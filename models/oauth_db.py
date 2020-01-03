@@ -24,14 +24,21 @@ class OAuthDB(DBBase):
         :param str mail: email
         :param dict credentials: user oauth token, from ``flow.credentials``
 
+        .. note:: Not to save ``client_id``, ``client_secret``
+
         '''
-        data = {}
+        oauth = self.find_one({'_id': mail}, {'token': 1})
+        if oauth and 'token' in oauth:
+            data = oauth['token']
+        else:
+            data = {}
+
         data['token'] = credentials.token
-        data['refresh_token'] = credentials.refresh_token
+        if credentials.refresh_token:
+            data['refresh_token'] = credentials.refresh_token
+
         data['token_uri'] = credentials.token_uri
         data['id_token'] = credentials.id_token
-        data['client_id'] = credentials.client_id
-        data['client_secret'] = credentials.client_secret
         data['scopes'] = credentials.scopes
 
         self.find_one_and_update(
