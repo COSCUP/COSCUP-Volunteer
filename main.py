@@ -12,7 +12,8 @@ from flask import session
 from flask import url_for
 
 import setting
-from models.oauth_db import OAuthDB
+from module.oauth import OAuth
+from module.users import User
 
 app = Flask(__name__)
 app.secret_key = setting.secret_key
@@ -69,13 +70,16 @@ def oauth2callback():
         user_info = auth_client.userinfo().get().execute()
 
         # ----- save oauth info ----- #
-        oauth_db = OAuthDB()
-        oauth_db.add_data(user_info['email'], user_info)
-        oauth_db.add_token(user_info['email'], flow.credentials)
+        OAuth.add(mail=user_info['email'], data=user_info, token=flow.credentials)
 
-        # ----- Check new account ----- #
+        # ----- Check account or create ----- #
+        owner = OAuth.owner(mail=user_info['email'])
+        if owner:
+            user = User(uid=owner).get()
+        else:
+            user = User.create(mail=user_info['email'])
 
-        return u'<pre>%s</pre>' % user_info
+        return u'<pre>%s</pre><br>User:<pre>%s</pre>' % (user_info, user)
 
     return u'state fail', 400
 

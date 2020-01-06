@@ -45,3 +45,12 @@ class OAuthDB(DBBase):
             {'_id': mail},
             {'$set': {'token': data}},
             upsert=True)
+
+    def setup_owner(self, mail, uid):
+        ''' Setup owner
+
+        :param str mail: mail
+        :param str uid: uid
+
+        '''
+        OAuthDB().find_one_and_update({'_id': mail}, {'$set': {'owner': uid}})
