@@ -2,7 +2,17 @@ from models.oauth_db import OAuthDB
 
 
 class OAuth(object):
-    ''' OAuth '''
+    ''' OAuth
+
+    :param str mail: mail
+
+    '''
+    def __init__(self, mail):
+        self.mail = mail
+
+    def get(self):
+        ''' Get data '''
+        return OAuthDB().find_one({'_id': self.mail})
 
     @staticmethod
     def add(mail, data=None, token=None):

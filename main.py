@@ -6,7 +6,9 @@ from urllib.parse import urlparse
 import google_auth_oauthlib.flow
 from apiclient import discovery
 from flask import Flask
+from flask import g
 from flask import redirect
+from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
@@ -27,6 +29,10 @@ NO_NEED_LOGIN_PATH = (
 @app.before_request
 def need_login():
     print('[X-SSL-SESSION-ID: %s] [SESSION: %s]' % (request.headers.get('X-SSL-SESSION-ID'), session))
+    if 'uid' in session and session['uid']:
+        g.user = {}
+        g.user['account'] = User(uid=session['uid']).get()
+        g.user['data'] = OAuth(mail=g.user['account']['mail']).get()['data']
 
     #if request.path not in NO_NEED_LOGIN_PATH:
     #    if not session.get('u') or session.get('u').get('email') not in setting.ALLOW_USER:
@@ -35,7 +41,7 @@ def need_login():
 
 @app.route('/')
 def index():
-    return u'Hello'
+    return render_template('base.html')
 
 
 @app.route('/oauth2callback')
@@ -79,7 +85,9 @@ def oauth2callback():
         else:
             user = User.create(mail=user_info['email'])
 
-        return u'<pre>%s</pre><br>User:<pre>%s</pre>' % (user_info, user)
+        session['uid'] = owner
+
+        return redirect(url_for('index', _scheme='https', _external=True))
 
     return u'state fail', 400
 
