@@ -16,6 +16,7 @@ from flask import url_for
 import setting
 from module.oauth import OAuth
 from module.users import User
+from module.usession import USession
 
 app = Flask(__name__)
 app.secret_key = setting.secret_key
@@ -29,10 +30,17 @@ NO_NEED_LOGIN_PATH = (
 @app.before_request
 def need_login():
     print('[X-SSL-SESSION-ID: %s] [SESSION: %s]' % (request.headers.get('X-SSL-SESSION-ID'), session))
-    if 'uid' in session and session['uid']:
-        g.user = {}
-        g.user['account'] = User(uid=session['uid']).get()
-        g.user['data'] = OAuth(mail=g.user['account']['mail']).get()['data']
+    if 'sid' in session and session['sid']:
+        session_data = USession.get(session['sid'])
+        if session_data:
+            uid = session_data['uid']
+
+            g.user = {}
+            g.user['account'] = User(uid=uid).get()
+            g.user['data'] = OAuth(mail=g.user['account']['mail']).get()['data']
+        else:
+            if request.path != '/logout':
+                return redirect(url_for('oauth2logout', _scheme='https', _external=True))
 
     #if request.path not in NO_NEED_LOGIN_PATH:
     #    if not session.get('u') or session.get('u').get('email') not in setting.ALLOW_USER:
@@ -85,7 +93,8 @@ def oauth2callback():
         else:
             user = User.create(mail=user_info['email'])
 
-        session['uid'] = owner
+        user_session= USession.make_new(uid=owner, header=dict(request.headers))
+        session['sid'] = user_session.inserted_id
 
         return redirect(url_for('index', _scheme='https', _external=True))
 
@@ -99,7 +108,8 @@ def oauth2logout():
 
         :return: Remove cookie/session.
     '''
-    session.pop('u', None)
+    session.pop('state', None)
+    session.pop('sid', None)
     return redirect(url_for('index', _scheme='https', _external=True))
 
 if __name__ == '__main__':
