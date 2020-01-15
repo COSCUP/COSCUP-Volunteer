@@ -7,43 +7,43 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="/faw/svgs/solid/paper-plane.svg">
+    <link href="/faw/css/all.css" rel="stylesheet">
     <title>COSCUP Secretary</title>
   </head>
   <body>
-  <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+  <nav class="navbar is-success" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <div class="navbar-item">
         <a class="button is-success is-light" href="/">COSCUP Secretary</a>
       </div>
   
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <a role="button" class="navbar-burger" v-on:click="navtoggle = !navtoggle" v-bind:class="{'is-active': navtoggle}" data-target="navMenu" aria-label="menu" aria-expanded="false">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
       </a>
     </div>
-    <div class="navbar-menu">
+    <div class="navbar-menu" id="navMenu" v-bind:class="{'is-active': navtoggle}">
       <div class="navbar-end">
           {% if g.user and g.user.data %}
-          <div class="navbar-item has-dropdown">
+          <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
-              <figure class="image is-24x24">
-                <img class="is-rounded" src="{{g.user.data.picture}}">
-              </figure>
-              {{g.user.data.name}}
+                <span><figure class="image is-24x24">
+                    <img class="is-rounded" src="{{g.user.data.picture}}">
+                    </figure></span>
+                <span>{{g.user.data.name}}</span>
             </a>
             <div class="navbar-dropdown is-right">
-                <a class="navbar-item">Setting</a>
+                <a class="navbar-item" href="/setting"><span class="icon"><i class="fas fa-user-cog"></i></span> <span>Setting</span></a>
                 <hr class="navbar-divider">
-                <a class="navbar-item">Logout</a>
+                <a class="navbar-item" href="/logout"><span class="icon"><i class="fas fa-sign-out-alt"></i></span> <span>Logout</span></a>
             </div>
           </div>
           {% else %}
           <div class="navbar-item">
               <div class="field is-grouped">
                   <p class="control">
-                      <a class="button is-info" href="/oauth2callback">Login</a>
+                  <a class="button is-info" href="/oauth2callback"><span class="icon"><i class="fas fa-sign-in-alt"></i></span> <span>Login</span></a>
                   </p>
               </div>
           </div>
@@ -51,16 +51,17 @@
       </div>
     </div>
   </nav>
-
-  <section class="section">
-    <div class="container">
-      <h1 class="title">
-        Hello World
-      </h1>
-      <p class="subtitle">
-        My first website with <strong>Bulma</strong>!
-      </p>
-    </div>
-  </section>
+  {% block body %}{% endblock %}
   </body>
+  <script src="/js/vue.min.js"></script>
+  <script>
+      var app = new Vue({
+          el: 'nav',
+          data: {
+              navtoggle: false
+          },
+          delimiters: ['[[', ']]']
+      });
+  </script>
+  {% block js %}{% endblock %}
 </html>
