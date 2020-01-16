@@ -1,13 +1,47 @@
 {% extends "base.html" %}
 {% block body %}
-  <section class="section">
-    <div class="container">
-      <h1 class="title">
-        Hello World
-      </h1>
-      <p class="subtitle">
-        My first website with <strong>Bulma</strong>!
-      </p>
-    </div>
-  </section>
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+      Hello World
+    </h1>
+    <p class="subtitle">行政組</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div class="column">
+              <article class="message is-success">
+                  <div class="message-header">
+                      <p><span class="icon"><i class="fas fa-id-badge"></i></span> 志工招募庫</p>
+                  </div>
+                  <div class="message-body">
+                      <p>登錄成為 COSCUP 志工，每屆活動開始時，可一起參與籌備。</p>
+                  </div>
+              </article>
+          </div>
+          <div class="column">
+              <article class="message is-success">
+                  <div class="message-header">
+                      <p><span class="icon"><i class="fas fa-satellite-dish"></i></span> 組長找夥伴</p>
+                  </div>
+                  <div class="message-body">
+                      <p>組長建立活動組織後，可以主動到志工庫找尋相符合技能的夥伴一起打拼。</p>
+                  </div>
+              </article>
+          </div>
+          <div class="column">
+              <article class="message is-success">
+                  <div class="message-header">
+                      <p><span class="icon"><i class="fas fa-robot"></i></span> 行政效率+</p>
+                  </div>
+                  <div class="message-body">
+                      <p>捨棄 Google 表單複製貼上資訊，串接 API 於服務、報到同步。</p>
+                  </div>
+              </article>
+          </div>
+      </div>
+  </div>
+</section>
 {% endblock %}
