@@ -52,7 +52,11 @@
     </div>
   </nav>
   {% block body %}{% endblock %}
-  </body>
+  <footer class="footer" style="margin-top: 50px;">
+    <div class="content has-text-centered">
+      <p>COSCUP Secretary</p>
+    </div>
+  </footer>
   <script src="/js/vue.min.js"></script>
   <script>
       var app = new Vue({
@@ -64,4 +68,5 @@
       });
   </script>
   {% block js %}{% endblock %}
+  </body>
 </html>

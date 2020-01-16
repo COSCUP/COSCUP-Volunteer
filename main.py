@@ -17,15 +17,19 @@ import setting
 from module.oauth import OAuth
 from module.users import User
 from module.usession import USession
+from view.setting import VIEW_SETTING
 
 app = Flask(__name__)
 app.secret_key = setting.secret_key
+app.register_blueprint(VIEW_SETTING)
+
 
 NO_NEED_LOGIN_PATH = (
     '/',
     '/oauth2callback',
     '/logout',
 )
+
 
 @app.before_request
 def need_login():
@@ -38,17 +42,22 @@ def need_login():
             g.user = {}
             g.user['account'] = User(uid=uid).get()
             g.user['data'] = OAuth(mail=g.user['account']['mail']).get()['data']
-        else:
-            if request.path != '/logout':
-                return redirect(url_for('oauth2logout', _scheme='https', _external=True))
+    else:
+        if request.path not in NO_NEED_LOGIN_PATH:
+            session['r'] = request.path
+            return redirect(url_for('oauth2callback', _scheme='https', _external=True))
 
     #if request.path not in NO_NEED_LOGIN_PATH:
     #    if not session.get('u') or session.get('u').get('email') not in setting.ALLOW_USER:
     #        session['r'] = request.path
     #        return redirect(url_for('oauth2logout'))
 
+
 @app.route('/')
 def index():
+    if 'user' in g:
+        return render_template('index_guide.html')
+
     return render_template('index.html')
 
 
@@ -96,9 +105,15 @@ def oauth2callback():
         user_session= USession.make_new(uid=owner, header=dict(request.headers))
         session['sid'] = user_session.inserted_id
 
+        if 'r' in session:
+            r = session['r']
+            session.pop('r', None)
+            return redirect(r)
+
         return redirect(url_for('index', _scheme='https', _external=True))
 
     return u'state fail', 400
+
 
 @app.route('/logout')
 def oauth2logout():
