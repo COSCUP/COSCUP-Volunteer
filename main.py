@@ -33,7 +33,12 @@ NO_NEED_LOGIN_PATH = (
 
 @app.before_request
 def need_login():
-    print('[X-SSL-SESSION-ID: %s] [SESSION: %s]' % (request.headers.get('X-SSL-SESSION-ID'), session))
+    print('[X-SSL-SESSION-ID: %s] [X-REAL-IP: %s] [USER-AGENT: %s] [SESSION: %s]' % (
+            request.headers.get('X-SSL-SESSION-ID'),
+            request.headers.get('X-REAL-IP'),
+            request.headers.get('USER-AGENT'),
+            session, )
+       )
     if 'sid' in session and session['sid']:
         session_data = USession.get(session['sid'])
         if session_data:
