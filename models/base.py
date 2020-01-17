@@ -1,7 +1,9 @@
-import setting
+from time import time
 
 import pymongo
 from pymongo.collection import Collection
+
+import setting
 
 
 class DBBase(Collection):
@@ -15,6 +17,15 @@ class DBBase(Collection):
                 setting.MONGO_HOST, setting.MONGO_PORT))[setting.MONGO_DBNAME]
 
         super(DBBase, self).__init__(client, name)
+
+    @staticmethod
+    def make_create_at(data):
+        ''' make create_at timestamp
+
+        :param dict data: data
+
+        '''
+        data['created_at'] = time()
 
 
 class TestDB(DBBase):
