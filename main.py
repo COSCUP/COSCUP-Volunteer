@@ -17,11 +17,16 @@ import setting
 from module.oauth import OAuth
 from module.users import User
 from module.usession import USession
+from view.project import VIEW_PROJECT
 from view.setting import VIEW_SETTING
+from view.team import VIEW_TEAM
+
 
 app = Flask(__name__)
 app.secret_key = setting.secret_key
+app.register_blueprint(VIEW_PROJECT)
 app.register_blueprint(VIEW_SETTING)
+app.register_blueprint(VIEW_TEAM)
 
 
 NO_NEED_LOGIN_PATH = (

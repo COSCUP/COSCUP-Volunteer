@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        All Projects
+    </h1>
+    <p class="subtitle">所有活動組織列表</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+      {% for project_col in projects %}
+      <div class="columns">
+          {% for project in project_col %}
+          <div class="column is-one-third">
+              <article class="message">
+                  <div class="message-header">
+                      <p>
+                          <span class="icon"><i class="fas fa-project-diagram"></i></span>
+                          <span>{{project.name}}</span>
+                      </p>
+                  </div>
+                  <div class="message-body">
+                      <p>(desc!!!!!)</p>
+                      <p>date: {{project.action_date_str}}</p>
+                      <div class="buttons is-right">
+                          <a class="button is-info is-light" href="/project/{{project._id}}/">
+                              <span class="icon"><i class="fas fa-directions"></i></span>
+                              <span>檢視組別列表</span>
+                          </a>
+                      </div>
+                  </div>
+              </article>
+          </div>
+          {% endfor %}
+      </div>
+      {% endfor %}
+  </div>
+</section>
+{% endblock %}
