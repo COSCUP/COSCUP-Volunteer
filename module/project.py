@@ -23,3 +23,17 @@ class Project(object):
         data['action_date'] = arrow.get(action_date).timestamp
 
         return projectdb.add(data)
+
+    @staticmethod
+    def all():
+        ''' List all project '''
+        return ProjectDB(pid=None).find()
+
+    @staticmethod
+    def get(pid):
+        ''' Get project info
+
+        :param str pid: project id
+
+        '''
+        return ProjectDB(pid).find_one({'_id': pid})

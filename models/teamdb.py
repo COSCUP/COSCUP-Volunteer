@@ -68,3 +68,7 @@ class TeamDB(DBBase):
         values = list(set(data[field]) | set(add_uids) - set(del_uids))
 
         self.find_one_and_update({'pid': self.pid, 'tid': self.tid}, {'$set': {field: values}})
+
+    def get(self):
+        ''' Get data '''
+        return self.find_one({'pid': self.pid, 'tid': self.tid})

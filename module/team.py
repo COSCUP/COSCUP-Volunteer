@@ -32,3 +32,22 @@ class Team(object):
         '''
         teamdb = TeamDB(pid, tid)
         teamdb.update_users(field='chiefs', add_uids=add_uids, del_uids=del_uids)
+
+    @staticmethod
+    def list_by_pid(pid):
+        ''' List all team in project
+
+        :param str pid: project id
+
+        '''
+        return TeamDB(None, None).find({'pid': pid})
+
+    @staticmethod
+    def get(pid, tid):
+        ''' Get team data
+
+        :param str pid: project id
+        :param str tid: team id
+
+        '''
+        return TeamDB(pid=pid, tid=tid).get()

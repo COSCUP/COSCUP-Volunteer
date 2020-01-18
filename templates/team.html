@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        {{team.name}}
+    </h1>
+    <p class="subtitle">{{tesm}}</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div class="column is-one-third">
+			  <aside class="menu">
+			    <p class="menu-label">
+			  	General
+			    </p>
+			    <ul class="menu-list">
+			  	<li><a>Dashboard</a></li>
+			  	<li><a>Customers</a></li>
+			    </ul>
+			    <p class="menu-label">
+			  	Administration
+			    </p>
+			    <ul class="menu-list">
+			  	<li><a>Team Settings</a></li>
+			  	<li>
+			  	  <a class="is-active">Manage Your Team</a>
+			  	  <ul>
+			  		<li><a>Members</a></li>
+			  		<li><a>Plugins</a></li>
+			  		<li><a>Add a member</a></li>
+			  	  </ul>
+			  	</li>
+			  	<li><a>Invitations</a></li>
+			  	<li><a>Cloud Storage Environment Settings</a></li>
+			  	<li><a>Authentication</a></li>
+			    </ul>
+			    <p class="menu-label">
+			  	Transactions
+			    </p>
+			    <ul class="menu-list">
+			  	<li><a>Payments</a></li>
+			  	<li><a>Transfers</a></li>
+			  	<li><a>Balance</a></li>
+			    </ul>
+			  </aside>
+              <article class="message is-success">
+                  <div class="message-header">
+                      <p>
+                          <span class="icon"><i class="fas fa-project-diagram"></i></span>
+                          <span>{{team.name}}</span>
+                      </p>
+                  </div>
+                  <div class="message-body">
+                      <p>組長：{{team.chiefs}}</p>
+                      <p>組員：{{team.members}}</p>
+                  </div>
+              </article>
+          </div>
+          <div class="column">
+              <section class="section">
+                  <div class="content">
+                      <h2>H2 的抬頭會是長怎樣的</h2>
+                      <p>這裡放一般的文字會是怎樣的呈現</p>
+                  </div>
+              </section>
+              <article class="message is-success">
+                  <div class="message-header">
+                      <p>
+                          <span class="icon"><i class="fas fa-project-diagram"></i></span>
+                          <span>說明</span>
+                      </p>
+                  </div>
+                  <div class="message-body">
+                      <p>這裡要呈現說明</p>
+                  </div>
+              </article>
+          </div>
+      </div>
+  </div>
+</section>
+{% endblock %}

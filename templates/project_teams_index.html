@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        {{project.name}}
+    </h1>
+    <p class="subtitle">{{project}}</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+      {% for team_col in teams %}
+      <div class="columns">
+          {% for team in team_col %}
+          <div class="column is-one-third">
+              <article class="message is-success">
+                  <div class="message-header">
+                      <p>
+                          <span class="icon"><i class="fas fa-project-diagram"></i></span>
+                          <span>{{team.name}}</span>
+                      </p>
+                  </div>
+                  <div class="message-body">
+                      <p>組長：{{team.chiefs}}</p>
+                      <p>組員：{{team.members}}</p>
+                      <div class="buttons is-right">
+                          <a class="button is-info is-light" href="/team/{{project._id}}/{{team.tid}}/">
+                              <span class="icon"><i class="fas fa-users"></i></span>
+                              <span>檢視組別</span>
+                          </a>
+                      </div>
+                  </div>
+              </article>
+          </div>
+          {% endfor %}
+      </div>
+      {% endfor %}
+  </div>
+</section>
+{% endblock %}
