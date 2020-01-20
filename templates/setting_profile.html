@@ -1,16 +1,11 @@
-{% extends 'index.html' %}
-{% block body %}
-<section class="hero is-info" style="margin-bottom: 25px;">
-    <div class="hero-body">
-        <div class="container">
-            <h1 class="title">Profile</h1>
-            <h2 class="subtitle">建立基本資料</h2>
-        </div>
-    </div>
-</section>
-<div class="container">
-    <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
+{% extends "setting.html" %}
+{% block setting_profile %}is-active{% endblock %}
+{% block setting_body %}
+<div class="columns">
+    <div class="column">
+        <div class="content">
+            <h2>個人資訊</h2>
+            <hr>
             <form method="POST">
                 <div class="field">
                     <label class="label">Name*</label>
@@ -23,20 +18,20 @@
                     <p class="help is-success">名牌顯示的稱呼。</p>
                 </div>
                 <div class="field">
-                    <label class="label">Phone*</label>
-                    <div class="control has-icons-right">
-                        <input class="input" name="phone" type="tel" pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}" required>
-                        <span class="icon is-small is-right">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </span>
+                    <label class="label">Intro</label>
+                    <div class="control">
+                        <textarea class="textarea" name="intro" placeholder="自我介紹 ..."></textarea>
                     </div>
-                    <p class="help is-success">0912-3456-7890</p>
+                    <p class="help is-success">可使用 markdown 語法</p>
                 </div>
                 <div class="field">
                     <button class="button is-primary" type="submit">Update</button>
                 </div>
             </form>
         </div>
+    </div>
+    <div class="column is-two-fifths">
+        這是邊邊
     </div>
 </div>
 {% endblock %}

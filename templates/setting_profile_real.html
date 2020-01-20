@@ -1,0 +1,91 @@
+{% extends "setting.html" %}
+{% block setting_profile_real %}is-active{% endblock %}
+{% block setting_body %}
+<div class="columns">
+    <div class="column">
+        <div class="content">
+            <h2>真實個人資訊</h2>
+            <hr>
+            <form method="POST">
+                <div class="field">
+                    <label class="label">姓名</label>
+                    <div class="control">
+                        <input class="input" name="badge_name" type="text">
+                    </div>
+                    <p class="help is-success">真實世界的姓名</p>
+                </div>
+                <div class="field">
+                    <label class="label">Phone</label>
+                    <div class="control">
+                        <input class="input" name="phone" type="tel" pattern="[0-9]{4}-[0-9]{3}-[0-9]{3}">
+                    </div>
+                    <p class="help is-success">0912-345-789</p>
+                </div>
+                <div class="field">
+                    <label class="label">出生年月日</label>
+                    <div class="control">
+                        <input class="input" name="birthday" type="date">
+                    </div>
+                    <p class="help is-success">這是檢查成年是否</p>
+                </div>
+                <div class="field">
+                    <label class="label">身分證字號</label>
+                    <div class="control">
+                        <input class="input" name="roc_id" type="text">
+                    </div>
+                    <p class="help is-success">A187654321</p>
+                </div>
+                <h3>銀行資訊</h3>
+                <hr>
+                <div class="field is-horizontal">
+                    <div class="field-body">
+                        <div class="field">
+                            <label class="label">銀行代碼</label>
+                            <div class="control">
+                                <input class="input" name="account_bank_code" pattern="[0-9]{3}">
+                            </div>
+                            <p class="help is-success">銀行代碼</p>
+                        </div>
+                        <div class="field">
+                            <label class="label">銀行帳號</label>
+                            <div class="control">
+                                <input class="input" name="account_bank_no">
+                            </div>
+                            <p class="help is-success">銀行帳號</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-body">
+                        <div class="field">
+                            <label class="label">分行名稱</label>
+                            <div class="control">
+                                <input class="input" name="account_bank_branch">
+                            </div>
+                            <p class="help is-success">例：新莊分行</p>
+                        </div>
+                        <div class="field">
+                            <label class="label">戶名</label>
+                            <div class="control">
+                                <input class="input" name="account_bank_name">
+                            </div>
+                            <p class="help is-success">帳戶名稱，通常是本名為戶名</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <button class="button is-primary" type="submit">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="column is-two-fifths">
+        <div class="content">
+            <div class="notification">
+                <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                這裡的項目並非必填，主要用在辦理住宿申請、補助款轉帳時用到資訊。申請相關服務的時候會提示回來這裡補齊所需的欄位資料。
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
