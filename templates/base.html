@@ -4,7 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css" rel="stylesheet">
+    <link href="/css/bulma.min.css" rel="stylesheet">
     <link href="/faw/css/all.css" rel="stylesheet">
     <title>COSCUP Secretary</title>
   </head>
@@ -26,9 +26,11 @@
           {% if g.user and g.user.data %}
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
-                <span><figure class="image is-24x24">
-                    <img class="is-rounded" src="{{g.user.data.picture}}">
-                    </figure></span>
+                <span style="margin-right: 5px;">
+                    <figure class="image is-24x24">
+                        <img class="is-rounded" src="{{g.user.data.picture}}">
+                    </figure>
+                </span>
                 <span>{{g.user.data.name}}</span>
             </a>
             <div class="navbar-dropdown is-right">

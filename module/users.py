@@ -19,11 +19,7 @@ class User(object):
         :rtype: dict
 
         '''
-        user = UsersDB().find_one({'$or': [{'_id': self.uid}, {'mail': self.mail}]})
-        if not user:
-            raise Exception('No user account be created')
-
-        return user
+        return UsersDB().find_one({'$or': [{'_id': self.uid}, {'mail': self.mail}]})
 
     @staticmethod
     def create(mail, force=False):

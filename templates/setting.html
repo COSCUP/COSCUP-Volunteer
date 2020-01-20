@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        Setting
+    </h1>
+    <p class="subtitle">設定頁面</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div class="column is-one-fifth">
+			  <aside class="menu">
+			    <p class="menu-label">General</p>
+			    <ul class="menu-list">
+                    <li><a href="/setting/" class="{% block setting_index %}{% endblock %}">Notice</a></li>
+			    </ul>
+			    <p class="menu-label">Profile</p>
+			    <ul class="menu-list">
+                    <li><a href="/setting/profile" class="{% block setting_profile%}{% endblock %}">Profile</a></li>
+                    <li><a href="/setting/profile_real" class="{% block setting_profile_real %}{% endblock %}">Profile for real world</a></li>
+			    </ul>
+			  </aside>
+          </div>
+          <div class="column">
+              {% block setting_body %}{% endblock %}
+          </div>
+      </div>
+  </div>
+</section>
+{% endblock %}

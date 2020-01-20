@@ -20,6 +20,7 @@ from module.usession import USession
 from view.project import VIEW_PROJECT
 from view.setting import VIEW_SETTING
 from view.team import VIEW_TEAM
+from view.user import VIEW_USER
 
 
 app = Flask(__name__)
@@ -27,6 +28,7 @@ app.secret_key = setting.secret_key
 app.register_blueprint(VIEW_PROJECT)
 app.register_blueprint(VIEW_SETTING)
 app.register_blueprint(VIEW_TEAM)
+app.register_blueprint(VIEW_USER)
 
 
 NO_NEED_LOGIN_PATH = (
@@ -50,7 +52,12 @@ def need_login():
             uid = session_data['uid']
 
             g.user = {}
-            g.user['account'] = User(uid=uid).get()
+            user = User(uid=uid).get()
+            if user:
+                g.user['account'] = User(uid=uid).get()
+            else:
+                session.pop('sid', None)
+
             g.user['data'] = OAuth(mail=g.user['account']['mail']).get()['data']
     else:
         if request.path not in NO_NEED_LOGIN_PATH:
