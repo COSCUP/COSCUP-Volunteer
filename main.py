@@ -1,3 +1,9 @@
+import logging
+logging.basicConfig(
+    format='%(asctime)s [%(levelname)-5.5s][%(thread)6.6s] [%(module)s:%(funcName)s#%(lineno)d]: %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+    level=logging.DEBUG)
+
 import os
 import hashlib
 from urllib.parse import parse_qs
@@ -40,7 +46,7 @@ NO_NEED_LOGIN_PATH = (
 
 @app.before_request
 def need_login():
-    print('[X-SSL-SESSION-ID: %s] [X-REAL-IP: %s] [USER-AGENT: %s] [SESSION: %s]' % (
+    app.logger.info('[X-SSL-SESSION-ID: %s] [X-REAL-IP: %s] [USER-AGENT: %s] [SESSION: %s]' % (
             request.headers.get('X-SSL-SESSION-ID'),
             request.headers.get('X-REAL-IP'),
             request.headers.get('USER-AGENT'),
