@@ -1,6 +1,8 @@
 from models.oauth_db import OAuthDB
 from models.users_db import UsersDB
 
+from pymongo.collection import ReturnDocument
+
 
 class User(object):
     ''' User
@@ -38,3 +40,27 @@ class User(object):
         OAuthDB().setup_owner(mail=user['mail'], uid=user['_id'])
 
         return user
+
+    def update_profile(self, data):
+        ''' update profile
+
+        :param dict data: data
+
+        '''
+        return UsersDB().find_one_and_update(
+            {'_id': self.uid},
+            {'$set': {'profile': data}},
+            return_document=ReturnDocument.AFTER,
+        )
+
+    def update_profile_real(self, data):
+        ''' update profile
+
+        :param dict data: data
+
+        '''
+        return UsersDB().find_one_and_update(
+            {'_id': self.uid},
+            {'$set': {'profile_real': data}},
+            return_document=ReturnDocument.AFTER,
+        )

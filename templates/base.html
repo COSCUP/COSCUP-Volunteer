@@ -34,9 +34,16 @@
                 <span>{{g.user.data.name}}</span>
             </a>
             <div class="navbar-dropdown is-right">
-                <a class="navbar-item" href="/setting"><span class="icon"><i class="fas fa-user-cog"></i></span> <span>Setting</span></a>
+                <a class="navbar-item" href="/user/{{g.user.account._id}}">
+                    <span class="icon"><i class="far fa-id-badge"></i></span> <span>Your Profile</span>
+                </a>
                 <hr class="navbar-divider">
-                <a class="navbar-item" href="/logout"><span class="icon"><i class="fas fa-sign-out-alt"></i></span> <span>Logout</span></a>
+                <a class="navbar-item" href="/setting">
+                    <span class="icon"><i class="fas fa-user-cog"></i></span> <span>Setting</span>
+                </a>
+                <a class="navbar-item" href="/logout">
+                    <span class="icon"><i class="fas fa-sign-out-alt"></i></span> <span>Logout</span>
+                </a>
             </div>
           </div>
           {% else %}

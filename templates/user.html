@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div class="column is-one-quarter">
+              <div class="card">
+                  <div class="card-image">
+                      <figure class="image is-1by1">
+                          <img src="{{oauth.data.picture}}">
+                      </figure>
+                  </div>
+                  <div class="card-content">
+                      <div class="media">
+                          <div class="media-content">
+                              <p class="title is-4">{{oauth.data.name}}</p>
+                              <p class="subtitle is-6">{{badge_name}}</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="column">
+              <div class="content">
+                  <h2>Intro</h2>
+                  <hr>
+                  {{intro|safe}}
+                  {% if participate_in %}
+                  <h2>Participate In</h2>
+                  <hr>
+                  <ul>
+                      {% for p in participate_in %}
+                      <li>{{p._project.name}} {{p.name}}<small>（{{p._title}}, {{p._action_date}}）</small></li>
+                      {% endfor %}
+                  </ul>
+                  {% endif %}
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+{% endblock %}
+
