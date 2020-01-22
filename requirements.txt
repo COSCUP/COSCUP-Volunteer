@@ -1,10 +1,9 @@
+google-api-python-client
+google-auth
+google-auth-httplib2
+google-auth-oauthlib
+
 arrow
 flask
-
-google-api-python-client
-
-google-auth
-google-auth-oauthlib
-google-auth-httplib2
-
+markdown
 pymongo

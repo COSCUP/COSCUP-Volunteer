@@ -10,28 +10,28 @@
                 <div class="field">
                     <label class="label">姓名</label>
                     <div class="control">
-                        <input class="input" name="badge_name" type="text">
+                        <input class="input" name="name" type="text" value="{{user.profile_real.name}}">
                     </div>
                     <p class="help is-success">真實世界的姓名</p>
                 </div>
                 <div class="field">
                     <label class="label">Phone</label>
                     <div class="control">
-                        <input class="input" name="phone" type="tel" pattern="[0-9]{4}-[0-9]{3}-[0-9]{3}">
+                        <input class="input" name="phone" type="tel" value="{{user.profile_real.phone}}" pattern="[0-9]{4}-[0-9]{3}-[0-9]{3}">
                     </div>
                     <p class="help is-success">0912-345-789</p>
                 </div>
                 <div class="field">
                     <label class="label">出生年月日</label>
                     <div class="control">
-                        <input class="input" name="birthday" type="date">
+                        <input class="input" name="birthday" type="date" value="{{user.profile_real.birthday}}">
                     </div>
                     <p class="help is-success">這是檢查成年是否</p>
                 </div>
                 <div class="field">
                     <label class="label">身分證字號</label>
                     <div class="control">
-                        <input class="input" name="roc_id" type="text">
+                        <input class="input" name="roc_id" type="text" value="{{user.profile_real.roc_id}}">
                     </div>
                     <p class="help is-success">A187654321</p>
                 </div>
@@ -42,14 +42,14 @@
                         <div class="field">
                             <label class="label">銀行代碼</label>
                             <div class="control">
-                                <input class="input" name="account_bank_code" pattern="[0-9]{3}">
+                                <input class="input" name="account_bank_code" pattern="[0-9]{3}" value="{{user.profile_real.bank.code}}">
                             </div>
                             <p class="help is-success">銀行代碼</p>
                         </div>
                         <div class="field">
                             <label class="label">銀行帳號</label>
                             <div class="control">
-                                <input class="input" name="account_bank_no">
+                                <input class="input" name="account_bank_no" value="{{user.profile_real.bank.no}}">
                             </div>
                             <p class="help is-success">銀行帳號</p>
                         </div>
@@ -60,14 +60,14 @@
                         <div class="field">
                             <label class="label">分行名稱</label>
                             <div class="control">
-                                <input class="input" name="account_bank_branch">
+                                <input class="input" name="account_bank_branch" value="{{user.profile_real.bank.branch}}">
                             </div>
-                            <p class="help is-success">例：新莊分行</p>
+                            <p class="help is-success">例：新莊分行，也可以<a target="_blank" href="https://www.fisc.com.tw/tc/download/twd.txt">查詢</a>這張表。</p>
                         </div>
                         <div class="field">
                             <label class="label">戶名</label>
                             <div class="control">
-                                <input class="input" name="account_bank_name">
+                                <input class="input" name="account_bank_name" value="{{user.profile_real.bank.name}}">
                             </div>
                             <p class="help is-success">帳戶名稱，通常是本名為戶名</p>
                         </div>

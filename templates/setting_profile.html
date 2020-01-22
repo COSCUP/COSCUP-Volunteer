@@ -10,7 +10,7 @@
                 <div class="field">
                     <label class="label">Name*</label>
                     <div class="control has-icons-right">
-                        <input class="input" name="badge_name" type="text" required>
+                        <input class="input" name="badge_name" type="text" value="{{user.profile.badge_name}}" required>
                         <span class="icon is-small is-right">
                             <i class="fas fa-exclamation-triangle"></i>
                         </span>
@@ -20,7 +20,7 @@
                 <div class="field">
                     <label class="label">Intro</label>
                     <div class="control">
-                        <textarea class="textarea" name="intro" placeholder="自我介紹 ..."></textarea>
+                        <textarea class="textarea" name="intro" placeholder="自我介紹 ...">{{user.profile.intro}}</textarea>
                     </div>
                     <p class="help is-success">可使用 markdown 語法</p>
                 </div>

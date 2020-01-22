@@ -51,3 +51,12 @@ class Team(object):
 
         '''
         return TeamDB(pid=pid, tid=tid).get()
+
+    @staticmethod
+    def participate_in(uid):
+        ''' participate in
+
+        :param str uid: uid
+
+        '''
+        return TeamDB(None, None).find({'$or': [{'members': uid}, {'chiefs': uid}]})
