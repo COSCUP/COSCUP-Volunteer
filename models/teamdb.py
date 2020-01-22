@@ -22,6 +22,8 @@ class TeamDB(DBBase):
 
     def index(self):
         ''' Index '''
+        self.create_index([('chiefs', 1), ])
+        self.create_index([('members', 1), ])
         self.create_index([('pid', 1), ])
 
     def default(self):
