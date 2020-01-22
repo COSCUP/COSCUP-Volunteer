@@ -17,6 +17,10 @@ class ProjectDB(DBBase):
         super(ProjectDB, self).__init__('project')
         self.pid = pid
 
+    def index(self):
+        ''' Index '''
+        self.create_index([('owners', 1), ])
+
     def default(self):
         ''' default data '''
         r = {
