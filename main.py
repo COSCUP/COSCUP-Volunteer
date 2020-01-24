@@ -30,6 +30,7 @@ from view.user import VIEW_USER
 
 
 app = Flask(__name__)
+app.config['SESSION_COOKIE_SECURE'] = True
 app.secret_key = setting.secret_key
 app.register_blueprint(VIEW_PROJECT)
 app.register_blueprint(VIEW_SETTING)
