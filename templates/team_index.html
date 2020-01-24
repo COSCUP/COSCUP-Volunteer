@@ -1,0 +1,20 @@
+{% extends "team.html" %}
+{% block menu_index %}is-active{% endblock %}
+{% block team_body %}
+<section class="section">
+  <div class="content">
+      {{team.desc|safe}}
+  </div>
+</section>
+<article class="message is-success">
+  <div class="message-header">
+      <p>
+          <span class="icon"><i class="fas fa-project-diagram"></i></span>
+          <span>說明</span>
+      </p>
+  </div>
+  <div class="message-body">
+      <p>這裡要呈現說明</p>
+  </div>
+</article>
+{% endblock %}

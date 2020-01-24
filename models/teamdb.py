@@ -35,6 +35,7 @@ class TeamDB(DBBase):
             'owners': [],
             'chiefs': [],
             'members': [],
+            'desc': '',
         }
         self.make_create_at(r)
         return r
@@ -52,6 +53,19 @@ class TeamDB(DBBase):
             return_document=ReturnDocument.AFTER,
         )
 
+    def update_setting(self, data):
+        ''' update setting
+
+        :param dict data: data
+
+        '''
+        return self.find_one_and_update(
+            {'pid': self.pid, 'tid': self.tid},
+            {'$set': data},
+            return_document=ReturnDocument.AFTER,
+        )
+
+
     def update_users(self, field, add_uids, del_uids):
         ''' Update users
 
@@ -60,16 +74,15 @@ class TeamDB(DBBase):
         :param list del_uids: del uids
 
         '''
-        if add_uids is None:
-            add_uids = []
+        if add_uids:
+            self.find_one_and_update(
+                {'pid': self.pid, 'tid': self.tid},
+                {'$addToSet': {field: {'$each': add_uids}}})
 
-        if del_uids is None:
-            del_uids = []
-
-        data = self.find_one({'pid': self.pid, 'tid': self.tid}, {field: 1})
-        values = list(set(data[field]) | set(add_uids) - set(del_uids))
-
-        self.find_one_and_update({'pid': self.pid, 'tid': self.tid}, {'$set': {field: values}})
+        if del_uids:
+            self.find_one_and_update(
+                {'pid': self.pid, 'tid': self.tid},
+                {'$pullAll': {field: del_uids}})
 
     def get(self):
         ''' Get data '''

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        Setting Project
+    </h1>
+    <p class="subtitle">設定頁面</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div class="column is-half is-offset-one-quarter">
+              <form method="POST">
+                  <div class="field">
+                      <label class="label">name</label>
+                      <div class="control">
+                          <input class="input" type="text" name="name" value="{{project.name}}">
+                      </div>
+                  </div>
+                  <div class="field">
+                      <label class="label">description</label>
+                      <div class="control">
+                          <textarea class="textarea" name="desc" placeholder="Project description ...">{{project.desc}}</textarea>
+                      </div>
+                  </div>
+                  <div class="field">
+                      <div class="control">
+                          <button class="button is-primary" type="submit">Update</button>
+                          <a class="button" href="/project/{{project._id}}">Cancel</a>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+</section>
+{% endblock %}
+

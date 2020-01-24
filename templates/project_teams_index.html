@@ -5,7 +5,16 @@
     <h1 class="title">
         {{project.name}}
     </h1>
-    <p class="subtitle">{{project}}</p>
+    <div class="content">
+        <p>{{project.desc}}</p>
+        {% if editable %}
+        <div class="buttons is-right">
+            <a class="button is-info is-light" href="/project/{{project._id}}/edit">
+                <span class="icon"><i class="far fa-edit"></i></span> <span>Edit</span>
+            </a>
+        </div>
+        {% endif %}
+    </div>
   </div>
 </section>
 <section class="section">
@@ -22,8 +31,8 @@
                       </p>
                   </div>
                   <div class="message-body">
-                      <p>組長：{{team.chiefs}}</p>
-                      <p>組員：{{team.members}}</p>
+                      <p>組長：{{chiefs|join(',')}}</p>
+                      <p>組員：{{team.members|length}}</p>
                       <div class="buttons is-right">
                           <a class="button is-info is-light" href="/team/{{project._id}}/{{team.tid}}/">
                               <span class="icon"><i class="fas fa-users"></i></span>

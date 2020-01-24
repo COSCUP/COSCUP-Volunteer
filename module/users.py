@@ -64,3 +64,22 @@ class User(object):
             {'$set': {'profile_real': data}},
             return_document=ReturnDocument.AFTER,
         )
+
+    @staticmethod
+    def get_info(uids):
+        ''' Get user info
+
+        :param list uids: uid
+
+        '''
+        users = {}
+        for u in UsersDB().find({'_id': {'$in': uids}}, {'profile': 1}):
+            users[u['_id']] = u
+            if 'profile' not in u:
+                oauth_data = OAuthDB().find_one({'owner': mail}, {'data.name': 1})
+                users[u['_id']]['profile'] = {
+                    'badge_name': oauth_data['data']['name'],
+                    'intro': '',
+                }
+
+        return users

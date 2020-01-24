@@ -60,3 +60,21 @@ class Team(object):
 
         '''
         return TeamDB(None, None).find({'$or': [{'members': uid}, {'chiefs': uid}]})
+
+    @staticmethod
+    def update_setting(pid, tid, data):
+        ''' update setting
+
+        :param str pid: project id
+        :param str tid: team id
+        :param dict data: data
+
+        '''
+        teamdb = TeamDB(pid=pid, tid=tid)
+        _data = {}
+        for k in ('name', 'public_desc', 'desc'):
+            if k in data:
+                _data[k] = data[k]
+
+        if _data:
+            return teamdb.update_setting(_data)
