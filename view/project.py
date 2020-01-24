@@ -2,10 +2,16 @@ import math
 
 import arrow
 from flask import Blueprint
+from flask import g
+from flask import redirect
 from flask import render_template
+from flask import request
+from flask import url_for
 
 from module.project import Project
 from module.team import Team
+from module.users import User
+
 
 VIEW_PROJECT = Blueprint('project', __name__, url_prefix='/project')
 
@@ -24,6 +30,23 @@ def index():
 
     return render_template('./project_index.html', projects=projects)
 
+@VIEW_PROJECT.route('/<pid>/edit', methods=('GET', 'POST'))
+def project_edit(pid):
+    project = Project.get(pid)
+    if g.user['account']['_id'] not in project['owners']:
+        return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
+
+    if request.method == 'GET':
+        return render_template('./project_edit.html', project=project)
+
+    elif request.method == 'POST':
+        data = {
+            'desc': request.form['desc'].strip(),
+            'name': request.form['name'].strip(),
+        }
+        Project.update(pid, data)
+        return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
+
 @VIEW_PROJECT.route('/<pid>/')
 def team_page(pid):
     teams = []
@@ -32,9 +55,25 @@ def team_page(pid):
         return u'no data', 404
 
     data = list(Team.list_by_pid(project['_id']))
+    uids = []
+    for t in data:
+        uids.extend(t['chiefs'])
 
+    user_info = User.get_info(uids)
+    chiefs = []
+    for uid in list(set(uids)):
+        chiefs.append(user_info[uid]['profile']['badge_name'])
+
+    # ----- group for layout ----- #
     per = 3
     for i in range(int(math.ceil(len(data) / float(per)))):
         teams.append(data[per*i:min([per*(i+1), len(data)])])
 
-    return render_template('./project_teams_index.html', teams=teams, project=project)
+    editable = g.user['account']['_id'] in project['owners']
+
+    return render_template('./project_teams_index.html',
+        teams=teams,
+        project=project,
+        editable=editable,
+        chiefs=chiefs,
+    )

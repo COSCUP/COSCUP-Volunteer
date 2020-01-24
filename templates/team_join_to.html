@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        Team Join to
+    </h1>
+    <p class="subtitle">加入 {{project.name}} / {{team.name}}</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div class="column is-half is-offset-one-quarter">
+              {% if is_in_wait %}
+              <article class="message">
+                  <div class="message-body">
+                      已收到申請加入 {{project.name}} / {{team.name}}，敬請稍等組長們的審核。
+                  </div>
+              </article>
+              <div class="content">
+                  <a class="button is-success is-light" href="/team/{{team.pid}}/{{team.tid}}">確定</a>
+              </div>
+              {% else %}
+              <form method="POST">
+                  <div class="field">
+                      <article class="message">
+                          <div class="message-body">
+                              感謝申請加入 {{project.name}} / {{team.name}}，提出申請後敬請稍等組長們的審核。
+                          </div>
+                      </article>
+                  </div>
+                  <div class="field">
+                      <label class="label">給組長的訊息</label>
+                      <div class="control">
+                          <textarea class="textarea" name="note"></textarea>
+                      </div>
+                      <p class="help is-success">可以留下訊息或是簡介讓組長方便審閱。</p>
+                  </div>
+                  <div class="field">
+                      <div class="control">
+                          <button class="button is-link is-fullwidth" type="submit">
+                              申請加入 {{project.name}} / {{team.name}}
+                          </button>
+                      </div>
+                  </div>
+              </form>
+              {% endif %}
+          </div>
+      </div>
+  </div>
+</section>
+{% endblock %}
+

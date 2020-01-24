@@ -37,3 +37,17 @@ class Project(object):
 
         '''
         return ProjectDB(pid).find_one({'_id': pid})
+
+    @staticmethod
+    def update(pid, data):
+        ''' update data
+
+        :param dict data: data
+
+        '''
+        _data = {}
+        for k in ('name', 'desc'):
+            if k in data:
+                _data[k] = data[k]
+
+        ProjectDB(pid).find_one_and_update({'_id': pid}, {'$set': _data})

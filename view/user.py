@@ -1,3 +1,5 @@
+import html
+
 import arrow
 from flask import Blueprint
 from flask import redirect
@@ -37,7 +39,7 @@ def user_page(uid, nickname=None):
         intro = ''
     else:
         badge_name = user['profile']['badge_name']
-        intro = markdown(user['profile']['intro'])
+        intro = markdown(html.escape(user['profile']['intro']))
 
     participate_in = []
     for p in Team.participate_in(uid):

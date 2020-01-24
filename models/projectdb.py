@@ -27,6 +27,7 @@ class ProjectDB(DBBase):
             '_id': self.pid,
             'name': '',
             'action_date': 0,
+            'desc': '',
             'owners': [],
         }
         self.make_create_at(r)
