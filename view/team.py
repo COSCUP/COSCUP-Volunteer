@@ -32,9 +32,21 @@ def index(pid, tid):
         else:
             team[k] = markdown(html.escape(team[k]))
 
-    join_able = not (g.user['account']['_id'] in team['members'] or g.user['account']['_id'] in team['chiefs'])
+    preview_public = False
+    if 'preview' in request.args:
+        preview_public = True
 
-    return render_template('./team_index.html', team=team, project=project, join_able=join_able)
+    join_able = not (g.user['account']['_id'] in team['members'] or \
+                     g.user['account']['_id'] in team['chiefs'] or \
+                     g.user['account']['_id'] in team['owners'] or \
+                     g.user['account']['_id'] in project['owners'])
+
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    return render_template('./team_index.html', team=team, project=project,
+            join_able=join_able, is_admin=is_admin, preview_public=preview_public)
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit', methods=('GET', 'POST'))
 def team_edit(pid, tid):
@@ -44,6 +56,13 @@ def team_edit(pid, tid):
 
     project = Project.get(pid)
     if not project:
+        return redirect('/')
+
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    if not is_admin:
         return redirect('/')
 
     if request.method == 'GET':
