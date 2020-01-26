@@ -1,40 +1,26 @@
-{% extends "base.html" %}
-{% block body %}
-<section class="section">
-  <div class="container">
-    <h1 class="title">
-        Setting Project
-    </h1>
-    <p class="subtitle">設定頁面</p>
-  </div>
-</section>
-<section class="section">
-  <div class="container">
-      <div class="columns">
-          <div class="column is-half is-offset-one-quarter">
-              <form method="POST">
-                  <div class="field">
-                      <label class="label">name</label>
-                      <div class="control">
-                          <input class="input" type="text" name="name" value="{{project.name}}">
-                      </div>
-                  </div>
-                  <div class="field">
-                      <label class="label">description</label>
-                      <div class="control">
-                          <textarea class="textarea" name="desc" placeholder="Project description ...">{{project.desc}}</textarea>
-                      </div>
-                  </div>
-                  <div class="field">
-                      <div class="control">
-                          <button class="button is-primary" type="submit">Update</button>
-                          <a class="button" href="/project/{{project._id}}">Cancel</a>
-                      </div>
-                  </div>
-              </form>
-          </div>
-      </div>
-  </div>
-</section>
+{% extends "project_edit_base.html" %}
+{%block project_edit_menu%}is-active{%endblock%}
+{% block project_edit_body %}
+<form method="POST">
+    <div class="field">
+        <label class="label">name</label>
+        <div class="control">
+            <input class="input" type="text" name="name" value="{{project.name}}">
+        </div>
+        <p class="help is-success">活動名稱</p>
+    </div>
+    <div class="field">
+        <label class="label">description</label>
+        <div class="control">
+            <textarea class="textarea" name="desc" placeholder="Project description ...">{{project.desc}}</textarea>
+        </div>
+        <p class="help is-success">描述一下活動的簡介</p>
+    </div>
+    <div class="field">
+        <div class="control">
+            <button class="button is-primary" type="submit">Update</button>
+            <a class="button" href="/project/{{project._id}}">Cancel</a>
+        </div>
+    </div>
+</form>
 {% endblock %}
-

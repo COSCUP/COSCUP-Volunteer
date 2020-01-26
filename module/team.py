@@ -14,6 +14,9 @@ class Team(object):
         :param list owners: owners
 
         '''
+        if not tid or not pid or not owners:
+            raise Exception('lost required')
+
         teamdb = TeamDB(pid, tid)
 
         data = teamdb.default()
@@ -72,9 +75,14 @@ class Team(object):
         '''
         teamdb = TeamDB(pid=pid, tid=tid)
         _data = {}
-        for k in ('name', 'public_desc', 'desc'):
+        for k in ('name', 'public_desc', 'desc', 'chiefs', 'members', 'owners'):
             if k in data:
                 _data[k] = data[k]
+
+        for k in ('chiefs', 'members', 'owners'):
+            if k in _data:
+                if isinstance(_data[k], str):
+                    _data[k] = _data[k].split(',')
 
         if _data:
             return teamdb.update_setting(_data)

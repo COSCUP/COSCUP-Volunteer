@@ -1,0 +1,112 @@
+{% extends "project_edit_base.html" %}
+{%block project_edit_menu_create_team%}is-active{%endblock%}
+{% block project_edit_body %}
+<div class="content">
+    <ul>
+    {% for team in teams %}
+    <li>
+        {{team.name}} ({{team.tid}}) <a v-on:click="showedit('{{team.tid}}', '{{team.name}}')"><span class="icon"><i class="far fa-edit"></i></span><span>編輯</span></a>
+    </li>
+    {% endfor %}
+    <li><a v-on:click="showcreate()"><span class="icon"><i class="far fa-plus-square"></i></span><span>建立</span></a></li>
+    </ul>
+</div>
+<div class="modal" v-bind:class="{'is-active': isActive}">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">[[modalTitle]]</p>
+            <button class="delete" aria-label="close" v-on:click="goback"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="field">
+                <label class="label">name</label>
+                <div class="control">
+                    <input class="input" type="text" name="name" v-model="modalBody.name">
+                </div>
+                <p class="help is-success">組別名稱</p>
+            </div>
+            <div class="field">
+                <label class="label">tid</label>
+                <div class="control">
+                    <input class="input" type="text" name="name" v-model="modalBody.tid" v-bind:readonly="modalBody.submittype === 'update'">
+                </div>
+                <p class="help is-success">組別 id，皆用英文表示</p>
+            </div>
+            <div class="field">
+                <label class="label">owners</label>
+                <div class="control">
+                    <input class="input" type="text" name="owners" v-model="modalBody.owners" v-bind:disabled="modalBody.submittype === 'create'">
+                </div>
+                <p class="help is-success">擁有者，擁有極高的管理權限，以 , 區隔。</p>
+            </div>
+            <div class="field">
+                <label class="label">chiefs</label>
+                <div class="control">
+                    <input class="input" type="text" name="chiefs" v-model="modalBody.chiefs" v-bind:disabled="modalBody.submittype === 'create'">
+                </div>
+                <p class="help is-success">組長，以 , 區隔。</p>
+            </div>
+            <div class="field">
+                <label class="label">members</label>
+                <div class="control">
+                    <input class="input" type="text" name="members" v-model="modalBody.members" v-bind:disabled="modalBody.submittype === 'create'">
+                </div>
+                <p class="help is-success">組員，以 , 區隔。</p>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success" v-on:click="gosubmit">Update</button>
+            <button class="button" v-on:click="goback">Cancel</button>
+        </footer>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    var $project = new Vue({
+        el: '#projectbody' ,
+        data: {
+            isActive: false,
+            modalNew: {name: '', tid: '', chiefs: '', members: '', owners: ''},
+            modalTitle: '',
+            modalBody: ''
+        },
+        methods: {
+            showedit: function(tid, name) {
+                this.modalTitle = '編輯 ' + name;
+                axios.get('./team/api', {params: {tid: tid}}).then(function(resp){
+                    $project.modalBody = resp.data;
+                    $project.modalBody.submittype = 'update';
+                    $project.fixpage();
+                });
+            },
+            showcreate: function() {
+                this.modalTitle = '建立新的組別';
+                this.modalBody = $project.modalNew;
+                this.modalBody.submittype = 'create';
+                this.fixpage();
+            },
+            gosubmit: function(btn) {
+                btn.target.classList.add('is-loading');
+                axios.post('./team/api', this.modalBody).then(function(resp){
+                    $project.goback();
+                    window.location.href = './team';
+                });
+            },
+            fixpage: function() {
+                this.isActive = true;
+                var html = document.querySelector('html');
+                html.classList.add('is-clipped');
+            },
+            goback: function() {
+                var html = document.querySelector('html');
+                html.classList.remove('is-clipped');
+                this.isActive = false;
+            }
+        },
+        delimiters: ['[[', ']]']
+    });
+</script>
+{% endblock %}

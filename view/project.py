@@ -1,3 +1,4 @@
+import json
 import math
 
 import arrow
@@ -47,6 +48,38 @@ def project_edit(pid):
         Project.update(pid, data)
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
+@VIEW_PROJECT.route('/<pid>/edit/team', methods=('GET', 'POST'))
+def project_edit_create_team(pid):
+    project = Project.get(pid)
+    if g.user['account']['_id'] not in project['owners']:
+        return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
+
+    teams = Team.list_by_pid(project['_id'])
+    return render_template('./project_edit_create_team.html', project=project, teams=teams)
+
+@VIEW_PROJECT.route('/<pid>/edit/team/api', methods=('GET', 'POST'))
+def project_edit_create_team_api(pid):
+    project = Project.get(pid)
+    if g.user['account']['_id'] not in project['owners']:
+        return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
+
+    if request.method == 'GET':
+        _team = Team.get(pid, request.args['tid'].strip())
+        team = {}
+        for k in ('name', 'chiefs', 'members', 'owners', 'tid'):
+            team[k] = _team[k]
+
+        return u'%s' % json.dumps(team)
+
+    elif request.method == 'POST':
+        data = request.json
+        if data['submittype'] == 'update':
+            Team.update_setting(pid=pid, tid=data['tid'], data=data)
+            return u'%s' % request.json
+        elif data['submittype'] == 'create':
+            Team.create(pid=pid, tid=data['tid'], name=data['name'], owners=project['owners'])
+            return u'%s' % data
+
 @VIEW_PROJECT.route('/<pid>/')
 def team_page(pid):
     teams = []
@@ -60,9 +93,10 @@ def team_page(pid):
         uids.extend(t['chiefs'])
 
     user_info = User.get_info(uids)
-    chiefs = []
-    for uid in list(set(uids)):
-        chiefs.append(user_info[uid]['profile']['badge_name'])
+    for t in data:
+        t['chiefs_name'] = []
+        for uid in t['chiefs']:
+            t['chiefs_name'].append(user_info[uid]['profile']['badge_name'])
 
     # ----- group for layout ----- #
     per = 3
@@ -75,5 +109,4 @@ def team_page(pid):
         teams=teams,
         project=project,
         editable=editable,
-        chiefs=chiefs,
     )
