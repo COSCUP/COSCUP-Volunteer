@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        Setting Project
+    </h1>
+    <p class="subtitle">設定頁面</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div class="column is-one-fifth">
+              <aside class="menu">
+                  <p class="menu-label">管理</p>
+                  <ul class="menu-list">
+                      <li><a class="{%block project_edit_menu%}{%endblock%}" href="/project/{{project._id}}/edit">設定</a></li>
+                      <li><a class="{%block project_edit_menu_create_team%}{%endblock%}" href="/project/{{project._id}}/edit/team">編輯組別</a></li>
+                  </ul>
+              </aside>
+          </div>
+          <div id="projectbody" class="column is-half">{% block project_edit_body %}{% endblock %}</div>
+      </div>
+  </div>
+</section>
+{% endblock %}

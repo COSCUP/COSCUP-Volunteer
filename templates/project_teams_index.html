@@ -31,7 +31,7 @@
                       </p>
                   </div>
                   <div class="message-body">
-                      <p>組長：{{chiefs|join(',')}}</p>
+                      <p>組長：{{team.chiefs_name|join(',')}}</p>
                       <p>組員：{{team.members|length}}</p>
                       <div class="buttons is-right">
                           <a class="button is-info is-light" href="/team/{{project._id}}/{{team.tid}}/">
