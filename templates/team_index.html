@@ -3,18 +3,20 @@
 {% block team_body %}
 <section class="section">
   <div class="content">
+      {% if team.desc %}
       {{team.desc|safe}}
+      {% else %}
+      <a href="./edit">（編輯說明簡介...）</a>
+      {% endif %}
   </div>
 </section>
-<article class="message is-success">
-  <div class="message-header">
-      <p>
-          <span class="icon"><i class="fas fa-project-diagram"></i></span>
-          <span>說明</span>
-      </p>
-  </div>
-  <div class="message-body">
-      <p>這裡要呈現說明</p>
-  </div>
-</article>
+{% endblock %}
+
+{% block team_body_right %}
+{% if not (team.desc or team.public_desc) %}
+<div class="notification">
+    <p><span class="icon has-text-info"><i class="fas fa-exclamation-circle"></i></span>
+    說明頁面分成兩種，分別給「已加入」、「未加入」的組員。
+    編輯說明簡介可以到<strong>組別管理</strong>、<a href="./edit"><strong>設定</strong></a>來撰寫。</p>
+{% endif %}
 {% endblock %}
