@@ -85,9 +85,12 @@ class Team(object):
         '''
         teamdb = TeamDB(pid=pid, tid=tid)
         _data = {}
-        for k in ('name', 'public_desc', 'desc', 'chiefs', 'members', 'owners'):
+        for k in ('name', 'public_desc', 'desc', 'chiefs', 'members', 'owners', 'headcount'):
             if k in data:
                 _data[k] = data[k]
+
+        if 'headcount' in _data:
+            _data['headcount'] = int(_data['headcount'])
 
         for k in ('chiefs', 'members', 'owners'):
             if k in _data:

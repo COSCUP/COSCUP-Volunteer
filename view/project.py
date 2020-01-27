@@ -66,8 +66,14 @@ def project_edit_create_team_api(pid):
     if request.method == 'GET':
         _team = Team.get(pid, request.args['tid'].strip())
         team = {}
-        for k in ('name', 'chiefs', 'members', 'owners', 'tid'):
-            team[k] = _team[k]
+        for k in ('name', 'chiefs', 'members', 'owners', 'tid', 'headcount'):
+            if k in _team:
+                team[k] = _team[k]
+
+        if 'headcount' not in team:
+            team['headcount'] = 0
+        else:
+            team['headcount'] = max([0, int(team['headcount'])])
 
         return jsonify(team)
 

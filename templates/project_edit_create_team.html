@@ -29,9 +29,16 @@
             <div class="field">
                 <label class="label">tid</label>
                 <div class="control">
-                    <input class="input" type="text" name="name" v-model="modalBody.tid" v-bind:readonly="modalBody.submittype === 'update'">
+                    <input class="input" type="text" name="tid" v-model="modalBody.tid" v-bind:readonly="modalBody.submittype === 'update'">
                 </div>
                 <p class="help is-success">組別 id，皆用英文表示</p>
+            </div>
+            <div class="field">
+                <label class="label">headcount</label>
+                <div class="control">
+                    <input class="input" type="number" name="headcount" min="0" v-model="modalBody.headcount" v-bind:disabled="modalBody.submittype === 'create'">
+                </div>
+                <p class="help is-success">上限人數</p>
             </div>
             <div class="field">
                 <label class="label">owners</label>
@@ -56,7 +63,7 @@
             </div>
         </section>
         <footer class="modal-card-foot">
-            <button class="button is-success" v-on:click="gosubmit">Update</button>
+            <button class="button is-success" type="submit" v-on:click.prevent="gosubmit">Update</button>
             <button class="button" v-on:click="goback">Cancel</button>
         </footer>
     </div>
@@ -69,7 +76,7 @@
         el: '#projectbody' ,
         data: {
             isActive: false,
-            modalNew: {name: '', tid: '', chiefs: '', members: '', owners: ''},
+            modalNew: {name: '', tid: '', chiefs: '', members: '', owners: '', headcount: 0},
             modalTitle: '',
             modalBody: ''
         },
