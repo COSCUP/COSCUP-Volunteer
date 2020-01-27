@@ -1,9 +1,9 @@
-import json
 import math
 
 import arrow
 from flask import Blueprint
 from flask import g
+from flask import jsonify
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -69,13 +69,13 @@ def project_edit_create_team_api(pid):
         for k in ('name', 'chiefs', 'members', 'owners', 'tid'):
             team[k] = _team[k]
 
-        return u'%s' % json.dumps(team)
+        return jsonify(team)
 
     elif request.method == 'POST':
         data = request.json
         if data['submittype'] == 'update':
             Team.update_setting(pid=pid, tid=data['tid'], data=data)
-            return u'%s' % request.json
+            return u'%s' % data
         elif data['submittype'] == 'create':
             Team.create(pid=pid, tid=data['tid'], name=data['name'], owners=project['owners'])
             return u'%s' % data
