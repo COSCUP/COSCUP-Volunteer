@@ -1,56 +1,49 @@
 {% extends "team_edit.html" %}
 {% block team_edit_subtitle %}編輯組員{% endblock %}
+{% block team_edit_user_menu %}is-active{% endblock %}
 {% block team_edit_body %}
-<section class="section">
-  <div class="container">
-      <div class="columns">
-          <div class="column is-one-fifth">
-          </div>
-          <div class="column is-half">
-              <div id="teamuser" class="content">
-                  <h3>等待核准組員（{{waitting_list|length}}）</h3>
-                  {% for u in waitting_list %}
-                  <article class="media box">
-                      <div class="media-left">
-                          <figure class="image is-48x48">
-                              <img class="is-rounded" src="{{u._info.oauth.picture}}">
-                          </figure>
-                      </div>
-                      <div class="media-content">
-                          <div class="content">
-                              <p><strong>{{u._info.profile.badge_name}}</strong> <small class="tag">{{u.uid}}</small></p>
-                              <p>{{u.note}}</p>
-                          </div>
-                          <nav class="level is-mobile">
-                              <div class="level-left">
-                                  <a class="level-item" href="/user/{{u.uid}}">
-                                      <span class="icon">
-                                          <i class="far fa-id-badge"></i>
-                                      </span>
-                                      <span class="is-hidden-mobile">個人頁面</span>
-                                  </a>
-                                  <a class="level-item" v-on:click="showapprove">
-                                      <span class="icon">
-                                          <i class="fas fa-user-cog" data-uid="{{u.uid}}"></i>
-                                      </span>
-                                      <span class="is-hidden-mobile" data-uid="{{u.uid}}">編輯申請</span>
-                                  </a>
-                              </div>
-                          </nav>
-                      </div>
-                  </article>
-                  {% endfor %}
-                  <h3>已加入組員（{{team.members|length}}）</h3>
-                  <ol>
-                      {% for u in team.members %}
-                      <li>{{u}}</li>
-                      {% endfor %}
-                  </ol>
-              </div>
-          </div>
-      </div>
-  </div>
-</section>
+<div class="column is-half">
+    <div id="teamuser" class="content">
+        <h3>等待核准組員（{{waitting_list|length}}）</h3>
+        {% for u in waitting_list %}
+        <article class="media box">
+            <div class="media-left">
+                <figure class="image is-48x48">
+                    <img class="is-rounded" src="{{u._info.oauth.picture}}">
+                </figure>
+            </div>
+            <div class="media-content">
+                <div class="content">
+                    <p><strong>{{u._info.profile.badge_name}}</strong> <small class="tag">{{u.uid}}</small></p>
+                    <p>{{u.note}}</p>
+                </div>
+                <nav class="level is-mobile">
+                    <div class="level-left">
+                        <a class="level-item" href="/user/{{u.uid}}">
+                            <span class="icon">
+                                <i class="far fa-id-badge"></i>
+                            </span>
+                            <span class="is-hidden-mobile">個人頁面</span>
+                        </a>
+                        <a class="level-item" v-on:click="showapprove">
+                            <span class="icon">
+                                <i class="fas fa-user-cog" data-uid="{{u.uid}}"></i>
+                            </span>
+                            <span class="is-hidden-mobile" data-uid="{{u.uid}}">編輯申請</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </article>
+        {% endfor %}
+        <h3>已加入組員（{{team.members|length}}）</h3>
+        <ol>
+            {% for u in team.members %}
+            <li>{{u}}</li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
 <div id="teamusermodal" class="modal" v-bind:class="{'is-active': isActive}">
     <div class="modal-background"></div>
     <div class="modal-card">
