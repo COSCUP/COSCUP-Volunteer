@@ -8,5 +8,26 @@
     <p class="subtitle">{% block team_edit_subtitle %}{% endblock %}</p>
   </div>
 </section>
-{% block team_edit_body %}{% endblock %}
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div class="column is-one-fifth">
+              <aside class="menu">
+                  <p class="menu-label">{{team.name}}</p>
+                  <ul class="menu-list">
+                      <li>
+                          <a href="{{url_for('team.index', pid=team.pid, tid=team.tid)}}">首頁</a>
+                      </li>
+                  </ul>
+                  <p class="menu-label">{{team.name}} - 管理</p>
+                  <ul class="menu-list">
+                      <li><a class="{%block team_edit_menu%}{%endblock%}" href="/team/{{team.pid}}/{{team.tid}}/edit">設定</a></li>
+                      <li><a class="{%block team_edit_user_menu%}{%endblock%}" href="/team/{{team.pid}}/{{team.tid}}/edit_user">組員</a></li>
+                  </ul>
+              </aside>
+          </div>
+          {% block team_edit_body %}{% endblock %}
+      </div>
+  </div>
+</section>
 {% endblock %}
