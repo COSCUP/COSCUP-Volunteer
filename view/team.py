@@ -103,7 +103,24 @@ def team_edit_user(pid, tid):
         for u in waitting_list:
             u['_info'] = users_info[u['uid']]
 
-        return render_template('./team_edit_user.html', project=project, team=team, waitting_list=waitting_list)
+        members = []
+        if team['members']:
+            users_info = User.get_info(team['members'])
+            for uid in team['members']:
+                members.append(users_info[uid])
+
+            sorted(members, key=lambda u: u['profile']['badge_name'])
+
+        return render_template('./team_edit_user.html',
+                project=project, team=team, waitting_list=waitting_list, members=members)
+
+    elif request.method == 'POST':
+        data = request.json
+
+        if data['case'] == 'deluser':
+            Team.update_members(pid=pid, tid=tid, del_uids=[data['uid'], ])
+
+        return jsonify(data)
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit_user/api', methods=('GET', 'POST'))
 def team_edit_user_api(pid, tid):
