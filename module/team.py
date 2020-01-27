@@ -36,6 +36,16 @@ class Team(object):
         teamdb = TeamDB(pid, tid)
         teamdb.update_users(field='chiefs', add_uids=add_uids, del_uids=del_uids)
 
+    def update_members(pid, tid, add_uids=None, del_uids=None):
+        ''' update chiefs
+
+        :param list add_uids: add uids
+        :param list del_uids: del uids
+
+        '''
+        teamdb = TeamDB(pid, tid)
+        teamdb.update_users(field='members', add_uids=add_uids, del_uids=del_uids)
+
     @staticmethod
     def list_by_pid(pid):
         ''' List all team in project
@@ -81,6 +91,9 @@ class Team(object):
 
         for k in ('chiefs', 'members', 'owners'):
             if k in _data:
+                if not _data[k]:
+                    _data[k] = []
+                    continue
                 if isinstance(_data[k], str):
                     _data[k] = _data[k].split(',')
 

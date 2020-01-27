@@ -1,0 +1,153 @@
+{% extends "team_edit.html" %}
+{% block team_edit_subtitle %}編輯組員{% endblock %}
+{% block team_edit_body %}
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div class="column is-one-fifth">
+          </div>
+          <div class="column is-half">
+              <div id="teamuser" class="content">
+                  <h3>等待核准組員（{{waitting_list|length}}）</h3>
+                  {% for u in waitting_list %}
+                  <article class="media box">
+                      <div class="media-left">
+                          <figure class="image is-48x48">
+                              <img class="is-rounded" src="{{u._info.oauth.picture}}">
+                          </figure>
+                      </div>
+                      <div class="media-content">
+                          <div class="content">
+                              <p><strong>{{u._info.profile.badge_name}}</strong> <small class="tag">{{u.uid}}</small></p>
+                              <p>{{u.note}}</p>
+                          </div>
+                          <nav class="level is-mobile">
+                              <div class="level-left">
+                                  <a class="level-item" href="/user/{{u.uid}}">
+                                      <span class="icon">
+                                          <i class="far fa-id-badge"></i>
+                                      </span>
+                                      <span class="is-hidden-mobile">個人頁面</span>
+                                  </a>
+                                  <a class="level-item" v-on:click="showapprove">
+                                      <span class="icon">
+                                          <i class="fas fa-user-cog" data-uid="{{u.uid}}"></i>
+                                      </span>
+                                      <span class="is-hidden-mobile" data-uid="{{u.uid}}">編輯申請</span>
+                                  </a>
+                              </div>
+                          </nav>
+                      </div>
+                  </article>
+                  {% endfor %}
+                  <h3>已加入組員（{{team.members|length}}）</h3>
+                  <ol>
+                      {% for u in team.members %}
+                      <li>{{u}}</li>
+                      {% endfor %}
+                  </ol>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+<div id="teamusermodal" class="modal" v-bind:class="{'is-active': isActive}">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">[[modalTitle]]</p>
+            <button class="delete" aria-label="close" v-on:click="goback"></button>
+        </header>
+        <section class="modal-card-body">
+            <article class="media">
+                <div class="media-left">
+                    <figure class="image is-48x48">
+                        <img class="is-rounded" v-bind:src="user.picture">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <div class="content">
+                        <p><strong>[[user.badge_name]]</strong> <small class="tag">[[user.uid]]</small></p>
+                        <p>[[user.note]]</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-info" v-on:click="sendresult('approval')">
+                <span class="icon"><i class="fas fa-user-plus"></i></span>
+                <span>核准加入</span>
+            </button>
+            <button class="button is-danger" v-on:click="sendresult('deny')">
+                <span class="icon"><i class="fas fa-user-times"></i></span>
+                <span>不允許加入</span>
+            </button>
+            <button class="button" v-on:click="goback">
+                <span class="icon"><i class="fas fa-user-clock"></i></span>
+                <span>暫不處理</span>
+            </button>
+        </footer>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    var $teamusermodal = new Vue({
+        el: '#teamusermodal',
+        data: {
+            isActive: false,
+            user: {},
+            modalTitle: ''
+        },
+        methods: {
+            showapprove: function(uid) {
+                this.user = {};
+                axios.get('./edit_user/api', {params: {uid: uid}}).then(function(resp){
+                    $teamusermodal.modalTitle = '核准加入 ' + resp.data.badge_name;
+                    $teamusermodal.user = resp.data;
+                }).then(function(){
+                    $teamusermodal.fixpage();
+                });
+            },
+            sendresult: function(result) {
+                this.$el.querySelectorAll('footer button.button').forEach(function(btn){
+                    btn.classList.add('is-loading');
+                });
+
+                var uid = $teamusermodal.user.uid;
+                var wid = $teamusermodal.user.wid;
+
+                axios.post('./edit_user/api', {uid: uid, wid: wid, result: result}).then(function(resp){
+                    $teamusermodal.goback();
+                    window.location.href = './edit_user';
+                });
+            },
+            fixpage: function() {
+                this.isActive = true;
+                var html = document.querySelector('html');
+                html.classList.add('is-clipped');
+            },
+            goback: function() {
+                var html = document.querySelector('html');
+                html.classList.remove('is-clipped');
+                this.isActive = false;
+
+                this.$el.querySelectorAll('footer button.button').forEach(function(btn){
+                    btn.classList.remove('is-loading');
+                });
+            }
+        },
+        delimiters: ['[[', ']]']
+    });
+    var $teamuser = new Vue({
+        el: '#teamuser',
+        methods: {
+            showapprove: function(btn) {
+                $teamusermodal.showapprove(btn.target.dataset.uid);
+            }
+        },
+        delimiters: ['[[', ']]']
+    });
+</script>
+{% endblock %}

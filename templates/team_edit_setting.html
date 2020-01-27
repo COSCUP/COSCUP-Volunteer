@@ -1,0 +1,40 @@
+{% extends "team_edit.html" %}
+{% block team_edit_subtitle %}設定頁面{% endblock %}
+{% block team_edit_body %}
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div class="column is-half is-offset-one-quarter">
+              <form method="POST">
+                  <div class="field">
+                      <label class="label">name</label>
+                      <div class="control">
+                          <input class="input" type="text" name="name" value="{{team.name}}">
+                      </div>
+                  </div>
+                  <div class="field">
+                      <label class="label">給未加入的組別介紹</label>
+                      <div class="control">
+                          <textarea class="textarea" name="public_desc" placeholder="description ...">{{team.public_desc}}</textarea>
+                      </div>
+                      <p class="help is-success">給未加入的人閱讀的介紹內容，支援 markdown。<a target="_blank" href="/team/{{team.pid}}/{{team.tid}}/?preview">檢視「未加入」頁面</a>。</p>
+                  </div>
+                  <div class="field">
+                      <label class="label">給組員的組別介紹</label>
+                      <div class="control">
+                          <textarea class="textarea" name="desc" placeholder="description ...">{{team.desc}}</textarea>
+                      </div>
+                      <p class="help is-success">給加入的組員閱讀的介紹，會顯示在組別頁面首頁部分，支援 markdown。</p>
+                  </div>
+                  <div class="field">
+                      <div class="control">
+                          <button class="button is-primary" type="submit">Update</button>
+                          <a class="button" href="/team/{{team.pid}}/{{team.tid}}">Cancel</a>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+</section>
+{% endblock %}
