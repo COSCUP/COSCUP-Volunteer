@@ -4,6 +4,7 @@
 {% block team_edit_body %}
 <div class="column">
     <div id="teamuser" class="content">
+        {% if waitting_list %}
         <h3>等待核准組員（{{waitting_list|length}}）</h3>
         {% for u in waitting_list %}
         <article class="media box">
@@ -36,7 +37,12 @@
             </div>
         </article>
         {% endfor %}
-        <h3>已加入組員（{{team.members|length}}）</h3>
+        {% endif %}
+        {% if team.headcount %}
+        <h3>已加入組員（<span class="is-family-monospace">{{members|length}}/{{team.headcount}}</span>）</h3>
+        {% else %}
+        <h3>已加入組員（{{members|length}}）</h3>
+        {% endif %}
         <div class="table-container">
             <table class="table is-hoverable">
                 <thead>

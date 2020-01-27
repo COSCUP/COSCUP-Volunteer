@@ -104,9 +104,10 @@ def team_edit_user(pid, tid):
             u['_info'] = users_info[u['uid']]
 
         members = []
-        if team['members']:
-            users_info = User.get_info(team['members'])
-            for uid in team['members']:
+        if team['members'] or team['chiefs']:
+            _all_uids = set(team['chiefs']) | set(team['members'])
+            users_info = User.get_info(list(_all_uids))
+            for uid in _all_uids:
                 members.append(users_info[uid])
 
             sorted(members, key=lambda u: u['profile']['badge_name'])
@@ -158,8 +159,11 @@ def team_edit_user_api(pid, tid):
         return jsonify(user_data)
 
     elif request.method == 'POST':
-        data = request.json
+        all_members = len(team['members']) + len(team['chiefs'])
+        if 'headcount' in team and team['headcount'] and all_members >= team['headcount']:
+            return jsonify({'status': 'fail', 'message': 'over headcount.'}), 406
 
+        data = request.json
         w = WaitList.make_result(wid=data['wid'], pid=pid, uid=data['uid'], result=data['result'])
         if w and 'result' in w and w['result'] == 'approval':
             Team.update_members(pid=pid, tid=tid, add_uids=[data['uid'], ])
