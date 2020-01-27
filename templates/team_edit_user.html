@@ -2,7 +2,7 @@
 {% block team_edit_subtitle %}編輯組員{% endblock %}
 {% block team_edit_user_menu %}is-active{% endblock %}
 {% block team_edit_body %}
-<div class="column is-half">
+<div class="column">
     <div id="teamuser" class="content">
         <h3>等待核准組員（{{waitting_list|length}}）</h3>
         {% for u in waitting_list %}
@@ -37,11 +37,43 @@
         </article>
         {% endfor %}
         <h3>已加入組員（{{team.members|length}}）</h3>
-        <ol>
-            {% for u in team.members %}
-            <li>{{u}}</li>
-            {% endfor %}
-        </ol>
+        <div class="table-container">
+            <table class="table is-hoverable">
+                <thead>
+                    <tr>
+                        <th>uid</th>
+                        <th>Picture</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Mail</th>
+                        <th><abbr title="Operator">OP</abbr></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for u in members %}
+                    <tr>
+                        <td><span class="tag">{{u._id}}</span></td>
+                        <td>
+                            <figure class="image is-32x32">
+                                <img class="is-rounded" src="{{u.oauth.picture}}">
+                            </figure>
+                        </td>
+                        <td>{{u.profile.badge_name}}</td>
+                        <td>{{u.profile_real.phone}}</td>
+                        <td>{{u.oauth.email}}</td>
+                        <td>
+                            <span class="icon"><a href="/user/{{u._id}}"><i class="far fa-id-badge"></i></a></span>
+                            <span class="icon">
+                                <a class="has-text-danger" v-on:click="deluser">
+                                    <i class="fas fa-user-times" data-uid="{{u._id}}" data-name="{{u.profile.badge_name}}"></i>
+                                </a>
+                            </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div id="teamusermodal" class="modal" v-bind:class="{'is-active': isActive}">
@@ -138,6 +170,16 @@
         methods: {
             showapprove: function(btn) {
                 $teamusermodal.showapprove(btn.target.dataset.uid);
+            },
+            deluser: function(btn) {
+                var uid = btn.target.dataset.uid;
+                var name = btn.target.dataset.name;
+                var ans = window.confirm('是否刪除 ' + name + '(' + uid + ') ?\r\n\r\n（確定就直接移除組員喔！）');
+                if (ans === true) {
+                    axios.post('./edit_user', {uid: uid, case: 'deluser'}).then(function(resp){
+                        window.location.href = './edit_user';
+                    });
+                }
             }
         },
         delimiters: ['[[', ']]']
