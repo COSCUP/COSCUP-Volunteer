@@ -38,12 +38,16 @@ def project_edit(pid):
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'GET':
+        if 'volunteer_certificate_hours' not in project:
+            project['volunteer_certificate_hours'] = 0
+
         return render_template('./project_edit.html', project=project)
 
     elif request.method == 'POST':
         data = {
             'desc': request.form['desc'].strip(),
             'name': request.form['name'].strip(),
+            'volunteer_certificate_hours': max([0, int(request.form['volunteer_certificate_hours'])]),
         }
         Project.update(pid, data)
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))

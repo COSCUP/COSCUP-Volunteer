@@ -18,6 +18,13 @@
         <p class="help is-success">描述一下活動的簡介</p>
     </div>
     <div class="field">
+        <label class="label">志工時數申請上限</label>
+        <div class="control">
+            <input class="input" type="number" name="volunteer_certificate_hours" min="0" value="{{project.volunteer_certificate_hours}}">
+        </div>
+        <p class="help is-success">時數申請上限，顯示在說明處。</p>
+    </div>
+    <div class="field">
         <div class="control">
             <button class="button is-primary" type="submit">Update</button>
             <a class="button" href="/project/{{project._id}}">Cancel</a>

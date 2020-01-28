@@ -46,8 +46,11 @@ class Project(object):
 
         '''
         _data = {}
-        for k in ('name', 'desc'):
+        for k in ('name', 'desc', 'volunteer_certificate_hours'):
             if k in data:
                 _data[k] = data[k]
+
+        if 'volunteer_certificate_hours' in _data:
+            _data['volunteer_certificate_hours'] = int(_data['volunteer_certificate_hours'])
 
         ProjectDB(pid).find_one_and_update({'_id': pid}, {'$set': _data})
