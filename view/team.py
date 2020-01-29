@@ -190,3 +190,26 @@ def team_join_to(pid, tid):
     elif request.method == 'POST':
         WaitList.join_to(pid=pid, tid=tid, uid=g.user['account']['_id'], note=request.form['note'].strip())
         return redirect(url_for('team.team_join_to', pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
+
+@VIEW_TEAM.route('/<pid>/<tid>/form/accommodation', methods=('GET', 'POST'))
+def team_form_accommodation(pid, tid):
+    team = Team.get(pid, tid)
+    if not team:
+        return redirect('/')
+
+    project = Project.get(team['pid'])
+    if not project:
+        return redirect('/')
+
+    if request.method == 'GET':
+        is_ok_submit = False
+
+        user = User(uid=g.user['account']['_id']).get()
+        if 'profile_real' in user and 'name' in user['profile_real'] and 'roc_id' in user['profile_real']:
+            if user['profile_real']['name'] and user['profile_real']['roc_id']:
+                is_ok_submit = True
+
+        return render_template('./form_accommodation.html', project=project, team=team, is_ok_submit=is_ok_submit)
+
+    elif request.method == 'POST':
+        return u'%s' % request.form
