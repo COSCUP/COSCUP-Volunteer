@@ -1,0 +1,89 @@
+{% extends "form.html" %}
+{% block head_title_form %}交通費補助{% endblock %}
+{% block head_subtitle %}交通費補助申請{% endblock %}
+{% block form_menu_traffic_fee %}is-active{% endblock %}
+{% block form_body %}
+<div class="columns">
+    <div class="column is-half">
+        <div class="notification">
+            <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+            請先參閱補助辦法：<a href="https://drive.google.com/file/d/1uXYQiapmCj3vlPwfQeEVDEZfo-Qj5VLB">補助辦法</a>
+        </div>
+        <form id="trafficform" method="POST">
+            <div class="field">
+                <div class="control">
+                    <label class="label">是否閱讀補助辦法？</label>
+                    <label class="checkbox">
+                        <input type="checkbox" v-model="readed" required> 我已閱讀「補助辦法」
+                    </label>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <label class="label">我需要申請交通費補助？</label>
+                    <div class="select">
+                        <select name="apply" v-model="data.apply" v-bind:disabled="!readed" required>
+                            <option value="no">否 (No)</option>
+                            <option value="yes">是 (Yes)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <label class="label">出發地</label>
+                    <div class="select">
+                        <select name="fromwhere" v-model="data.fromwhere" v-bind:disabled="!readed" required>
+                            <option value="" disabled>請選擇...</option>
+                            <option v-for="l in locations" v-bind:value="l">[[l]]</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <label class="label">預計交通方式</label>
+                    <input class="input" type="text" name="howto" v-model.lazy.trim="data.howto" v-bind:disabled="!readed" required>
+                </div>
+                <p class="help is-success">（請參閱補助辦法）</p>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <label class="label">預計交通費用</label>
+                    <input class="input" type="number" min="0" max="1566" name="fee" v-model.number.lazy="data.fee" v-bind:disabled="!readed" required>
+                </div>
+                <p class="help is-success">（請參閱補助辦法）</p>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit" v-bind:disabled="!readed">送出申請</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    var $formtraffic = new Vue({
+        el: '#trafficform',
+        data: {
+            readed: false,
+            data: {apply: 'no', fromwhere: '', howto: '', fee: 0},
+            locations: []
+        },
+        mounted: function() {
+            this.loadlocation();
+        },
+        methods: {
+            loadlocation: function(){
+                axios.get('./api', {params: {case: 'locations'}}).then(function(resp){
+                    $formtraffic.locations = resp.data.locations;
+                });
+            }
+        },
+        delimiters: ['[[', ']]']
+    });
+</script>
+{% endblock %}
