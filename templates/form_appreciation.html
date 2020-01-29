@@ -1,0 +1,37 @@
+{% extends "form.html" %}
+{% block head_title_form %}感謝狀申請{% endblock %}
+{% block head_subtitle %}感謝狀申請{% endblock %}
+{% block form_menu_appreciation %}is-active{% endblock %}
+{% block form_body %}
+<div class="columns">
+    <div class="column is-half">
+        <form method="POST">
+            <div class="field">
+                <div class="control">
+                    <label class="label">志工服務證明</label>
+                    <div class="select">
+                        <select name="volunteer_certificate">
+                            <option value="no">否(No)</option>
+                            {% for v in names%}
+                            <option value="{{v[0]}}">是(Yes)，使用「{{v[1]}}」</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <p class="help is-success">選擇要列印的名稱</p>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit">送出申請</button>
+                </div>
+            </div>
+            <div class="field">
+                <div class="notification">
+                    <span class="icon has-text-info"><i class="fas fa-exclamation-triangle"></i></span>
+                    如要使用真實姓名，請到<a href="/setting/profile_real">設定→真實資料</a>完成「姓名」。
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

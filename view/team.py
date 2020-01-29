@@ -276,3 +276,33 @@ def team_form_volunteer_certificate(pid, tid):
             return u'', 406
 
         return u'%s' % request.form
+
+@VIEW_TEAM.route('/<pid>/<tid>/form/appreciation', methods=('GET', 'POST'))
+def team_form_appreciation(pid, tid):
+    team = Team.get(pid, tid)
+    if not team:
+        return redirect('/')
+
+    project = Project.get(team['pid'])
+    if not project:
+        return redirect('/')
+
+    if request.method == 'GET':
+        names = {
+            'oauth': g.user['data']['name'],
+        }
+
+        if 'profile' in g.user['account'] and \
+           'badge_name' in g.user['account']['profile'] and \
+           g.user['account']['profile']['badge_name']:
+            names['badge_name'] = g.user['account']['profile']['badge_name']
+
+        if 'profile_real' in g.user['account'] and \
+           'name' in g.user['account']['profile_real'] and \
+           g.user['account']['profile_real']['name']:
+            names['real_name'] = g.user['account']['profile_real']['name']
+
+        return render_template('./form_appreciation.html', project=project, team=team, names=names.items())
+
+    elif request.method == 'POST':
+        return u'%s' % request.form
