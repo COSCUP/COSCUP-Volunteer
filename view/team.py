@@ -217,17 +217,19 @@ def team_form_accommodation(pid, tid):
     if not project:
         return redirect('/')
 
+    is_ok_submit = False
+    user = User(uid=g.user['account']['_id']).get()
+    if 'profile_real' in user and 'name' in user['profile_real'] and 'roc_id' in user['profile_real']:
+        if user['profile_real']['name'] and user['profile_real']['roc_id']:
+            is_ok_submit = True
+
     if request.method == 'GET':
-        is_ok_submit = False
-
-        user = User(uid=g.user['account']['_id']).get()
-        if 'profile_real' in user and 'name' in user['profile_real'] and 'roc_id' in user['profile_real']:
-            if user['profile_real']['name'] and user['profile_real']['roc_id']:
-                is_ok_submit = True
-
         return render_template('./form_accommodation.html', project=project, team=team, is_ok_submit=is_ok_submit)
 
     elif request.method == 'POST':
+        if not is_ok_submit:
+            return u'', 406
+
         return u'%s' % request.form
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/traffic_fee', methods=('GET', 'POST'))
