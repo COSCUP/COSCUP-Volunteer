@@ -245,3 +245,34 @@ def team_form_traffic_fee(pid, tid):
 
     elif request.method == 'POST':
         return u'%s' % request.form
+
+@VIEW_TEAM.route('/<pid>/<tid>/form/volunteer_certificate', methods=('GET', 'POST'))
+def team_form_volunteer_certificate(pid, tid):
+    team = Team.get(pid, tid)
+    if not team:
+        return redirect('/')
+
+    project = Project.get(team['pid'])
+    if not project:
+        return redirect('/')
+
+    is_ok_submit = False
+    user = User(uid=g.user['account']['_id']).get()
+    if 'profile_real' in user:
+        _check = []
+        for k in ('name', 'roc_id', 'birthday', 'company'):
+            if k in user['profile_real'] and user['profile_real'][k]:
+                _check.append(True)
+            else:
+                _check.append(False)
+
+        is_ok_submit = all(_check)
+
+    if request.method == 'GET':
+        return render_template('./form_volunteer_certificate.html', project=project, team=team, is_ok_submit=is_ok_submit)
+
+    elif request.method == 'POST':
+        if not is_ok_submit:
+            return u'', 406
+
+        return u'%s' % request.form
