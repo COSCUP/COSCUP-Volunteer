@@ -191,6 +191,22 @@ def team_join_to(pid, tid):
         WaitList.join_to(pid=pid, tid=tid, uid=g.user['account']['_id'], note=request.form['note'].strip())
         return redirect(url_for('team.team_join_to', pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
 
+@VIEW_TEAM.route('/<pid>/<tid>/form/api', methods=('GET', 'POST'))
+def team_form_api(pid, tid):
+    team = Team.get(pid, tid)
+    if not team:
+        return redirect('/')
+
+    project = Project.get(team['pid'])
+    if not project:
+        return redirect('/')
+
+    if request.method == 'GET':
+        if request.args['case'] == 'locations':
+            return jsonify({'locations': ['TW', 'JP']})
+
+        return jsonify(request.args)
+
 @VIEW_TEAM.route('/<pid>/<tid>/form/accommodation', methods=('GET', 'POST'))
 def team_form_accommodation(pid, tid):
     team = Team.get(pid, tid)
@@ -210,6 +226,22 @@ def team_form_accommodation(pid, tid):
                 is_ok_submit = True
 
         return render_template('./form_accommodation.html', project=project, team=team, is_ok_submit=is_ok_submit)
+
+    elif request.method == 'POST':
+        return u'%s' % request.form
+
+@VIEW_TEAM.route('/<pid>/<tid>/form/traffic_fee', methods=('GET', 'POST'))
+def team_form_traffic_fee(pid, tid):
+    team = Team.get(pid, tid)
+    if not team:
+        return redirect('/')
+
+    project = Project.get(team['pid'])
+    if not project:
+        return redirect('/')
+
+    if request.method == 'GET':
+        return render_template('./form_traffic_fee.html', project=project, team=team)
 
     elif request.method == 'POST':
         return u'%s' % request.form
