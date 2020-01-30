@@ -5,12 +5,12 @@
 {% block form_body %}
 <div class="columns">
     <div class="column is-half">
-        <form method="POST">
+        <form id="appreciationform" method="POST">
             <div class="field">
                 <div class="control">
                     <label class="label">志工服務證明</label>
                     <div class="select">
-                        <select name="volunteer_certificate">
+                        <select name="volunteer_certificate" v-bind:value="'{{select_value}}'">
                             <option value="no">否(No)</option>
                             {% for v in names%}
                             <option value="{{v[0]}}">是(Yes)，使用「{{v[1]}}」</option>
@@ -34,4 +34,12 @@
         </form>
     </div>
 </div>
+{% endblock %}
+{% block js %}
+<script>
+    var $appreciationform = new Vue({
+        el: '#appreciationform',
+        delimiters: ['[[', ']]']
+    });
+</script>
 {% endblock %}

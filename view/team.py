@@ -9,6 +9,7 @@ from flask import request
 from flask import url_for
 from markdown import markdown
 
+from module.form import Form
 from module.project import Project
 from module.team import Team
 from module.users import User
@@ -304,7 +305,35 @@ def team_form_appreciation(pid, tid):
            g.user['account']['profile_real']['name']:
             names['real_name'] = g.user['account']['profile_real']['name']
 
-        return render_template('./form_appreciation.html', project=project, team=team, names=names.items())
+        select_value = 'no'
+        form_data = Form.get_appreciation(pid=pid, uid=g.user['account']['_id'])
+        if form_data and 'data' in form_data and 'key' in form_data['data']:
+            if 'available' in form_data['data'] and form_data['data']['available']:
+                select_value = form_data['data']['key']
+
+        return render_template('./form_appreciation.html',
+            project=project, team=team, names=names.items(), select_value=select_value)
 
     elif request.method == 'POST':
-        return u'%s' % request.form
+        if request.form['volunteer_certificate'] not in ('oauth', 'badge_name', 'real_name', 'no'):
+            return u'', 406
+
+        if request.form['volunteer_certificate'] == 'no':
+            data = {'available': False}
+
+        else:
+            if request.form['volunteer_certificate'] == 'oauth':
+                name = g.user['data']['name']
+            elif request.form['volunteer_certificate'] == 'badge_name':
+                name = g.user['account']['profile']['badge_name']
+            elif request.form['volunteer_certificate'] == 'real_name':
+                name = g.user['account']['profile_real']['name']
+
+            data = {
+                'available': True,
+                'key': request.form['volunteer_certificate'],
+                'value': name,
+            }
+
+        Form().update_appreciation(pid=team['pid'], uid=g.user['account']['_id'], data=data)
+        return redirect(url_for('team.team_form_appreciation', pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
