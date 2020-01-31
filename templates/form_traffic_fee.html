@@ -35,7 +35,7 @@
                     <div class="select">
                         <select name="fromwhere" v-model="data.fromwhere" v-bind:disabled="!readed" required>
                             <option value="" disabled>請選擇...</option>
-                            <option v-for="l in locations" v-bind:value="l">[[l]]</option>
+                            <option v-for="l in locations" v-bind:value="l[0]">[[ l[0] ]]</option>
                         </select>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
             <div class="field">
                 <div class="control">
                     <label class="label">預計交通費用</label>
-                    <input class="input" type="number" min="0" max="1566" name="fee" v-model.number.lazy="data.fee" v-bind:disabled="!readed" required>
+                    <input class="input" type="number" min="0" v-bind:max="maxfee" name="fee" v-model.number.lazy="data.fee" v-bind:disabled="!readed" required>
                 </div>
                 <p class="help is-success">（請參閱補助辦法）</p>
             </div>
@@ -70,17 +70,42 @@
         el: '#trafficform',
         data: {
             readed: false,
-            data: {apply: 'no', fromwhere: '', howto: '', fee: 0},
+            data: {% if data %}{{data|safe}}{%else%}{apply: 'no', fromwhere: '', howto: '', fee: 0}{%endif%},
+            maxfee: 0,
             locations: []
         },
         mounted: function() {
             this.loadlocation();
         },
+        watch: {
+            readed: function() {
+                this.calmaxfee(this.data.fromwhere);
+            },
+            'data.apply': function() {
+                this.calmaxfee(this.data.fromwhere);
+            },
+            'data.fromwhere': function(val) {
+                this.calmaxfee(val);
+            }
+        },
         methods: {
             loadlocation: function(){
-                axios.get('./api', {params: {case: 'locations'}}).then(function(resp){
+                axios.get('./api', {params: {case: 'traffic_fee'}}).then(function(resp){
                     $formtraffic.locations = resp.data.locations;
                 });
+            },
+            calmaxfee: function(val) {
+                if (this.readed === false || this.data.apply === 'no') {
+                    $formtraffic.maxfee = 0;
+                } else {
+                    $formtraffic.locations.every(function(loc) {
+                        if (val === loc[0]) {
+                            $formtraffic.maxfee = loc[1];
+                            return false;
+                        }
+                        return true;
+                    });
+                };
             }
         },
         delimiters: ['[[', ']]']

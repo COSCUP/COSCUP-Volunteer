@@ -1,4 +1,5 @@
 import html
+import json
 
 from flask import Blueprint
 from flask import g
@@ -203,8 +204,8 @@ def team_form_api(pid, tid):
         return redirect('/')
 
     if request.method == 'GET':
-        if request.args['case'] == 'locations':
-            return jsonify({'locations': ['TW', 'JP']})
+        if request.args['case'] == 'traffic_fee':
+            return jsonify({'locations': Form.TRAFFIC_FEE_LOCATIONS})
 
         return jsonify(request.args)
 
@@ -244,10 +245,30 @@ def team_form_traffic_fee(pid, tid):
         return redirect('/')
 
     if request.method == 'GET':
-        return render_template('./form_traffic_fee.html', project=project, team=team)
+        form_data = Form.get_traffic_fee(pid=pid, uid=g.user['account']['_id'])
+        data = ''
+        if form_data:
+            data = json.dumps({
+                'apply': 'yes' if form_data['data']['apply'] else 'no',
+                'fromwhere': form_data['data']['fromwhere'],
+                'howto': form_data['data']['howto'],
+                'fee': form_data['data']['fee'],
+            })
+        return render_template('./form_traffic_fee.html', project=project, team=team, data=data)
 
     elif request.method == 'POST':
-        return u'%s' % request.form
+        if request.form['fromwhere'] in [i[0] for i in Form.TRAFFIC_FEE_LOCATIONS]:
+            data = {
+                'fee': int(request.form['fee']),
+                'howto': request.form['howto'].strip(),
+                'apply': True if request.form['apply'].strip() == 'yes' else False,
+                'fromwhere': request.form['fromwhere'],
+            }
+            Form.update_traffic_fee(pid=pid, uid=g.user['account']['_id'], data=data)
+            return redirect(url_for('team.team_form_traffic_fee',
+                    pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
+
+        return u'', 406
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/volunteer_certificate', methods=('GET', 'POST'))
 def team_form_volunteer_certificate(pid, tid):
