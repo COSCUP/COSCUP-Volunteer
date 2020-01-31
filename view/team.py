@@ -272,13 +272,24 @@ def team_form_volunteer_certificate(pid, tid):
         is_ok_submit = all(_check)
 
     if request.method == 'GET':
-        return render_template('./form_volunteer_certificate.html', project=project, team=team, is_ok_submit=is_ok_submit)
+        form_data = Form.get_appreciation(pid=pid, uid=g.user['account']['_id'])
+        if form_data and 'data' in form_data and 'value' in form_data['data']:
+            select_value = 'yes' if form_data['data']['value'] else 'no'
+        else:
+            select_value = 'no'
+
+        return render_template('./form_volunteer_certificate.html',
+                project=project, team=team, is_ok_submit=is_ok_submit, select_value=select_value)
 
     elif request.method == 'POST':
         if not is_ok_submit:
             return u'', 406
 
-        return u'%s' % request.form
+        data = {'value': True if request.form['volunteer_certificate'] == 'yes' else False}
+        Form.update_volunteer_certificate(pid=team['pid'], uid=g.user['account']['_id'], data=data)
+
+        return redirect(url_for('team.team_form_volunteer_certificate',
+                pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/appreciation', methods=('GET', 'POST'))
 def team_form_appreciation(pid, tid):

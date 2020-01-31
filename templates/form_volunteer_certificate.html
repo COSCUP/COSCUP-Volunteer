@@ -11,12 +11,12 @@
             今年最多開立 {{project.volunteer_certificate_hours}} 小時服務證明，如有特殊需求，請找總召討論。
         </div>
         {% if is_ok_submit %}
-        <form method="POST">
+        <form id="volunteercertificate" method="POST">
             <div class="field">
                 <div class="control">
                     <label class="label">志工服務證明</label>
                     <div class="select">
-                        <select name="volunteer_certificate">
+                        <select name="volunteer_certificate" v-bind:value="'{{select_value}}'">
                             <option value="no">否(No)</option>
                             <option value="yes">是(Yes)</option>
                         </select>
@@ -43,4 +43,12 @@
         {% endif %}
     </div>
 </div>
+{% endblock %}
+{% block js %}
+<script>
+    var $volunteercertificate = new Vue({
+        el: '#volunteercertificate',
+        delimiters: ['[[', ']]']
+    });
+</script>
 {% endblock %}
