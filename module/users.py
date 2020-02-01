@@ -92,7 +92,7 @@ class User(object):
                 }
 
             if 'profile_real' not in u:
-                user[u['_id']]['profile_real'] = {
+                users[u['_id']]['profile_real'] = {
                     'phone': '',
                 }
 

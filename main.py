@@ -126,7 +126,7 @@ def oauth2callback():
         else:
             user = User.create(mail=user_info['email'])
 
-        user_session= USession.make_new(uid=owner, header=dict(request.headers))
+        user_session= USession.make_new(uid=user['_id'], header=dict(request.headers))
         session['sid'] = user_session.inserted_id
 
         if 'r' in session:
