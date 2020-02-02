@@ -4,19 +4,19 @@
 {% block form_menu_accommodation %}is-active{% endblock %}
 {% block form_body %}
 <div class="columns">
-    <div class="column is-half">
+    <div class="column is-three-fifths">
         <div class="notification">
             <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
             以來自外縣市的夥伴為主，但如果妳的通勤時間特殊，會超過一個小時，也可以申請。
             住宿名單會在活動前二個月公布。
         </div>
         {% if is_ok_submit %}
-        <form method="POST">
+        <form id="accommodationform" method="POST">
             <div class="field">
                 <div class="control">
                     <label class="label">我需要申請住宿？</label>
                     <div class="select">
-                        <select name="accommodation">
+                        <select name="accommodation" v-bind:value="'{{select_value}}'">
                             <option value="no">我不需要住宿(No)</option>
                             <option value="yes">我需要住宿(Yes)</option>
                             <option value="yes-longtraffic">我需要住宿，且通勤時間大於一小時(Yes)</option>
@@ -33,10 +33,20 @@
         {% else %}
         <div class="notification is-warning">
             <span class="icon has-text-info"><i class="fas fa-exclamation-triangle"></i></span>
-            入住時須出示身份證比對姓名，請到<a href="/setting/profile_real">設定→真實資料</a>完成「姓名」、「身分證字號」。
+            入住時須出示身份證比對姓名，請到<a href="/setting/profile_real">設定→真實資料</a>完成「姓名」、「身分證字號」後才可以申請住宿。
             請放心，你的姓名資料不會在其他公開場合出現或被使用。
         </div>
         {% endif %}
     </div>
 </div>
+{% endblock %}
+{% block js %}
+{% if is_ok_submit %}
+<script>
+    $accommodationform = new Vue({
+        el: '#accommodationform',
+        delimiters: ['[[', ']]']
+    });
+</script>
+{% endif %}
 {% endblock %}

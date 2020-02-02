@@ -102,3 +102,29 @@ class Form(object):
 
         '''
         return FormDB().find_one({'case': 'traffic_fee', 'pid': pid, 'uid': uid})
+
+    @staticmethod
+    def update_accommodation(pid, uid, data):
+        ''' Update accommodation
+
+        :param str pid: project id
+        :param str uid: user id
+        :param dict data: form data
+
+        .. note::
+            - data:
+                - status: bool
+                - key: str, in ('no', 'yes', 'yes-longtraffic')
+
+        '''
+        return FormDB().add_by_case(case='accommodation', pid=pid, uid=uid, data=data)
+
+    @staticmethod
+    def get_accommodation(pid, uid):
+        ''' Get accommodation
+
+        :param str pid: project id
+        :param str uid: user id
+
+        '''
+        return FormDB().find_one({'case': 'accommodation', 'pid': pid, 'uid': uid})
