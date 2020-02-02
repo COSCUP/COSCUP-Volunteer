@@ -1,5 +1,6 @@
 import logging
 logging.basicConfig(
+    filename='./log/log.log',
     format='%(asctime)s [%(levelname)-5.5s][%(thread)6.6s] [%(module)s:%(funcName)s#%(lineno)d]: %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S',
     level=logging.DEBUG)
