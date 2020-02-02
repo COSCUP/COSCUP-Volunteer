@@ -23,7 +23,7 @@ class UsersDB(DBBase):
 
         '''
         return {
-            '_id': '%x' % uuid4().fields[0],
+            '_id': '%0.8x' % uuid4().fields[0],
             'mail': mail,
             'created_at': int(time()),
         }
