@@ -1,0 +1,9 @@
+FROM secretary-base:20.02.02
+
+ADD ./client_secret.json ./client_secret.json
+ADD ./main.py ./main.py
+ADD ./models ./models
+ADD ./module ./module
+ADD ./setting.py ./setting.py
+ADD ./templates ./templates
+ADD ./view ./view

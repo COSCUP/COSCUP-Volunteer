@@ -1,6 +1,7 @@
+.git
+.gitignore
 .ycm_extra_conf.py
 __pycache__
-client_secret.json
 log
-setting.py
 venv
+working.py
