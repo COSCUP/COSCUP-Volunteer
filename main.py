@@ -7,14 +7,17 @@ logging.basicConfig(
 
 import hashlib
 import os
+import traceback
 #import re
 from urllib.parse import parse_qs
 from urllib.parse import urlparse
 
+import arrow
 import google_auth_oauthlib.flow
 from apiclient import discovery
 from flask import Flask
 from flask import g
+from flask import got_request_exception
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -29,6 +32,7 @@ from view.project import VIEW_PROJECT
 from view.setting import VIEW_SETTING
 from view.team import VIEW_TEAM
 from view.user import VIEW_USER
+from celery_task.task_mail_sys import mail_sys_weberror
 
 
 app = Flask(__name__)
@@ -140,6 +144,7 @@ def oauth2callback():
         session.pop('state', None)
         return redirect(url_for('oauth2callback', _scheme='https', _external=True))
 
+
 @app.route('/logout')
 def oauth2logout():
     ''' Logout
@@ -151,6 +156,30 @@ def oauth2logout():
     session.pop('state', None)
     session.pop('sid', None)
     return redirect(url_for('index', _scheme='https', _external=True))
+
+
+@app.route('/exception')
+def exception():
+    try:
+        1/0
+    except Exception as e:
+        raise Exception('Error: [%s]' % e)
+
+
+def error_exception(sender, exception, **extra):
+    mail_sys_weberror.apply_async(
+        kwargs={
+            'title': u'%s %s %s' % (request.method, request.path, arrow.now()),
+            'body': '''<b>%s</b> %s<br>
+            <pre>%s</pre>
+            <pre>%s</pre>
+            <pre>User: %s\n\nsid: %s\n\nargs: %s\n\nform: %s\n\nvalues: %s\n\n%s</pre>''' %
+            (request.method, request.path, os.environ, request.headers,
+             g.get('user', {}).get('account', {}).get('_id'), session.get('sid'), request.args, request.form, request.values, traceback.format_exc())
+        })
+
+got_request_exception.connect(error_exception, app)
+
 
 if __name__ == '__main__':
     app.run(debug=False, host=setting.SERVER_HOST, port=setting.SERVER_PORT)

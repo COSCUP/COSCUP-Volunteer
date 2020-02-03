@@ -4,10 +4,10 @@ WORKDIR /app
 ADD ./requirements.txt ./requirements.txt
 RUN \
   apk update && apk upgrade                                   && \
-  apk add python3 curl gcc python3-dev musl-dev               && \
+  apk add python3 curl ca-certificates                        && \
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py     && \
   python3 get-pip.py                                          && \
   rm get-pip.py                                               && \
   pip install -r ./requirements.txt                           && \
-  apk del gcc python3-dev musl-dev curl                       && \
+  apk del curl                                                && \
   rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
