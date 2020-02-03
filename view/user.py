@@ -29,7 +29,10 @@ def user_page(uid, nickname=None):
 
     oauth = OAuth(user['mail']).get()
 
-    _nickname = oauth['data']['name'].replace(' ', '_')
+    if 'profile' in user and 'badge_name' in user['profile']:
+        _nickname = user['profile']['badge_name'].replace(' ', '_')
+    else:
+        _nickname = oauth['data']['name'].replace(' ', '_')
 
     if nickname is None or nickname != _nickname:
         return redirect(url_for('user.user_page', uid=uid, nickname=_nickname))
