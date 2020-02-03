@@ -5,8 +5,9 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S',
     level=logging.DEBUG)
 
-import os
 import hashlib
+import os
+#import re
 from urllib.parse import parse_qs
 from urllib.parse import urlparse
 
@@ -60,22 +61,20 @@ def need_login():
             uid = session_data['uid']
 
             g.user = {}
-            user = User(uid=uid).get()
-            if user:
-                g.user['account'] = User(uid=uid).get()
+            g.user['account'] = User(uid=session_data['uid']).get()
+
+            if g.user['account']:
+                g.user['data'] = OAuth(mail=g.user['account']['mail']).get()['data']
             else:
                 session.pop('sid', None)
-
-            g.user['data'] = OAuth(mail=g.user['account']['mail']).get()['data']
     else:
         if request.path not in NO_NEED_LOGIN_PATH:
+            # ----- Let user profile public ----- #
+            #if re.match(r'(\/user\/[a-z0-9]{8}).*', request.path):
+            #    return
+
             session['r'] = request.path
             return redirect(url_for('oauth2callback', _scheme='https', _external=True))
-
-    #if request.path not in NO_NEED_LOGIN_PATH:
-    #    if not session.get('u') or session.get('u').get('email') not in setting.ALLOW_USER:
-    #        session['r'] = request.path
-    #        return redirect(url_for('oauth2logout'))
 
 
 @app.route('/')
@@ -137,8 +136,9 @@ def oauth2callback():
 
         return redirect(url_for('index', _scheme='https', _external=True))
 
-    return u'state fail', 400
-
+    else:
+        session.pop('state', None)
+        return redirect(url_for('oauth2callback', _scheme='https', _external=True))
 
 @app.route('/logout')
 def oauth2logout():
