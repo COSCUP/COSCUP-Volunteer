@@ -4,7 +4,7 @@
 {% block form_menu_appreciation %}is-active{% endblock %}
 {% block form_body %}
 <div class="columns">
-    <div class="column is-half">
+    <div class="column is-three-fifths">
         <form id="appreciationform" method="POST">
             <div class="field">
                 <div class="control">
@@ -26,10 +26,12 @@
                 </div>
             </div>
             <div class="field">
-                <div class="notification">
-                    <span class="icon has-text-info"><i class="fas fa-exclamation-triangle"></i></span>
-                    如要使用真實姓名，請到<a href="/setting/profile_real">設定→真實資料</a>完成「姓名」。
-                </div>
+                <article class="message is-small">
+                    <div class="message-body">
+                        <span class="icon has-text-info"><i class="fas fa-exclamation-triangle"></i></span>
+                        如要使用真實姓名，請到<a href="/setting/profile_real">設定→真實資料</a>完成「姓名」。
+                    </div>
+                </article>
             </div>
         </form>
     </div>
