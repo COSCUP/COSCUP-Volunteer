@@ -5,11 +5,13 @@
 {% block form_body %}
 <div class="columns">
     <div class="column is-three-fifths">
-        <div class="notification">
-            <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
-            以來自外縣市的夥伴為主，但如果妳的通勤時間特殊，會超過一個小時，也可以申請。
-            住宿名單會在活動前二個月公布。
-        </div>
+        <article class="message is-small">
+            <div class="message-body">
+                <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                以來自外縣市的夥伴為主，但如果妳的通勤時間特殊，會超過一個小時，也可以申請。
+                住宿名單會在活動前二個月公布。
+            </div>
+        </article>
         {% if is_ok_submit %}
         <form id="accommodationform" method="POST">
             <div class="field">
@@ -31,11 +33,12 @@
             </div>
         </form>
         {% else %}
-        <div class="notification is-warning">
-            <span class="icon has-text-info"><i class="fas fa-exclamation-triangle"></i></span>
-            入住時須出示身份證比對姓名，請到<a href="/setting/profile_real">設定→真實資料</a>完成「姓名」、「身分證字號」後才可以申請住宿。
-            請放心，你的姓名資料不會在其他公開場合出現或被使用。
-        </div>
+        <article class="message is-small is-warning">
+            <div class="message-body">
+                <span class="icon has-text-info"><i class="fas fa-exclamation-triangle"></i></span>
+                入住時須出示身份證比對姓名，請到<a href="/setting/profile_real">設定→真實資料</a>完成<strong>「姓名」</strong>、<strong>「身分證字號」</strong>後才可以申請住宿。請放心，你的姓名資料不會在其他公開場合出現或被使用。
+            </div>
+        </article>
         {% endif %}
     </div>
 </div>

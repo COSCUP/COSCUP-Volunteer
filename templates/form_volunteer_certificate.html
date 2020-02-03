@@ -4,12 +4,14 @@
 {% block form_menu_volunteer_certificate %}is-active{% endblock %}
 {% block form_body %}
 <div class="columns">
-    <div class="column is-half">
+    <div class="column is-three-fifths">
         {% if project.volunteer_certificate_hours %}
-        <div class="notification">
-            <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
-            今年最多開立 {{project.volunteer_certificate_hours}} 小時服務證明，如有特殊需求，請找總召討論。
-        </div>
+        <article class="message is-small">
+            <div class="message-body">
+                <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                今年最多開立 {{project.volunteer_certificate_hours}} 小時服務證明，如有特殊需求，請找總召討論。
+            </div>
+        </article>
         {% if is_ok_submit %}
         <form id="volunteercertificate" method="POST">
             <div class="field">
@@ -30,16 +32,20 @@
             </div>
         </form>
         {% else %}
-        <div class="notification is-warning">
-            <span class="icon has-text-info"><i class="fas fa-exclamation-triangle"></i></span>
-            請到<a href="/setting/profile_real">設定→真實資料</a>完成「姓名」、「身分證字號」、「出生日」、「組織單位」。
-        </div>
+        <article class="message is-warning is-small">
+            <div class="message-body">
+                <span class="icon has-text-info"><i class="fas fa-exclamation-triangle"></i></span>
+                請到<a href="/setting/profile_real">設定→真實資料</a>完成「姓名」、「身分證字號」、「出生日」、「組織單位」。
+            </div>
+        </article>
         {% endif %}
         {% else %}
-        <div class="notification">
-            <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
-            目前無法申請。
-        </div>
+        <article class="message is-small">
+            <div class="message-body">
+                <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                目前無法申請。
+            </div>
+        </article>
         {% endif %}
     </div>
 </div>
