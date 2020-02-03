@@ -25,7 +25,7 @@ def user_page(uid, nickname=None):
     user = User(uid=uid).get()
 
     if not user:
-        return u'.', 404
+        return u'', 200
 
     oauth = OAuth(user['mail']).get()
 

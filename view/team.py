@@ -18,16 +18,31 @@ from module.waitlist import WaitList
 
 VIEW_TEAM = Blueprint('team', __name__, url_prefix='/team')
 
+def check_the_team_and_project_are_existed(pid, tid):
+    ''' Base check the team and profect are existed
 
-@VIEW_TEAM.route('/<pid>/<tid>/')
-def index(pid, tid):
+    :param str pid: project id
+    :param str tid: team id
+    :rtype: tuple
+    :return: team, project, redirect
+
+    '''
     team = Team.get(pid, tid)
     if not team:
-        return redirect('/')
+        return None, None, redirect('/')
 
     project = Project.get(pid)
     if not project:
-        return redirect('/')
+        return None, None, redirect('/')
+
+    return team, project, None
+
+
+@VIEW_TEAM.route('/<pid>/<tid>/')
+def index(pid, tid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
 
     for k in ('desc', 'public_desc'):
         if k not in team:
@@ -53,13 +68,9 @@ def index(pid, tid):
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit', methods=('GET', 'POST'))
 def team_edit(pid, tid):
-    team = Team.get(pid, tid)
-    if not team:
-        return redirect('/')
-
-    project = Project.get(pid)
-    if not project:
-        return redirect('/')
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or \
                 g.user['account']['_id'] in team['owners'] or \
@@ -82,13 +93,9 @@ def team_edit(pid, tid):
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit_user', methods=('GET', 'POST'))
 def team_edit_user(pid, tid):
-    team = Team.get(pid, tid)
-    if not team:
-        return redirect('/')
-
-    project = Project.get(pid)
-    if not project:
-        return redirect('/')
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or \
                 g.user['account']['_id'] in team['owners'] or \
@@ -127,13 +134,9 @@ def team_edit_user(pid, tid):
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit_user/api', methods=('GET', 'POST'))
 def team_edit_user_api(pid, tid):
-    team = Team.get(pid, tid)
-    if not team:
-        return redirect('/')
-
-    project = Project.get(pid)
-    if not project:
-        return redirect('/')
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or \
                 g.user['account']['_id'] in team['owners'] or \
@@ -174,13 +177,9 @@ def team_edit_user_api(pid, tid):
 
 @VIEW_TEAM.route('/<pid>/<tid>/join_to', methods=('GET', 'POST'))
 def team_join_to(pid, tid):
-    team = Team.get(pid, tid)
-    if not team:
-        return redirect('/')
-
-    project = Project.get(team['pid'])
-    if not project:
-        return redirect('/')
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
 
     if g.user['account']['_id'] in team['members'] or g.user['account']['_id'] in team['chiefs']:
         return redirect(url_for('team.index', pid=pid, tid=tid))
@@ -195,12 +194,12 @@ def team_join_to(pid, tid):
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/api', methods=('GET', 'POST'))
 def team_form_api(pid, tid):
-    team = Team.get(pid, tid)
-    if not team:
-        return redirect('/')
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
 
-    project = Project.get(team['pid'])
-    if not project:
+    if not (g.user['account']['_id'] in team['members'] or \
+            g.user['account']['_id'] in team['chiefs']):
         return redirect('/')
 
     if request.method == 'GET':
@@ -211,16 +210,16 @@ def team_form_api(pid, tid):
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/accommodation', methods=('GET', 'POST'))
 def team_form_accommodation(pid, tid):
-    team = Team.get(pid, tid)
-    if not team:
-        return redirect('/')
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
 
-    project = Project.get(team['pid'])
-    if not project:
+    if not (g.user['account']['_id'] in team['members'] or \
+            g.user['account']['_id'] in team['chiefs']):
         return redirect('/')
 
     is_ok_submit = False
-    user = User(uid=g.user['account']['_id']).get()
+    user = g.user['account']
     if 'profile_real' in user and 'name' in user['profile_real'] and 'roc_id' in user['profile_real']:
         if user['profile_real']['name'] and user['profile_real']['roc_id']:
             is_ok_submit = True
@@ -254,12 +253,12 @@ def team_form_accommodation(pid, tid):
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/traffic_fee', methods=('GET', 'POST'))
 def team_form_traffic_fee(pid, tid):
-    team = Team.get(pid, tid)
-    if not team:
-        return redirect('/')
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
 
-    project = Project.get(team['pid'])
-    if not project:
+    if not (g.user['account']['_id'] in team['members'] or \
+            g.user['account']['_id'] in team['chiefs']):
         return redirect('/')
 
     if request.method == 'GET':
@@ -290,16 +289,16 @@ def team_form_traffic_fee(pid, tid):
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/volunteer_certificate', methods=('GET', 'POST'))
 def team_form_volunteer_certificate(pid, tid):
-    team = Team.get(pid, tid)
-    if not team:
-        return redirect('/')
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
 
-    project = Project.get(team['pid'])
-    if not project:
+    if not (g.user['account']['_id'] in team['members'] or \
+            g.user['account']['_id'] in team['chiefs']):
         return redirect('/')
 
     is_ok_submit = False
-    user = User(uid=g.user['account']['_id']).get()
+    user = g.user['account']
     if 'profile_real' in user:
         _check = []
         for k in ('name', 'roc_id', 'birthday', 'company'):
@@ -332,12 +331,12 @@ def team_form_volunteer_certificate(pid, tid):
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/appreciation', methods=('GET', 'POST'))
 def team_form_appreciation(pid, tid):
-    team = Team.get(pid, tid)
-    if not team:
-        return redirect('/')
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
 
-    project = Project.get(team['pid'])
-    if not project:
+    if not (g.user['account']['_id'] in team['members'] or \
+            g.user['account']['_id'] in team['chiefs']):
         return redirect('/')
 
     if request.method == 'GET':
