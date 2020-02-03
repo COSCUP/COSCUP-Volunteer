@@ -1,6 +1,7 @@
 docker run -d --restart='always' \
            --name secretary-1 \
            --link secretary_mongo:mongo \
+           --link queue_sender:celery \
            --log-opt max-size=64m \
            --log-opt max-file=1 \
            -v $(pwd)/log:/app/log \
@@ -10,6 +11,7 @@ docker run -d --restart='always' \
 docker run -d --restart='always' \
            --name secretary-2 \
            --link secretary_mongo:mongo \
+           --link queue_sender:celery \
            --log-opt max-size=64m \
            --log-opt max-file=1 \
            -v $(pwd)/log:/app/log \
