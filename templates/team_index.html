@@ -2,22 +2,24 @@
 {% block head_title_team %}首頁{% endblock %}
 {% block menu_index %}is-active{% endblock %}
 {% block team_body %}
-<section class="section">
-  <div class="content">
-      {% if team.desc %}
-      {{team.desc|safe}}
-      {% else %}
-      <p><a class="button is-info" href="./edit">（編輯說明簡介...）</a></p>
-      {% endif %}
-      {% if not (team.desc or team.public_desc) %}
-      <article class="message is-small">
-          <div class="message-body">
-              <p><span class="icon has-text-info"><i class="fas fa-exclamation-circle"></i></span>
-              說明頁面分成兩種，分別給「已加入」、「未加入」的組員。
-              編輯說明簡介可以到<strong>組別管理</strong>、<a href="./edit"><strong>設定</strong></a>來撰寫。</p>
-          </div>
-      </article>
-      {% endif %}
-  </div>
-</section>
+<div class="column is-three-fifths">
+    <section class="section">
+      <div class="content">
+          {% if team.desc %}
+          {{team.desc|safe}}
+          {% else %}
+          <p><a class="button is-info" href="./edit">（編輯說明簡介...）</a></p>
+          {% endif %}
+          {% if not (team.desc or team.public_desc) %}
+          <article class="message is-small">
+              <div class="message-body">
+                  <p><span class="icon has-text-info"><i class="fas fa-exclamation-circle"></i></span>
+                  說明頁面分成兩種，分別給「已加入」、「未加入」的組員。
+                  編輯說明簡介可以到<strong>組別管理</strong>、<a href="./edit"><strong>設定</strong></a>來撰寫。</p>
+              </div>
+          </article>
+          {% endif %}
+      </div>
+    </section>
+</div>
 {% endblock %}

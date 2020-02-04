@@ -66,6 +66,22 @@ def index(pid, tid):
     return render_template('./team_index.html', team=team, project=project,
             join_able=join_able, is_admin=is_admin, preview_public=preview_public)
 
+@VIEW_TEAM.route('/<pid>/<tid>/calendar')
+def calendar(pid, tid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    if 'calendar' in project and project['calendar']:
+        is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                    g.user['account']['_id'] in team['owners'] or \
+                    g.user['account']['_id'] in project['owners'])
+
+        return render_template('./team_calendar.html', project=project, team=team, is_admin=is_admin)
+
+    return redirect(url_for('team.index', pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
+
+
 @VIEW_TEAM.route('/<pid>/<tid>/edit', methods=('GET', 'POST'))
 def team_edit(pid, tid):
     team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
