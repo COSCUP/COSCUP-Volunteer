@@ -51,12 +51,29 @@
                   {% if is_admin %}
                   <p class="menu-label">{{team.name}} - 管理</p>
                   <ul class="menu-list">
-                      <li><a href="/team/{{team.pid}}/{{team.tid}}/edit">設定</a></li>
-                      <li><a href="/team/{{team.pid}}/{{team.tid}}/edit_user">組員</a></li>
+                      <li>
+                          <a href="/team/{{team.pid}}/{{team.tid}}/edit">
+                              <span class="icon"><i class="fas fa-tools"></i></span>
+                              <span>設定</span>
+                          </a>
+                      </li>
+                      <li>
+                          <a href="/team/{{team.pid}}/{{team.tid}}/edit_user">
+                              <span class="icon"><i class="fas fa-users"></i></span>
+                              <span>組員</span>
+                          </a>
+                      </li>
                   </ul>
                   {% endif %}
                   <p class="menu-label">{{project.name}}</p>
                   <ul class="menu-list">
+                      {% if project.calendar %}
+                      <li>
+                          <a class="{%block menu_calendar%}{%endblock%}" href="/team/{{team.pid}}/{{team.tid}}/calendar">
+                              <span class="icon"><i class="far fa-calendar-alt"></i></span>
+                              <span>行事曆</span>
+                          </a>
+                      {% endif %}
                       <li><a>調查事項</a></li>
                   </ul>
                   <p class="menu-label">相關申請專區</p>
@@ -88,8 +105,7 @@
                   </ul>
 			  </aside>
           </div>
-          <div class="column is-three-fifths">{% block team_body %}{% endblock %}</div>
-          <div class="column">{% block team_body_right %}{% endblock %}</div>
+          <div class="column">{% block team_body %}{% endblock %}</div>
       </div>
   </div>
 </section>

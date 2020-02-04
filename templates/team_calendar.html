@@ -1,0 +1,11 @@
+{% extends "team.html" %}
+{% block head_title_team %}行事曆{% endblock %}
+{% block menu_calendar %}is-active{% endblock %}
+{% block team_body %}
+<div class="content">
+  <figure class="image is-16by9">
+      <iframe class="has-ratio" src="https://calendar.google.com/calendar/embed?src={{project.calendar}}&ctz=Asia%2FTaipei"
+          style="border: 0" width="800" height="600" frameborder="0" scrolling="no">讀取錯誤，可能被第三方擋下。</iframe>
+  </figure>
+</div>
+{% endblock %}

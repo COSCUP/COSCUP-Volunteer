@@ -25,6 +25,13 @@
         <p class="help is-success">時數申請上限，顯示在說明處。</p>
     </div>
     <div class="field">
+        <label class="label">行事曆 ID</label>
+        <div class="control">
+            <input class="input" type="text" name="calendar" value="{{project.calendar}}">
+        </div>
+        <p class="help is-success">類似：ust6glc03eat210i65r1g4m2j4@group.calendar.google.com</p>
+    </div>
+    <div class="field">
         <div class="control">
             <button class="button is-primary" type="submit">Update</button>
             <a class="button" href="/project/{{project._id}}">Cancel</a>

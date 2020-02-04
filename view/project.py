@@ -48,6 +48,7 @@ def project_edit(pid):
             'desc': request.form['desc'].strip(),
             'name': request.form['name'].strip(),
             'volunteer_certificate_hours': max([0, int(request.form['volunteer_certificate_hours'])]),
+            'calendar': request.form['calendar'].strip(),
         }
         Project.update(pid, data)
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
