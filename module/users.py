@@ -73,7 +73,11 @@ class User(object):
 
         '''
         users = {}
-        for u in UsersDB().find({'_id': {'$in': uids}}, {'profile': 1, 'profile_real.phone': 1}):
+        for u in UsersDB().find({'_id': {'$in': uids}},
+                {'profile': 1,
+                 'profile_real.phone': 1,
+                 'profile_real.name': 1,
+            }):
             users[u['_id']] = u
             oauth_data = OAuthDB().find_one(
                     {'owner': u['_id']},
@@ -94,6 +98,7 @@ class User(object):
             if 'profile_real' not in u:
                 users[u['_id']]['profile_real'] = {
                     'phone': '',
+                    'name': '',
                 }
 
         return users

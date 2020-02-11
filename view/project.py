@@ -1,3 +1,5 @@
+import csv
+import io
 import math
 
 import arrow
@@ -9,6 +11,9 @@ from flask import render_template
 from flask import request
 from flask import url_for
 
+from models.oauth_db import OAuthDB
+from models.users_db import UsersDB
+from module.form import Form
 from module.project import Project
 from module.team import Team
 from module.users import User
@@ -61,6 +66,131 @@ def project_edit_create_team(pid):
 
     teams = Team.list_by_pid(project['_id'])
     return render_template('./project_edit_create_team.html', project=project, teams=teams)
+
+@VIEW_PROJECT.route('/<pid>/form', methods=('GET', 'POST'))
+def project_form(pid):
+    project = Project.get(pid)
+    if g.user['account']['_id'] not in project['owners']:
+        return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
+
+    if request.method == 'GET':
+        return render_template('./project_form.html', project=project)
+
+@VIEW_PROJECT.route('/<pid>/form/api', methods=('GET', 'POST'))
+def project_form_api(pid):
+    project = Project.get(pid)
+    if g.user['account']['_id'] not in project['owners']:
+        return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
+
+    if request.method == 'POST':
+        data = request.get_json()
+        if 'case' not in data:
+            return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
+
+        if data['case'] == 'volunteer_certificate':
+            fieldnames = ('uid', 'picture', 'value', 'name', 'roc_id', 'birthday', 'company')
+            with io.StringIO() as str_io:
+                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
+                csv_writer.writeheader()
+
+                for raw in Form.all_volunteer_certificate(pid):
+                    user_info = UsersDB().find_one({'_id': raw['uid']})
+                    oauth = OAuthDB().find_one({'owner': raw['uid']}, {'data.picture': 1})
+
+                    data = {
+                        'uid': raw['uid'],
+                        'picture': oauth['data']['picture'],
+                        'value': raw['data']['value'],
+                        'name': user_info['profile_real']['name'],
+                        'roc_id': user_info['profile_real']['roc_id'],
+                        'birthday': user_info['profile_real']['birthday'],
+                        'company': user_info['profile_real']['company'],
+                    }
+
+                    csv_writer.writerow(data)
+
+                result = []
+                for raw in csv.reader(io.StringIO(str_io.getvalue())):
+                    result.append(raw)
+
+                return jsonify({'result': result})
+
+        elif data['case'] == 'traffic_fee':
+            fieldnames = ('uid', 'picture', 'apply', 'fee', 'fromwhere', 'howto')
+            with io.StringIO() as str_io:
+                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
+                csv_writer.writeheader()
+
+                for raw in Form.all_traffic_fee(pid):
+                    user_info = UsersDB().find_one({'_id': raw['uid']})
+                    oauth = OAuthDB().find_one({'owner': raw['uid']}, {'data.picture': 1})
+
+                    data = {
+                        'uid': raw['uid'],
+                        'picture': oauth['data']['picture'],
+                        'apply': raw['data']['apply'],
+                        'fee': raw['data']['fee'],
+                        'fromwhere': raw['data']['fromwhere'],
+                        'howto': raw['data']['howto'],
+                    }
+
+                    csv_writer.writerow(data)
+
+                result = []
+                for raw in csv.reader(io.StringIO(str_io.getvalue())):
+                    result.append(raw)
+
+                return jsonify({'result': result})
+
+        elif data['case'] == 'accommodation':
+            fieldnames = ('uid', 'picture', 'key', 'status')
+            with io.StringIO() as str_io:
+                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
+                csv_writer.writeheader()
+
+                for raw in Form.all_accommodation(pid):
+                    user_info = UsersDB().find_one({'_id': raw['uid']})
+                    oauth = OAuthDB().find_one({'owner': raw['uid']}, {'data.picture': 1})
+
+                    data = {
+                        'uid': raw['uid'],
+                        'picture': oauth['data']['picture'],
+                        'key': raw['data']['key'],
+                        'status': raw['data']['status'],
+                    }
+
+                    csv_writer.writerow(data)
+
+                result = []
+                for raw in csv.reader(io.StringIO(str_io.getvalue())):
+                    result.append(raw)
+
+                return jsonify({'result': result})
+
+        elif data['case'] == 'appreciation':
+            fieldnames = ('uid', 'picture', 'available', 'key', 'value')
+            with io.StringIO() as str_io:
+                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
+                csv_writer.writeheader()
+
+                for raw in Form.all_appreciation(pid):
+                    user_info = UsersDB().find_one({'_id': raw['uid']})
+                    oauth = OAuthDB().find_one({'owner': raw['uid']}, {'data.picture': 1})
+
+                    data = {
+                        'uid': raw['uid'],
+                        'picture': oauth['data']['picture'],
+                        'available': raw['data']['available'],
+                        'key': raw['data']['key'],
+                        'value': raw['data']['value'],
+                    }
+                    csv_writer.writerow(data)
+
+                result = []
+                for raw in csv.reader(io.StringIO(str_io.getvalue())):
+                    result.append(raw)
+
+                return jsonify({'result': result})
 
 @VIEW_PROJECT.route('/<pid>/edit/team/api', methods=('GET', 'POST'))
 def project_edit_create_team_api(pid):

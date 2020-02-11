@@ -2,40 +2,44 @@
 {% block head_title_project_edit %}設定{% endblock %}
 {%block project_edit_menu%}is-active{%endblock%}
 {% block project_edit_body %}
-<form method="POST">
-    <div class="field">
-        <label class="label">name</label>
-        <div class="control">
-            <input class="input" type="text" name="name" value="{{project.name}}">
-        </div>
-        <p class="help is-success">活動名稱</p>
+<div class="columns">
+    <div class="column is-two-thirds">
+        <form method="POST">
+            <div class="field">
+                <label class="label">name</label>
+                <div class="control">
+                    <input class="input" type="text" name="name" value="{{project.name}}">
+                </div>
+                <p class="help is-success">活動名稱</p>
+            </div>
+            <div class="field">
+                <label class="label">description</label>
+                <div class="control">
+                    <textarea class="textarea" name="desc" placeholder="Project description ...">{{project.desc}}</textarea>
+                </div>
+                <p class="help is-success">描述一下活動的簡介</p>
+            </div>
+            <div class="field">
+                <label class="label">志工時數申請上限</label>
+                <div class="control">
+                    <input class="input" type="number" name="volunteer_certificate_hours" min="0" value="{{project.volunteer_certificate_hours}}">
+                </div>
+                <p class="help is-success">時數申請上限，顯示在說明處。</p>
+            </div>
+            <div class="field">
+                <label class="label">行事曆 ID</label>
+                <div class="control">
+                    <input class="input" type="text" name="calendar" value="{{project.calendar}}">
+                </div>
+                <p class="help is-success">類似：ust6glc03eat210i65r1g4m2j4@group.calendar.google.com</p>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit">Update</button>
+                    <a class="button" href="/project/{{project._id}}">Cancel</a>
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="field">
-        <label class="label">description</label>
-        <div class="control">
-            <textarea class="textarea" name="desc" placeholder="Project description ...">{{project.desc}}</textarea>
-        </div>
-        <p class="help is-success">描述一下活動的簡介</p>
-    </div>
-    <div class="field">
-        <label class="label">志工時數申請上限</label>
-        <div class="control">
-            <input class="input" type="number" name="volunteer_certificate_hours" min="0" value="{{project.volunteer_certificate_hours}}">
-        </div>
-        <p class="help is-success">時數申請上限，顯示在說明處。</p>
-    </div>
-    <div class="field">
-        <label class="label">行事曆 ID</label>
-        <div class="control">
-            <input class="input" type="text" name="calendar" value="{{project.calendar}}">
-        </div>
-        <p class="help is-success">類似：ust6glc03eat210i65r1g4m2j4@group.calendar.google.com</p>
-    </div>
-    <div class="field">
-        <div class="control">
-            <button class="button is-primary" type="submit">Update</button>
-            <a class="button" href="/project/{{project._id}}">Cancel</a>
-        </div>
-    </div>
-</form>
+</div>
 {% endblock %}
