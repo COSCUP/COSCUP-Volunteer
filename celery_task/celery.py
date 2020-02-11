@@ -15,11 +15,13 @@ app = Celery(
     broker='amqp://%s' % setting.RABBITMQ,
     include=(
         'celery_task.task_mail_sys',
+        'celery_task.task_ipinfo',
     ),
 )
 
 app.conf.task_queues = (
     Queue('CS_mail_sys', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.sys.#'),
+    Queue('CS_ipinfo', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.ipinfo.#'),
 )
 
 app.conf.acks_late = True
@@ -37,6 +39,15 @@ app.conf.beat_schedule = {
     #        'routing_key': 'cs.mail.sys.test',
     #    },
     #},
+    'ipinfo-update-usession': {
+        'task': 'ipinfo.update.usession',
+        'schedule': crontab(minute='*/5'),
+        'kwargs': {},
+        'options': {
+            'exchange': 'COSCUP-SECRETARY',
+            'routing_key': 'cs.ipinfo.update.session',
+        },
+    },
 }
 
 @task_failure.connect
