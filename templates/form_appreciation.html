@@ -39,9 +39,11 @@
 {% endblock %}
 {% block js %}
 <script>
-    var $appreciationform = new Vue({
-        el: '#appreciationform',
-        delimiters: ['[[', ']]']
-    });
+    (function () {
+        let $appreciationform = new Vue({
+            el: '#appreciationform',
+            delimiters: ['[[', ']]']
+        });
+    })();
 </script>
 {% endblock %}

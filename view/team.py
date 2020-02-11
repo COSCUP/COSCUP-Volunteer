@@ -326,7 +326,7 @@ def team_form_volunteer_certificate(pid, tid):
         is_ok_submit = all(_check)
 
     if request.method == 'GET':
-        form_data = Form.get_appreciation(pid=pid, uid=g.user['account']['_id'])
+        form_data = Form.get_volunteer_certificate(pid=pid, uid=g.user['account']['_id'])
         if form_data and 'data' in form_data and 'value' in form_data['data']:
             select_value = 'yes' if form_data['data']['value'] else 'no'
         else:

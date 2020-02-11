@@ -125,71 +125,73 @@
 {% block js %}
 <script src="/js/axios.min.js"></script>
 <script>
-    var $teamusermodal = new Vue({
-        el: '#teamusermodal',
-        data: {
-            isActive: false,
-            user: {},
-            modalTitle: ''
-        },
-        methods: {
-            showapprove: function(uid) {
-                this.user = {};
-                axios.get('./edit_user/api', {params: {uid: uid}}).then(function(resp){
-                    $teamusermodal.modalTitle = '核准加入 ' + resp.data.badge_name;
-                    $teamusermodal.user = resp.data;
-                }).then(function(){
-                    $teamusermodal.fixpage();
-                });
+    (function () {
+        let $teamusermodal = new Vue({
+            el: '#teamusermodal',
+            data: {
+                isActive: false,
+                user: {},
+                modalTitle: ''
             },
-            sendresult: function(result) {
-                this.$el.querySelectorAll('footer button.button').forEach(function(btn){
-                    btn.classList.add('is-loading');
-                });
+            methods: {
+                showapprove: function(uid) {
+                    this.user = {};
+                    axios.get('./edit_user/api', {params: {uid: uid}}).then(function(resp){
+                        $teamusermodal.modalTitle = '核准加入 ' + resp.data.badge_name;
+                        $teamusermodal.user = resp.data;
+                    }).then(function(){
+                        $teamusermodal.fixpage();
+                    });
+                },
+                sendresult: function(result) {
+                    this.$el.querySelectorAll('footer button.button').forEach(function(btn){
+                        btn.classList.add('is-loading');
+                    });
 
-                var uid = $teamusermodal.user.uid;
-                var wid = $teamusermodal.user.wid;
+                    var uid = $teamusermodal.user.uid;
+                    var wid = $teamusermodal.user.wid;
 
-                axios.post('./edit_user/api', {uid: uid, wid: wid, result: result}).then(function(resp){
-                    $teamusermodal.goback();
-                    window.location.href = './edit_user';
-                });
-            },
-            fixpage: function() {
-                this.isActive = true;
-                var html = document.querySelector('html');
-                html.classList.add('is-clipped');
-            },
-            goback: function() {
-                var html = document.querySelector('html');
-                html.classList.remove('is-clipped');
-                this.isActive = false;
-
-                this.$el.querySelectorAll('footer button.button').forEach(function(btn){
-                    btn.classList.remove('is-loading');
-                });
-            }
-        },
-        delimiters: ['[[', ']]']
-    });
-    var $teamuser = new Vue({
-        el: '#teamuser',
-        methods: {
-            showapprove: function(btn) {
-                $teamusermodal.showapprove(btn.target.dataset.uid);
-            },
-            deluser: function(btn) {
-                var uid = btn.target.dataset.uid;
-                var name = btn.target.dataset.name;
-                var ans = window.confirm('是否刪除 ' + name + '(' + uid + ') ?\r\n\r\n（確定就直接移除組員喔！）');
-                if (ans === true) {
-                    axios.post('./edit_user', {uid: uid, case: 'deluser'}).then(function(resp){
+                    axios.post('./edit_user/api', {uid: uid, wid: wid, result: result}).then(function(resp){
+                        $teamusermodal.goback();
                         window.location.href = './edit_user';
                     });
+                },
+                fixpage: function() {
+                    this.isActive = true;
+                    var html = document.querySelector('html');
+                    html.classList.add('is-clipped');
+                },
+                goback: function() {
+                    var html = document.querySelector('html');
+                    html.classList.remove('is-clipped');
+                    this.isActive = false;
+
+                    this.$el.querySelectorAll('footer button.button').forEach(function(btn){
+                        btn.classList.remove('is-loading');
+                    });
                 }
-            }
-        },
-        delimiters: ['[[', ']]']
-    });
+            },
+            delimiters: ['[[', ']]']
+        });
+        let $teamuser = new Vue({
+            el: '#teamuser',
+            methods: {
+                showapprove: function(btn) {
+                    $teamusermodal.showapprove(btn.target.dataset.uid);
+                },
+                deluser: function(btn) {
+                    var uid = btn.target.dataset.uid;
+                    var name = btn.target.dataset.name;
+                    var ans = window.confirm('是否刪除 ' + name + '(' + uid + ') ?\r\n\r\n（確定就直接移除組員喔！）');
+                    if (ans === true) {
+                        axios.post('./edit_user', {uid: uid, case: 'deluser'}).then(function(resp){
+                            window.location.href = './edit_user';
+                        });
+                    }
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
 </script>
 {% endblock %}
