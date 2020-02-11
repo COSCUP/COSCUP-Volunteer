@@ -85,13 +85,15 @@
   </script>
   <script src="/js/vue.min.js"></script>
   <script>
-      var app = new Vue({
-          el: 'nav',
-          data: {
-              navtoggle: false
-          },
-          delimiters: ['[[', ']]']
-      });
+      (function() {
+          let app = new Vue({
+              el: 'nav',
+              data: {
+                  navtoggle: false
+              },
+              delimiters: ['[[', ']]']
+          });
+      })();
   </script>
   {% block js %}{% endblock %}
   </body>

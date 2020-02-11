@@ -46,10 +46,12 @@
 {% block js %}
 {% if is_ok_submit %}
 <script>
-    $accommodationform = new Vue({
-        el: '#accommodationform',
-        delimiters: ['[[', ']]']
-    });
+    (function() {
+        let $accommodationform = new Vue({
+            el: '#accommodationform',
+            delimiters: ['[[', ']]']
+        });
+    })();
 </script>
 {% endif %}
 {% endblock %}

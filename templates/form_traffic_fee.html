@@ -68,49 +68,51 @@
 {% block js %}
 <script src="/js/axios.min.js"></script>
 <script>
-    var $formtraffic = new Vue({
-        el: '#trafficform',
-        data: {
-            readed: false,
-            data: {% if data %}{{data|safe}}{%else%}{apply: 'no', fromwhere: '', howto: '', fee: 0}{%endif%},
-            maxfee: 0,
-            locations: []
-        },
-        mounted: function() {
-            this.loadlocation();
-        },
-        watch: {
-            readed: function() {
-                this.calmaxfee(this.data.fromwhere);
+    (function () {
+        let $formtraffic = new Vue({
+            el: '#trafficform',
+            data: {
+                readed: false,
+                data: {% if data %}{{data|safe}}{%else%}{apply: 'no', fromwhere: '', howto: '', fee: 0}{%endif%},
+                maxfee: 0,
+                locations: []
             },
-            'data.apply': function() {
-                this.calmaxfee(this.data.fromwhere);
+            mounted: function() {
+                this.loadlocation();
             },
-            'data.fromwhere': function(val) {
-                this.calmaxfee(val);
-            }
-        },
-        methods: {
-            loadlocation: function(){
-                axios.get('./api', {params: {case: 'traffic_fee'}}).then(function(resp){
-                    $formtraffic.locations = resp.data.locations;
-                });
+            watch: {
+                readed: function() {
+                    this.calmaxfee(this.data.fromwhere);
+                },
+                'data.apply': function() {
+                    this.calmaxfee(this.data.fromwhere);
+                },
+                'data.fromwhere': function(val) {
+                    this.calmaxfee(val);
+                }
             },
-            calmaxfee: function(val) {
-                if (this.readed === false || this.data.apply === 'no') {
-                    $formtraffic.maxfee = 0;
-                } else {
-                    $formtraffic.locations.every(function(loc) {
-                        if (val === loc[0]) {
-                            $formtraffic.maxfee = loc[1];
-                            return false;
-                        }
-                        return true;
+            methods: {
+                loadlocation: function(){
+                    axios.get('./api', {params: {case: 'traffic_fee'}}).then(function(resp){
+                        $formtraffic.locations = resp.data.locations;
                     });
-                };
-            }
-        },
-        delimiters: ['[[', ']]']
-    });
+                },
+                calmaxfee: function(val) {
+                    if (this.readed === false || this.data.apply === 'no') {
+                        $formtraffic.maxfee = 0;
+                    } else {
+                        $formtraffic.locations.every(function(loc) {
+                            if (val === loc[0]) {
+                                $formtraffic.maxfee = loc[1];
+                                return false;
+                            }
+                            return true;
+                        });
+                    };
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
 </script>
 {% endblock %}

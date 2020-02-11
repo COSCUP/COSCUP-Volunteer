@@ -52,9 +52,11 @@
 {% endblock %}
 {% block js %}
 <script>
-    var $volunteercertificate = new Vue({
-        el: '#volunteercertificate',
-        delimiters: ['[[', ']]']
-    });
+    (function () {
+        let $volunteercertificate = new Vue({
+            el: '#volunteercertificate',
+            delimiters: ['[[', ']]']
+        });
+    })();
 </script>
 {% endblock %}
