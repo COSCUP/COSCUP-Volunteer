@@ -24,3 +24,18 @@ class USession(object):
 
         '''
         return USessionDB(token=sid).get()
+
+    @staticmethod
+    def get_no_ipinfo():
+        ''' Get no ipinfo '''
+        for raw in USessionDB().find({'ipinfo': {'$exists': False}}, {'header.X-Real-Ip': 1, 'header.X-Forwarded-For': 1}):
+            yield raw
+
+    @staticmethod
+    def update_ipinfo(sid, data):
+        ''' Update session ipinfo
+
+        :param str sid: usession id
+
+        '''
+        USessionDB().find_one_and_update({'_id': sid}, {'$set': {'ipinfo': data}})

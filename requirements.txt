@@ -10,3 +10,4 @@ celery<5
 flask
 markdown
 pymongo
+requests

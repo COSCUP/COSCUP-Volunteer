@@ -17,6 +17,12 @@ class USessionDB(DBBase):
 
         self.token = token
 
+    def index(self):
+        ''' Index '''
+        self.create_index([('created_at', 1), ])
+        self.create_index([('ipinfo', 1), ])
+        self.create_index([('uid', 1), ])
+
     def save(self, data):
         ''' save
 
