@@ -380,23 +380,23 @@ def team_form_appreciation(pid, tid):
             project=project, team=team, names=names.items(), select_value=select_value)
 
     elif request.method == 'POST':
-        if request.form['volunteer_certificate'] not in ('oauth', 'badge_name', 'real_name', 'no'):
+        if request.form['appreciation'] not in ('oauth', 'badge_name', 'real_name', 'no'):
             return u'', 406
 
-        if request.form['volunteer_certificate'] == 'no':
+        if request.form['appreciation'] == 'no':
             data = {'available': False}
 
         else:
-            if request.form['volunteer_certificate'] == 'oauth':
+            if request.form['appreciation'] == 'oauth':
                 name = g.user['data']['name']
-            elif request.form['volunteer_certificate'] == 'badge_name':
+            elif request.form['appreciation'] == 'badge_name':
                 name = g.user['account']['profile']['badge_name']
-            elif request.form['volunteer_certificate'] == 'real_name':
+            elif request.form['appreciation'] == 'real_name':
                 name = g.user['account']['profile_real']['name']
 
             data = {
                 'available': True,
-                'key': request.form['volunteer_certificate'],
+                'key': request.form['appreciation'],
                 'value': name,
             }
 

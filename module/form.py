@@ -51,6 +51,16 @@ class Form(object):
         return FormDB().find_one({'case': 'appreciation', 'pid': pid, 'uid': uid})
 
     @staticmethod
+    def all_appreciation(pid):
+        ''' Get all appreciation
+
+        :param str pid: project id
+
+        '''
+        for raw in FormDB().find({'case': 'appreciation', 'pid': pid}):
+            yield raw
+
+    @staticmethod
     def update_volunteer_certificate(pid, uid, data):
         ''' Update volunteer certificate
 
@@ -74,6 +84,16 @@ class Form(object):
 
         '''
         return FormDB().find_one({'case': 'volunteer_certificate', 'pid': pid, 'uid': uid})
+
+    @staticmethod
+    def all_volunteer_certificate(pid):
+        ''' Get All volunteer certificate
+
+        :param str pid: project id
+
+        '''
+        for raw in FormDB().find({'case': 'volunteer_certificate', 'pid': pid}):
+            yield raw
 
     @staticmethod
     def update_traffic_fee(pid, uid, data):
@@ -104,6 +124,16 @@ class Form(object):
         return FormDB().find_one({'case': 'traffic_fee', 'pid': pid, 'uid': uid})
 
     @staticmethod
+    def all_traffic_fee(pid):
+        ''' Get All traffic_fee
+
+        :param str pid: project id
+
+        '''
+        for raw in FormDB().find({'case': 'traffic_fee', 'pid': pid}):
+            yield raw
+
+    @staticmethod
     def update_accommodation(pid, uid, data):
         ''' Update accommodation
 
@@ -128,3 +158,13 @@ class Form(object):
 
         '''
         return FormDB().find_one({'case': 'accommodation', 'pid': pid, 'uid': uid})
+
+    @staticmethod
+    def all_accommodation(pid):
+        ''' Get all accommodation
+
+        :param str pid: project id
+
+        '''
+        for raw in FormDB().find({'case': 'accommodation', 'pid': pid}):
+            yield raw

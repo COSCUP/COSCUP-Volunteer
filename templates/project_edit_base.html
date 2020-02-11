@@ -18,10 +18,11 @@
                   <ul class="menu-list">
                       <li><a class="{%block project_edit_menu%}{%endblock%}" href="/project/{{project._id}}/edit">設定</a></li>
                       <li><a class="{%block project_edit_menu_create_team%}{%endblock%}" href="/project/{{project._id}}/edit/team">編輯組別</a></li>
+                      <li><a class="{%block project_form_menu%}{%endblock%}" href="/project/{{project._id}}/form">表單結果</a></li>
                   </ul>
               </aside>
           </div>
-          <div id="projectbody" class="column is-half">{% block project_edit_body %}{% endblock %}</div>
+          <div id="projectbody" class="column">{% block project_edit_body %}{% endblock %}</div>
       </div>
   </div>
 </section>

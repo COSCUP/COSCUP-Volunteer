@@ -1,0 +1,121 @@
+{% extends "project_edit_base.html" %}
+{% block head_title_project_edit %}表單結果{% endblock %}
+{%block project_form_menu%}is-active{%endblock%}
+{% block project_edit_body %}
+<div id="projectform" class="columns">
+    <div class="column is-three-quarters">
+        <div class="content">
+            <button class="button is-success" v-bind:class="{'is-outlined': casename != 'accommodation'}"
+                v-on:click="getResult('accommodation')">住宿申請</button>
+            <button class="button is-success" v-bind:class="{'is-outlined': casename != 'volunteer_certificate'}"
+                v-on:click="getResult('volunteer_certificate')">志工時數證明</button>
+            <button class="button is-success" v-bind:class="{'is-outlined': casename != 'traffic_fee'}"
+                v-on:click="getResult('traffic_fee')">交通費補助</button>
+            <button class="button is-success" v-bind:class="{'is-outlined': casename != 'appreciation'}"
+                v-on:click="getResult('appreciation')">感謝狀</button>
+        </div>
+        <table v-show="casename" class="table is-striped is-fullwidth" v-cloak>
+            <thead>
+                <tr>
+                    <th v-for="name in fields">[[name]]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-if="casename == 'accommodation'" v-for="data in result">
+                    <td>
+                        <span class="tag">[[ data[0] ]]</span>
+                    </td>
+                    <td>
+                        <span>
+                            <figure class="image is-32x32">
+                                <img class="is-rounded" v-bind:src="data[1]">
+                            </figure>
+                        </span>
+                    </td>
+                    <td>[[ data[2] ]]</td>
+                    <td>[[ data[3] ]]</td>
+                </tr>
+                <tr v-if="casename == 'volunteer_certificate'" v-for="data in result">
+                    <td>
+                        <span class="tag">[[ data[0] ]]</span>
+                    </td>
+                    <td>
+                        <span>
+                            <figure class="image is-32x32">
+                                <img class="is-rounded" v-bind:src="data[1]">
+                            </figure>
+                        </span>
+                    </td>
+                    <td>[[ data[2] ]]</td>
+                    <td>[[ data[3] ]]</td>
+                    <td>[[ data[4] ]]</td>
+                    <td>[[ data[5] ]]</td>
+                    <td>[[ data[6] ]]</td>
+                </tr>
+                <tr v-if="casename == 'appreciation'" v-for="data in result">
+                    <td>
+                        <span class="tag">[[ data[0] ]]</span>
+                    </td>
+                    <td>
+                        <span>
+                            <figure class="image is-32x32">
+                                <img class="is-rounded" v-bind:src="data[1]">
+                            </figure>
+                        </span>
+                    </td>
+                    <td>[[ data[2] ]]</td>
+                    <td>[[ data[3] ]]</td>
+                    <td>[[ data[4] ]]</td>
+                </tr>
+                <tr v-if="casename == 'traffic_fee'" v-for="data in result">
+                    <td>
+                        <span class="tag">[[ data[0] ]]</span>
+                    </td>
+                    <td>
+                        <span>
+                            <figure class="image is-32x32">
+                                <img class="is-rounded" v-bind:src="data[1]">
+                            </figure>
+                        </span>
+                    </td>
+                    <td>[[ data[2] ]]</td>
+                    <td>[[ data[3] ]]</td>
+                    <td>[[ data[4] ]]</td>
+                    <td>[[ data[5] ]]</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="column">
+        <div name="forminfo" class="content">
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+(function() {
+    let $projectform = new Vue({
+        el: '#projectform',
+        data: {
+            casename: '',
+            result: [],
+            fields: []
+        },
+        methods: {
+            getResult: function(casename) {
+                this.result = [];
+                this.fields = [];
+                this.casename = casename;
+                axios.post('./form/api', {case: casename}).then(function(resp) {
+                    $projectform.result = resp.data.result.slice(1);
+                    $projectform.fields = resp.data.result.slice(0, 1)[0];
+                });
+            }
+        },
+        delimiters: ['[[', ']]']
+    });
+})();
+</script>
+{% endblock %}

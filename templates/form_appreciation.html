@@ -8,9 +8,9 @@
         <form id="appreciationform" method="POST">
             <div class="field">
                 <div class="control">
-                    <label class="label">志工服務證明</label>
+                    <label class="label">感謝狀</label>
                     <div class="select">
-                        <select name="volunteer_certificate" v-bind:value="'{{select_value}}'">
+                        <select name="appreciation" v-bind:value="'{{select_value}}'">
                             <option value="no">否(No)</option>
                             {% for v in names%}
                             <option value="{{v[0]}}">是(Yes)，使用「{{v[1]}}」</option>
