@@ -20,6 +20,7 @@ app = Celery(
 )
 
 app.conf.task_queues = (
+    Queue('celery', Exchange('celery', type='direct'), routing_key='celery'),
     Queue('CS_mail_sys', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.sys.#'),
     Queue('CS_ipinfo', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.ipinfo.#'),
 )
