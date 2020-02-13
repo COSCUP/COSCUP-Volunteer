@@ -1,4 +1,4 @@
-FROM secretary-base:20.02.03
+FROM volunteer-base:20.02.13
 
 ADD ./celery_task ./celery_task
 ADD ./client_secret.json ./client_secret.json

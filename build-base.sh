@@ -1,1 +1,1 @@
-docker build --no-cache=true -t secretary-base:20.02.03 -f ./Dockerfile-base ./
+docker build --no-cache=true -t volunteer-base:20.02.13 -f ./Dockerfile-base ./

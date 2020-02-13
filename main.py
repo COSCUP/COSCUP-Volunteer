@@ -37,7 +37,7 @@ from celery_task.task_mail_sys import mail_sys_weberror
 
 app = Flask(__name__)
 app.config['SESSION_COOKIE_SECURE'] = True
-app.secret_key = setting.secret_key
+app.secret_key = setting.SECRET_KEY
 app.register_blueprint(VIEW_PROJECT)
 app.register_blueprint(VIEW_SETTING)
 app.register_blueprint(VIEW_TEAM)
@@ -98,7 +98,7 @@ def oauth2callback():
           'https://www.googleapis.com/auth/userinfo.email',
           'https://www.googleapis.com/auth/userinfo.profile',
         ),
-        redirect_uri='https://secretary.coscup.org/oauth2callback',
+        redirect_uri='https://%s/oauth2callback' % setting.DOMAIN,
     )
 
     if 'code' not in request.args:
