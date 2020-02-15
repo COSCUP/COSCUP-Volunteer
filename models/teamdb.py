@@ -1,3 +1,5 @@
+from time import time
+
 from pymongo.collection import ReturnDocument
 
 from models.base import DBBase
@@ -87,3 +89,37 @@ class TeamDB(DBBase):
     def get(self):
         ''' Get data '''
         return self.find_one({'pid': self.pid, 'tid': self.tid})
+
+
+class TeamMemberChangedDB(DBBase):
+    ''' TeamMemberChangedDB Collection
+
+    :Struct:
+        - ``pid``: from project id
+        - ``tid``: team id
+        - ``uid``: user id
+        - ``case``: ``add``, ``del``
+
+    '''
+    def __init__(self):
+        super(TeamMemberChangedDB, self).__init__('team_member_changed')
+
+    def index(self):
+        ''' Index '''
+        self.create_index([('pid', 1), ])
+        self.create_index([('case', 1), ])
+
+    def make_record(self, pid, tid, add_uids=None, del_uids=None):
+        ''' make record
+
+        :param str pid: project id
+        :param str tid: team id
+        :param list add_uids: add user list
+        :param list del_uids: del user list
+
+        '''
+        if add_uids:
+            self.insert_many([{'pid': pid, 'tid': tid, 'case': 'add', 'uid': uid, 'create_at': time()} for uid in add_uids])
+
+        if del_uids:
+            self.insert_many([{'pid': pid, 'tid': tid, 'case': 'del', 'uid': uid, 'create_at': time()} for uid in del_uids])
