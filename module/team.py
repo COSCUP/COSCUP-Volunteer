@@ -1,4 +1,5 @@
 from models.teamdb import TeamDB
+from models.teamdb import TeamMemberChangedDB
 
 
 class Team(object):
@@ -36,15 +37,21 @@ class Team(object):
         teamdb = TeamDB(pid, tid)
         teamdb.update_users(field='chiefs', add_uids=add_uids, del_uids=del_uids)
 
-    def update_members(pid, tid, add_uids=None, del_uids=None):
+    def update_members(pid, tid, add_uids=None, del_uids=None, make_record=True):
         ''' update chiefs
 
         :param list add_uids: add uids
         :param list del_uids: del uids
+        :param bool make_record: make user update record
+
+        .. note:: also make user changed record
 
         '''
         teamdb = TeamDB(pid, tid)
         teamdb.update_users(field='members', add_uids=add_uids, del_uids=del_uids)
+
+        if make_record:
+            TeamMemberChangedDB().make_record(pid=pid, tid=tid, add_uids=add_uids, del_uids=del_uids)
 
     @staticmethod
     def list_by_pid(pid):
