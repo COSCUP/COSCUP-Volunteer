@@ -54,9 +54,11 @@ def project_edit(pid):
             'name': request.form['name'].strip(),
             'volunteer_certificate_hours': max([0, int(request.form['volunteer_certificate_hours'])]),
             'calendar': request.form['calendar'].strip(),
+            'mailling_staff': request.form['mailling_staff'].strip(),
+            'mailling_leader': request.form['mailling_leader'].strip(),
         }
         Project.update(pid, data)
-        return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
+        return redirect(url_for('project.project_edit', pid=pid, _scheme='https', _external=True))
 
 @VIEW_PROJECT.route('/<pid>/edit/team', methods=('GET', 'POST'))
 def project_edit_create_team(pid):
@@ -201,7 +203,7 @@ def project_edit_create_team_api(pid):
     if request.method == 'GET':
         _team = Team.get(pid, request.args['tid'].strip())
         team = {}
-        for k in ('name', 'chiefs', 'members', 'owners', 'tid', 'headcount'):
+        for k in ('name', 'chiefs', 'members', 'owners', 'tid', 'headcount', 'mailling'):
             if k in _team:
                 team[k] = _team[k]
 

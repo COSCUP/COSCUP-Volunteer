@@ -46,9 +46,12 @@ class Project(object):
 
         '''
         _data = {}
-        for k in ('name', 'desc', 'volunteer_certificate_hours', 'calendar'):
+        for k in ('name', 'desc', 'volunteer_certificate_hours', 'calendar', 'mailling_staff', 'mailling_leader'):
             if k in data:
                 _data[k] = data[k]
+
+                if isinstance(_data[k], str):
+                    _data[k] = _data[k].strip()
 
         if 'volunteer_certificate_hours' in _data:
             _data['volunteer_certificate_hours'] = int(_data['volunteer_certificate_hours'])
