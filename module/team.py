@@ -92,9 +92,12 @@ class Team(object):
         '''
         teamdb = TeamDB(pid=pid, tid=tid)
         _data = {}
-        for k in ('name', 'public_desc', 'desc', 'chiefs', 'members', 'owners', 'headcount'):
+        for k in ('name', 'public_desc', 'desc', 'chiefs', 'members', 'owners', 'headcount', 'mailling'):
             if k in data:
                 _data[k] = data[k]
+
+                if isinstance(_data[k], str):
+                    _data[k] = _data[k].strip()
 
         if 'headcount' in _data:
             _data['headcount'] = int(_data['headcount'])
@@ -105,7 +108,7 @@ class Team(object):
                     _data[k] = []
                     continue
                 if isinstance(_data[k], str):
-                    _data[k] = _data[k].split(',')
+                    _data[k] = [i.strip() for i in _data[k].split(',')]
 
         if _data:
             return teamdb.update_setting(_data)

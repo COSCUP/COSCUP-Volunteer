@@ -2,7 +2,7 @@
 {% block head_title_project_edit %}編輯組別{% endblock %}
 {%block project_edit_menu_create_team%}is-active{%endblock%}
 {% block project_edit_body %}
-<div class="columns">
+<div id="projectbody" class="columns">
     <div class="column is-two-thirds">
         <div class="content">
             <ul>
@@ -64,6 +64,13 @@
                         </div>
                         <p class="help is-success">組員，以 , 區隔。</p>
                     </div>
+                    <div class="field">
+                        <label class="label">Mailling-List</label>
+                        <div class="control">
+                            <input class="input" type="text" name="mailling" v-model="modalBody.mailling" v-bind:disabled="modalBody.submittype === 'create'">
+                        </div>
+                        <p class="help is-success">組專用的信箱。</p>
+                    </div>
                 </section>
                 <footer class="modal-card-foot">
                     <button class="button is-success" type="submit" v-on:click.prevent="gosubmit">Update</button>
@@ -82,7 +89,7 @@
             el: '#projectbody' ,
             data: {
                 isActive: false,
-                modalNew: {name: '', tid: '', chiefs: '', members: '', owners: '', headcount: 0},
+                modalNew: {name: '', tid: '', chiefs: '', members: '', owners: '', headcount: 0, mailling: ''},
                 modalTitle: '',
                 modalBody: ''
             },

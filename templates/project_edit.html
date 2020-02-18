@@ -34,6 +34,20 @@
                 <p class="help is-success">類似：ust6glc03eat210i65r1g4m2j4@group.calendar.google.com</p>
             </div>
             <div class="field">
+                <label class="label">工作人員 mailling-list</label>
+                <div class="control">
+                    <input class="input" type="text" name="mailling_staff" value="{{project.mailling_staff}}">
+                </div>
+                <p class="help is-success">工人專用的信箱，會把工作人員都丟到這裡面去。</p>
+            </div>
+            <div class="field">
+                <label class="label">組長 mailling-list</label>
+                <div class="control">
+                    <input class="input" type="text" name="mailling_leader" value="{{project.mailling_leader}}">
+                </div>
+                <p class="help is-success">組長群用的，也是會把組長丟進去。</p>
+            </div>
+            <div class="field">
                 <div class="control">
                     <button class="button is-primary" type="submit">Update</button>
                     <a class="button" href="/project/{{project._id}}">Cancel</a>

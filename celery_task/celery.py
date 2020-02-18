@@ -16,6 +16,7 @@ app = Celery(
     include=(
         'celery_task.task_mail_sys',
         'celery_task.task_ipinfo',
+        'celery_task.task_service_sync',
     ),
 )
 
@@ -23,6 +24,7 @@ app.conf.task_queues = (
     Queue('celery', Exchange('celery', type='direct'), routing_key='celery'),
     Queue('CS_mail_sys', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.sys.#'),
     Queue('CS_ipinfo', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.ipinfo.#'),
+    Queue('CS_service_sync', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.servicesync.#'),
 )
 
 app.conf.acks_late = True
@@ -47,6 +49,15 @@ app.conf.beat_schedule = {
         'options': {
             'exchange': 'COSCUP-SECRETARY',
             'routing_key': 'cs.ipinfo.update.session',
+        },
+    },
+    'service_sync.gsuite': {
+        'task': 'servicesync.gsuite.memberchange',
+        'schedule': crontab(minute='*/5'),
+        'kwargs': {},
+        'options': {
+            'exchange': 'COSCUP-SECRETARY',
+            'routing_key': 'cs.servicesync.gsuite.memberchange',
         },
     },
 }
