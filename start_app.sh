@@ -1,7 +1,7 @@
 docker run -d --restart='always' \
            --name volunteer-1 \
            --link secretary_mongo:mongo \
-           --link queue_sender:celery \
+           --link queue_sender:rabbitmq \
            --log-opt max-size=64m \
            --log-opt max-file=1 \
            -v $(pwd)/log:/app/log \
@@ -11,7 +11,7 @@ docker run -d --restart='always' \
 docker run -d --restart='always' \
            --name volunteer-2 \
            --link secretary_mongo:mongo \
-           --link queue_sender:celery \
+           --link queue_sender:rabbitmq \
            --log-opt max-size=64m \
            --log-opt max-file=1 \
            -v $(pwd)/log:/app/log \
