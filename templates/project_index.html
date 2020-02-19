@@ -7,6 +7,9 @@
         All Projects
     </h1>
     <p class="subtitle">所有活動組織列表</p>
+    <div class="content">
+        這裡會以活動為一個專案開啟，像是 COSCUP 2020 或是未來可能會有的 COSCUP Taigi，找到期間中正在籌辦的活動進入。
+    </div>
   </div>
 </section>
 <section class="section">
@@ -15,18 +18,21 @@
       <div class="columns">
           {% for project in project_col %}
           <div class="column is-one-third">
-              <article class="message">
+              <article class="message is-dark">
                   <div class="message-header">
                       <p>
                           <span class="icon"><i class="fas fa-project-diagram"></i></span>
                           <span>{{project.name}}</span>
                       </p>
                   </div>
-                  <div class="message-body">
+                  <div class="message-body is-small">
                       <p>{{project.desc}}</p>
-                      <p>date: {{project.action_date_str}}</p>
-                      <div class="buttons is-right">
-                          <a class="button is-info is-light" href="/project/{{project._id}}/">
+                      <p>
+                          <span class="icon has-text-info"><i class="far fa-calendar-alt"></i></span>
+                          <span>{{project.action_date_str}}</span>
+                      </p>
+                      <div class="buttons is-right" style="margin-top: 15px;">
+                          <a class="button is-info is-inverted" href="/project/{{project._id}}/">
                               <span class="icon"><i class="fas fa-directions"></i></span>
                               <span>檢視組別列表</span>
                           </a>

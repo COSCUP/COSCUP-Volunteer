@@ -2,12 +2,19 @@
 {% block head_title_setting %}首頁{% endblock %}
 {% block setting_index %}is-active{% endblock %}
 {% block setting_body %}
-<div class="column is-half">
+<div class="column is-two-thirds">
     <div class="content box">
         <h3><span class="icon has-text-info"><i class="far fa-star"></i></span> <span>說明</span></h3>
         <p>Hi {{g.user.data.name}},</p>
         <p>這是今年 2020 行政組預計完成的線上登錄系統，希望能擺脫每一屆用 Google 表單在重複蒐集一樣的資訊問題。也希望能藉由這個機會，建立一個 COSCUP 志工人才庫！</p>
-        <p>由於目前還有很多功能正在趕工中，如果你有發現問題，可以到<a href="https://app.slack.com/client/T035G8BB7/CST6D28BC">這裡反應</a>，感謝！</p>
+        <p>由於目前還有很多功能正在趕工中，如果你有發現問題，可以到<a href="https://chat.coscup.org/coscup/channels/secretary_hr">這裡反應</a>，感謝！</p>
+    </div>
+    <div class="content">
+        <article class="message is-success">
+            <div class="message-body box">
+                如果都完成自我介紹的頁面建立，可以到<a href="/project/">這裡</a>逛逛有什麼組別感到興趣、想要加入的。
+            </div>
+        </article>
     </div>
 </div>
 {% endblock %}
