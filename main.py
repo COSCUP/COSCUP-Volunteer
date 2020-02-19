@@ -25,14 +25,15 @@ from flask import session
 from flask import url_for
 
 import setting
+from celery_task.task_mail_sys import mail_sys_weberror
 from module.oauth import OAuth
 from module.users import User
 from module.usession import USession
+from view.links import VIEW_LINKS
 from view.project import VIEW_PROJECT
 from view.setting import VIEW_SETTING
 from view.team import VIEW_TEAM
 from view.user import VIEW_USER
-from celery_task.task_mail_sys import mail_sys_weberror
 
 
 app = Flask(__name__)
@@ -42,12 +43,14 @@ app.register_blueprint(VIEW_PROJECT)
 app.register_blueprint(VIEW_SETTING)
 app.register_blueprint(VIEW_TEAM)
 app.register_blueprint(VIEW_USER)
+app.register_blueprint(VIEW_LINKS)
 
 
 NO_NEED_LOGIN_PATH = (
     '/',
     '/oauth2callback',
     '/logout',
+    '/links/chat',
 )
 
 

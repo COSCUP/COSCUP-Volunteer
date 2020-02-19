@@ -1,0 +1,46 @@
+{% extends "setting.html" %}
+{% block head_title_setting %}連結 chat 帳號{% endblock %}
+{% block setting_link_chat %}is-active{% endblock %}
+{% block setting_body %}
+<div class="columns">
+    <div class="column">
+        <div class='content'>
+            <h3>連結 chat.coscup.org 帳號</h3>
+            <p>COSCUP 在 2020 年搬移 slack 服務改用 <a href="https://chat.coscup.org/">mattermost 建立溝通平台</a>，如果在原來的 slack 已有帳號(mail) ，在新的服務可以透過忘記密碼的方式重新登入。</p>
+            <h4>登入 chat.coscup.org</h4>
+            <article class="message is-dark">
+                <div class="message-body">
+                    <a href="https://chat.coscup.org/" target="_blank">https://chat.coscup.org/</a>
+                </div>
+            </article>
+            {% if mml.raw.data %}
+            <h4>認證成功</h4>
+            <article class="message is-success">
+                <div class="message-body">
+                    user_name: <span class="is-family-monospace">{{mml.raw.data.user_name}}</span>,
+                    user_id: <span class="is-family-monospace">{{mml.raw.data.user_id}}</span>
+                </div>
+            </article>
+            <h4>移除連結</h4>
+            <p>想要斷開與 chat.coscup.org 的連結，可以按下移除連結按鈕</p>
+            <form method="POST">
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" class="button is-warning">移除連結</button>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <h4>輸入驗證</h4>
+            <p>請在任何一個對話框輸入以下文字（複製貼上），不用擔心，跑出的文字訊息只有自己看得到。</p>
+            <article class="message is-dark">
+                <div class="message-body is-family-monospace">
+                    /volunteer verify {{mml.raw._id}}.{{mml.raw.code}}
+                </div>
+            </article>
+            <p>理論上這步之後就綁定成功了！綁定完後可以重新整理這頁繼續以下操作。</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
