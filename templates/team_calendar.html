@@ -2,10 +2,25 @@
 {% block head_title_team %}行事曆{% endblock %}
 {% block menu_calendar %}is-active{% endblock %}
 {% block team_body %}
+{% if project.calendar %}
 <div class="content">
   <figure class="image is-16by9">
       <iframe class="has-ratio" src="https://calendar.google.com/calendar/embed?src={{project.calendar}}&ctz=Asia%2FTaipei"
           style="border: 0" width="800" height="600" frameborder="0" scrolling="no">讀取錯誤，可能被第三方擋下。</iframe>
   </figure>
+  <article class="message is-dark">
+      <div class="message-body">
+          行事曆網址：<a href="https://calendar.google.com/calendar/embed?src={{project.calendar}}&ctz=Asia%2FTaipei">https://calendar.google.com/calendar/embed?src={{project.calendar}}&ctz=Asia%2FTaipei</a>
+      </div>
+  </article>
 </div>
+{% else %}
+<div class="content">
+    <article class="message">
+        <div class="message-body">
+            目前沒有大會行事曆，請稍等設定。
+        </div>
+    </article>
+</div>
+{% endif %}
 {% endblock %}
