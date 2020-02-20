@@ -21,6 +21,23 @@
                       </div>
                   </div>
               </div>
+              <div class="content" style="margin-top: 20px;">
+                  <div class="buttons">
+                  {% if mml.raw and 'data' in mml.raw and 'user_name' in mml.raw['data'] %}
+                      <a class="button is-small is-fullwidth is-success is-light"
+                          href="https://chat.coscup.org/{{mml.raw['data']['team_domain']}}/messages/{{mml.raw['data']['user_id']}}">
+                          <span class="icon"><i class="far fa-comments"></i></span>
+                          <span>Direct Message</span>
+                      </a>
+                  {% endif %}
+                  {% if g.user['account']['_id'] == user._id %}
+                      <a class="button is-small is-fullwidth" href="/setting/profile">
+                          <span class="icon"><i class="fas fa-user-edit"></i></span>
+                          <span>修改</span>
+                      </a>
+                  {% endif %}
+                  </div>
+              </div>
           </div>
           <div class="column">
               <div class="content">
