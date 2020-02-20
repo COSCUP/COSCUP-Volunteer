@@ -120,7 +120,7 @@ def oauth2callback():
     if 'state' in url_query and url_query['state'] and url_query['state'][0] == session.get('state'):
         flow.fetch_token(authorization_response=url)
 
-        auth_client = discovery.build('oauth2', 'v2', credentials=flow.credentials)
+        auth_client = discovery.build('oauth2', 'v2', credentials=flow.credentials, cache_discovery=False)
         user_info = auth_client.userinfo().get().execute()
 
         # ----- save oauth info ----- #
