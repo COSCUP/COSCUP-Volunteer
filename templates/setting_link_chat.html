@@ -17,8 +17,8 @@
             <h4>認證成功</h4>
             <article class="message is-success">
                 <div class="message-body">
-                    user_name: <span class="is-family-monospace">{{mml.raw.data.user_name}}</span>,
-                    user_id: <span class="is-family-monospace">{{mml.raw.data.user_id}}</span>
+                    使用者名稱(user_name)：<span class="tag is-family-monospace">{{mml.raw.data.user_name}}</span><br>
+                    帳號ID(user_id)：<span class="tag is-family-monospace">{{mml.raw.data.user_id}}</span>
                 </div>
             </article>
             <h4>移除連結</h4>
@@ -35,7 +35,7 @@
             <p>請在任何一個對話框輸入以下文字（複製貼上），不用擔心，跑出的文字訊息只有自己看得到。</p>
             <article class="message is-dark">
                 <div class="message-body is-family-monospace">
-                    /volunteer verify {{mml.raw._id}}.{{mml.raw.code}}
+                    <input class="input" type="text" value="/volunteer verify {{mml.raw._id}}.{{mml.raw.code}}" readonly>
                 </div>
             </article>
             <p>理論上這步之後就綁定成功了！綁定完後可以重新整理這頁繼續以下操作。</p>
