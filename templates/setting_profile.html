@@ -10,11 +10,8 @@
             <form method="POST">
                 <div class="field">
                     <label class="label">Name*</label>
-                    <div class="control has-icons-right">
+                    <div class="control">
                         <input class="input" name="badge_name" type="text" value="{{user.profile.badge_name}}" required>
-                        <span class="icon is-small is-right">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </span>
                     </div>
                     <p class="help is-success">名牌顯示的稱呼。</p>
                 </div>
@@ -33,10 +30,16 @@
     </div>
     <div class="column is-two-fifths">
         <div class="content">
-            <article class="message is-small">
+            <article class="message is-small is-dark">
                 <div class="message-body">
                     <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
                     這裡的資訊會公開，讓其他人來瞭解你的部分。這裡的內容會呈現在<a href="/user/{{user._id}}">「關於你」</a>的頁面。
+                </div>
+            </article>
+            <article class="message is-small is-info">
+                <div class="message-body">
+                    <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                    可在此描述您個人所會的技能，包括語言、經驗、才藝等。在申請加入小組時，組長可以參考您的個人頁面。
                 </div>
             </article>
         </div>

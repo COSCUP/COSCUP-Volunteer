@@ -7,6 +7,7 @@ from flask import render_template
 from flask import url_for
 from markdown import markdown
 
+from module.mattermost_link import MattermostLink
 from module.oauth import OAuth
 from module.project import Project
 from module.team import Team
@@ -59,10 +60,12 @@ def user_page(uid, nickname=None):
 
     sorted(participate_in, key=lambda p: p['_project']['action_date'], reverse=True)
 
+
     return render_template('./user.html',
             badge_name=badge_name,
             intro=intro,
             oauth=oauth,
             user=user,
+            mml=MattermostLink(uid=user['_id']),
             participate_in=participate_in,
     )
