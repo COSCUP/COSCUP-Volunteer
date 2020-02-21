@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block head_title %}隱私權政策{% endblock %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        隱私權政策
+    </h1>
+    <p class="subtitle">我們會作的事情與怎麼作。</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter">
+                <div class="content">
+                    {{content|safe}}
+                </div>
+            </div>
+        </div>
+  </div>
+</section>
+{% endblock %}
+
