@@ -23,6 +23,7 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
+from markdown import markdown
 
 import setting
 from celery_task.task_mail_sys import mail_sys_weberror
@@ -53,6 +54,7 @@ NO_NEED_LOGIN_PATH = (
     '/oauth2callback',
     '/logout',
     '/links/chat',
+    '/privacy',
 )
 
 
@@ -166,6 +168,12 @@ def oauth2logout():
     session.pop('sid', None)
     return redirect(url_for('index', _scheme='https', _external=True))
 
+@app.route('/privacy')
+def privacy():
+    with open('./privacy.txt', 'r') as files:
+        content = markdown(files.read())
+
+        return render_template('./privacy.html', content=content)
 
 @app.route('/exception')
 def exception():
