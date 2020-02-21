@@ -62,6 +62,10 @@ def need_login():
             request.headers.get('USER-AGENT'),
             session, )
        )
+
+    if request.path.startswith('/user') and request.path[-1] == '/':
+        return redirect(request.path[:-1])
+
     if 'sid' in session and session['sid']:
         session_data = USession.get(session['sid'])
         if session_data:

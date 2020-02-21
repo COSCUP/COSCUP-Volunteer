@@ -1,4 +1,5 @@
 import html
+from urllib.parse import quote_plus
 
 import arrow
 from flask import Blueprint
@@ -31,9 +32,11 @@ def user_page(uid, nickname=None):
     oauth = OAuth(user['mail']).get()
 
     if 'profile' in user and 'badge_name' in user['profile']:
-        _nickname = user['profile']['badge_name'].replace(' ', '_')
+        _nickname = user['profile']['badge_name']
     else:
-        _nickname = oauth['data']['name'].replace(' ', '_')
+        _nickname = oauth['data']['name']
+
+    _nickname = quote_plus(_nickname)
 
     if nickname is None or nickname != _nickname:
         return redirect(url_for('user.user_page', uid=uid, nickname=_nickname))
