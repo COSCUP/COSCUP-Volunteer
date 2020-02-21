@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block head_title %}使用手冊{% endblock %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        使用手冊
+    </h1>
+    <p class="subtitle">所有功能服務說明，如果迷失在前往 COSCUP 的道路上 ...</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter">
+                <div class="content">
+                    <div class="buttons">
+                        <a class="button is-outlined" href="#account">帳號</a>
+                        <a class="button is-outlined" href="#jointo">加入組別</a>
+                        <a class="button is-outlined" href="#forchief">組長操作</a>
+                    </div>
+                    <h2>帳號<a name="account"></a></h2>
+                    <h3>登錄</h3>
+                    <p>需要 Google 帳戶或是建立在 Google GSuite 的帳戶透過 OAuth 進行登錄。</p>
+                    <h3>個人頁面「關於你」</h3>
+                    <p>其他志工可以透過此頁面初步認識你。（內容可以在設定 > <a href="/setting/profile">關於你的簡介</a>裡編輯）</p>
+                    <h3>真實資料</h3>
+                    <p>這裡所有的欄位是為了配合工作人員住宿、交通費補助、志工時數證明申請時所需要的。如果沒有申請到以上的服務，所有欄位可以不填寫。</p>
+                    <ul>
+                        <li>工作人員住宿：姓名、身分證字號、電話</li>
+                        <li>交通費補助：銀行資訊</li>
+                        <li>志工時數證明：姓名、身分證字號、出生年月日、組織單位（學校/公司）</li>
+                        <li>感謝狀：（如要使用真實姓名）</li>
+                    </ul>
+                    <p>以上申請服務在加入組別後，會出現在左側功能列表上，再依需求申請即可。</p>
+                    <h3>連結 chat.coscup.org 帳號</h3>
+                    <p>綁定兩邊的帳號設定，也會是訊息通知的管道之一。</p>
+                    <div class="buttons is-right">
+                        <a class="button is-small" href="#top">跑到上面</a>
+                    </div>
+                    <hr>
+                    <h2>加入組別<a name="jointo"></a></h2>
+                    <p>在<a href="/project/">活動列表中</a>會列出目前正在籌辦的活動，點入活動後可以看到該活動籌備的組別。</p>
+                    <h3>送出加入申請</h3>
+                    <p>提出申請前有相關指示說明，完成填寫後繼續送出申請。即可等待組長審核、受理。</p>
+                    <p>各組別即使人數已滿，還是可以提出申請。</p>
+                    <h3>行事曆</h3>
+                    <p>大會活動行事曆，也可透過連結加入行事曆。</p>
+                    <h3>相關申請專區</h3>
+                    <p>住宿、交通費、志工服務、感謝狀... 等申請會在加入的組別頁面左側顯示。可依需求提出申請。</p>
+                    <div class="buttons is-right">
+                        <a class="button is-small" href="#top">跑到上面</a>
+                    </div>
+                    <hr>
+                    <h2>組長操作說明</h2>
+                    <p>志工服務系統兼具招募與人事管理特性，希望透過此系統能協助各組別處理登錄事宜與建立志工人才庫。</p>
+                    <h3>組別建立<a name="forchief"></a></h3>
+                    <p>在總召確定各組組長後，會提交清單到行政組，行政組會建立相對應的組別，並設定組長擁有該組別的管理權限（組長需有志工服務平台的帳號）。</p>
+                    <h3>組別 > 設定</h3>
+                    <p>組別名稱可以自由設定，但至少要保留○○組的辨識字樣。</p>
+                    <p>「給未加入的組別介紹」是出現在志工提出組員申請時看到的文字頁面。</p>
+                    <p>「給組員的組別介紹」是成為組員後，在組別首頁顯示的文字，可以放置相關組目標。</p>
+                    <h3>組別 > 組員</h3>
+                    <p>這是組員管理頁面，會看到提出申請與正式組員的清單，目前會提供電話號碼資訊給組長。</p>
+                    <div class="buttons is-right">
+                        <a class="button is-small" href="#top">跑到上面</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+</section>
+{% endblock %}
