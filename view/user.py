@@ -61,7 +61,7 @@ def user_page(uid, nickname=None):
 
         participate_in.append(p)
 
-    sorted(participate_in, key=lambda p: p['_project']['action_date'], reverse=True)
+    participate_in = sorted(participate_in, key=lambda p: p['_project']['action_date'], reverse=True)
 
 
     return render_template('./user.html',

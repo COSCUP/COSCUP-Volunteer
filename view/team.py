@@ -135,7 +135,7 @@ def team_edit_user(pid, tid):
             for uid in _all_uids:
                 members.append(users_info[uid])
 
-            sorted(members, key=lambda u: u['profile']['badge_name'])
+            members = sorted(members, key=lambda u: u['profile']['badge_name'])
 
         return render_template('./team_edit_user.html',
                 project=project, team=team, waitting_list=waitting_list, members=members)
@@ -236,8 +236,8 @@ def team_form_accommodation(pid, tid):
 
     is_ok_submit = False
     user = g.user['account']
-    if 'profile_real' in user and 'name' in user['profile_real'] and 'roc_id' in user['profile_real']:
-        if user['profile_real']['name'] and user['profile_real']['roc_id']:
+    if 'profile_real' in user and 'name' in user['profile_real'] and 'roc_id' in user['profile_real'] and 'phone' in user['profile_real']:
+        if user['profile_real']['name'] and user['profile_real']['roc_id'] and user['profile_real']['phone']:
             is_ok_submit = True
 
     if request.method == 'GET':
@@ -277,6 +277,20 @@ def team_form_traffic_fee(pid, tid):
             g.user['account']['_id'] in team['chiefs']):
         return redirect('/')
 
+    is_ok_submit = False
+    user = g.user['account']
+
+    if 'profile_real' in user and 'bank' in user['profile_real']:
+        _short_check = []
+        for k in ('name', 'branch', 'no', 'code'):
+            if k in user['profile_real']['bank'] and user['profile_real']['bank'][k]:
+                _short_check.append(True)
+            else:
+                _short_check.append(False)
+
+        if all(_short_check):
+            is_ok_submit = True
+
     if request.method == 'GET':
         form_data = Form.get_traffic_fee(pid=pid, uid=g.user['account']['_id'])
         data = ''
@@ -287,10 +301,11 @@ def team_form_traffic_fee(pid, tid):
                 'howto': form_data['data']['howto'],
                 'fee': form_data['data']['fee'],
             })
-        return render_template('./form_traffic_fee.html', project=project, team=team, data=data)
+        return render_template('./form_traffic_fee.html', project=project, team=team,
+                data=data, is_ok_submit=is_ok_submit)
 
     elif request.method == 'POST':
-        if request.form['fromwhere'] in [i[0] for i in Form.TRAFFIC_FEE_LOCATIONS]:
+        if is_ok_submit and request.form['fromwhere'] in [i[0] for i in Form.TRAFFIC_FEE_LOCATIONS]:
             data = {
                 'fee': int(request.form['fee']),
                 'howto': request.form['howto'].strip(),

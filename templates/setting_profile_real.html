@@ -9,41 +9,41 @@
             <hr>
             <form method="POST">
                 <div class="field">
-                    <label class="label">姓名</label>
+                    <label class="label">姓名 <span class="tag is-info is-light">住宿</span> <span class="tag is-warning is-light">志工時數</span></label>
                     <div class="control">
                         <input class="input" name="name" type="text" value="{{user.profile_real.name}}">
                     </div>
                     <p class="help is-success">真實世界的姓名</p>
                 </div>
                 <div class="field">
-                    <label class="label">Phone</label>
+                    <label class="label">Phone <span class="tag is-info is-light">住宿</span></label>
                     <div class="control">
                         <input class="input" name="phone" type="tel" value="{{user.profile_real.phone}}" pattern="[0-9]{4}-[0-9]{3}-[0-9]{3}">
                     </div>
                     <p class="help is-success">0912-345-789</p>
                 </div>
                 <div class="field">
-                    <label class="label">出生年月日</label>
+                    <label class="label">出生年月日 <span class="tag is-warning is-light">志工時數</span></label>
                     <div class="control">
                         <input class="input" name="birthday" type="date" value="{{user.profile_real.birthday}}">
                     </div>
                     <p class="help is-success">這是檢查成年是否</p>
                 </div>
                 <div class="field">
-                    <label class="label">身分證字號</label>
+                    <label class="label">身分證字號 <span class="tag is-info is-light">住宿</span> <span class="tag is-warning is-light">志工時數</span></label>
                     <div class="control">
                         <input class="input" name="roc_id" type="text" value="{{user.profile_real.roc_id}}">
                     </div>
                     <p class="help is-success">A187654321</p>
                 </div>
                 <div class="field">
-                    <label class="label">組織單位（學校/公司）</label>
+                    <label class="label">組織單位（學校/公司） <span class="tag is-warning is-light">志工時數</span></label>
                     <div class="control">
                         <input class="input" name="company" type="text" value="{{user.profile_real.company}}">
                     </div>
                     <p class="help is-success">完整的學校/公司名稱</p>
                 </div>
-                <h3>銀行資訊</h3>
+                <h3>銀行資訊 <span class="tag is-link is-light">交通費補助</span></h3>
                 <hr>
                 <div class="field is-horizontal">
                     <div class="field-body">
@@ -89,10 +89,35 @@
     </div>
     <div class="column is-two-fifths">
         <div class="content">
-            <article class="message is-small">
+            <article class="message is-small is-dark">
                 <div class="message-body">
                     <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
                     這裡的項目並非必填，主要用在辦理住宿申請、補助款轉帳時用到資訊。申請相關服務的時候會提示回來這裡補齊所需的欄位資料。
+                    申請服務在加入組別後，會出現在左側功能列表上，再依需求申請即可。
+                </div>
+            </article>
+            <article class="message is-small is-info">
+                <div class="message-body">
+                    <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                    工作人員住宿：姓名、身分證字號、電話
+                </div>
+            </article>
+            <article class="message is-small is-info">
+                <div class="message-body">
+                    <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                    交通費補助：銀行資訊
+                </div>
+            </article>
+            <article class="message is-small is-info">
+                <div class="message-body">
+                    <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                    志工時數證明：姓名、身分證字號、出生年月日、組織單位（學校/公司）
+                </div>
+            </article>
+            <article class="message is-small is-info">
+                <div class="message-body">
+                    <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                    感謝狀：（如要使用真實姓名）
                 </div>
             </article>
         </div>

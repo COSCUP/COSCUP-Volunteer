@@ -29,6 +29,7 @@ from celery_task.task_mail_sys import mail_sys_weberror
 from module.oauth import OAuth
 from module.users import User
 from module.usession import USession
+from view.guide import VIEW_GUIDE
 from view.links import VIEW_LINKS
 from view.project import VIEW_PROJECT
 from view.setting import VIEW_SETTING
@@ -39,11 +40,12 @@ from view.user import VIEW_USER
 app = Flask(__name__)
 app.config['SESSION_COOKIE_SECURE'] = True
 app.secret_key = setting.SECRET_KEY
+app.register_blueprint(VIEW_GUIDE)
+app.register_blueprint(VIEW_LINKS)
 app.register_blueprint(VIEW_PROJECT)
 app.register_blueprint(VIEW_SETTING)
 app.register_blueprint(VIEW_TEAM)
 app.register_blueprint(VIEW_USER)
-app.register_blueprint(VIEW_LINKS)
 
 
 NO_NEED_LOGIN_PATH = (

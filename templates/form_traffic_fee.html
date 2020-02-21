@@ -11,6 +11,14 @@
                 請先參閱補助辦法：<a href="https://drive.google.com/file/d/1uXYQiapmCj3vlPwfQeEVDEZfo-Qj5VLB">補助辦法</a>
             </div>
         </article>
+        {% if not is_ok_submit %}
+        <article class="message is-warning is-small">
+            <div class="message-body">
+                <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                需要提供「銀行資訊」內容，請在設定 > <a href="/setting/profile_real">真實資料</a>中新增。
+            </div>
+        </article>
+        {% else %}
         <form id="trafficform" method="POST">
             <div class="field">
                 <div class="control">
@@ -62,10 +70,12 @@
                 </div>
             </div>
         </form>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
 {% block js %}
+{% if is_ok_submit %}
 <script src="/js/axios.min.js"></script>
 <script>
     (function () {
@@ -115,4 +125,5 @@
         });
     })();
 </script>
+{% endif %}
 {% endblock %}
