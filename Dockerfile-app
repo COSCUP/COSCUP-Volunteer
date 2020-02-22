@@ -1,6 +1,6 @@
 FROM volunteer-base:20.02.13
 
-ADD ./privacy.txt ./privacy.txt
+ADD ./privacy.md ./privacy.md
 ADD ./celery_task ./celery_task
 ADD ./client_secret.json ./client_secret.json
 ADD ./secretary-e00794553a7d.json ./secretary-e00794553a7d.json
