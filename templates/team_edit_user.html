@@ -16,7 +16,7 @@
             </div>
             <div class="media-content">
                 <div class="content">
-                    <p><strong>{{u._info.profile.badge_name}}</strong> <small class="tag">{{u.uid}}</small></p>
+                    <p><strong>{{u._info.profile.badge_name}}</strong> <small class="tag is-family-monospace">{{u.uid}}</small></p>
                     <p>{{u.note}}</p>
                 </div>
                 <nav class="level is-mobile">
@@ -59,7 +59,7 @@
                 <tbody>
                 {% for u in members %}
                     <tr>
-                        <td><span class="tag">{{u._id}}</span></td>
+                        <td><span class="tag is-family-monospace">{{u._id}}</span></td>
                         <td>
                             <figure class="image is-32x32">
                                 <img class="is-rounded" src="{{u.oauth.picture}}">
@@ -107,7 +107,7 @@
                 </div>
                 <div class="media-content">
                     <div class="content">
-                        <p><strong>[[user.badge_name]]</strong> <small class="tag">[[user.uid]]</small></p>
+                        <p><strong>[[user.badge_name]]</strong> <small class="tag is-family-monospace">[[user.uid]]</small></p>
                         <p>[[user.note]]</p>
                     </div>
                 </div>
