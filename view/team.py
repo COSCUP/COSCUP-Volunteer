@@ -10,6 +10,7 @@ from flask import request
 from flask import url_for
 from markdown import markdown
 
+from models.teamdb import TeamMemberChangedDB
 from module.form import Form
 from module.project import Project
 from module.team import Team
@@ -206,6 +207,8 @@ def team_join_to(pid, tid):
 
     elif request.method == 'POST':
         WaitList.join_to(pid=pid, tid=tid, uid=g.user['account']['_id'], note=request.form['note'].strip())
+        TeamMemberChangedDB().make_record(pid=pid, tid=tid, waiting_uids=(g.user['account']['_id'], ))
+
         return redirect(url_for('team.team_join_to', pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/api', methods=('GET', 'POST'))

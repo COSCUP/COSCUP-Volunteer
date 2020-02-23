@@ -21,7 +21,7 @@ def service_sync_gsuite_memberchange(sender, **kwargs):
     team_member_change_db = TeamMemberChangedDB()
     sync_gsuite = None
     for raw in team_member_change_db.find(
-        {'done.gsuite_team': {'$exists': False}},
+        {'done.gsuite_team': {'$exists': False}, 'case': {'$in': ('add', 'del')}},
         sort=(('create_at', 1), )):
         team = Team.get(raw['pid'], raw['tid'])
 
@@ -42,7 +42,7 @@ def service_sync_gsuite_memberchange(sender, **kwargs):
             team_member_change_db.find_one_and_update({'_id': raw['_id']}, {'$set': {'done.gsuite_team': True}})
 
     for raw in team_member_change_db.find(
-        {'done.gsuite_staff': {'$exists': False}},
+        {'done.gsuite_staff': {'$exists': False}, 'case': {'$in': ('add', 'del')}},
         sort=(('create_at', 1), )):
         project = Project.get(raw['pid'])
 
