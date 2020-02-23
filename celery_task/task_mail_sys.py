@@ -151,6 +151,40 @@ def mail_member_add(sender, **kwargs):
         logger.info(r)
 
 
+@app.task(bind=True, name='mail.member.del',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+    routing_key='cs.mail.member.del', exchange='COSCUP-SECRETARY')
+def mail_member_del(sender, **kwargs):
+    TPLENV = Environment(loader=FileSystemLoader('./templates/mail'))
+    template = TPLENV.get_template('./base_member_del.html')
+
+    team_member_change_db = TeamMemberChangedDB()
+    awsses = AWSSES(
+            aws_access_key_id=setting.AWS_ID,
+            aws_secret_access_key=setting.AWS_KEY,
+            source=setting.AWS_SES_FROM)
+
+    for raw in team_member_change_db.find(
+        {'done.mail': {'$exists': False}, 'case': 'del'},
+        sort=(('create_at', 1), )):
+        team = Team.get(raw['pid'], raw['tid'])
+
+        user = User.get_info(uids=(raw['uid'], ))[raw['uid']]
+
+        body = template.render(
+                name=user['profile']['badge_name'],
+                team_name=team['name'], )
+
+        raw_mail = awsses.raw_mail(
+                to_addresses=(dict(name=user['profile']['badge_name'], mail=user['oauth']['email']), ),
+                subject=u'您已被移除 %s 的組員資格！' % team['name'],
+                body=body,
+            )
+
+        r = mail_member_send.apply_async(kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
+        logger.info(r)
+
+
 @app.task(bind=True, name='mail.member.send',
     autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
     routing_key='cs.mail.member.send', exchange='COSCUP-SECRETARY')
