@@ -212,7 +212,7 @@ def team_join_to(pid, tid):
         WaitList.join_to(pid=pid, tid=tid, uid=g.user['account']['_id'], note=request.form['note'].strip())
         TeamMemberChangedDB().make_record(pid=pid, tid=tid, waiting_uids=(g.user['account']['_id'], ))
 
-        return redirect(url_for('team.team_join_to', pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
+        return redirect('/project/%s/' % pid)
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/api', methods=('GET', 'POST'))
 def team_form_api(pid, tid):
