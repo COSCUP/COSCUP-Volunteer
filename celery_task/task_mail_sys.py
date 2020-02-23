@@ -10,6 +10,8 @@ import setting
 from celery_task.celery import app
 from models.teamdb import TeamMemberChangedDB
 from module.awsses import AWSSES
+from module.mattermost_bot import MattermostBot
+from module.mattermost_link import MattermostLink
 from module.project import Project
 from module.team import Team
 from module.users import User
@@ -64,6 +66,8 @@ def mail_member_waiting(sender, **kwargs):
 
         users = User.get_info(uids=uids)
 
+        mmb = MattermostBot(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
+
         for uid in team['chiefs']:
             body = template.render(
                     name=users[uid]['profile']['badge_name'],
@@ -79,6 +83,16 @@ def mail_member_waiting(sender, **kwargs):
 
             r = mail_member_send.apply_async(kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
             logger.info(r)
+
+            mattermost_link = MattermostLink(uid=uid)
+            if 'data' in mattermost_link.raw and 'user_id' in mattermost_link.raw['data']:
+                channel_info = mmb.create_a_direct_message(
+                        users=(mattermost_link.raw['data']['user_id'], setting.MATTERMOST_BOT_ID)).json()
+
+                r = mmb.posts(
+                    channel_id=channel_info['id'],
+                    message=u'收到 **%s** 申請加入 **%s**，前往 [管理組員](https://volunteer.coscup.org/team/%s/%s/edit_user)' % (users[raw['uid']]['profile']['badge_name'], team['name'], team['pid'], team['tid']))
+                logger.info(r.json())
 
 
 @app.task(bind=True, name='mail.member.deny',
