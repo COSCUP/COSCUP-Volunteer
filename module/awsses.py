@@ -159,12 +159,17 @@ class AWSSES(object):
         :param str body: (optional) body
         :param list attachment: (optional) attachment
         :param data: (optional) MIMEMultipart data
+        :param data_str: (optional) MIMEMultipart to str data
         :type data: :py:class:`email.mime.multipart.MIMEMultipart`
 
         .. seealso::
             :meth:`SES.Client.send_raw_email`
 
         '''
+        if 'data_str' in kwargs:
+            return self.client.send_raw_email(
+                    RawMessage={'Data': kwargs['data_str']})
+
         if 'data' in kwargs:
             data = kwargs['data']
         else:

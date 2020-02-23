@@ -22,8 +22,9 @@ app = Celery(
 
 app.conf.task_queues = (
     Queue('celery', Exchange('celery', type='direct'), routing_key='celery'),
-    Queue('CS_mail_sys', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.sys.#'),
     Queue('CS_ipinfo', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.ipinfo.#'),
+    Queue('CS_mail_member', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.member.#'),
+    Queue('CS_mail_sys', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.sys.#'),
     Queue('CS_service_sync', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.servicesync.#'),
 )
 
@@ -60,6 +61,15 @@ app.conf.beat_schedule = {
             'routing_key': 'cs.servicesync.gsuite.memberchange',
         },
     },
+    #'mail.member.waiting': {
+    #    'task': 'mail.member.waiting',
+    #    'schedule': crontab(minute='*/5'),
+    #    'kwargs': {},
+    #    'options': {
+    #        'exchange': 'COSCUP-SECRETARY',
+    #        'routing_key': 'cs.mail.member.waiting',
+    #    },
+    #},
 }
 
 @task_failure.connect

@@ -98,7 +98,7 @@ class TeamMemberChangedDB(DBBase):
         - ``pid``: from project id
         - ``tid``: team id
         - ``uid``: user id
-        - ``case``: ``add``, ``del``
+        - ``case``: ``add``, ``del``, ``waiting``
 
     '''
     def __init__(self):
@@ -109,13 +109,20 @@ class TeamMemberChangedDB(DBBase):
         self.create_index([('pid', 1), ])
         self.create_index([('case', 1), ])
 
-    def make_record(self, pid, tid, add_uids=None, del_uids=None):
+    def make_record(self, pid, tid, add_uids=None, del_uids=None, waiting_uids=None, deny_uids=None):
         ''' make record
 
         :param str pid: project id
         :param str tid: team id
         :param list add_uids: add user list
         :param list del_uids: del user list
+        :param list waiting_uids: waiting user list
+
+        .. note::
+            - waiting: user send request, and waiting.
+            - deny: user send request, but deny.
+            - add/approve: join.
+            - del: was joined, but remove.
 
         '''
         if add_uids:
@@ -123,3 +130,9 @@ class TeamMemberChangedDB(DBBase):
 
         if del_uids:
             self.insert_many([{'pid': pid, 'tid': tid, 'case': 'del', 'uid': uid, 'create_at': time()} for uid in del_uids])
+
+        if waiting_uids:
+            self.insert_many([{'pid': pid, 'tid': tid, 'case': 'waiting', 'uid': uid, 'create_at': time()} for uid in waiting_uids])
+
+        if deny_uids:
+            self.insert_many([{'pid': pid, 'tid': tid, 'case': 'deny', 'uid': uid, 'create_at': time()} for uid in deny_uids])
