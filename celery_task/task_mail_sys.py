@@ -10,6 +10,7 @@ import setting
 from celery_task.celery import app
 from models.teamdb import TeamMemberChangedDB
 from module.awsses import AWSSES
+from module.project import Project
 from module.team import Team
 from module.users import User
 
@@ -79,6 +80,40 @@ def mail_member_waiting(sender, **kwargs):
             r = mail_member_send.apply_async(kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
             logger.info(r)
 
+
+@app.task(bind=True, name='mail.member.deny',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+    routing_key='cs.mail.member.deny', exchange='COSCUP-SECRETARY')
+def mail_member_deny(sender, **kwargs):
+    TPLENV = Environment(loader=FileSystemLoader('./templates/mail'))
+    template = TPLENV.get_template('./base_member_deny.html')
+
+    team_member_change_db = TeamMemberChangedDB()
+    awsses = AWSSES(
+            aws_access_key_id=setting.AWS_ID,
+            aws_secret_access_key=setting.AWS_KEY,
+            source=setting.AWS_SES_FROM)
+
+    for raw in team_member_change_db.find(
+        {'done.mail': {'$exists': False}, 'case': 'deny'},
+        sort=(('create_at', 1), )):
+        team = Team.get(raw['pid'], raw['tid'])
+        project = Project().get(pid=team['pid'])
+
+        user = User.get_info(uids=(raw['uid'], ))[raw['uid']]
+        body = template.render(
+                name=user['profile']['badge_name'],
+                team_name=team['name'],
+                project_name=project['name'])
+
+        raw_mail = awsses.raw_mail(
+                to_addresses=(dict(name=user['profile']['badge_name'], mail=user['oauth']['email']), ),
+                subject=u'申請加入 %s 未核准' % team['name'],
+                body=body,
+            )
+
+        r = mail_member_send.apply_async(kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
+        logger.info(r)
 
 @app.task(bind=True, name='mail.member.send',
     autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
