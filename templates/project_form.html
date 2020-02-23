@@ -2,8 +2,8 @@
 {% block head_title_project_edit %}表單結果{% endblock %}
 {%block project_form_menu%}is-active{%endblock%}
 {% block project_edit_body %}
-<div id="projectform" class="columns" v-cloak>
-    <div class="column">
+<div id="projectform" class="columns">
+    <div class="column" v-cloak>
         <div class="content">
             <div class="buttons">
                 <button class="button is-success" v-bind:class="{'is-outlined': casename != 'accommodation'}"
@@ -27,7 +27,7 @@
                 <tbody>
                     <tr v-if="casename == 'accommodation'" v-for="data in result">
                         <td>
-                            <span class="tag">[[ data[0] ]]</span>
+                            <span class="tag is-family-monospace">[[ data[0] ]]</span>
                         </td>
                         <td>
                             <span>
@@ -41,7 +41,7 @@
                     </tr>
                     <tr v-if="casename == 'volunteer_certificate'" v-for="data in result">
                         <td>
-                            <span class="tag">[[ data[0] ]]</span>
+                            <span class="tag is-family-monospace">[[ data[0] ]]</span>
                         </td>
                         <td>
                             <span>
@@ -58,7 +58,7 @@
                     </tr>
                     <tr v-if="casename == 'appreciation'" v-for="data in result">
                         <td>
-                            <span class="tag">[[ data[0] ]]</span>
+                            <span class="tag is-family-monospace">[[ data[0] ]]</span>
                         </td>
                         <td>
                             <span>
@@ -73,7 +73,7 @@
                     </tr>
                     <tr v-if="casename == 'traffic_fee'" v-for="data in result">
                         <td>
-                            <span class="tag">[[ data[0] ]]</span>
+                            <span class="tag is-family-monospace">[[ data[0] ]]</span>
                         </td>
                         <td>
                             <span>
