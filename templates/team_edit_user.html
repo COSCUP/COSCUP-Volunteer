@@ -156,22 +156,17 @@
                         btn.classList.add('is-loading');
                     });
 
-                    var uid = $teamusermodal.user.uid;
-                    var wid = $teamusermodal.user.wid;
-
-                    axios.post('./edit_user/api', {uid: uid, wid: wid, result: result}).then(function(resp){
+                    axios.post('./edit_user/api', {uid: $teamusermodal.user.uid, wid: $teamusermodal.user.wid, result: result}).then(function(resp){
                         $teamusermodal.goback();
                         window.location.href = './edit_user';
                     });
                 },
                 fixpage: function() {
                     this.isActive = true;
-                    var html = document.querySelector('html');
-                    html.classList.add('is-clipped');
+                    document.querySelector('html').classList.add('is-clipped');
                 },
                 goback: function() {
-                    var html = document.querySelector('html');
-                    html.classList.remove('is-clipped');
+                    document.querySelector('html').classList.remove('is-clipped');
                     this.isActive = false;
 
                     this.$el.querySelectorAll('footer button.button').forEach(function(btn){
@@ -188,11 +183,9 @@
                     $teamusermodal.showapprove(btn.target.dataset.uid);
                 },
                 deluser: function(btn) {
-                    var uid = btn.target.dataset.uid;
-                    var name = btn.target.dataset.name;
-                    var ans = window.confirm('是否刪除 ' + name + '(' + uid + ') ?\r\n\r\n（確定就直接移除組員喔！）');
+                    let ans = window.confirm('是否刪除 ' + btn.target.dataset.name + '(' + btn.target.dataset.uid + ') ?\r\n\r\n（確定就直接移除組員喔！）');
                     if (ans === true) {
-                        axios.post('./edit_user', {uid: uid, case: 'deluser'}).then(function(resp){
+                        axios.post('./edit_user', {uid: btn.target.dataset.uid, case: 'deluser'}).then(function(resp){
                             window.location.href = './edit_user';
                         });
                     }

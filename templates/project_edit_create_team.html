@@ -117,12 +117,10 @@
                 },
                 fixpage: function() {
                     this.isActive = true;
-                    var html = document.querySelector('html');
-                    html.classList.add('is-clipped');
+                    document.querySelector('html').classList.add('is-clipped');
                 },
                 goback: function() {
-                    var html = document.querySelector('html');
-                    html.classList.remove('is-clipped');
+                    document.querySelector('html').classList.remove('is-clipped');
                     this.isActive = false;
                 }
             },
