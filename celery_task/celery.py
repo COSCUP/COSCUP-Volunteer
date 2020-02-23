@@ -70,6 +70,15 @@ app.conf.beat_schedule = {
     #        'routing_key': 'cs.mail.member.waiting',
     #    },
     #},
+    #'mail.member.deny': {
+    #    'task': 'mail.member.deny',
+    #    'schedule': crontab(minute='*/5'),
+    #    'kwargs': {},
+    #    'options': {
+    #        'exchange': 'COSCUP-SECRETARY',
+    #        'routing_key': 'cs.mail.member.deny',
+    #    },
+    #},
 }
 
 @task_failure.connect

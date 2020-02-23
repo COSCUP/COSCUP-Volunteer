@@ -187,8 +187,11 @@ def team_edit_user_api(pid, tid):
 
         data = request.json
         w = WaitList.make_result(wid=data['wid'], pid=pid, uid=data['uid'], result=data['result'])
-        if w and 'result' in w and w['result'] == 'approval':
-            Team.update_members(pid=pid, tid=tid, add_uids=[data['uid'], ])
+        if w and 'result' in w:
+            if w['result'] == 'approval':
+                Team.update_members(pid=pid, tid=tid, add_uids=[data['uid'], ])
+            elif w['result'] == 'deny':
+                TeamMemberChangedDB().make_record(pid=pid, tid=tid, deny_uids=(data['uid'], ))
 
         return jsonify({'status': 'ok'})
 
