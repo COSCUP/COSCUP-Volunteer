@@ -61,6 +61,24 @@ app.conf.beat_schedule = {
             'routing_key': 'cs.servicesync.gsuite.memberchange',
         },
     },
+    'service_sync.mattermost.users': {
+        'task': 'servicesync.mattermost.users',
+        'schedule': crontab(minute='*/5'),
+        'kwargs': {},
+        'options': {
+            'exchange': 'COSCUP-SECRETARY',
+            'routing_key': 'cs.servicesync.mattermost.users',
+        },
+    },
+    'service_sync.mattermost.users': {
+        'task': 'servicesync.mattermost.users',
+        'schedule': crontab(hour='*/8'),
+        'kwargs': {'force': True},
+        'options': {
+            'exchange': 'COSCUP-SECRETARY',
+            'routing_key': 'cs.servicesync.mattermost.users',
+        },
+    },
     #'mail.member.waiting': {
     #    'task': 'mail.member.waiting',
     #    'schedule': crontab(minute='*/5'),
