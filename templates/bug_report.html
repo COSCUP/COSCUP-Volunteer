@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block head_title %} - 缺陷回報{% endblock %}
+{% block og_title %}缺陷回報 {% endblock %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        缺陷回報
+    </h1>
+    <p class="subtitle">有洞幫忙補，凹嗚！</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter">
+                <div class="content">
+                    <p>如有發現任何缺陷問題，可以透過以下方式回報，非常感謝。</p>
+                    <ul>
+                        <li>寄信到 <a href="mailto:volunteer@coscup.org">volunteer@coscup.org</a></li>
+                        <li>透過 PGP 加密內容後傳送：
+                            <ul>
+                                <li class="is-family-monospace"><a href="/pgp/85328B3E566983C4F4FD048768429A6CD9689A13.asc">85328B3E566983C4F4FD048768429A6CD9689A13</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+  </div>
+</section>
+{% endblock %}
