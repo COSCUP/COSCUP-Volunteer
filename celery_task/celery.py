@@ -70,7 +70,7 @@ app.conf.beat_schedule = {
             'routing_key': 'cs.servicesync.mattermost.users',
         },
     },
-    'service_sync.mattermost.users': {
+    'service_sync.mattermost.users.force': {
         'task': 'servicesync.mattermost.users',
         'schedule': crontab(hour='*/8'),
         'kwargs': {'force': True},
