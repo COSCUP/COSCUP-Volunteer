@@ -8,6 +8,7 @@ from jinja2 import FileSystemLoader
 
 import setting
 from celery_task.celery import app
+from models.mailletterdb import MailLetterDB
 from models.teamdb import TeamMemberChangedDB
 from module.awsses import AWSSES
 from module.mattermost_bot import MattermostTools
@@ -195,6 +196,43 @@ def mail_member_del(sender, **kwargs):
 
         r = mail_member_send.apply_async(kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
         logger.info(r)
+
+
+@app.task(bind=True, name='mail.member.welcome',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+    routing_key='cs.mail.member.welcom', exchange='COSCUP-SECRETARY')
+def mail_member_welcome(sender, **kwargs):
+    TPLENV = Environment(loader=FileSystemLoader('./templates/mail'))
+    template = TPLENV.get_template('./welcome.html')
+
+    awsses = AWSSES(
+            aws_access_key_id=setting.AWS_ID,
+            aws_secret_access_key=setting.AWS_KEY,
+            source=setting.AWS_SES_FROM)
+
+    uids = []
+    for u in MailLetterDB().need_to_send(code='welcome'):
+        uids.append(u['_id'])
+
+    users = User.get_info(uids=uids)
+
+    for uid in uids:
+        logger.info('uid: %s' % uid)
+        body = template.render(
+            name=users[uid]['profile']['badge_name'], )
+
+        raw_mail = awsses.raw_mail(
+                to_addresses=(dict(name=users[uid]['profile']['badge_name'], mail=users[uid]['oauth']['email']), ),
+                subject=u'歡迎使用志工服務系統 - %s' % users[uid]['profile']['badge_name'],
+                body=body,
+            )
+
+        resp = awsses.send_raw_email(data=raw_mail)
+        logger.info(resp)
+        if resp['ResponseMetadata']['HTTPStatusCode'] != 200:
+            raise Exception('HTTPStatusCode not `200`, do retry')
+
+        MailLetterDB().make_sent(uid=uid, code='welcome')
 
 
 @app.task(bind=True, name='mail.member.send',
