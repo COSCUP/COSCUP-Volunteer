@@ -79,42 +79,42 @@ app.conf.beat_schedule = {
             'routing_key': 'cs.servicesync.mattermost.users',
         },
     },
-    #'mail.member.waiting': {
-    #    'task': 'mail.member.waiting',
-    #    'schedule': crontab(minute='*/5'),
-    #    'kwargs': {},
-    #    'options': {
-    #        'exchange': 'COSCUP-SECRETARY',
-    #        'routing_key': 'cs.mail.member.waiting',
-    #    },
-    #},
-    #'mail.member.deny': {
-    #    'task': 'mail.member.deny',
-    #    'schedule': crontab(minute='*/5'),
-    #    'kwargs': {},
-    #    'options': {
-    #        'exchange': 'COSCUP-SECRETARY',
-    #        'routing_key': 'cs.mail.member.deny',
-    #    },
-    #},
-    #'mail.member.add': {
-    #    'task': 'mail.member.add',
-    #    'schedule': crontab(minute='*/5'),
-    #    'kwargs': {},
-    #    'options': {
-    #        'exchange': 'COSCUP-SECRETARY',
-    #        'routing_key': 'cs.mail.member.add',
-    #    },
-    #},
-    #'mail.member.del': {
-    #    'task': 'mail.member.del',
-    #    'schedule': crontab(minute='*/5'),
-    #    'kwargs': {},
-    #    'options': {
-    #        'exchange': 'COSCUP-SECRETARY',
-    #        'routing_key': 'cs.mail.member.del',
-    #    },
-    #},
+    'mail.member.waiting': {
+        'task': 'mail.member.waiting',
+        'schedule': crontab(minute='*/5'),
+        'kwargs': {},
+        'options': {
+            'exchange': 'COSCUP-SECRETARY',
+            'routing_key': 'cs.mail.member.waiting',
+        },
+    },
+    'mail.member.deny': {
+        'task': 'mail.member.deny',
+        'schedule': crontab(minute='*/5'),
+        'kwargs': {},
+        'options': {
+            'exchange': 'COSCUP-SECRETARY',
+            'routing_key': 'cs.mail.member.deny',
+        },
+    },
+    'mail.member.add': {
+        'task': 'mail.member.add',
+        'schedule': crontab(minute='*/5'),
+        'kwargs': {},
+        'options': {
+            'exchange': 'COSCUP-SECRETARY',
+            'routing_key': 'cs.mail.member.add',
+        },
+    },
+    'mail.member.del': {
+        'task': 'mail.member.del',
+        'schedule': crontab(minute='*/5'),
+        'kwargs': {},
+        'options': {
+            'exchange': 'COSCUP-SECRETARY',
+            'routing_key': 'cs.mail.member.del',
+        },
+    },
 }
 
 @task_failure.connect
