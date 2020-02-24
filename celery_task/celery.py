@@ -72,7 +72,7 @@ app.conf.beat_schedule = {
     },
     'service_sync.mattermost.users.force': {
         'task': 'servicesync.mattermost.users',
-        'schedule': crontab(hour='*/8'),
+        'schedule': crontab(hour='*/8', minute='17'),
         'kwargs': {'force': True},
         'options': {
             'exchange': 'COSCUP-SECRETARY',
