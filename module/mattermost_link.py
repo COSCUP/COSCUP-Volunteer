@@ -11,7 +11,7 @@ class MattermostLink(object):
         self.uid = uid
         self.raw = MattermostLinkDB().find_one({'_id': uid})
 
-        if not self.raw:
+        if not self.raw and uid:
             mml_db = MattermostLinkDB()
             mml_db.insert_one({'_id': uid, 'code': uuid4().hex})
             self.raw = mml_db.find_one({'_id': uid})

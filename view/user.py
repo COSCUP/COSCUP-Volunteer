@@ -8,12 +8,13 @@ from flask import render_template
 from flask import url_for
 from markdown import markdown
 
+import setting
+from module.mattermost_bot import MattermostTools
 from module.mattermost_link import MattermostLink
 from module.oauth import OAuth
 from module.project import Project
 from module.team import Team
 from module.users import User
-
 
 VIEW_USER = Blueprint('user', __name__, url_prefix='/user')
 
@@ -63,12 +64,18 @@ def user_page(uid, nickname=None):
 
     participate_in = sorted(participate_in, key=lambda p: p['_project']['action_date'], reverse=True)
 
+    mattermost_data = {}
+    mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
+    mid = mmt.find_possible_mid(uid=uid)
+    if mid:
+        mattermost_data['mid'] = mid
+        mattermost_data['username'] = mmt.find_user_name(mid=mid)
 
     return render_template('./user.html',
             badge_name=badge_name,
             intro=intro,
             oauth=oauth,
             user=user,
-            mml=MattermostLink(uid=user['_id']),
+            mattermost_data=mattermost_data,
             participate_in=participate_in,
     )

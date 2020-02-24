@@ -23,11 +23,11 @@
               </div>
               <div class="content" style="margin-top: 20px;">
                   <div class="buttons">
-                  {% if mml.raw and 'data' in mml.raw and 'user_name' in mml.raw['data'] %}
+                  {% if mattermost_data %}
                       <a class="button is-small is-fullwidth is-success is-light"
-                          href="https://chat.coscup.org/{{mml.raw['data']['team_domain']}}/messages/{{mml.raw['data']['user_id']}}">
+                         href="https://chat.coscup.org/coscup/messages/@{{mattermost_data['username']}}">
                           <span class="icon"><i class="far fa-comments"></i></span>
-                          <span>Direct Message</span>
+                          <span>Direct Message @{{mattermost_data['username']}}</span>
                       </a>
                   {% endif %}
                   {% if g.user['account']['_id'] == user._id %}

@@ -1,9 +1,10 @@
 from requests import Session
 
 import setting
+from models.mattermost_link_db import MattermostLinkDB
 from models.mattermostdb import MattermostUsersDB
-from module.mattermost_link import MattermostLink
 from models.oauth_db import OAuthDB
+from module.mattermost_link import MattermostLink
 
 
 class MattermostBot(Session):
@@ -78,5 +79,21 @@ class MattermostTools(MattermostBot):
             mm_user = MattermostUsersDB().find_one({'email': mail.strip()}, {'_id': 1})
             if mm_user:
                 return mm_user['_id']
+
+        return u''
+
+    def find_user_name(self, mid):
+        ''' Find user_name by mid
+
+        :param str mid: mid
+
+        '''
+        ml = MattermostLinkDB().find_one({'data.user_id': mid}, {'data.user_name': 1})
+        if ml and 'data' in ml:
+            return ml['data']['user_name']
+
+        mm_user = MattermostUsersDB().find_one({'_id': mid}, {'username': 1})
+        if mm_user:
+            return mm_user['username']
 
         return u''
