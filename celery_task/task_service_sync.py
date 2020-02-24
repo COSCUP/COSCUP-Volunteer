@@ -3,7 +3,9 @@ from __future__ import unicode_literals
 
 from celery.utils.log import get_task_logger
 from celery_task.celery import app
+from models.mattermostdb import MattermostUsersDB
 from models.teamdb import TeamMemberChangedDB
+from module.mattermost_bot import MattermostBot
 from module.project import Project
 from module.service_sync import SyncGSuite
 from module.team import Team
@@ -13,6 +15,27 @@ from module.usession import USession
 import setting
 
 logger = get_task_logger(__name__)
+
+@app.task(bind=True, name='servicesync.mattermost.users',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+    routing_key='cs.servicesync.mattermost.users', exchange='COSCUP-SECRETARY')
+def service_sync_mattermost_users(sender, **kwargs):
+    mmb = MattermostBot(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
+
+    total_users_count = mmb.get_users_stats().json()['total_users_count']
+    db_count = MattermostUsersDB().count_documents({})
+
+    logger.info('total_users_count: %s, db_count: %s' % (total_users_count, db_count))
+
+    if (db_count-3) < total_users_count or 'force' in kwargs:
+        mmusers_db = MattermostUsersDB()
+        n = 0
+        for u in mmb.get_users_loop():
+            n += 1
+            mmusers_db.save(data=u)
+
+        logger.info('Sync count: %s' % n)
+
 
 @app.task(bind=True, name='servicesync.gsuite.memberchange',
     autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,

@@ -37,6 +37,9 @@ class MattermostBot(Session):
                 yield u
                 n += 1
 
+    def get_users_stats(self):
+        return self.get('/users/stats')
+
     def get_user_by_username(self, username):
         return self.get('/users/username/%s' % username)
 
