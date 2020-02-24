@@ -11,7 +11,7 @@ from celery_task.celery import app
 from models.teamdb import TeamMemberChangedDB
 from module.awsses import AWSSES
 from module.mattermost_bot import MattermostBot
-from module.mattermost_link import MattermostLink
+from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.team import Team
 from module.users import User
@@ -67,6 +67,7 @@ def mail_member_waiting(sender, **kwargs):
         users = User.get_info(uids=uids)
 
         mmb = MattermostBot(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
+        mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
 
         for uid in team['chiefs']:
             body = template.render(
@@ -84,10 +85,9 @@ def mail_member_waiting(sender, **kwargs):
             r = mail_member_send.apply_async(kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
             logger.info(r)
 
-            mattermost_link = MattermostLink(uid=uid)
-            if 'data' in mattermost_link.raw and 'user_id' in mattermost_link.raw['data']:
-                channel_info = mmb.create_a_direct_message(
-                        users=(mattermost_link.raw['data']['user_id'], setting.MATTERMOST_BOT_ID)).json()
+            mid = mmt.find_possible_mid(uid=uid)
+            if mid:
+                channel_info = mmb.create_a_direct_message(users=(mid, setting.MATTERMOST_BOT_ID)).json()
 
                 r = mmb.posts(
                     channel_id=channel_info['id'],
