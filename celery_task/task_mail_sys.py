@@ -10,7 +10,6 @@ import setting
 from celery_task.celery import app
 from models.teamdb import TeamMemberChangedDB
 from module.awsses import AWSSES
-from module.mattermost_bot import MattermostBot
 from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.team import Team
@@ -66,7 +65,6 @@ def mail_member_waiting(sender, **kwargs):
 
         users = User.get_info(uids=uids)
 
-        mmb = MattermostBot(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
         mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
 
         for uid in team['chiefs']:
@@ -87,9 +85,9 @@ def mail_member_waiting(sender, **kwargs):
 
             mid = mmt.find_possible_mid(uid=uid)
             if mid:
-                channel_info = mmb.create_a_direct_message(users=(mid, setting.MATTERMOST_BOT_ID)).json()
+                channel_info = mmt.create_a_direct_message(users=(mid, setting.MATTERMOST_BOT_ID)).json()
 
-                r = mmb.posts(
+                r = mmt.posts(
                     channel_id=channel_info['id'],
                     message=u'收到 **%s** 申請加入 **%s**，前往 [管理組員](https://volunteer.coscup.org/team/%s/%s/edit_user)' % (users[raw['uid']]['profile']['badge_name'], team['name'], team['pid'], team['tid']))
                 logger.info(r.json())
