@@ -54,6 +54,7 @@ NO_NEED_LOGIN_PATH = (
     '/logout',
     '/links/chat',
     '/privacy',
+    '/bug-report',
 )
 
 
@@ -170,6 +171,10 @@ def oauth2logout():
 @app.route('/privacy')
 def privacy():
     return render_template('./privacy.html', content=setting.PRIVACY_CONTENT)
+
+@app.route('/bug-report')
+def bug_report():
+    return render_template('./bug_report.html')
 
 @app.route('/exception')
 def exception():
