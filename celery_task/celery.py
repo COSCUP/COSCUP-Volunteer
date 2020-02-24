@@ -63,7 +63,7 @@ app.conf.beat_schedule = {
     },
     'service_sync.mattermost.users': {
         'task': 'servicesync.mattermost.users',
-        'schedule': crontab(minute='*/5'),
+        'schedule': crontab(minute='12'),
         'kwargs': {},
         'options': {
             'exchange': 'COSCUP-SECRETARY',
@@ -113,6 +113,15 @@ app.conf.beat_schedule = {
         'options': {
             'exchange': 'COSCUP-SECRETARY',
             'routing_key': 'cs.mail.member.del',
+        },
+    },
+    'mail.member.welcome': {
+        'task': 'mail.member.welcome',
+        'schedule': crontab(minute='*/7'),
+        'kwargs': {},
+        'options': {
+            'exchange': 'COSCUP-SECRETARY',
+            'routing_key': 'cs.mail.member.welcome',
         },
     },
 }

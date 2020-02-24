@@ -26,6 +26,7 @@ from flask import url_for
 
 import setting
 from celery_task.task_mail_sys import mail_sys_weberror
+from models.mailletterdb import MailLetterDB
 from module.oauth import OAuth
 from module.users import User
 from module.usession import USession
@@ -140,6 +141,7 @@ def oauth2callback():
             user = User(uid=owner).get()
         else:
             user = User.create(mail=user_info['email'])
+            MailLetterDB().create(uid=user['_id'])
 
         user_session= USession.make_new(uid=user['_id'], header=dict(request.headers))
         session['sid'] = user_session.inserted_id
