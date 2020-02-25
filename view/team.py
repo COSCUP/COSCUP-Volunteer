@@ -1,5 +1,6 @@
 import html
 import json
+import re
 
 from flask import Blueprint
 from flask import g
@@ -49,7 +50,7 @@ def index(pid, tid):
         if k not in team:
             team[k] = ''
         else:
-            team[k] = markdown(html.escape(team[k]))
+            team[k] = re.sub('<a href="javascript:.*"', '<a href="/"', markdown(html.escape(team[k])))
 
     preview_public = False
     if 'preview' in request.args:

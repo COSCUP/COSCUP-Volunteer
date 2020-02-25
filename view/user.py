@@ -1,4 +1,5 @@
 import html
+import re
 from urllib.parse import quote_plus
 
 import arrow
@@ -47,7 +48,7 @@ def user_page(uid, nickname=None):
         intro = ''
     else:
         badge_name = user['profile']['badge_name']
-        intro = markdown(html.escape(user['profile']['intro']))
+        intro = re.sub('<a href="javascript:.*"', '<a href="/"', markdown(html.escape(user['profile']['intro'])))
 
     participate_in = []
     for p in Team.participate_in(uid):
