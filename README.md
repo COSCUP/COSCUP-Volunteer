@@ -31,4 +31,7 @@ GNU Affero General Public License version 3 (AGPL-3.0)
 ## Issues
 問題回報請使用 Issues、如果遇到安全問題的回報，可以使用 GPG 加密後回報。
 
-- Toomore Chiang [422B 779C D894 982B C41E 85EE 3624 CAD7 8AFC 3169](https://keyserver.ubuntu.com/pks/lookup?search=0x422b779cd894982bc41e85ee3624cad78afc3169&fingerprint=on&op=index)
+- COSCUP Volunteer (volunteer.coscup.org)
+  [8532 8B3E 5669 83C4 F4FD  0487 6842 9A6C D968 9A13](https://volunteer.coscup.org/pgp/85328B3E566983C4F4FD048768429A6CD9689A13.asc)
+- Toomore Chiang (toomore@coscup.org)
+  [DD5B 53B5 ECC3 0E9F 6B4F  4E47 B55D DBA4 944B 6241](https://volunteer.coscup.org/pgp/DD5B53B5ECC30E9F6B4F4E47B55DDBA4944B6241.asc)
