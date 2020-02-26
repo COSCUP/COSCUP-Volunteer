@@ -59,7 +59,8 @@ class MattermostTools(MattermostBot):
     def __init__(self, token, base_url):
         super(MattermostTools, self).__init__(token=token, base_url=base_url)
 
-    def find_possible_mid(self, uid, mail=None):
+    @staticmethod
+    def find_possible_mid(uid, mail=None):
         ''' Find any possible mattermost user id
 
         :param str uid: uid
@@ -82,7 +83,8 @@ class MattermostTools(MattermostBot):
 
         return u''
 
-    def find_user_name(self, mid):
+    @staticmethod
+    def find_user_name(mid):
         ''' Find user_name by mid
 
         :param str mid: mid
