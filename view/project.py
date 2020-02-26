@@ -235,11 +235,15 @@ def team_page(pid):
     for t in data:
         uids.extend(t['chiefs'])
 
+    total = 0
     user_info = User.get_info(uids)
     for t in data:
         t['chiefs_name'] = []
         for uid in t['chiefs']:
             t['chiefs_name'].append('<a href="/user/%s">%s</a>' % (uid, user_info[uid]['profile']['badge_name']))
+
+        t['count'] = len(set(t['chiefs'] + t['members']))
+        total += t['count']
 
     # ----- group for layout ----- #
     per = 3
@@ -252,4 +256,5 @@ def team_page(pid):
         teams=teams,
         project=project,
         editable=editable,
+        total=total,
     )
