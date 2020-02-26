@@ -84,3 +84,34 @@ def service_sync_gsuite_memberchange(sender, **kwargs):
         elif raw['case'] == 'del':
             sync_gsuite.del_users_from_group(group=project['mailling_staff'], users=(user['mail'], ))
             team_member_change_db.find_one_and_update({'_id': raw['_id']}, {'$set': {'done.gsuite_staff': True}})
+
+
+@app.task(bind=True, name='servicesync.gsuite.team_members',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+    routing_key='cs.servicesync.gsuite.team_members', exchange='COSCUP-SECRETARY')
+def service_sync_gsuite_team_members(sender, **kwargs):
+    team = Team.get(pid=kwargs['pid'], tid=kwargs['tid'])
+    if 'to_team' in kwargs:
+        to_team = Team.get(pid=kwargs['to_team'][0], tid=kwargs['to_team'][1])
+
+        if 'mailling' not in to_team or not to_team['mailling']:
+            return
+
+        mailling = to_team['mailling']
+
+    else:
+        if 'mailling' not in team or not team['mailling']:
+            return
+
+        mailling = team['mailling']
+
+    uids = []
+    uids.extend(team['chiefs'])
+    uids.extend(team['members'])
+
+    users_info = User.get_info(uids=uids)
+
+    sync_gsuite = SyncGSuite(credentialfile=setting.GSUITE_JSON, with_subject=setting.GSUITE_ADMIN)
+    sync_gsuite.add_users_into_group(group=mailling, users=[u['oauth']['email'] for u in users_info.values()])
+
+    logger.info('%s %s', mailling, [u['oauth']['email'] for u in users_info.values()])
