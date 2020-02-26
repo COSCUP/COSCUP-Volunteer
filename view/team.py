@@ -11,14 +11,17 @@ from flask import request
 from flask import url_for
 from markdown import markdown
 
+import setting
 from models.teamdb import TeamMemberChangedDB
 from module.form import Form
+from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.team import Team
 from module.users import User
 from module.waitlist import WaitList
 
 VIEW_TEAM = Blueprint('team', __name__, url_prefix='/team')
+
 
 def check_the_team_and_project_are_existed(pid, tid):
     ''' Base check the team and profect are existed
@@ -82,6 +85,39 @@ def calendar(pid, tid):
         return render_template('./team_calendar.html', project=project, team=team, is_admin=is_admin)
 
     return redirect(url_for('team.index', pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
+
+@VIEW_TEAM.route('/<pid>/<tid>/members')
+def members(pid, tid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    uids = []
+    uids.extend(team['chiefs'])
+    uids.extend(team['members'])
+
+    uids = list(set(uids))
+    users_info = User.get_info(uids=uids)
+
+    members = []
+    for uid in uids:
+        if uid in users_info:
+            user = users_info[uid]
+
+            user['chat'] = {}
+            mid = MattermostTools.find_possible_mid(uid=uid)
+            if mid:
+                user['chat'] = {'mid': mid, 'name': MattermostTools.find_user_name(mid=mid)}
+
+            members.append(user)
+
+    members = sorted(members, key=lambda u: u['profile']['badge_name'].lower())
+
+    return render_template('./team_members.html', project=project, team=team, is_admin=is_admin, members=members)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit', methods=('GET', 'POST'))

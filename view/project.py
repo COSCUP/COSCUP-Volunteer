@@ -239,7 +239,7 @@ def team_page(pid):
     for t in data:
         t['chiefs_name'] = []
         for uid in t['chiefs']:
-            t['chiefs_name'].append(user_info[uid]['profile']['badge_name'])
+            t['chiefs_name'].append('<a href="/user/%s">%s</a>' % (uid, user_info[uid]['profile']['badge_name']))
 
     # ----- group for layout ----- #
     per = 3
