@@ -173,6 +173,12 @@ def team_edit_user(pid, tid):
             for uid in _all_uids:
                 members.append(users_info[uid])
 
+            for u in members:
+                u['chat'] = {}
+                mid = MattermostTools.find_possible_mid(uid=u['_id'])
+                if mid:
+                    u['chat'] = {'mid': mid, 'name': MattermostTools.find_user_name(mid=mid)}
+
             members = sorted(members, key=lambda u: u['profile']['badge_name'])
 
         return render_template('./team_edit_user.html',

@@ -61,15 +61,24 @@
                     <tr>
                         <td><span class="tag is-family-monospace">{{u._id}}</span></td>
                         <td>
-                            <figure class="image is-32x32">
-                                <img class="is-rounded" src="{{u.oauth.picture}}">
-                            </figure>
+                            <a href="/user/{{u._id}}">
+                                <figure class="image is-32x32"><img class="is-rounded" src="{{u.oauth.picture}}"></figure>
+                            </a>
                         </td>
-                        <td>{{u.profile.badge_name}}</td>
+                        <td><a href="/user/{{u._id}}">{{u.profile.badge_name}}</a></td>
                         <td>{{u.profile_real.phone}}</td>
                         <td>{{u.oauth.email}}</td>
                         <td>
-                            <span class="icon"><a href="/user/{{u._id}}"><i class="far fa-id-badge"></i></a></span>
+                            <span class="icon">
+                            {% if u.chat %}
+                                <a href="https://chat.coscup.org/coscup/messages/{{u.chat['mid']}}" target="_blank"><i class="far fa-comments"></i></a>
+                            {% else %}
+                                <i class="far fa-comments"></i>
+                            {% endif %}
+                            </span>
+                            <span class="icon">
+                                <a href="/user/{{u._id}}"><i class="far fa-id-badge"></i></a>
+                            </span>
                             <span class="icon">
                                 <a class="has-text-danger" v-on:click="deluser">
                                     <i class="fas fa-user-times" data-uid="{{u._id}}" data-name="{{u.profile.badge_name}}"></i>
@@ -88,6 +97,13 @@
                     人員新增、移除會在每 5 分時刻執行同步到大會的專用郵件群組（包含共享資料夾）
                 </div>
             </article>
+            {% if 'mailling' in team %}
+            <article class="message is-warning is-small">
+                <div class="message-body">
+                    <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                    組員也會同步到組的專用信箱 <span class="tag"><a href="mailto:{{team.mailling}}">{{team.mailling}}</a></span>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
