@@ -7,7 +7,7 @@
         <div class="content">
             <h2>真實個人資訊</h2>
             <hr>
-            <form method="POST">
+            <form id="profileform" method="POST">
                 <div class="field">
                     <label class="label">姓名 <span class="tag is-info is-light">住宿</span> <span class="tag is-warning is-light">志工時數</span></label>
                     <div class="control">
@@ -15,12 +15,29 @@
                     </div>
                     <p class="help is-success">真實世界的姓名</p>
                 </div>
-                <div class="field">
-                    <label class="label">Phone <span class="tag is-info is-light">住宿</span></label>
-                    <div class="control">
-                        <input class="input" name="phone" type="tel" value="{{user.profile_real.phone}}" pattern="[0-9]{4}-[0-9]{3}-[0-9]{3}">
+                <div class="field is-horizontal">
+                    <div class="field-body">
+                        <div class="field">
+                            <label class="label">Phone <span class="tag is-light">國碼</span></label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select name="phone_code" class="is-family-monospace" v-model="defaultCode">
+                                        {% for code, country in phone_codes %}
+                                        {% if country[0] != '001' %}
+                                        <option value="{{code}}">{{country[0]}} +{{code}}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label"><span class="tag is-info is-light">住宿</span> <span class="tag is-link is-light">組長</span></label>
+                            <div class="control">
+                                <input class="input" name="phone" type="tel" value="{{user.profile_real.phone}}">
+                            </div>
+                        </div>
                     </div>
-                    <p class="help is-success">0912-345-789</p>
                 </div>
                 <div class="field">
                     <label class="label">出生年月日 <span class="tag is-warning is-light">志工時數</span></label>
@@ -120,7 +137,26 @@
                     感謝狀：（如要使用真實姓名）
                 </div>
             </article>
+            <article class="message is-small is-info">
+                <div class="message-body">
+                    <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                    組長：電話會提供給組長聯絡使用。
+                </div>
+            </article>
         </div>
     </div>
 </div>
+{% endblock %}
+{% block js %}
+<script>
+    (function () {
+        let $profileform = new Vue({
+            el: '#profileform',
+            data: {
+                defaultCode: '{{default_code}}'
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
 {% endblock %}
