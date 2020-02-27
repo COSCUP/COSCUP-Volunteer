@@ -14,9 +14,13 @@
       <div class="columns">
           <div class="column is-one-quarter">
 			  <aside class="menu">
-                <p class="menu-label">{{project.name}}</p>
 			    <ul class="menu-list">
-                    <li><a href="/team/{{team.pid}}/{{team.tid}}">回 {{team.name}}</a></li>
+                    <li>
+                        <a class="button is-info is-small is-light" href="/team/{{team.pid}}/{{team.tid}}/">
+                            <span class="icon"><i class="fas fa-arrow-circle-left"></i></span>
+                            <span>回 {{team.name}}</span>
+                        </a>
+                    </li>
 			    </ul>
                 <p class="menu-label">相關申請專區</p>
                 <ul class="menu-list">
