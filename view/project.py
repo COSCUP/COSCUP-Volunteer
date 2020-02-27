@@ -56,6 +56,7 @@ def project_edit(pid):
             'calendar': request.form['calendar'].strip(),
             'mailling_staff': request.form['mailling_staff'].strip(),
             'mailling_leader': request.form['mailling_leader'].strip(),
+            'shared_drive': request.form['shared_drive'].strip(),
         }
         Project.update(pid, data)
         return redirect(url_for('project.project_edit', pid=pid, _scheme='https', _external=True))
