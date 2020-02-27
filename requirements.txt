@@ -9,5 +9,6 @@ boto3
 celery<5
 flask
 markdown
+phonenumbers
 pymongo
 requests

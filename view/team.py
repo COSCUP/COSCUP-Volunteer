@@ -2,6 +2,7 @@ import html
 import json
 import re
 
+import phonenumbers
 from flask import Blueprint
 from flask import g
 from flask import jsonify
@@ -178,6 +179,12 @@ def team_edit_user(pid, tid):
                 mid = MattermostTools.find_possible_mid(uid=u['_id'])
                 if mid:
                     u['chat'] = {'mid': mid, 'name': MattermostTools.find_user_name(mid=mid)}
+
+                u['phone'] = {'country_code': '', 'phone': ''}
+                if 'phone' in u['profile_real'] and u['profile_real']['phone']:
+                    phone = phonenumbers.parse(u['profile_real']['phone'])
+                    u['phone']['country_code'] = phonenumbers.COUNTRY_CODE_TO_REGION_CODE[phone.country_code][0]
+                    u['phone']['phone'] = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.NATIONAL)
 
             members = sorted(members, key=lambda u: u['profile']['badge_name'])
 
