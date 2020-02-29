@@ -65,6 +65,13 @@
                               <span>通訊錄</span>
                           </a>
                       </li>
+                      <li>
+                          <a class="{%block menu_plan%}{%endblock%}" href="/team/{{team.pid}}/{{team.tid}}/plan/edit">
+                              <span class="icon"><i class="fas fa-calendar-week"></i></span>
+                              <span>規劃時程</span>
+                              <span class="icon"><i class="fas fa-flask"></i></span>
+                          </a>
+                      </li>
                   </ul>
                   {% if is_admin %}
                   <p class="menu-label">{{team.name}} - 管理</p>
@@ -79,13 +86,6 @@
                           <a href="/team/{{team.pid}}/{{team.tid}}/edit_user">
                               <span class="icon"><i class="fas fa-users"></i></span>
                               <span>組員</span>
-                          </a>
-                      </li>
-                      <li>
-                          <a class="{%block menu_plan%}{%endblock%}" href="/team/{{team.pid}}/{{team.tid}}/plan/edit">
-                              <span class="icon"><i class="fas fa-calendar-week"></i></span>
-                              <span>規劃時程</span>
-                              <span class="icon"><i class="fas fa-flask"></i></span>
                           </a>
                       </li>
                   </ul>
