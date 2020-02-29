@@ -493,7 +493,7 @@ def team_plan_edit(pid, tid):
     elif request.method == 'POST':
         data = request.get_json()
         today = arrow.now().format('YYYY-MM-DD')
-        default = {'title': '', 'desc': '', 'start': today, 'end': '', 'tid': tid, 'team_name': team['name']}
+        default = {'title': '', 'desc': '', 'start': today, 'end': '', 'tid': tid, 'team_name': team['name'], 'start_timestamp': 0}
 
         team_plan_db = TeamPlanDB()
         if 'case' in data and data['case'] == 'get':
@@ -526,10 +526,14 @@ def team_plan_edit(pid, tid):
                 _data = []
                 for raw in data['data']:
                     if raw['title'] and raw['start']:
-                        _raw = {}
-                        for k in ('title', 'start', 'end', 'desc'):
-                            _raw[k] = raw[k]
-                        _data.append(_raw)
+                        try:
+                            arrow.get(raw['start'])
+                            _raw = {}
+                            for k in ('title', 'start', 'end', 'desc'):
+                                _raw[k] = raw[k]
+                            _data.append(_raw)
+                        except arrow.parser.ParserError:
+                            continue
 
                 _data = sorted(_data, key=lambda d: arrow.get(d['start']))
                 result = team_plan_db.save(pid=pid, tid=tid, data=_data)
@@ -537,6 +541,7 @@ def team_plan_edit(pid, tid):
                 for raw in result['data']:
                     raw['tid'] = tid
                     raw['team_name'] = team['name']
+                    raw['start_timestamp'] = arrow.get(raw['start']).timestamp
 
                 if not result['data']:
                     result['data'] = [default, ]
@@ -549,6 +554,7 @@ def team_plan_edit(pid, tid):
                         for raw in team_plan['data']:
                             raw['tid'] = tid
                             raw['team_name'] = team_info['name']
+                            raw['start_timestamp'] = arrow.get(raw['start']).timestamp
 
                             others.append(raw)
 
