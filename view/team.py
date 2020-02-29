@@ -1,6 +1,7 @@
 import html
 import json
 import re
+import logging
 
 import arrow
 import phonenumbers
@@ -500,11 +501,25 @@ def team_plan_edit(pid, tid):
             if not plan_data:
                 plan_data = {'data': [default, ]}
 
+            if not plan_data['data']:
+                plan_data['data'] = [default, ]
+
             for raw in plan_data['data']:
                 raw['tid'] = tid
                 raw['team_name'] = team['name']
 
-            return jsonify({'data': plan_data['data'], 'default': default})
+            others = []
+            if 'import_others' in data and data['import_others']:
+                for team_plan in team_plan_db.find({'pid': pid, 'tid': {'$nin': [tid, ]}}):
+                    team_info = Team.get(pid=pid, tid=team_plan['tid'])
+
+                    for raw in team_plan['data']:
+                        raw['tid'] = tid
+                        raw['team_name'] = team_info['name']
+
+                        others.append(raw)
+
+            return jsonify({'data': plan_data['data'], 'default': default, 'others': others})
 
         elif 'case' in data and data['case'] == 'post':
             if 'data' in data:
@@ -523,6 +538,20 @@ def team_plan_edit(pid, tid):
                     raw['tid'] = tid
                     raw['team_name'] = team['name']
 
-                return jsonify({'data': result['data'], 'default': default})
+                if not result['data']:
+                    result['data'] = [default, ]
 
-            return jsonify({'data': result, 'default': default})
+                others = []
+                if 'import_others' in data and data['import_others']:
+                    for team_plan in team_plan_db.find({'pid': pid, 'tid': {'$nin': [tid, ]}}):
+                        team_info = Team.get(pid=pid, tid=team_plan['tid'])
+
+                        for raw in team_plan['data']:
+                            raw['tid'] = tid
+                            raw['team_name'] = team_info['name']
+
+                            others.append(raw)
+
+                return jsonify({'data': result['data'], 'default': default, 'others': others})
+
+        return jsonify({'data': [], 'default': default})
