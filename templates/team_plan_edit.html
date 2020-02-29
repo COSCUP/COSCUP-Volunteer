@@ -3,6 +3,12 @@
 {% block menu_plan %}is-active{% endblock %}
 {% block team_body %}
 <div class="content">
+    <article class="message is-dark">
+        <div class="message-body">
+            用 timeline 的方式呈現時程表，欄位依序為 title, start, end(可不填), desc(可不填)。 title 一樣會合併在同一條的時間線。
+            也可以使用「匯入其他組別」顯示其他組別已規劃的項目。
+        </div>
+    </article>
     <form id="planform">
         <div class="field is-horizontal" v-for="raw in data">
             <div class="field-body">
@@ -28,7 +34,9 @@
                 </div>
                 <div class="field">
                     <div class="control">
-                        <a class="button" v-on:click="delraw(raw)">-</a>
+                        <a class="button" v-on:click="delraw(raw)">
+                            <span class="icon"><i class="far fa-trash-alt"></i></span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -76,9 +84,10 @@
                 axios.post('./edit?_t=' + Date.now(), {data: this.data, case: 'get', import_others: this.importOthers}).then(function(resp) {
                     $planform.data = resp.data.data;
                     $planform.baseFormat = resp.data.default;
+                }).then(function() {
+                    google.charts.load("current", {packages:["timeline"]});
+                    google.charts.setOnLoadCallback($planform.drawChart);
                 });
-                google.charts.load("current", {packages:["timeline"]});
-                google.charts.setOnLoadCallback(this.drawChart);
             },
             watch: {
                 importOthers: function() {
