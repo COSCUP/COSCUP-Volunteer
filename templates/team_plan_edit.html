@@ -1,0 +1,108 @@
+{% extends "team.html" %}
+{% block head_title_team %}規劃{% endblock %}
+{% block menu_plan %}is-active{% endblock %}
+{% block team_body %}
+<div class="content">
+    <form id="planform">
+        <div class="field is-horizontal" v-for="raw in data">
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="text" placeholder="title" v-model="raw.title">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="date" v-model="raw.start">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="date" v-model="raw.end">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="text" placeholder="desc" v-model="raw.desc">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <a class="button" v-on:click="delraw(raw)">-</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <a class="button is-fullwidth" v-on:click="addraw">add</a>
+        </div>
+        <div class="field">
+            <label class="checkbox">
+                <input type="checkbox" v-model="importOthers">
+                匯入其他組別
+            </label>
+        </div>
+        <div class="field">
+            <a class="button is-fullwidth" v-on:click="showchart">Save and show chart</a>
+        </div>
+        <div class="field">
+            [[ data ]]
+            [[ importOthers ]]
+        </div>
+    </form>
+    <div id="timeline" style="height: 180px;"></div>
+</div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $planform= new Vue({
+            el: '#planform',
+            data: {
+                data: [{'title': 'toomore', 'start': '2020-08-01', 'end': '2020-08-01', 'desc': '活動日'}, ],
+                importOthers: false
+            },
+            methods: {
+                addraw: function() {
+                    this.data.push({'title': '', 'start': '', 'end': '', 'desc': ''});
+                },
+                delraw: function(raw) {
+                    this.data.splice(this.data.indexOf(raw), 1);
+                },
+                drawChart: function() {
+                    let container = document.getElementById('timeline');
+                    let chart = new google.visualization.Timeline(container);
+                    let dataTable = new google.visualization.DataTable();
+
+                    chart.clearChart();
+
+                    dataTable.addColumn({ type: 'string', id: 'Name' });
+                    dataTable.addColumn({ type: 'string', id: 'Desc' });
+                    dataTable.addColumn({ type: 'date', id: 'Start' });
+                    dataTable.addColumn({ type: 'date', id: 'End' });
+
+                    this.data.forEach(function(raw){
+                        if (raw.start === raw.end || raw.end === '') {
+                            let start = new Date(raw.start);
+                            let end = new Date(raw.start);
+                            end.setDate(end.getDate() + 1);
+                            dataTable.addRow([raw.title, raw.title+'('+raw.desc+')', start, end]);
+                        } else {
+                            dataTable.addRow([raw.title,, raw.title+'('+raw.desc+')', new Date(raw.start), new Date(raw.end)]);
+                        }
+                    });
+
+                    chart.draw(dataTable, {fontSize: 16, forceIFrame: true});
+                },
+                showchart: function() {
+                    google.charts.load("current", {packages:["timeline"]});
+                    google.charts.setOnLoadCallback(this.drawChart);
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}
