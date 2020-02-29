@@ -34,22 +34,27 @@
             </div>
         </div>
         <div class="field">
-            <a class="button is-fullwidth" v-on:click="addraw">add</a>
+            <a class="button is-fullwidth is-info is-light" v-on:click="addraw">
+                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                <span>新增</span>
+            </a>
+        </div>
+        <div class="field">
+            <a class="button is-fullwidth is-success is-light" v-on:click="save">
+                <span class="icon"><i class="far fa-save"></i></span>
+                <span>儲存與更新圖表</span>
+            </a>
         </div>
         <div class="field">
             <label class="checkbox">
                 <input type="checkbox" v-model="importOthers">
-                匯入其他組別
+                <span class="icon"><i class="fas fa-file-download"></i></span>
+                <span>匯入其他組別</span>
             </label>
         </div>
-        <div class="field">
-            <a class="button is-fullwidth" v-on:click="save">Save and show chart</a>
-        </div>
-        <div class="field">
-            [[ data ]]
-            [[ importOthers ]]
-        </div>
     </form>
+</div>
+<div class="content">
     <div id="timeline" style="height: 480px;"></div>
 </div>
 {% endblock %}
@@ -68,26 +73,32 @@
                 chart: null
             },
             mounted: function() {
-                axios.post('./edit?_t=' + Date.now(), {data: this.data, case: 'get'}).then(function(resp) {
-                    console.info(resp.data);
+                axios.post('./edit?_t=' + Date.now(), {data: this.data, case: 'get', import_others: this.importOthers}).then(function(resp) {
                     $planform.data = resp.data.data;
                     $planform.baseFormat = resp.data.default;
                 });
                 google.charts.load("current", {packages:["timeline"]});
                 google.charts.setOnLoadCallback(this.drawChart);
             },
+            watch: {
+                importOthers: function() {
+                    this.save();
+                }
+            },
             methods: {
                 addraw: function() {
                     this.data.push(Object.assign({}, this.baseFormat));
                 },
                 delraw: function(raw) {
-                    this.data.splice(this.data.indexOf(raw), 1);
+                    if (window.confirm('確定是否刪除「'+raw.title+'」？（無法恢復喔！）')) {
+                        this.data.splice(this.data.indexOf(raw), 1);
+                    }
                 },
                 save: function() {
-                    axios.post('./edit?_t='+Date.now(), {data: this.data, case: 'post'}).then(function(resp) {
-                        console.info(resp.data);
+                    axios.post('./edit?_t='+Date.now(), {data: this.data, case: 'post', import_others: this.importOthers}).then(function(resp) {
                         $planform.data = resp.data.data;
                         $planform.baseFormat = resp.data.default;
+                        $planform.others = resp.data.others;
                     }).then(function() {
                         $planform.showchart();
                     });
@@ -104,14 +115,28 @@
                     dataTable.addColumn({ type: 'date', id: 'Start' });
                     dataTable.addColumn({ type: 'date', id: 'End' });
 
-                    this.data.forEach(function(raw){
+                    let allData = new Array();
+                    allData.push.apply(allData, this.data);
+                    if (this.importOthers === true) {
+                        allData.push.apply(allData, this.others);
+                    }
+
+                    allData.forEach(function(raw){
                         if (raw.start === raw.end || raw.end === '') {
                             let start = new Date(raw.start);
                             let end = new Date(raw.start);
                             end.setDate(end.getDate() + 1);
-                            dataTable.addRow([raw.title, raw.title+'('+raw.desc+')', start, end]);
+                            if ($planform.importOthers === true) {
+                                dataTable.addRow([raw.title+'('+raw.team_name+')', raw.title+'('+raw.desc+' '+raw.team_name+')', start, end]);
+                            } else {
+                                dataTable.addRow([raw.title, raw.title+'('+raw.desc+')', start, end]);
+                            }
                         } else {
-                            dataTable.addRow([raw.title,, raw.title+'('+raw.desc+')', new Date(raw.start), new Date(raw.end)]);
+                            if ($planform.importOthers === true) {
+                                dataTable.addRow([raw.title+'('+raw.team_name+')', raw.title+'('+raw.desc+' '+raw.team_name+')', new Date(raw.start), new Date(raw.end)]);
+                            } else {
+                                dataTable.addRow([raw.title, raw.title+'('+raw.desc+')', new Date(raw.start), new Date(raw.end)]);
+                            }
                         }
                     });
 
