@@ -63,7 +63,7 @@
     </form>
 </div>
 <div class="content">
-    <div id="timeline" style="height: 480px;"></div>
+    <div id="timeline" style="height: 800px;"></div>
 </div>
 {% endblock %}
 {% block js %}
@@ -85,7 +85,7 @@
                     $planform.data = resp.data.data;
                     $planform.baseFormat = resp.data.default;
                 }).then(function() {
-                    google.charts.load("current", {packages:["timeline"]});
+                    google.charts.load("current", {packages:["timeline"], 'language': navigator.language || navigator.userLanguage});
                     google.charts.setOnLoadCallback($planform.drawChart);
                 });
             },
@@ -121,6 +121,7 @@
 
                     dataTable.addColumn({ type: 'string', id: 'Name' });
                     dataTable.addColumn({ type: 'string', id: 'Desc' });
+                    dataTable.addColumn({ type: 'string', role: 'tooltip' });
                     dataTable.addColumn({ type: 'date', id: 'Start' });
                     dataTable.addColumn({ type: 'date', id: 'End' });
 
@@ -130,26 +131,40 @@
                         allData.push.apply(allData, this.others);
                     }
 
+                    allData.sort(function(a, b) {
+                        return a.start_timestamp - b.start_timestamp;
+                    });
+
                     allData.forEach(function(raw){
                         if (raw.start === raw.end || raw.end === '') {
                             let start = new Date(raw.start);
                             let end = new Date(raw.start);
                             end.setDate(end.getDate() + 1);
                             if ($planform.importOthers === true) {
-                                dataTable.addRow([raw.title+'('+raw.team_name+')', raw.title+'('+raw.desc+' '+raw.team_name+')', start, end]);
+                                dataTable.addRow([raw.title+'('+raw.team_name+')', raw.title+'('+raw.desc+' '+raw.team_name+')', $planform.renderTip(raw), start, end]);
                             } else {
-                                dataTable.addRow([raw.title, raw.title+'('+raw.desc+')', start, end]);
+                                dataTable.addRow([raw.title, raw.title+'('+raw.desc+')', $planform.renderTip(raw), start, end]);
                             }
                         } else {
                             if ($planform.importOthers === true) {
-                                dataTable.addRow([raw.title+'('+raw.team_name+')', raw.title+'('+raw.desc+' '+raw.team_name+')', new Date(raw.start), new Date(raw.end)]);
+                                dataTable.addRow([raw.title+'('+raw.team_name+')', raw.title+'('+raw.desc+' '+raw.team_name+')', $planform.renderTip(raw), new Date(raw.start), new Date(raw.end)]);
                             } else {
-                                dataTable.addRow([raw.title, raw.title+'('+raw.desc+')', new Date(raw.start), new Date(raw.end)]);
+                                dataTable.addRow([raw.title, raw.title+'('+raw.desc+')', $planform.renderTip(raw), new Date(raw.start), new Date(raw.end)]);
                             }
                         }
                     });
 
-                    this.chart.draw(dataTable, {fontSize: 20});
+                    this.chart.draw(dataTable, {
+                        tooltip: { isHtml: true },
+                        timeline: {colorByRowLabel: true}
+                    });
+                },
+                renderTip: function(raw) {
+                    return '<div style="padding: 5px; width: 300px;">' +
+                        raw.title + ' ' + raw.desc + '<br>' +
+                        '<span style="font-family: monospace; font-weight: bold;">' + raw.start + '<br>' + raw.end + '</span><br>' +
+                        raw.team_name +
+                        '</div>'
                 },
                 showchart: function() {
                     google.charts.setOnLoadCallback(this.drawChart);
