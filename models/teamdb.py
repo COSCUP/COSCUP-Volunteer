@@ -136,3 +136,28 @@ class TeamMemberChangedDB(DBBase):
 
         if deny_uids:
             self.insert_many([{'pid': pid, 'tid': tid, 'case': 'deny', 'uid': uid, 'create_at': time()} for uid in deny_uids])
+
+
+class TeamPlanDB(DBBase):
+    ''' TeamPlan Collection '''
+    def __init__(self):
+        super(TeamPlanDB, self).__init__('team_plan')
+
+    def index(self):
+        ''' Index '''
+        self.create_index([('pid', 1), ])
+
+    def save(self, pid, tid, data):
+        ''' Save data
+
+        :param str pid: project id
+        :param str tid: team id
+        :patam list data: plan data
+
+        '''
+        return self.find_one_and_update(
+            {'pid': pid, 'tid': tid},
+            {'$set': {'data': data}},
+            upsert=True,
+            return_document=ReturnDocument.AFTER,
+        )

@@ -43,14 +43,14 @@
             </label>
         </div>
         <div class="field">
-            <a class="button is-fullwidth" v-on:click="showchart">Save and show chart</a>
+            <a class="button is-fullwidth" v-on:click="save">Save and show chart</a>
         </div>
         <div class="field">
             [[ data ]]
             [[ importOthers ]]
         </div>
     </form>
-    <div id="timeline" style="height: 180px;"></div>
+    <div id="timeline" style="height: 480px;"></div>
 </div>
 {% endblock %}
 {% block js %}
@@ -61,22 +61,43 @@
         let $planform= new Vue({
             el: '#planform',
             data: {
-                data: [{'title': 'toomore', 'start': '2020-08-01', 'end': '2020-08-01', 'desc': '活動日'}, ],
-                importOthers: false
+                data: [],
+                others: [],
+                baseFormat: {},
+                importOthers: false,
+                chart: null
+            },
+            mounted: function() {
+                axios.post('./edit?_t=' + Date.now(), {data: this.data, case: 'get'}).then(function(resp) {
+                    console.info(resp.data);
+                    $planform.data = resp.data.data;
+                    $planform.baseFormat = resp.data.default;
+                });
+                google.charts.load("current", {packages:["timeline"]});
+                google.charts.setOnLoadCallback(this.drawChart);
             },
             methods: {
                 addraw: function() {
-                    this.data.push({'title': '', 'start': '', 'end': '', 'desc': ''});
+                    this.data.push(Object.assign({}, this.baseFormat));
                 },
                 delraw: function(raw) {
                     this.data.splice(this.data.indexOf(raw), 1);
                 },
+                save: function() {
+                    axios.post('./edit?_t='+Date.now(), {data: this.data, case: 'post'}).then(function(resp) {
+                        console.info(resp.data);
+                        $planform.data = resp.data.data;
+                        $planform.baseFormat = resp.data.default;
+                    }).then(function() {
+                        $planform.showchart();
+                    });
+                },
                 drawChart: function() {
-                    let container = document.getElementById('timeline');
-                    let chart = new google.visualization.Timeline(container);
+                    if (this.chart === null ) {
+                        this.chart = new google.visualization.Timeline(document.getElementById('timeline'));
+                    }
+                    this.chart.clearChart();
                     let dataTable = new google.visualization.DataTable();
-
-                    chart.clearChart();
 
                     dataTable.addColumn({ type: 'string', id: 'Name' });
                     dataTable.addColumn({ type: 'string', id: 'Desc' });
@@ -94,10 +115,9 @@
                         }
                     });
 
-                    chart.draw(dataTable, {fontSize: 16, forceIFrame: true});
+                    this.chart.draw(dataTable, {fontSize: 20});
                 },
                 showchart: function() {
-                    google.charts.load("current", {packages:["timeline"]});
                     google.charts.setOnLoadCallback(this.drawChart);
                 }
             },

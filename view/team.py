@@ -2,6 +2,7 @@ import html
 import json
 import re
 
+import arrow
 import phonenumbers
 from flask import Blueprint
 from flask import g
@@ -14,6 +15,7 @@ from markdown import markdown
 
 import setting
 from models.teamdb import TeamMemberChangedDB
+from models.teamdb import TeamPlanDB
 from module.form import Form
 from module.mattermost_bot import MattermostTools
 from module.project import Project
@@ -484,4 +486,43 @@ def team_plan_edit(pid, tid):
                 g.user['account']['_id'] in team['owners'] or \
                 g.user['account']['_id'] in project['owners'])
 
-    return render_template('./team_plan_edit.html', project=project, team=team, is_admin=is_admin)
+    if request.method == 'GET':
+        return render_template('./team_plan_edit.html', project=project, team=team, is_admin=is_admin)
+
+    elif request.method == 'POST':
+        data = request.get_json()
+        today = arrow.now().format('YYYY-MM-DD')
+        default = {'title': '', 'desc': '', 'start': today, 'end': '', 'tid': tid, 'team_name': team['name']}
+
+        team_plan_db = TeamPlanDB()
+        if 'case' in data and data['case'] == 'get':
+            plan_data = team_plan_db.find_one({'pid': pid, 'tid': tid})
+            if not plan_data:
+                plan_data = {'data': [default, ]}
+
+            for raw in plan_data['data']:
+                raw['tid'] = tid
+                raw['team_name'] = team['name']
+
+            return jsonify({'data': plan_data['data'], 'default': default})
+
+        elif 'case' in data and data['case'] == 'post':
+            if 'data' in data:
+                _data = []
+                for raw in data['data']:
+                    if raw['title'] and raw['start']:
+                        _raw = {}
+                        for k in ('title', 'start', 'end', 'desc'):
+                            _raw[k] = raw[k]
+                        _data.append(_raw)
+
+                _data = sorted(_data, key=lambda d: arrow.get(d['start']))
+                result = team_plan_db.save(pid=pid, tid=tid, data=_data)
+
+                for raw in result['data']:
+                    raw['tid'] = tid
+                    raw['team_name'] = team['name']
+
+                return jsonify({'data': result['data'], 'default': default})
+
+            return jsonify({'data': result, 'default': default})
