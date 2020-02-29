@@ -473,3 +473,15 @@ def team_form_appreciation(pid, tid):
 
         Form().update_appreciation(pid=team['pid'], uid=g.user['account']['_id'], data=data)
         return redirect(url_for('team.team_form_appreciation', pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
+
+@VIEW_TEAM.route('/<pid>/<tid>/plan/edit', methods=('GET', 'POST'))
+def team_plan_edit(pid, tid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    return render_template('./team_plan_edit.html', project=project, team=team, is_admin=is_admin)
