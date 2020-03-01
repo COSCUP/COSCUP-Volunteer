@@ -521,6 +521,29 @@ def team_plan_edit(pid, tid):
 
             return jsonify({'data': plan_data['data'], 'default': default, 'others': others})
 
+        elif 'case' in data and data['case'] == 'get_schedular':
+            query = {'pid': pid}
+            if not data['import_others']:
+                query['tid'] = tid
+
+            dates = {}
+            team_plan = list(team_plan_db.find(query))
+            for raw in team_plan:
+                for plan in raw['data']:
+                    if not plan['end']:
+                        if plan['start'] not in dates:
+                            dates[plan['start']] = []
+
+                        dates[plan['start']].append(plan)
+                    else:
+                        for d in arrow.Arrow.range('day', arrow.get(plan['start']), arrow.get(plan['end'])):
+                            d_format = d.format('YYYY-MM-DD')
+                            if d_format not in dates:
+                                dates[d_format] = []
+                            dates[d_format].append(plan)
+
+            return jsonify({'data': list(dates.items())})
+
         elif 'case' in data and data['case'] == 'post':
             if 'data' in data:
                 _data = []

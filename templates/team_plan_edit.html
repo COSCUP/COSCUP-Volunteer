@@ -59,8 +59,16 @@
                 <span class="icon"><i class="fas fa-file-download"></i></span>
                 <span>匯入其他組別</span>
             </label>
+            <label class="checkbox">
+                <input type="checkbox" v-model="disableMenu">
+                <span class="icon"><i class="fas fa-arrows-alt-h"></i></span>
+                <span>加寬圖表</span>
+            </label>
         </div>
     </form>
+</div>
+<div class="content">
+    <div id="schedular"></div>
 </div>
 <div class="content">
     <div id="timeline" style="height: 800px;"></div>
@@ -78,18 +86,29 @@
                 others: [],
                 baseFormat: {},
                 importOthers: false,
-                chart: null
+                disableMenu: false,
+                chart: null,
+                chartSchedular: null
             },
             mounted: function() {
                 axios.post('./edit?_t=' + Date.now(), {data: this.data, case: 'get', import_others: this.importOthers}).then(function(resp) {
                     $planform.data = resp.data.data;
                     $planform.baseFormat = resp.data.default;
                 }).then(function() {
-                    google.charts.load("current", {packages:["timeline"], 'language': navigator.language || navigator.userLanguage});
+                    google.charts.load("current", {packages:["timeline", "calendar"], 'language': navigator.language || navigator.userLanguage});
                     google.charts.setOnLoadCallback($planform.drawChart);
+                    google.charts.setOnLoadCallback($planform.drawSchedular);
                 });
             },
             watch: {
+                disableMenu: function() {
+                    if (this.disableMenu === true) {
+                        document.getElementById('teammainmenu').style.display = 'none';
+                    } else {
+                        document.getElementById('teammainmenu').style.display = '';
+                    }
+                    this.save();
+                },
                 importOthers: function() {
                     this.save();
                 }
@@ -156,7 +175,25 @@
 
                     this.chart.draw(dataTable, {
                         tooltip: { isHtml: true },
-                        timeline: {colorByRowLabel: true}
+                        timeline: {colorByRowLabel: true, barLabelStyle: {fontSize: 10}, rowLabelStyle: {fontSize: 10}}
+                    });
+                },
+                drawSchedular: function() {
+                    if (this.chartSchedular === null ) {
+                        this.chartSchedular = new google.visualization.Calendar(document.getElementById('schedular'));
+                    }
+                    this.chartSchedular.clearChart();
+
+                    let dataTable = new google.visualization.DataTable();
+                    dataTable.addColumn({ type: 'date', id: 'Date' });
+                    dataTable.addColumn({ type: 'number', id: 'Times' });
+                    dataTable.addColumn({ type: 'string', role: 'tooltip' });
+
+                    axios.post('./edit?_t='+Date.now(), {case: 'get_schedular', import_others: this.importOthers}).then(function(resp) {
+                        resp.data.data.forEach(function(raw) {
+                            dataTable.addRow([new Date(raw[0]), raw[1].length, $planform.renderSchedularTip(raw[0], raw[1])]);
+                        });
+                        $planform.chartSchedular.draw(dataTable, {title: 'Busy Day', colorAxis: {colors: ['#C6E48B', '#196127']}, calendar: {cellColor: { stroke: '#fff', strokeOpacity: 1, strokeWidth: 3 }}});
                     });
                 },
                 renderTip: function(raw) {
@@ -166,8 +203,18 @@
                         raw.team_name +
                         '</div>'
                 },
+                renderSchedularTip: function(date, raw) {
+                    let items = new Array();
+                    items.push('<strong>' + date + '</strong> 共 <strong>' + raw.length + '</strong> 個事項');
+                    raw.forEach(function(plan) {
+                        items.push('<li>' + plan.title + ' ' + plan.desc + '<br><span style="font-family: monospace; font-weight: bold;">' + plan.start + ' ' + plan.end + '</span></li>');
+                    });
+                    return '<div style="padding: 5px; width: 300px;">' +
+                        '<ul>' + items.join('') + '</ul></div>'
+                },
                 showchart: function() {
                     google.charts.setOnLoadCallback(this.drawChart);
+                    google.charts.setOnLoadCallback(this.drawSchedular);
                 }
             },
             delimiters: ['[[', ']]']
