@@ -53,6 +53,12 @@ class MattermostBot(Session):
     def get_posts_from_channel(self, channel_id):
         return self.get('/channels/%s/posts' % channel_id)
 
+    def post_invite_by_email(self, team_id, emails):
+        return self.post('/teams/%s/invite/email' % team_id, json=emails)
+
+    def post_user_to_channel(self, channel_id, uid):
+        return self.post('/channels/%s/members' % channel_id, json={'user_id': uid})
+
 
 class MattermostTools(MattermostBot):
     ''' MattermostTools for more implement in operation '''

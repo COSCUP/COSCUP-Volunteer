@@ -46,7 +46,8 @@ class Project(object):
 
         '''
         _data = {}
-        for k in ('name', 'desc', 'volunteer_certificate_hours', 'calendar', 'mailling_staff', 'mailling_leader', 'shared_drive'):
+        for k in ('name', 'desc', 'volunteer_certificate_hours', 'calendar',
+                'mailling_staff', 'mailling_leader', 'shared_drive', 'mattermost_ch_id'):
             if k in data:
                 _data[k] = data[k]
 

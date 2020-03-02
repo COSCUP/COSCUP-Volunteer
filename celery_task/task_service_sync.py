@@ -4,8 +4,10 @@ from __future__ import unicode_literals
 from celery.utils.log import get_task_logger
 from celery_task.celery import app
 from models.mattermostdb import MattermostUsersDB
+from models.teamdb import TeamDB
 from models.teamdb import TeamMemberChangedDB
 from module.mattermost_bot import MattermostBot
+from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.service_sync import SyncGSuite
 from module.team import Team
@@ -115,3 +117,47 @@ def service_sync_gsuite_team_members(sender, **kwargs):
     sync_gsuite.add_users_into_group(group=mailling, users=[u['oauth']['email'] for u in users_info.values()])
 
     logger.info('%s %s', mailling, [u['oauth']['email'] for u in users_info.values()])
+
+
+@app.task(bind=True, name='servicesync.gsuite.team_leader',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+    routing_key='cs.servicesync.gsuite.team_leader', exchange='COSCUP-SECRETARY')
+def service_sync_gsuite_team_leader(sender, **kwargs):
+    chiefs = []
+    for team in TeamDB(pid=None, tid=None).find({'pid': kwargs['pid']}):
+        chiefs.extend(team['chiefs'])
+
+    users_info = User.get_info(uids=chiefs)
+
+    project = Project.get(pid=kwargs['pid'])
+    sync_gsuite = SyncGSuite(credentialfile=setting.GSUITE_JSON, with_subject=setting.GSUITE_ADMIN)
+    sync_gsuite.add_users_into_group(group=project['mailling_staff'], users=[u['oauth']['email'] for u in users_info.values()])
+
+    logger.info('%s %s', project['mailling_staff'], [u['oauth']['email'] for u in users_info.values()])
+
+@app.task(bind=True, name='servicesync.mattermost.invite',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+    routing_key='cs.servicesync.mattermost.invite', exchange='COSCUP-SECRETARY')
+def service_sync_mattermost_invite(sender, **kwargs):
+    mmb = MattermostBot(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
+
+    users_info = User.get_info(uids=kwargs['uids'])
+    r = mmb.post_invite_by_email(
+            team_id=setting.MATTERMOST_TEAM_ID,
+            emails=[users_info[uid]['oauth']['email'] for uid in users_info])
+    logger.info(r.json())
+
+@app.task(bind=True, name='servicesync.mattermost.add.channel',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+    routing_key='cs.servicesync.mattermost.add.channel', exchange='COSCUP-SECRETARY')
+def service_sync_mattermost_add_channel(sender, **kwargs):
+    project = Project.get(pid=kwargs['pid'])
+    if not ('mattermost_ch_id' in project and project['mattermost_ch_id']):
+        return
+
+    mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
+    for uid in kwargs['uids']:
+        mid = mmt.find_possible_mid(uid=uid)
+        if mid:
+            r = mmt.post_user_to_channel(channel_id=project['mattermost_ch_id'], uid=mid)
+            logger.info(r.json())

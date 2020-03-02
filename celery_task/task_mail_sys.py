@@ -8,6 +8,7 @@ from jinja2 import FileSystemLoader
 
 import setting
 from celery_task.celery import app
+from celery_task.task_service_sync import service_sync_mattermost_invite
 from models.mailletterdb import MailLetterDB
 from models.teamdb import TeamMemberChangedDB
 from module.awsses import AWSSES
@@ -214,6 +215,10 @@ def mail_member_welcome(sender, **kwargs):
     for u in MailLetterDB().need_to_send(code='welcome'):
         uids.append(u['_id'])
 
+    if not uids:
+        return
+
+    service_sync_mattermost_invite.apply_async(kwargs={'uids': uids})
     users = User.get_info(uids=uids)
 
     for uid in uids:
