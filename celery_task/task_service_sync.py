@@ -124,6 +124,8 @@ def service_sync_gsuite_team_members(sender, **kwargs):
     routing_key='cs.servicesync.gsuite.team_leader', exchange='COSCUP-SECRETARY')
 def service_sync_gsuite_team_leader(sender, **kwargs):
     chiefs = []
+
+    # note: sync all, include `disabled` team
     for team in TeamDB(pid=None, tid=None).find({'pid': kwargs['pid']}):
         chiefs.extend(team['chiefs'])
 

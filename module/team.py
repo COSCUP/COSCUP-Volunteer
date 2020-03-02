@@ -54,13 +54,18 @@ class Team(object):
             TeamMemberChangedDB().make_record(pid=pid, tid=tid, add_uids=add_uids, del_uids=del_uids)
 
     @staticmethod
-    def list_by_pid(pid):
+    def list_by_pid(pid, show_all=False):
         ''' List all team in project
 
         :param str pid: project id
 
         '''
-        return TeamDB(None, None).find({'pid': pid})
+        if show_all:
+            return TeamDB(None, None).find({'pid': pid})
+
+        return TeamDB(None, None).find({
+                'pid': pid,
+                '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]})
 
     @staticmethod
     def get(pid, tid):
@@ -79,7 +84,12 @@ class Team(object):
         :param str uid: uid
 
         '''
-        return TeamDB(None, None).find({'$or': [{'members': uid}, {'chiefs': uid}]})
+        return TeamDB(None, None).find({
+                '$or': [
+                    {'members': uid, '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]},
+                    {'chiefs': uid, '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]},
+                ],
+            })
 
     @staticmethod
     def update_setting(pid, tid, data):
@@ -92,7 +102,7 @@ class Team(object):
         '''
         teamdb = TeamDB(pid=pid, tid=tid)
         _data = {}
-        for k in ('name', 'public_desc', 'desc', 'chiefs', 'members', 'owners', 'headcount', 'mailling'):
+        for k in ('name', 'public_desc', 'desc', 'chiefs', 'members', 'owners', 'headcount', 'mailling', 'disabled'):
             if k in data:
                 _data[k] = data[k]
 
