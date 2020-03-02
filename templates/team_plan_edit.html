@@ -53,22 +53,26 @@
                 <span>儲存與更新圖表</span>
             </a>
         </div>
-        <div class="field">
-            <label class="checkbox">
-                <input type="checkbox" v-model="importOthers">
-                <span class="icon"><i class="fas fa-file-download"></i></span>
-                <span>匯入其他組別</span>
-            </label>
-            <label class="checkbox">
-                <input type="checkbox" v-model="disableMenu">
-                <span class="icon"><i class="fas fa-arrows-alt-h"></i></span>
-                <span>加寬圖表</span>
-            </label>
+        <div class="field is-grouped-right is-grouped">
+            <div class="control">
+                <label class="checkbox">
+                    <input type="checkbox" v-model="importOthers">
+                    <span class="icon"><i class="far fa-eye"></i></span>
+                    <span>顯示其他組別</span>
+                </label>
+            </div>
+            <div class="control">
+                <label class="checkbox">
+                    <input type="checkbox" v-model="disableMenu">
+                    <span class="icon"><i class="fas fa-arrows-alt-h"></i></span>
+                    <span>加寬圖表</span>
+                </label>
+            </div>
         </div>
     </form>
 </div>
 <div class="content">
-    <div id="schedular"></div>
+    <div id="schedular" style="height: 200px;"></div>
 </div>
 <div class="content">
     <div id="timeline" style="height: 800px;"></div>
@@ -98,6 +102,7 @@
                     google.charts.load("current", {packages:["timeline", "calendar"], 'language': navigator.language || navigator.userLanguage});
                     google.charts.setOnLoadCallback($planform.drawChart);
                     google.charts.setOnLoadCallback($planform.drawSchedular);
+                    window.addEventListener('resize', $planform.showchart);
                 });
             },
             watch: {
@@ -193,7 +198,7 @@
                         resp.data.data.forEach(function(raw) {
                             dataTable.addRow([new Date(raw[0]), raw[1].length, $planform.renderSchedularTip(raw[0], raw[1])]);
                         });
-                        $planform.chartSchedular.draw(dataTable, {title: 'Busy Day', colorAxis: {colors: ['#C6E48B', '#196127']}, calendar: {cellColor: { stroke: '#fff', strokeOpacity: 1, strokeWidth: 3 }}});
+                        $planform.chartSchedular.draw(dataTable, {colorAxis: {colors: ['#C6E48B', '#196127']}, calendar: {cellColor: { stroke: '#fff', strokeOpacity: 1, strokeWidth: 3 }}});
                     });
                 },
                 renderTip: function(raw) {
@@ -213,6 +218,8 @@
                         '<ul>' + items.join('') + '</ul></div>'
                 },
                 showchart: function() {
+                    document.getElementById('timeline').innerHTML = '';
+                    document.getElementById('schedular').innerHTML = '';
                     google.charts.setOnLoadCallback(this.drawChart);
                     google.charts.setOnLoadCallback(this.drawSchedular);
                 }
