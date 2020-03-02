@@ -68,7 +68,7 @@ def project_edit_create_team(pid):
     if g.user['account']['_id'] not in project['owners']:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
-    teams = Team.list_by_pid(project['_id'])
+    teams = Team.list_by_pid(project['_id'], show_all=True)
     return render_template('./project_edit_create_team.html', project=project, teams=teams)
 
 @VIEW_PROJECT.route('/<pid>/form', methods=('GET', 'POST'))
@@ -205,7 +205,7 @@ def project_edit_create_team_api(pid):
     if request.method == 'GET':
         _team = Team.get(pid, request.args['tid'].strip())
         team = {}
-        for k in ('name', 'chiefs', 'members', 'owners', 'tid', 'headcount', 'mailling'):
+        for k in ('name', 'chiefs', 'members', 'owners', 'tid', 'headcount', 'mailling', 'disabled'):
             if k in _team:
                 team[k] = _team[k]
 

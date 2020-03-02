@@ -71,6 +71,14 @@
                         </div>
                         <p class="help is-success">組專用的信箱。</p>
                     </div>
+                    <div class="field">
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="disabled" v-model="modalBody.disabled" v-bind:disabled="modalBody.submittype === 'create'">
+                                隱藏不顯示於列表
+                            </label>
+                        </div>
+                    </div>
                 </section>
                 <footer class="modal-card-foot">
                     <button class="button is-success" type="submit" v-on:click.prevent="gosubmit">Update</button>
