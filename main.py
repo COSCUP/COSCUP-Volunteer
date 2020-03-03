@@ -23,10 +23,12 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
+from markdown import markdown
 
 import setting
 from celery_task.task_mail_sys import mail_sys_weberror
 from models.mailletterdb import MailLetterDB
+from module.mc import MC
 from module.oauth import OAuth
 from module.users import User
 from module.usession import USession
@@ -58,7 +60,6 @@ NO_NEED_LOGIN_PATH = (
     '/bug-report',
 )
 
-
 @app.before_request
 def need_login():
     app.logger.info('[X-SSL-SESSION-ID: %s] [X-REAL-IP: %s] [USER-AGENT: %s] [SESSION: %s]' % (
@@ -72,17 +73,24 @@ def need_login():
         return redirect(request.path[:-1])
 
     if 'sid' in session and session['sid']:
-        session_data = USession.get(session['sid'])
-        if session_data:
-            uid = session_data['uid']
+        mc = MC.get_client()
+        user_g_data = mc.get('sid:%s' % session['sid'])
 
-            g.user = {}
-            g.user['account'] = User(uid=session_data['uid']).get()
+        if user_g_data:
+            g.user = user_g_data
+        else:
+            session_data = USession.get(session['sid'])
+            if session_data:
+                uid = session_data['uid']
 
-            if g.user['account']:
-                g.user['data'] = OAuth(mail=g.user['account']['mail']).get()['data']
-            else:
-                session.pop('sid', None)
+                g.user = {}
+                g.user['account'] = User(uid=session_data['uid']).get()
+
+                if g.user['account']:
+                    g.user['data'] = OAuth(mail=g.user['account']['mail']).get()['data']
+                    mc.set('sid:%s' % session['sid'], g.user, 600)
+                else:
+                    session.pop('sid', None)
     else:
         if request.path not in NO_NEED_LOGIN_PATH:
             # ----- Let user profile public ----- #
@@ -172,7 +180,14 @@ def oauth2logout():
 
 @app.route('/privacy')
 def privacy():
-    return render_template('./privacy.html', content=setting.PRIVACY_CONTENT)
+    mc = MC.get_client()
+    content = mc.get('page:privacy')
+    if not content:
+        with open('./privacy.md', 'r') as files:
+            content = markdown(files.read())
+            mc.set('page:privacy', content, 3600)
+
+    return render_template('./privacy.html', content=content)
 
 @app.route('/bug-report')
 def bug_report():
