@@ -24,9 +24,10 @@
   <body>
   <nav class="navbar is-success" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <div class="navbar-item">
-        <a class="button is-success is-light" href="/">COSCUP Volunteer</a>
-      </div>
+        <a class="navbar-item is-active has-text-weight-semibold" href="/">
+            <img src="/img/coscup_volunteer_og.png" style="margin-right: 5px; box-shadow: white 0px 0px 10px;border-radius: 25px;">
+            COSCUP Volunteer
+        </a>
   
       <a role="button" class="navbar-burger" v-on:click="navtoggle = !navtoggle" v-bind:class="{'is-active': navtoggle}" data-target="navMenu" aria-label="menu" aria-expanded="false">
         <span aria-hidden="true"></span>
@@ -35,6 +36,20 @@
       </a>
     </div>
     <div class="navbar-menu" id="navMenu" v-bind:class="{'is-active': navtoggle}">
+      <div class="navbar-start">
+          <a class="navbar-item has-text-weight-medium" href="/project/2020/">
+              <span class="icon"><i class="far fa-bookmark"></i></span>
+              <span>COSCUP2020</span>
+          </a>
+          {% if g.user and g.user.data %}
+          {% for team in g.user['participate_in'] %}
+          <a class="navbar-item has-text-weight-medium" href="/team/{{team['pid']}}/{{team['tid']}}/">
+              <span class="icon"><i class="fas fa-thumbtack"></i></span>
+              <span>{{team['name']}}</span>
+          </a>
+          {% endfor %}
+          {% endif %}
+      </div>
       <div class="navbar-end">
           {% if g.user and g.user.data %}
           <div class="navbar-item has-dropdown is-hoverable">
@@ -44,7 +59,7 @@
                         <img class="is-rounded" src="{{g.user.data.picture}}">
                     </figure>
                 </span>
-                <span>{{g.user.data.name}}</span>
+                <span class="has-text-weight-medium">{{g.user.data.name}}</span>
             </a>
             <div class="navbar-dropdown is-right">
                 <a class="navbar-item" href="/user/{{g.user.account._id}}">

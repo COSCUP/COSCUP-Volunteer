@@ -30,6 +30,7 @@ from celery_task.task_mail_sys import mail_sys_weberror
 from models.mailletterdb import MailLetterDB
 from module.mc import MC
 from module.oauth import OAuth
+from module.team import Team
 from module.users import User
 from module.usession import USession
 from view.guide import VIEW_GUIDE
@@ -88,6 +89,8 @@ def need_login():
 
                 if g.user['account']:
                     g.user['data'] = OAuth(mail=g.user['account']['mail']).get()['data']
+                    g.user['participate_in'] = [{'pid': team['pid'], 'tid': team['tid'], 'name': team['name']} for team in Team.participate_in(uid=session_data['uid'])]
+
                     mc.set('sid:%s' % session['sid'], g.user, 600)
                 else:
                     session.pop('sid', None)
