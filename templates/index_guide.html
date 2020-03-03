@@ -9,7 +9,13 @@
     <h1 class="title">
         Hello {{g.user.data.name}},
     </h1>
-    <p class="subtitle">歡迎回來！</p>
+    <p class="subtitle">
+        歡迎回來！
+        {% if not check['profile'] or not check['participate_in'] or not check['mattermost']%}<br>
+        <span class="icon has-text-link" style="margin-top: 10px;"><i class="far fa-comment-alt"></i></span>
+        <span class="has-text-weight-semibold">請先完成以下三個目標，方便之後的組別加入與聯繫，感謝！</span>
+        {% endif %}
+    </p>
   </div>
 </section>
 <section class="section">
@@ -24,12 +30,19 @@
                       </p>
                   </div>
                   <div class="message-body">
-                      <p>可以到設定建立基本資料，在這個服務裡，可以共用一份資料，不用到處填寫。</p>
+                      <p>可以到設定建立基本資料，讓組長或是其他志工夥伴認識你，在這個服務裡，可以共用一份資料，不用到處填寫。</p>
                       <div class="buttons is-right" style="margin-top: 15px;">
+                          {% if check['profile'] %}
                           <a class="button is-info is-inverted" href="/setting/profile">
                               <span class="icon"><i class="fas fa-check"></i></span>
-                              <span>建立資料</span>
+                              <span>檢視資料</span>
                           </a>
+                          {% else %}
+                          <a class="button is-danger is-inverted" href="/setting/profile">
+                              <span class="icon"><i class="fas fa-edit"></i></span>
+                              <span>前往建立資料</span>
+                          </a>
+                          {% endif %}
                       </div>
                   </div>
               </article>
@@ -43,13 +56,21 @@
                       </p>
                   </div>
                   <div class="message-body">
-                      <p>組長建立活動組織後，可以找這次想要加入的組別提出申請，組長會檢閱自我介紹與屬性核准妳的申請。</p>
-                      <p>或是收到來自組長的邀約加入，也可以檢視組別今年要達成的事項、目標，選擇加入與否。</p>
+                      <p style="margin-bottom:3px;">檢視組別今年要達成的事項、目標，選擇加入與否。</p>
+                      <p style="margin-bottom:3px;">找到這次想要加入的組別提出申請，組長會檢閱自我介紹與屬性核准妳的申請。</p>
+                      <p>在 COSCUP 裡的參與、貢獻將會幫你紀錄起來，未來需要提出志工服務或相關參與證明時，也可方便利用。</p>
                       <div class="buttons is-right" style="margin-top: 15px;">
+                          {% if check['participate_in'] %}
                           <a class="button is-info is-inverted" href="/project/">
                               <span class="icon"><i class="fas fa-check"></i></span>
                               <span>檢視活動組織</span>
                           </a>
+                          {% else %}
+                          <a class="button is-danger is-inverted" href="/project/">
+                              <span class="icon"><i class="fas fa-user-plus"></i></span>
+                              <span>檢視活動組織，提出申請加入</span>
+                          </a>
+                          {% endif %}
                       </div>
                   </div>
               </article>
@@ -58,18 +79,28 @@
               <article class="message is-info">
                   <div class="message-header">
                       <p>
-                          <span class="icon"><i class="fas fa-id-card"></i></span>
-                          <span>志工紀錄</span>
+                          <span class="icon"><i class="far fa-comments"></i></span>
+                          <span>Mattermost</span>
                       </p>
                   </div>
                   <div class="message-body">
-                      <p>在 COSCUP 裡的參與、貢獻將會幫你紀錄起來，未來需要提出志工服務或相關參與證明時，也可方便利用。</p>
+                      <p>2020 起 COSCUP 改用 Mattermost 取代 Slack，可以前往平台加入，或是透過忘記密碼的方式取回帳號使用！</p>
+                      {% if check['mattermost'] %}
                       <div class="buttons is-right" style="margin-top: 15px;">
-                          <a class="button is-info is-inverted">
-                              <span class="icon is-small"><i class="fas fa-check"></i></span>
-                              <span>檢視服務申請</span>
+                          <a class="button is-warning is-light" href="https://chat.coscup.org/" target="_blank">
+                              <span class="icon is-small"><i class="fas fa-sign-in-alt"></i></span>
+                              <span>取回帳號使用</span>
                           </a>
                       </div>
+                      {% else %}
+                      <div class="buttons is-right" style="margin-top: 15px;">
+                          <a class="button is-warning is-light"
+                              href="https://chat.coscup.org/signup_user_complete/?id=obxpktmw1jgrbxdgz3n34cfezh" target="_blank">
+                              <span class="icon is-small"><i class="fas fa-sign-in-alt"></i></span>
+                              <span>申請加入</span>
+                          </a>
+                      </div>
+                      {% endif %}
                   </div>
               </article>
           </div>
