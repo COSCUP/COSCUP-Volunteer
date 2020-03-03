@@ -10,5 +10,6 @@ celery<5
 flask
 markdown
 phonenumbers
+pylibmc
 pymongo
 requests
