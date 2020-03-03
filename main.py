@@ -28,6 +28,7 @@ from markdown import markdown
 import setting
 from celery_task.task_mail_sys import mail_sys_weberror
 from models.mailletterdb import MailLetterDB
+from module.mattermost_bot import MattermostTools
 from module.mc import MC
 from module.oauth import OAuth
 from module.team import Team
@@ -106,10 +107,26 @@ def need_login():
 
 @app.route('/')
 def index():
-    if 'user' in g:
-        return render_template('index_guide.html')
+    if 'user' not in g:
+        return render_template('index.html')
 
-    return render_template('index.html')
+    check = {
+        'profile': False,
+        'participate_in': False,
+        'mattermost': False,
+    }
+
+    if 'profile' in g.user['account'] and 'intro' in g.user['account']['profile']:
+        if len(g.user['account']['profile']['intro']) > 100:
+            check['profile'] = True
+
+    if list(Team.participate_in(uid=g.user['account']['_id'])):
+        check['participate_in'] = True
+
+    if MattermostTools.find_possible_mid(uid=g.user['account']['_id']):
+        check['mattermost'] = True
+
+    return render_template('index_guide.html', check=check)
 
 
 @app.route('/oauth2callback')
