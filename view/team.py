@@ -169,6 +169,12 @@ def team_edit_user(pid, tid):
 
         for u in waitting_list:
             u['_info'] = users_info[u['uid']]
+            u['_history'] = []
+            for w in WaitList.find_history(pid=pid, uid=u['uid']):
+                if 'result' not in w:
+                    w['result'] = 'waitting'
+
+                u['_history'].append(w)
 
         members = []
         if team['members'] or team['chiefs']:

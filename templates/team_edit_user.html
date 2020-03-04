@@ -18,6 +18,25 @@
                 <div class="content">
                     <p><strong>{{u._info.profile.badge_name}}</strong> <small class="tag is-family-monospace">{{u.uid}}</small></p>
                     <p>{{u.note}}</p>
+                    {% if '_history' in u %}
+                    <hr>
+                    <p>申請歷程：</p>
+                    <div class="field is-grouped is-grouped-multiline">
+                        {% for h in u['_history']%}
+                        <div class="control">
+                            <div class="tags has-addons">
+                                <span class="tag">{{h['tid']}}</span>
+                                {% if h['result'] == 'approval' %}
+                                <span class="tag is-success">approved</span>
+                                {% elif h['result'] == 'deny' %}
+                                <span class="tag is-danger">denied</span>
+                                {% elif h['result'] == 'waitting' %}
+                                <span class="tag is-warning">{{h['result']}}</span>
+                                {%endif%}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
                 <nav class="level is-mobile">
                     <div class="level-left">
