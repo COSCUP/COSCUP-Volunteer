@@ -26,6 +26,7 @@ class WaitList(object):
         '''
         return WaitListDB().is_in_wait(pid=pid, tid=tid, uid=uid)
 
+    @staticmethod
     def list_by_team(pid, tid, uid=None):
         ''' List team waitting user
 
@@ -36,6 +37,7 @@ class WaitList(object):
         '''
         return WaitListDB().list_by(pid=pid, tid=tid, uid=uid)
 
+    @staticmethod
     def make_result(wid, pid, uid, result):
         ''' make result
 
@@ -46,3 +48,13 @@ class WaitList(object):
 
         '''
         return WaitListDB().make_result(_id=wid, pid=pid, uid=uid, result=result)
+
+    @staticmethod
+    def find_history(pid, uid):
+        ''' Find some one history
+
+        :param str pid: project id
+        :param str uid: user id
+
+        '''
+        return WaitListDB().find({'pid': pid, 'uid': uid}, {'tid': 1, 'uid': 1, 'result': 1})
