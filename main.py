@@ -95,6 +95,13 @@ def need_login():
                     mc.set('sid:%s' % session['sid'], g.user, 600)
                 else:
                     session.pop('sid', None)
+                    session['r'] = request.path
+                    return redirect(url_for('oauth2callback', _scheme='https', _external=True))
+            else:
+                session.pop('sid', None)
+                session['r'] = request.path
+                return redirect(url_for('oauth2callback', _scheme='https', _external=True))
+
     else:
         if request.path not in NO_NEED_LOGIN_PATH:
             # ----- Let user profile public ----- #
@@ -102,6 +109,7 @@ def need_login():
             #    return
 
             session['r'] = request.path
+            app.logger.info('r: %s' % session['r'])
             return redirect(url_for('oauth2callback', _scheme='https', _external=True))
 
 
@@ -194,6 +202,9 @@ def oauth2logout():
 
         :return: Remove cookie/session.
     '''
+    if 'sid' in session:
+        USession.make_dead(sid=session['sid'])
+
     session.pop('state', None)
     session.pop('sid', None)
     return redirect(url_for('index', _scheme='https', _external=True))

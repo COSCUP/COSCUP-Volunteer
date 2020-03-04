@@ -1,6 +1,7 @@
 from time import time
 
 from models.usessiondb import USessionDB
+from module.mc import MC
 
 
 class USession(object):
@@ -13,7 +14,7 @@ class USession(object):
         :param dict header: headers
 
         '''
-        doc = {'uid': uid, 'header': header, 'created_at': time()}
+        doc = {'uid': uid, 'header': header, 'created_at': time(), 'alive': True}
         return USessionDB().save(doc)
 
     @staticmethod
@@ -39,3 +40,32 @@ class USession(object):
 
         '''
         USessionDB().find_one_and_update({'_id': sid}, {'$set': {'ipinfo': data}})
+
+    @staticmethod
+    def get_recently(uid, limit=25):
+        ''' Get recently record
+
+        :param str uid: uid
+
+        '''
+        for raw in USessionDB(token='').find({'uid': uid}, sort=(('created_at', -1), ), limit=limit):
+            yield raw
+
+    @staticmethod
+    def get_alive(uid):
+        ''' Get alive session
+
+        :param str uid: uid
+
+        '''
+        for raw in USessionDB(token='').find({'uid': uid, 'alive': True}):
+            yield raw
+
+    @staticmethod
+    def make_dead(sid, uid=None):
+        if uid is None:
+            USessionDB(token='').find_one_and_update({'_id': sid}, {'$set': {'alive': False}})
+            MC.get_client().delete('sid:%s' % sid)
+        else:
+            if USessionDB(token='').find_one_and_update({'_id': sid, 'uid': uid}, {'$set': {'alive': False}}):
+                MC.get_client().delete('sid:%s' % sid)
