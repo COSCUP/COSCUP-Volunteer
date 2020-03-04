@@ -22,6 +22,7 @@ class USessionDB(DBBase):
         self.create_index([('created_at', 1), ])
         self.create_index([('ipinfo', 1), ])
         self.create_index([('uid', 1), ])
+        self.create_index([('alive', 1), ])
 
     def save(self, data):
         ''' save
@@ -37,4 +38,4 @@ class USessionDB(DBBase):
 
     def get(self):
         ''' Get data '''
-        return self.find_one({'_id': self.token})
+        return self.find_one({'_id': self.token, 'alive': True})
