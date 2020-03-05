@@ -16,7 +16,8 @@
                     {% for raw in alive_session %}
                     <tr>
                         <td>
-                            <span class="is-family-monospace">{{raw.iso_time}}</span>
+                            <span>{{raw.iso_time}}</span>
+                            <span class="tag is-success is-light">{{raw.time_hr}}</span>
                             {% if raw['is_me'] %}
                             <span class="tag is-info">目前工作階段</span>
                             {% else %}
@@ -28,12 +29,17 @@
                             <span class="tag is-link is-light">{{raw.ipinfo.city}}, {{raw.ipinfo.region}}</span>
                             {% endif %}
                             <br>
-                            {{raw.header['User-Agent']}}
+                            <span class="has-text-grey" style="font-size: smaller;">{{raw.header['User-Agent']}}</span>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            <article class="message is-warning">
+                <div class="message-body">
+                    登入 Session 保存天數為３日，除非有執行登出。
+                </div>
+            </article>
             <h3>認證日誌</h3>
             <table class="table is-striped">
                 <thead>
@@ -45,18 +51,23 @@
                     {% for raw in records %}
                     <tr>
                         <td>
-                            <span class="is-family-monospace">{{raw.iso_time}}</span><br>
+                            <span>{{raw.iso_time}}</span><span class="tag is-success is-light">{{raw.time_hr}}</span><br>
                             {% if 'ipinfo' in raw %}
                             <span class="tag is-info is-light">{{raw.ipinfo.ip}}</span>
                             <span class="tag is-link is-light">{{raw.ipinfo.city}}, {{raw.ipinfo.region}}</span>
                             <br>
                             {% endif %}
-                            {{raw.header['User-Agent']}}
+                            <span class="has-text-grey" style="font-size: smaller;">{{raw.header['User-Agent']}}</span>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            <article class="message is-warning">
+                <div class="message-body">
+                    顯示近 25 筆的資料。
+                </div>
+            </article>
         </div>
     </div>
 </div>

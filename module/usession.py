@@ -63,9 +63,28 @@ class USession(object):
 
     @staticmethod
     def make_dead(sid, uid=None):
-        if uid is None:
-            USessionDB(token='').find_one_and_update({'_id': sid}, {'$set': {'alive': False}})
-            MC.get_client().delete('sid:%s' % sid)
-        else:
-            if USessionDB(token='').find_one_and_update({'_id': sid, 'uid': uid}, {'$set': {'alive': False}}):
-                MC.get_client().delete('sid:%s' % sid)
+        ''' Make session to dead
+
+        :param str sid: sid
+        :param str uid: uid
+
+        '''
+        query = {'_id': sid}
+        if uid:
+            query['uid'] = uid
+
+        USessionDB(token='').find_one_and_update(query, {'$set': {'alive': False}})
+        MC.get_client().delete('sid:%s' % sid)
+
+    @staticmethod
+    def clean(days=3):
+        ''' Make expired
+
+        :param int days: days
+
+        '''
+        target = time() - 86400*days
+        return USessionDB(token='').update_many(
+            {'alive': True, 'created_at': {'$lte': target}},
+            {'$set': {'alive': False}},
+        )

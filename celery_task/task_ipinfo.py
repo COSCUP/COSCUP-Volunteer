@@ -25,3 +25,10 @@ def ipinfo_update_usession_one(sender, **kwargs):
 
     r = IPInfo(setting.IPINFO_TOKEN).get(ip=kwargs['ip'])
     USession.update_ipinfo(sid=kwargs['sid'], data=r.json())
+
+@app.task(bind=True, name='session.daily.clean',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+    routing_key='cs.session.daily.clean', exchange='COSCUP-SECRETARY')
+def session_daily_clean(sender, **kwargs):
+    clean = USession.clean()
+    logger.info(clean.matched_count, clean.modified_count, clean.raw_result)

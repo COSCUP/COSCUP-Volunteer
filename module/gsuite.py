@@ -17,7 +17,7 @@ class GSuite(object):
         creds = service_account.Credentials.from_service_account_file(
                 credentialfile, scopes=self.SCOPES).with_subject(with_subject)
 
-        self.service = build('admin', 'directory_v1', credentials=creds)
+        self.service = build('admin', 'directory_v1', credentials=creds, cache_discovery=False)
 
     @property
     def print_scopes(self):
