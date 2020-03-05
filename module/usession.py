@@ -58,7 +58,7 @@ class USession(object):
         :param str uid: uid
 
         '''
-        for raw in USessionDB(token='').find({'uid': uid, 'alive': True}):
+        for raw in USessionDB(token='').find({'uid': uid, 'alive': True}, sort=(('created_at', -1), )):
             yield raw
 
     @staticmethod
