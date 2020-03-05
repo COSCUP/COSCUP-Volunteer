@@ -26,6 +26,7 @@ app.conf.task_queues = (
     Queue('CS_mail_member', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.member.#'),
     Queue('CS_mail_sys', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.sys.#'),
     Queue('CS_service_sync', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.servicesync.#'),
+    Queue('CS_session', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.session.#'),
 )
 
 app.conf.acks_late = True
@@ -50,6 +51,15 @@ app.conf.beat_schedule = {
         'options': {
             'exchange': 'COSCUP-SECRETARY',
             'routing_key': 'cs.ipinfo.update.session',
+        },
+    },
+    'session-daily-clean': {
+        'task': 'session.daily.clean',
+        'schedule': crontab(hour='21', minute='17'),
+        'kwargs': {},
+        'options': {
+            'exchange': 'COSCUP-SECRETARY',
+            'routing_key': 'cs.session.daily.clean',
         },
     },
     'service_sync.gsuite': {
