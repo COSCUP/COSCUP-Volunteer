@@ -5,6 +5,13 @@
 {% block team_edit_body %}
 <div class="column">
     <div id="teamuser" class="content">
+        <div class="tabs">
+            <ul>
+                <li class="is-active"><a v-on:click="showMemberTabs">已加入組員({{members|length}})</a></li>
+                <li><a v-on:click="showWaittingTabs">等待核准組員({{waitting_list|length}})</a></li>
+            </ul>
+        </div>
+        <div id="waittingTabs" class="content" style="display: none;">
         {% if waitting_list %}
         <h3>等待核准組員（{{waitting_list|length}}）</h3>
         {% for u in waitting_list %}
@@ -58,6 +65,9 @@
         </article>
         {% endfor %}
         {% endif %}
+        </div>
+
+        <div id="membersTabs" class="content" style="display: none;">
         {% if team.headcount %}
         <h3>已加入組員（<span class="is-family-monospace">{{members|length}}/{{team.headcount}}</span>）</h3>
         {% else %}
@@ -125,6 +135,7 @@
                     組員也會同步到組的專用信箱 <span class="tag"><a href="mailto:{{team.mailling}}">{{team.mailling}}</a></span>
                 </div>
             {% endif %}
+        </div>
         </div>
     </div>
 </div>
@@ -215,6 +226,9 @@
         });
         let $teamuser = new Vue({
             el: '#teamuser',
+            mounted: function() {
+                this.showMemberTabs();
+            },
             methods: {
                 showapprove: function(btn) {
                     $teamusermodal.showapprove(btn.target.dataset.uid);
@@ -226,6 +240,26 @@
                             window.location.href = './edit_user';
                         });
                     }
+                },
+                showMemberTabs: function($e) {
+                    if ($e) {
+                        $e.target.parentNode.parentNode.querySelectorAll('li').forEach(function(e) {
+                            e.classList.remove('is-active');
+                        });
+                        $e.target.parentNode.classList.add('is-active');
+                    }
+                    document.getElementById('membersTabs').style.display = '';
+                    document.getElementById('waittingTabs').style.display = 'none';
+                },
+                showWaittingTabs: function($e) {
+                    if ($e) {
+                        $e.target.parentNode.parentNode.querySelectorAll('li').forEach(function(e) {
+                            e.classList.remove('is-active');
+                        });
+                        $e.target.parentNode.classList.add('is-active');
+                    }
+                    document.getElementById('membersTabs').style.display = 'none';
+                    document.getElementById('waittingTabs').style.display = '';
                 }
             },
             delimiters: ['[[', ']]']
