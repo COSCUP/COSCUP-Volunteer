@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block head_title %} 傳送通知{% endblock %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        Sender
+    </h1>
+    <p class="subtitle">傳送通知</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div id="campaign" class="column is-three-fifths is-offset-one-fifth">
+              <div class="buttons is-right">
+                  <button class="button" v-on:click="showModal">建立 Campaign</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+<div id="campaignmodal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+      <header class="modal-card-head">
+          建立 Campaign
+      </header>
+      <section class="modal-card-body">
+          <div class="field">
+              <label class="label">Campaign 名稱</label>
+              <div class="control">
+                  <input class="input" type="text" v-model="campaignName">
+              </div>
+              <p class="help is-info">這個名稱可以方便識別用來做什麼用途的。例如：組員第一次開會通知信</p>
+          </div>
+      </section>
+      <footer class="modal-card-foot">
+          <button class="button is-info" v-on:click="create">建立</button> <button class="button is-warning" v-on:click="close">取消</button>
+      </footer>
+  </div>
+  <button class="modal-close is-large" aria-label="close" v-on:click="close"></button>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $campaignmodal = new Vue({
+            el: '#campaignmodal',
+            data: {
+                campaignName: ''
+            },
+            methods: {
+                create: function($e) {
+                    $e.target.classList.add('is-loading');
+                    console.info(this.campaignName);
+                    axios.post('./', {casename: 'create', name: this.campaignName}).then(function(resp) {
+                        window.location.href = './campaign/' + resp.data.cid;
+                    });
+                },
+                close: function($e) {
+                    $e.target.parentNode.querySelector('button').classList.remove('is-loading');
+                    document.getElementById('campaignmodal').classList.toggle('is-active');
+                    document.querySelector('html').classList.toggle('is-clipped');
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+        let $campaign = new Vue({
+            el: '#campaign',
+            methods: {
+                showModal: function() {
+                    document.getElementById('campaignmodal').classList.toggle('is-active');
+                    document.querySelector('html').classList.toggle('is-clipped');
+                }
+            }
+        });
+    })();
+</script>
+{% endblock %}
