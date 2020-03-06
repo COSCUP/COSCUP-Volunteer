@@ -15,6 +15,7 @@ from module.mattermost_link import MattermostLink
 from module.mc import MC
 from module.users import User
 from module.usession import USession
+from module.waitlist import WaitList
 
 
 VIEW_SETTING = Blueprint('setting', __name__, url_prefix='/setting')
@@ -145,3 +146,25 @@ def security():
         USession.make_dead(sid=data['sid'], uid=g.user['account']['_id'])
 
         return jsonify(data)
+
+
+@VIEW_SETTING.route('/waitting')
+def waitting():
+    waitting_lists = []
+
+    for raw  in WaitList.find_history(uid=g.user['account']['_id']):
+        raw['hr_time'] = arrow.get(raw['_id'].generation_time).to('Asia/Taipei').format('YYYY-MM-DD')
+
+        if 'result' in raw:
+            if raw['result'] == 'approval':
+                raw['result'] = 'approved'
+            elif raw['result'] == 'deny':
+                raw['result'] = 'denid'
+        else:
+            raw['result'] = 'waitting'
+
+        waitting_lists.append(raw)
+
+    waitting_lists = sorted(waitting_lists, key=lambda x: x['_id'], reverse=True)
+
+    return render_template('./setting_waitting.html', waitting_lists=waitting_lists)
