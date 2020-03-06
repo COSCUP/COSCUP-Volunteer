@@ -50,11 +50,15 @@ class WaitList(object):
         return WaitListDB().make_result(_id=wid, pid=pid, uid=uid, result=result)
 
     @staticmethod
-    def find_history(pid, uid):
+    def find_history(uid, pid=None):
         ''' Find some one history
 
         :param str pid: project id
         :param str uid: user id
 
         '''
-        return WaitListDB().find({'pid': pid, 'uid': uid}, {'tid': 1, 'uid': 1, 'result': 1})
+        query = {'uid': uid}
+        if pid is not None:
+            query['pid'] = pid
+
+        return WaitListDB().find(query)

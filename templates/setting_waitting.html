@@ -1,0 +1,41 @@
+{% extends "setting.html" %}
+{% block head_title_setting %}組別申請狀況{% endblock %}
+{% block setting_waitting %}is-active{% endblock %}
+{% block setting_body %}
+<div class="columns">
+    <div class="column">
+        <div class="content">
+            <h3>組別申請狀況</h3>
+            {% if waitting_lists %}
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Date / Status</th>
+                        <th>Team / Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for raw in waitting_lists %}
+                    <tr>
+                        <td>{{raw.hr_time}}<br>
+                        {% if raw.result == 'approved'%}
+                        <span class="tag is-success">{{raw.result}}</span></td>
+                        {%elif raw.result == 'denid'%}
+                        <span class="tag is-danger">{{raw.result}}</span></td>
+                        {%else%}
+                        <span class="tag is-warning">{{raw.result}}</span></td>
+                        {%endif%}
+                        <td><a href="/team/{{raw.pid}}/{{raw.tid}}/">{{raw.pid}} / {{raw.tid}}</a><br>
+                        {{raw.note}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>目前無申請紀錄，<a href="/project/">要不來逛逛找找呢？</a></p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
