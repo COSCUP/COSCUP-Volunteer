@@ -37,6 +37,7 @@ from module.usession import USession
 from view.guide import VIEW_GUIDE
 from view.links import VIEW_LINKS
 from view.project import VIEW_PROJECT
+from view.sender import VIEW_SENDER
 from view.setting import VIEW_SETTING
 from view.team import VIEW_TEAM
 from view.user import VIEW_USER
@@ -48,6 +49,7 @@ app.secret_key = setting.SECRET_KEY
 app.register_blueprint(VIEW_GUIDE)
 app.register_blueprint(VIEW_LINKS)
 app.register_blueprint(VIEW_PROJECT)
+app.register_blueprint(VIEW_SENDER)
 app.register_blueprint(VIEW_SETTING)
 app.register_blueprint(VIEW_TEAM)
 app.register_blueprint(VIEW_USER)

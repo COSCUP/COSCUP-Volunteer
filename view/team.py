@@ -19,32 +19,12 @@ from models.teamdb import TeamMemberChangedDB
 from models.teamdb import TeamPlanDB
 from module.form import Form
 from module.mattermost_bot import MattermostTools
-from module.project import Project
 from module.team import Team
 from module.users import User
 from module.waitlist import WaitList
+from view.utils import check_the_team_and_project_are_existed
 
 VIEW_TEAM = Blueprint('team', __name__, url_prefix='/team')
-
-
-def check_the_team_and_project_are_existed(pid, tid):
-    ''' Base check the team and profect are existed
-
-    :param str pid: project id
-    :param str tid: team id
-    :rtype: tuple
-    :return: team, project, redirect
-
-    '''
-    team = Team.get(pid, tid)
-    if not team:
-        return None, None, redirect('/')
-
-    project = Project.get(pid)
-    if not project:
-        return None, None, redirect('/')
-
-    return team, project, None
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/')
