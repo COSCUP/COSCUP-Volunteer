@@ -6,6 +6,10 @@ class OAuthDB(DBBase):
     def __init__(self):
         super(OAuthDB, self).__init__('oauth')
 
+    def index(self):
+        ''' Index '''
+        self.create_index([('owner', 1), ])
+
     def add_data(self, mail, data):
         ''' Add user data
 
