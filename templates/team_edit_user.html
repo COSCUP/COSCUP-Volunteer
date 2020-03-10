@@ -25,8 +25,9 @@
                 <div class="content">
                     <p><strong>{{u._info.profile.badge_name}}</strong> <small class="tag is-family-monospace">{{u.uid}}</small></p>
                     <p>{{u.note}}</p>
-                    {% if '_history' in u %}
                     <hr>
+                    <p>申請者 Mail：<span class="tag is-info is-light"><a href="mailto:{{u._mail}}">{{u._mail}}</a></span></p>
+                    {% if '_history' in u %}
                     <p>申請歷程：</p>
                     <div class="field is-grouped is-grouped-multiline">
                         {% for h in u['_history']%}

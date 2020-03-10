@@ -156,6 +156,8 @@ def team_edit_user(pid, tid):
 
                 u['_history'].append(w)
 
+            u['_mail'] = User(uid=u['uid']).get()['mail']
+
         members = []
         if team['members'] or team['chiefs']:
             _all_uids = set(team['chiefs']) | set(team['members'])
