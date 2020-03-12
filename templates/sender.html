@@ -16,6 +16,23 @@
               <div class="buttons is-right">
                   <button class="button" v-on:click="showModal">建立 Campaign</button>
               </div>
+              <table class="table is-fullwidth">
+                  <thead>
+                      <tr>
+                          <th>Name</th>
+                          <th>Create by</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr v-for="campaign in campaigns">
+                          <td>
+                              <a :href="'./campaign/' + campaign._id">[[ campaign.name ]]</a><br>
+                              <span>Subject: [[ campaign.mail.subject ]]</span>
+                          </td>
+                          <td>[[ campaign.created.uid ]]</td>
+                      </tr>
+                  </tbody>
+              </table>
           </div>
       </div>
   </div>
@@ -54,7 +71,6 @@
             methods: {
                 create: function($e) {
                     $e.target.classList.add('is-loading');
-                    console.info(this.campaignName);
                     axios.post('./', {casename: 'create', name: this.campaignName}).then(function(resp) {
                         window.location.href = './campaign/' + resp.data.cid;
                     });
@@ -69,12 +85,24 @@
         });
         let $campaign = new Vue({
             el: '#campaign',
+            data: {
+                campaigns: []
+            },
+            mounted: function() {
+                this.load();
+            },
             methods: {
                 showModal: function() {
                     document.getElementById('campaignmodal').classList.toggle('is-active');
                     document.querySelector('html').classList.toggle('is-clipped');
+                },
+                load: function() {
+                    axios.post('./', {casename: 'get'}).then(function(resp) {
+                        $campaign.campaigns = resp.data.campaigns;
+                    });
                 }
-            }
+            },
+            delimiters: ['[[', ']]']
         });
     })();
 </script>

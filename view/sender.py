@@ -33,9 +33,14 @@ def index(pid, tid):
     elif request.method == 'POST':
         data = request.get_json()
 
-        r = SenderCampaign.create(name=data['name'], pid=team['pid'], tid=team['tid'], uid=g.user['account']['_id'])
+        if 'casename' in data and data['casename'] == 'get':
+            return jsonify({'campaigns': list(SenderCampaign.get_list(pid=team['pid'], tid=team['tid']))})
 
-        return jsonify({'cid': r['_id']})
+        if 'casename' in data and data['casename'] == 'create':
+            r = SenderCampaign.create(
+                    name=data['name'], pid=team['pid'], tid=team['tid'], uid=g.user['account']['_id'])
+
+            return jsonify({'cid': r['_id']})
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/', methods=('GET', 'POST'))
@@ -46,7 +51,7 @@ def campaign(pid, tid, cid):
 
     campaign_data = SenderCampaign.get(cid=cid, pid=pid, tid=tid)
 
-    return render_template('./sender_campaign.html', campaign=campaign_data)
+    return render_template('./sender_campaign.html', campaign=campaign_data, team=team)
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/content', methods=('GET', 'POST'))
@@ -58,7 +63,7 @@ def campaign_content(pid, tid, cid):
     if request.method == 'GET':
         campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
 
-        return render_template('./sender_campaign_content.html', campaign=campaign_data)
+        return render_template('./sender_campaign_content.html', campaign=campaign_data, team=team)
 
     elif request.method == 'POST':
         data = request.get_json()
