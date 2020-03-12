@@ -35,7 +35,7 @@
                       </p>
                   </div>
                   <div class="message-body">
-                      <p>組長：{{team.chiefs_name|join(',')|safe}}</p>
+                      <p>組長：{{team.chiefs_name|join(', ')|safe}}</p>
                       <p>人數：{{team.count}}</p>
                       <div class="buttons is-right">
                           <a class="button is-info is-light" href="/team/{{project._id}}/{{team.tid}}/">
