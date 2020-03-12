@@ -186,7 +186,9 @@ def oauth2callback():
 
         if 'r' in session:
             r = session['r']
+            app.logger.info('login r: %s' % r)
             session.pop('r', None)
+            session.pop('state', None)
             return redirect(r)
 
         return redirect(url_for('index', _scheme='https', _external=True))
