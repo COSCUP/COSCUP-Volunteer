@@ -1,0 +1,82 @@
+{% extends "sender_campaign.html" %}
+{% block campaign_title %} Campaign{% endblock %}
+{% block campaign_content %} is-active{% endblock %}
+{% block campaign_body %}
+<div class="columns">
+    <div class="column is-three-quarters">
+        <form id="campaigncontentform" class="form" v-on:submit.prevent="save" v-cloak>
+            <div class="field">
+                <label class="label">Subject</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="data.subject">
+                </div>
+                <p class="help is-success">郵件的抬頭</p>
+            </div>
+            <div class="field">
+                <label class="label">Preheader</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="data.preheader">
+                </div>
+                <p class="help is-success">會顯示在信箱信件列表中的文字，但在內文不會顯示，好的句子可以增加開信的可能。</p>
+            </div>
+            <div class="field">
+                <label class="label">Content</label>
+                <div class="control">
+                    <textarea class="textarea" v-model="data.content"></textarea>
+                </div>
+                <p class="help is-success">郵件內容</p>
+            </div>
+            <div class="field">
+                <div class="buttons">
+                    <button class="button is-info" v-bind:disabled="disabled">儲存</button>
+                </div>
+            </div>
+            <div class="field">
+                [[ data ]]
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $campaigncontentform = new Vue({
+            el: '#campaigncontentform',
+            data: {
+                disabled: true,
+                data: {}
+            },
+            watch: {
+                'data.subject': function() {
+                    this.disabled = false;
+                },
+                'data.content': function() {
+                    this.disabled = false;
+                }
+            },
+            mounted: function() {
+                axios.post('./content', {casename: 'get'}).then(function(resp) {
+                    $campaigncontentform.data = resp.data.mail;
+                });
+            },
+            methods: {
+                save: function($e) {
+                    console.info($e);
+                    $e.explicitOriginalTarget.classList.add('is-loading');
+
+                    axios.post('./content', {data: this.data, casename: 'save'}).then(function(resp) {
+                        console.info(resp);
+                        $campaigncontentform.data = resp.data.mail;
+
+                        $campaigncontentform.disabled = true;
+                        $e.explicitOriginalTarget.classList.remove('is-loading');
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}

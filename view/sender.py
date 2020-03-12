@@ -1,3 +1,6 @@
+import json
+import logging
+
 from flask import Blueprint
 from flask import g
 from flask import jsonify
@@ -41,4 +44,35 @@ def campaign(pid, tid, cid):
     if _redirect:
         return _redirect
 
-    return u'hi cid: %s' % cid
+    campaign_data = SenderCampaign.get(cid=cid, pid=pid, tid=tid)
+
+    return render_template('./sender_campaign.html', campaign=campaign_data)
+
+
+@VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/content', methods=('GET', 'POST'))
+def campaign_content(pid, tid, cid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    if request.method == 'GET':
+        campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
+
+        return render_template('./sender_campaign_content.html', campaign=campaign_data)
+
+    elif request.method == 'POST':
+        data = request.get_json()
+        logging.info(data)
+
+        if 'casename' in data and data['casename'] == 'get':
+            campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
+            return jsonify({'mail': campaign_data['mail']})
+
+        if 'casename' in data and data['casename'] == 'save':
+            r = SenderCampaign.save_mail(
+                cid=cid,
+                subject=data['data']['subject'].strip(),
+                content=data['data']['content'].strip(),
+                preheader=data['data']['preheader'].strip(),
+            )
+            return jsonify({'mail': r['mail']})
