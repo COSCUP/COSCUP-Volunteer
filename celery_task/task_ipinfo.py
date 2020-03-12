@@ -31,4 +31,4 @@ def ipinfo_update_usession_one(sender, **kwargs):
     routing_key='cs.session.daily.clean', exchange='COSCUP-SECRETARY')
 def session_daily_clean(sender, **kwargs):
     clean = USession.clean()
-    logger.info(clean.matched_count, clean.modified_count, clean.raw_result)
+    logger.info('matched: %s, modified: %s, raw_result: %s' % (clean.matched_count, clean.modified_count, clean.raw_result))
