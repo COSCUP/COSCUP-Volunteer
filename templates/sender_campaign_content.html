@@ -63,11 +63,9 @@
             },
             methods: {
                 save: function($e) {
-                    console.info($e);
                     $e.explicitOriginalTarget.classList.add('is-loading');
 
                     axios.post('./content', {data: this.data, casename: 'save'}).then(function(resp) {
-                        console.info(resp);
                         $campaigncontentform.data = resp.data.mail;
 
                         $campaigncontentform.disabled = true;

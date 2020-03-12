@@ -39,6 +39,17 @@ class SenderCampaign(object):
 
         return SenderCampaignDB().find_one(query)
 
+    @staticmethod
+    def get_list(pid, tid):
+        ''' Get list campaign
+
+        :param str pid: pid
+        :param str tid: tid
+
+        '''
+        return SenderCampaignDB().find({'created.pid': pid, 'created.tid': tid})
+
+    @staticmethod
     def save_mail(cid, subject, content, preheader):
         ''' Save mail data
 
