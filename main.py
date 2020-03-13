@@ -62,6 +62,7 @@ NO_NEED_LOGIN_PATH = (
     '/links/chat',
     '/privacy',
     '/bug-report',
+    '/robots.txt',
 )
 
 @app.before_request
@@ -227,6 +228,11 @@ def privacy():
 @app.route('/bug-report')
 def bug_report():
     return render_template('./bug_report.html')
+
+@app.route('/robots.txt')
+def robots():
+    return u'''User-agent: *
+Allow: /'''
 
 @app.route('/exception')
 def exception():
