@@ -8,6 +8,7 @@ from flask import render_template
 from flask import request
 
 from module.sender import SenderCampaign
+from module.team import Team
 from view.utils import check_the_team_and_project_are_existed
 
 VIEW_SENDER = Blueprint('sender', __name__, url_prefix='/sender')
@@ -67,7 +68,6 @@ def campaign_content(pid, tid, cid):
 
     elif request.method == 'POST':
         data = request.get_json()
-        logging.info(data)
 
         if 'casename' in data and data['casename'] == 'get':
             campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
@@ -81,3 +81,34 @@ def campaign_content(pid, tid, cid):
                 preheader=data['data']['preheader'].strip(),
             )
             return jsonify({'mail': r['mail']})
+
+
+@VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/receiver', methods=('GET', 'POST'))
+def campaign_receiver(pid, tid, cid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
+    if request.method == 'GET':
+        return render_template('./sender_campaign_receiver.html', campaign=campaign_data, team=team)
+
+    if request.method == 'POST':
+        data = request.get_json()
+
+        if 'casename' in data and data['casename'] == 'getinit':
+            teams = []
+            for team in Team.list_by_pid(pid=team['pid']):
+                teams.append({'tid': team['tid'], 'name': team['name']})
+
+            return jsonify({'teams': teams, 'pickteams': campaign_data['receiver']['teams']})
+
+        if 'casename' in data and data['casename'] == 'save':
+            tids = [team['tid'] for team in Team.list_by_pid(pid=team['pid'])]
+
+            _result = []
+            for tid in tids:
+                if tid in data['pickteams']:
+                    _result.append(tid)
+
+            return jsonify(SenderCampaign.save_receiver(cid=cid, teams=_result)['receiver'])

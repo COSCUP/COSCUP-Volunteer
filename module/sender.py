@@ -64,3 +64,21 @@ class SenderCampaign(object):
             {'$set': {'mail.subject': subject, 'mail.content': content, 'mail.preheader': preheader}},
             return_document=ReturnDocument.AFTER,
         )
+
+    @staticmethod
+    def save_receiver(cid, teams, users=None):
+        ''' Save receiver
+
+        :param str cid: cid
+        :param list teams: teams
+        :param list users: users
+
+        '''
+        update = {'receiver.teams': teams}
+        update['receiver.users'] = users if users else []
+
+        return SenderCampaignDB().find_one_and_update(
+            {'_id': cid},
+            {'$set': update},
+            return_document=ReturnDocument.AFTER,
+        )

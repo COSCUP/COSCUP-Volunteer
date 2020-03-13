@@ -1,0 +1,64 @@
+{% extends "sender_campaign.html" %}
+{% block campaign_title %} Campaign edit receiver{% endblock %}
+{% block campaign_receiver %} is-active{% endblock %}
+{% block campaign_body %}
+<div class="columns">
+    <div class="column is-three-quarters">
+        <form id="campaignreceiverform" class="form" v-on:submit.prevent="save($event)">
+            <div class="field">
+                <label class="label">Team</label>
+                <div class="control">
+                    <label class="checkbox" v-for="team in teams" style="margin: 0 12px 12px 0;">
+                        <input type="checkbox" v-bind:value="team.tid" v-model="pickteams">
+                        <span v-bind:class="{'has-text-weight-bold': pickteams.includes(team.tid)}">
+                            [[ team.tid ]] ([[ team.name ]])
+                        </span>
+                    </label>
+                </div>
+                <p class="help is-success">發送的組別</p>
+            </div>
+            <div class="field">
+                <button class="button is-info">儲存</button>
+            </div>
+            <div class="field">
+                [[ teams ]]
+                [[ pickteams ]]
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $campaignreceiverform = new Vue({
+            el: '#campaignreceiverform',
+            data: {
+                teams: [],
+                pickteams: []
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                load: function() {
+                    axios.post('./receiver', {casename: 'getinit'}).then(function(resp) {
+                        $campaignreceiverform.teams = resp.data.teams;
+                        $campaignreceiverform.pickteams = resp.data.pickteams;
+                    });
+                },
+                save: function($e) {
+                    $e.submitter.classList.add('is-loading');
+
+                    axios.post('./receiver', {casename: 'save', pickteams: this.pickteams}).then(function(resp) {
+                        $campaignreceiverform.pickteams = resp.data.teams;
+                        $e.submitter.classList.remove('is-loading');
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}
