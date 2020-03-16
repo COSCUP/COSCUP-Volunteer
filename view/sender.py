@@ -52,7 +52,7 @@ def campaign(pid, tid, cid):
 
     campaign_data = SenderCampaign.get(cid=cid, pid=pid, tid=tid)
 
-    return render_template('./sender_campaign.html', campaign=campaign_data, team=team)
+    return render_template('./sender_campaign_index.html', campaign=campaign_data, team=team)
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/content', methods=('GET', 'POST'))

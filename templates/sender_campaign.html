@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block head_title %} Campaign{% endblock %}
+{% block head_title %} Campaign{% block campaign_title %}{% endblock %}{% endblock %}
 {% block body %}
 <section class="section">
   <div class="container">
@@ -19,9 +19,14 @@
 			    </ul>
 			    <p class="menu-label">Campaign</p>
 			    <ul class="menu-list">
-                    <li><a href="./content" class="{% block campaign_content%}{% endblock %}">編輯內容</a></li>
-                    <li><a href="./receiver" class="{% block campaign_receiver%}{% endblock %}">發送對象</a></li>
-                    <li><a href="./schedule" class="{% block campaign_schedule%}{% endblock %}">排程發送</a></li>
+                    <li>
+                        <a href="./" class="{% block campaign_index%}{% endblock %}">摘要</a>
+                        <ul>
+                            <li><a href="./content" class="{% block campaign_content%}{% endblock %}">編輯內容</a></li>
+                            <li><a href="./receiver" class="{% block campaign_receiver%}{% endblock %}">發送對象</a></li>
+                            <li><a href="./schedule" class="{% block campaign_schedule%}{% endblock %}">排程發送</a></li>
+                        </ul>
+                    </li>
 			    </ul>
 			  </aside>
           </div>
