@@ -50,18 +50,24 @@ class SenderCampaign(object):
         return SenderCampaignDB().find({'created.pid': pid, 'created.tid': tid})
 
     @staticmethod
-    def save_mail(cid, subject, content, preheader):
+    def save_mail(cid, subject, content, preheader, layout):
         ''' Save mail data
 
         :param str cid: cid
         :param str subject: subject
         :param str content: content
         :param str preheader: preheader
+        :param str layout: layout
 
         '''
         return SenderCampaignDB().find_one_and_update(
             {'_id': cid},
-            {'$set': {'mail.subject': subject, 'mail.content': content, 'mail.preheader': preheader}},
+            {'$set': {
+                'mail.subject': subject,
+                'mail.content': content,
+                'mail.preheader': preheader,
+                'mail.layout': layout,
+            }},
             return_document=ReturnDocument.AFTER,
         )
 

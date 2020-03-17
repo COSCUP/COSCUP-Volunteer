@@ -49,6 +49,7 @@ class SenderCampaignDB(DBBase):
                 'subject': '',
                 'content': '',
                 'preheader': '',
+                'layout': '1',
             },
         }
 

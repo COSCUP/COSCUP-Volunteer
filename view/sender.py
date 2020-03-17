@@ -79,6 +79,7 @@ def campaign_content(pid, tid, cid):
                 subject=data['data']['subject'].strip(),
                 content=data['data']['content'].strip(),
                 preheader=data['data']['preheader'].strip(),
+                layout=data['data']['layout'].strip(),
             )
             return jsonify({'mail': r['mail']})
 
