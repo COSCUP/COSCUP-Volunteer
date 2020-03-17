@@ -6,9 +6,12 @@ from flask import g
 from flask import jsonify
 from flask import render_template
 from flask import request
+from markdown import markdown
 
+from celery_task.task_sendermailer import sender_mailer_volunteer
 from module.sender import SenderCampaign
 from module.team import Team
+from module.users import User
 from view.utils import check_the_team_and_project_are_existed
 
 VIEW_SENDER = Blueprint('sender', __name__, url_prefix='/sender')
@@ -113,3 +116,37 @@ def campaign_receiver(pid, tid, cid):
                     _result.append(tid)
 
             return jsonify(SenderCampaign.save_receiver(cid=cid, teams=_result)['receiver'])
+
+
+@VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/schedule', methods=('GET', 'POST'))
+def campaign_schedule(pid, tid, cid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
+    if request.method == 'GET':
+        return render_template('./sender_campaign_schedule.html', campaign=campaign_data, team=team)
+
+    if request.method == 'POST':
+        data = request.get_json()
+
+        if 'casename' in data and data['casename'] == 'send':
+            return jsonify(data)
+
+        if 'casename' in data and data['casename'] == 'sendtest':
+            # layout, campaign_data, team, uids
+            if campaign_data['mail']['layout'] == '1':
+                uid = g.user['account']['_id']
+                users = User.get_info(uids=[uid, ])
+
+                user_data = {
+                    'mail': users[uid]['oauth']['email'],
+                    'name': users[uid]['profile']['badge_name'],
+                }
+
+                sender_mailer_volunteer.apply_async(kwargs={
+                        'campaign_data': campaign_data, 'team_name': team['name'],
+                        'user_datas': (user_data, )})
+
+            return jsonify(data)

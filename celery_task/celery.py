@@ -14,8 +14,9 @@ app = Celery(
     main='celery_task',
     broker='amqp://%s' % setting.RABBITMQ,
     include=(
-        'celery_task.task_mail_sys',
         'celery_task.task_ipinfo',
+        'celery_task.task_mail_sys',
+        'celery_task.task_sendermailer',
         'celery_task.task_service_sync',
     ),
 )
@@ -25,6 +26,7 @@ app.conf.task_queues = (
     Queue('CS_ipinfo', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.ipinfo.#'),
     Queue('CS_mail_member', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.member.#'),
     Queue('CS_mail_sys', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.sys.#'),
+    Queue('CS_sender_mailer', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.sender.mailer.#'),
     Queue('CS_service_sync', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.servicesync.#'),
     Queue('CS_session', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.session.#'),
 )
