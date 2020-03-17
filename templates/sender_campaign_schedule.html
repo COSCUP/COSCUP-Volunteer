@@ -1,0 +1,41 @@
+{% extends "sender_campaign.html" %}
+{% block campaign_title %} Schedule{% endblock %}
+{% block campaign_schedule %} is-active{% endblock %}
+{% block campaign_body %}
+<div class="columns">
+    <div class="column is-three-quarters">
+        <div id="senderschedule" class="content">
+            <h3>發送測試信</h3>
+            <button class="button" v-on:click="sendtest">發送</button>
+            <h3>正式發送</h3>
+            <button class="button" v-on:click="send">發送</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $senderschedule= new Vue({
+            el: '#senderschedule',
+            methods: {
+                send: function() {
+                    let msg = window.prompt('請輸入 "SEND" 再次確認發送！');
+                    if (msg == 'SEND') {
+                        console.info('Fire');
+                        axios.post('./schedule', {casename: 'send'}).then(function(resp) {
+                            console.info(resp.data);
+                        });
+                    }
+                },
+                sendtest: function() {
+                    axios.post('./schedule', {casename: 'sendtest'}).then(function(resp) {
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}
