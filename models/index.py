@@ -4,6 +4,7 @@ from models.mattermost_link_db import MattermostLinkDB
 from models.mattermostdb import MattermostUsersDB
 from models.oauth_db import OAuthDB
 from models.projectdb import ProjectDB
+from models.senderdb import SenderReceiverDB
 from models.teamdb import TeamDB
 from models.teamdb import TeamMemberChangedDB
 from models.teamdb import TeamPlanDB
@@ -18,6 +19,7 @@ if __name__ == '__main__':
     MattermostUsersDB().index()
     OAuthDB().index()
     ProjectDB(pid=None).index()
+    SenderReceiverDB().index()
     TeamDB(pid=None, tid=None).index()
     TeamMemberChangedDB().index()
     TeamPlanDB().index()

@@ -3,10 +3,10 @@
 {% block campaign_receiver %} is-active{% endblock %}
 {% block campaign_body %}
 <div class="columns">
-    <div class="column is-three-quarters">
+    <div class="column">
         <form id="campaignreceiverform" class="form" v-on:submit.prevent="save($event)">
             <div class="field">
-                <label class="label">Team</label>
+                <label class="label">Team<sup>([[ pickteams.length ]])</sup></label>
                 <div class="control">
                     <label class="checkbox" v-for="team in teams" style="margin: 0 12px 12px 0;">
                         <input type="checkbox" v-bind:value="team.tid" v-model="pickteams">
@@ -20,6 +20,73 @@
             <div class="field">
                 <button class="button is-info">儲存</button>
             </div>
+            <div class="field">
+                <article class="message is-info">
+                    <div class="message-body">
+                        Team, Upload List 可以同時使用。
+                    </div>
+                </article>
+            </div>
+            <div class="field">
+                <label class="label">Upload List</label>
+                <div class="control">
+                    <div class="file">
+                        <label class="file-label">
+                            <input class="file-input" type="file" ref="file" name="resume"
+                                   v-on:change="handleupload" accept="text/csv">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span v-if="!file" class="file-label">
+                                    選擇檔案…
+                                </span>
+                                <span v-if="file" class="file-label">
+                                    [[ file.name ]]
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <p class="help is-info">上傳 CSV 檔案，必須包含 name, mail 欄位。</p>
+            </div>
+            <div class="field">
+                <label class="label">上傳更新或取代方式</label>
+                <div class="control">
+                    <label class="radio">
+                        <input type="radio" name="uploadtype" value='update' v-model="uploadtype">
+                        更新(Update)
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="uploadtype" value='replace' v-model="uploadtype">
+                        取代(Replace)
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="uploadtype" value='remove' v-model="uploadtype">
+                        清除(Remove)
+                    </label>
+                </div>
+                <p class="help is-info">更新：會以 mail 當作唯一值索引更新。取代：直接覆蓋舊檔案資料。</p>
+            </div>
+            <div class="field">
+                <button class="button is-info">儲存</button>
+            </div>
+            <div class="field" v-if="filedata[1].length">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th v-for="field in filedata[0]">[[ field ]]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="raw in filedata[1]">
+                                <td v-for="r in raw">[[ r ]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </form>
     </div>
 </div>
@@ -32,7 +99,10 @@
             el: '#campaignreceiverform',
             data: {
                 teams: [],
-                pickteams: []
+                pickteams: [],
+                uploadtype: 'update',
+                file: null,
+                filedata: [[], []],
             },
             mounted: function() {
                 this.load();
@@ -42,7 +112,11 @@
                     axios.post('./receiver', {casename: 'getinit'}).then(function(resp) {
                         $campaignreceiverform.teams = resp.data.teams;
                         $campaignreceiverform.pickteams = resp.data.pickteams;
+                        $campaignreceiverform.filedata = resp.data.filedata;
                     });
+                },
+                handleupload: function($e) {
+                    this.file = this.$refs.file.files[0];
                 },
                 save: function($e) {
                     $e.submitter.classList.add('is-loading');
@@ -50,6 +124,15 @@
                     axios.post('./receiver', {casename: 'save', pickteams: this.pickteams}).then(function(resp) {
                         $campaignreceiverform.pickteams = resp.data.teams;
                         $e.submitter.classList.remove('is-loading');
+                    }).then(function(resp) {
+                        if ($campaignreceiverform.file || $campaignreceiverform.uploadtype == 'remove') {
+                            let formData = new FormData();
+                            formData.append('file', $campaignreceiverform.file);
+                            formData.append('uploadtype', $campaignreceiverform.uploadtype);
+                            axios.post('./receiver', formData, {header: {'Content-Type': 'multipart/form-data'}}).then(function(resp) {
+                                window.location.href = './receiver';
+                            });
+                        }
                     });
                 }
             },

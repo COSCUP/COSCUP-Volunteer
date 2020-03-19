@@ -1,3 +1,5 @@
+import csv
+import io
 import json
 import logging
 
@@ -10,6 +12,7 @@ from markdown import markdown
 
 from celery_task.task_sendermailer import sender_mailer_volunteer
 from module.sender import SenderCampaign
+from module.sender import SenderReceiver
 from module.team import Team
 from module.users import User
 from view.utils import check_the_team_and_project_are_existed
@@ -100,14 +103,19 @@ def campaign_receiver(pid, tid, cid):
     if request.method == 'POST':
         data = request.get_json()
 
-        if 'casename' in data and data['casename'] == 'getinit':
+        if data and 'casename' in data and data['casename'] == 'getinit':
             teams = []
             for team in Team.list_by_pid(pid=team['pid']):
                 teams.append({'tid': team['tid'], 'name': team['name']})
 
-            return jsonify({'teams': teams, 'pickteams': campaign_data['receiver']['teams']})
+            sender_receiver = SenderReceiver.get(pid=team['pid'], cid=cid)
 
-        if 'casename' in data and data['casename'] == 'save':
+            return jsonify({'teams': teams,
+                            'pickteams': campaign_data['receiver']['teams'],
+                            'filedata': sender_receiver,
+                           })
+
+        if data and 'casename' in data and data['casename'] == 'save':
             tids = [team['tid'] for team in Team.list_by_pid(pid=team['pid'])]
 
             _result = []
@@ -116,6 +124,24 @@ def campaign_receiver(pid, tid, cid):
                     _result.append(tid)
 
             return jsonify(SenderCampaign.save_receiver(cid=cid, teams=_result)['receiver'])
+
+        if request.form['uploadtype'] == 'remove':
+            SenderReceiver.remove(pid=team['pid'], cid=cid)
+
+            return jsonify({'file': [],
+                            'uploadtype': request.form['uploadtype'],
+                           })
+
+        if request.files and 'file' in request.files:
+            csv_file = list(csv.DictReader(io.StringIO(request.files['file'].read().decode('utf8'))))
+            if request.form['uploadtype'] == 'replace':
+                SenderReceiver.replace(pid=team['pid'], cid=cid, datas=csv_file)
+            elif request.form['uploadtype'] == 'update':
+                SenderReceiver.update(pid=team['pid'], cid=cid, datas=csv_file)
+
+            return jsonify({'file': csv_file,
+                            'uploadtype': request.form['uploadtype'],
+                           })
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/schedule', methods=('GET', 'POST'))
