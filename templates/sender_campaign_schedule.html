@@ -5,10 +5,31 @@
 <div class="columns">
     <div class="column is-three-quarters">
         <div id="senderschedule" class="content">
-            <h3>發送測試信</h3>
-            <button class="button" v-on:click="sendtest">發送</button>
-            <h3>正式發送</h3>
-            <button class="button" v-on:click="send">發送</button>
+            <div class="content">
+                <h3>發送測試信</h3>
+                <button class="button is-warning is-light" v-on:click="sendtest">發送</button>
+                <h3>正式發送</h3>
+                <button class="button is-info is-light" v-on:click="send">發送</button>
+            </div>
+            <div class="content">
+                <h3>發送紀錄</h3>
+                <table class="table table-fullwidth" v-if="logs.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Desc</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="log in logs">
+                            <td>[[ log.time ]]</td>
+                            <td>[[ log.desc ]]</td>
+                            <td>[[ log.count ]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -19,18 +40,29 @@
     (function () {
         let $senderschedule= new Vue({
             el: '#senderschedule',
+            data: {
+                logs: []
+            },
+            mounted: function() {
+                this.loadlogs();
+            },
             methods: {
+                loadlogs: function() {
+                    axios.post('./schedule', {casename: 'getlogs'}).then(function(resp) {
+                        $senderschedule.logs = resp.data.logs;
+                    });
+                },
                 send: function() {
                     let msg = window.prompt('請輸入 "SEND" 再次確認發送！');
                     if (msg == 'SEND') {
-                        console.info('Fire');
                         axios.post('./schedule', {casename: 'send'}).then(function(resp) {
-                            console.info(resp.data);
+                            window.location.href = './schedule';
                         });
                     }
                 },
                 sendtest: function() {
                     axios.post('./schedule', {casename: 'sendtest'}).then(function(resp) {
+                            window.location.href = './schedule';
                     });
                 }
             },
