@@ -3,6 +3,7 @@ from pymongo.collection import ReturnDocument
 
 import setting
 from models.senderdb import SenderCampaignDB
+from models.senderdb import SenderReceiverDB
 from module.awsses import AWSSES
 
 
@@ -134,3 +135,81 @@ class SenderMailerVolunteer(SenderMailer):
         super(SenderMailerVolunteer, self).__init__(
             template_path='/app/templates/mail/sender_base.html',
             subject=subject, content=content, source=source)
+
+
+class SenderReceiver(object):
+    ''' SenderReceiver object '''
+
+    @staticmethod
+    def replace(pid, cid, datas):
+        ''' Replace
+
+        :param str pid: pid
+        :param str cid: cid
+        :param list datas: list of dict data
+
+        '''
+        sender_receiver_db = SenderReceiverDB()
+        sender_receiver_db.remove_past(pid=pid, cid=cid)
+
+        save_datas = []
+        for data in datas:
+            _data = SenderReceiverDB.new(pid=pid, cid=cid, name=data['name'], mail=data['mail'])
+            _data['data'].update(data)
+            save_datas.append(_data)
+
+        sender_receiver_db.update_data(pid=pid, cid=cid, datas=save_datas)
+
+    @staticmethod
+    def update(pid, cid, datas):
+        ''' Update
+
+        :param str pid: pid
+        :param str cid: cid
+        :param list datas: list of dict data
+
+        '''
+        save_datas = []
+        for data in datas:
+            _data = SenderReceiverDB.new(pid=pid, cid=cid, name=data['name'], mail=data['mail'])
+            _data['data'].update(data)
+            save_datas.append(_data)
+
+        SenderReceiverDB().update_data(pid=pid, cid=cid, datas=save_datas)
+
+    @staticmethod
+    def remove(pid, cid):
+        ''' Update
+
+        :param str pid: pid
+        :param str cid: cid
+
+        '''
+        SenderReceiverDB().remove_past(pid=pid, cid=cid)
+
+    @staticmethod
+    def get(pid, cid):
+        ''' Get
+
+        :param str pid: pid
+        :param str cid: cid
+
+        :return: fields, raws
+
+        '''
+        datas = list(SenderReceiverDB().find({'pid': pid, 'cid': cid}))
+        fields = ['name', 'mail']
+        for data in datas:
+            for k in data['data']:
+                if k not in ('name', 'mail') and k not in fields:
+                    fields.append(k)
+
+        raws = []
+        for data in datas:
+            raw = []
+            for field in fields:
+                raw.append(data['data'].get(field, ''))
+
+            raws.append(raw)
+
+        return fields, raws
