@@ -138,6 +138,14 @@ class SenderMailerVolunteer(SenderMailer):
             subject=subject, content=content, source=source)
 
 
+class SenderMailerCOSCUP(SenderMailer):
+    ''' Sender using COSCUP template '''
+    def __init__(self, subject, content, source=None):
+        super(SenderMailerCOSCUP, self).__init__(
+            template_path='/app/templates/mail/coscup_base.html',
+            subject=subject, content=content, source=source)
+
+
 class SenderLogs(object):
     ''' SenderLogs object '''
 
