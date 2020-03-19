@@ -2,7 +2,9 @@ import csv
 import io
 import json
 import logging
+import random
 
+import arrow
 from flask import Blueprint
 from flask import g
 from flask import jsonify
@@ -12,6 +14,7 @@ from markdown import markdown
 
 from celery_task.task_sendermailer import sender_mailer_volunteer
 from module.sender import SenderCampaign
+from module.sender import SenderLogs
 from module.sender import SenderReceiver
 from module.team import Team
 from module.users import User
@@ -157,19 +160,50 @@ def campaign_schedule(pid, tid, cid):
     if request.method == 'POST':
         data = request.get_json()
 
+        if 'casename' in data and data['casename'] == 'getlogs':
+            logs = []
+            for log in SenderLogs.get(cid=cid):
+                logs.append({
+                    'time': arrow.get(log['create_at']).to('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss'),
+                    'cid': log['cid'],
+                    'count': len(log['receivers']),
+                    'layout': log['layout'],
+                    'desc': log['desc'],
+                })
+
+            return jsonify({'logs': logs})
+
         if 'casename' in data and data['casename'] == 'send':
-            return jsonify(data)
+            if campaign_data['mail']['layout'] == '1':
+                fields, raws = SenderReceiver.get(pid=team['pid'], cid=cid)
+                user_datas = []
+                for raw in raws:
+                    user_datas.append(dict(zip(fields, raw)))
+
+                SenderLogs.save(cid=cid,
+                        layout=campaign_data['mail']['layout'], desc=u'Send', receivers=user_datas)
+
+                sender_mailer_volunteer.apply_async(kwargs={
+                        'campaign_data': campaign_data, 'team_name': team['name'],
+                        'user_datas': user_datas})
+
+                return jsonify(data)
 
         if 'casename' in data and data['casename'] == 'sendtest':
             # layout, campaign_data, team, uids
             if campaign_data['mail']['layout'] == '1':
+                fields, raws = SenderReceiver.get(pid=team['pid'], cid=cid)
+                user_data = dict(zip(fields, random.choice(raws)))
+
                 uid = g.user['account']['_id']
                 users = User.get_info(uids=[uid, ])
 
-                user_data = {
+                user_data.update({
                     'mail': users[uid]['oauth']['email'],
-                    'name': users[uid]['profile']['badge_name'],
-                }
+                })
+
+                SenderLogs.save(cid=cid,
+                        layout=campaign_data['mail']['layout'], desc=u'Test Send', receivers=(user_data, ))
 
                 sender_mailer_volunteer.apply_async(kwargs={
                         'campaign_data': campaign_data, 'team_name': team['name'],

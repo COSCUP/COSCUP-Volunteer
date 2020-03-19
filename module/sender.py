@@ -3,6 +3,7 @@ from pymongo.collection import ReturnDocument
 
 import setting
 from models.senderdb import SenderCampaignDB
+from models.senderdb import SenderLogsDB
 from models.senderdb import SenderReceiverDB
 from module.awsses import AWSSES
 
@@ -135,6 +136,32 @@ class SenderMailerVolunteer(SenderMailer):
         super(SenderMailerVolunteer, self).__init__(
             template_path='/app/templates/mail/sender_base.html',
             subject=subject, content=content, source=source)
+
+
+class SenderLogs(object):
+    ''' SenderLogs object '''
+
+    @staticmethod
+    def save(cid, layout, desc, receivers):
+        ''' save log
+
+        :param str cid: cid
+        :param str layout: layout
+        :param str desc: desc
+        :param list receivers: receivers
+
+        '''
+        SenderLogsDB().save(cid=cid, layout=layout, desc=desc, receivers=receivers)
+
+    @staticmethod
+    def get(cid):
+        ''' Get log
+
+        :param str cid: cid
+
+        '''
+        for raw in SenderLogsDB().find({'cid': cid}, sort=(('_id', -1), )):
+            yield raw
 
 
 class SenderReceiver(object):

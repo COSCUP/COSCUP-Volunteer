@@ -63,6 +63,31 @@ class SenderCampaignDB(DBBase):
         )
 
 
+class SenderLogsDB(DBBase):
+    ''' SenderLogsDB Collection '''
+    def __init__(self):
+        super(SenderLogsDB, self).__init__('sender_logs')
+
+    def save(self, cid, layout, desc, receivers):
+        ''' Save log
+
+        :param str cid: cid
+        :param str layout: layout
+        :param str desc: desc
+        :param list receivers: receivers
+
+        '''
+
+        data = {
+            'cid': cid,
+            'layout': layout,
+            'desc': desc,
+            'receivers': receivers,
+            'create_at': time(),
+        }
+
+        self.insert_one(data)
+
 class SenderReceiverDB(DBBase):
     ''' SenderReceiver Collection
 
