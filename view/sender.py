@@ -12,7 +12,7 @@ from flask import render_template
 from flask import request
 from markdown import markdown
 
-from celery_task.task_sendermailer import sender_mailer_volunteer
+from celery_task.task_sendermailer import sender_mailer_start
 from module.sender import SenderCampaign
 from module.sender import SenderLogs
 from module.sender import SenderReceiver
@@ -183,30 +183,43 @@ def campaign_schedule(pid, tid, cid):
                 SenderLogs.save(cid=cid,
                         layout=campaign_data['mail']['layout'], desc=u'Send', receivers=user_datas)
 
-                sender_mailer_volunteer.apply_async(kwargs={
-                        'campaign_data': campaign_data, 'team_name': team['name'],
-                        'user_datas': user_datas})
+                source = None
+                if campaign_data['mail']['layout'] == '2':
+                    if 'mailling' in team and team['mailling']:
+                        source = {'name': team['name'], 'mail': team['mailling']}
+                    else:
+                        source = {'name': 'COSCUP Attendee', 'mail': 'attendee@coscup.org'}
+
+                sender_mailer_start.apply_async(kwargs={
+                        'campaign_data': campaign_data, 'team_name': team['name'], 'source': source,
+                        'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
 
                 return jsonify(data)
 
         if 'casename' in data and data['casename'] == 'sendtest':
             # layout, campaign_data, team, uids
-            if campaign_data['mail']['layout'] == '1':
-                fields, raws = SenderReceiver.get(pid=team['pid'], cid=cid)
-                user_data = dict(zip(fields, random.choice(raws)))
+            fields, raws = SenderReceiver.get(pid=team['pid'], cid=cid)
+            user_data = dict(zip(fields, random.choice(raws)))
 
-                uid = g.user['account']['_id']
-                users = User.get_info(uids=[uid, ])
+            uid = g.user['account']['_id']
+            users = User.get_info(uids=[uid, ])
 
-                user_data.update({
-                    'mail': users[uid]['oauth']['email'],
-                })
+            user_data.update({
+                'mail': users[uid]['oauth']['email'],
+            })
 
-                SenderLogs.save(cid=cid,
-                        layout=campaign_data['mail']['layout'], desc=u'Test Send', receivers=(user_data, ))
+            SenderLogs.save(cid=cid,
+                    layout=campaign_data['mail']['layout'], desc=u'Test Send', receivers=(user_data, ))
 
-                sender_mailer_volunteer.apply_async(kwargs={
-                        'campaign_data': campaign_data, 'team_name': team['name'],
-                        'user_datas': (user_data, )})
+            source = None
+            if campaign_data['mail']['layout'] == '2':
+                if 'mailling' in team and team['mailling']:
+                    source = {'name': team['name'], 'mail': team['mailling']}
+                else:
+                    source = {'name': 'COSCUP Attendee', 'mail': 'attendee@coscup.org'}
+
+            sender_mailer_start.apply_async(kwargs={
+                    'campaign_data': campaign_data, 'team_name': team['name'], 'source': source,
+                    'user_datas': (user_data, ), 'layout': campaign_data['mail']['layout']})
 
             return jsonify(data)
