@@ -62,6 +62,13 @@
                 <p class="help is-success">組長群用的，也是會把組長丟進去。</p>
             </div>
             <div class="field">
+                <label class="label">交通費補助公告辦法文件</label>
+                <div class="control">
+                    <input class="input" type="text" name="traffic_fee_doc" value="{{project.traffic_fee_doc}}">
+                </div>
+                <p class="help is-success">辦法文件的連結網址</p>
+            </div>
+            <div class="field">
                 <div class="control">
                     <button class="button is-primary" type="submit">Update</button>
                     <a class="button" href="/project/{{project._id}}">Cancel</a>

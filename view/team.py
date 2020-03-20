@@ -329,7 +329,7 @@ def team_form_traffic_fee(pid, tid):
     user = g.user['account']
     feemapping = FormTrafficFeeMapping.get(pid=pid)
 
-    if feemapping and 'data' in feemapping and feemapping['data']:
+    if 'traffic_fee_doc' in project and project['traffic_fee_doc'] and feemapping and 'data' in feemapping and feemapping['data']:
         if 'profile_real' in user and 'bank' in user['profile_real']:
             _short_check = []
             for k in ('name', 'branch', 'no', 'code'):

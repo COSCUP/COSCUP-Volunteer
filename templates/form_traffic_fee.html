@@ -5,15 +5,24 @@
 {% block form_body %}
 <div class="columns">
     <div class="column is-three-fifths">
+        {% if not project.traffic_fee_doc %}
         <article class="message is-small">
             <div class="message-body">
                 <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
-                <span>請先參閱補助辦法：<a href="https://drive.google.com/file/d/1uXYQiapmCj3vlPwfQeEVDEZfo-Qj5VLB">
+                <span>尚未開始申請</span>
+            </div>
+        </article>
+        {% else %}
+        <article class="message is-small">
+            <div class="message-body">
+                <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                <span>請先參閱補助辦法：<a href="{{project.traffic_fee_doc}}" target="_blank">
                         補助辦法<span class="icon"><i class="fas fa-external-link-alt"></i></span>
                     </a>
                 </span>
             </div>
         </article>
+        {% endif %}
         {% if not is_ok_submit %}
         <article class="message is-warning is-small">
             <div class="message-body">
