@@ -18,6 +18,7 @@ import setting
 from models.teamdb import TeamMemberChangedDB
 from models.teamdb import TeamPlanDB
 from module.form import Form
+from module.form import FormTrafficFeeMapping
 from module.mattermost_bot import MattermostTools
 from module.team import Team
 from module.users import User
@@ -267,7 +268,7 @@ def team_form_api(pid, tid):
 
     if request.method == 'GET':
         if request.args['case'] == 'traffic_fee':
-            return jsonify({'locations': Form.TRAFFIC_FEE_LOCATIONS})
+            return jsonify({'locations': list(FormTrafficFeeMapping.get(pid=pid)['data'].items())})
 
         return jsonify(request.args)
 
@@ -326,17 +327,19 @@ def team_form_traffic_fee(pid, tid):
 
     is_ok_submit = False
     user = g.user['account']
+    feemapping = FormTrafficFeeMapping.get(pid=pid)
 
-    if 'profile_real' in user and 'bank' in user['profile_real']:
-        _short_check = []
-        for k in ('name', 'branch', 'no', 'code'):
-            if k in user['profile_real']['bank'] and user['profile_real']['bank'][k]:
-                _short_check.append(True)
-            else:
-                _short_check.append(False)
+    if feemapping and 'data' in feemapping and feemapping['data']:
+        if 'profile_real' in user and 'bank' in user['profile_real']:
+            _short_check = []
+            for k in ('name', 'branch', 'no', 'code'):
+                if k in user['profile_real']['bank'] and user['profile_real']['bank'][k]:
+                    _short_check.append(True)
+                else:
+                    _short_check.append(False)
 
-        if all(_short_check):
-            is_ok_submit = True
+            if all(_short_check):
+                is_ok_submit = True
 
     if request.method == 'GET':
         form_data = Form.get_traffic_fee(pid=pid, uid=g.user['account']['_id'])
@@ -352,7 +355,7 @@ def team_form_traffic_fee(pid, tid):
                 data=data, is_ok_submit=is_ok_submit)
 
     elif request.method == 'POST':
-        if is_ok_submit and request.form['fromwhere'] in [i[0] for i in Form.TRAFFIC_FEE_LOCATIONS]:
+        if is_ok_submit and request.form['fromwhere'] in [k for k in FormTrafficFeeMapping.get(pid=pid)['data']]:
             data = {
                 'fee': int(request.form['fee']),
                 'howto': request.form['howto'].strip(),

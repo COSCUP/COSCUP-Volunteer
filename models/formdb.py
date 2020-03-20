@@ -37,3 +37,23 @@ class FormDB(DBBase):
             upsert=True,
             return_document=ReturnDocument.AFTER,
         )
+
+
+class FormTrafficFeeMappingDB(DBBase):
+    ''' Form traffic fee mapping Collection '''
+    def __init__(self):
+        super(FormTrafficFeeMappingDB, self).__init__('form_traffic_fee_mapping')
+
+    def save(self, pid, data):
+        ''' Save location / fee data
+
+        :param str pid: pid
+        :param dict data: {'(location)': (fee)}
+
+        '''
+        return self.find_one_and_update(
+                {'_id': pid},
+                {'$set': {'data': data}},
+                upsert=True,
+                return_document=ReturnDocument.AFTER,
+            )

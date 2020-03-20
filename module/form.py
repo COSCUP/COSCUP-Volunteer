@@ -1,4 +1,5 @@
 from models.formdb import FormDB
+from models.formdb import FormTrafficFeeMappingDB
 
 
 class Form(object):
@@ -168,3 +169,30 @@ class Form(object):
         '''
         for raw in FormDB().find({'case': 'accommodation', 'pid': pid}):
             yield raw
+
+
+class FormTrafficFeeMapping(object):
+    ''' FormTrafficFeeMapping object '''
+
+    @staticmethod
+    def save(pid, data):
+        ''' Save mapping data
+
+        :param str pid: pid
+        :param dict data: location/fee mapping
+
+        '''
+        _data = {}
+        for location in data:
+            _data[location.strip()] = int(data[location])
+
+        return FormTrafficFeeMappingDB().save(pid=pid, data=_data)
+
+    @staticmethod
+    def get(pid):
+        ''' Get
+
+        :param str pid: pid
+
+        '''
+        return FormTrafficFeeMappingDB().find_one({'_id': pid})
