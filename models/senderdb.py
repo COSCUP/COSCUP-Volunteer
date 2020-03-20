@@ -88,6 +88,32 @@ class SenderLogsDB(DBBase):
 
         self.insert_one(data)
 
+
+class SenderSESLogsDB(DBBase):
+    ''' SenderSESLogsDB Collection '''
+    def __init__(self):
+        super(SenderSESLogsDB, self).__init__('sender_ses_logs')
+
+    def save(self, cid, mail, name, ses_result):
+        ''' Save log
+
+        :param str cid: cid
+        :param str mail: mail
+        :param str name: name
+        :param dict ses_result: from ses return result
+
+        '''
+        data = {
+            'cid': cid,
+            'mail': mail,
+            'name': name,
+            'result': ses_result,
+            'create_at': time(),
+        }
+
+        self.insert_one(data)
+
+
 class SenderReceiverDB(DBBase):
     ''' SenderReceiver Collection
 

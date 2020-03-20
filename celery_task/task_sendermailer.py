@@ -6,6 +6,7 @@ from celery_task.celery import app
 from markdown import markdown
 from module.sender import SenderMailerCOSCUP
 from module.sender import SenderMailerVolunteer
+from module.sender import SenderSESLogs
 
 logger = get_task_logger(__name__)
 
@@ -47,10 +48,23 @@ def sender_mailer_start_one(sender, **kwargs):
                      'body': markdown(campaign_data['mail']['content']),
                      'send_by': team_name, },
             source=source,
-            )
+        )
 
-    sender_mailer.send(
+    result = sender_mailer.send(
         to_list=[{'name': user_data['name'],
                   'mail': user_data['mail']}, ],
         data=user_data,
+        x_coscup=campaign_data['_id'],
     )
+
+    logger.info(result)
+
+    SenderSESLogs.save(
+            cid=campaign_data['_id'],
+            name=user_data['name'],
+            mail=user_data['mail'],
+            result=result,
+        )
+
+    if result['ResponseMetadata']['HTTPStatusCode'] != 200:
+        raise Exception('Send mail error, do retry ...')

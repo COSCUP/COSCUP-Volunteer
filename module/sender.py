@@ -5,6 +5,7 @@ import setting
 from models.senderdb import SenderCampaignDB
 from models.senderdb import SenderLogsDB
 from models.senderdb import SenderReceiverDB
+from models.senderdb import SenderSESLogsDB
 from module.awsses import AWSSES
 
 
@@ -115,7 +116,7 @@ class SenderMailer(object):
         self.awsses = AWSSES(aws_access_key_id=setting.AWS_ID,
                 aws_secret_access_key=setting.AWS_KEY, source=source)
 
-    def send(self, to_list, data):
+    def send(self, to_list, data, x_coscup=None):
         ''' Send mail
 
         :param list to_list: [{'name': str, 'mail': str}, ]
@@ -126,6 +127,7 @@ class SenderMailer(object):
             to_addresses=to_list,
             subject=self.subject.render(**data),
             body=self.tpl.render(**data),
+            x_coscup=x_coscup,
         )
         return self.awsses.send_raw_email(data=raw_mail)
 
@@ -170,6 +172,23 @@ class SenderLogs(object):
         '''
         for raw in SenderLogsDB().find({'cid': cid}, sort=(('_id', -1), )):
             yield raw
+
+
+class SenderSESLogs(object):
+    ''' SenderSESLogs '''
+
+    @staticmethod
+    def save(cid, name, mail, result):
+        ''' Save log
+
+        :param str cid: cid
+        :param str name: name
+        :param str mail: mail
+        :param dict result: result
+
+        '''
+        SenderSESLogsDB().save(cid=cid, mail=mail, name=name, ses_result=result)
+
 
 
 class SenderReceiver(object):
