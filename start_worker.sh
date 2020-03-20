@@ -3,7 +3,7 @@ docker run \
            --name volunteer-worker \
            --link secretary_mongo:mongo \
            --link queue_sender:rabbitmq \
-           --link memcached-prod-1:memcached \
+           --link memcached-prod:memcached \
            --log-opt max-size=64m \
            --log-opt max-file=1 \
            -v $(pwd)/scripts:/app/scripts \
