@@ -29,6 +29,9 @@ def index(pid, tid):
     if _redirect:
         return _redirect
 
+    if g.user['account']['_id'] not in team['chiefs']:
+        return redirect('/')
+
     ''' ..note::
         1. create campaign (campaign name) / list campaign
         2. write title, content(jinja2, markdown)
@@ -59,6 +62,9 @@ def campaign(pid, tid, cid):
     if _redirect:
         return _redirect
 
+    if g.user['account']['_id'] not in team['chiefs']:
+        return redirect('/')
+
     campaign_data = SenderCampaign.get(cid=cid, pid=pid, tid=tid)
 
     return render_template('./sender_campaign_index.html', campaign=campaign_data, team=team)
@@ -69,6 +75,9 @@ def campaign_content(pid, tid, cid):
     team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
     if _redirect:
         return _redirect
+
+    if g.user['account']['_id'] not in team['chiefs']:
+        return redirect('/')
 
     if request.method == 'GET':
         campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
@@ -98,6 +107,9 @@ def campaign_receiver(pid, tid, cid):
     team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
     if _redirect:
         return _redirect
+
+    if g.user['account']['_id'] not in team['chiefs']:
+        return redirect('/')
 
     campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
     if request.method == 'GET':
@@ -153,6 +165,9 @@ def campaign_schedule(pid, tid, cid):
     if _redirect:
         return _redirect
 
+    if g.user['account']['_id'] not in team['chiefs']:
+        return redirect('/')
+
     campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
     if request.method == 'GET':
         return render_template('./sender_campaign_schedule.html', campaign=campaign_data, team=team)
@@ -174,27 +189,26 @@ def campaign_schedule(pid, tid, cid):
             return jsonify({'logs': logs})
 
         if 'casename' in data and data['casename'] == 'send':
-            if campaign_data['mail']['layout'] == '1':
-                fields, raws = SenderReceiver.get(pid=team['pid'], cid=cid)
-                user_datas = []
-                for raw in raws:
-                    user_datas.append(dict(zip(fields, raw)))
+            fields, raws = SenderReceiver.get(pid=team['pid'], cid=cid)
+            user_datas = []
+            for raw in raws:
+                user_datas.append(dict(zip(fields, raw)))
 
-                SenderLogs.save(cid=cid,
-                        layout=campaign_data['mail']['layout'], desc=u'Send', receivers=user_datas)
+            SenderLogs.save(cid=cid,
+                    layout=campaign_data['mail']['layout'], desc=u'Send', receivers=user_datas)
 
-                source = None
-                if campaign_data['mail']['layout'] == '2':
-                    if 'mailling' in team and team['mailling']:
-                        source = {'name': team['name'], 'mail': team['mailling']}
-                    else:
-                        source = {'name': 'COSCUP Attendee', 'mail': 'attendee@coscup.org'}
+            source = None
+            if campaign_data['mail']['layout'] == '2':
+                if 'mailling' in team and team['mailling']:
+                    source = {'name': team['name'], 'mail': team['mailling']}
+                else:
+                    source = {'name': 'COSCUP Attendee', 'mail': 'attendee@coscup.org'}
 
-                sender_mailer_start.apply_async(kwargs={
-                        'campaign_data': campaign_data, 'team_name': team['name'], 'source': source,
-                        'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
+            sender_mailer_start.apply_async(kwargs={
+                    'campaign_data': campaign_data, 'team_name': team['name'], 'source': source,
+                    'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
 
-                return jsonify(data)
+            return jsonify(data)
 
         if 'casename' in data and data['casename'] == 'sendtest':
             # layout, campaign_data, team, uids
