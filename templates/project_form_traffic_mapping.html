@@ -1,0 +1,98 @@
+{% extends "project_edit_base.html" %}
+{% block head_title_project_edit %}交通費補助區域設定{% endblock %}
+{%block project_form_traffic_mapping%}is-active{%endblock%}
+{% block project_edit_body %}
+<div class="content">
+    <form id="trafficfeemp" v-on:submit.prevent="save">
+        <div class="field is-horizontal" v-for="raw in raws">
+            <div class="field-body">
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="text" placeholder="地點" v-model="raw.location" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <input class="input" type="number" min="1" v-model="raw.fee" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <a class="button" v-on:click="delraw(raw)">
+                            <span class="icon"><i class="far fa-trash-alt"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <a class="button" v-on:click="addraw">
+                <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                <span>新增</span>
+            </a>
+            <button class="button is-info is-light">
+                <span class="icon"><i class="far fa-save"></i></span>
+                <span>Save</span>
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+(function() {
+    let $trafficfeemp = new Vue({
+        el: '#trafficfeemp',
+        data: {
+            raws: [],
+            base: null
+        },
+        mounted: function() {
+            axios.post('./form_traffic_mapping', {casename: 'init'}).then(function(resp) {
+                $trafficfeemp.base = resp.data.base;
+
+                let rawslist = Object.entries(resp.data.data);
+                rawslist.sort(function(a, b) {
+                    return a[1] > b[1];
+                });
+                rawslist.forEach(function(raw) {
+                    $trafficfeemp.raws.push({location: raw[0], fee: raw[1]});
+                });
+            }).then(function() {
+                if ($trafficfeemp.raws.length == 0) {
+                    $trafficfeemp.raws.push(Object.assign({}, $trafficfeemp.base));
+                }
+            });
+        },
+        methods: {
+            save: function() {
+                axios.post('./form_traffic_mapping', {casename: 'save', data: this.raws}).then(function(resp) {
+                    let rawslist = Object.entries(resp.data.data);
+                    rawslist.sort(function(a, b) {
+                        return a[1] > b[1];
+                    });
+                    $trafficfeemp.raws = [];
+                    rawslist.forEach(function(raw) {
+                        $trafficfeemp.raws.push({location: raw[0], fee: raw[1]});
+                    });
+                }).then(function() {
+                    if ($trafficfeemp.raws.length == 0) {
+                        $trafficfeemp.raws.push(Object.assign({}, $trafficfeemp.base));
+                    }
+                });
+            },
+            addraw: function() {
+                this.raws.push(Object.assign({}, this.base));
+            },
+            delraw: function(raw) {
+                if (window.confirm('確定是否刪除「'+raw.location+'」？（無法恢復喔！）')) {
+                    this.raws.splice(this.raws.indexOf(raw), 1);
+                }
+            }
+        },
+        delimiters: ['[[', ']]']
+    });
+})();
+</script>
+{% endblock %}

@@ -14,6 +14,7 @@ from flask import url_for
 from models.oauth_db import OAuthDB
 from models.users_db import UsersDB
 from module.form import Form
+from module.form import FormTrafficFeeMapping
 from module.project import Project
 from module.team import Team
 from module.users import User
@@ -260,3 +261,29 @@ def team_page(pid):
         editable=editable,
         total=total,
     )
+
+@VIEW_PROJECT.route('/<pid>/form_traffic_mapping', methods=('GET', 'POST'))
+def project_form_traffic_mapping(pid):
+    project = Project.get(pid)
+    if g.user['account']['_id'] not in project['owners']:
+        return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
+
+    if request.method == 'GET':
+        return render_template('./project_form_traffic_mapping.html', project=project)
+
+    elif request.method == 'POST':
+        data = request.get_json()
+        if 'casename' in data and data['casename'] == 'init':
+            return jsonify({
+                'base': {'loaction': '', 'fee': 0},
+                'data': (FormTrafficFeeMapping.get(pid=pid) or {}).get('data', []),
+            })
+
+        if 'casename' in data and data['casename'] == 'save':
+            feemapping = {}
+            for raw in data['data']:
+                if raw['location'].strip():
+                    feemapping[raw['location'].strip()] = raw['fee']
+
+            result = FormTrafficFeeMapping.save(pid=pid, data=feemapping)
+            return jsonify({'data': result['data']})
