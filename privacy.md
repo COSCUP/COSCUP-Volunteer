@@ -25,5 +25,11 @@
 ## 權利行使
 可寄信到 volunteer@coscup.org 或 secretary@coscup.org。針對個人資料行使個資法第３條規定。
 
+或行政組郵政信箱：
+
+ - 11099 台北信義郵局第 203 號信箱
+ - P.O.BOX 203 Xinyi, Taipei City 11099, Taiwan(R.O.C)
+
 ## 公告時間
-2020年02月22日
+- 2020年03月20日 新增郵政信箱
+- 2020年02月22日
