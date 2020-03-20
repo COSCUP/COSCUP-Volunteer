@@ -201,6 +201,8 @@ def campaign_schedule(pid, tid, cid):
             if campaign_data['mail']['layout'] == '2':
                 if 'mailling' in team and team['mailling']:
                     source = {'name': team['name'], 'mail': team['mailling']}
+                    if not (source['name'].startswith('COSCUP') or source['name'].startswith('coscup')):
+                        source['name'] = 'COSCUP %s' % source['name']
                 else:
                     source = {'name': 'COSCUP Attendee', 'mail': 'attendee@coscup.org'}
 
@@ -229,6 +231,8 @@ def campaign_schedule(pid, tid, cid):
             if campaign_data['mail']['layout'] == '2':
                 if 'mailling' in team and team['mailling']:
                     source = {'name': team['name'], 'mail': team['mailling']}
+                    if not (source['name'].startswith('COSCUP') or source['name'].startswith('coscup')):
+                        source['name'] = 'COSCUP %s' % source['name']
                 else:
                     source = {'name': 'COSCUP Attendee', 'mail': 'attendee@coscup.org'}
 
