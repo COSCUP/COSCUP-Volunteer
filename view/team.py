@@ -355,7 +355,7 @@ def team_form_traffic_fee(pid, tid):
                 data=data, is_ok_submit=is_ok_submit)
 
     elif request.method == 'POST':
-        if is_ok_submit and request.form['fromwhere'] in [k for k in FormTrafficFeeMapping.get(pid=pid)['data']]:
+        if is_ok_submit and request.form['fromwhere'] in FormTrafficFeeMapping.get(pid=pid)['data']:
             data = {
                 'fee': int(request.form['fee']),
                 'howto': request.form['howto'].strip(),
