@@ -180,6 +180,9 @@ def project_form_api(pid):
                 csv_writer.writeheader()
 
                 for raw in Form.all_appreciation(pid):
+                    if not raw['data']['available']:
+                        continue
+
                     user_info = UsersDB().find_one({'_id': raw['uid']})
                     oauth = OAuthDB().find_one({'owner': raw['uid']}, {'data.picture': 1})
 
