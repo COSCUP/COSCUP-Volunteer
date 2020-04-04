@@ -115,6 +115,13 @@ def need_login():
             app.logger.info('r: %s' % session['r'])
             return redirect(url_for('oauth2callback', _scheme='https', _external=True))
 
+@app.after_request
+def no_store(response):
+    ''' return no-store '''
+    if 'sid' in session and session['sid']:
+        response.headers['Cache-Control'] = 'no-store'
+
+    return response
 
 @app.route('/')
 def index():
