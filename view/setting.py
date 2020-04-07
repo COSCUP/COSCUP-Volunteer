@@ -92,6 +92,7 @@ def profile_real():
         }
 
         User(uid=g.user['account']['_id']).update_profile_real(data)
+        MC.get_client().delete('sid:%s' % session['sid'])
         return redirect(url_for('setting.profile_real', _scheme='https', _external=True))
 
 
