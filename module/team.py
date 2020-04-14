@@ -122,3 +122,18 @@ class Team(object):
 
         if _data:
             return teamdb.update_setting(_data)
+
+    @staticmethod
+    def get_users(pid, tids):
+        ''' Get all users by team
+
+        :param str pid: project id
+        :param list tid: team id
+
+        '''
+        users = {}
+        for tid in tids:
+            team = TeamDB(pid=pid, tid=tid).get()
+            users[tid] = team['chiefs'] + team['members']
+
+        return users

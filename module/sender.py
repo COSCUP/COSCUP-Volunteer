@@ -7,6 +7,8 @@ from models.senderdb import SenderLogsDB
 from models.senderdb import SenderReceiverDB
 from models.senderdb import SenderSESLogsDB
 from module.awsses import AWSSES
+from module.team import Team
+from module.users import User
 
 
 class SenderCampaign(object):
@@ -190,7 +192,6 @@ class SenderSESLogs(object):
         SenderSESLogsDB().save(cid=cid, mail=mail, name=name, ses_result=result)
 
 
-
 class SenderReceiver(object):
     ''' SenderReceiver object '''
 
@@ -267,3 +268,40 @@ class SenderReceiver(object):
             raws.append(raw)
 
         return fields, raws
+
+    @staticmethod
+    def get_from_user(pid, tids):
+        ''' Get users from userdb by project, team
+
+        :param str pid: pid
+        :param str tids: team id or ids
+
+        :return: fields, raws
+
+        '''
+        if isinstance(tids, str):
+            tids = (tids, )
+
+        team_users = Team.get_users(pid=pid, tids=tids)
+        uids = []
+        for user_ids in team_users.values():
+            uids.extend(user_ids)
+
+        user_infos = User.get_info(uids=uids)
+        datas = []
+        for uid in user_infos:
+            # append, plus more data here in the future
+            datas.append({
+                'name': user_infos[uid]['profile']['badge_name'],
+                'mail': user_infos[uid]['oauth']['email'],
+            })
+
+        raws = []
+        for data in datas:
+            raw = []
+            for field in ('name', 'mail'):
+                raw.append(data[field])
+
+            raws.append(raw)
+
+        return (('name', 'mail'), raws)
