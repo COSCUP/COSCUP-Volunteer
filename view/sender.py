@@ -189,8 +189,14 @@ def campaign_schedule(pid, tid, cid):
             return jsonify({'logs': logs})
 
         if 'casename' in data and data['casename'] == 'send':
-            fields, raws = SenderReceiver.get(pid=team['pid'], cid=cid)
             user_datas = []
+
+            fields, raws = SenderReceiver.get_from_user(
+                    pid=team['pid'], tids=campaign_data['receiver']['teams'])
+            for raw in raws:
+                user_datas.append(dict(zip(fields, raw)))
+
+            fields, raws = SenderReceiver.get(pid=team['pid'], cid=cid)
             for raw in raws:
                 user_datas.append(dict(zip(fields, raw)))
 
@@ -214,18 +220,27 @@ def campaign_schedule(pid, tid, cid):
 
         if 'casename' in data and data['casename'] == 'sendtest':
             # layout, campaign_data, team, uids
+            user_datas = []
+
+            fields, raws = SenderReceiver.get_from_user(
+                    pid=team['pid'], tids=campaign_data['receiver']['teams'])
+            if raws:
+                user_datas.append(dict(zip(fields, random.choice(raws))))
+
             fields, raws = SenderReceiver.get(pid=team['pid'], cid=cid)
-            user_data = dict(zip(fields, random.choice(raws)))
+            if raws:
+                user_datas.append(dict(zip(fields, random.choice(raws))))
 
             uid = g.user['account']['_id']
             users = User.get_info(uids=[uid, ])
 
-            user_data.update({
-                'mail': users[uid]['oauth']['email'],
-            })
+            for user_data in user_datas:
+                user_data.update({
+                    'mail': users[uid]['oauth']['email'],
+                })
 
             SenderLogs.save(cid=cid,
-                    layout=campaign_data['mail']['layout'], desc=u'Test Send', receivers=(user_data, ))
+                    layout=campaign_data['mail']['layout'], desc=u'Test Send', receivers=user_datas)
 
             source = None
             if campaign_data['mail']['layout'] == '2':
@@ -238,6 +253,6 @@ def campaign_schedule(pid, tid, cid):
 
             sender_mailer_start.apply_async(kwargs={
                     'campaign_data': campaign_data, 'team_name': team['name'], 'source': source,
-                    'user_datas': (user_data, ), 'layout': campaign_data['mail']['layout']})
+                    'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
 
             return jsonify(data)
