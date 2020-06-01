@@ -62,3 +62,15 @@ class WaitList(object):
             query['pid'] = pid
 
         return WaitListDB().find(query)
+
+    @staticmethod
+    def find_history_in_team(uid, pid, tid):
+        ''' Find some one history in team
+
+        :param str uid: user id
+        :param str pid: project id
+        :param str tid: team id
+
+        '''
+        for raw in WaitListDB().find({'pid': pid, 'tid': tid, 'uid': uid}):
+            yield raw

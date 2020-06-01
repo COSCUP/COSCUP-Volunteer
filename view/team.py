@@ -188,6 +188,13 @@ def team_edit_user(pid, tid):
 
         if data['case'] == 'deluser':
             Team.update_members(pid=pid, tid=tid, del_uids=[data['uid'], ])
+        elif data['case'] == 'history':
+            history = []
+            for raw in WaitList.find_history_in_team(uid=data['uid'], pid=pid, tid=tid):
+                raw['_id'] = str(raw['_id'])
+                history.append(raw)
+
+            return jsonify({'history': history})
 
         return jsonify(data)
 

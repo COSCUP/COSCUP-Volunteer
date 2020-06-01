@@ -17,7 +17,7 @@
         {% for u in waitting_list %}
         <article class="media box">
             <div class="media-left">
-                <figure class="image is-48x48">
+                <figure class="image is-96x96">
                     <img class="is-rounded" src="{{u._info.oauth.picture}}">
                 </figure>
             </div>
@@ -102,6 +102,11 @@
                         <td>{{u.oauth.email}}</td>
                         <td>
                             <span class="icon">
+                                <a v-on:click="history('{{u._id}}', '{{u.profile.badge_name}}', '{{u.oauth.picture}}')">
+                                    <i class="fas fa-history"></i>
+                                </a>
+                            </span>
+                            <span class="icon">
                             {% if u.chat %}
                                 <a href="https://chat.coscup.org/coscup/messages/{{u.chat['mid']}}" target="_blank"><i class="far fa-comments"></i></a>
                             {% else %}
@@ -138,10 +143,43 @@
             {% endif %}
         </div>
         </div>
+        <!-- modal -->
+        <div class="modal" v-bind:class="{'is-active': Object.keys(historymodal).length}">
+            <div class="modal-background" v-on:click="goback"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title" style="margin-bottom: 0;">History - [[ historymodal.name ]]</p>
+                    <button class="delete" aria-label="close" v-on:click="goback"></button>
+                </header>
+                <section class="modal-card-body">
+                    <article class="media">
+                        <figure class="media-left">
+                            <p class="image is-96x96"><img class="is-rounded" :src="historymodal.picture"></p>
+                        </figure>
+                        <div class="media-content">
+                            <div class="content">
+                                <p><strong>[[ historymodal.name]]</strong></p>
+                                <article class="message is-info" v-for="h in historymodal">
+                                    <div class="message-body">
+                                        [[ h.note ]]
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button" v-on:click="goback">
+                        <span class="icon"><i class="fas fa-check"></i></span>
+                        <span>確定</span>
+                    </button>
+                </footer>
+            </div>
+        </div>
     </div>
 </div>
 <div id="teamusermodal" class="modal" v-bind:class="{'is-active': isActive}">
-    <div class="modal-background"></div>
+    <div class="modal-background" v-on:click="goback"></div>
     <div class="modal-card">
         <header class="modal-card-head">
             <p class="modal-card-title">[[modalTitle]]</p>
@@ -150,7 +188,7 @@
         <section class="modal-card-body">
             <article class="media">
                 <div class="media-left">
-                    <figure class="image is-48x48">
+                    <figure class="image is-96x96">
                         <img class="is-rounded" v-bind:src="user.picture">
                     </figure>
                 </div>
@@ -227,6 +265,9 @@
         });
         let $teamuser = new Vue({
             el: '#teamuser',
+            data: {
+                historymodal: {}
+            },
             mounted: function() {
                 this.showMemberTabs();
             },
@@ -261,6 +302,16 @@
                     }
                     document.getElementById('membersTabs').style.display = 'none';
                     document.getElementById('waittingTabs').style.display = '';
+                },
+                history: function(uid, name, picture) {
+                    axios.post('./edit_user', {case: 'history', uid: uid}).then(function(resp) {
+                        $teamuser.historymodal = resp.data.history;
+                        $teamuser.historymodal.name = name;
+                        $teamuser.historymodal.picture = picture;
+                    });
+                },
+                goback: function() {
+                    this.historymodal = {};
                 }
             },
             delimiters: ['[[', ']]']
