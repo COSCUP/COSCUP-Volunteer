@@ -34,6 +34,7 @@ from module.oauth import OAuth
 from module.team import Team
 from module.users import User
 from module.usession import USession
+from view.api import VIEW_API
 from view.guide import VIEW_GUIDE
 from view.links import VIEW_LINKS
 from view.project import VIEW_PROJECT
@@ -46,6 +47,7 @@ from view.user import VIEW_USER
 app = Flask(__name__)
 app.config['SESSION_COOKIE_SECURE'] = True
 app.secret_key = setting.SECRET_KEY
+app.register_blueprint(VIEW_API)
 app.register_blueprint(VIEW_GUIDE)
 app.register_blueprint(VIEW_LINKS)
 app.register_blueprint(VIEW_PROJECT)
@@ -63,6 +65,7 @@ NO_NEED_LOGIN_PATH = (
     '/privacy',
     '/bug-report',
     '/robots.txt',
+    '/api/members',
 )
 
 @app.before_request
