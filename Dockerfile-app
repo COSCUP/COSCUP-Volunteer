@@ -1,4 +1,4 @@
-FROM volunteer-base:20.02.13
+FROM volunteer-base:20.06.16
 
 ADD ./privacy.md ./privacy.md
 ADD ./celery_task ./celery_task
