@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block head_title %} - Add task in {{project.name}}{% endblock %}
+{% block body %}
+<section class="hero is-primary">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                Add Task: {{project.name}}
+            </h1>
+            <h3 class="subtitle">
+                新增工作列表
+            </h3>
+        </div>
+    </div>
+    <div class="hero-foot">
+        <nav class="tabs is-boxed">
+            <div class="container">
+                <ul>
+                    <li class="is-active"><a href="/tasks/{{project._id}}">返回 / Back</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</section>
+<datalist id="catelist">
+    {%for cate in catelist %}
+    <option value="{{cate}}">
+    {% endfor %}
+</datalist>
+<section class="section">
+    <div class="container">
+        <div id="tasks" class="columns">
+            <div class="column is-half is-offset-one-quarter">
+                <div class="content">
+                    <form class="form" @submit="submit">
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Title</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" type="text" v-model="data.title" required>
+                                    </div>
+                                    <p class="help is-info">需求單的標題，可以直覺知道缺什麼性質的協助</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Category</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" type="text" v-model="data.cate" list="catelist" required>
+                                    </div>
+                                    <p class="help is-info">分類名稱可以隨意自訂，相同的會在列表總表以群組的方式呈現。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        {%for cate in catelist %}
+                                        <a class="tag" v-on:click="completecate($event)">{{cate}}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Date</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="control">
+                                        <input class="input" type="date" v-model="data.date" required>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <p class="control">
+                                        <input class="input" type="time" v-model="data.starttime" required>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <p class="control">
+                                        <input class="input" type="time" v-model="data.endtime">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal"></div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="help is-info">日期為某一日，時間可以只有起始或是起始與結束。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                說明
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <textarea class="textarea" v-model="data.desc"
+                                            placeholder="說明工作內容與如何聯絡" required></textarea>
+                                    </div>
+                                    <p class="help is-info">說明工作需求，如何進行工作，需要怎樣的條件，最後要去找誰負責與驗收。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                需要人數
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="input" type="number" min="1" v-model="data.limit" required>
+                                    </div>
+                                    <p class="help is-info">至少１人</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <button class="button is-outlined is-dark">
+                                            <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                                            <span>建立需求單</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="content">
+                    <pre>[[ data ]]</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $tasks = new Vue({
+            el: '#tasks',
+            data: {
+                data: {limit: '1', cate: ''}
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                load: function() {
+                    console.info('hi');
+                },
+                submit: function($e) {
+                    $e.preventDefault();
+
+                    console.info(this.data);
+
+                    axios.post('./add', {casename: 'add', data: this.data}).then(function(resp) {
+                        console.info(resp);
+                        window.location.href = './{{project._id}}';
+                    });
+                },
+                completecate: function($e) {
+                    this.data.cate = $e.target.text;
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}

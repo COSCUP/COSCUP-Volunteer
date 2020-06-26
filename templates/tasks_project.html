@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% block head_title %} - Task {{project.name}}{% endblock %}
+{% block body %}
+<section class="hero is-success">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                Tasks: {{project.name}}
+            </h1>
+            <h3 class="subtitle">
+                工作列表
+            </h3>
+        </div>
+    </div>
+    <div class="hero-foot">
+        <nav class="tabs is-boxed">
+            <div class="container">
+                <ul>
+                    <li class="is-active"><a href="/tasks/">返回 / Back</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div id="tasks" class="columns">
+            <div class="column is-10 is-offset-1" v-cloak>
+                <div class="content">
+                    <div class="field is-grouped is-grouped-multiline">
+                        <div class="control">
+                            <a class="button">
+                                <span class="icon"><i class="far fa-star"></i></span>
+                                <span>關注新增活動</span>
+                            </a>
+                        </div>
+                        <div class="control">
+                            <a class="button">
+                                <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+                                <span>下載行事曆</span>
+                            </a>
+                        </div>
+                        <div class="control">
+                            <a class="button">
+                                <span class="icon"><i class="fas fa-print"></i></span>
+                                <span>列印</span>
+                            </a>
+                        </div>
+                        <div class="control">
+                            <a class="button is-info is-outlined" href="/tasks/{{project._id}}/add">
+                                <span class="icon"><i class="fas fa-plus"></i></span>
+                                <span>建立需求單</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Tasks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="mdate in mdatas.entries()" v-if="mdatas.size > 0">
+                            <td width="20%">
+                                <p class="is-family-monospace has-text-weight-bold">[[ mdate[0] ]]</p>
+                                <progress class="progress is-small is-info" style="margin-bottom:.2rem;"
+                                    :value="sumpeoples(mdate[1])" :max="sumlimits(mdate[1])">
+                                    volunteers
+                                </progress>
+                                <div>
+                                    <span class="icon has-text-success-dark"><i class="fas fa-user-friends"></i></span>
+                                    <span>[[ sumpeoples(mdate[1]) ]] / [[ sumlimits(mdate[1]) ]]</span>
+                                </div>
+                            </td>
+                            <td>
+                                <table v-for="mcate in mdate[1]"
+                                       class="table is-fullwidth is-hoverable is-narrow"
+                                       style="border: 1px solid #eef6fc"
+                                    >
+                                    <thead>
+                                        <tr>
+                                            <th colspan=4 class="has-background-info-light">
+                                                <span v-if="mcate[0]" class="tag is-info">[[ mcate[0] ]]</span>
+                                                <span v-if="!mcate[0]" class='tag'>未分類</span>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th width="35%">Title</th>
+                                            <th>Start</th>
+                                            <th>End</th>
+                                            <th>Volunteers</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="row in mcate[1]">
+                                            <td style="vertical-align: middle;">
+                                                <p>
+                                                    <a :href="'./'+row.pid+'/r/'+row._id">
+                                                        <span class="icon"><i class="fas fa-thumbtack"></i></span>
+                                                        <span>[[ row.title ]]</span>
+                                                    </a>
+                                                </p>
+                                            </td>
+                                            <td style="vertical-align: middle;">
+                                                [[ new Date(row.starttime).toLocaleTimeString('zh-Hant', {hour12: false}) ]]</td>
+                                            <td style="vertical-align: middle;">
+                                                [[ new Date(row.endtime).toLocaleTimeString('zh-Hant', {hour12: false}) ]]</td>
+                                            <td style="vertical-align: middle;">
+                                                <progress class="progress is-small" style="margin-bottom:.2rem;"
+                                                    :class="{'is-danger': row.people.length/row.limit < 0.8,
+                                                             'is-success': row.people.length/row.limit >= 0.8}"
+                                                    :value="row.people.length" :max="row.limit">
+                                                    volunteers
+                                                </progress>
+                                                <div class="buttons">
+                                                    <a class="button is-small">
+                                                        <span class="icon"
+                                                            :class="{'has-text-danger': row.people.length/row.limit < 0.8,
+                                                                     'has-text-success': row.people.length/row.limit >= 0.8}"
+                                                        >
+                                                            <i class="fas fa-user-friends"></i>
+                                                        </span>
+                                                        <span>[[ row.people.length ]] / [[ row.limit ]]</span>
+                                                    </a>
+                                                    <span><a class="button is-small" href="/">登入</a></span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="content">
+                    <pre>[[ datas ]]</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $tasks = new Vue({
+            el: '#tasks',
+            data: {
+                datas: [],
+                mdatas: new Map()
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                dateformat: function(datetime) {
+                    let date = new Date(datetime);
+                    let datef = date.toLocaleDateString(
+                        'ja', {year: 'numeric', month: '2-digit', day: '2-digit'});
+                    let weekf = date.toLocaleDateString(
+                        'en-US', {weekday: 'short'});
+
+                    return datef +' '+weekf+'.';
+                },
+                sumpeoples: function(datas) {
+                    let peoples = 0;
+                    datas.forEach(function(data) {
+                        data.forEach(function(tdata) {
+                            peoples = peoples + tdata.people.length;
+                        });
+                    });
+                    return peoples;
+                },
+                sumlimits: function(datas) {
+                    let limits = 0;
+                    datas.forEach(function(data) {
+                        data.forEach(function(tdata) {
+                            limits = limits + tdata.limit;
+                        });
+                    });
+                    return limits;
+                },
+                load: function() {
+                    axios.post('./{{project._id}}', {casename: 'get'}).then(function(resp) {
+                        $tasks.datas = resp.data.datas;
+                        resp.data.datas.forEach(function(data) {
+                            $tasks.mdatas.set($tasks.dateformat(data.starttime), new Map());
+                        });
+                        resp.data.datas.forEach(function(data) {
+                            let catemap = $tasks.mdatas.get($tasks.dateformat(data.starttime));
+                            catemap.set(data.cate, new Array());
+                        });
+                        resp.data.datas.forEach(function(data) {
+                            let date = $tasks.dateformat(data.starttime);
+                            let catemap = $tasks.mdatas.get(date);
+                            let rawlist = catemap.get(data.cate);
+
+                            rawlist.push(data);
+                            catemap.set(data.cate, rawlist);
+                            $tasks.mdatas.set(date, catemap);
+                        });
+                        console.info($tasks.mdatas);
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}
