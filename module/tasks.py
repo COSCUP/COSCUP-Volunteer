@@ -49,3 +49,21 @@ class Tasks(object):
     def get_cate(pid):
         ''' Get cate '''
         return TasksDB().find({'pid': pid}).distinct('cate')
+
+    @staticmethod
+    def join(pid, task_id, uid):
+        ''' Join to '''
+        return TasksDB().find_one_and_update(
+            {'_id': task_id, 'pid': pid},
+            {'$addToSet': {'people': uid}},
+            return_document=ReturnDocument.AFTER,
+        )
+
+    @staticmethod
+    def cancel(pid, task_id, uid):
+        ''' cancel join '''
+        return TasksDB().find_one_and_update(
+            {'_id': task_id, 'pid': pid},
+            {'$pull': {'people': uid}},
+            return_document=ReturnDocument.AFTER,
+        )

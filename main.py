@@ -154,6 +154,9 @@ def index():
 
 @app.route('/oauth2callback')
 def oauth2callback():
+    if 'r' in request.args and request.args.startswith('/'):
+        session['r'] = request.args['r']
+
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         './client_secret.json',
         scopes=(

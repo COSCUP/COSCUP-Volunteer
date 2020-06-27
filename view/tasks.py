@@ -27,9 +27,38 @@ def project(pid):
     elif request.method == 'POST':
         post_data = request.get_json()
 
+        def page_args(data, uid):
+            data['_uid'] = uid
+            data['_joined'] = False
+            data['_login'] = False
+
+            if uid in data['people']:
+                data['_joined'] = True
+
+            if data['_uid']:
+                data['_login'] = True
+
         if post_data['casename'] == 'get':
-            datas = list(Tasks.get_by_pid(pid=pid))
+            datas = []
+            uid = g.user['account']['_id']
+
+            for data in Tasks.get_by_pid(pid=pid):
+                page_args(data=data, uid=uid)
+                datas.append(data)
+
             return jsonify({'datas': datas})
+
+        elif post_data['casename'] == 'join':
+            data = Tasks.join(pid=pid, task_id=post_data['task_id'], uid=g.user['account']['_id'])
+            page_args(data=data, uid=g.user['account']['_id'])
+
+            return jsonify({'data': data})
+
+        elif post_data['casename'] == 'cancel':
+            data = Tasks.cancel(pid=pid, task_id=post_data['task_id'], uid=g.user['account']['_id'])
+            page_args(data=data, uid=g.user['account']['_id'])
+
+            return jsonify({'data': data})
 
 @VIEW_TASKS.route('/<pid>/add', methods=('GET', 'POST'))
 @VIEW_TASKS.route('/<pid>/edit/<task_id>', methods=('GET', 'POST'))
