@@ -77,7 +77,7 @@
                             <td>
                                 <table v-for="mcate in mdate[1]"
                                        class="table is-fullwidth is-hoverable is-narrow"
-                                       style="border: 1px solid #eef6fc"
+                                       style="border: 1px solid #eef6fc;border-collapse:separate;border-radius:5px;"
                                     >
                                     <thead>
                                         <tr>
@@ -97,8 +97,14 @@
                                         <tr v-for="row in mcate[1]">
                                             <td style="vertical-align: middle;">
                                                 <p>
-                                                    <a :href="'./'+row.pid+'/r/'+row._id">
-                                                        <span class="icon"><i class="fas fa-thumbtack"></i></span>
+                                                    <a :href="'./'+row.pid+'/r/'+row._id"
+                                                        v-on:click.stop.prevent="detail(row, $event)">
+                                                        <span class="icon" v-if="!row._joined">
+                                                            <i class="fas fa-thumbtack"></i>
+                                                        </span>
+                                                        <span class="icon has-text-success" v-if="row._joined">
+                                                            <i class="far fa-check-square"></i>
+                                                        </span>
                                                         <span>[[ row.title ]]</span>
                                                     </a>
                                                 </p>
@@ -124,7 +130,10 @@
                                                         </span>
                                                         <span>[[ row.people.length ]] / [[ row.limit ]]</span>
                                                     </a>
-                                                    <span><a class="button is-small" href="/">登入</a></span>
+                                                    <span v-if="!row._login">
+                                                        <a class="button is-small"
+                                                           href="/oauth2callback?r=/tasks/{{project.pid}}">登入</a>
+                                                    </span>
                                                 </div>
                                             </td>
                                         </tr>
@@ -136,6 +145,70 @@
                 </table>
                 <div class="content">
                     <pre>[[ datas ]]</pre>
+                </div>
+            </div>
+            <!-- modal -->
+            <div class="modal" :class="{'is-active': Object.keys(modal).length > 0}">
+                <div class="modal-background" @click="modalclose"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">[[ modal.title ]]<span class="tag">[[ modal._id ]]</span></p>
+                        <button class="delete" aria-label="close" @click="modalclose"></button>
+                    </header>
+                    <section class="modal-card-body">
+                        <table class="table is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Title</td>
+                                    <td>[[ modal.title ]]</td>
+                                </tr>
+                                <tr>
+                                    <td>Start</td>
+                                    <td>[[ new Date(modal.starttime).toLocaleString() ]]</td>
+                                </tr>
+                                <tr>
+                                    <td>End</td>
+                                    <td>[[ new Date(modal.endtime).toLocaleString() ]]</td>
+                                </tr>
+                                <tr>
+                                    <td>Desc</td>
+                                    <td><pre>[[ modal.desc ]]</pre></td>
+                                </tr>
+                                <tr v-if="Object.keys(modal).length">
+                                    <td>Volunteers</td>
+                                    <td>
+                                        <progress class="progress is-small" style="margin-bottom:.2rem;"
+                                            :class="{'is-danger': modal.people.length/modal.limit < 0.8,
+                                                     'is-success': modal.people.length/modal.limit >= 0.8}"
+                                            :value="modal.people.length" :max="modal.limit">
+                                            volunteers
+                                        </progress>
+                                        <span>[[ modal.people.length ]] / [[ modal.limit ]]</span>
+                                    </td>
+                            </tbody>
+                        </table>
+                        <pre>[[ modal ]]</pre>
+                    </section>
+                    <footer class="modal-card-foot">
+                        <button v-if="!modal._joined" @click="join(modal, $event)" class="button is-success">
+                            <span class="icon"><i class="fas fa-user-plus"></i></span>
+                            <span>我要幫忙</span>
+                        </button>
+                        <button v-if="modal._joined" @click="cancel(modal, $event)" class="button is-danger">
+                            <span class="icon"><i class="fas fa-user-times"></i></span>
+                            <span>取消幫忙</span>
+                        </button>
+                        <button class="button" @click="modalclose">
+                            <span class="icon"><i class="far fa-times-circle"></i></span>
+                            <span>Close</span>
+                        </button>
+                    </footer>
                 </div>
             </div>
         </div>
@@ -150,7 +223,8 @@
             el: '#tasks',
             data: {
                 datas: [],
-                mdatas: new Map()
+                mdatas: new Map(),
+                modal: {}
             },
             mounted: function() {
                 this.load();
@@ -183,6 +257,44 @@
                     });
                     return limits;
                 },
+                modalclose: function() {
+                    this.modal = {};
+                },
+                detail: function(data, $e) {
+                    this.modal = data;
+                },
+                join: function(data, $e) {
+                    let $footer_btn = $e.target.closest('footer').querySelectorAll('button');
+                    $footer_btn.forEach(function(btn) {
+                        btn.classList.add('is-loading');
+                    });
+
+                    axios.post('./{{project._id}}', {casename: 'join', task_id: data._id}).then(function(resp) {
+                        console.info(resp.data);
+                        $tasks.modal = resp.data.data;
+                        $tasks.load();
+                    });
+
+                    $footer_btn.forEach(function(btn) {
+                        btn.classList.remove('is-loading');
+                    });
+                },
+                cancel: function(data, $e) {
+                    let $footer_btn = $e.target.closest('footer').querySelectorAll('button');
+                    $footer_btn.forEach(function(btn) {
+                        btn.classList.add('is-loading');
+                    });
+
+                    axios.post('./{{project._id}}', {casename: 'cancel', task_id: data._id}).then(function(resp) {
+                        console.info(resp.data);
+                        $tasks.modal = resp.data.data;
+                        $tasks.load();
+                    });
+
+                    $footer_btn.forEach(function(btn) {
+                        btn.classList.remove('is-loading');
+                    });
+                },
                 load: function() {
                     axios.post('./{{project._id}}', {casename: 'get'}).then(function(resp) {
                         $tasks.datas = resp.data.datas;
@@ -202,7 +314,6 @@
                             catemap.set(data.cate, rawlist);
                             $tasks.mdatas.set(date, catemap);
                         });
-                        console.info($tasks.mdatas);
                     });
                 }
             },
