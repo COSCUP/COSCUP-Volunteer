@@ -111,6 +111,9 @@ def need_login():
                 return redirect(url_for('oauth2callback', _scheme='https', _external=True))
 
     else:
+        if request.path.startswith('/tasks'):
+            return
+
         if request.path not in NO_NEED_LOGIN_PATH:
             # ----- Let user profile public ----- #
             #if re.match(r'(\/user\/[a-z0-9]{8}).*', request.path):
@@ -154,7 +157,7 @@ def index():
 
 @app.route('/oauth2callback')
 def oauth2callback():
-    if 'r' in request.args and request.args.startswith('/'):
+    if 'r' in request.args and request.args['r'].startswith('/'):
         session['r'] = request.args['r']
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(

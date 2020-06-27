@@ -78,18 +78,23 @@ class Team(object):
         return TeamDB(pid=pid, tid=tid).get()
 
     @staticmethod
-    def participate_in(uid):
+    def participate_in(uid, pid=None):
         ''' participate in
 
         :param str uid: uid
 
         '''
-        return TeamDB(None, None).find({
+        query = {
                 '$or': [
                     {'members': uid, '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]},
                     {'chiefs': uid, '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]},
                 ],
-            })
+            }
+
+        if pid:
+            query['pid'] = {'$in': pid}
+
+        return TeamDB(None, None).find(query)
 
     @staticmethod
     def update_setting(pid, tid, data):
