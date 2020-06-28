@@ -2,8 +2,10 @@ import arrow
 from flask import Blueprint
 from flask import g
 from flask import jsonify
+from flask import redirect
 from flask import render_template
 from flask import request
+from flask import url_for
 
 from module.mattermost_bot import MattermostTools
 from module.project import Project
@@ -16,7 +18,7 @@ VIEW_TASKS = Blueprint('tasks', __name__, url_prefix='/tasks')
 
 @VIEW_TASKS.route('/')
 def index():
-    return u'hi'
+    return redirect(url_for('tasks.project', pid='2020', _scheme='https', _external=True))
 
 @VIEW_TASKS.route('/<pid>', methods=('GET', 'POST'))
 def project(pid):
