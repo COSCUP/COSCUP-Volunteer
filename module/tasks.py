@@ -7,8 +7,8 @@ from module.users import User
 class Tasks(object):
     ''' Tasks class '''
 
-    @staticmethod
-    def add(pid, title, cate, desc, limit, starttime, created_by, endtime=None, task_id=None):
+    @classmethod
+    def add(cls, pid, title, cate, desc, limit, starttime, created_by, endtime=None, task_id=None):
         ''' add new task
 
         :param str pid: pid
@@ -27,7 +27,13 @@ class Tasks(object):
             starttime=starttime, created_by=created_by, endtime=endtime)
 
         if task_id is not None:
-            data['task_id'] = task_id
+            if not cls.get_with_pid(pid=pid, _id=task_id):
+                raise Exception('No task_id: %s', task_id)
+
+            data['_id'] = task_id
+            data.pop('people', None)
+            data.pop('created_by', None)
+            data.pop('created_at', None)
 
         return TasksDB().find_one_and_update(
             {'_id': data['_id'], 'pid': data['pid']},
@@ -46,6 +52,7 @@ class Tasks(object):
         for raw in TasksDB().find({'pid': pid}, sort=(('starttime', 1), )):
             yield raw
 
+    @staticmethod
     def get_with_pid(pid, _id):
         ''' Get with pid '''
         return TasksDB().find_one({'pid': pid, '_id': _id})
@@ -53,7 +60,8 @@ class Tasks(object):
     @staticmethod
     def get_cate(pid):
         ''' Get cate '''
-        return TasksDB().find({'pid': pid}).distinct('cate')
+        cates = TasksDB().find({'pid': pid}).distinct('cate')
+        return [cate for cate in cates if cate]
 
     @staticmethod
     def join(pid, task_id, uid):
