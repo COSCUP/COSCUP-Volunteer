@@ -40,6 +40,7 @@ def project(pid):
             data['_uid'] = uid
             data['_joined'] = False
             data['_login'] = False
+            data['_is_in_project'] = is_in_project
 
             if uid:
                 data['_login'] = True
@@ -117,13 +118,18 @@ def add(pid, task_id=None):
     if not uid:
         return jsonify({'info': 'Need login'}), 401
 
+    is_in_project = bool(Team.participate_in(uid, pid))
+    if not is_in_project:
+        return jsonify({'info': 'Not in project'}), 401
+
     project = Project.get(pid=pid)
     if not project:
         return u'404', 404
 
     if request.method == 'GET':
         catelist = Tasks.get_cate(pid=pid)
-        return render_template('./tasks_add.html', project=project, catelist=catelist)
+        return render_template('./tasks_add.html', project=project,
+                catelist=catelist, task_id=task_id)
 
     elif request.method == 'POST':
         post_data = request.get_json()
@@ -132,11 +138,31 @@ def add(pid, task_id=None):
             data = post_data['data']
             starttime = arrow.get('%(date)s %(starttime)s' % data, tzinfo='Asia/Taipei').datetime
             endtime = None
+            task_id = None
+
             if 'endtime' in data and data['endtime']:
                 endtime = arrow.get('%(date)s %(endtime)s' % data, tzinfo='Asia/Taipei').datetime
 
+            if 'task_id' in post_data:
+                task_id = post_data['task_id']
+
             raw = Tasks.add(pid=pid, title=data['title'].strip(), cate=data['cate'].strip(),
                     desc=data['desc'], limit=max((1, int(data['limit']))), starttime=starttime,
-                    created_by=uid, endtime=endtime)
+                    created_by=uid, endtime=endtime, task_id=task_id)
+
+        elif post_data['casename'] == 'get':
+            data = Tasks.get_with_pid(pid=pid, _id=task_id)
+            if not data:
+                return jsonify({}), 404
+
+            starttime = arrow.get(data['starttime']).to('Asia/Taipei')
+            data['date'] = starttime.format('YYYY-MM-DD')
+            data['starttime'] = starttime.format('HH:mm')
+
+            if data['endtime']:
+                endtime = arrow.get(data['endtime']).to('Asia/Taipei')
+                data['endtime'] = endtime.format('HH:mm')
+
+            return jsonify({'data': data})
 
         return jsonify({'data': raw})

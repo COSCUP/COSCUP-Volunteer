@@ -121,7 +121,8 @@
                                                     volunteers
                                                 </progress>
                                                 <div class="buttons">
-                                                    <a class="button is-small">
+                                                    <a class="button is-small" :href="'./'+row.pid+'/r/'+row._id"
+                                                        v-on:click.stop.prevent="detail(row)">
                                                         <span class="icon"
                                                             :class="{'has-text-danger': row.people.length/row.limit < 0.8,
                                                                      'has-text-success': row.people.length/row.limit >= 0.8}"
@@ -130,10 +131,11 @@
                                                         </span>
                                                         <span>[[ row.people.length ]] / [[ row.limit ]]</span>
                                                     </a>
-                                                    <span v-if="!row._login">
-                                                        <a class="button is-small"
-                                                           href="/oauth2callback?r=/tasks/{{project.pid}}">登入</a>
-                                                    </span>
+                                                    <a class="button is-small" v-if="!row._login"
+                                                       href="/oauth2callback?r=/tasks/{{project.pid}}">登入</a>
+                                                    <a class="button is-small" v-if="row._is_in_project"
+                                                       :href="'/tasks/'+row.pid+'/edit/'+row._id">
+                                                        <span class="icon"><i class="far fa-edit"></i></span></a>
                                                 </div>
                                             </td>
                                         </tr>
