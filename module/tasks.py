@@ -1,6 +1,7 @@
 from pymongo.collection import ReturnDocument
 
 from models.tasksdb import TasksDB
+from module.users import User
 
 
 class Tasks(object):
@@ -45,6 +46,10 @@ class Tasks(object):
         for raw in TasksDB().find({'pid': pid}, sort=(('starttime', 1), )):
             yield raw
 
+    def get_with_pid(pid, _id):
+        ''' Get with pid '''
+        return TasksDB().find_one({'pid': pid, '_id': _id})
+
     @staticmethod
     def get_cate(pid):
         ''' Get cate '''
@@ -67,3 +72,9 @@ class Tasks(object):
             {'$pull': {'people': uid}},
             return_document=ReturnDocument.AFTER,
         )
+
+    @staticmethod
+    def get_peoples_info(pid, task_id):
+        ''' Get peoples info '''
+        uids = TasksDB().find_one({'pid': pid, '_id': task_id}, {'people': 1})['people']
+        return User.get_info(uids=uids)
