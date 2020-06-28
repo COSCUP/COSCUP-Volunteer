@@ -43,6 +43,11 @@ class Tasks(object):
         )
 
     @staticmethod
+    def delete(pid, _id):
+        ''' Del task '''
+        TasksDB().delete_one({'_id': _id, 'pid': pid})
+
+    @staticmethod
     def get_by_pid(pid):
         ''' Get by pid
 
