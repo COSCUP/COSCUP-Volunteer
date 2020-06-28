@@ -29,8 +29,8 @@
                 <div class="content">
                     <div class="field is-grouped is-grouped-multiline">
                         <div class="control">
-                            <a class="button">
-                                <span class="icon"><i class="far fa-star"></i></span>
+                            <a class="button" href="/tasks/{{project._id}}/rss">
+                                <span class="icon"><i class="fas fa-rss-square"></i></span>
                                 <span>關注新增活動</span>
                             </a>
                         </div>
@@ -82,8 +82,13 @@
                                     <thead>
                                         <tr>
                                             <th colspan=4 class="has-background-info-light">
-                                                <span v-if="mcate[0]" class="tag is-info">[[ mcate[0] ]]</span>
-                                                <span v-if="!mcate[0]" class='tag'>未分類</span>
+                                                <div class="tags has-addons">
+                                                    <span class="tag is-success is-light">
+                                                        <span class="icon"><i class="far fa-folder-open"></i></span>
+                                                    </span>
+                                                    <span v-if="mcate[0]" class="tag is-info">[[ mcate[0] ]]</span>
+                                                    <span v-if="!mcate[0]" class='tag'>未分類</span>
+                                                </div>
                                             </th>
                                         </tr>
                                         <tr>
