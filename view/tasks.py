@@ -5,9 +5,11 @@ from flask import jsonify
 from flask import render_template
 from flask import request
 
+from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.tasks import Tasks
 from module.team import Team
+from module.users import User
 
 VIEW_TASKS = Blueprint('tasks', __name__, url_prefix='/tasks')
 
@@ -71,6 +73,42 @@ def project(pid):
             page_args(data=data, uid=uid)
 
             return jsonify({'data': data})
+        elif post_data['casename'] == 'peoples':
+            task_data = Tasks.get_with_pid(pid=pid, _id=post_data['task_id'])
+            if not task_data:
+                return jsonify({}), 404
+
+            creator = {}
+            if task_data:
+                user_info = User.get_info(uids=[task_data['created_by'], ])
+                creator['name'] = user_info[task_data['created_by']]['profile']['badge_name']
+                creator['uid'] = task_data['created_by']
+
+                mid = MattermostTools.find_possible_mid(uid=task_data['created_by'])
+                if mid:
+                    creator['mattermost_uid'] = MattermostTools.find_user_name(mid=mid)
+
+            if not is_in_project:
+                return jsonify({'peoples': {}, 'creator': creator})
+
+            users_info = Tasks.get_peoples_info(pid=pid, task_id=post_data['task_id'])
+            peoples = {}
+            for uid in users_info:
+                user = users_info[uid]
+
+                peoples[uid] = {
+                    'name': user['profile']['badge_name'],
+                    'mail': user['oauth']['email'],
+                    'picture': user['oauth']['picture'],
+                    'mattermost_uid': None,
+                }
+
+                mid = MattermostTools.find_possible_mid(uid=uid)
+                if mid:
+                    peoples[uid]['mattermost_uid'] = MattermostTools.find_user_name(mid=mid)
+
+            return jsonify({'peoples': peoples, 'creator': creator})
+
 
 @VIEW_TASKS.route('/<pid>/add', methods=('GET', 'POST'))
 @VIEW_TASKS.route('/<pid>/edit/<task_id>', methods=('GET', 'POST'))

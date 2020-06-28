@@ -10,7 +10,6 @@ from flask import url_for
 from markdown import markdown
 
 from module.mattermost_bot import MattermostTools
-from module.mattermost_link import MattermostLink
 from module.oauth import OAuth
 from module.project import Project
 from module.team import Team

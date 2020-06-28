@@ -98,7 +98,7 @@
                                             <td style="vertical-align: middle;">
                                                 <p>
                                                     <a :href="'./'+row.pid+'/r/'+row._id"
-                                                        v-on:click.stop.prevent="detail(row, $event)">
+                                                        v-on:click.stop.prevent="detail(row)">
                                                         <span class="icon" v-if="!row._joined">
                                                             <i class="fas fa-thumbtack"></i>
                                                         </span>
@@ -156,43 +156,103 @@
                         <button class="delete" aria-label="close" @click="modalclose"></button>
                     </header>
                     <section class="modal-card-body">
-                        <table class="table is-fullwidth">
-                            <thead>
-                                <tr>
-                                    <th>Key</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Title</td>
-                                    <td>[[ modal.title ]]</td>
-                                </tr>
-                                <tr>
-                                    <td>Start</td>
-                                    <td>[[ new Date(modal.starttime).toLocaleString() ]]</td>
-                                </tr>
-                                <tr>
-                                    <td>End</td>
-                                    <td>[[ new Date(modal.endtime).toLocaleString() ]]</td>
-                                </tr>
-                                <tr>
-                                    <td>Desc</td>
-                                    <td><pre>[[ modal.desc ]]</pre></td>
-                                </tr>
-                                <tr v-if="Object.keys(modal).length">
-                                    <td>Volunteers</td>
-                                    <td>
-                                        <progress class="progress is-small" style="margin-bottom:.2rem;"
-                                            :class="{'is-danger': modal.people.length/modal.limit < 0.8,
-                                                     'is-success': modal.people.length/modal.limit >= 0.8}"
-                                            :value="modal.people.length" :max="modal.limit">
-                                            volunteers
-                                        </progress>
-                                        <span>[[ modal.people.length ]] / [[ modal.limit ]]</span>
-                                    </td>
-                            </tbody>
-                        </table>
+                        <div class="content">
+                            <h4>Detail</h4>
+                            <table class="table is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>Key</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Title</td>
+                                        <td>[[ modal.title ]]</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Start</td>
+                                        <td>[[ new Date(modal.starttime).toLocaleString() ]]</td>
+                                    </tr>
+                                    <tr>
+                                        <td>End</td>
+                                        <td>[[ new Date(modal.endtime).toLocaleString() ]]</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Desc</td>
+                                        <td><pre>[[ modal.desc ]]</pre></td>
+                                    </tr>
+                                    <tr v-if="modal.creator && Object.keys(modal.creator).length > 0">
+                                        <td>Post by</td>
+                                        <td>
+                                            <div class="buttons has-addons">
+                                                <a class="button" :href="'/user/'+modal.creator.uid">
+                                                    <span class="icon"><i class="far fa-id-badge"></i></span>
+                                                    <span>[[modal.creator.name]]</span>
+                                                </a>
+                                                <a class="button" v-if="modal.creator && modal.creator.mattermost_uid"
+                                                    :href="'https://chat.coscup.org/coscup/messages/@'+modal.creator.mattermost_uid">
+                                                    <span class="icon"><i class="far fa-comments"></i></span>
+                                                </a>
+                                        </td>
+                                    </tr>
+                                    <tr v-if="Object.keys(modal).length">
+                                        <td>Volunteers</td>
+                                        <td>
+                                            <progress class="progress is-small" style="margin-bottom:.2rem;"
+                                                :class="{'is-danger': modal.people.length/modal.limit < 0.8,
+                                                         'is-success': modal.people.length/modal.limit >= 0.8}"
+                                                :value="modal.people.length" :max="modal.limit">
+                                                volunteers
+                                            </progress>
+                                            <span>[[ modal.people.length ]] / [[ modal.limit ]]</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <article class="message is-info"
+                                v-if="modal.creator && Object.keys(modal.creator).length > 0">
+                                <div class="message-body">
+                                    有任何疑問可以直接詢問 <strong>[[ modal.creator.name ]]</strong>，或是前往大會服務台旁的<strong>志工服務台</strong>，我們有專人為您服務。
+                                </div>
+                            </article>
+                        </div>
+                        <div class="content" v-if="modal.peoples && Object.keys(modal.peoples).length > 0">
+                            <h4>Volunteers <small><span class="tag is-info is-light">Staff view only</span></small></h4>
+                            <table class="table is-fullwidth is-hoverable">
+                                <thead>
+                                    <tr>
+                                        <th>avatar</th>
+                                        <th>name</th>
+                                        <th>info</th>
+                                    </tr>
+                                <thead>
+                                <tbody>
+                                    <tr v-for="uid in Object.keys(modal.peoples)">
+                                        <td style="vertical-align:middle;">
+                                            <figure class="image is-48x48">
+                                                <img class="is-rounded" :src="modal.peoples[uid].picture">
+                                            </figure>
+                                        </td>
+                                        <td style="vertical-align:middle;">[[modal.peoples[uid].name]]</td>
+                                        <td style="vertical-align:middle;">
+                                            <div class="buttons is-small">
+                                                <a class="button" :href="'/user/'+uid">
+                                                    <span class="icon"><i class="far fa-id-badge"></i></span>
+                                                </a>
+                                                <a class="button" v-if="modal.peoples[uid].mattermost_uid"
+                                                    :href="'https://chat.coscup.org/coscup/messages/@'+modal.peoples[uid].mattermost_uid">
+                                                    <span class="icon"><i class="far fa-comments"></i></span>
+                                                </a>
+                                                <a class="button" :href="'mailto:'+modal.peoples[uid].mail">
+                                                    <span class="icon"><i class="far fa-paper-plane"></i></span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <pre>[[ modal ]]</pre>
                     </section>
                     <footer class="modal-card-foot">
@@ -261,8 +321,20 @@
                 modalclose: function() {
                     this.modal = {};
                 },
-                detail: function(data, $e) {
+                detail: function(data) {
                     this.modal = data;
+                    if (!data.creator) {
+                        axios.post('./{{project._id}}', {casename: 'peoples', task_id: data._id},
+                            {validateStatus: function (status){return status < 500;}}).then(function(resp) {
+                                if (resp.status != 200) {
+                                    return
+                                } else {
+                                    $tasks.modal['peoples'] = resp.data.peoples;
+                                    $tasks.modal['creator'] = resp.data.creator;
+                                    $tasks.$forceUpdate();
+                                }
+                            });
+                    }
                 },
                 join: function(data, $e) {
                     let $footer_btn = $e.target.closest('footer').querySelectorAll('button');
@@ -277,7 +349,7 @@
                                     window.location.href = '/oauth2callback?r=/tasks/{{project._id}}';
                                 }
                             } else {
-                                $tasks.modal = resp.data.data;
+                                $tasks.detail(resp.data.data);
                                 $tasks.load();
                             }
                             $footer_btn.forEach(function(btn) {
@@ -299,7 +371,7 @@
                                     window.location.href = '/oauth2callback?r=/tasks/{{project._id}}';
                                 }
                             } else {
-                                $tasks.modal = resp.data.data;
+                                $tasks.detail(resp.data.data);
                                 $tasks.load();
                             }
                             $footer_btn.forEach(function(btn) {
