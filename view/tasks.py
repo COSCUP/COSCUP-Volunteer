@@ -150,6 +150,16 @@ def add(pid, task_id=None):
                     desc=data['desc'], limit=max((1, int(data['limit']))), starttime=starttime,
                     created_by=uid, endtime=endtime, task_id=task_id)
 
+            return jsonify({'data': raw})
+
+        elif post_data['casename'] == 'del':
+            data = Tasks.get_with_pid(pid=pid, _id=post_data['task_id'])
+            if not data:
+                return jsonify({}), 404
+
+            if data['created_by'] == g.user['account']['_id']:
+                Tasks.delete(pid=pid, _id=data['_id'])
+
         elif post_data['casename'] == 'get':
             data = Tasks.get_with_pid(pid=pid, _id=task_id)
             if not data:
@@ -163,6 +173,8 @@ def add(pid, task_id=None):
                 endtime = arrow.get(data['endtime']).to('Asia/Taipei')
                 data['endtime'] = endtime.format('HH:mm')
 
+            data['_is_creator'] = g.user['account']['_id'] == data['created_by']
+
             return jsonify({'data': data})
 
-        return jsonify({'data': raw})
+        return jsonify({})
