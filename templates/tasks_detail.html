@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block head_title %} - Task: {{task.title}} [{{task._id}}]{% endblock %}
+{%block og%}
+<meta property="og:title" content="Task: {{task.title}} [{{task.pid}}.{{task._id}}] Volunteer with COSCUP! 志工服務系統">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="COSCUP Volunteer">
+<meta property="og:image" content="https://volunteer.coscup.org/img/coscup_volunteer_og.png">
+<meta property="og:description" content="{{task.desc|replace('\n', ' ')}}">
+{%endblock%}
+{% block body %}
+<section class="hero is-primary">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                Task: {{task.title}}
+            </h1>
+            <h3 class="subtitle">
+                {{task._id}}
+            </h3>
+        </div>
+    </div>
+    <div class="hero-foot">
+        <nav class="tabs is-boxed">
+            <div class="container">
+                <ul>
+                    <li class="is-active"><a href="/tasks/{{task.pid}}">返回 / Back</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <div id="taskdetail" class="columns">
+            <div class="column is-half is-offset-one-quarter">
+                <div class="content" v-cloak>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Title</td>
+                                <td>{{task.title}}</td>
+                            </tr>
+                            <tr>
+                                <td>Start</td>
+                                <td>{{task.starttime}}</td>
+                            </tr>
+                            <tr>
+                                <td>End</td>
+                                <td>{{task.endtime}}</td>
+                            </tr>
+                            <tr>
+                                <td>Desc</td>
+                                <td>{{task.desc|replace('\n', '<br>')|safe}}</td>
+                            </tr>
+                            <tr>
+                                <td>Post by</td>
+                                <td>
+                                    <div class="buttons has-addons">
+                                        <a class="button" href="/user/{{creator['uid']}}">
+                                            <span class="icon"><i class="far fa-id-badge"></i></span>
+                                            <span>{{creator['name']}}</span>
+                                        </a>
+                                        {%if creator['mattermost_uid']%}
+                                        <a class="button"
+                                           href="https://chat.coscup.org/coscup/messages/@{{creator['mattermost_uid']}}">
+                                            <span class="icon"><i class="far fa-comments"></i></span>
+                                        </a>
+                                        {%endif%}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Volunteers</td>
+                                <td>
+                                    <progress class="progress is-small is-success"
+                                        style="margin-bottom:.2rem;" value="{{task.people|length}}" max="{{task.limit}}">
+                                        volunteers
+                                    </progress>
+                                    <span>{{task.people|length}} / {{task.limit}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="content" id="taskdetail">
+                        <div class="buttons">
+                            <button v-if="!joined" @click="submit('join', $event)" class="button is-success">
+                                <span class="icon"><i class="fas fa-user-plus"></i></span>
+                                <span>我要幫忙</span>
+                            </button>
+                            <button v-if="joined" @click="submit('cancel', $event)" class="button is-danger">
+                                <span class="icon"><i class="fas fa-user-times"></i></span>
+                                <span>取消幫忙</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $tasks = new Vue({
+            el: '#taskdetail',
+            data: {
+                joined: {%if uid in task['people']%}true{%else%}false{%endif%}
+            },
+            methods: {
+                submit: function(casename, $e) {
+                    let $btns = $e.target.closest('.buttons').querySelectorAll('.button');
+                    $btns.forEach(function(btn) {
+                        btn.classList.add('is-loading');
+                    });
+
+                    axios.post('./{{task._id}}', {casename: casename, task_id: '{{task._id}}'},
+                        {validateStatus: function (status){return status < 500;}}).then(function(resp) {
+                            if (resp.status != 200) {
+                                if (confirm('需要登入志工服務才可以使用，前往登入？')) {
+                                    window.location.href = '/oauth2callback?r=/tasks/{{task.pid}}/r/{{task._id}}';
+                                }
+                            } else {
+                                window.location.href = './{{task._id}}';
+                            }
+                        });
+                },
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}

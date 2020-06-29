@@ -201,3 +201,43 @@ def add(pid, task_id=None):
             return jsonify({'data': data})
 
         return jsonify({})
+
+@VIEW_TASKS.route('/<pid>/r/<task_id>', methods=('GET', 'POST'))
+def read(pid, task_id):
+    project = Project.get(pid=pid)
+    if not project:
+        return u'404', 404
+
+    task = Tasks.get_with_pid(pid=pid, _id=task_id)
+    if not task:
+        return redirect(url_for('tasks.project', pid=pid, _scheme='https', _external=True))
+
+    task['starttime'] = arrow.get(task['starttime']).to('Asia/Taipei').format('YYYY-MM-DD HH:mm')
+    if task['endtime']:
+        task['endtime'] = arrow.get(task['endtime']).to('Asia/Taipei').format('YYYY-MM-DD HH:mm')
+
+    uid = g.get('user', {}).get('account', {}).get('_id')
+    if request.method == 'GET':
+        creator = {}
+        user_info = User.get_info(uids=[task['created_by'], ])
+        creator['name'] = user_info[task['created_by']]['profile']['badge_name']
+        creator['uid'] = task['created_by']
+
+        mid = MattermostTools.find_possible_mid(uid=task['created_by'])
+        if mid:
+            creator['mattermost_uid'] = MattermostTools.find_user_name(mid=mid)
+
+        return render_template('./tasks_detail.html', task=task, creator=creator, uid=uid)
+
+    elif request.method == 'POST':
+        if not uid:
+            return jsonify({'info': 'Need login'}), 401
+
+        post_data = request.get_json()
+        if post_data['casename'] == 'join':
+            Tasks.join(pid=pid, task_id=task['_id'], uid=uid)
+
+        elif post_data['casename'] == 'cancel':
+            Tasks.cancel(pid=pid, task_id=task['_id'], uid=uid)
+
+        return jsonify({})
