@@ -25,6 +25,7 @@ app.conf.task_queues = (
     Queue('celery', Exchange('celery', type='direct'), routing_key='celery'),
     Queue('CS_ipinfo', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.ipinfo.#'),
     Queue('CS_mail_member', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.member.#'),
+    Queue('CS_mail_tasks', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.tasks.#'),
     Queue('CS_mail_sys', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.sys.#'),
     Queue('CS_sender_mailer', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.sender.mailer.#'),
     Queue('CS_service_sync', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.servicesync.#'),

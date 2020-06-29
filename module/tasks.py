@@ -1,6 +1,7 @@
 from pymongo.collection import ReturnDocument
 
 from models.tasksdb import TasksDB
+from models.tasksdb import TasksStarDB
 from module.users import User
 
 
@@ -91,3 +92,46 @@ class Tasks(object):
         ''' Get peoples info '''
         uids = TasksDB().find_one({'pid': pid, '_id': task_id}, {'people': 1})['people']
         return User.get_info(uids=uids)
+
+
+class TasksStar(object):
+    ''' TasksStar object '''
+
+    @staticmethod
+    def add(pid, uid):
+        ''' add '''
+        data = TasksStarDB().find_one({'pid': pid, 'uid': uid})
+        if not data:
+            return TasksStarDB().insert(TasksStarDB.new(pid=pid, uid=uid))
+
+        return data
+
+    @staticmethod
+    def delete(pid, uid):
+        ''' delete '''
+        return TasksStarDB().delete_one({'pid': pid, 'uid': uid})
+
+    @staticmethod
+    def status(pid, uid):
+        ''' ststus '''
+        if TasksStarDB().find_one({'pid': pid, 'uid': uid}):
+            return {'add': True}
+
+        return {'add': False}
+
+    @staticmethod
+    def toggle(pid, uid):
+        ''' toggle '''
+        data = TasksStarDB().find_one({'pid': pid, 'uid': uid})
+        if data:
+            TasksStarDB().delete_one({'pid': pid, 'uid': uid})
+            return {'add': False}
+        else:
+            TasksStarDB().insert(TasksStarDB.new(pid=pid, uid=uid))
+            return {'add': True}
+
+    @staticmethod
+    def get(pid):
+        ''' Get all star users '''
+        for user in TasksStarDB().find({'pid': pid}, {'uid': 1}):
+            yield user

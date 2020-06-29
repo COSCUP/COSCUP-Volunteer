@@ -7,9 +7,11 @@ from flask import render_template
 from flask import request
 from flask import url_for
 
+from celery_task.task_mail_sys import mail_tasks_star
 from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.tasks import Tasks
+from module.tasks import TasksStar
 from module.team import Team
 from module.users import User
 
@@ -57,7 +59,19 @@ def project(pid):
                 page_args(data=data, uid=uid)
                 datas.append(data)
 
-            return jsonify({'datas': datas, 'is_in_project': is_in_project})
+            is_star = False
+            if uid:
+                is_star = TasksStar.status(pid, uid)['add']
+
+            return jsonify({'datas': datas, 'is_in_project': is_in_project, 'is_star': is_star})
+
+        elif post_data['casename'] == 'star':
+            if not uid:
+                return jsonify({'info': 'Need login'}), 401
+
+            result = TasksStar.toggle(pid=pid, uid=uid)
+
+            return jsonify({'is_star': result['add']})
 
         elif post_data['casename'] == 'join':
             if not uid:
@@ -148,9 +162,16 @@ def add(pid, task_id=None):
             if 'task_id' in post_data:
                 task_id = post_data['task_id']
 
+            send_star = False
+            if 'task_id' in post_data and not post_data['task_id']:
+                send_star = True
+
             raw = Tasks.add(pid=pid, title=data['title'].strip(), cate=data['cate'].strip(),
                     desc=data['desc'], limit=max((1, int(data['limit']))), starttime=starttime,
                     created_by=uid, endtime=endtime, task_id=task_id)
+
+            if send_star:
+                mail_tasks_star.apply_async(kwargs={'pid': pid, 'task_id': raw['_id']})
 
             return jsonify({'data': raw})
 

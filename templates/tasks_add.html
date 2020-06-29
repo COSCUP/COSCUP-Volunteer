@@ -183,6 +183,11 @@
                 submit: function($e) {
                     $e.preventDefault();
 
+                    let $btns = $e.target.querySelectorAll('button');
+                    $btns.forEach(function(btn) {
+                        btn.classList.add('is-loading');
+                    });
+
                     axios.post('./add', {casename: 'add', data: this.data, task_id: this.task_id}).then(function(resp) {
                         window.location.href = '/tasks/{{project._id}}';
                     });
