@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block head_title %} - Task {{project.name}}{% endblock %}
+{%block og%}
+<meta property="og:title" content="Tasks: {{project.name}} 志工任務平台 Volunteer with COSCUP! 志工服務系統">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="COSCUP Volunteer">
+<meta property="og:image" content="https://volunteer.coscup.org/img/coscup_volunteer_og.png">
+<meta property="og:description" content="找任務、接任務、解任務、領獎賞">
+{%endblock%}
 {% block body %}
 <section class="hero is-success">
     <div class="hero-body">
@@ -8,7 +15,7 @@
                 Tasks: {{project.name}}
             </h1>
             <h3 class="subtitle">
-                工作列表
+                找任務、接任務、解任務、領獎賞
             </h3>
         </div>
     </div>
@@ -24,6 +31,24 @@
 </section>
 <section class="section">
     <div class="container">
+        <div class="columns">
+            <div class="column is-5 is-offset-1">
+                <div class="content">
+                    <div class="notification is-info is-light">
+                        <span class="icon"><i class="fas fa-info-circle"></i></span>
+                        在大會活動期間，我們有些任務需要你的協助，如果願意協助我們並完成任務，會有小小的獎賞當作回饋。
+                    </div>
+                </div>
+            </div>
+            <div class="column is-5">
+                <div class="content">
+                    <div class="notification is-info is-light">
+                        <span class="icon"><i class="fas fa-info-circle"></i></span>
+                        如何開始？找到可以協助的任務，按下<strong>「我要幫忙」</strong>登記，請在時間開始前找到<strong>任務負責人</strong>開始任務。
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="tasks" class="columns">
             <div class="column is-10 is-offset-1" v-cloak>
                 <div class="content">
@@ -40,9 +65,13 @@
                             </a>
                         </div>
                         <div class="control">
+                            <a class="button" @click="load()" data-name="reload">
+                                <span class="icon"><i class="fas fa-redo"></i></span>
+                            </a>
+                        </div>
+                        <div class="control">
                             <a class="button" @click="window.print()">
                                 <span class="icon"><i class="fas fa-print"></i></span>
-                                <span>列印</span>
                             </a>
                         </div>
                         <div class="control" v-if="is_in_project">
@@ -152,9 +181,6 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="content">
-                    <pre>[[ datas ]]</pre>
-                </div>
             </div>
             <!-- modal -->
             <div class="modal" :class="{'is-active': Object.keys(modal).length > 0}">
@@ -222,7 +248,8 @@
                             <article class="message is-info"
                                 v-if="modal.creator && Object.keys(modal.creator).length > 0">
                                 <div class="message-body">
-                                    有任何疑問可以直接詢問 <strong>[[ modal.creator.name ]]</strong>，或是前往大會服務台旁的<strong>志工服務台</strong>，我們有專人為您服務。
+                                    <span class="icon"><i class="fas fa-info-circle"></i></span>
+                                    <span>請在時間開始前找到<strong>任務負責人：[[modal.creator.name]]</strong> 開始任務，有任何疑問可以直接詢問 <strong>[[ modal.creator.name ]]</strong>，或是前往大會服務台旁的<strong>志工服務台</strong>，我們有專人為您服務。</span>
                                 </div>
                             </article>
                         </div>
@@ -262,7 +289,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <pre>[[ modal ]]</pre>
                     </section>
                     <footer class="modal-card-foot">
                         <button v-if="!modal._joined" @click="join(modal, $event)" class="button is-success">
@@ -293,7 +319,6 @@
             data: {
                 is_in_project: false,
                 is_star: false,
-                datas: [],
                 mdatas: new Map(),
                 modal: {}
             },
@@ -410,8 +435,9 @@
 
                 },
                 load: function() {
+                    let $btn = this.$el.querySelector('[data-name="reload"]');
+                    $btn.classList.add('is-loading');
                     axios.post('./{{project._id}}', {casename: 'get'}).then(function(resp) {
-                        $tasks.datas = resp.data.datas;
                         $tasks.is_in_project = resp.data.is_in_project;
                         $tasks.is_star = resp.data.is_star;
 
@@ -431,6 +457,8 @@
                             catemap.set(data.cate, rawlist);
                             $tasks.mdatas.set(date, catemap);
                         });
+                        $btn.classList.remove('is-loading');
+                        $tasks.$forceUpdate();
                     });
                 },
                 prettydesc: function(text) {
