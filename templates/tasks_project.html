@@ -29,19 +29,18 @@
                 <div class="content">
                     <div class="field is-grouped is-grouped-multiline">
                         <div class="control">
-                            <a class="button" href="/tasks/{{project._id}}/rss">
-                                <span class="icon"><i class="fas fa-rss-square"></i></span>
-                                <span>關注新增活動</span>
+                            <a class="button" @click="star($event)">
+                                <span class="icon has-text-warning" v-if="is_star">
+                                    <i class="fas fa-star"></i>
+                                </span>
+                                <span class="icon" v-if="!is_star">
+                                    <i class="far fa-star"></i>
+                                </span>
+                                <span v-if="!is_star">關注新增活動</span>
                             </a>
                         </div>
                         <div class="control">
-                            <a class="button">
-                                <span class="icon"><i class="fas fa-calendar-alt"></i></span>
-                                <span>下載行事曆</span>
-                            </a>
-                        </div>
-                        <div class="control">
-                            <a class="button">
+                            <a class="button" @click="window.print()">
                                 <span class="icon"><i class="fas fa-print"></i></span>
                                 <span>列印</span>
                             </a>
@@ -187,7 +186,7 @@
                                     </tr>
                                     <tr>
                                         <td>Desc</td>
-                                        <td><pre>[[ modal.desc ]]</pre></td>
+                                        <td v-html="prettydesc(modal.desc)"></td>
                                     </tr>
                                     <tr v-if="modal.creator && Object.keys(modal.creator).length > 0">
                                         <td>Post by</td>
@@ -290,6 +289,7 @@
             el: '#tasks',
             data: {
                 is_in_project: false,
+                is_star: false,
                 datas: [],
                 mdatas: new Map(),
                 modal: {}
@@ -365,6 +365,25 @@
                     });
 
                 },
+                star: function($e) {
+                    let $btns = $e.target.closest('.control').querySelectorAll('.button');
+                    $btns.forEach(function(btn) {
+                        btn.classList.add('is-loading');
+                    });
+                    axios.post('./{{project._id}}', {casename: 'star'},
+                        {validateStatus: function (status){return status < 500;}}).then(function(resp) {
+                            if (resp.status != 200) {
+                                if (confirm('需要登入志工服務才可以使用，前往登入？')) {
+                                    window.location.href = '/oauth2callback?r=/tasks/{{project._id}}';
+                                }
+                            } else {
+                                $tasks.is_star = resp.data.is_star;
+                            }
+                            $btns.forEach(function(btn) {
+                                btn.classList.remove('is-loading');
+                            });
+                        });
+                },
                 cancel: function(data, $e) {
                     let $footer_btn = $e.target.closest('footer').querySelectorAll('button');
                     $footer_btn.forEach(function(btn) {
@@ -391,6 +410,7 @@
                     axios.post('./{{project._id}}', {casename: 'get'}).then(function(resp) {
                         $tasks.datas = resp.data.datas;
                         $tasks.is_in_project = resp.data.is_in_project;
+                        $tasks.is_star = resp.data.is_star;
 
                         resp.data.datas.forEach(function(data) {
                             $tasks.mdatas.set($tasks.dateformat(data.starttime), new Map());
@@ -409,6 +429,11 @@
                             $tasks.mdatas.set(date, catemap);
                         });
                     });
+                },
+                prettydesc: function(text) {
+                    if (text && text.length > 0) {
+                        return text.split('\n').join('<br>');
+                    }
                 }
             },
             delimiters: ['[[', ']]']

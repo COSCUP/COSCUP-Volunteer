@@ -14,6 +14,8 @@ from models.teamdb import TeamMemberChangedDB
 from module.awsses import AWSSES
 from module.mattermost_bot import MattermostTools
 from module.project import Project
+from module.tasks import Tasks
+from module.tasks import TasksStar
 from module.team import Team
 from module.users import User
 
@@ -256,3 +258,53 @@ def mail_member_send(sender, **kwargs):
         raise Exception('HTTPStatusCode not `200`, do retry')
 
     team_member_change_db.find_one_and_update({'_id': ObjectId(kwargs['rid'])}, {'$set': {'done.mail': True}})
+
+
+@app.task(bind=True, name='mail.tasks.star',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+    routing_key='cs.mail.tasks.star', exchange='COSCUP-SECRETARY')
+def mail_tasks_star(sender, **kwargs):
+    pid = kwargs['pid']
+    task_id = kwargs['task_id']
+
+    task = Tasks.get_with_pid(pid=pid, _id=task_id)
+
+    uids = []
+    for user in TasksStar.get(pid=pid):
+        uids.append(user['uid'])
+
+    logger.info(uids)
+
+    users = User.get_info(uids=uids)
+    for uid in users:
+        user = {}
+        user['name'] = users[uid]['profile']['badge_name']
+        user['mail'] = users[uid]['oauth']['email']
+        mail_tasks_star_one.apply_async(kwargs={
+            'pid': pid, 'task_id': task_id, 'user': user, 'task': task})
+
+
+@app.task(bind=True, name='mail.tasks.star.one',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+    routing_key='cs.mail.tasks.star.one', exchange='COSCUP-SECRETARY')
+def mail_tasks_star_one(sender, **kwargs):
+    logger.info(kwargs)
+
+    TPLENV = Environment(loader=FileSystemLoader('./templates/mail'))
+    template = TPLENV.get_template('./tasks_star.html')
+
+    awsses = AWSSES(
+            aws_access_key_id=setting.AWS_ID,
+            aws_secret_access_key=setting.AWS_KEY,
+            source=setting.AWS_SES_FROM)
+
+    body = template.render(name=kwargs['user']['name'], task=kwargs['task'])
+
+    raw_mail = awsses.raw_mail(
+            to_addresses=(kwargs['user'], ),
+            subject=u'有一筆新志工任務 - %s' % kwargs['task']['title'],
+            body=body,
+        )
+
+    resp = awsses.send_raw_email(data=raw_mail)
+    logger.info(resp)

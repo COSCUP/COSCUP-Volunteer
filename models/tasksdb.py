@@ -25,3 +25,18 @@ class TasksDB(DBBase):
             'created_by': created_by,
             'created_at': datetime.now(),
         }
+
+
+class TasksStarDB(DBBase):
+    ''' TasksStarDB Collection '''
+    def __init__(self):
+        super(TasksStarDB, self).__init__('tasks_star')
+
+    @staticmethod
+    def new(pid, uid):
+        ''' new data '''
+        return {
+            'pid': pid,
+            'uid': uid,
+            'created_at': datetime.now(),
+        }
