@@ -65,8 +65,8 @@
                             </a>
                         </div>
                         <div class="control">
-                            <a class="button" @click="load()" data-name="reload">
-                                <span class="icon"><i class="fas fa-redo"></i></span>
+                            <a class="button" @click="load" data-name="reload">
+                                <span class="icon"><i class="fas fa-sync"></i></span>
                             </a>
                         </div>
                         <div class="control">
@@ -80,6 +80,12 @@
                                 <span>建立需求單</span>
                             </a>
                         </div>
+                        {% if g.user and g.user.data %}{%else%}
+                        <div class="control">
+                            <a class="button is-info is-outlined"
+                               href="/oauth2callback?r=/tasks/{{project.pid}}">登入</a>
+                        </div>
+                        {%endif%}
                     </div>
                 </div>
                 <table class="table is-fullwidth">
@@ -110,7 +116,7 @@
                                             >
                                             <thead>
                                                 <tr>
-                                                    <th colspan=4 class="has-background-info-light">
+                                                    <th class="has-background-info-light">
                                                         <div class="tags has-addons">
                                                             <span class="tag is-success is-light">
                                                                 <span class="icon"><i class="far fa-folder-open"></i></span>
@@ -120,56 +126,56 @@
                                                         </div>
                                                     </th>
                                                 </tr>
-                                                <tr>
-                                                    <th width="35%">Title</th>
-                                                    <th>Start</th>
-                                                    <th>End</th>
-                                                    <th>Volunteers</th>
-                                                </tr>
                                             </thead>
                                             <tbody>
                                                 <tr v-for="row in mcate[1]">
-                                                    <td style="vertical-align: middle;">
-                                                        <p>
-                                                            <a :href="'./'+row.pid+'/r/'+row._id"
-                                                                v-on:click.stop.prevent="detail(row)">
-                                                                <span class="icon" v-if="!row._joined">
-                                                                    <i class="fas fa-thumbtack"></i>
-                                                                </span>
-                                                                <span class="icon has-text-success" v-if="row._joined">
-                                                                    <i class="far fa-check-square"></i>
-                                                                </span>
-                                                                <span>[[ row.title ]]</span>
-                                                            </a>
-                                                        </p>
-                                                    </td>
-                                                    <td style="vertical-align: middle;">
-                                                        [[ new Date(row.starttime).toLocaleTimeString('zh-Hant', {hour12: false}) ]]</td>
-                                                    <td style="vertical-align: middle;">
-                                                        [[ new Date(row.endtime).toLocaleTimeString('zh-Hant', {hour12: false}) ]]</td>
-                                                    <td style="vertical-align: middle;">
-                                                        <progress class="progress is-small" style="margin-bottom:.2rem;"
-                                                            :class="{'is-danger': row.people.length/row.limit < 0.8,
-                                                                     'is-success': row.people.length/row.limit >= 0.8}"
-                                                            :value="row.people.length" :max="row.limit">
-                                                            volunteers
-                                                        </progress>
-                                                        <div class="buttons">
-                                                            <a class="button is-small" :href="'./'+row.pid+'/r/'+row._id"
-                                                                v-on:click.stop.prevent="detail(row)">
-                                                                <span class="icon"
-                                                                    :class="{'has-text-danger': row.people.length/row.limit < 0.8,
-                                                                             'has-text-success': row.people.length/row.limit >= 0.8}"
-                                                                >
-                                                                    <i class="fas fa-user-friends"></i>
-                                                                </span>
-                                                                <span>[[ row.people.length ]] / [[ row.limit ]]</span>
-                                                            </a>
-                                                            <a class="button is-small" v-if="!row._login"
-                                                               href="/oauth2callback?r=/tasks/{{project.pid}}">登入</a>
-                                                            <a class="button is-small" v-if="row._is_in_project"
-                                                               :href="'/tasks/'+row.pid+'/edit/'+row._id">
-                                                                <span class="icon"><i class="far fa-edit"></i></span></a>
+                                                    <td>
+                                                        <div class="columns">
+                                                            <div class="column">
+                                                                <div class="columns">
+                                                                    <div class="column pb-1">
+                                                                        <p><a :href="'./'+row.pid+'/r/'+row._id"
+                                                                            v-on:click.stop.prevent="detail(row)">
+                                                                            <span class="icon" v-if="!row._joined">
+                                                                                <i class="fas fa-thumbtack"></i>
+                                                                            </span>
+                                                                            <span class="icon has-text-success" v-if="row._joined">
+                                                                                <i class="far fa-check-square"></i>
+                                                                            </span>
+                                                                            <span>[[ row.title ]]</span></a></p>
+                                                                        <div class="is-size-7"
+                                                                             style="width:220px;white-space:nowrap;overflow: hidden;text-overflow: ellipsis;"><span class="icon"><i class="far fa-sticky-note"></i></span><span>[[ row.desc ]]</span></div>
+                                                                    </div>
+                                                                    <div class="column is-5 pb-1">
+                                                                        <span class="icon"><i class="far fa-clock"></i></span>
+                                                                        <span>[[ new Date(row.starttime).toLocaleTimeString('zh-Hant', {hour12: false}) ]] - [[ new Date(row.endtime).toLocaleTimeString('zh-Hant', {hour12: false}) ]]</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="column is-3">
+                                                                <progress class="progress is-small" style="margin-bottom:.2rem;"
+                                                                    :class="{'is-danger': row.people.length/row.limit < 0.8,
+                                                                             'is-success': row.people.length/row.limit >= 0.8}"
+                                                                    :value="row.people.length" :max="row.limit">
+                                                                    volunteers
+                                                                </progress>
+                                                                <div class="buttons">
+                                                                    <a class="button is-small" :href="'./'+row.pid+'/r/'+row._id"
+                                                                        v-on:click.stop.prevent="detail(row)">
+                                                                        <span class="icon"
+                                                                            :class="{'has-text-danger': row.people.length/row.limit < 0.8,
+                                                                                     'has-text-success': row.people.length/row.limit >= 0.8}"
+                                                                        >
+                                                                            <i class="fas fa-user-friends"></i>
+                                                                        </span>
+                                                                        <span>[[ row.people.length ]] / [[ row.limit ]]</span>
+                                                                    </a>
+                                                                    <a class="button is-small" :href="'/tasks/'+row.pid+'/r/'+row._id"><span class="icon"><i class="fas fa-link"></i></span></a>
+                                                                    <a class="button is-small" v-if="row._is_in_project"
+                                                                       :href="'/tasks/'+row.pid+'/edit/'+row._id">
+                                                                        <span class="icon"><i class="far fa-edit"></i></span></a>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -177,6 +183,14 @@
                                         </table>
                                     </div>
                                 </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="has-text-right">
+                                <a class="button is-small" @click="load" data-name="reload">
+                                    <span class="icon"><i class="fas fa-sync"></i></span>
+                                    <span>[[ last_update ]]</span>
+                                </a>
                             </td>
                         </tr>
                     </tbody>
@@ -229,6 +243,7 @@
                                                     :href="'https://chat.coscup.org/coscup/messages/@'+modal.creator.mattermost_uid">
                                                     <span class="icon"><i class="far fa-comments"></i></span>
                                                 </a>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr v-if="Object.keys(modal).length">
@@ -319,6 +334,7 @@
             data: {
                 is_in_project: false,
                 is_star: false,
+                last_update: new Date(),
                 mdatas: new Map(),
                 modal: {}
             },
@@ -355,8 +371,10 @@
                 },
                 modalclose: function() {
                     this.modal = {};
+                    document.querySelector('html').classList.remove('is-clipped');
                 },
                 detail: function(data) {
+                    document.querySelector('html').classList.add('is-clipped');
                     this.modal = data;
                     if (!data.creator) {
                         axios.post('./{{project._id}}', {casename: 'peoples', task_id: data._id},
@@ -435,8 +453,10 @@
 
                 },
                 load: function() {
-                    let $btn = this.$el.querySelector('[data-name="reload"]');
-                    $btn.classList.add('is-loading');
+                    let $btns = this.$el.querySelectorAll('[data-name="reload"]');
+                    $btns.forEach(function($btn) {
+                        $btn.classList.add('is-loading');
+                    });
                     axios.post('./{{project._id}}', {casename: 'get'}).then(function(resp) {
                         $tasks.is_in_project = resp.data.is_in_project;
                         $tasks.is_star = resp.data.is_star;
@@ -457,7 +477,10 @@
                             catemap.set(data.cate, rawlist);
                             $tasks.mdatas.set(date, catemap);
                         });
-                        $btn.classList.remove('is-loading');
+                        $btns.forEach(function($btn) {
+                            $btn.classList.remove('is-loading');
+                        });
+                        $tasks.last_update = new Date();
                         $tasks.$forceUpdate();
                     });
                 },
