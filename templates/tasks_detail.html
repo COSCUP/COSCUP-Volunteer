@@ -130,6 +130,9 @@
                             } else {
                                 window.location.href = './{{task._id}}';
                             }
+                            $btns.forEach(function(btn) {
+                                btn.classList.remove('is-loading');
+                            });
                         });
                 },
             },
