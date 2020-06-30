@@ -150,6 +150,41 @@ class Form(object):
         for raw in FormDB().find({'case': 'accommodation', 'pid': pid}):
             yield raw
 
+    @staticmethod
+    def update_clothes(pid, uid, data):
+        ''' Update clothes
+
+        :param str pid: project id
+        :param str uid: user id
+        :param dict data: form data
+
+        .. note::
+            - data:
+                - clothes: str, 'S / 38.5 / 55'
+
+        '''
+        return FormDB().add_by_case(case='clothes', pid=pid, uid=uid, data=data)
+
+    @staticmethod
+    def get_clothes(pid, uid):
+        ''' Get clothes
+
+        :param str pid: project id
+        :param str uid: user id
+
+        '''
+        return FormDB().find_one({'case': 'clothes', 'pid': pid, 'uid': uid})
+
+    @staticmethod
+    def all_clothes(pid):
+        ''' Get all clothes
+
+        :param str pid: project id
+
+        '''
+        for raw in FormDB().find({'case': 'clothes', 'pid': pid}):
+            yield raw
+
 
 class FormTrafficFeeMapping(object):
     ''' FormTrafficFeeMapping object '''

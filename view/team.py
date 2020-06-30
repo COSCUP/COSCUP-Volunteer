@@ -475,6 +475,34 @@ def team_form_appreciation(pid, tid):
         Form().update_appreciation(pid=team['pid'], uid=g.user['account']['_id'], data=data)
         return redirect(url_for('team.team_form_appreciation', pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
 
+@VIEW_TEAM.route('/<pid>/<tid>/form/clothes', methods=('GET', 'POST'))
+def team_form_clothes(pid, tid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    if not (g.user['account']['_id'] in team['members'] or \
+            g.user['account']['_id'] in team['chiefs']):
+        return redirect('/')
+
+    if request.method == 'GET':
+        return render_template('./form_clothes.html', project=project, team=team)
+
+    elif request.method == 'POST':
+        post_data = request.get_json()
+
+        if post_data['casename'] == 'get':
+            data = Form.get_clothes(pid=team['pid'], uid=g.user['account']['_id'])
+            if not data:
+                data = {'data': {'clothes': ''}}
+
+            return jsonify({'clothes': data['data']['clothes']})
+
+        elif post_data['casename'] == 'post':
+            if 'clothes' in post_data and post_data['clothes']:
+                Form.update_clothes(pid=team['pid'], uid=g.user['account']['_id'], data={'clothes': post_data['clothes']})
+                return jsonify({})
+
 @VIEW_TEAM.route('/<pid>/<tid>/plan/edit', methods=('GET', 'POST'))
 def team_plan_edit(pid, tid):
     team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
