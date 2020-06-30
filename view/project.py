@@ -201,6 +201,29 @@ def project_form_api(pid):
 
                 return jsonify({'result': result})
 
+        elif data['case'] == 'clothes':
+            fieldnames = ('uid', 'picture', 'clothes')
+            with io.StringIO() as str_io:
+                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
+                csv_writer.writeheader()
+
+                for raw in Form.all_clothes(pid):
+                    user_info = UsersDB().find_one({'_id': raw['uid']})
+                    oauth = OAuthDB().find_one({'owner': raw['uid']}, {'data.picture': 1})
+
+                    data = {
+                        'uid': raw['uid'],
+                        'picture': oauth['data']['picture'],
+                        'clothes': raw['data']['clothes'],
+                    }
+                    csv_writer.writerow(data)
+
+                result = []
+                for raw in csv.reader(io.StringIO(str_io.getvalue())):
+                    result.append(raw)
+
+                return jsonify({'result': result})
+
 @VIEW_PROJECT.route('/<pid>/edit/team/api', methods=('GET', 'POST'))
 def project_edit_create_team_api(pid):
     project = Project.get(pid)
