@@ -14,6 +14,8 @@
                     v-on:click="getResult('traffic_fee')">交通費補助</button>
                 <button class="button is-success" v-bind:class="{'is-outlined': casename != 'appreciation'}"
                     v-on:click="getResult('appreciation')">感謝狀</button>
+                <button class="button is-success" v-bind:class="{'is-outlined': casename != 'clothes'}"
+                    v-on:click="getResult('clothes')">衣服尺寸</button>
             </div>
             <span>資料筆數：[[ result.length ]]</span>
         </div>
@@ -25,7 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-if="casename == 'accommodation'" v-for="data in result">
+                    <tr v-if="casename == 'accommodation' || casename == 'clothes'" v-for="data in result">
                         <td>
                             <span class="tag is-family-monospace">[[ data[0] ]]</span>
                         </td>
