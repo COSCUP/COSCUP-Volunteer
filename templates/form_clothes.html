@@ -1,0 +1,92 @@
+{% extends "form.html" %}
+{% block head_title_form %}衣服尺寸{% endblock %}
+{% block head_subtitle %}衣服的大小，活動日穿著{% endblock %}
+{% block form_menu_clothes%}is-active{% endblock %}
+{% block form_body %}
+<div class="columns">
+    <div id="clothesform" class="column is-three-fifths">
+        <form @submit.prevent="submit">
+            <div class="field">
+                <div class="control">
+                    <a @click="is_active=!is_active">
+                        <p class="image is-16by9">
+                        <img src="/s3/img/2020_clothes_16x9.png"></p>
+                    </a>
+                </div>
+            </div>
+            <div class="field" v-cloak>
+                <div class="control">
+                    <label class="label">活動服</label>
+                    <div class="select">
+                        <select v-model="size">
+                            <option value="">請選擇尺寸...</option>
+                            <optgroup label="上圖（有腰身）">
+                                <option value="S / 38.5 / 55">S / 38.5 / 55</option>
+                                <option value="M / 41 / 58">M / 41 / 58</option>
+                                <option value="L / 44.5 / 60">L / 44.5 / 60</option>
+                                <option value="XL / 46 / 63">XL / 46 / 63</option>
+                                <option value="2XL / 48 / 64">2XL / 48 / 64</option>
+                                <option value="3XL / 50.5 / 65">2XL / 50.5 / 65</option>
+                            </optgroup>
+                            <optgroup label="下圖（無腰身）">
+                                <option value="XS / 44 / 64">XS / 44 / 64</option>
+                                <option value="S / 47 / 67">S / 47 / 67</option>
+                                <option value="M / 50 / 70">M / 50 / 70</option>
+                                <option value="L / 53 / 73">L / 53 / 73</option>
+                                <option value="XL / 56 / 75">XL / 56 / 75</option>
+                                <option value="2XL / 59 / 77">2XL / 59 / 77</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit">送出</button>
+                </div>
+            </div>
+        </form>
+        <!-- modal -->
+        <div class="modal" :class="{'is-active': is_active}">
+            <div class="modal-background" @click="is_active=!is_active"></div>
+            <div class="modal-content">
+                <p class="image is-16by9"><img src="/s3/img/2020_clothes_16x9.png"></p>
+            </div>
+            <button class="modal-close is-large" aria-label="close" @click="is_active=!is_active"></button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function() {
+        let $clothesform = new Vue({
+            el: '#clothesform',
+            data: {
+                is_active: false,
+                size: ''
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                load: function() {
+                    axios.post('./clothes', {casename: 'get'}).then(function(resp) {
+                        $clothesform.size = resp.data.clothes;
+                    });
+                },
+                submit: function($e) {
+                    let $btn = $e.submitter;
+                    $btn.classList.add('is-loading');
+                    axios.post('./clothes', {casename: 'post', clothes: this.size}).then(function(resp) {
+                        $clothesform.load();
+                        $btn.classList.remove('is-loading');
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}
