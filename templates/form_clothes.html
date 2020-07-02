@@ -19,14 +19,14 @@
                     <label class="label">活動服</label>
                     <div class="select">
                         <select v-model="size">
-                            <option value="">請選擇尺寸...</option>
+                            <option value="" disabled>請選擇尺寸...</option>
                             <optgroup label="上圖（有腰身）">
                                 <option value="S / 38.5 / 55">S / 38.5 / 55</option>
                                 <option value="M / 41 / 58">M / 41 / 58</option>
                                 <option value="L / 44.5 / 60">L / 44.5 / 60</option>
                                 <option value="XL / 46 / 63">XL / 46 / 63</option>
                                 <option value="2XL / 48 / 64">2XL / 48 / 64</option>
-                                <option value="3XL / 50.5 / 65">2XL / 50.5 / 65</option>
+                                <option value="3XL / 50.5 / 65">3XL / 50.5 / 65</option>
                             </optgroup>
                             <optgroup label="下圖（無腰身）">
                                 <option value="XS / 44 / 64">XS / 44 / 64</option>
@@ -64,6 +64,7 @@
         let $clothesform = new Vue({
             el: '#clothesform',
             data: {
+                debug: null,
                 is_active: false,
                 size: ''
             },
@@ -77,7 +78,7 @@
                     });
                 },
                 submit: function($e) {
-                    let $btn = $e.submitter;
+                    let $btn = $e.target.querySelector('.button');
                     $btn.classList.add('is-loading');
                     axios.post('./clothes', {casename: 'post', clothes: this.size}).then(function(resp) {
                         $clothesform.load();

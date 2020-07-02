@@ -34,28 +34,20 @@
         <form id="trafficform" method="POST">
             <div class="field">
                 <div class="control">
-                    <label class="label">是否閱讀補助辦法？</label>
-                    <label class="checkbox">
-                        <input type="checkbox" v-model="readed" required> 我已閱讀「補助辦法」
-                    </label>
-                </div>
-            </div>
-            <div class="field">
-                <div class="control">
                     <label class="label">我需要申請交通費補助？</label>
                     <div class="select">
-                        <select name="apply" v-model="data.apply" v-bind:disabled="!readed" required>
+                        <select name="apply" v-model="data.apply" required>
                             <option value="no">否 (No)</option>
                             <option value="yes">是 (Yes)</option>
                         </select>
                     </div>
                 </div>
             </div>
-            <div class="field">
+            <div class="field" v-cloak>
                 <div class="control">
                     <label class="label">出發地</label>
                     <div class="select">
-                        <select name="fromwhere" v-model="data.fromwhere" v-bind:disabled="!readed" required>
+                        <select name="fromwhere" v-model="data.fromwhere" required>
                             <option value="" disabled>請選擇...</option>
                             <option v-for="l in locations" v-bind:value="l[0]">[[ l[0] ]]</option>
                         </select>
@@ -65,16 +57,24 @@
             <div class="field">
                 <div class="control">
                     <label class="label">預計交通方式</label>
-                    <input class="input" type="text" name="howto" v-model.lazy.trim="data.howto" v-bind:disabled="!readed" required>
+                    <input class="input" type="text" name="howto" v-model.lazy.trim="data.howto" required>
                 </div>
                 <p class="help is-success">（請參閱補助辦法）</p>
             </div>
             <div class="field">
                 <div class="control">
                     <label class="label">預計交通費用</label>
-                    <input class="input" type="number" min="0" v-bind:max="maxfee" name="fee" v-model.number.lazy="data.fee" v-bind:disabled="!readed" required>
+                    <input class="input" type="number" min="0" v-bind:max="maxfee" name="fee" v-model.number.lazy="data.fee" required>
                 </div>
                 <p class="help is-success">（請參閱補助辦法）</p>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <label class="label">是否閱讀補助辦法？</label>
+                    <label class="checkbox">
+                        <input type="checkbox" v-model="readed" required> 我已閱讀「補助辦法」
+                    </label>
+                </div>
             </div>
             <div class="field">
                 <div class="control">
