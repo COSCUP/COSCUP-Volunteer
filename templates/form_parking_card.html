@@ -1,0 +1,81 @@
+{% extends "form.html" %}
+{% block head_title_form %}停車券{% endblock %}
+{% block head_subtitle %}台科大停車券{% endblock %}
+{% block form_menu_parking_card%}is-active{% endblock %}
+{% block form_body %}
+<div id="parkingcard" class="columns">
+    <div class="column is-three-fifths" v-cloak>
+        <article class="message is-info">
+            <div class="message-body">
+                在活動期間如果需要開車前往台科大，並停於停車場部分，需要先提供車號才能放行。
+            </div>
+        </article>
+        <form @submit.prevent="submit">
+            <div class="field">
+                <div class="control">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">車號</label>
+                <div class="control">
+                    <input class="input" type="text" v-model="data.carno" required>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">需求天數</label>
+                <div class="control">
+                    <label class="checkbox mr-3">
+                        <input type="checkbox" value="2020-07-31" v-model="data.dates">
+                        2020-07-31
+                    </label>
+                    <label class="checkbox mr-3">
+                        <input type="checkbox" value="2020-08-01" v-model="data.dates">
+                        2020-08-01
+                    </label>
+                    <label class="checkbox mr-3">
+                        <input type="checkbox" value="2020-08-02" v-model="data.dates">
+                        2020-08-02
+                    </label>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit">送出</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function() {
+        let $parkingcard = new Vue({
+            el: '#parkingcard',
+            data: {
+                data: {carno: '', dates: []}
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                load: function() {
+                    axios.post('./parking_card', {casename: 'get'}).then(function(resp) {
+                        $parkingcard.data = resp.data.data;
+                    });
+                },
+                submit: function($e) {
+                    let $btn = $e.target.querySelector('.button');
+                    $btn.classList.add('is-loading');
+                    axios.post('./parking_card', {casename: 'post', data: this.data}).then(function(resp) {
+                        $parkingcard.load();
+                        $btn.classList.remove('is-loading');
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}

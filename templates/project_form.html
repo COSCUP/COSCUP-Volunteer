@@ -16,6 +16,8 @@
                     v-on:click="getResult('appreciation')">感謝狀</button>
                 <button class="button is-success" v-bind:class="{'is-outlined': casename != 'clothes'}"
                     v-on:click="getResult('clothes')">衣服尺寸</button>
+                <button class="button is-success" v-bind:class="{'is-outlined': casename != 'parking_card'}"
+                    v-on:click="getResult('parking_card')">停車卡</button>
             </div>
             <span>資料筆數：[[ result.length ]]</span>
         </div>
@@ -27,7 +29,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-if="casename == 'accommodation' || casename == 'clothes'" v-for="data in result">
+                    <tr v-if="casename == 'accommodation' || casename == 'parking_card'"
+                        v-for="data in result">
                         <td>
                             <span class="tag is-family-monospace">[[ data[0] ]]</span>
                         </td>
@@ -40,8 +43,9 @@
                         </td>
                         <td>[[ data[2] ]]</td>
                         <td>[[ data[3] ]]</td>
+                        <td>[[ data[4] ]]</td>
                     </tr>
-                    <tr v-if="casename == 'volunteer_certificate'" v-for="data in result">
+                    <tr v-if="casename == 'volunteer_certificate' || casename == 'traffic_fee'" v-for="data in result">
                         <td>
                             <span class="tag is-family-monospace">[[ data[0] ]]</span>
                         </td>
@@ -72,8 +76,9 @@
                         <td>[[ data[2] ]]</td>
                         <td>[[ data[3] ]]</td>
                         <td>[[ data[4] ]]</td>
+                        <td>[[ data[5] ]]</td>
                     </tr>
-                    <tr v-if="casename == 'traffic_fee'" v-for="data in result">
+                    <tr v-if="casename == 'clothes'" v-for="data in result">
                         <td>
                             <span class="tag is-family-monospace">[[ data[0] ]]</span>
                         </td>
@@ -86,8 +91,6 @@
                         </td>
                         <td>[[ data[2] ]]</td>
                         <td>[[ data[3] ]]</td>
-                        <td>[[ data[4] ]]</td>
-                        <td>[[ data[5] ]]</td>
                     </tr>
                 </tbody>
             </table>

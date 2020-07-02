@@ -503,6 +503,42 @@ def team_form_clothes(pid, tid):
                 Form.update_clothes(pid=team['pid'], uid=g.user['account']['_id'], data={'clothes': post_data['clothes']})
                 return jsonify({})
 
+@VIEW_TEAM.route('/<pid>/<tid>/form/parking_card', methods=('GET', 'POST'))
+def team_form_parking_card(pid, tid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    if not (g.user['account']['_id'] in team['members'] or \
+            g.user['account']['_id'] in team['chiefs']):
+        return redirect('/')
+
+    if request.method == 'GET':
+        return render_template('./form_parking_card.html', project=project, team=team)
+
+    elif request.method == 'POST':
+        post_data = request.get_json()
+
+        if post_data['casename'] == 'get':
+            data = Form.get_parking_card(pid=team['pid'], uid=g.user['account']['_id'])
+            if not data:
+                return jsonify({'data': {'carno': '', 'dates': []}})
+
+            return jsonify({'data': data['data']})
+
+        elif post_data['casename'] == 'post':
+            if 'data' in post_data and post_data['data']:
+                carno = post_data['data']['carno'].strip().upper()
+                if not carno:
+                    return jsonify({})
+
+                dates = post_data['data']['dates']
+
+                Form.update_parking_card(pid=team['pid'], uid=g.user['account']['_id'],
+                        data={'carno': carno, 'dates': dates})
+
+                return jsonify({})
+
 @VIEW_TEAM.route('/<pid>/<tid>/plan/edit', methods=('GET', 'POST'))
 def team_plan_edit(pid, tid):
     team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)

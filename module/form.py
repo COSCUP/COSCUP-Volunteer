@@ -185,6 +185,42 @@ class Form(object):
         for raw in FormDB().find({'case': 'clothes', 'pid': pid}):
             yield raw
 
+    @staticmethod
+    def update_parking_card(pid, uid, data):
+        ''' Update parking card
+
+        :param str pid: project id
+        :param str uid: user id
+        :param dict data: form data
+
+        .. note::
+            - data:
+                - carno: str
+                - dates: list, ['2020-07-31', ]
+
+        '''
+        return FormDB().add_by_case(case='parking_card', pid=pid, uid=uid, data=data)
+
+    @staticmethod
+    def get_parking_card(pid, uid):
+        ''' Get parking card
+
+        :param str pid: project id
+        :param str uid: user id
+
+        '''
+        return FormDB().find_one({'case': 'parking_card', 'pid': pid, 'uid': uid})
+
+    @staticmethod
+    def all_parking_card(pid):
+        ''' Get all parking card
+
+        :param str pid: project id
+
+        '''
+        for raw in FormDB().find({'case': 'parking_card', 'pid': pid}):
+            yield raw
+
 
 class FormTrafficFeeMapping(object):
     ''' FormTrafficFeeMapping object '''
