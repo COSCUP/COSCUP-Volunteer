@@ -40,6 +40,11 @@
                     </div>
                 </div>
             </div>
+            <div class="field" v-if="submit_size.length > 0">
+                <div class="control">
+                    目前收到的資料：[[ submit_size ]]
+                </div>
+            </div>
             <div class="field">
                 <div class="control">
                     <button class="button is-primary" type="submit">送出</button>
@@ -66,7 +71,8 @@
             data: {
                 debug: null,
                 is_active: false,
-                size: ''
+                size: '',
+                submit_size: ''
             },
             mounted: function() {
                 this.load();
@@ -75,6 +81,7 @@
                 load: function() {
                     axios.post('./clothes', {casename: 'get'}).then(function(resp) {
                         $clothesform.size = resp.data.clothes;
+                        $clothesform.submit_size = resp.data.clothes;
                     });
                 },
                 submit: function($e) {
