@@ -19,7 +19,7 @@
                 <button class="button is-success" v-bind:class="{'is-outlined': casename != 'parking_card'}"
                     v-on:click="getResult('parking_card')">停車卡</button>
             </div>
-            <span>資料筆數：[[ result.length ]]</span>
+            <span>資料筆數：[[ result.length ]]，有效資料：[[ has_data ]]</span>
         </div>
         <div class="table-container">
             <table v-show="casename" class="table is-striped is-fullwidth">
@@ -29,10 +29,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-if="casename == 'accommodation' || casename == 'parking_card'"
-                        v-for="data in result">
+                    <tr v-for="data in result">
                         <td>
-                            <span class="tag is-family-monospace">[[ data[0] ]]</span>
+                            <a :href="'/user/'+data[0]"><span class="tag is-family-monospace">[[ data[0] ]]</span></a>
                         </td>
                         <td>
                             <span>
@@ -41,56 +40,7 @@
                                 </figure>
                             </span>
                         </td>
-                        <td>[[ data[2] ]]</td>
-                        <td>[[ data[3] ]]</td>
-                        <td>[[ data[4] ]]</td>
-                    </tr>
-                    <tr v-if="casename == 'volunteer_certificate' || casename == 'traffic_fee'" v-for="data in result">
-                        <td>
-                            <span class="tag is-family-monospace">[[ data[0] ]]</span>
-                        </td>
-                        <td>
-                            <span>
-                                <figure class="image is-32x32">
-                                    <img class="is-rounded" v-bind:src="data[1]">
-                                </figure>
-                            </span>
-                        </td>
-                        <td>[[ data[2] ]]</td>
-                        <td>[[ data[3] ]]</td>
-                        <td>[[ data[4] ]]</td>
-                        <td>[[ data[5] ]]</td>
-                        <td>[[ data[6] ]]</td>
-                    </tr>
-                    <tr v-if="casename == 'appreciation'" v-for="data in result">
-                        <td>
-                            <span class="tag is-family-monospace">[[ data[0] ]]</span>
-                        </td>
-                        <td>
-                            <span>
-                                <figure class="image is-32x32">
-                                    <img class="is-rounded" v-bind:src="data[1]">
-                                </figure>
-                            </span>
-                        </td>
-                        <td>[[ data[2] ]]</td>
-                        <td>[[ data[3] ]]</td>
-                        <td>[[ data[4] ]]</td>
-                        <td>[[ data[5] ]]</td>
-                    </tr>
-                    <tr v-if="casename == 'clothes'" v-for="data in result">
-                        <td>
-                            <span class="tag is-family-monospace">[[ data[0] ]]</span>
-                        </td>
-                        <td>
-                            <span>
-                                <figure class="image is-32x32">
-                                    <img class="is-rounded" v-bind:src="data[1]">
-                                </figure>
-                            </span>
-                        </td>
-                        <td>[[ data[2] ]]</td>
-                        <td>[[ data[3] ]]</td>
+                        <td v-for="col in data.slice(2)">[[ col ]]</td>
                     </tr>
                 </tbody>
             </table>
@@ -107,16 +57,22 @@
         data: {
             casename: '',
             result: [],
+            has_data: 0,
             fields: []
         },
         methods: {
             getResult: function(casename) {
-                this.result = [];
-                this.fields = [];
                 this.casename = casename;
                 axios.post('./form/api', {case: casename}).then(function(resp) {
                     $projectform.result = resp.data.result.slice(1);
                     $projectform.fields = resp.data.result.slice(0, 1)[0];
+
+                    $projectform.has_data = 0;
+                    $projectform.result.forEach(function(row) {
+                        if (row[3] === 'True') {
+                            $projectform.has_data = $projectform.has_data + 1;
+                        }
+                    });
                 });
             }
         },

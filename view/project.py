@@ -202,19 +202,29 @@ def project_form_api(pid):
                 return jsonify({'result': result})
 
         elif data['case'] == 'clothes':
-            fieldnames = ('uid', 'picture', 'name', 'clothes')
+            all_users = {}
+            for team in Team.list_by_pid(pid=pid):
+                for uid in team['chiefs']+team['members']:
+                    all_users[uid] = {'tid': team['tid']}
+
+            user_info = User.get_info(uids=list(all_users.keys()))
+
+            fieldnames = ('uid', 'picture', 'name', '_has_data', 'tid', 'clothes')
             with io.StringIO() as str_io:
                 csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
                 csv_writer.writeheader()
 
                 for raw in Form.all_clothes(pid):
-                    user_info = User.get_info(uids=[raw['uid'], ])[raw['uid']]
+                    all_users[raw['uid']]['clothes'] = raw['data']['clothes']
 
+                for uid in all_users:
                     data = {
-                        'uid': raw['uid'],
-                        'picture': user_info['oauth']['picture'],
-                        'name': user_info['profile']['badge_name'],
-                        'clothes': raw['data']['clothes'],
+                        'uid': uid,
+                        'picture': user_info[uid]['oauth']['picture'],
+                        'name': user_info[uid]['profile']['badge_name'],
+                        '_has_data': bool(all_users[uid].get('clothes', False)),
+                        'tid': all_users[uid]['tid'],
+                        'clothes': all_users[uid].get('clothes'),
                     }
                     csv_writer.writerow(data)
 
