@@ -11,8 +11,13 @@
             </div>
         </article>
         <form @submit.prevent="submit">
-            <div class="field">
+            <div class="field" v-if="Object.keys(posted_data).length > 0">
                 <div class="control">
+                    <label class="label">目前收到的資料</label>
+                    <ul>
+                        <li>車號：[[ posted_data.carno ]]</li>
+                        <li>需求天數：[[ posted_data.dates ]]</li>
+                    </ul>
                 </div>
             </div>
             <div class="field">
@@ -54,7 +59,8 @@
         let $parkingcard = new Vue({
             el: '#parkingcard',
             data: {
-                data: {carno: '', dates: []}
+                data: {carno: '', dates: []},
+                posted_data: {}
             },
             mounted: function() {
                 this.load();
@@ -63,14 +69,24 @@
                 load: function() {
                     axios.post('./parking_card', {casename: 'get'}).then(function(resp) {
                         $parkingcard.data = resp.data.data;
+                        $parkingcard.posted_data = Object.assign({}, resp.data.data);
                     });
                 },
                 submit: function($e) {
                     let $btn = $e.target.querySelector('.button');
                     $btn.classList.add('is-loading');
+
+                    let $inputs = $e.target.closest('form').querySelectorAll('input');
+                    $inputs.forEach(function(input) {
+                        input.disabled = true;
+                    });
+
                     axios.post('./parking_card', {casename: 'post', data: this.data}).then(function(resp) {
                         $parkingcard.load();
                         $btn.classList.remove('is-loading');
+                        $inputs.forEach(function(input) {
+                            input.disabled = false;
+                        });
                     });
                 }
             },

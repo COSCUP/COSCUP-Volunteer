@@ -5,7 +5,7 @@
 {% block form_body %}
 <div class="columns">
     <div id="clothesform" class="column is-three-fifths">
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" v-cloak>
             <div class="field">
                 <div class="control">
                     <a @click="is_active=!is_active">
@@ -14,7 +14,7 @@
                     </a>
                 </div>
             </div>
-            <div class="field" v-cloak>
+            <div class="field">
                 <div class="control">
                     <label class="label">活動服</label>
                     <div class="select">
@@ -87,9 +87,19 @@
                 submit: function($e) {
                     let $btn = $e.target.querySelector('.button');
                     $btn.classList.add('is-loading');
+
+                    let $inputs = $e.target.closest('form').querySelectorAll('input, select');
+                    $inputs.forEach(function(input) {
+                        input.disabled = true;
+                    });
+
                     axios.post('./clothes', {casename: 'post', clothes: this.size}).then(function(resp) {
                         $clothesform.load();
                         $btn.classList.remove('is-loading');
+
+                        $inputs.forEach(function(input) {
+                            input.disabled = false;
+                        });
                     });
                 }
             },
