@@ -215,6 +215,8 @@ def project_form_api(pid):
                 csv_writer.writeheader()
 
                 for raw in Form.all_clothes(pid):
+                    if raw['uid'] not in all_users:
+                        continue
                     all_users[raw['uid']]['clothes'] = raw['data']['clothes']
 
                 for uid in all_users:
