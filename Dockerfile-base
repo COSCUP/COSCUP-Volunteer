@@ -4,11 +4,14 @@ WORKDIR /app
 ADD ./requirements.txt ./requirements.txt
 RUN \
   apk update && apk upgrade                                   && \
-  apk add python3 curl ca-certificates cmake                     \
+  apk add python3 curl ca-certificates cmake g++ make            \
           gcc musl-dev libmemcached-dev python3-dev zlib-dev  && \
+  wget https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2 && \
+  tar xvjf jemalloc-5.2.1.tar.bz2 && cd jemalloc-5.2.1 && ./configure && make && make install && \
+  cd ../ && rm -rf ./jemalloc* && \
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py     && \
   python3 get-pip.py                                          && \
   rm get-pip.py                                               && \
   pip install -r ./requirements.txt                           && \
-  apk del curl gcc musl-dev python3-dev zlib-dev cmake        && \
+  apk del curl gcc musl-dev python3-dev zlib-dev cmake g++ make && \
   rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
