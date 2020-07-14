@@ -7,6 +7,7 @@ docker run -d --restart='always' \
            --log-opt max-file=1 \
            -v $(pwd)/log:/app/log \
            -p 127.0.0.1:6699:6699 \
+           -e LD_PRELOAD=/usr/local/lib/libjemalloc.so \
            volunteer-app:prod python3 ./main.py
 
 docker run -d --restart='always' \
@@ -18,4 +19,5 @@ docker run -d --restart='always' \
            --log-opt max-file=1 \
            -v $(pwd)/log:/app/log \
            -p 127.0.0.1:6688:6699 \
+           -e LD_PRELOAD=/usr/local/lib/libjemalloc.so \
            volunteer-app:prod python3 ./main.py
