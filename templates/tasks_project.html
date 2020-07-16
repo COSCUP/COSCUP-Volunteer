@@ -170,7 +170,10 @@
                                                                         </span>
                                                                         <span>[[ row.people.length ]] / [[ row.limit ]]</span>
                                                                     </a>
-                                                                    <a class="button is-small" :href="'/tasks/'+row.pid+'/r/'+row._id"><span class="icon"><i class="fas fa-link"></i></span></a>
+                                                                    <a class="button is-small" :href="'/tasks/'+row.pid+'/r/'+row._id"
+                                                                        @click="golink(row, $event)">
+                                                                        <span class="icon"><i class="fas fa-link"></i></span>
+                                                                    </a>
                                                                     <a class="button is-small" v-if="row._is_in_project"
                                                                        :href="'/tasks/'+row.pid+'/edit/'+row._id">
                                                                         <span class="icon"><i class="far fa-edit"></i></span></a>
@@ -374,6 +377,14 @@
                     document.querySelector('html').classList.remove('is-clipped');
                 },
                 detail: function(data) {
+                    if (typeof ga === 'function') {
+                        gtag('event', 'show', {
+                            event_category: data._id+' '+data.title,
+                            event_label: 'is_in_project:'+this.is_in_project+'|is_star:'+this.is_star+'|_joined:'+data._joined+'|_login:'+data._login,
+                            value: 1
+                        });
+                    }
+
                     document.querySelector('html').classList.add('is-clipped');
                     this.modal = data;
                     if (!data.creator) {
@@ -412,6 +423,13 @@
 
                 },
                 star: function($e) {
+                    if (typeof ga === 'function') {
+                        gtag('event', 'star', {
+                            event_category: this.is_star+' -> '+!this.is_star,
+                            event_label: 'is_in_project:'+this.is_in_project+'|is_star:'+this.is_star,
+                            value: 1
+                        });
+                    }
                     let $btns = $e.target.closest('.control').querySelectorAll('.button');
                     $btns.forEach(function(btn) {
                         btn.classList.add('is-loading');
@@ -483,6 +501,24 @@
                         $tasks.last_update = new Date();
                         $tasks.$forceUpdate();
                     });
+                },
+                golink: function(data, $e) {
+                    if (typeof ga === 'function') {
+                        $e.preventDefault();
+
+                        let $a = $e.target;
+                        if ($e.target.tagName != 'A') {
+                            $a = $e.target.closest('a');
+                        }
+
+                        gtag('event', 'share_link', {
+                            event_category: data._id+' '+data.title,
+                            event_label: 'is_in_project:'+this.is_in_project+'|is_star:'+this.is_star+'|_joined:'+data._joined+'|_login:'+data._login,
+                            value: 1,
+                            event_callback: function() {
+                                location.href = $a.href;
+                            }});
+                    }
                 },
                 prettydesc: function(text) {
                     if (text && text.length > 0) {
