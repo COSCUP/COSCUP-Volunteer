@@ -80,13 +80,13 @@
             },
             methods: {
                 save: function($e) {
-                    $e.explicitOriginalTarget.classList.add('is-loading');
+                    $e.submitter.classList.add('is-loading');
 
                     axios.post('./content', {data: this.data, casename: 'save'}).then(function(resp) {
                         $campaigncontentform.data = resp.data.mail;
 
                         $campaigncontentform.disabled = true;
-                        $e.explicitOriginalTarget.classList.remove('is-loading');
+                        $e.submitter.classList.remove('is-loading');
                     });
                 }
             },
