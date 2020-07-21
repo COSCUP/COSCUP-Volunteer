@@ -1,3 +1,7 @@
+from uuid import uuid4
+
+from pymongo.collection import ReturnDocument
+
 from models.formdb import FormDB
 from models.formdb import FormTrafficFeeMappingDB
 
@@ -247,3 +251,33 @@ class FormTrafficFeeMapping(object):
 
         '''
         return FormTrafficFeeMappingDB().find_one({'_id': pid})
+
+
+class FormAccommodation(object):
+    ''' FormAccommodation object '''
+    @staticmethod
+    def get(pid):
+        ''' Get data '''
+        for raw in FormDB().find({'case': 'accommodation', 'data.key': {'$ne': 'no'}}):
+            yield raw
+
+    @staticmethod
+    def update_room(pid, uid, room, change_key=True):
+        ''' Update room no
+
+        :param str pid: pid
+        :param str uid: uid
+        :param str room: room
+
+        '''
+        _update = {'data.room': room}
+        if change_key:
+            _update['data.room_key'] = '%0.8x' % uuid4().fields[0]
+
+        _query = {'case': 'accommodation', 'pid': pid, 'uid': uid}
+        _query['$or'] = [{'data.room': {'$ne': room}}, {'data.room': {'$exists': False}}]
+
+        return FormDB().find_one_and_update(
+            _query, {'$set': _update},
+            return_document=ReturnDocument.AFTER,
+        )

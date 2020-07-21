@@ -296,31 +296,35 @@ def team_form_accommodation(pid, tid):
             is_ok_submit = True
 
     if request.method == 'GET':
-        select_value = 'no'
-
-        form_data = Form.get_accommodation(pid=pid, uid=g.user['account']['_id'])
-        if form_data:
-            select_value = form_data['data']['key']
-
         return render_template('./form_accommodation.html',
-                project=project, team=team, is_ok_submit=is_ok_submit, select_value=select_value)
+                project=project, team=team, is_ok_submit=is_ok_submit)
 
     elif request.method == 'POST':
         if not is_ok_submit:
             return u'', 406
 
-        if request.form['accommodation'] not in ('no', 'yes', 'yes-longtraffic'):
-            return u'', 406
+        post_data = request.get_json()
 
-        data = {
-            'status': True if request.form['accommodation'] in ('yes', 'yes-longtraffic') else False,
-            'key': request.form['accommodation'],
-        }
+        if post_data['casename'] == 'get':
+            raw = {'selected': 'no'}
 
-        Form.update_accommodation(pid=pid, uid=g.user['account']['_id'], data=data)
+            form_data = Form.get_accommodation(pid=pid, uid=g.user['account']['_id'])
+            if form_data:
+                raw['selected'] = form_data['data']['key']
 
-        return redirect(url_for('team.team_form_accommodation',
-                pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
+            return jsonify({'data': raw})
+        if post_data['casename'] == 'update':
+            if post_data['selected'] not in ('no', 'yes', 'yes-longtraffic'):
+                return u'', 406
+
+            data = {
+                'status': True if post_data['selected'] in ('yes', 'yes-longtraffic') else False,
+                'key': post_data['selected'],
+            }
+
+            Form.update_accommodation(pid=pid, uid=g.user['account']['_id'], data=data)
+
+            return jsonify({'data': {'selected': post_data['selected']}})
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/traffic_fee', methods=('GET', 'POST'))
 def team_form_traffic_fee(pid, tid):
