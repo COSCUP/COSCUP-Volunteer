@@ -18,6 +18,7 @@ import setting
 from models.teamdb import TeamMemberChangedDB
 from models.teamdb import TeamPlanDB
 from module.form import Form
+from module.form import FormAccommodation
 from module.form import FormTrafficFeeMapping
 from module.mattermost_bot import MattermostTools
 from module.team import Team
@@ -312,8 +313,26 @@ def team_form_accommodation(pid, tid):
             if form_data:
                 raw['selected'] = form_data['data']['key']
 
-            return jsonify({'data': raw})
-        if post_data['casename'] == 'update':
+                room = {}
+                if 'room' in form_data['data'] and form_data['data']['room']:
+                    room['no'] = form_data['data']['room']
+                    room['key'] = form_data['data']['room_key']
+                    room['exkey'] = form_data['data'].get('room_exkey', '')
+
+                    room['mate'] = {}
+                    _user_room, mate_room = FormAccommodation.get_room_mate(pid=pid, uid=g.user['account']['_id'])
+                    if mate_room:
+                        user_info = User.get_info(uids=[mate_room['uid'], ])[mate_room['uid']]
+                        room['mate'] = {
+                            'uid': mate_room['uid'],
+                            'name': user_info['profile']['badge_name'],
+                            'tid': '',
+                            'picture': user_info['oauth']['picture'],
+                        }
+
+            return jsonify({'data': raw, 'room': room})
+
+        elif post_data['casename'] == 'update':
             if post_data['selected'] not in ('no', 'yes', 'yes-longtraffic'):
                 return u'', 406
 
@@ -325,6 +344,10 @@ def team_form_accommodation(pid, tid):
             Form.update_accommodation(pid=pid, uid=g.user['account']['_id'], data=data)
 
             return jsonify({'data': {'selected': post_data['selected']}})
+
+        elif post_data['casename'] == 'makechange':
+            msg = FormAccommodation.make_exchange(pid=pid, uid=g.user['account']['_id'], exkey=post_data['key'].strip())
+            return jsonify({'data': post_data, 'msg': msg})
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/traffic_fee', methods=('GET', 'POST'))
 def team_form_traffic_fee(pid, tid):
