@@ -13,25 +13,90 @@
             </div>
         </article>
         {% if is_ok_submit %}
-        <form id="accommodationform" v-on:submit.prevent="send">
-            <div class="field" v-cloak>
-                <div class="control">
-                    <label class="label">我需要申請住宿？</label>
-                    <div class="select">
-                        <select name="accommodation" v-model="raw.selected">
-                            <option value="no">我不需要住宿(No)</option>
-                            <option value="yes">我需要住宿(Yes)</option>
-                            <option value="yes-longtraffic">我需要住宿，且通勤時間大於一小時(Yes)</option>
-                        </select>
+        <section class="section" id="accommodationform">
+            <form v-on:submit.prevent="send">
+                <div class="field" v-cloak>
+                    <div class="control">
+                        <label class="label">我需要申請住宿？</label>
+                        <div class="select">
+                            <select name="accommodation" v-model="raw.selected">
+                                <option value="no">我不需要住宿(No)</option>
+                                <option value="yes">我需要住宿(Yes)</option>
+                                <option value="yes-longtraffic">我需要住宿，且通勤時間大於一小時(Yes)</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <button class="button is-primary" type="submit">送出申請</button>
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-primary" type="submit">送出申請</button>
+                    </div>
                 </div>
+            </form>
+            <div class="container my-5" v-if="Object.keys(room).length == 0">
+                <article class="message">
+                    <div class="message-body">
+                        <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                        提出申請後稍等行政組分配房間，之後才能進行交換房間功能。
+                    </div>
+                </article>
             </div>
-        </form>
+            <div class="container my-5" v-if="Object.keys(room).length > 0">
+                <h3 class="is-size-4">住宿資訊</h3>
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>住宿地點</td>
+                            <td>晶璽商旅 110台北市信義區信義路四段468號<br>
+                                <small>（check-in 時說是<span class="tag is-success is-light">COSCUP</span>或<span class="tag is-success is-light">開放文化基金會</span>）</small></td>
+                        </tr>
+                        <tr>
+                            <td>房間編號</td>
+                            <td>[[room.no]]<br><small>（不等於房號喔，check-in 時才會給正式房號）<small></td>
+                        </tr>
+                        <tr>
+                            <td>室友</td>
+                            <td v-if="Object.keys(room.mate).length > 0" style="vertical-align:middle;">
+                                <div style="display: inline-flex;">
+                                    <a :href="'/user/'+room.mate.uid" style="display:inherit;">
+                                        <figure class="image is-32x32">
+                                            <img class="is-rounded" v-bind:src="room.mate.picture">
+                                        </figure>
+                                        <p class="ml-2" style="margin: auto 0;">[[room.mate.name]]</p>
+                                    </a>
+                                </div>
+                            </td>
+                            <td v-if="Object.keys(room.mate).length === 0">
+                                無室友
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>交換代碼</td>
+                            <td>
+                                <span class="tag is-info is-light is-family-monospace has-text-weight-bold">[[room.key]]</span>
+                                <span class="icon"><i class="fas fa-plus"></i></span>
+                                <a @click="inputkey"
+                                    class="button is-small is-warning is-light is-family-monospace has-text-weight-bold">[[room.exkey ? room.exkey: '?']]</a>
+                                <a @click="makechange" v-if="disabled"
+                                    class="button is-small is-info is-light">送出</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <article class="message">
+                    <div class="message-body">
+                        <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                        如果要與他人同房，請將 <span class="tag is-info is-light is-family-monospace has-text-weight-bold">[[room.key]]</span> 給對方，並索取對方的「交換代碼」一同輸入後，最後一個輸入的人，完成檢查就會進行調整同房的程序。
+                    </div>
+                </article>
+            </div>
+        </section>
         {% else %}
         <article class="message is-small is-warning">
             <div class="message-body">
@@ -51,15 +116,35 @@
         let $accommodationform = new Vue({
             el: '#accommodationform',
             data: {
-                raw: {selected: ''}
+                raw: {selected: ''},
+                disabled: false,
+                room: {}
             },
             mounted: function() {
                 this.load();
             },
             methods: {
+                inputkey: function($e) {
+                    let metakey = window.prompt('請輸入對方的交換代碼...', this.room.exkey);
+                    if (metakey === null) {
+                        return ;
+                    }
+                    this.room.exkey = metakey;
+                    if (this.room.exkey != '') {
+                        this.disabled = true;
+                    }
+                },
+                makechange: function($e) {
+                    axios.post('./accommodation', {'casename': 'makechange', 'key': this.room.exkey}).then(function(resp) {
+                        console.info(resp.data.data);
+                        alert(resp.data.msg);
+                        window.location.href = './accommodation';
+                    });
+                },
                 load: function($e) {
                     axios.post('./accommodation', {'casename': 'get'}).then(function(resp) {
                         $accommodationform.raw = resp.data.data;
+                        $accommodationform.room = resp.data.room;
                     });
                 },
                 send: function($e) {
