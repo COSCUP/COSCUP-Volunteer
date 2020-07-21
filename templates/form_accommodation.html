@@ -13,12 +13,12 @@
             </div>
         </article>
         {% if is_ok_submit %}
-        <form id="accommodationform" method="POST">
-            <div class="field">
+        <form id="accommodationform" v-on:submit.prevent="send">
+            <div class="field" v-cloak>
                 <div class="control">
                     <label class="label">我需要申請住宿？</label>
                     <div class="select">
-                        <select name="accommodation" v-bind:value="'{{select_value}}'">
+                        <select name="accommodation" v-model="raw.selected">
                             <option value="no">我不需要住宿(No)</option>
                             <option value="yes">我需要住宿(Yes)</option>
                             <option value="yes-longtraffic">我需要住宿，且通勤時間大於一小時(Yes)</option>
@@ -45,10 +45,29 @@
 {% endblock %}
 {% block js %}
 {% if is_ok_submit %}
+<script src="/js/axios.min.js"></script>
 <script>
     (function() {
         let $accommodationform = new Vue({
             el: '#accommodationform',
+            data: {
+                raw: {selected: ''}
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                load: function($e) {
+                    axios.post('./accommodation', {'casename': 'get'}).then(function(resp) {
+                        $accommodationform.raw = resp.data.data;
+                    });
+                },
+                send: function($e) {
+                    axios.post('./accommodation', {'casename': 'update', selected: this.raw.selected}).then(function(resp) {
+                        console.info(resp.data.data);
+                    });
+                }
+            },
             delimiters: ['[[', ']]']
         });
     })();

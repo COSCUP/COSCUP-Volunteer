@@ -1,0 +1,100 @@
+{% extends "project_edit_base.html" %}
+{% block head_title_project_edit %}住宿申請管理{% endblock %}
+{%block project_form_accommodation%}is-active{%endblock%}
+{% block project_edit_body %}
+<div class="content" id="formacc">
+    <table class="table is-narrow">
+        <thead>
+            <tr>
+                <th>no.</th>
+                <th>UID</th>
+                <th>picture</th>
+                <th>name</th>
+                <th><span @click="sorted">tid</span></th>
+                <th>ROCID</th>
+                <th>data</th>
+                <th>RoomKey</th>
+                <th><span @click="sort_room">Room</span></th>
+            </tr>
+        </thead>
+        <tbody v-cloak>
+            <tr v-for="(raw, index) in raws">
+                <td style="vertical-align:middle;">[[index+1]].</td>
+                <td style="vertical-align:middle;">
+                    <a :href="'/user/'+raw['uid']"><span class="tag is-family-monospace">[[ raw['uid'] ]]</span></a>
+                </td>
+                <td style="vertical-align:middle;">
+                    <span>
+                        <figure class="image is-32x32">
+                            <img class="is-rounded" v-bind:src="raw.picture">
+                        </figure>
+                    </span>
+                </td>
+                <td style="vertical-align:middle;">[[raw.name]]</td>
+                <td style="vertical-align:middle;">[[raw.tid]]</td>
+                <td style="vertical-align:middle;"><span class="tag is-family-monospace">[[raw.roc_id]]</span></td>
+                <td style="vertical-align:middle;">[[ raw.data['key'] ]]</td>
+                <td style="vertical-align:middle;"><span class="tag is-family-monospace">[[ raw.data['room_key'] ]]</span></td>
+                <td style="vertical-align:middle;">
+                    <div class="field">
+                        <div class="control">
+                            <input class="input" type="text" v-model="raw.room">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a class="button" @click="send">更新</a>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+(function() {
+    let $formacc = new Vue({
+        el: '#formacc',
+        data: {
+            raws: []
+        },
+        mounted: function() {
+            this.load();
+        },
+        methods: {
+            sorted: function() {
+                this.raws.sort(function(a, b) {
+                    return a.uid > b.uid;
+                });
+                this.raws.sort(function(a, b) {
+                    return parseInt(a.roc_id[1]) > parseInt(b.roc_id[1]);
+                });
+                this.raws.sort(function(a, b) {
+                    return a.tid > b.tid;
+                });
+            },
+            sort_room: function() {
+                this.raws.sort(function(a, b) {
+                    return a.room > b.room;
+                });
+            },
+            send: function($e) {
+                $e.target.classList.add('is-loading');
+                axios.post('./accommodation', {'casename': 'update', datas: this.raws}).then(function(resp) {
+                    $formacc.load($e);
+                });
+            },
+            load: function($e) {
+                axios.post('./accommodation', {'casename': 'get'}).then(function(resp) {
+                    $formacc.raws = resp.data.datas;
+                    $formacc.sorted();
+                    if ($e) {
+                        $e.target.classList.remove('is-loading');
+                    }
+                });
+            }
+        },
+        delimiters: ['[[', ']]']
+    });
+})();
+</script>
+{% endblock %}

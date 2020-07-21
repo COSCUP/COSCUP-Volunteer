@@ -66,18 +66,22 @@ class User(object):
         )
 
     @staticmethod
-    def get_info(uids):
+    def get_info(uids, need_sensitive=False):
         ''' Get user info
 
         :param list uids: uid
+        :param bool need_sensitive: show sensitive data
 
         '''
         users = {}
-        for u in UsersDB().find({'_id': {'$in': uids}},
-                {'profile': 1,
+        base_fields = {'profile': 1,
                  'profile_real.phone': 1,
-                 'profile_real.name': 1,
-            }):
+                 'profile_real.name': 1, }
+
+        if need_sensitive:
+            base_fields['profile_real.roc_id'] = 1
+
+        for u in UsersDB().find({'_id': {'$in': uids}}, base_fields):
             users[u['_id']] = u
             oauth_data = OAuthDB().find_one(
                     {'owner': u['_id']},
