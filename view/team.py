@@ -308,12 +308,12 @@ def team_form_accommodation(pid, tid):
 
         if post_data['casename'] == 'get':
             raw = {'selected': 'no'}
+            room = {}
 
             form_data = Form.get_accommodation(pid=pid, uid=g.user['account']['_id'])
             if form_data:
                 raw['selected'] = form_data['data']['key']
 
-                room = {}
                 if 'room' in form_data['data'] and form_data['data']['room']:
                     room['no'] = form_data['data']['room']
                     room['key'] = form_data['data']['room_key']
