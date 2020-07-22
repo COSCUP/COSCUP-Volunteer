@@ -50,15 +50,32 @@
                             <th>Value</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody v-cloak>
                         <tr>
                             <td>住宿地點</td>
                             <td>晶璽商旅 110台北市信義區信義路四段468號<br>
                                 <small>（check-in 時說是<span class="tag is-success is-light">COSCUP</span>或<span class="tag is-success is-light">開放文化基金會</span>）</small></td>
                         </tr>
                         <tr>
+                            <td>住宿時間</td>
+                            <td>
+                                <span class="tag is-info">7/31(晚)</span>
+                                <span class="tag is-info">8/1(晚)</span>
+                                <span class="tag is-danger">8/2(早上退宿)</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>交通車</td>
+                            <td>
+                                <span>晶璽→台科大</span>
+                                <span class="tag is-link is-light">06:45</span>
+                                <span class="tag is-link is-light">07:15</span>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>房間編號</td>
-                            <td>[[room.no]]<br><small>（不等於房號喔，check-in 時才會給正式房號）<small></td>
+                            <td><span class="is-family-monospace">[[room.no]]</span><br>
+                                <small>（不等於房號喔，check-in 時才會給正式房號）<small></td>
                         </tr>
                         <tr>
                             <td>室友</td>
