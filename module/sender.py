@@ -1,4 +1,5 @@
 import jinja2
+from jinja2.sandbox import SandboxedEnvironment
 from pymongo.collection import ReturnDocument
 
 import setting
@@ -110,7 +111,7 @@ class SenderMailer(object):
         body = jinja2.Environment().from_string(open(template_path, 'r').read()).render(**content)
 
         self.tpl = jinja2.Environment().from_string(body)
-        self.subject = jinja2.Environment().from_string(subject)
+        self.subject = SandboxedEnvironment().from_string(subject)
 
         if source is None:
             source = setting.AWS_SES_FROM
