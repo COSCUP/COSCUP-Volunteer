@@ -108,9 +108,9 @@ class SenderMailer(object):
 
     '''
     def __init__(self, template_path, subject, content, source=None):
-        body = jinja2.Environment().from_string(open(template_path, 'r').read()).render(**content)
+        body = SandboxedEnvironment().from_string(open(template_path, 'r').read()).render(**content)
 
-        self.tpl = jinja2.Environment().from_string(body)
+        self.tpl = SandboxedEnvironment().from_string(body)
         self.subject = SandboxedEnvironment().from_string(subject)
 
         if source is None:
