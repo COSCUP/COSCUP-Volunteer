@@ -302,7 +302,7 @@ def mail_tasks_star_one(sender, **kwargs):
 
     raw_mail = awsses.raw_mail(
             to_addresses=(kwargs['user'], ),
-            subject=u'有一筆新志工任務 - %s' % kwargs['task']['title'],
+            subject=u'有一筆新志工任務 - %s [%s]' % (kwargs['task']['title'], kwargs['task_id']),
             body=body,
         )
 

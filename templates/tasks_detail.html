@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 {% block head_title %} - Task: {{task.title}} [{{task._id}}]{% endblock %}
 {%block og%}
-<meta property="og:title" content="Task: {{task.title}} [{{task.pid}}.{{task._id}}] Volunteer with COSCUP! 志工服務系統">
+<meta property="og:title" content="!!! {{task.title}} [{{task.pid}}.{{task._id}}] - Volunteer with COSCUP! 志工服務系統">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="COSCUP Volunteer">
-<meta property="og:image" content="https://volunteer.coscup.org/img/coscup_volunteer_og.png">
+<meta property="og:image" content="https://volunteer.coscup.org/img/volunteer_tasks_paper.png">
 <meta property="og:description" content="{{task.desc|replace('\n', ' ')}}">
+<meta property="twitter:title" content="!!! {{task.title}} [{{task.pid}}.{{task._id}}] - Volunteer with COSCUP! 志工服務系統">
+<meta property="twitter:card" content="summary">
+<meta property="twitter:site" content="@coscup">
 {%endblock%}
 {% block body %}
 <section class="hero is-primary">

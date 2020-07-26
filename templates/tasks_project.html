@@ -1,22 +1,40 @@
 {% extends "base.html" %}
 {% block head_title %} - Task {{project.name}}{% endblock %}
 {%block og%}
-<meta property="og:title" content="Tasks: {{project.name}} 志工任務平台 Volunteer with COSCUP! 志工服務系統">
+<meta property="og:title" content="{{project.name}}'s Tasks - 志工任務平台 Volunteer with COSCUP! 志工服務系統">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="COSCUP Volunteer">
-<meta property="og:image" content="https://volunteer.coscup.org/img/coscup_volunteer_og.png">
+<meta property="og:image" content="https://volunteer.coscup.org/img/volunteer_tasks_paper_marketing.png">
 <meta property="og:description" content="找任務、接任務、解任務、領獎賞">
+<meta property="twitter:title" content="{{project.name}}'s Tasks - 志工任務平台 Volunteer with COSCUP! 志工服務系統">
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:site" content="@coscup">
+{%endblock%}
+{% block style %}
+<style>
+  .tophero {
+      background-position: center bottom;
+      background-repeat:  no-repeat;
+      background-size:  cover;
+      background-image: url('https://volunteer.coscup.org/img/volunteer_tasks_paper_marketing.png');
+  }
+  .tophero .title,
+  .tophero .subtitle {
+      text-shadow: 1px 1px 2px #000;
+      color: #fff !important;
+  }
+</style>
 {%endblock%}
 {% block body %}
-<section class="hero is-success">
+<section class="hero is-success is-large tophero">
     <div class="hero-body">
         <div class="container">
             <h1 class="title">
                 Tasks: {{project.name}}
             </h1>
-            <h3 class="subtitle">
+            <h2 class="subtitle">
                 找任務、接任務、解任務、領獎賞
-            </h3>
+            </h2>
         </div>
     </div>
     <div class="hero-foot">
