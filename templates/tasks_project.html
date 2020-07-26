@@ -135,12 +135,16 @@
                                             <thead>
                                                 <tr>
                                                     <th class="has-background-info-light">
-                                                        <div class="tags has-addons">
+                                                        <div :id="'tag'+hashCode(mdate[0]+mcate[0])" class="tags has-addons">
                                                             <span class="tag is-success is-light">
                                                                 <span class="icon"><i class="far fa-folder-open"></i></span>
                                                             </span>
                                                             <span v-if="mcate[0]" class="tag is-info">[[ mcate[0] ]]</span>
                                                             <span v-if="!mcate[0]" class='tag'>未分類</span>
+                                                            <span class="tag">
+                                                                <a :href="'#tag'+hashCode(mdate[0]+mcate[0])">
+                                                                    <span class="icon"><i class="fas fa-link"></i></span></a>
+                                                            </span>
                                                         </div>
                                                     </th>
                                                 </tr>
@@ -281,7 +285,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <article class="message is-info"
+                            <article class="message is-info my-2"
                                 v-if="modal.creator && Object.keys(modal.creator).length > 0">
                                 <div class="message-body">
                                     <span class="icon"><i class="fas fa-info-circle"></i></span>
@@ -537,6 +541,13 @@
                                 location.href = $a.href;
                             }});
                     }
+                },
+                hashCode: function(s) {
+                    let h;
+                    for(let i = 0; i < s.length; i++) {
+                        h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+                    }
+                    return h;
                 },
                 prettydesc: function(text) {
                     if (text && text.length > 0) {
