@@ -530,6 +530,35 @@ def team_form_clothes(pid, tid):
                 Form.update_clothes(pid=team['pid'], uid=g.user['account']['_id'], data={'clothes': post_data['clothes']})
                 return jsonify({})
 
+@VIEW_TEAM.route('/<pid>/<tid>/form/drink', methods=('GET', 'POST'))
+def team_form_drink(pid, tid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    if not (g.user['account']['_id'] in team['members'] or \
+            g.user['account']['_id'] in team['chiefs']):
+        return redirect('/')
+
+    if request.method == 'GET':
+        return render_template('./form_drink.html', project=project, team=team)
+
+    elif request.method == 'POST':
+        post_data = request.get_json()
+        if post_data['casename'] == 'get':
+            data = Form.get_drink(pid=team['pid'], uid=g.user['account']['_id'])
+            if not data:
+                data = {'data': {'y18': False}}
+
+            return jsonify({'data': data['data']})
+
+        elif post_data['casename'] == 'post':
+            if 'y18' in post_data:
+                data = {'y18': bool(post_data['y18'])}
+                Form.update_drink(pid=team['pid'], uid=g.user['account']['_id'], data=data)
+
+        return jsonify({'data': post_data})
+
 @VIEW_TEAM.route('/<pid>/<tid>/form/parking_card', methods=('GET', 'POST'))
 def team_form_parking_card(pid, tid):
     team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)

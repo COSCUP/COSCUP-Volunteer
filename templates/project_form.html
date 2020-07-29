@@ -18,6 +18,8 @@
                     v-on:click="getResult('clothes')">衣服尺寸</button>
                 <button class="button is-success" v-bind:class="{'is-outlined': casename != 'parking_card'}"
                     v-on:click="getResult('parking_card')">停車卡</button>
+                <button class="button is-success" v-bind:class="{'is-outlined': casename != 'drink'}"
+                    v-on:click="getResult('drink')">理性飲酒聲明</button>
             </div>
             <span>資料筆數：[[ result.length ]]，有效資料：[[ has_data ]]</span>
         </div>
