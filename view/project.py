@@ -265,6 +265,42 @@ def project_form_api(pid):
 
                 return jsonify({'result': result})
 
+        elif data['case'] == 'drink':
+            all_users = {}
+            for team in Team.list_by_pid(pid=pid):
+                for uid in team['chiefs']+team['members']:
+                    all_users[uid] = {'tid': team['tid']}
+
+            user_info = User.get_info(uids=list(all_users.keys()))
+
+            fieldnames = ('uid', 'picture', 'name', '_has_data', 'tid', 'y18')
+            with io.StringIO() as str_io:
+                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
+                csv_writer.writeheader()
+
+                for raw in Form.all_drink(pid):
+                    if raw['uid'] not in all_users:
+                        continue
+
+                    all_users[raw['uid']]['y18'] = raw['data']['y18']
+
+                for uid in all_users:
+                    data = {
+                        'uid': uid,
+                        'picture': user_info[uid]['oauth']['picture'],
+                        'name': user_info[uid]['profile']['badge_name'],
+                        '_has_data': True if all_users[uid].get('y18') is not None else False,
+                        'tid': all_users[uid]['tid'],
+                        'y18': all_users[uid].get('y18'),
+                    }
+                    csv_writer.writerow(data)
+
+                result = []
+                for raw in csv.reader(io.StringIO(str_io.getvalue())):
+                    result.append(raw)
+
+                return jsonify({'result': result})
+
 @VIEW_PROJECT.route('/<pid>/edit/team/api', methods=('GET', 'POST'))
 def project_edit_create_team_api(pid):
     project = Project.get(pid)

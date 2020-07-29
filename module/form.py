@@ -227,6 +227,41 @@ class Form(object):
         for raw in FormDB().find({'case': 'parking_card', 'pid': pid}):
             yield raw
 
+    @staticmethod
+    def update_drink(pid, uid, data):
+        ''' Update drink
+
+        :param str pid: project id
+        :param str uid: user id
+        :param dict data: form data
+
+        .. note::
+            - data:
+                - y18: bool
+
+        '''
+        return FormDB().add_by_case(case='drink', pid=pid, uid=uid, data=data)
+
+    @staticmethod
+    def get_drink(pid, uid):
+        ''' Get drink
+
+        :param str pid: project id
+        :param str uid: user id
+
+        '''
+        return FormDB().find_one({'case': 'drink', 'pid': pid, 'uid': uid})
+
+    @staticmethod
+    def all_drink(pid):
+        ''' Get all drink
+
+        :param str pid: project id
+
+        '''
+        for raw in FormDB().find({'case': 'drink', 'pid': pid}):
+            yield raw
+
 
 class FormTrafficFeeMapping(object):
     ''' FormTrafficFeeMapping object '''

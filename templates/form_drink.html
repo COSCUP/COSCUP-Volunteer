@@ -1,0 +1,77 @@
+{% extends "form.html" %}
+{% block head_title_form %}理性飲酒聲明{% endblock %}
+{% block head_subtitle %}閱讀完之後我會知道改怎麼喝酒{% endblock %}
+{% block form_menu_drink%}is-active{% endblock %}
+{% block form_body %}
+<div class="columns">
+    <div id="drinkform" class="column is-three-fifths">
+        <section class="section">
+            <div class="container">
+                <h3 class="title">理性飲酒聲明</h3>
+                <ol>
+                    <li>有心臟、高血壓疾病的來賓及懷孕的婦女，請勿飲酒。</li>
+                    <li>飲酒時要搭配飲用礦泉水，飲酒前與飲酒中請進食，提醒勿空腹飲酒。</li>
+                    <li>不得有酒醉而影響會場秩序與安全之行為，酒醉與否由主辦單位認定。</li>
+                    <li>酒後勿開車，主辦單位另有提供計程車叫車服務,請洽現場服務人員。</li>
+                <ol>
+            </div>
+        </section>
+        <form @submit.prevent="submit" v-cloak>
+            <div class="field">
+                <div class="control">
+                    <label class="label">我的聲明</label>
+                    <label class="radio">
+                        <input type="radio" :value="true" v-model="data.y18">
+                            我已經滿 18 也閱讀理性飲酒聲明。
+                    </label>
+                    <label class="radio">
+                        <input type="radio" :value="false" v-model="data.y18">
+                            我不喝酒！
+                    </label>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit">送出</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function() {
+        let $drinkform = new Vue({
+            el: '#drinkform',
+            data: {
+                data: {}
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                load: function() {
+                    axios.post('./drink', {casename: 'get'}).then(function(resp) {
+                        $drinkform.data = resp.data.data;
+                    });
+                },
+                submit: function($e) {
+                    let $btn = $e.target.querySelector('.button');
+                    $btn.classList.add('is-loading');
+
+                    axios.post('./drink', {casename: 'post', y18: this.data['y18']}).then(function(resp) {
+                        $drinkform.load();
+                        $btn.classList.remove('is-loading');
+                        $btn.classList.add('is-success');
+                        $btn.classList.add('is-outlined');
+                        $btn.textContent = 'OK';
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}
