@@ -10,6 +10,15 @@
 <meta property="twitter:card" content="summary">
 <meta property="twitter:site" content="@coscup">
 {%endblock%}
+{% block style %}
+<style>
+  .table pre {
+      white-space:pre-wrap;
+      border-radius: 5px;
+      border: 1px solid #efefef;
+  }
+</style>
+{%endblock%}
 {% block body %}
 <section class="hero is-primary">
     <div class="hero-body">
@@ -59,7 +68,7 @@
                             </tr>
                             <tr>
                                 <td>Desc</td>
-                                <td>{{task.desc|replace('\n', '<br>')|safe}}</td>
+                                <td><pre>{{task.desc}}</pre></td>
                             </tr>
                             <tr>
                                 <td>Post by</td>
