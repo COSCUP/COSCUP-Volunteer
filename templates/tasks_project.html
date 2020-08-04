@@ -262,7 +262,9 @@
                                     </tr>
                                     <tr>
                                         <td>Desc</td>
-                                        <td v-html="prettydesc(modal.desc)"></td>
+                                        <td>
+                                          <pre>[[ modal.desc ]]</pre>
+                                        </td>
                                     </tr>
                                     <tr v-if="modal.creator && Object.keys(modal.creator).length > 0">
                                         <td>Post by</td>
@@ -557,6 +559,7 @@
                     }
                     return h;
                 },
+                // deprecated, commit: [Change <v-html> to <pre>]
                 prettydesc: function(text) {
                     if (text && text.length > 0) {
                         return text.split('\n').join('<br>');
