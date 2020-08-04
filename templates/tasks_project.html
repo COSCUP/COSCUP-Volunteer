@@ -563,12 +563,6 @@
                         h = Math.imul(31, h) + s.charCodeAt(i) | 0;
                     }
                     return h;
-                },
-                // deprecated, commit: [Change <v-html> to <pre>]
-                prettydesc: function(text) {
-                    if (text && text.length > 0) {
-                        return text.split('\n').join('<br>');
-                    }
                 }
             },
             delimiters: ['[[', ']]']
