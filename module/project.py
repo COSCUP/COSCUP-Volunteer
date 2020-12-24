@@ -27,7 +27,7 @@ class Project(object):
     @staticmethod
     def all():
         ''' List all project '''
-        return ProjectDB(pid=None).find()
+        return ProjectDB(pid=None).find({}, sort=(('action_date', -1), ))
 
     @staticmethod
     def get(pid):
