@@ -8,4 +8,5 @@ docker run \
            --log-opt max-file=1 \
            -v $(pwd)/scripts:/app/scripts \
            -e LD_PRELOAD=/usr/local/lib/libjemalloc.so \
+           -e PYTHONPATH=/app \
            volunteer-app:prod sh

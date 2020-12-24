@@ -19,7 +19,7 @@ class ProjectDB(DBBase):
 
     def index(self):
         ''' Index '''
-        self.create_index([('owners', 1), ])
+        self.create_index([('owners', 1), ('action_date', -1)])
 
     def default(self):
         ''' default data '''
