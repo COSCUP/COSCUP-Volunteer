@@ -8,6 +8,7 @@ from jinja2 import FileSystemLoader
 
 import setting
 from celery_task.celery import app
+from celery_task.task_service_sync import service_sync_mattermost_add_channel
 from celery_task.task_service_sync import service_sync_mattermost_invite
 from models.mailletterdb import MailLetterDB
 from models.teamdb import TeamMemberChangedDB
@@ -164,6 +165,7 @@ def mail_member_add(sender, **kwargs):
             )
 
         r = mail_member_send.apply_async(kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
+        service_sync_mattermost_add_channel.apply_async(kwargs={'pid': raw['pid'], 'uids': (raw['uid'], )})
         logger.info(r)
 
 
