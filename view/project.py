@@ -12,7 +12,9 @@ from flask import render_template
 from flask import request
 from flask import url_for
 
+from celery_task.task_service_sync import service_sync_mattermost_add_channel
 from models.oauth_db import OAuthDB
+from models.teamdb import TeamMemberChangedDB
 from models.users_db import UsersDB
 from module.form import Form
 from module.form import FormAccommodation
@@ -324,7 +326,23 @@ def project_edit_create_team_api(pid):
     elif request.method == 'POST':
         data = request.json
         if data['submittype'] == 'update':
+            chiefs = data['chiefs']
+            members = data['members']
+            if isinstance(data['chiefs'], str):
+                chiefs = data['chiefs'].split(',')
+
+            if isinstance(data['members'], str):
+                members = data['members'].split(',')
+
+            new_members = set(chiefs + members)
+            old_members = set(Team.get_users(pid=pid, tids=(data['tid'], ))[data['tid']])
+
+            TeamMemberChangedDB().make_record(pid=pid, tid=data['tid'],
+                    add_uids=new_members-old_members, del_uids=old_members-new_members)
+
             Team.update_setting(pid=pid, tid=data['tid'], data=data)
+            service_sync_mattermost_add_channel.apply_async(kwargs={'pid': pid, 'uids': list(new_members)})
+
             return u'%s' % data
         elif data['submittype'] == 'create':
             Team.create(pid=pid, tid=data['tid'], name=data['name'], owners=project['owners'])
