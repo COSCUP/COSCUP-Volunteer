@@ -295,7 +295,7 @@ class FormAccommodation(object):
     @staticmethod
     def get(pid):
         ''' Get data '''
-        for raw in FormDB().find({'case': 'accommodation', 'data.key': {'$ne': 'no'}}):
+        for raw in FormDB().find({'case': 'accommodation', 'pid': pid, 'data.key': {'$ne': 'no'}}):
             yield raw
 
     @staticmethod
