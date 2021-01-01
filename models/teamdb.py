@@ -126,16 +126,24 @@ class TeamMemberChangedDB(DBBase):
 
         '''
         if add_uids:
-            self.insert_many([{'pid': pid, 'tid': tid, 'case': 'add', 'uid': uid, 'create_at': time()} for uid in add_uids])
+            query = [{'pid': pid, 'tid': tid, 'case': 'add', 'uid': uid, 'create_at': time()} for uid in add_uids if uid]
+            if query:
+                self.insert_many(query)
 
         if del_uids:
-            self.insert_many([{'pid': pid, 'tid': tid, 'case': 'del', 'uid': uid, 'create_at': time()} for uid in del_uids])
+            query = [{'pid': pid, 'tid': tid, 'case': 'del', 'uid': uid, 'create_at': time()} for uid in del_uids if uid]
+            if query:
+                self.insert_many(query)
 
         if waiting_uids:
-            self.insert_many([{'pid': pid, 'tid': tid, 'case': 'waiting', 'uid': uid, 'create_at': time()} for uid in waiting_uids])
+            query = [{'pid': pid, 'tid': tid, 'case': 'waiting', 'uid': uid, 'create_at': time()} for uid in waiting_uids if uid]
+            if query:
+                self.insert_many(query)
 
         if deny_uids:
-            self.insert_many([{'pid': pid, 'tid': tid, 'case': 'deny', 'uid': uid, 'create_at': time()} for uid in deny_uids])
+            query = [{'pid': pid, 'tid': tid, 'case': 'deny', 'uid': uid, 'create_at': time()} for uid in deny_uids if uid]
+            if query:
+                self.insert_many(query)
 
 
 class TeamPlanDB(DBBase):
