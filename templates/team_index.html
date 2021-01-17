@@ -19,6 +19,14 @@
               </div>
           </article>
           {% endif %}
+          {% if team.mailling %}
+          <article class="message is-small is-info">
+              <div class="message-body">
+                  <p><span class="icon has-text-info"><i class="fas fa-exclamation-circle"></i></span>
+                  組別的 mailling-list: <strong><a href="mailto:{{ team.mailling }}">{{ team.mailling }}</a></strong>
+              </div>
+          </article>
+          {% endif %}
       </div>
     </section>
 </div>
