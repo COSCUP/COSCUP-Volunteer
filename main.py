@@ -91,14 +91,12 @@ def need_login():
         else:
             session_data = USession.get(session['sid'])
             if session_data:
-                uid = session_data['uid']
-
                 g.user = {}
                 g.user['account'] = User(uid=session_data['uid']).get()
 
                 if g.user['account']:
                     g.user['data'] = OAuth(mail=g.user['account']['mail']).get()['data']
-                    g.user['participate_in'] = [{'pid': team['pid'], 'tid': team['tid'], 'name': team['name']} for team in Team.participate_in(uid=session_data['uid'])]
+                    g.user['participate_in'] = sorted([{'pid': team['pid'], 'tid': team['tid'], 'name': team['name']} for team in Team.participate_in(uid=session_data['uid'])], key=lambda x: x['pid'], reverse=True)
 
                     mc.set('sid:%s' % session['sid'], g.user, 600)
                 else:

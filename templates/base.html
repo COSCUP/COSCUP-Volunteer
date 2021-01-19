@@ -45,17 +45,27 @@
               <span class="icon"><i class="fas fa-pizza-slice"></i></span>
               <span>解任務！</span>
           </a>
-          <a class="navbar-item has-text-weight-medium" href="/project/2020/">
+          <a class="navbar-item has-text-weight-medium" href="/project/2021/">
               <span class="icon"><i class="far fa-bookmark"></i></span>
-              <span>COSCUP2020</span>
+              <span>COSCUP2021</span>
           </a>
           {% if g.user and g.user.data %}
-          {% for team in g.user['participate_in'] %}
-          <a class="navbar-item has-text-weight-medium" href="/team/{{team['pid']}}/{{team['tid']}}/">
-              <span class="icon"><i class="fas fa-thumbtack"></i></span>
-              <span>{{team['name']}}</span>
-          </a>
-          {% endfor %}
+          {% if g.user['participate_in'] %}
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link has-text-weight-medium" href="/team/{{g.user['participate_in'][0]['pid']}}/{{g.user['participate_in'][0]['tid']}}/">
+                <span class="icon"><i class="fas fa-thumbtack"></i></span>
+                <span>{{g.user['participate_in'][0]['name']}}</span>
+            </a>
+            <div class="navbar-dropdown">
+                {% for team in g.user['participate_in'] %}
+                <a class="navbar-item has-text-weight-medium" href="/team/{{team['pid']}}/{{team['tid']}}/">
+                    <span class="icon"><i class="fas fa-thumbtack"></i></span>
+                    <span>[{{team['pid']}}] {{team['name']}}</span>
+                </a>
+                {% endfor %}
+            </div>
+          </div>
+          {% endif %}
           {% endif %}
       </div>
       <div class="navbar-end">
