@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+from time import time
+
 from celery.utils.log import get_task_logger
 from celery_task.celery import app
 from models.mattermostdb import MattermostUsersDB
@@ -163,3 +165,29 @@ def service_sync_mattermost_add_channel(sender, **kwargs):
         if mid:
             r = mmt.post_user_to_channel(channel_id=project['mattermost_ch_id'], uid=mid)
             logger.info(r.json())
+
+@app.task(bind=True, name='servicesync.mattermost.projectuserin.channel',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=2,
+    routing_key='cs.servicesync.mattermost.projectuserin.channel', exchange='COSCUP-SECRETARY')
+def service_sync_mattermost_projectuserin_channel(sender, **kwargs):
+    pids = {}
+    for project in Project.all():
+        if project['action_date'] >= time() and ['mattermost_ch_id']:
+            pids[project['_id']] = project['mattermost_ch_id']
+
+    if not pids:
+        return
+
+    mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
+    for pid in pids:
+        uids = set()
+        for team in Team.list_by_pid(pid=pid):
+            uids.update(team['chiefs'])
+            uids.update(team['members'])
+
+        for uid in uids:
+            mid = mmt.find_possible_mid(uid=uid)
+            if mid:
+                r = mmt.post_user_to_channel(channel_id=pids[pid], uid=mid)
+                logger.info(r.json())
+
