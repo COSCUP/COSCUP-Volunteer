@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block head_title %} - 使用手冊{% endblock %}
 {% block body %}
-<section class="section">
-  <div class="container">
+<section class="hero is-info">
+  <div class="hero-body">
     <h1 class="title">
         使用手冊
     </h1>
@@ -15,9 +15,9 @@
             <div class="column is-half is-offset-one-quarter">
                 <div class="content">
                     <div class="buttons">
-                        <a class="button is-outlined" href="#account">帳號</a>
-                        <a class="button is-outlined" href="#jointo">加入組別</a>
-                        <a class="button is-outlined" href="#forchief">組長操作</a>
+                        <a class="button is-outlined is-info" href="#account">帳號</a>
+                        <a class="button is-outlined is-info" href="#jointo">加入組別</a>
+                        <a class="button is-outlined is-info" href="#forchief">組長操作</a>
                     </div>
                     <h2>帳號<a name="account"></a></h2>
                     <h3>登錄</h3>
@@ -62,6 +62,8 @@
                     <p>「給組員的組別介紹」是成為組員後，在組別首頁顯示的文字，可以放置相關組目標。</p>
                     <h3>組別 > 組員</h3>
                     <p>這是組員管理頁面，會看到提出申請與正式組員的清單，目前會提供電話號碼資訊給組長。</p>
+                    <h3>設定副組長</h3>
+                    <p>平台無副組長的權限，但組長可以設定多人，所以副組長的設定等同於組長的編輯權限。這部份的這定需要透過行政組協助設定後台，請提供需要設定人員的 uid（例：<span class="tag">{{g.user.account['_id']}}</span>）</p>
                     <div class="buttons is-right">
                         <a class="button is-small" href="#top">跑到上面</a>
                     </div>
