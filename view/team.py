@@ -256,6 +256,11 @@ def team_join_to(pid, tid):
 
     if request.method == 'GET':
         is_in_wait = WaitList.is_in_wait(pid=team['pid'], tid=team['tid'], uid=g.user['account']['_id'])
+
+        if not is_in_wait:
+            team['public_desc'] = re.sub('<a href="javascript:.*"', '<a href="/"',
+                    markdown(html.escape(team['public_desc'])))
+
         return render_template('./team_join_to.html', project=project, team=team, is_in_wait=is_in_wait)
 
     elif request.method == 'POST':
