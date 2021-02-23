@@ -74,6 +74,9 @@ class MattermostTools(MattermostBot):
 
         '''
         mml = MattermostLink(uid)
+        if not mml:
+            return u''
+
         if 'data' in mml.raw and 'user_id' in mml.raw['data']:
             return mml.raw['data']['user_id']
 
