@@ -56,6 +56,17 @@
                     </div>
                     <p class="help is-success">完整的學校/公司名稱</p>
                 </div>
+                <h3>飲食習慣 <span class="tag is-link is-light">餐點外燴</span></h3>
+                <hr>
+                <div class="field">
+                    <label class="label">需注意的項目</label>
+                    <div class="control">
+                        <label class="checkbox mr-3" v-for="ditem in dietaryHabit">
+                            <input type="checkbox" :value="ditem[0]" v-model="profile.dietary_habit">
+                            [[ ditem[1] ]]
+                        </label>
+                    </div>
+                </div>
                 <h3>銀行資訊 <span class="tag is-link is-light">交通費補助</span></h3>
                 <hr>
                 <div class="field is-horizontal">
@@ -152,6 +163,7 @@
             data: {
                 defaultCode: '',
                 phoneCodes: [],
+                dietaryHabit: [],
                 profile: {bank: {}}
             },
             mounted: function() {
@@ -163,6 +175,7 @@
                         $profileform.profile = resp.data.profile;
                         $profileform.defaultCode = resp.data.default_code;
                         $profileform.phoneCodes = resp.data.phone_codes;
+                        $profileform.dietaryHabit = resp.data.dietary_habit;
                     });
                 },
                 send: function() {
