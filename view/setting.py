@@ -47,6 +47,8 @@ def profile():
 @VIEW_SETTING.route('/profile_real', methods=('GET', 'POST'))
 def profile_real():
     if request.method == 'GET':
+        return render_template('./setting_profile_real.html')
+
         user = g.user['account']
 
         default_code = '886'
@@ -71,29 +73,60 @@ def profile_real():
                 phone_codes=phone_codes, default_code=default_code)
 
     elif request.method == 'POST':
-        try:
-            phone = phonenumbers.parse('+%(phone_code)s %(phone)s' % request.form)
-            phone = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.E164)
-        except phonenumbers.phonenumberutil.NumberParseException:
-            phone = ''
+        post_data = request.get_json()
 
-        data = {
-            'name': request.form['name'].strip(),
-            'phone': phone,
-            'birthday': request.form['birthday'].strip(),
-            'roc_id': request.form['roc_id'].strip(),
-            'company': request.form['company'].strip(),
-            'bank': {
-                'code': request.form['account_bank_code'].strip(),
-                'no': request.form['account_bank_no'].strip(),
-                'branch': request.form['account_bank_branch'].strip(),
-                'name': request.form['account_bank_name'].strip(),
+        if post_data['casename'] == 'get':
+            default_code = '886'
+
+            if 'profile_real' in g.user['account']:
+                user = {'profile_real': g.user['account']['profile_real']}
+
+                try:
+                    phone = phonenumbers.parse(user['profile_real']['phone'], None)
+                    user['profile_real']['phone'] = phonenumbers.format_number(
+                            phone, phonenumbers.PhoneNumberFormat.NATIONAL)
+
+                    default_code = phone.country_code
+
+                except phonenumbers.phonenumberutil.NumberParseException:
+                    pass
+            else:
+                user = {'profile_real': {}}
+
+            if 'bank' not in user['profile_real']:
+                user['profile_real']['bank'] = {}
+
+            phone_codes = sorted(phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key= lambda x: x[1][0])
+
+            return jsonify({'profile': user['profile_real'],
+                            'phone_codes': phone_codes,
+                            'default_code': default_code, })
+
+        elif post_data['casename'] == 'update':
+            try:
+                phone = phonenumbers.parse('+%(phone_code)s %(phone)s' % post_data['data'])
+                phone = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.E164)
+            except phonenumbers.phonenumberutil.NumberParseException:
+                phone = ''
+
+            data = {
+                'name': post_data['data']['name'].strip(),
+                'phone': phone,
+                'birthday': post_data['data']['birthday'].strip(),
+                'roc_id': post_data['data']['roc_id'].strip(),
+                'company': post_data['data']['company'].strip(),
+                'bank': {
+                    'code': post_data['data']['bank']['code'].strip(),
+                    'no': post_data['data']['bank']['no'].strip(),
+                    'branch': post_data['data']['bank']['branch'].strip(),
+                    'name': post_data['data']['bank']['name'].strip(),
+                }
             }
-        }
 
-        User(uid=g.user['account']['_id']).update_profile_real(data)
-        MC.get_client().delete('sid:%s' % session['sid'])
-        return redirect(url_for('setting.profile_real', _scheme='https', _external=True))
+            User(uid=g.user['account']['_id']).update_profile_real(data)
+            MC.get_client().delete('sid:%s' % session['sid'])
+
+            return jsonify(data)
 
 
 @VIEW_SETTING.route('/link/chat', methods=('GET', 'POST'))

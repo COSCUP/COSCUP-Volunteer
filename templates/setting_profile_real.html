@@ -7,11 +7,11 @@
         <div class="content">
             <h2>真實個人資訊</h2>
             <hr>
-            <form id="profileform" method="POST">
+            <form id="profileform" method="POST" v-on:submit.prevent="send" v-cloak>
                 <div class="field">
                     <label class="label">姓名 <span class="tag is-info is-light">住宿</span> <span class="tag is-warning is-light">志工時數</span></label>
                     <div class="control">
-                        <input class="input" name="name" type="text" value="{{user.profile_real.name}}">
+                        <input class="input" name="name" type="text" v-model="profile.name">
                     </div>
                     <p class="help is-success">真實世界的姓名</p>
                 </div>
@@ -22,11 +22,7 @@
                             <div class="control">
                                 <div class="select is-fullwidth">
                                     <select name="phone_code" class="is-family-monospace" v-model="defaultCode">
-                                        {% for code, country in phone_codes %}
-                                        {% if country[0] != '001' %}
-                                        <option value="{{code}}">{{country[0]}} +{{code}}</option>
-                                        {% endif %}
-                                        {% endfor %}
+                                        <option v-for="codes in phoneCodes" :value="codes[0]">[[ codes[1][0] ]] +[[ codes[0] ]]</option>
                                     </select>
                                 </div>
                             </div>
@@ -34,7 +30,7 @@
                         <div class="field">
                             <label class="label"><span class="tag is-info is-light">住宿</span> <span class="tag is-link is-light">組長</span></label>
                             <div class="control">
-                                <input class="input" name="phone" type="tel" value="{{user.profile_real.phone}}">
+                                <input class="input" name="phone" type="tel" v-model="profile.phone">
                             </div>
                         </div>
                     </div>
@@ -42,21 +38,21 @@
                 <div class="field">
                     <label class="label">出生年月日 <span class="tag is-warning is-light">志工時數</span></label>
                     <div class="control">
-                        <input class="input" name="birthday" type="date" value="{{user.profile_real.birthday}}">
+                        <input class="input" name="birthday" type="date" v-model="profile.birthday">
                     </div>
                     <p class="help is-success">這是檢查成年是否</p>
                 </div>
                 <div class="field">
                     <label class="label">身分證字號 <span class="tag is-info is-light">住宿</span> <span class="tag is-warning is-light">志工時數</span></label>
                     <div class="control">
-                        <input class="input" name="roc_id" type="text" value="{{user.profile_real.roc_id}}">
+                        <input class="input" name="roc_id" type="text" v-model="profile.roc_id">
                     </div>
                     <p class="help is-success">A187654321</p>
                 </div>
                 <div class="field">
                     <label class="label">組織單位（學校/公司） <span class="tag is-warning is-light">志工時數</span></label>
                     <div class="control">
-                        <input class="input" name="company" type="text" value="{{user.profile_real.company}}">
+                        <input class="input" name="company" type="text" v-model="profile.company">
                     </div>
                     <p class="help is-success">完整的學校/公司名稱</p>
                 </div>
@@ -67,14 +63,14 @@
                         <div class="field">
                             <label class="label">銀行代碼</label>
                             <div class="control">
-                                <input class="input" name="account_bank_code" pattern="[0-9]{3}" value="{{user.profile_real.bank.code}}">
+                                <input class="input" name="account_bank_code" pattern="[0-9]{3}" v-model="profile.bank.code">
                             </div>
                             <p class="help is-success">銀行代碼</p>
                         </div>
                         <div class="field">
                             <label class="label">銀行帳號</label>
                             <div class="control">
-                                <input class="input" name="account_bank_no" value="{{user.profile_real.bank.no}}">
+                                <input class="input" name="account_bank_no" v-model="profile.bank.no">
                             </div>
                             <p class="help is-success">銀行帳號</p>
                         </div>
@@ -85,14 +81,14 @@
                         <div class="field">
                             <label class="label">分行名稱</label>
                             <div class="control">
-                                <input class="input" name="account_bank_branch" value="{{user.profile_real.bank.branch}}">
+                                <input class="input" name="account_bank_branch" v-model="profile.bank.branch">
                             </div>
                             <p class="help is-success">例：新莊分行，也可以<a target="_blank" href="https://www.fisc.com.tw/tc/download/twd.txt">查詢</a>這張表。</p>
                         </div>
                         <div class="field">
                             <label class="label">戶名</label>
                             <div class="control">
-                                <input class="input" name="account_bank_name" value="{{user.profile_real.bank.name}}">
+                                <input class="input" name="account_bank_name" v-model="profile.bank.name">
                             </div>
                             <p class="help is-success">帳戶名稱，通常是本名為戶名</p>
                         </div>
@@ -148,12 +144,33 @@
 </div>
 {% endblock %}
 {% block js %}
+<script src="/js/axios.min.js"></script>
 <script>
     (function () {
         let $profileform = new Vue({
             el: '#profileform',
             data: {
-                defaultCode: '{{default_code}}'
+                defaultCode: '',
+                phoneCodes: [],
+                profile: {bank: {}}
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                load: function() {
+                    axios.post('./profile_real', {'casename': 'get'}).then(function(resp) {
+                        $profileform.profile = resp.data.profile;
+                        $profileform.defaultCode = resp.data.default_code;
+                        $profileform.phoneCodes = resp.data.phone_codes;
+                    });
+                },
+                send: function() {
+                    this.profile.phone_code = this.defaultCode;
+                    axios.post('./profile_real', {'casename': 'update', 'data': this.profile}).then(function(resp) {
+                        window.location.href = './profile_real';
+                    });
+                }
             },
             delimiters: ['[[', ']]']
         });
