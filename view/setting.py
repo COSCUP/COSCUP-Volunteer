@@ -11,6 +11,7 @@ from flask import request
 from flask import session
 from flask import url_for
 
+from module.dietary_habit import DietaryHabit
 from module.mattermost_link import MattermostLink
 from module.mc import MC
 from module.users import User
@@ -96,11 +97,16 @@ def profile_real():
             if 'bank' not in user['profile_real']:
                 user['profile_real']['bank'] = {}
 
+            if 'dietary_habit' not in user['profile_real']:
+                user['profile_real']['dietary_habit'] = []
+
             phone_codes = sorted(phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key= lambda x: x[1][0])
 
             return jsonify({'profile': user['profile_real'],
                             'phone_codes': phone_codes,
-                            'default_code': default_code, })
+                            'default_code': default_code,
+                            'dietary_habit': list(DietaryHabit.ITEMS.items()),
+                        })
 
         elif post_data['casename'] == 'update':
             try:
@@ -115,6 +121,7 @@ def profile_real():
                 'birthday': post_data['data']['birthday'].strip(),
                 'roc_id': post_data['data']['roc_id'].strip(),
                 'company': post_data['data']['company'].strip(),
+                'dietary_habit': DietaryHabit.valid(items_no=post_data['data']['dietary_habit']),
                 'bank': {
                     'code': post_data['data']['bank']['code'].strip(),
                     'no': post_data['data']['bank']['no'].strip(),
