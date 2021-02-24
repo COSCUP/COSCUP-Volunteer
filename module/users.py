@@ -76,7 +76,9 @@ class User(object):
         users = {}
         base_fields = {'profile': 1,
                  'profile_real.phone': 1,
-                 'profile_real.name': 1, }
+                 'profile_real.name': 1,
+                 'profile_real.dietary_habit': 1,
+                 }
 
         if need_sensitive:
             base_fields['profile_real.roc_id'] = 1

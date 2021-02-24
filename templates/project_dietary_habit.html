@@ -1,0 +1,98 @@
+{% extends "project_edit_base.html" %}
+{% block head_title_project_edit %}飲食習慣{% endblock %}
+{% block project_dietary_habit %}is-active{%endblock%}
+{% block project_edit_body %}
+<div id="projectdietaryhabit" class="columns">
+    <div class="column" v-cloak>
+        <div class="content">
+            <span>資料筆數：[[ datas.length ]]，有效資料：[[ Object.values(counter).reduce((a,b) => a+b, 0) ]]</span>
+        </div>
+        <div class="table-container">
+            <table class="table is-striped is-bordered">
+                <thead>
+                    <tr>
+                        <th>dietary_habit</th>
+                        <th>count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="count in Object.keys(counter)">
+                        <td>[[ dietaryHabit[count] ]]</td>
+                        <td>[[ counter[count] ]]</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table is-striped is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>uid</th>
+                        <th>picture</th>
+                        <th>name</th>
+                        <th>tid</th>
+                        <th>dietary_habit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="data in datas">
+                        <td class="is-vcentered">
+                            <a :href="'/user/'+data.uid"><span class="tag is-family-monospace">[[ data.uid ]]</span></a>
+                        </td>
+                        <td class="is-vcentered">
+                            <span>
+                                <figure class="image is-32x32">
+                                    <img class="is-rounded" v-bind:src="data.picture">
+                                </figure>
+                            </span>
+                        </td>
+                        <td class="is-vcentered">[[ data.name ]]</td>
+                        <td class="is-vcentered">[[ data.tid ]]</td>
+                        <td class="is-vcentered">
+                            <span class="tags">
+                                <span class="tag is-light is-info" v-for="habit in data.dietary_habit">[[ dietaryHabit[habit] ]]</span>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+(function() {
+    let $projectdietaryhabit = new Vue({
+        el: '#projectdietaryhabit',
+        data: {
+            dietaryHabit: {},
+            counter: {},
+            datas: []
+        },
+        mounted: function() {
+            this.load();
+        },
+        methods: {
+            load: function() {
+                axios.post('./dietary_habit', {casename: 'get'}).then(function(resp) {
+                    $projectdietaryhabit.datas = resp.data.datas;
+                    $projectdietaryhabit.dietaryHabit = resp.data.dietary_habit;
+                    $projectdietaryhabit.count();
+                });
+            },
+            count: function() {
+                Object.keys(this.dietaryHabit).forEach(function(item) {
+                    $projectdietaryhabit.counter[item] = 0;
+                });
+                for (var i = 0; i < this.datas.length; i++) {
+                    this.datas[i].dietary_habit.forEach(function(habit) {
+                        $projectdietaryhabit.counter[habit]++;
+                    });
+                }
+            }
+        },
+        delimiters: ['[[', ']]']
+    });
+})();
+</script>
+{% endblock %}
