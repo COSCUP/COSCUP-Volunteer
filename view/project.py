@@ -16,6 +16,7 @@ from celery_task.task_service_sync import service_sync_mattermost_add_channel
 from models.oauth_db import OAuthDB
 from models.teamdb import TeamMemberChangedDB
 from models.users_db import UsersDB
+from module.dietary_habit import DietaryHabit
 from module.form import Form
 from module.form import FormAccommodation
 from module.form import FormTrafficFeeMapping
@@ -461,3 +462,41 @@ def project_form_accommodation(pid):
                         pid=pid, uid=data['uid'].strip(), room=data['room'].strip())
 
             return jsonify({})
+
+@VIEW_PROJECT.route('/<pid>/dietary_habit', methods=('GET', 'POST'))
+def project_dietary_habit(pid):
+    project = Project.get(pid)
+    if g.user['account']['_id'] not in project['owners']:
+        return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
+
+    if request.method == 'GET':
+        return render_template('./project_dietary_habit.html', project=project)
+
+    elif request.method == 'POST':
+        post_data = request.get_json()
+
+        if post_data['casename'] == 'get':
+            all_users = {}
+            for team in Team.list_by_pid(pid=pid):
+                for uid in team['chiefs']+team['members']:
+                    all_users[uid] = {'tid': team['tid']}
+
+            user_infos = User.get_info(uids=list(all_users.keys()), need_sensitive=True)
+
+            datas = []
+            for uid in all_users:
+                user_info = user_infos[uid]
+                data = {
+                    'uid': uid,
+                    'name': user_info['profile']['badge_name'],
+                    'picture': user_info['oauth']['picture'],
+                    'tid': all_users[uid]['tid'],
+                    'dietary_habit': [],
+                }
+
+                if 'profile_real' in user_info and 'dietary_habit' in user_info['profile_real']:
+                    data['dietary_habit'] = user_info['profile_real']['dietary_habit']
+
+                datas.append(data)
+
+            return jsonify({'datas': datas, 'dietary_habit': DietaryHabit.ITEMS})
