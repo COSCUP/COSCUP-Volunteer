@@ -109,26 +109,37 @@ def profile_real():
                         })
 
         elif post_data['casename'] == 'update':
-            try:
-                phone = phonenumbers.parse('+%(phone_code)s %(phone)s' % post_data['data'])
-                phone = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.E164)
-            except phonenumbers.phonenumberutil.NumberParseException:
-                phone = ''
+            phone = ''
+            if 'phone' in post_data['data'] and post_data['data']['phone'] and \
+                    'phone_code' in post_data['data'] and post_data['data']['phone_code']:
+                try:
+                    phone = phonenumbers.parse('+%(phone_code)s %(phone)s' % post_data['data'])
+                    phone = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.E164)
+                except phonenumbers.phonenumberutil.NumberParseException:
+                    phone = ''
 
             data = {
-                'name': post_data['data']['name'].strip(),
+                'name': post_data['data'].get('name', '').strip(),
                 'phone': phone,
-                'birthday': post_data['data']['birthday'].strip(),
-                'roc_id': post_data['data']['roc_id'].strip(),
-                'company': post_data['data']['company'].strip(),
+                'roc_id': post_data['data'].get('roc_id', '').strip(),
+                'company': post_data['data'].get('company', '').strip(),
                 'dietary_habit': DietaryHabit.valid(items_no=post_data['data']['dietary_habit']),
                 'bank': {
-                    'code': post_data['data']['bank']['code'].strip(),
-                    'no': post_data['data']['bank']['no'].strip(),
-                    'branch': post_data['data']['bank']['branch'].strip(),
-                    'name': post_data['data']['bank']['name'].strip(),
+                    'code': post_data['data']['bank'].get('code', '').strip(),
+                    'no': post_data['data']['bank'].get('no', '').strip(),
+                    'branch': post_data['data']['bank'].get('branch', '').strip(),
+                    'name': post_data['data']['bank'].get('name', '').strip(),
                 }
             }
+
+            birthday = post_data['data'].get('birthday', '').strip()
+            if birthday:
+                try:
+                    birthday = arrow.get(birthday).format('YYYY-MM-DD')
+                except arrow.parser.ParserError:
+                    birthday = ''
+
+            data['birthday'] = birthday
 
             User(uid=g.user['account']['_id']).update_profile_real(data)
             MC.get_client().delete('sid:%s' % session['sid'])
