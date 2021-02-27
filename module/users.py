@@ -65,6 +65,14 @@ class User(object):
             return_document=ReturnDocument.AFTER,
         )
 
+    def property_suspend(self, value=True):
+        ''' Property suspend '''
+        return UsersDB().find_one_and_update(
+            {'_id': self.uid},
+            {'$set': {'property.suspend': value}},
+            return_document=ReturnDocument.AFTER,
+        )
+
     @staticmethod
     def get_info(uids, need_sensitive=False):
         ''' Get user info
