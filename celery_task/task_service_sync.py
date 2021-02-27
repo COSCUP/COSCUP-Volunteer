@@ -172,7 +172,7 @@ def service_sync_mattermost_add_channel(sender, **kwargs):
 def service_sync_mattermost_projectuserin_channel(sender, **kwargs):
     pids = {}
     for project in Project.all():
-        if project['action_date'] >= time() and ['mattermost_ch_id']:
+        if project['action_date'] >= time() and 'mattermost_ch_id' in project and project['mattermost_ch_id']:
             pids[project['_id']] = project['mattermost_ch_id']
 
     if not pids:
