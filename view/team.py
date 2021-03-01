@@ -687,7 +687,7 @@ def team_plan_edit(pid, tid):
                 for raw in result['data']:
                     raw['tid'] = tid
                     raw['team_name'] = team['name']
-                    raw['start_timestamp'] = arrow.get(raw['start']).timestamp
+                    raw['start_timestamp'] = arrow.get(raw['start']).timestamp()
 
                 if not result['data']:
                     result['data'] = [default, ]
@@ -700,7 +700,7 @@ def team_plan_edit(pid, tid):
                         for raw in team_plan['data']:
                             raw['tid'] = tid
                             raw['team_name'] = team_info['name']
-                            raw['start_timestamp'] = arrow.get(raw['start']).timestamp
+                            raw['start_timestamp'] = arrow.get(raw['start']).timestamp()
 
                             others.append(raw)
 
