@@ -20,7 +20,7 @@ class Project(object):
         data = projectdb.default()
         data['name'] = name
         data['owners'].extend(owners)
-        data['action_date'] = arrow.get(action_date).timestamp
+        data['action_date'] = arrow.get(action_date).timestamp()
 
         return projectdb.add(data)
 
