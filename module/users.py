@@ -65,7 +65,7 @@ class User(object):
             return_document=ReturnDocument.AFTER,
         )
 
-    def property_suspend(self, value=True):
+    def property_suspend(self, value: bool = True) -> dict:
         ''' Property suspend '''
         return UsersDB().find_one_and_update(
             {'_id': self.uid},

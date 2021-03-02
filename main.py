@@ -91,6 +91,11 @@ def need_login():
         else:
             session_data = USession.get(session['sid'])
             if session_data:
+                user_data = User(uid=session_data['uid']).get()
+                if 'property' in user_data and 'suspend' in user_data['property'] and user_data['property']['suspend']:
+                    session.pop('sid', None)
+                    return redirect(url_for('index', _scheme='https', _external=True))
+
                 g.user = {}
                 g.user['account'] = User(uid=session_data['uid']).get()
 
