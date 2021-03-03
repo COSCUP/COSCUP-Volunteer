@@ -8,6 +8,7 @@ from models.senderdb import SenderReceiverDB
 from models.teamdb import TeamDB
 from models.teamdb import TeamMemberChangedDB
 from models.teamdb import TeamPlanDB
+from models.users_db import UsersDB
 from models.usessiondb import USessionDB
 from models.waitlistdb import WaitListDB
 
@@ -24,4 +25,5 @@ if __name__ == '__main__':
     TeamMemberChangedDB().index()
     TeamPlanDB().index()
     USessionDB().index()
+    UsersDB().index()
     WaitListDB().index()

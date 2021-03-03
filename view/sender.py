@@ -127,6 +127,8 @@ def campaign_receiver(pid, tid, cid):
 
             return jsonify({'teams': teams,
                             'pickteams': campaign_data['receiver']['teams'],
+                            'is_all_users': campaign_data['receiver']['all_users'],
+                            'all_users_count': User.count(),
                             'filedata': sender_receiver,
                            })
 
@@ -138,7 +140,8 @@ def campaign_receiver(pid, tid, cid):
                 if tid in data['pickteams']:
                     _result.append(tid)
 
-            return jsonify(SenderCampaign.save_receiver(cid=cid, teams=_result)['receiver'])
+            return jsonify(SenderCampaign.save_receiver(
+                    cid=cid, teams=_result, all_users=bool(data['is_all_users']))['receiver'])
 
         if request.form['uploadtype'] == 'remove':
             SenderReceiver.remove(pid=team['pid'], cid=cid)
@@ -200,6 +203,11 @@ def campaign_schedule(pid, tid, cid):
             for raw in raws:
                 user_datas.append(dict(zip(fields, raw)))
 
+            if campaign_data['receiver']['all_users']:
+                fields, raws = SenderReceiver.get_all_users()
+                for raw in raws:
+                    user_datas.append(dict(zip(fields, raw)))
+
             SenderLogs.save(cid=cid,
                     layout=campaign_data['mail']['layout'], desc=u'Send', receivers=user_datas)
 
@@ -230,6 +238,11 @@ def campaign_schedule(pid, tid, cid):
             fields, raws = SenderReceiver.get(pid=team['pid'], cid=cid)
             if raws:
                 user_datas.append(dict(zip(fields, random.choice(raws))))
+
+            if campaign_data['receiver']['all_users']:
+                fields, raws = SenderReceiver.get_all_users()
+                if raws:
+                    user_datas.append(dict(zip(fields, random.choice(raws))))
 
             uid = g.user['account']['_id']
             users = User.get_info(uids=[uid, ])

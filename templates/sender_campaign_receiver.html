@@ -4,7 +4,7 @@
 {% block campaign_body %}
 <div class="columns">
     <div class="column">
-        <form id="campaignreceiverform" class="form" v-on:submit.prevent="save($event)">
+        <form id="campaignreceiverform" class="form" v-on:submit.prevent="save($event)" v-cloak>
             <div class="field">
                 <label class="label">Team<sup>([[ pickteams.length ]])</sup></label>
                 <div class="control">
@@ -18,14 +18,28 @@
                 <p class="help is-success">發送的組別</p>
             </div>
             <div class="field">
+                <label class="label">全志工平台的人員</label>
+                <div class="control">
+                    <label class="checkbox" style="margin: 0 12px 12px 0;">
+                        <input type="checkbox" v-model="is_all_users">
+                        <span v-bind:class="{'has-text-weight-bold': is_all_users, 'has-text-danger': is_all_users}">
+                            寄送全部人員（約：[[ all_users_count ]]）
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <div class="field">
                 <button class="button is-info">儲存</button>
             </div>
             <div class="field">
-                <article class="message is-info">
+                <article class="message is-info is-small">
                     <div class="message-body">
                         Team, Upload List 可以同時使用。
                     </div>
                 </article>
+            </div>
+            <div class="field">
+                <hr>
             </div>
             <div class="field">
                 <label class="label">Upload List</label>
@@ -71,6 +85,9 @@
             <div class="field">
                 <button class="button is-info">儲存</button>
             </div>
+            <div class="field">
+                <hr>
+            </div>
             <div class="field" v-if="filedata[1].length">
                 <div class="table-container">
                     <table class="table">
@@ -101,6 +118,8 @@
                 teams: [],
                 pickteams: [],
                 uploadtype: 'update',
+                is_all_users: false,
+                all_users_count: 0,
                 file: null,
                 filedata: [[], []],
             },
@@ -113,6 +132,8 @@
                         $campaignreceiverform.teams = resp.data.teams;
                         $campaignreceiverform.pickteams = resp.data.pickteams;
                         $campaignreceiverform.filedata = resp.data.filedata;
+                        $campaignreceiverform.is_all_users = resp.data.is_all_users;
+                        $campaignreceiverform.all_users_count = resp.data.all_users_count;
                     });
                 },
                 handleupload: function($e) {
@@ -121,8 +142,10 @@
                 save: function($e) {
                     $e.submitter.classList.add('is-loading');
 
-                    axios.post('./receiver', {casename: 'save', pickteams: this.pickteams}).then(function(resp) {
+                    axios.post('./receiver', {casename: 'save',
+                            pickteams: this.pickteams, is_all_users: this.is_all_users}).then(function(resp) {
                         $campaignreceiverform.pickteams = resp.data.teams;
+                        $campaignreceiverform.is_all_users = resp.data.all_users;
                         $e.submitter.classList.remove('is-loading');
                     }).then(function(resp) {
                         if ($campaignreceiverform.file || $campaignreceiverform.uploadtype == 'remove') {
