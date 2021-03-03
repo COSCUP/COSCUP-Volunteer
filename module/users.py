@@ -116,3 +116,31 @@ class User(object):
                 }
 
         return users
+
+    @staticmethod
+    def get_all_users(include_suspend: bool = False):
+        ''' Get all users '''
+        query = {}
+        if not include_suspend:
+            query = {
+                '$or': [
+                    {'property.suspend': {'$exists': False}},
+                    {'property.suspend': False},
+                ]}
+
+        for row in UsersDB().find(query, {'_id': 1}):
+            yield row
+
+    @staticmethod
+    def count(include_suspend: bool = False):
+        ''' Count users '''
+        query = {}
+        if not include_suspend:
+            query = {
+                '$or': [
+                    {'property.suspend': {'$exists': False}},
+                    {'property.suspend': False},
+                ]}
+
+        return UsersDB().count_documents(query)
+

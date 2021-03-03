@@ -45,6 +45,7 @@ class SenderCampaignDB(DBBase):
             'receiver': {
                 'teams': [],
                 'users': [],
+                'all_users': False,
             },
             'mail': {
                 'subject': '',

@@ -1,3 +1,5 @@
+from typing import List
+
 import jinja2
 from jinja2.sandbox import SandboxedEnvironment
 from pymongo.collection import ReturnDocument
@@ -81,16 +83,20 @@ class SenderCampaign(object):
         )
 
     @staticmethod
-    def save_receiver(cid, teams, users=None):
+    def save_receiver(cid, teams, users=None, all_users=False):
         ''' Save receiver
 
         :param str cid: cid
         :param list teams: teams
         :param list users: users
+        :param bool all_users: all volunteer users
+
+        .. note:: ``users`` not in completed implement
 
         '''
         update = {'receiver.teams': teams}
         update['receiver.users'] = users if users else []
+        update['receiver.all_users'] = all_users
 
         return SenderCampaignDB().find_one_and_update(
             {'_id': cid},
@@ -304,5 +310,22 @@ class SenderReceiver(object):
                 raw.append(data[field])
 
             raws.append(raw)
+
+        return (('name', 'mail'), raws)
+
+    @staticmethod
+    def get_all_users():
+        ''' Get all users '''
+        uids = []
+        for user in User.get_all_users():
+            uids.append(user['_id'])
+
+        user_infos = User.get_info(uids=uids)
+        raws = []
+        for uid in user_infos:
+            raws.append((
+                user_infos[uid]['profile']['badge_name'],
+                user_infos[uid]['oauth']['email'],
+            ))
 
         return (('name', 'mail'), raws)
