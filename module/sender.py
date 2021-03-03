@@ -1,5 +1,3 @@
-from typing import List
-
 import jinja2
 from jinja2.sandbox import SandboxedEnvironment
 from pymongo.collection import ReturnDocument
