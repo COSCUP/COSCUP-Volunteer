@@ -101,6 +101,15 @@ app.conf.beat_schedule = {
             'routing_key': 'cs.servicesync.mattermost.projectuserin.channel',
         },
     },
+    'servicesync.mattermost.users.position': {
+        'task': 'servicesync.mattermost.users.position',
+        'schedule': crontab(hour='*/8', minute='27'),
+        'kwargs': {},
+        'options': {
+            'exchange': 'COSCUP-SECRETARY',
+            'routing_key': 'cs.servicesync.mattermost.users.position',
+        },
+    },
     'mail.member.waiting': {
         'task': 'mail.member.waiting',
         'schedule': crontab(minute='*/5'),
