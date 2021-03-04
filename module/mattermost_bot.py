@@ -21,6 +21,10 @@ class MattermostBot(Session):
         headers = {'Authorization': 'Bearer %s' % self.token}
         return super(MattermostBot, self).post('%s%s' % (self.base_url, path), headers=headers, **kwargs)
 
+    def put(self, path, **kwargs):
+        headers = {'Authorization': 'Bearer %s' % self.token}
+        return super(MattermostBot, self).put('%s%s' % (self.base_url, path), headers=headers, **kwargs)
+
     def get_users(self, page, per_page=200):
         return self.get('/users', params={'page': page, 'per_page': per_page})
 
@@ -56,8 +60,24 @@ class MattermostBot(Session):
     def post_invite_by_email(self, team_id, emails):
         return self.post('/teams/%s/invite/email' % team_id, json=emails)
 
+    def post_invite_guests_by_email(self, team_id, emails, channels, message=None):
+        data = {
+            'emails': emails,
+            'channels': channels,
+        }
+        if message:
+            data['message'] = message.strip()
+
+        return self.post('/teams/%s/invite-guests/email' % team_id, json=data)
+
     def post_user_to_channel(self, channel_id, uid):
         return self.post('/channels/%s/members' % channel_id, json={'user_id': uid})
+
+    def put_users_patch(self, uid, position):
+        data = {
+            'position': position,
+        }
+        return self.put('/users/%s/patch' % uid, json=data)
 
 
 class MattermostTools(MattermostBot):

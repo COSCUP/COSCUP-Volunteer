@@ -191,3 +191,49 @@ def service_sync_mattermost_projectuserin_channel(sender, **kwargs):
                 r = mmt.post_user_to_channel(channel_id=pids[pid], uid=mid)
                 logger.info(r.json())
 
+@app.task(bind=True, name='servicesync.mattermost.users.position',
+    autoretry_for=(Exception, ), retry_backoff=True, max_retries=2,
+    routing_key='cs.servicesync.mattermost.users.position', exchange='COSCUP-SECRETARY')
+def service_sync_mattermost_users_position(sender, **kwargs):
+    pids = []
+    for project in Project.all():
+        if project['action_date'] >= time():
+            pids.append(project['_id'])
+
+    if not pids:
+        return
+
+    for pid in pids:
+        users = {}
+        for team in Team.list_by_pid(pid=pid):
+            team_name = team['name'].split('-')[0].strip()
+
+            for chief in team['chiefs']:
+                if chief not in users:
+                    users[chief] = []
+
+                if team['tid'] == 'coordinator':
+                    users[chief].append('🌟總召')
+                else:
+                    users[chief].append('⭐️組長@%s' % team_name)
+
+            team['members'] = set(team['members']) - set(team['chiefs'])
+            for member in team['members']:
+                if member not in users:
+                    users[member] = []
+
+                users[member].append('%s(組員)' % team_name)
+
+        mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
+        mmb = MattermostBot(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
+
+        for uid in users:
+            mid = mmt.find_possible_mid(uid=uid)
+            if not mid:
+                continue
+
+            position = [pid, ]
+            position.extend(users[uid])
+            position.append('[%s]' % uid)
+            mmb.put_users_patch(uid=mid, position=' '.join(position))
+
