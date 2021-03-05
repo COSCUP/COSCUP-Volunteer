@@ -12,6 +12,7 @@ from flask import render_template
 from flask import request
 from flask import url_for
 
+import setting
 from celery_task.task_service_sync import service_sync_mattermost_add_channel
 from models.oauth_db import OAuthDB
 from models.teamdb import TeamMemberChangedDB
@@ -20,6 +21,8 @@ from module.dietary_habit import DietaryHabit
 from module.form import Form
 from module.form import FormAccommodation
 from module.form import FormTrafficFeeMapping
+from module.mattermost_bot import MattermostBot
+from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.team import Team
 from module.users import User
@@ -500,3 +503,44 @@ def project_dietary_habit(pid):
                 datas.append(data)
 
             return jsonify({'datas': datas, 'dietary_habit': DietaryHabit.ITEMS})
+
+@VIEW_PROJECT.route('/<pid>/contact_book', methods=('GET', 'POST'))
+def project_contact_book(pid):
+    project = Project.get(pid)
+    if g.user['account']['_id'] not in project['owners']:
+        return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
+
+    if request.method == 'GET':
+        return render_template('./project_contact_book.html', project=project)
+
+    elif request.method == 'POST':
+        post_data = request.get_json()
+
+        if post_data['casename'] == 'get':
+            all_users = {}
+            for team in Team.list_by_pid(pid=pid):
+                for uid in team['chiefs']+team['members']:
+                    all_users[uid] = {'tid': team['tid']}
+
+            user_infos = User.get_info(uids=list(all_users.keys()), need_sensitive=True)
+
+            mmb = MattermostBot(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
+            mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
+            datas = []
+            for uid in all_users:
+                user_info = user_infos[uid]
+                data = {
+                    'uid': uid,
+                    'name': user_info['profile']['badge_name'],
+                    'picture': user_info['oauth']['picture'],
+                    'tid': all_users[uid]['tid'],
+                    'email': user_info['oauth']['email'],
+                }
+
+                if 'profile_real' in user_info:
+                    data['phone'] = user_info['profile_real'].get('phone', '')
+
+                data['user_name'] = mmt.find_user_name(mmt.find_possible_mid(uid=uid))
+                datas.append(data)
+
+            return jsonify({'datas': datas})

@@ -1,0 +1,70 @@
+{% extends "project_edit_base.html" %}
+{% block head_title_project_edit %}通訊錄{% endblock %}
+{% block project_contact_book %}is-active{%endblock%}
+{% block project_edit_body %}
+<div id="projectcontactbook" class="columns">
+    <div class="column" v-cloak>
+        <div class="content">
+            <span class="tag">共 [[ datas.length ]] 筆</span>
+        </div>
+        <div class="table-container">
+            <table class="table is-striped is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>uid</th>
+                        <th>picture</th>
+                        <th>name</th>
+                        <th>tid</th>
+                        <th>phone</th>
+                        <th>username</th>
+                        <th>email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="data in datas">
+                        <td class="is-vcentered">
+                            <a :href="'/user/'+data.uid"><span class="tag is-family-monospace">[[ data.uid ]]</span></a>
+                        </td>
+                        <td class="is-vcentered">
+                            <span>
+                                <figure class="image is-32x32">
+                                    <img class="is-rounded" v-bind:src="data.picture">
+                                </figure>
+                            </span>
+                        </td>
+                        <td class="is-vcentered">[[ data.name ]]</td>
+                        <td class="is-vcentered">[[ data.tid ]]</td>
+                        <td class="is-vcentered">[[ data.phone ]]</td>
+                        <td class="is-vcentered">[[ data.user_name ]]</td>
+                        <td class="is-vcentered">[[ data.email ]]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+(function() {
+    let $projectcontactbook = new Vue({
+        el: '#projectcontactbook',
+        data: {
+            datas: []
+        },
+        mounted: function() {
+            this.load();
+        },
+        methods: {
+            load: function() {
+                axios.post('./contact_book', {casename: 'get'}).then(function(resp) {
+                    $projectcontactbook.datas = resp.data.datas;
+                });
+            }
+        },
+        delimiters: ['[[', ']]']
+    });
+})();
+</script>
+{% endblock %}
