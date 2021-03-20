@@ -24,7 +24,7 @@
             <div class="media-content">
                 <div class="content">
                     <p><strong>{{u._info.profile.badge_name}}</strong> <small class="tag is-family-monospace">{{u.uid}}</small></p>
-                    <p>{{u.note}}</p>
+                    <textarea class="textarea">{{u.note}}</textarea>
                     <hr>
                     <p>申請者 Mail：<span class="tag is-info is-light"><a href="mailto:{{u._mail}}">{{u._mail}}</a></span></p>
                     {% if '_history' in u %}
@@ -44,6 +44,7 @@
                             </div>
                         </div>
                         {% endfor %}
+                    </div>
                     {% endif %}
                 </div>
                 <nav class="level is-mobile">
@@ -140,8 +141,8 @@
                     <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
                     組員也會同步到組的專用信箱 <span class="tag"><a href="mailto:{{team.mailling}}">{{team.mailling}}</a></span>
                 </div>
+            </article>
             {% endif %}
-        </div>
         </div>
         <!-- modal -->
         <div class="modal" v-bind:class="{'is-active': Object.keys(historymodal).length}">
