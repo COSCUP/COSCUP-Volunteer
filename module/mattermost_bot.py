@@ -1,3 +1,5 @@
+import logging
+
 from requests import Session
 
 import setting
@@ -8,22 +10,37 @@ from module.mattermost_link import MattermostLink
 
 
 class MattermostBot(Session):
-    def __init__(self, token, base_url):
+    def __init__(self, token, base_url, log_name='MattermostBot'):
         super(MattermostBot, self).__init__()
         self.token = token
         self.base_url = base_url
+        self.log = logging.getLogger(log_name)
+
+    def log_rate_limit(self, headers):
+        ''' Get log info from headers '''
+        self.log.info('X-Ratelimit-Limit: %s, X-Ratelimit-Remaining: %s, X-Ratelimit-Reset: %s' % (
+                headers.get('X-Ratelimit-Limit'),
+                headers.get('X-Ratelimit-Remaining'),
+                headers.get('X-Ratelimit-Reset'),
+            ))
 
     def get(self, path, **kwargs):
         headers = {'Authorization': 'Bearer %s' % self.token}
-        return super(MattermostBot, self).get('%s%s' % (self.base_url, path), headers=headers, **kwargs)
+        r = super(MattermostBot, self).get('%s%s' % (self.base_url, path), headers=headers, **kwargs)
+        self.log_rate_limit(r.headers)
+        return r
 
     def post(self, path, **kwargs):
         headers = {'Authorization': 'Bearer %s' % self.token}
-        return super(MattermostBot, self).post('%s%s' % (self.base_url, path), headers=headers, **kwargs)
+        r = super(MattermostBot, self).post('%s%s' % (self.base_url, path), headers=headers, **kwargs)
+        self.log_rate_limit(r.headers)
+        return r
 
     def put(self, path, **kwargs):
         headers = {'Authorization': 'Bearer %s' % self.token}
-        return super(MattermostBot, self).put('%s%s' % (self.base_url, path), headers=headers, **kwargs)
+        r = super(MattermostBot, self).put('%s%s' % (self.base_url, path), headers=headers, **kwargs)
+        self.log_rate_limit(r.headers)
+        return r
 
     def get_users(self, page, per_page=200):
         return self.get('/users', params={'page': page, 'per_page': per_page})
