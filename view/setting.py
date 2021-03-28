@@ -11,6 +11,7 @@ from flask import request
 from flask import session
 from flask import url_for
 
+from celery_task.task_service_sync import service_sync_mattermost_invite
 from module.dietary_habit import DietaryHabit
 from module.mattermost_link import MattermostLink
 from module.mc import MC
@@ -154,8 +155,15 @@ def link_chat():
         return render_template('./setting_link_chat.html', mml=mml)
 
     elif request.method == 'POST':
-        MattermostLink.reset(uid=g.user['account']['_id'])
-        return redirect(url_for('setting.link_chat', _scheme='https', _external=True))
+        data = request.get_json()
+        if 'casename' in data:
+            if data['casename'] == 'invite':
+                service_sync_mattermost_invite.apply_async(
+                        kwargs={'uids': (g.user['account']['_id'], )})
+                return jsonify(data)
+        else:
+            MattermostLink.reset(uid=g.user['account']['_id'])
+            return redirect(url_for('setting.link_chat', _scheme='https', _external=True))
 
 
 @VIEW_SETTING.route('/security', methods=('GET', 'POST'))
