@@ -3,7 +3,7 @@
 {% block setting_link_chat %}is-active{% endblock %}
 {% block setting_body %}
 <div class="columns">
-    <div class="column">
+    <div id="settingchat" class="column" v-cloak>
         <div class='content'>
             <h3>連結 chat.coscup.org 帳號</h3>
             <p>COSCUP 在 2020 年搬移 slack 服務改用 <a href="https://chat.coscup.org/">mattermost 建立溝通平台</a>，如果在原來的 slack 已有帳號(mail) ，在新的服務可以透過忘記密碼的方式重新登入。</p>
@@ -40,7 +40,41 @@
             </article>
             <p>理論上這步之後就綁定成功了！綁定完後可以重新整理這頁繼續以下操作。</p>
             {% endif %}
+            <h3>重新取得登入邀請函</h3>
+            <p>登入邀請函只有一天的使用期限，如果不小心超過時間，可以再重新取得一次！</p>
+            <p><a class="button is-info"
+                  @click="get_invite($event)" :class="{'is-loading': is_loading, 'is-static': is_static}">
+                    取得邀請函
+                </a>
+            </p>
         </div>
     </div>
 </div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function() {
+        let $settingchat = new Vue({
+            el: '#settingchat',
+            data: {
+                is_loading: 0,
+                is_static: 0
+            },
+            methods: {
+                get_invite: function($e) {
+                    ++this.is_loading;
+                    let $btn = $e.target;
+
+                    axios.post('./chat', {casename: 'invite'}).then(function(resp) {
+                        $btn.innerText = '來去信箱收信';
+                        --$settingchat.is_loading;
+                        ++$settingchat.is_static;
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
 {% endblock %}
