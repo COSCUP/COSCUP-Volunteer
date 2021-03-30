@@ -26,6 +26,7 @@ ADD ./models/waitlistdb.py ./models/waitlistdb.py
 ADD ./module/awsses.py ./module/awsses.py
 ADD ./module/dietary_habit.py ./module/dietary_habit.py
 ADD ./module/form.py ./module/form.py
+ADD ./module/gitlab_api.py ./module/gitlab_api.py
 ADD ./module/gsuite.py ./module/gsuite.py
 ADD ./module/ipinfo.py ./module/ipinfo.py
 ADD ./module/mattermost_bot.py ./module/mattermost_bot.py
