@@ -47,7 +47,8 @@ class Project(object):
         '''
         _data = {}
         for k in ('name', 'desc', 'volunteer_certificate_hours', 'calendar',
-                'mailling_staff', 'mailling_leader', 'shared_drive', 'mattermost_ch_id', 'traffic_fee_doc'):
+                'mailling_staff', 'mailling_leader', 'shared_drive', 'mattermost_ch_id',
+                'traffic_fee_doc', 'gitlab_project_id'):
             if k in data:
                 _data[k] = data[k]
 
@@ -58,3 +59,4 @@ class Project(object):
             _data['volunteer_certificate_hours'] = int(_data['volunteer_certificate_hours'])
 
         ProjectDB(pid).find_one_and_update({'_id': pid}, {'$set': _data})
+
