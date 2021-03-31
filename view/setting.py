@@ -38,8 +38,8 @@ def profile():
         return render_template('./setting_profile.html', user=user)
     elif request.method == 'POST':
         data = {
-            'badge_name': request.form['badge_name'],
-            'intro': request.form['intro'],
+            'badge_name': request.form['badge_name'].strip(),
+            'intro': request.form['intro'].strip(),
         }
         User(uid=g.user['account']['_id']).update_profile(data)
         MC.get_client().delete('sid:%s' % session['sid'])
@@ -81,7 +81,7 @@ def profile_real():
             default_code = '886'
 
             if 'profile_real' in g.user['account']:
-                user = {'profile_real': g.user['account']['profile_real']}
+                user = {'profile_real': g.user['account']['profile_real'].strip()}
 
                 try:
                     phone = phonenumbers.parse(user['profile_real']['phone'], None)
@@ -228,3 +228,4 @@ def waitting():
     waitting_lists = sorted(waitting_lists, key=lambda x: x['_id'], reverse=True)
 
     return render_template('./setting_waitting.html', waitting_lists=waitting_lists)
+
