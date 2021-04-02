@@ -81,7 +81,7 @@ def profile_real():
             default_code = '886'
 
             if 'profile_real' in g.user['account']:
-                user = {'profile_real': g.user['account']['profile_real'].strip()}
+                user = {'profile_real': g.user['account']['profile_real']}
 
                 try:
                     phone = phonenumbers.parse(user['profile_real']['phone'], None)
