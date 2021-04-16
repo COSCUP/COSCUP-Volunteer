@@ -1,9 +1,12 @@
 from __future__ import print_function
 
 import json
+import re
 
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
+
+RE_PICTURE = re.compile(r'(https://.+){1,}=?s([\d]{1,}-c)')
 
 
 class GSuite(object):
@@ -100,3 +103,15 @@ class GSuite(object):
     def members_delete(self, group_key, email):
         ''' members.delete '''
         return self.service.members().delete(groupKey=group_key, memberKey=email).execute()
+
+    @staticmethod
+    def size_picture(url, size=512):
+        ''' Convert picture size '''
+        result = RE_PICTURE.match(url)
+
+        if result:
+            _url, _size = result.groups()
+            return url.replace('s%s' % _size, 's%s-c' % size)
+
+        return url
+

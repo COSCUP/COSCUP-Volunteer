@@ -9,11 +9,13 @@ from flask import render_template
 from flask import url_for
 from markdown import markdown
 
+from module.gsuite import GSuite
 from module.mattermost_bot import MattermostTools
 from module.oauth import OAuth
 from module.project import Project
 from module.team import Team
 from module.users import User
+
 
 VIEW_USER = Blueprint('user', __name__, url_prefix='/user')
 
@@ -30,6 +32,9 @@ def user_page(uid, nickname=None):
         return u'', 200
 
     oauth = OAuth(user['mail']).get()
+
+    if 'data' in oauth and 'picture' in oauth['data']:
+        oauth['data']['picture'] = GSuite.size_picture(oauth['data']['picture'])
 
     if 'profile' in user and 'badge_name' in user['profile']:
         _nickname = user['profile']['badge_name']
