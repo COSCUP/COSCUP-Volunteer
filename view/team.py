@@ -181,29 +181,8 @@ def team_edit_user(pid, tid):
 
             u['_mail'] = User(uid=u['uid']).get()['mail']
 
-        members = []
-        if team['members'] or team['chiefs']:
-            _all_uids = set(team['chiefs']) | set(team['members'])
-            users_info = User.get_info(list(_all_uids))
-            for uid in _all_uids:
-                members.append(users_info[uid])
-
-            for u in members:
-                u['chat'] = {}
-                mid = MattermostTools.find_possible_mid(uid=u['_id'])
-                if mid:
-                    u['chat'] = {'mid': mid, 'name': MattermostTools.find_user_name(mid=mid)}
-
-                u['phone'] = {'country_code': '', 'phone': ''}
-                if 'phone' in u['profile_real'] and u['profile_real']['phone']:
-                    phone = phonenumbers.parse(u['profile_real']['phone'])
-                    u['phone']['country_code'] = phonenumbers.COUNTRY_CODE_TO_REGION_CODE[phone.country_code][0]
-                    u['phone']['phone'] = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.NATIONAL)
-
-            members = sorted(members, key=lambda u: u['profile']['badge_name'])
-
         return render_template('./team_edit_user.html',
-                project=project, team=team, waitting_list=waitting_list, members=members)
+                project=project, team=team, waitting_list=waitting_list)
 
     elif request.method == 'POST':
         data = request.json
@@ -217,6 +196,29 @@ def team_edit_user(pid, tid):
                 history.append(raw)
 
             return jsonify({'history': history})
+        elif data['case'] == 'members':
+            members = []
+            if team['members'] or team['chiefs']:
+                _all_uids = set(team['chiefs']) | set(team['members'])
+                users_info = User.get_info(list(_all_uids))
+                for uid in _all_uids:
+                    members.append(users_info[uid])
+
+                for u in members:
+                    u['chat'] = {}
+                    mid = MattermostTools.find_possible_mid(uid=u['_id'])
+                    if mid:
+                        u['chat'] = {'mid': mid, 'name': MattermostTools.find_user_name(mid=mid)}
+
+                    u['phone'] = {'country_code': '', 'phone': ''}
+                    if 'phone' in u['profile_real'] and u['profile_real']['phone']:
+                        phone = phonenumbers.parse(u['profile_real']['phone'])
+                        u['phone']['country_code'] = phonenumbers.COUNTRY_CODE_TO_REGION_CODE[phone.country_code][0]
+                        u['phone']['phone'] = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.NATIONAL)
+
+                members = sorted(members, key=lambda u: u['profile']['badge_name'])
+
+                return jsonify({'members': members})
 
         return jsonify(data)
 

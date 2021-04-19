@@ -4,10 +4,10 @@
 {% block team_edit_user_menu %}is-active{% endblock %}
 {% block team_edit_body %}
 <div class="column">
-    <div id="teamuser" class="content">
+    <div id="teamuser" class="content" v-cloak>
         <div class="tabs">
             <ul>
-                <li class="is-active"><a v-on:click="showMemberTabs">已加入組員({{members|length}})</a></li>
+                <li class="is-active"><a v-on:click="showMemberTabs">已加入組員([[ members.length ]])</a></li>
                 <li><a v-on:click="showWaittingTabs">等待核准組員({{waitting_list|length}})</a></li>
             </ul>
         </div>
@@ -69,11 +69,11 @@
         {% endif %}
         </div>
 
-        <div id="membersTabs" class="content" style="display: none;">
+        <div id="membersTabs" class="content">
         {% if team.headcount %}
-        <h3>已加入組員（<span class="is-family-monospace">{{members|length}}/{{team.headcount}}</span>）</h3>
+        <h3>已加入組員（<span class="is-family-monospace">[[ members.length ]]/{{team.headcount}}</span>）</h3>
         {% else %}
-        <h3>已加入組員（{{members|length}}）</h3>
+        <h3>已加入組員（[[ members.length ]]）</h3>
         {% endif %}
         <div class="table-container">
             <table class="table is-hoverable">
@@ -88,43 +88,41 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for u in members %}
-                    <tr>
-                        <td><span class="tag is-family-monospace">{{u._id}}</span></td>
+                    <tr v-for="u in members">
+                        <td><span class="tag is-family-monospace">[[ u._id ]]</span></td>
                         <td>
-                            <a href="/user/{{u._id}}">
-                                <figure class="image is-32x32"><img class="is-rounded" src="{{u.oauth.picture}}"></figure>
+                            <a :href="'/user/' + u._id">
+                                <figure class="image is-32x32"><img class="is-rounded" :src="u.oauth['picture']"></figure>
                             </a>
                         </td>
-                        <td><a href="/user/{{u._id}}">{{u.profile.badge_name}}</a></td>
+                        <td><a :href="'/user/' + u._id">[[ u.profile['badge_name'] ]]</a></td>
                         <td class="is-family-monospace">
-                            {%if u.profile_real['phone'] %}<span class="tag">{{u.phone['country_code']}}</span>{{u.phone['phone']}}{%endif%}
+                            <span class="tag" v-if="u.profile_real.phone">[[ u.phone['country_code'] ]]</span>
+                            <span>[[ u.phone['phone'] ]]</span>
                         </td>
-                        <td>{{u.oauth.email}}</td>
+                        <td>[[ u.oauth['email'] ]]</td>
                         <td>
                             <span class="icon">
-                                <a v-on:click="history('{{u._id}}', '{{u.profile.badge_name}}', '{{u.oauth.picture}}')">
+                                <a @click="history(u._id, u.profile.badge_name, u.oauth.picture)">
                                     <i class="fas fa-history"></i>
                                 </a>
                             </span>
                             <span class="icon">
-                            {% if u.chat %}
-                                <a href="https://chat.coscup.org/coscup/messages/{{u.chat['mid']}}" target="_blank"><i class="far fa-comments"></i></a>
-                            {% else %}
-                                <i class="far fa-comments"></i>
-                            {% endif %}
+                                <a v-if="u.chat.mid != undefined" :href="'https://chat.coscup.org/coscup/messages/' + u.chat['mid']" target="_blank">
+                                    <i class="far fa-comments"></i>
+                                </a>
+                                <i v-else class="far fa-comments"></i>
                             </span>
                             <span class="icon">
-                                <a href="/user/{{u._id}}"><i class="far fa-id-badge"></i></a>
+                                <a :href="'/user/' + u._id"><i class="far fa-id-badge"></i></a>
                             </span>
                             <span class="icon">
-                                <a class="has-text-danger" v-on:click="deluser">
-                                    <i class="fas fa-user-times" data-uid="{{u._id}}" data-name="{{u.profile.badge_name}}"></i>
+                                <a class="has-text-danger" @click="deluser">
+                                    <i class="fas fa-user-times" :data-uid="u._id" :data-name="u.profile.badge_name"></i>
                                 </a>
                             </span>
                         </td>
                     </tr>
-                {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -179,6 +177,7 @@
         </div>
     </div>
 </div>
+        <!-- modal -->
 <div id="teamusermodal" class="modal" v-bind:class="{'is-active': isActive}">
     <div class="modal-background" v-on:click="goback"></div>
     <div class="modal-card">
@@ -216,6 +215,7 @@
             </button>
         </footer>
     </div>
+</div>
 </div>
 {% endblock %}
 {% block js %}
@@ -267,12 +267,19 @@
         let $teamuser = new Vue({
             el: '#teamuser',
             data: {
-                historymodal: {}
+                historymodal: {},
+                members: []
             },
             mounted: function() {
-                this.showMemberTabs();
+                this.load();
             },
             methods: {
+                load: function() {
+                    axios.post('./edit_user', {case: 'members'}).then(function(resp){
+                        $teamuser.members = resp.data.members;
+                        $teamuser.showMemberTabs();
+                    });
+                },
                 showapprove: function(btn) {
                     $teamusermodal.showapprove(btn.target.dataset.uid);
                 },
