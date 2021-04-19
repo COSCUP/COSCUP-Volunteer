@@ -2,7 +2,16 @@
 {% block head_title_team %}組織夥伴{% endblock %}
 {% block menu_members %}is-active{% endblock %}
 {% block team_body %}
-<div class="content">
+<div class="content" id="teammembers" v-cloak>
+    <div class="field is-grouped is-grouped-right">
+        <div class="control">
+            <div class="select">
+                <select v-model="team">
+                    <option v-for="lt in teams" :value="lt._id">[[ lt.name ]]</option>
+                </select>
+            </div>
+        </div>
+    </div>
     <div class="table-container">
         <table class="table is-hoverable">
             <thead>
@@ -10,28 +19,63 @@
                     <th>uid</th>
                     <th>Picture</th>
                     <th>Name</th>
+                    <th>is_chief</th>
                     <th>Chat</th>
                 </tr>
             </thead>
             <tbody>
-            {% for u in members %}
-                <tr>
-                    <td><span class="tag is-family-monospace">{{u._id}}</span></td>
-                    <td>
-                        <a href="/user/{{u._id}}">
-                            <figure class="image is-32x32"><img class="is-rounded" src="{{u.oauth.picture}}"></figure>
+                <tr v-for="u in members">
+                    <td class="is-vcentered"><span class="tag is-family-monospace">[[ u._id ]]</span></td>
+                    <td class="is-vcentered">
+                        <a :href="'/user/'+ u._id">
+                            <figure class="image is-32x32"><img class="is-rounded" :src="u.oauth['picture']"></figure>
                         </a>
                     </td>
-                    <td><a href="/user/{{u._id}}">{{u.profile.badge_name}}</a></td>
-                    <td>
-                        {% if u.chat %}
-                        <a class="button is-small is-info is-light" href="https://chat.coscup.org/coscup/messages/@{{u.chat['name']}}">chat with @{{u.chat['name']}}</a>
-                        {% endif %}
+                    <td class="is-vcentered"><a :href="'/user/' + u._id">[[ u.profile['badge_name'] ]]</a></td>
+                    <td class="is-vcentered">
+                        <span v-if="u.is_chief">🌟</span>
+                    </td>
+                    <td class="is-vcentered">
+                        <a v-if="u.chat['name'] != undefined " class="button is-small is-info is-light"
+                            :href="'https://chat.coscup.org/coscup/messages/@'+ u.chat['name']">chat with @[[ u.chat['name'] ]]</a>
                     </td>
                 </tr>
-            {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $teammembers = new Vue({
+            el: '#teammembers',
+            data: {
+                team: '{{team.tid}}',
+                teams: [],
+                members: []
+            },
+            watch: {
+                team: function() {
+                    this.load();
+                }
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                load: function() {
+                    axios.post('./members', {'casename': 'get', 'tid': this.team}).then(function(resp) {
+                        if (resp.data.teams.length > 0) {
+                            $teammembers.teams = resp.data.teams;
+                        }
+                        $teammembers.members = resp.data.members;
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
 {% endblock %}

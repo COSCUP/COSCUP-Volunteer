@@ -72,7 +72,7 @@ def calendar(pid, tid):
 
     return redirect(url_for('team.index', pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
 
-@VIEW_TEAM.route('/<pid>/<tid>/members')
+@VIEW_TEAM.route('/<pid>/<tid>/members', methods=('GET', 'POST'))
 def members(pid, tid):
     team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
     if _redirect:
@@ -82,28 +82,49 @@ def members(pid, tid):
                 g.user['account']['_id'] in team['owners'] or \
                 g.user['account']['_id'] in project['owners'])
 
-    uids = []
-    uids.extend(team['chiefs'])
-    uids.extend(team['members'])
+    if request.method == 'GET':
+        return render_template('./team_members.html', project=project, team=team, is_admin=is_admin)
 
-    uids = list(set(uids))
-    users_info = User.get_info(uids=uids)
+    elif request.method == 'POST':
+        post_data = request.get_json()
 
-    members = []
-    for uid in uids:
-        if uid in users_info:
-            user = users_info[uid]
+        if post_data['casename'] == 'get':
+            list_teams = []
+            if 'tid' in post_data and post_data['tid'] != tid:
+                team = Team.get(pid=pid, tid=post_data['tid'])
 
-            user['chat'] = {}
-            mid = MattermostTools.find_possible_mid(uid=uid)
-            if mid:
-                user['chat'] = {'mid': mid, 'name': MattermostTools.find_user_name(mid=mid)}
+            else:
+                for lteam in Team.list_by_pid(pid=pid):
+                    list_teams.append({'_id': lteam['tid'], 'name': lteam['name']})
 
-            members.append(user)
+            uids = []
+            uids.extend(team['chiefs'])
+            uids.extend(team['members'])
 
-    members = sorted(members, key=lambda u: u['profile']['badge_name'].lower())
+            uids = list(set(uids))
+            users_info = User.get_info(uids=uids)
 
-    return render_template('./team_members.html', project=project, team=team, is_admin=is_admin, members=members)
+            members = []
+            for uid in uids:
+                if uid in users_info:
+                    user = {'_id': uid,
+                            'profile': {'badge_name': users_info[uid]['profile']['badge_name']},
+                                        'oauth': {'picture': users_info[uid]['oauth']['picture']}}
+
+                    user['is_chief'] = False
+                    if uid in team['chiefs']:
+                        user['is_chief'] = True
+
+                    user['chat'] = {}
+                    mid = MattermostTools.find_possible_mid(uid=uid)
+                    if mid:
+                        user['chat'] = {'mid': mid, 'name': MattermostTools.find_user_name(mid=mid)}
+
+                    members.append(user)
+
+            members = sorted(members, key=lambda u: u['profile']['badge_name'].lower())
+
+        return jsonify({'members': members, 'teams':list_teams})
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit', methods=('GET', 'POST'))
