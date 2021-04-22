@@ -1,5 +1,8 @@
+from uuid import uuid4
+
 from models.teamdb import TeamDB
 from models.teamdb import TeamMemberChangedDB
+from models.teamdb import TeamMemberTagsDB
 
 
 class Team(object):
@@ -142,3 +145,56 @@ class Team(object):
             users[tid] = team['chiefs'] + team['members']
 
         return users
+
+    @staticmethod
+    def add_tag_member(pid, tid, tag_name, tag_id=None):
+        ''' Add tag member
+
+        :param str pid: project id
+        :param str tid: team id
+        :param str tag_id: tag id
+        :param str tag_name: tag name
+
+        '''
+        if tag_id is None:
+            tag_id = '%0.8x' % uuid4().fields[0]
+
+        data = {'id': tag_id, 'name': tag_name.strip()}
+        TeamDB(pid=pid, tid=tid).add_tag_member(tag_data=data)
+
+        return data
+
+    @staticmethod
+    def add_tags_to_members(pid, tid, data):
+        ''' Add tags to member
+
+        :param str pid: project id
+        :param str tid: team id
+        :param dict data: {uid: [tag_id, ...]}
+
+        '''
+        team_member_tags_db = TeamMemberTagsDB()
+        for uid in data:
+            team_member_tags_db.update(pid=pid, tid=tid, uid=uid, tags=data[uid])
+
+    @staticmethod
+    def del_tag(pid, tid, tag_id):
+        ''' Delete tag '''
+        TeamDB(pid=pid, tid=tid).update_one(
+                {'pid': pid, 'tid': tid},
+                {'$pull': {'tag_members': {'id': tag_id}}}
+            )
+        TeamMemberTagsDB().update_many(
+                {'pid': pid, 'tid': tid},
+                {'$pull': {'tags.tags': tag_id}}
+            )
+
+    @staticmethod
+    def get_members_tags(pid, tid):
+        ''' Get members tags info '''
+        datas = {}
+        for raw in TeamMemberTagsDB().find({'pid': pid, 'tid': tid}):
+            datas[raw['uid']] = raw['tags']
+
+        return datas
+

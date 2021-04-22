@@ -7,6 +7,7 @@ from models.projectdb import ProjectDB
 from models.senderdb import SenderReceiverDB
 from models.teamdb import TeamDB
 from models.teamdb import TeamMemberChangedDB
+from models.teamdb import TeamMemberTagsDB
 from models.teamdb import TeamPlanDB
 from models.users_db import UsersDB
 from models.usessiondb import USessionDB
@@ -23,7 +24,9 @@ if __name__ == '__main__':
     SenderReceiverDB().index()
     TeamDB(pid=None, tid=None).index()
     TeamMemberChangedDB().index()
+    TeamMemberTagsDB().index()
     TeamPlanDB().index()
     USessionDB().index()
     UsersDB().index()
     WaitListDB().index()
+

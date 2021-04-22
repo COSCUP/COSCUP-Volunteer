@@ -75,11 +75,33 @@
         {% else %}
         <h3>已加入組員（[[ members.length ]]）</h3>
         {% endif %}
+        <div class="content">
+            <div class="buttons">
+                <a v-if="!is_apply_tag" class="button is-small" @click="new_tag">新增標籤</a>
+                <a v-if="!is_apply_tag" class="button is-small is-info is-outlined"
+                   v-for="tag in tags" :class="{'is-light': new Set(select_tags).has(tag.id)}">
+                    <label class="checkbox">
+                        <input type="checkbox" :value="tag.id" v-model="select_tags">
+                        [[ tag.name ]]
+                    </label>
+                </a>
+                <a class="button is-small"
+                    :class="{'is-success': is_apply_tag, 'is-warning': !is_apply_tag, 'is-loading': is_loading}"
+                    v-if="tags.length > 0"
+                    @click="edit_tag">
+                    <span v-if="!is_apply_tag">開啟套用標籤編輯</span>
+                    <span v-if="is_apply_tag">儲存設定</span>
+                </a>
+                <a v-if="is_apply_tag" class="button is-small is-danger" @click="del_tag">刪除標籤</a>
+            </div>
+        </div>
         <div class="table-container">
             <table class="table is-hoverable">
                 <thead>
                     <tr>
                         <th>uid</th>
+                        <th v-if="!is_apply_tag">tag</th>
+                        <th v-if="is_apply_tag">edit tag</th>
                         <th>Picture</th>
                         <th>Name</th>
                         <th>Phone</th>
@@ -89,19 +111,36 @@
                 </thead>
                 <tbody>
                     <tr v-for="u in members">
-                        <td><span class="tag is-family-monospace">[[ u._id ]]</span></td>
-                        <td>
+                        <td class="is-vcentered"><span class="tag is-family-monospace">[[ u._id ]]</span></td>
+                        <td class="is-vcentered" v-if="!is_apply_tag">
+                            <span class="tags">
+                                <span class="tag is-small" :class="dict_tags[tag].color" v-for="tag in u.tags">
+                                    [[ dict_tags[tag].name ]]
+                                </span>
+                            </span>
+                        </td>
+                        <td class="is-vcentered" v-if="is_apply_tag">
+                            <span class="tags">
+                                <span class="tag is-small" :class="dict_tags[tag.id].color" v-for="tag in tags">
+                                    <label class="checkbox">
+                                        <input type="checkbox" :value="tag.id" v-model="u.tags">
+                                        [[ tag.name ]]
+                                    </label>
+                                </span>
+                            </span>
+                        </td>
+                        <td class="is-vcentered">
                             <a :href="'/user/' + u._id">
                                 <figure class="image is-32x32"><img class="is-rounded" :src="u.oauth['picture']"></figure>
                             </a>
                         </td>
-                        <td><a :href="'/user/' + u._id">[[ u.profile['badge_name'] ]]</a></td>
-                        <td class="is-family-monospace">
+                        <td class="is-vcentered"><a :href="'/user/' + u._id">[[ u.profile['badge_name'] ]]</a></td>
+                        <td class="is-vcentered" class="is-family-monospace">
                             <span class="tag" v-if="u.profile_real.phone">[[ u.phone['country_code'] ]]</span>
                             <span>[[ u.phone['phone'] ]]</span>
                         </td>
-                        <td>[[ u.oauth['email'] ]]</td>
-                        <td>
+                        <td class="is-vcentered">[[ u.oauth['email'] ]]</td>
+                        <td class="is-vcentered">
                             <span class="icon">
                                 <a @click="history(u._id, u.profile.badge_name, u.oauth.picture)">
                                     <i class="fas fa-history"></i>
@@ -267,16 +306,95 @@
         let $teamuser = new Vue({
             el: '#teamuser',
             data: {
+                tags: [],
+                select_tags: [],
+                dict_tags: {},
+                members_tags: {},
                 historymodal: {},
+                is_apply_tag: false,
+                is_loading: 0,
                 members: []
             },
             mounted: function() {
                 this.load();
             },
             methods: {
+                append_data: function() {
+                    this.members.forEach(function(raw) {
+                        raw.tags = new Array();
+                    });
+                },
+                make_dict_tags: function() {
+                    let color = [
+                            {'is-primary': true},
+                            {'is-link': true},
+                            {'is-info': true},
+                            {'is-success': true},
+                            {'is-warning': true},
+                            {'is-danger': true},
+                        ];
+                    this.dict_tags = {};
+                    this.tags.forEach(function(raw, index) {
+                        $teamuser.dict_tags[raw['id']] = {'name': raw['name'], 'color': color[index % color.length]};
+                    });
+                },
+                new_tag: function() {
+                    let tag_name = window.prompt('請輸入標籤名稱。', '');
+                    if (typeof(tag_name) == 'string' && tag_name.length > 0) {
+                        tag_name = tag_name.trim();
+                        axios.post('./edit_user', {case: 'add_tag', tag_name: tag_name}).then(function(resp){
+                            $teamuser.tags.push(resp.data.tag);
+                            $teamuser.make_dict_tags();
+                        });
+                    }
+                },
+                refresh_members_tags: function() {
+                    this.members.forEach(function(raw) {
+                        raw.tags = $teamuser.members_tags[raw._id].tags;
+                    });
+                },
+                del_tag: function() {
+                    let wording = new Array();
+                    wording.push('請輸入要刪除的順序號 [?],');
+                    this.tags.forEach(function(raw, index) {
+                        wording.push('- ['+index+'] '+raw.name);
+                    });
+                    wording.push('\n');
+
+                    let no = window.prompt(wording.join('\n'));
+
+                    if (this.tags[no] != undefined) {
+                        axios.post('./edit_user', {case: 'del_tag', tag: this.tags[no]}).then(function(resp){
+                            $teamuser.load();
+                        });
+                    }
+                },
+                edit_tag: function() {
+                    ++this.is_loading;
+                    if (this.is_apply_tag) {
+                        let members_tags = {};
+                        this.members.forEach(function(raw) {
+                            members_tags[raw._id] = raw.tags;
+                        });
+                        axios.post('./edit_user', {case: 'update_member_tags', data: members_tags}).then(function(resp){
+                            $teamuser.members_tags = resp.data.data;
+                        });
+                    }
+                    this.is_apply_tag = !this.is_apply_tag;
+                    --this.is_loading;
+                },
                 load: function() {
                     axios.post('./edit_user', {case: 'members'}).then(function(resp){
+                        $teamuser.tags = resp.data.tags;
+                        $teamuser.make_dict_tags();
+                        $teamuser.select_tags = new Array();
+
                         $teamuser.members = resp.data.members;
+                        $teamuser.append_data();
+
+                        $teamuser.members_tags = resp.data.members_tags;
+                        $teamuser.refresh_members_tags();
+
                         $teamuser.showMemberTabs();
                     });
                 },

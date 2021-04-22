@@ -38,6 +38,7 @@ class TeamDB(DBBase):
             'chiefs': [],
             'members': [],
             'desc': '',
+            'tag_members': [],
         }
         self.make_create_at(r)
         return r
@@ -89,6 +90,58 @@ class TeamDB(DBBase):
     def get(self):
         ''' Get data '''
         return self.find_one({'pid': self.pid, 'tid': self.tid})
+
+    def add_tag_member(self, tag_data):
+        ''' Add tag member
+
+        data: {'id': str, 'name': str}
+
+        '''
+        for data in self.find({'pid': self.pid, 'tid': self.tid}, {'tag_members': 1}):
+            if 'tag_members' not in data:
+                data['tag_members'] = []
+
+            tags = {}
+            for tag in data['tag_members']:
+                tags[tag['id']] = tag
+
+            tags[tag_data['id']] = tag_data
+
+            self.find_one_and_update(
+                {'pid': self.pid, 'tid': self.tid},
+                {'$set': {'tag_members': list(tags.values())}},
+            )
+
+
+class TeamMemberTagsDB(DBBase):
+    ''' TeamMemberTagsDB Collection
+
+    :Struct:
+        - ``pid``: from project id
+        - ``tid``: team id
+        - ``uid``: user id
+        - ``tags``: [tag_id, ...]
+
+    '''
+    def __init__(self):
+        super(TeamMemberTagsDB, self).__init__('team_member_tags')
+
+    def index(self):
+        ''' Index '''
+        self.create_index([('pid', 1), ('tid', 1)])
+
+    def update(self, pid, tid, uid, tags):
+        ''' update team
+
+        :param list tags: tag_id in tags array
+
+        '''
+        return self.find_one_and_update(
+            {'pid': pid, 'tid': tid, 'uid': uid},
+            {'$set': {'tags': tags}},
+            upsert=True,
+            return_document=ReturnDocument.AFTER,
+        )
 
 
 class TeamMemberChangedDB(DBBase):

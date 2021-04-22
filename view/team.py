@@ -218,7 +218,34 @@ def team_edit_user(pid, tid):
 
                 members = sorted(members, key=lambda u: u['profile']['badge_name'])
 
-                return jsonify({'members': members})
+                return jsonify({
+                        'members': members,
+                        'tags': team.get('tag_members', []),
+                        'members_tags': Team.get_members_tags(pid=pid, tid=tid),
+                    })
+
+        elif data['case'] == 'add_tag':
+            result = Team.add_tag_member(pid=pid, tid=tid, tag_name=data['tag_name'])
+            return jsonify({'tag': result})
+
+        elif data['case'] == 'update_member_tags':
+            team_tags = [i['id'] for i in team.get('tag_members', [])]
+            team_members = set(team['members'] + team['chiefs'])
+
+            tag_datas = {}
+            for uid in team_members:
+                if uid in data['data']:
+                    tag_datas[uid] = {'tags': list(set(team_tags) & set(data['data'][uid]))}
+
+            if tag_datas:
+                Team.add_tags_to_members(pid=pid, tid=tid, data=tag_datas)
+
+            return jsonify({'data': tag_datas})
+
+        elif data['case'] == 'del_tag':
+            Team.del_tag(pid=pid, tid=tid, tag_id=data['tag']['id'])
+
+            return jsonify({})
 
         return jsonify(data)
 
