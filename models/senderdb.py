@@ -20,6 +20,8 @@ class SenderCampaignDB(DBBase):
         - ``receiver``:
             - ``teams``: team in list
             - ``users``: user in list
+            - ``team_w_tags``: team tags
+            - ``all_users``: bool, send to all platform users
 
         - ``mail``:
             - ``subject``: subject
@@ -45,6 +47,7 @@ class SenderCampaignDB(DBBase):
             'receiver': {
                 'teams': [],
                 'users': [],
+                'team_w_tags': {},
                 'all_users': False,
             },
             'mail': {
