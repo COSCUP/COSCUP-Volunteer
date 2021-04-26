@@ -222,6 +222,15 @@ def campaign_schedule(pid, tid, cid):
             for raw in raws:
                 user_datas.append(dict(zip(fields, raw)))
 
+            if 'team_w_tags' in campaign_data['receiver'] and \
+                    team['tid'] in campaign_data['receiver']['team_w_tags'] and \
+                    campaign_data['receiver']['team_w_tags'][team['tid']]:
+                fields, raws = SenderReceiver.get_by_tags(pid=team['pid'], tid=team['tid'],
+                        tags=campaign_data['receiver']['team_w_tags'][team['tid']])
+
+                for raw in raws:
+                    user_datas.append(dict(zip(fields, raw)))
+
             if campaign_data['receiver']['all_users']:
                 fields, raws = SenderReceiver.get_all_users()
                 for raw in raws:
@@ -257,6 +266,14 @@ def campaign_schedule(pid, tid, cid):
             fields, raws = SenderReceiver.get(pid=team['pid'], cid=cid)
             if raws:
                 user_datas.append(dict(zip(fields, random.choice(raws))))
+
+            if 'team_w_tags' in campaign_data['receiver'] and \
+                    team['tid'] in campaign_data['receiver']['team_w_tags'] and \
+                    campaign_data['receiver']['team_w_tags'][team['tid']]:
+                fields, raws = SenderReceiver.get_by_tags(pid=team['pid'], tid=team['tid'],
+                        tags=campaign_data['receiver']['team_w_tags'][team['tid']])
+                if raws:
+                    user_datas.append(dict(zip(fields, random.choice(raws))))
 
             if campaign_data['receiver']['all_users']:
                 fields, raws = SenderReceiver.get_all_users()

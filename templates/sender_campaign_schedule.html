@@ -7,9 +7,15 @@
         <div id="senderschedule" class="content" v-cloak>
             <div class="content">
                 <h3>發送測試信</h3>
-                <button class="button is-warning is-light" v-on:click="sendtest">發送</button>
+                <button class="button is-warning is-light" v-on:click="sendtest">
+                    <span class="icon"><i class="fas fa-robot"></i></span>
+                    <span>發送 測試信</span>
+                </button>
                 <h3>正式發送</h3>
-                <button class="button is-info is-light" v-on:click="send">發送</button>
+                <button class="button is-info is-light" v-on:click="send">
+                    <span class="icon"><i class="far fa-paper-plane"></i></span>
+                    <span>發送！</span>
+                </button>
             </div>
             <div class="content">
                 <h3>發送紀錄</h3>

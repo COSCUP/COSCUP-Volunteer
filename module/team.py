@@ -198,3 +198,19 @@ class Team(object):
 
         return datas
 
+    @staticmethod
+    def get_members_uid_by_tags(pid, tid, tags):
+        ''' Get members by tags '''
+        _or = []
+        for tag in tags:
+            _or.append({'tags.tags': tag})
+
+        query = {'pid': pid, 'tid': tid}
+        query['$or'] = _or
+
+        uids = []
+        for raw in TeamMemberTagsDB().find(query):
+            uids.append(raw['uid'])
+
+        return uids
+

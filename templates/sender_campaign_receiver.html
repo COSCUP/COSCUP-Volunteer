@@ -24,7 +24,7 @@
                 </div>
                 <p class="help is-success">發送到組為單位的人員</p>
             </div>
-            <div class="field box">
+            <div class="field box" v-if="team_w_tags.length > 0">
                 <label class="label">組內的分組</label>
                 <div class="control">
                     <label class="checkbox" v-for="tag in team_w_tags" style="margin: 0 12px 12px 0;">
@@ -34,7 +34,15 @@
                         </span>
                     </label>
                 </div>
-                <p class="help is-success">[[ picktags ]] 發送到組內組別的人員</p>
+                <p class="help is-success">
+                    發送到組內組別的人員，可以透過<a href="/team/{{team['pid']}}/{{team['tid']}}/edit_user">編輯組員</a>中的<strong>新增標籤</strong>來分類組員。
+                </p>
+            </div>
+            <div class="field box" v-if="team_w_tags.length === 0">
+                <label class="label">組內的分組</label>
+                <div class="control">
+                    目前未設定，可以透過<a href="/team/{{team['pid']}}/{{team['tid']}}/edit_user">編輯組員</a>中的<strong>新增標籤</strong>來分類組員。
+                </div>
             </div>
             <div class="field box">
                 <label class="label">全志工平台的人員</label>
