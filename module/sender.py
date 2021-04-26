@@ -329,3 +329,19 @@ class SenderReceiver(object):
             ))
 
         return (('name', 'mail'), raws)
+
+    @staticmethod
+    def get_by_tags(pid, tid, tags):
+        ''' Get users by tags '''
+        uids = Team.get_members_uid_by_tags(pid=pid, tid=tid, tags=tags)
+
+        user_infos = User.get_info(uids=uids)
+        raws = []
+        for uid in user_infos:
+            raws.append((
+                user_infos[uid]['profile']['badge_name'],
+                user_infos[uid]['oauth']['email'],
+            ))
+
+        return (('name', 'mail'), raws)
+
