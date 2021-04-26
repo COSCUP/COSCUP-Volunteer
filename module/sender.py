@@ -81,11 +81,12 @@ class SenderCampaign(object):
         )
 
     @staticmethod
-    def save_receiver(cid, teams, users=None, all_users=False):
+    def save_receiver(cid, teams, team_w_tags, users=None, all_users=False):
         ''' Save receiver
 
         :param str cid: cid
         :param list teams: teams
+        :param list team_w_tags: {'team': [tag, ...]}
         :param list users: users
         :param bool all_users: all volunteer users
 
@@ -95,6 +96,7 @@ class SenderCampaign(object):
         update = {'receiver.teams': teams}
         update['receiver.users'] = users if users else []
         update['receiver.all_users'] = all_users
+        update['receiver.team_w_tags'] = team_w_tags
 
         return SenderCampaignDB().find_one_and_update(
             {'_id': cid},

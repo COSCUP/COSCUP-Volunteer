@@ -8,6 +8,7 @@ import arrow
 from flask import Blueprint
 from flask import g
 from flask import jsonify
+from flask import redirect
 from flask import render_template
 from flask import request
 from markdown import markdown
@@ -120,13 +121,24 @@ def campaign_receiver(pid, tid, cid):
 
         if data and 'casename' in data and data['casename'] == 'getinit':
             teams = []
-            for team in Team.list_by_pid(pid=team['pid']):
-                teams.append({'tid': team['tid'], 'name': team['name']})
+            for _team in Team.list_by_pid(pid=team['pid']):
+                teams.append({'tid': _team['tid'], 'name': _team['name']})
+
+            team_w_tags = []
+            if 'tag_members' in team:
+                team_w_tags = team['tag_members']
 
             sender_receiver = SenderReceiver.get(pid=team['pid'], cid=cid)
 
+            picktags = []
+            if 'team_w_tags' in campaign_data['receiver'] and \
+                    team['tid'] in campaign_data['receiver']['team_w_tags']:
+                picktags = campaign_data['receiver']['team_w_tags'][team['tid']]
+
             return jsonify({'teams': teams,
+                            'team_w_tags': team_w_tags,
                             'pickteams': campaign_data['receiver']['teams'],
+                            'picktags': picktags,
                             'is_all_users': campaign_data['receiver']['all_users'],
                             'all_users_count': User.count(),
                             'filedata': sender_receiver,
@@ -140,8 +152,15 @@ def campaign_receiver(pid, tid, cid):
                 if tid in data['pickteams']:
                     _result.append(tid)
 
+            _team_w_tags = []
+            if 'tag_members' in team:
+                for tag in team['tag_members']:
+                    if tag['id'] in data['picktags']:
+                        _team_w_tags.append(tag['id'])
+
             return jsonify(SenderCampaign.save_receiver(
-                    cid=cid, teams=_result, all_users=bool(data['is_all_users']))['receiver'])
+                    cid=cid, teams=_result, team_w_tags={team['tid']: _team_w_tags},
+                    all_users=bool(data['is_all_users']))['receiver'])
 
         if request.form['uploadtype'] == 'remove':
             SenderReceiver.remove(pid=team['pid'], cid=cid)
