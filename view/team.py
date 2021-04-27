@@ -124,7 +124,14 @@ def members(pid, tid):
 
             members = sorted(members, key=lambda u: u['profile']['badge_name'].lower())
 
-        return jsonify({'members': members, 'teams':list_teams})
+            tags = []
+            if 'tag_members' in team and team['tag_members']:
+                tags = team['tag_members']
+
+            members_tags = Team.get_members_tags(pid=team['pid'], tid=team['tid'])
+
+        return jsonify({'members': members, 'teams':list_teams,
+                        'tags': tags, 'members_tags': members_tags})
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit', methods=('GET', 'POST'))
