@@ -4,6 +4,9 @@
 {% block team_body %}
 <div class="content" id="teammembers" v-cloak>
     <div class="field is-grouped is-grouped-right">
+        <div class="control" v-if="is_loading > 0">
+            <a class="button is-loading"></a>
+        </div>
         <div class="control">
             <div class="select">
                 <select v-model="team">
@@ -17,6 +20,7 @@
             <thead>
                 <tr>
                     <th>uid</th>
+                    <th>Tag</th>
                     <th>Picture</th>
                     <th>Name</th>
                     <th>is_chief</th>
@@ -26,6 +30,13 @@
             <tbody>
                 <tr v-for="u in members">
                     <td class="is-vcentered"><span class="tag is-family-monospace">[[ u._id ]]</span></td>
+                    <td class="is-vcentered">
+                        <span class="tags" v-if="members_tags[u._id] != undefined">
+                            <span class="tag" v-for="tag_id in members_tags[u._id].tags" :class="tags[tag_id].color">
+                                [[ tags[tag_id].name ]]
+                            </span>
+                        </span>
+                    </td>
                     <td class="is-vcentered">
                         <a :href="'/user/'+ u._id">
                             <figure class="image is-32x32"><img class="is-rounded" :src="u.oauth['picture']"></figure>
@@ -54,7 +65,17 @@
             data: {
                 team: '{{team.tid}}',
                 teams: [],
-                members: []
+                tags: {},
+                members: [],
+                color: [
+                    {'is-primary': true},
+                    {'is-link': true},
+                    {'is-info': true},
+                    {'is-success': true},
+                    {'is-warning': true},
+                    {'is-danger': true},
+                ],
+                is_loading: 0
             },
             watch: {
                 team: function() {
@@ -66,11 +87,20 @@
             },
             methods: {
                 load: function() {
+                    ++this.is_loading;
                     axios.post('./members', {'casename': 'get', 'tid': this.team}).then(function(resp) {
                         if (resp.data.teams.length > 0) {
                             $teammembers.teams = resp.data.teams;
                         }
+                        if (resp.data.tags.length > 0) {
+                            $teammembers.tags = {};
+                            resp.data.tags.forEach(function(tag, index) {
+                                $teammembers.tags[tag.id] = {'name': tag.name, 'color': $teammembers.color[index % $teammembers.color.length]}
+                            });
+                        }
                         $teammembers.members = resp.data.members;
+                        $teammembers.members_tags = resp.data.members_tags;
+                        --$teammembers.is_loading;
                     });
                 }
             },
