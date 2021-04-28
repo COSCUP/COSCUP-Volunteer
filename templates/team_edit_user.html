@@ -313,10 +313,26 @@
                 historymodal: {},
                 is_apply_tag: false,
                 is_loading: 0,
-                members: []
+                members: [],
+                org_members: []
             },
             mounted: function() {
                 this.load();
+            },
+            watch: {
+                select_tags: function(val) {
+                    if (val.length > 0) {
+                        if ($teamuser.org_members.length === 0 && $teamuser.members.length > 0 ) {
+                            $teamuser.org_members = Object.assign(new Array(), $teamuser.members);
+                        }
+
+                        $teamuser.members = $teamuser.members.filter(function(member) {
+                            return val.some(function(tag) { return member.tags.includes(tag); });
+                        });
+                    } else if (val.length === 0 && $teamuser.org_members.length > 0) {
+                        $teamuser.members = Object.assign(new Array(), $teamuser.org_members);
+                    }
+                }
             },
             methods: {
                 append_data: function() {
