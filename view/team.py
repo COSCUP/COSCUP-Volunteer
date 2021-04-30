@@ -288,11 +288,12 @@ def team_edit_user_api(pid, tid):
         return jsonify(user_data)
 
     elif request.method == 'POST':
-        all_members = len(team['members']) + len(team['chiefs'])
-        if 'headcount' in team and team['headcount'] and all_members >= team['headcount']:
-            return jsonify({'status': 'fail', 'message': 'over headcount.'}), 406
-
         data = request.json
+        if data['result'] == 'approval':
+            all_members = len(team['members']) + len(team['chiefs'])
+            if 'headcount' in team and team['headcount'] and all_members >= team['headcount']:
+                return jsonify({'status': 'fail', 'message': 'over headcount.'}), 406
+
         w = WaitList.make_result(wid=data['wid'], pid=pid, uid=data['uid'], result=data['result'])
         if w and 'result' in w:
             if w['result'] == 'approval':
