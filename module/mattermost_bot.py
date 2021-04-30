@@ -136,12 +136,12 @@ class MattermostTools(MattermostBot):
         :param str mid: mid
 
         '''
-        ml = MattermostLinkDB().find_one({'data.user_id': mid}, {'data.user_name': 1})
-        if ml and 'data' in ml:
-            return ml['data']['user_name']
-
         mm_user = MattermostUsersDB().find_one({'_id': mid}, {'username': 1})
         if mm_user:
             return mm_user['username']
+
+        ml = MattermostLinkDB().find_one({'data.user_id': mid}, {'data.user_name': 1})
+        if ml and 'data' in ml:
+            return ml['data']['user_name']
 
         return u''
