@@ -41,7 +41,8 @@ class SyncGSuite(GSuite):
 
         for user in users:
             if self.members_has_member(group_key=group_info['id'], email=user)['isMember']:
-                logging.info('[%s] isMember: False' % user)
-            else:
                 logging.info('del [%s] from [%s]' % (user, group_info['id']))
                 self.members_delete(group_key=group_info['id'], email=user)
+            else:
+                logging.info('[%s] isMember: False' % user)
+
