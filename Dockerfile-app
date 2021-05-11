@@ -9,6 +9,7 @@ ADD ./celery_task/celery.py ./celery_task/celery.py
 ADD ./celery_task/task*.py ./celery_task/
 
 ADD ./models/base.py ./models/base.py
+ADD ./models/budgetdb.py ./models/budgetdb.py
 ADD ./models/formdb.py ./models/formdb.py
 ADD ./models/index.py ./models/index.py
 ADD ./models/mailletterdb.py ./models/mailletterdb.py
@@ -24,6 +25,7 @@ ADD ./models/usessiondb.py ./models/usessiondb.py
 ADD ./models/waitlistdb.py ./models/waitlistdb.py
 
 ADD ./module/awsses.py ./module/awsses.py
+ADD ./module/budget.py ./module/budget.py
 ADD ./module/dietary_habit.py ./module/dietary_habit.py
 ADD ./module/form.py ./module/form.py
 ADD ./module/gitlab_api.py ./module/gitlab_api.py
@@ -44,6 +46,7 @@ ADD ./module/usession.py ./module/usession.py
 ADD ./module/waitlist.py ./module/waitlist.py
 
 ADD ./templates/base.html ./templates/base.html
+ADD ./templates/budget.html ./templates/budget.html
 ADD ./templates/bug_report.html ./templates/bug_report.html
 ADD ./templates/form*.html ./templates/
 ADD ./templates/guide_index.html ./templates/guide_index.html
@@ -64,6 +67,7 @@ ADD ./templates/mail/tasks_star.html ./templates/mail/tasks_star.html
 ADD ./templates/mail/welcome.html ./templates/mail/welcome.html
 
 ADD ./view/api.py ./view/api.py
+ADD ./view/budget.py ./view/budget.py
 ADD ./view/guide.py ./view/guide.py
 ADD ./view/links.py ./view/links.py
 ADD ./view/project.py ./view/project.py
