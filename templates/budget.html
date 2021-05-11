@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+{% block head_title %} 管理已核准預算{% endblock %}
+{% block style %}
+<style>
+    .is-delete {
+      text-decoration: line-through;
+    }
+</style>
+{% endblock %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        Budget
+    </h1>
+    <p class="subtitle">管理已核准預算</p>
+  </div>
+</section>
+<section class="section">
+  <div id="budget" class="container" v-cloak>
+      <div class="column">
+          <div class="content">
+              <div class="field is-grouped is-grouped-right">
+                  <div class="buttons">
+                      <button class="button" v-on:click="create_budget">
+                          <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                          <span>建立已核准的預算項目</span>
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="column">
+          <table class="table is-fullwidth">
+              <thead>
+                  <tr>
+                      <th>預算編號</th>
+                      <th>名稱</th>
+                      <th>部門</th>
+                      <th>申請人</th>
+                      <th>金額</th>
+                      <th>預計支出日期</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr v-if="items.length == 0">
+                      <td colspan="6" class="has-text-centered">
+                          <span class="icon"><i class="fas fa-info-circle"></i></span>
+                          <span>目前沒有項目</span>
+                      </td>
+                  </tr>
+                  <tr v-for="item, index in items" :class="{'is-delete': item.enabled === 'false'}">
+                      <td>
+                          [[ item.bid ]]
+                      </td>
+                      <td>
+                          <a class="is-link" @click="edit(item, index)">[[ item.name ]]</a>
+                      </td>
+                      <td>[[ item.tid ]]</td>
+                      <td>[[ item.uid ]]</td>
+                      <td><span class="tag">[[ item.currency ]]</span>[[ item.total.toLocaleString('en') ]]</td>
+                      <td>[[ item.paydate ]]</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    <!-- modal -->
+    <div class="modal" :class="{'is-active': modaldata.show}">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+          <header class="modal-card-head">
+              <p class="modal-card-title">建立已核准的預算項目</p>
+              <button class="delete" aria-label="close" @click="close"></button>
+          </header>
+          <section class="modal-card-body">
+              <form @submit.prevent="create">
+              <div class="field">
+                  <label class="label">編號</label>
+                  <div class="control">
+                      <input class="input" type="text" v-model.trim="modaldata.bid" required>
+                  </div>
+                  <p class="help is-info">預算表上的流水號</p>
+              </div>
+              <div class="field">
+                  <div class="field-body">
+                      <div class="field">
+                          <label class="label">組別</label>
+                          <div class="control">
+                              <span class="select">
+                                  <select v-model="modaldata.tid">
+                                      <option value="">請選擇...</option>
+                                      <option v-for="team in teams" :value="team.tid">[[ team.name ]]</option>
+                                  </select>
+                              </span>
+                          </div>
+                      </div>
+                      <div class="field">
+                          <label class="label">申請人</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="modaldata.uid">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="field">
+                  <label class="label">項目名稱</label>
+                  <div class="control">
+                      <input class="input" type="text" v-model.trim="modaldata.name">
+                  </div>
+              </div>
+              <div class="field">
+                  <div class="field-body">
+                      <div class="field">
+                          <label class="label">核定金額</label>
+                          <div class="field has-addons">
+                              <div class="control">
+                                  <span class="select">
+                                      <select v-model="modaldata.currency">
+                                          <option>TWD</option>
+                                          <option>USD</option>
+                                      </select>
+                                  </span>
+                              </div>
+                              <div class="control">
+                                  <input class="input" type="number" step="0.01" v-model.number="modaldata.total">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="field">
+                          <label class="label">預定支出日期</label>
+                          <div class="control">
+                              <input class="input" type="date" v-model="modaldata.paydate">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="field">
+                  <label class="label">項目說明</label>
+                  <div class="control">
+                      <textarea class="textarea" type="text" v-model.trim="modaldata.desc"></textarea>
+                  </div>
+              </div>
+              <div class="field">
+                  <label class="label">估算方式</label>
+                  <div class="control">
+                      <textarea class="textarea" type="text" v-model.trim="modaldata.estimate"></textarea>
+                  </div>
+              </div>
+              <div class="field" v-if="modaldata.is_edit">
+                  <label class="label">項目狀態</label>
+                  <div class="control">
+                      <label class="radio">
+                          <input type="radio" value="true" v-model="modaldata.enabled">
+                          啟用
+                      </label>
+                      <label class="radio">
+                          <input type="radio" value="false" v-model="modaldata.enabled">
+                          放棄項目預算，不記入
+                      </label>
+                  </div>
+              </div>
+              <div class="field">
+                  [[ modaldata ]]
+              </div>
+              <div class="field">
+                  <div class="control">
+                      <button v-if="modaldata._id == undefined" class="button is-info" type="submit" :class="{'is-loading': modaldata.is_loading}">
+                          建立預算項目
+                      </button>
+                      <button v-if="modaldata._id != undefined" class="button is-link" type="submit" :class="{'is-loading': modaldata.is_loading}">
+                          更新
+                      </button>
+                      <button class="button is-warning" @click="close" :class="{'is-loading': modaldata.is_loading}">取消</button>
+                  </div>
+              </div>
+              </form>
+          </section>
+          <footer class="modal-card-foot">
+          </footer>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $budget = new Vue({
+            el: '#budget',
+            data: {
+                pid: '{{ project._id }}',
+                teams: [],
+                items: [],
+                modaldata: {show: false},
+                default_modaldata: {show: false, is_loading: 0},
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                create_budget: function() {
+                    this.modaldata.show = true;
+                    document.querySelector('html').classList.toggle('is-clipped');
+                },
+                create: function() {
+                    console.info('submit');
+                    ++this.modaldata.is_loading;
+
+                    if ($budget.modaldata.is_edit === true) {
+                        axios.post('./'+this.pid, {casename: 'edit', data: this.modaldata}).then(function(resp) {
+                            $budget.items[$budget.modaldata._index] = Object.assign({}, resp.data.data);
+                            --$budget.modaldata.is_loading;
+                            $budget.close();
+                        });
+                    } else {
+                        axios.post('./'+this.pid, {casename: 'add', data: this.modaldata}).then(function(resp) {
+                            $budget.items.push(Object.assign({}, resp.data.data));
+                            --$budget.modaldata.is_loading;
+                            $budget.close();
+                        });
+                    };
+                },
+                close: function() {
+                    this.modaldata = Object.assign({}, this.default_modaldata);
+                    document.querySelector('html').classList.toggle('is-clipped');
+                },
+                edit: function(item, index) {
+                    this.modaldata = Object.assign({}, item, {is_edit: true, _index: index});
+                    this.create_budget();
+                },
+                load: function() {
+                    axios.post('./'+this.pid, {casename: 'get'}).then(function(resp) {
+                        $budget.teams = resp.data.teams;
+                        $budget.default_modaldata = Object.assign({}, $budget.default_modaldata, resp.data.default_budget);
+
+                        $budget.modaldata = Object.assign({}, $budget.default_modaldata, $budget.default_budget);
+
+                        $budget.items = resp.data.items;
+                        console.info(resp.data);
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}
