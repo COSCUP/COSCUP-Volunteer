@@ -30,7 +30,11 @@ def index(pid, tid):
     if _redirect:
         return _redirect
 
-    if g.user['account']['_id'] not in team['chiefs']:
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    if not is_admin:
         return redirect('/')
 
     ''' ..note::
@@ -63,7 +67,11 @@ def campaign(pid, tid, cid):
     if _redirect:
         return _redirect
 
-    if g.user['account']['_id'] not in team['chiefs']:
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    if not is_admin:
         return redirect('/')
 
     campaign_data = SenderCampaign.get(cid=cid, pid=pid, tid=tid)
@@ -77,7 +85,11 @@ def campaign_content(pid, tid, cid):
     if _redirect:
         return _redirect
 
-    if g.user['account']['_id'] not in team['chiefs']:
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    if not is_admin:
         return redirect('/')
 
     if request.method == 'GET':
@@ -109,7 +121,11 @@ def campaign_receiver(pid, tid, cid):
     if _redirect:
         return _redirect
 
-    if g.user['account']['_id'] not in team['chiefs']:
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    if not is_admin:
         return redirect('/')
 
     campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
@@ -187,7 +203,11 @@ def campaign_schedule(pid, tid, cid):
     if _redirect:
         return _redirect
 
-    if g.user['account']['_id'] not in team['chiefs']:
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    if not is_admin:
         return redirect('/')
 
     campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
@@ -305,3 +325,4 @@ def campaign_schedule(pid, tid, cid):
                     'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
 
             return jsonify(data)
+
