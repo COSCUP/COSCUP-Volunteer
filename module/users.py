@@ -118,6 +118,16 @@ class User(object):
         return users
 
     @staticmethod
+    def get_bank(uid):
+        ''' Get bank info '''
+        bank =  { 'code' : '', 'no' : '', 'branch' : '', 'name' : '' }
+        for u in UsersDB().find({'_id': uid}, {'profile_real.bank': 1}):
+            if 'profile_real' in u and 'bank' in u['profile_real']:
+                bank.update(u['profile_real']['bank'])
+
+        return bank
+
+    @staticmethod
     def get_all_users(include_suspend: bool = False):
         ''' Get all users '''
         query = {}

@@ -54,3 +54,8 @@ class Budget(object):
         ''' Get by pid '''
         return BudgetDB().find({'pid': pid}, sort=(('tid', 1), ))
 
+    @staticmethod
+    def get_by_tid(pid, tid):
+        ''' Get by pid '''
+        return BudgetDB().find({'pid': pid, 'tid': tid})
+

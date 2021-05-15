@@ -35,17 +35,18 @@ def by_project_index(pid):
             teams = []
             for team in Team.list_by_pid(pid=project['_id']):
                 teams.append({'name': team['name'], 'tid': team['tid']})
-                default_budget = {
-                    'bid': '',
-                    'uid': '',
-                    'name': '',
-                    'total': 0,
-                    'paydate': '',
-                    'desc': '',
-                    'estimate': '',
-                    'tid': '',
-                    'currency': 'TWD',
-                }
+
+            default_budget = {
+                'bid': '',
+                'uid': '',
+                'name': '',
+                'total': 0,
+                'paydate': '',
+                'desc': '',
+                'estimate': '',
+                'tid': '',
+                'currency': 'TWD',
+            }
 
             items = []
             for item in Budget.get_by_pid(pid=pid):

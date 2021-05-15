@@ -1,0 +1,389 @@
+{% extends "expense_menu.html" %}
+{% block expense_subtitle %}編輯組員{% endblock %}
+{% block expense_lists_menu %}is-active{% endblock %}
+{% block expense_body %}
+<div class="column">
+    <div id="expenselists" class="container" v-cloak>
+      <div class="column">
+          <div class="content">
+              <div class="field is-grouped is-grouped-right">
+                  <div class="control">
+                      <div class="select" :class="{'is-loading': is_loading > 0}">
+                          <select v-model="select_team">
+                              <option v-for="team in teams" :value="team.tid">[[ team.name ]]</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+        <div class="column">
+            <div class="notification is-warning is-light" v-if="bank_alert === 0">
+                <span class="icon"><i class="fas fa-exclamation-circle"></i></span>
+                <span>申請預算撥款需要相關的匯款銀行資訊，可以到「<strong><a href="/setting/profile_real">真實個人資訊</a></strong>」預先設定，讓系動自動帶入，感謝！</span>
+            </div>
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>預算編號</th>
+                        <th>名稱</th>
+                        <th>部門</th>
+                        <th>申請人</th>
+                        <th>金額</th>
+                        <th>預計支出日期</th>
+                        <th>申請</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-if="items.length == 0">
+                        <td colspan="7" class="has-text-centered">
+                            <div class="field">
+                                <span class="icon"><i class="fas fa-info-circle"></i></span>
+                                <span>目前沒有項目，如果要報其他組別的預算，可以選擇。</span>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select" :class="{'is-loading': is_loading > 0}">
+                                        <select v-model="select_team">
+                                            <option v-for="team in teams" :value="team.tid">[[ team.name ]]</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-for="item, index in items" :class="{'is-delete': item.enabled === 'false'}">
+                        <td class="is-vcentered">
+                            <span class="tag is-dark">[[ item.bid ]]</span>
+                        </td>
+                        <td class="is-vcentered">
+                            <a class="is-link" @click="create(item)">[[ item.name ]]</a>
+                        </td>
+                        <td class="is-vcentered">[[ item.tid ]]</td>
+                        <td class="is-vcentered">[[ item.uid ]]</td>
+                        <td class="is-vcentered"><span class="tag">[[ item.currency ]]</span>[[ item.total.toLocaleString('en') ]]</td>
+                        <td class="is-vcentered">[[ item.paydate ]]</td>
+                        <td class="is-vcentered">
+                            <a class="button is-info is-outlined is-light is-small" @click="create(item)">申請經費</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    <!-- modal -->
+    <div class="modal" :class="{'is-active': modaldata.show}">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+          <header class="modal-card-head">
+              <p class="modal-card-title">申請預算經費 - [[ modaldata.name ]]</p>
+              <button class="delete" aria-label="close" @click="close"></button>
+          </header>
+          <section class="modal-card-body">
+              <div class="content">
+                  <h4>預算表資訊</h4>
+                  <table class="table is-bordered is-narrow is-striped">
+                      <thead>
+                          <tr>
+                              <th>項目</th>
+                              <th>名稱</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>預算表編號</td>
+                              <td><span class="tag is-dark">[[ modaldata.bid ]]</span></td>
+                          </tr>
+                          <tr>
+                              <td>組別 / 預算建立者</td>
+                              <td>
+                                  <div class="field-body">
+                                      <div class="field">
+                                          <span class="select is-small">
+                                              <select v-model="modaldata.tid" disabled>
+                                                  <option v-for="team in teams" :value="team.tid">[[ team.name ]]</option>
+                                              </select>
+                                          </span>
+                                      </div>
+                                      <div class="filed">
+                                          <input class="input is-small" type="text" v-model="modaldata.uid" disabled>
+                                      </div>
+                                  </div>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>預算總金額</td>
+                              <td><span class="tag">[[ modaldata.currency ]]</span> <span>$[[ modaldata.total.toLocaleString('en') ]]</span></td>
+                          </tr>
+                          <tr>
+                              <td>預計支出時間</td>
+                              <td>[[ modaldata.paydate ]]</td>
+                          </tr>
+                          <tr>
+                              <td>說明</td>
+                              <td>[[ modaldata.desc ]]</td>
+                          </tr>
+                          <tr>
+                              <td>估算方式</td>
+                              <td>[[ modaldata.estimate ]]</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <form @submit.prevent="submit_expense">
+              <div class="content">
+                  <h4>檢附單據</h4>
+              </div>
+              <div class="field" v-for="invoice, index in invoices">
+                  <div class="field-body">
+                      <div class="field">
+                          <label class="label">[[ index+1 ]]. 發票號碼或收據</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="invoice.name" required>
+                          </div>
+                          <p class="help is-info">或用途說明</p>
+                      </div>
+                      <div class="field">
+                          <label class="label">單據金額</label>
+                          <div class="field has-addons">
+                              <div class="control">
+                                  <span class="select">
+                                      <select v-model="invoice.currency">
+                                          <option>TWD</option>
+                                          <option>USD</option>
+                                      </select>
+                                  </span>
+                              </div>
+                              <div class="control">
+                                  <input class="input" type="number" step="0.01" v-model.number="invoice.total" required>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="field">
+                          <label class="label">單據狀況</label>
+                          <div class="control">
+                              <span class="select">
+                                  <select v-model="invoice.status" required>
+                                      <option value="" disabled>請選擇</option>
+                                      <option value="sent">已寄出</option>
+                                      <option value="not_send">還未寄出</option>
+                                  </select>
+                              </span>
+                          </div>
+                      </div>
+                      <div class="field">
+                          <label class="label is-danger">刪除</label>
+                          <div class="control">
+                              <a class="button is-danger" @click="del_invoice(invoice)"><span class="icon"><i class="fas fa-trash-alt"></i></span></a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="field">
+                  <a class="button is-small is-dark is-outlined" @click="add_invoice">
+                      <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span>
+                      <span>新增單據</span>
+                  </a>
+              </div>
+              <div class="content" v-if="invoices.length > 0">
+                  <h4 class="mt-5">申請金額</h4>
+              </div>
+              <div class="field" v-if="invoices.length > 0">
+                  <label class="label">合計</label>
+                  <div class="field is-grouped is-grouped-multiline">
+                      <div class="control" v-for="[currency, total] in Object.entries(invoices_total)">
+                          <div class="tags has-addons">
+                              <span class="tag is-info">[[ currency ]]</span>
+                              <span class="tag is-success is-light">$[[ total.toLocaleString('en') ]]</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="content" v-if="invoices.length > 0">
+                  <h4 class="mt-5">其他</h4>
+              </div>
+              <div class="field" v-if="invoices.length > 0">
+                  <label class="label">期望出款時間</label>
+                  <div class="control">
+                      <input class="input" type="date" v-model="expense_request.paydate">
+                  </div>
+              </div>
+              <div class="field" v-if="invoices.length > 0">
+                  <label class="label">其他補充說明</label>
+                  <div class="control">
+                      <textarea class="textarea" type="text" v-model.trim="expense_request.desc"></textarea>
+                  </div>
+              </div>
+              <div class="content" v-if="invoices.length > 0">
+                  <h4 class="mt-5">設定撥款資訊</h4>
+              </div>
+              <div class="field" v-if="invoices.length > 0">
+                  <div class="field-body">
+                      <div class="field">
+                          <label class="label">銀行代碼</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="bank.code">
+                          </div>
+                          <p class="help is-success">銀行代碼</p>
+                      </div>
+                      <div class="field">
+                          <label class="label">銀行帳號</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="bank.no">
+                          </div>
+                          <p class="help is-success">銀行帳號</p>
+                      </div>
+                  </div>
+              </div>
+              <div class="field" v-if="invoices.length > 0">
+                  <div class="field-body">
+                      <div class="field">
+                          <label class="label">分行名稱</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="bank.branch">
+                          </div>
+                          <p class="help is-success">例：新莊分行，也可以<a target="_blank" href="https://www.fisc.com.tw/tc/download/twd.txt">查詢</a>這張表。</p>
+                      </div>
+                      <div class="field">
+                          <label class="label">戶名</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="bank.name">
+                          </div>
+                          <p class="help is-success">帳戶名稱，通常是本名為戶名</p>
+                      </div>
+                  </div>
+              </div>
+              <div class="field">
+                  [[ modaldata ]]
+              </div>
+              <div class="field">
+                  [[ expense_request ]]
+              </div>
+              <div class="field">
+                  [[ invoices ]]
+              </div>
+              <div class="field" v-if="invoices.length > 0">
+                  <div class="control">
+                      <button class="button is-info" type="submit" :class="{'is-loading': modaldata.is_loading}">
+                          送出申請單
+                      </button>
+                      <button class="button is-warning" @click="close" :class="{'is-loading': modaldata.is_loading}">取消</button>
+                  </div>
+              </div>
+              </form>
+          </section>
+          <footer class="modal-card-foot">
+          </footer>
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $expenselists = new Vue({
+            el: '#expenselists',
+            data: {
+                is_loading: 0,
+                select_team: '',
+                modaldata: {show: false, total: 0},
+                expense_request: {currency: 'TWD', total: 0, paydate: '', desc: ''},
+                default_expense_request: {currency: 'TWD', total: 0, paydate: '', desc: ''},
+                default_invoice: {name: '', currency: 'TWD', total: 0, status: ''},
+                invoices: [],
+                invoices_total: {},
+                bank: {},
+                bank_alert: 0,
+                teams: [],
+                items: []
+            },
+            mounted: function() {
+                this.load();
+            },
+            watch: {
+                select_team: function(val, old) {
+                    if (old != '') {
+                        $expenselists.load();
+                    }
+                },
+                invoices: {
+                    handler: function(val, old) {
+                        this.sum_invoices();
+                    },
+                    deep: true
+                }
+            },
+            methods: {
+                create_expense: function() {
+                    this.modaldata.show = true;
+                    document.querySelector('html').classList.toggle('is-clipped');
+                },
+                close: function() {
+                    this.modaldata = {show: false, total: 0};
+                    document.querySelector('html').classList.toggle('is-clipped');
+                },
+                add_invoice: function() {
+                    this.invoices.push(Object.assign({}, this.default_invoice));
+                },
+                del_invoice: function(raw) {
+                    if (window.confirm('確定是否刪除「'+raw.name+'」？（無法恢復喔！）')) {
+                        this.invoices.splice(this.invoices.indexOf(raw), 1);
+                    }
+                },
+                sum_invoices: function() {
+                    this.invoices_total = {};
+                    this.invoices.forEach(function(raw) {
+                        if ($expenselists.invoices_total[raw.currency] === undefined) {
+                            $expenselists.invoices_total[raw.currency] = 0;
+                        }
+                        $expenselists.invoices_total[raw.currency] += raw.total;
+                    });
+                },
+                load: function() {
+                    ++this.is_loading;
+                    axios.post('./', {casename: 'get', select_team: this.select_team}).then(function(resp) {
+                        $expenselists.teams = resp.data.teams;
+                        $expenselists.items = resp.data.items;
+                        $expenselists.select_team = resp.data.select_team;
+                        $expenselists.bank = resp.data.bank;
+
+                        $expenselists.bank_alert = 0;
+                        for (let [key, val] of Object.entries(resp.data.bank)) {
+                            if (val === '') {
+                                $expenselists.bank_alert += 1;
+                            }
+                        }
+
+                        --$expenselists.is_loading;
+                    });
+                },
+                create: function(item) {
+                    console.info(item);
+                    this.modaldata = Object.assign({}, item);
+                    this.create_expense();
+                },
+                submit_expense: function() {
+                    console.info(this.bank);
+                    console.info(this.invoices);
+                    console.info(this.expense_request);
+
+                    ++this.modaldata.is_loading;
+                    this.close();
+
+                    axios.post('./', {casename: 'add_expense',
+                        bank: this.bank, invoices: this.invoices, expense_request: this.expense_request}).then(function(resp) {
+                            console.info(resp.data);
+                            $expenselists.invoices = [];
+                            $expenselists.expense_request = Object.assign({}, $expenselists.default_expense_request);
+                            --$expenselists.modaldata.is_loading;
+                    });
+                },
+                edit: function(item, index) {
+                    console.info(item);
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}

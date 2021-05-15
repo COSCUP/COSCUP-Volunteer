@@ -17,6 +17,7 @@ from markdown import markdown
 import setting
 from models.teamdb import TeamMemberChangedDB
 from models.teamdb import TeamPlanDB
+from module.budget import Budget
 from module.form import Form
 from module.form import FormAccommodation
 from module.form import FormTrafficFeeMapping
@@ -765,3 +766,61 @@ def team_plan_edit(pid, tid):
                 return jsonify({'data': result['data'], 'default': default, 'others': others})
 
         return jsonify({'data': [], 'default': default})
+
+@VIEW_TEAM.route('/<pid>/<tid>/expense/', methods=('GET', 'POST'))
+def team_expense_index(pid, tid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    if not is_admin:
+        return redirect('/')
+
+    if request.method == 'POST':
+        data = request.get_json()
+
+        if data['casename'] == 'get':
+            teams = []
+            for _team in Team.list_by_pid(pid=project['_id']):
+                teams.append({'name': _team['name'], 'tid': _team['tid']})
+
+            select_team = data['select_team']
+            if select_team == '':
+                select_team = team['tid']
+
+            items = []
+            for item in Budget.get_by_tid(pid=pid, tid=select_team):
+                if item['enabled']:
+                    item['enabled'] = 'true'
+                else:
+                    item['enabled'] = 'false'
+
+                items.append(item)
+
+            bank = User.get_bank(uid=g.user['account']['_id'])
+
+            return jsonify({'teams': teams, 'items': items, 'select_team': select_team, 'bank': bank})
+
+        elif data['casename'] == 'add_expense':
+            return jsonify(data)
+
+@VIEW_TEAM.route('/<pid>/<tid>/expense/lists', methods=('GET', 'POST'))
+def team_expense_lists(pid, tid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    if not is_admin:
+        return redirect('/')
+
+    if request.method == 'GET':
+        return render_template('./expense_lists.html', project=project, team=team)
+
