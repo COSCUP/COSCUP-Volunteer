@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block head_title %} - 申請經費 / 請款 {{project.name}} / {{team.name}} {% endblock %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        申請經費 / 請款
+    </h1>
+    <p class="subtitle">{% block expense_subtitle %}{% endblock %}</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+      <div class="columns">
+          <div class="column is-one-quarter">
+              <aside class="menu">
+                  <p class="menu-label">{{team.name}}</p>
+                  <ul class="menu-list">
+                      <li>
+                          <a href="{{url_for('team.index', pid=team.pid, tid=team.tid)}}">首頁</a>
+                      </li>
+                  </ul>
+                  <p class="menu-label">預算經費申請專區</p>
+                  <ul class="menu-list">
+                      <li>
+                          <a class="{%block expense_lists_menu%}{%endblock%}" href="/team/{{team.pid}}/{{team.tid}}/expense/lists">
+                              <span class="icon"><i class="fas fa-list"></i></span>
+                              <span>預算列表</span>
+                          </a>
+                      </li>
+                  </ul>
+              </aside>
+          </div>
+          {% block expense_body %}{% endblock %}
+      </div>
+  </div>
+</section>
+{% endblock %}

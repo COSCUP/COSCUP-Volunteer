@@ -48,6 +48,8 @@ ADD ./module/waitlist.py ./module/waitlist.py
 ADD ./templates/base.html ./templates/base.html
 ADD ./templates/budget.html ./templates/budget.html
 ADD ./templates/bug_report.html ./templates/bug_report.html
+ADD ./templates/expense_lists.html ./templates/expense_lists.html
+ADD ./templates/expense_menu.html ./templates/expense_menu.html
 ADD ./templates/form*.html ./templates/
 ADD ./templates/guide_index.html ./templates/guide_index.html
 ADD ./templates/index.html ./templates/index.html
