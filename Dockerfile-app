@@ -10,6 +10,7 @@ ADD ./celery_task/task*.py ./celery_task/
 
 ADD ./models/base.py ./models/base.py
 ADD ./models/budgetdb.py ./models/budgetdb.py
+ADD ./models/expensedb.py ./models/expensedb.py
 ADD ./models/formdb.py ./models/formdb.py
 ADD ./models/index.py ./models/index.py
 ADD ./models/mailletterdb.py ./models/mailletterdb.py
@@ -27,6 +28,7 @@ ADD ./models/waitlistdb.py ./models/waitlistdb.py
 ADD ./module/awsses.py ./module/awsses.py
 ADD ./module/budget.py ./module/budget.py
 ADD ./module/dietary_habit.py ./module/dietary_habit.py
+ADD ./module/expense.py ./module/expense.py
 ADD ./module/form.py ./module/form.py
 ADD ./module/gitlab_api.py ./module/gitlab_api.py
 ADD ./module/gsuite.py ./module/gsuite.py

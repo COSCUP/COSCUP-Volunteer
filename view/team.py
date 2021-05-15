@@ -18,6 +18,7 @@ import setting
 from models.teamdb import TeamMemberChangedDB
 from models.teamdb import TeamPlanDB
 from module.budget import Budget
+from module.expense import Expense
 from module.form import Form
 from module.form import FormAccommodation
 from module.form import FormTrafficFeeMapping
@@ -806,6 +807,7 @@ def team_expense_index(pid, tid):
             return jsonify({'teams': teams, 'items': items, 'select_team': select_team, 'bank': bank})
 
         elif data['casename'] == 'add_expense':
+            Expense.proess_and_add(pid=project['_id'], tid=team['tid'], uid=g.user['account']['_id'], data=data)
             return jsonify(data)
 
 @VIEW_TEAM.route('/<pid>/<tid>/expense/lists', methods=('GET', 'POST'))

@@ -1,4 +1,5 @@
 from models.budgetdb import BudgetDB
+from models.expensedb import ExpenseDB
 from models.formdb import FormDB
 from models.mailletterdb import MailLetterDB
 from models.mattermost_link_db import MattermostLinkDB
@@ -17,6 +18,7 @@ from models.waitlistdb import WaitListDB
 
 if __name__ == '__main__':
     BudgetDB().index()
+    ExpenseDB().index()
     FormDB().index()
     MailLetterDB().index()
     MattermostLinkDB().index()
