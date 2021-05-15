@@ -126,6 +126,10 @@
                               <td>估算方式</td>
                               <td>[[ modaldata.estimate ]]</td>
                           </tr>
+                          <tr>
+                              <td>唯一編號</td>
+                              <td><span class="tag">[[ modaldata._id ]]</span></td>
+                          </tr>
                       </tbody>
                   </table>
               </div>
@@ -221,14 +225,14 @@
                       <div class="field">
                           <label class="label">銀行代碼</label>
                           <div class="control">
-                              <input class="input" type="text" v-model="bank.code">
+                              <input class="input" type="text" v-model="bank.code" required>
                           </div>
                           <p class="help is-success">銀行代碼</p>
                       </div>
                       <div class="field">
                           <label class="label">銀行帳號</label>
                           <div class="control">
-                              <input class="input" type="text" v-model="bank.no">
+                              <input class="input" type="text" v-model="bank.no" required>
                           </div>
                           <p class="help is-success">銀行帳號</p>
                       </div>
@@ -239,14 +243,14 @@
                       <div class="field">
                           <label class="label">分行名稱</label>
                           <div class="control">
-                              <input class="input" type="text" v-model="bank.branch">
+                              <input class="input" type="text" v-model="bank.branch" required>
                           </div>
                           <p class="help is-success">例：新莊分行，也可以<a target="_blank" href="https://www.fisc.com.tw/tc/download/twd.txt">查詢</a>這張表。</p>
                       </div>
                       <div class="field">
                           <label class="label">戶名</label>
                           <div class="control">
-                              <input class="input" type="text" v-model="bank.name">
+                              <input class="input" type="text" v-model="bank.name" required>
                           </div>
                           <p class="help is-success">帳戶名稱，通常是本名為戶名</p>
                       </div>
@@ -287,8 +291,8 @@
                 is_loading: 0,
                 select_team: '',
                 modaldata: {show: false, total: 0},
-                expense_request: {currency: 'TWD', total: 0, paydate: '', desc: ''},
-                default_expense_request: {currency: 'TWD', total: 0, paydate: '', desc: ''},
+                expense_request: {paydate: '', desc: '', buid: ''},
+                default_expense_request: {paydate: '', desc: '', buid: ''},
                 default_invoice: {name: '', currency: 'TWD', total: 0, status: ''},
                 invoices: [],
                 invoices_total: {},
@@ -368,10 +372,14 @@
                     console.info(this.expense_request);
 
                     ++this.modaldata.is_loading;
+
+                    this.expense_request.buid = this.modaldata._id;
+
                     this.close();
 
                     axios.post('./', {casename: 'add_expense',
-                        bank: this.bank, invoices: this.invoices, expense_request: this.expense_request}).then(function(resp) {
+                        bank: this.bank, invoices: this.invoices,
+                        expense_request: this.expense_request}).then(function(resp) {
                             console.info(resp.data);
                             $expenselists.invoices = [];
                             $expenselists.expense_request = Object.assign({}, $expenselists.default_expense_request);
