@@ -64,6 +64,7 @@ ADD ./templates/tasks*.html ./templates/
 ADD ./templates/team*.html ./templates/
 ADD ./templates/user.html ./templates/user.html
 
+ADD ./templates/expense.html ./templates/expense.html
 ADD ./templates/mail/base*.html ./templates/mail/
 ADD ./templates/mail/coscup_base.html ./templates/mail/coscup_base.html
 ADD ./templates/mail/sender_base.html ./templates/mail/sender_base.html
@@ -72,6 +73,7 @@ ADD ./templates/mail/welcome.html ./templates/mail/welcome.html
 
 ADD ./view/api.py ./view/api.py
 ADD ./view/budget.py ./view/budget.py
+ADD ./view/expense.py ./view/expense.py
 ADD ./view/guide.py ./view/guide.py
 ADD ./view/links.py ./view/links.py
 ADD ./view/project.py ./view/project.py

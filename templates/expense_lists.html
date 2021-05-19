@@ -17,59 +17,60 @@
               </div>
           </div>
       </div>
-        <div class="column">
-            <div class="notification is-warning is-light" v-if="bank_alert === 0">
-                <span class="icon"><i class="fas fa-exclamation-circle"></i></span>
-                <span>申請預算撥款需要相關的匯款銀行資訊，可以到「<strong><a href="/setting/profile_real">真實個人資訊</a></strong>」預先設定，讓系動自動帶入，感謝！</span>
-            </div>
-            <table class="table is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>預算編號</th>
-                        <th>名稱</th>
-                        <th>部門</th>
-                        <th>申請人</th>
-                        <th>金額</th>
-                        <th>預計支出日期</th>
-                        <th>申請</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-if="items.length == 0">
-                        <td colspan="7" class="has-text-centered">
-                            <div class="field">
-                                <span class="icon"><i class="fas fa-info-circle"></i></span>
-                                <span>目前沒有項目，如果要報其他組別的預算，可以選擇。</span>
-                            </div>
-                            <div class="field">
-                                <div class="control">
-                                    <div class="select" :class="{'is-loading': is_loading > 0}">
-                                        <select v-model="select_team">
-                                            <option v-for="team in teams" :value="team.tid">[[ team.name ]]</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr v-for="item, index in items" :class="{'is-delete': item.enabled === 'false'}">
-                        <td class="is-vcentered">
-                            <span class="tag is-dark">[[ item.bid ]]</span>
-                        </td>
-                        <td class="is-vcentered">
-                            <a class="is-link" @click="create(item)">[[ item.name ]]</a>
-                        </td>
-                        <td class="is-vcentered">[[ item.tid ]]</td>
-                        <td class="is-vcentered">[[ item.uid ]]</td>
-                        <td class="is-vcentered"><span class="tag">[[ item.currency ]]</span>[[ item.total.toLocaleString('en') ]]</td>
-                        <td class="is-vcentered">[[ item.paydate ]]</td>
-                        <td class="is-vcentered">
-                            <a class="button is-info is-outlined is-light is-small" @click="create(item)">申請經費</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+      <div class="column">
+          <div class="notification is-warning is-light" v-if="bank_alert === 0">
+              <span class="icon"><i class="fas fa-exclamation-circle"></i></span>
+              <span>申請預算撥款需要相關的匯款銀行資訊，可以到「<strong><a href="/setting/profile_real">真實個人資訊</a></strong>」預先設定，讓系動自動帶入，感謝！</span>
+          </div>
+          <table class="table is-fullwidth">
+              <thead>
+                  <tr>
+                      <th>預算編號</th>
+                      <th>名稱</th>
+                      <th>部門</th>
+                      <th>申請人</th>
+                      <th>金額</th>
+                      <th>預計支出日期</th>
+                      <th>申請</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr v-if="items.length == 0">
+                      <td colspan="7" class="has-text-centered">
+                          <div class="field">
+                              <span class="icon"><i class="fas fa-info-circle"></i></span>
+                              <span>目前沒有項目，如果要報其他組別的預算，可以選擇。</span>
+                          </div>
+                          <div class="field">
+                              <div class="control">
+                                  <div class="select" :class="{'is-loading': is_loading > 0}">
+                                      <select v-model="select_team">
+                                          <option v-for="team in teams" :value="team.tid">[[ team.name ]]</option>
+                                      </select>
+                                  </div>
+                              </div>
+                          </div>
+                      </td>
+                  </tr>
+                  <tr v-for="item, index in items" :class="{'is-delete': item.enabled === 'false'}">
+                      <td class="is-vcentered">
+                          <span class="tag is-dark">[[ item.bid ]]</span>
+                      </td>
+                      <td class="is-vcentered">
+                          <a class="is-link" @click="create(item)">[[ item.name ]]</a>
+                      </td>
+                      <td class="is-vcentered">[[ item.tid ]]</td>
+                      <td class="is-vcentered">[[ item.uid ]]</td>
+                      <td class="is-vcentered"><span class="tag">[[ item.currency ]]</span>[[ item.total.toLocaleString('en') ]]</td>
+                      <td class="is-vcentered">[[ item.paydate ]]</td>
+                      <td class="is-vcentered">
+                          <a class="button is-info is-outlined is-light is-small" @click="create(item)">申請經費</a>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    </div>
     <!-- modal -->
     <div class="modal" :class="{'is-active': modaldata.show}">
       <div class="modal-background"></div>

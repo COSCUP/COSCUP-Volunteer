@@ -50,6 +50,15 @@ class Budget(object):
         return BudgetDB().edit(_id=data['_id'], data=save)
 
     @staticmethod
+    def get(buids, pid=None):
+        ''' Get by buid '''
+        query = {'_id': {'$in': buids}}
+        if pid is not None:
+            query['pid'] = pid
+
+        return BudgetDB().find(query)
+
+    @staticmethod
     def get_by_pid(pid):
         ''' Get by pid '''
         return BudgetDB().find({'pid': pid}, sort=(('tid', 1), ))

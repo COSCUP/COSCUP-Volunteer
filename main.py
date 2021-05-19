@@ -36,6 +36,7 @@ from module.users import User
 from module.usession import USession
 from view.api import VIEW_API
 from view.budget import VIEW_BUDGET
+from view.expense import VIEW_EXPENSE
 from view.guide import VIEW_GUIDE
 from view.links import VIEW_LINKS
 from view.project import VIEW_PROJECT
@@ -51,6 +52,7 @@ app.config['SESSION_COOKIE_SECURE'] = True
 app.secret_key = setting.SECRET_KEY
 app.register_blueprint(VIEW_API)
 app.register_blueprint(VIEW_BUDGET)
+app.register_blueprint(VIEW_EXPENSE)
 app.register_blueprint(VIEW_GUIDE)
 app.register_blueprint(VIEW_LINKS)
 app.register_blueprint(VIEW_PROJECT)
