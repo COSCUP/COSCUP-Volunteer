@@ -32,3 +32,14 @@ class Expense(object):
 
         return ExpenseDB().add(data=save)
 
+    @staticmethod
+    def status():
+        ''' Get status '''
+        return ExpenseDB.status()
+
+    @staticmethod
+    def get_all_by_pid(pid):
+        ''' Get all '''
+        for raw in ExpenseDB().find({'pid': pid}):
+            yield raw
+
