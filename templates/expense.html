@@ -54,15 +54,15 @@
                           <p class="is-size-7">[[ new Date(item.create_at).toLocaleString() ]]</p>
                       </td>
                       <td class="is-vcentered">
-                          <span class="tag is-warning" v-if="item.status == '1'">
+                          <span class="tag is-warning is-clickable" @click="edit(item, index)" v-if="item.status == '1'">
                               <span class="icon"><i class="far fa-hand-paper"></i></span>
                               <span>[[ status[item.status] ]]</span>
                           </span>
-                          <span class="tag is-link" v-if="item.status == '2'">
+                          <span class="tag is-link is-clickable" @click="edit(item, index)" v-if="item.status == '2'">
                               <span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
                               <span>[[ status[item.status] ]]</span>
                           </span>
-                          <span class="tag is-success" v-if="item.status == '3'">
+                          <span class="tag is-success is-clickable" @click="edit(item, index)" v-if="item.status == '3'">
                               <span class="icon"><i class="fas fa-clipboard-check"></i></span>
                               <span>[[ status[item.status] ]]</span>
                           </span>
@@ -178,7 +178,9 @@
                           <div class="select">
                               <select v-model="modaldata.status">
                                   <option :value="val"
-                               v-for="[val, name] in Object.entries(status).sort(function(a,b){if(a[0]>b[0]){return 1;} return -1;})">[[ name ]]</option>
+                               v-for="[val, name] in Object.entries(status).sort(function(a,b){if(a[0]>b[0]){return 1;} return -1;})">
+                               [[ name ]]
+                                  </option>
                               </select>
                           </div>
                       </div>
@@ -194,13 +196,24 @@
                               <thead>
                                   <th>名稱</th>
                                   <th class="has-text-right">金額</th>
-                                  <th>單據狀態</th>
+                                  <th>狀態</th>
+                                  <th class="has-text-centered">已確認收到</th>
                               </thead>
                               <tbody>
                                   <tr v-for="invoice in modaldata.invoices">
                                       <td>[[ invoice.name ]]</td>
-                                      <td class="has-text-right">[[ invoice.currency ]] $[[ invoice.total.toLocaleString('en') ]]</td>
-                                      <td>[[ invoice.status ]]</td>
+                                      <td class="has-text-right is-family-monospace">
+                                          [[ invoice.currency ]] $[[ invoice.total.toLocaleString('en') ]]
+                                      </td>
+                                      <td>
+                                          <span v-if="invoice.status === 'not_send'" class="tag is-warning">還未寄出</span>
+                                          <span v-if="invoice.status === 'sent'" class="tag is-success is-light">已寄出</span>
+                                      </td>
+                                      <td class="has-text-centered">
+                                          <label class="checkbox">
+                                              <input type="checkbox" v-model="invoice.received">
+                                          </label>
+                                      </td>
                                   </tr>
                               </tbody>
                           </table>
@@ -208,28 +221,25 @@
                       <div class="content" v-if="modaldata.bank">
                           <h4>匯款資訊</h4>
                           <ul>
-                              <li>銀行代碼：[[ modaldata.bank.code ]]</li>
-                              <li>銀行帳號：[[ modaldata.bank.no ]]</li>
+                              <li>銀行代碼：<span class="is-family-monospace">[[ modaldata.bank.code ]]</span></li>
+                              <li>銀行帳號：<span class="is-family-monospace">[[ modaldata.bank.no ]]</span></li>
                               <li>分行名稱：[[ modaldata.bank.branch ]]</li>
                               <li>戶名：[[ modaldata.bank.name ]]</li>
                           </ul>
                       </div>
                   </div>
               </div>
-              <form @submit.prevent="create">
-              <div class="field">
-                  <pre>[[ modaldata ]]</pre>
-              </div>
+              <form @submit.prevent="to_update">
               <div class="field">
                   <div class="control">
-                      <button v-if="modaldata._id == undefined" class="button is-info" type="submit" :class="{'is-loading': modaldata.is_loading}">
-                          建立預算項目
-                      </button>
-                      <button v-if="modaldata._id != undefined" class="button is-link" type="submit" :class="{'is-loading': modaldata.is_loading}">
+                      <button class="button is-link" type="submit" :class="{'is-loading': modaldata.is_loading}">
                           更新
                       </button>
                       <button class="button is-warning" @click="close" :class="{'is-loading': modaldata.is_loading}">取消</button>
                   </div>
+              </div>
+              <div class="field">
+                  <pre>[[ modaldata ]]</pre>
               </div>
               </form>
           </section>
@@ -266,23 +276,17 @@
                     this.modaldata.show = true;
                     document.querySelector('html').classList.toggle('is-clipped');
                 },
-                create: function() {
+                to_update: function() {
                     console.info('submit');
+                    console.info(this.modaldata);
+
                     ++this.modaldata.is_loading;
 
-                    if ($expense.modaldata.is_edit === true) {
-                        axios.post('./'+this.pid, {casename: 'edit', data: this.modaldata}).then(function(resp) {
-                            $expense.items[$expense.modaldata._index] = Object.assign({}, resp.data.data);
-                            --$expense.modaldata.is_loading;
-                            $expense.close();
-                        });
-                    } else {
-                        axios.post('./'+this.pid, {casename: 'add', data: this.modaldata}).then(function(resp) {
-                            $expense.items.push(Object.assign({}, resp.data.data));
-                            --$expense.modaldata.is_loading;
-                            $expense.close();
-                        });
-                    };
+                    axios.post('./'+this.pid, {casename: 'update', data: this.modaldata}).then(function(resp) {
+                        $expense.items[$expense.modaldata._index] = Object.assign({}, resp.data.result);
+                        --$expense.modaldata.is_loading;
+                        $expense.close();
+                    });
                 },
                 close: function() {
                     this.modaldata = Object.assign({}, this.default_modaldata);
