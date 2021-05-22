@@ -55,3 +55,10 @@ def by_project_index(pid):
             return jsonify({'datas': datas, 'budgets': budgets, 'users': users,
                     'status': Expense.status()})
 
+        elif data['casename'] == 'update':
+            # update invoices
+            Expense.update_invoices(expense_id=data['data']['_id'], invoices=data['data']['invoices'])
+            result = Expense.update_status(expense_id=data['data']['_id'], status=data['data']['status'])
+
+            return jsonify({'result': result})
+

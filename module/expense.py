@@ -1,3 +1,5 @@
+from pymongo.collection import ReturnDocument
+
 from models.expensedb import ExpenseDB
 
 
@@ -28,6 +30,7 @@ class Expense(object):
                         'name': invoice['name'],
                         'status': invoice['status'],
                         'total': invoice['total'],
+                        'received': False,
                     })
 
         return ExpenseDB().add(data=save)
@@ -42,4 +45,31 @@ class Expense(object):
         ''' Get all '''
         for raw in ExpenseDB().find({'pid': pid}):
             yield raw
+
+    @staticmethod
+    def update_invoices(expense_id, invoices):
+        ''' Only update invoices '''
+        _invoices = []
+        for invoice in invoices:
+            _invoices.append(
+                {'currency': invoice['currency'].strip(),
+                 'name': invoice['name'].strip(),
+                 'status': invoice['status'].strip(),
+                 'total': invoice['total'],
+                 'received': invoice['received'] if 'received' in invoice else False,
+                })
+
+        return ExpenseDB().find_one_and_update(
+                {'_id': expense_id},
+                {'$set': {'invoices': _invoices}},
+                return_document=ReturnDocument.AFTER,
+            )
+
+    def update_status(expense_id, status):
+        ''' update status '''
+        return ExpenseDB().find_one_and_update(
+                {'_id': expense_id},
+                {'$set': {'status': status.strip()}},
+                return_document=ReturnDocument.AFTER,
+            )
 
