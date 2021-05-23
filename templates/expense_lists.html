@@ -70,9 +70,8 @@
               </tbody>
           </table>
       </div>
-    </div>
     <!-- modal -->
-    <div class="modal" :class="{'is-active': modaldata.show}">
+    <div class="modal" :class="{'is-active': modaldata.show === true}">
       <div class="modal-background"></div>
       <div class="modal-card">
           <header class="modal-card-head">
@@ -257,15 +256,6 @@
                       </div>
                   </div>
               </div>
-              <div class="field">
-                  [[ modaldata ]]
-              </div>
-              <div class="field">
-                  [[ expense_request ]]
-              </div>
-              <div class="field">
-                  [[ invoices ]]
-              </div>
               <div class="field" v-if="invoices.length > 0">
                   <div class="control">
                       <button class="button is-info" type="submit" :class="{'is-loading': modaldata.is_loading}">
@@ -280,6 +270,8 @@
           </footer>
       </div>
     </div>
+    <!-- modal -->
+        </div>
 </div>
 {% endblock %}
 {% block js %}
@@ -363,15 +355,10 @@
                     });
                 },
                 create: function(item) {
-                    console.info(item);
                     this.modaldata = Object.assign({}, item);
                     this.create_expense();
                 },
                 submit_expense: function() {
-                    console.info(this.bank);
-                    console.info(this.invoices);
-                    console.info(this.expense_request);
-
                     ++this.modaldata.is_loading;
 
                     this.expense_request.buid = this.modaldata._id;
@@ -381,14 +368,10 @@
                     axios.post('./', {casename: 'add_expense',
                         bank: this.bank, invoices: this.invoices,
                         expense_request: this.expense_request}).then(function(resp) {
-                            console.info(resp.data);
                             $expenselists.invoices = [];
                             $expenselists.expense_request = Object.assign({}, $expenselists.default_expense_request);
                             --$expenselists.modaldata.is_loading;
                     });
-                },
-                edit: function(item, index) {
-                    console.info(item);
                 }
             },
             delimiters: ['[[', ']]']

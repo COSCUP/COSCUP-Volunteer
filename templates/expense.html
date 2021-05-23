@@ -194,10 +194,12 @@
                           <h4>單據</h4>
                           <table class="table is-narrow is-hoverable">
                               <thead>
-                                  <th>名稱</th>
-                                  <th class="has-text-right">金額</th>
-                                  <th>狀態</th>
-                                  <th class="has-text-centered">已確認收到</th>
+                                  <tr>
+                                      <th>名稱</th>
+                                      <th class="has-text-right">金額</th>
+                                      <th>狀態</th>
+                                      <th class="has-text-centered">已確認收到</th>
+                                  </tr>
                               </thead>
                               <tbody>
                                   <tr v-for="invoice in modaldata.invoices">
