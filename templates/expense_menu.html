@@ -28,7 +28,30 @@
                               <span>預算列表</span>
                           </a>
                       </li>
+                      <li>
+                          <a class="{%block expense_my_menu%}{%endblock%}" href="/team/{{team.pid}}/{{team.tid}}/expense/my">
+                              <span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
+                              <span>我的申請單</span>
+                          </a>
+                      </li>
                   </ul>
+                  {% if budget_menu %}
+                  <p class="menu-label">財務組管理使用</p>
+                  <ul class="menu-list">
+                      <li>
+                          <a href="/budget/{{team.pid}}">
+                              <span class="icon"><i class="fas fa-funnel-dollar"></i></span>
+                              <span>已核定預算</span>
+                          </a>
+                      </li>
+                      <li>
+                          <a href="/expense/{{team.pid}}">
+                              <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span>
+                              <span>申請單</span>
+                          </a>
+                      </li>
+                  </ul>
+                  {% endif %}
               </aside>
           </div>
           {% block expense_body %}{% endblock %}

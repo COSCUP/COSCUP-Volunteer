@@ -823,6 +823,9 @@ def team_expense_lists(pid, tid):
     if not is_admin:
         return redirect('/')
 
+    budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
+
     if request.method == 'GET':
-        return render_template('./expense_lists.html', project=project, team=team)
+        return render_template('./expense_lists.html', project=project,
+                team=team, budget_menu=budget_admin)
 
