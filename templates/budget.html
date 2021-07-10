@@ -204,7 +204,6 @@
                     document.querySelector('html').classList.toggle('is-clipped');
                 },
                 create: function() {
-                    console.info('submit');
                     ++this.modaldata.is_loading;
 
                     if ($budget.modaldata.is_edit === true) {
@@ -237,7 +236,6 @@
                         $budget.modaldata = Object.assign({}, $budget.default_modaldata, $budget.default_budget);
 
                         $budget.items = resp.data.items;
-                        console.info(resp.data);
                     });
                 }
             },

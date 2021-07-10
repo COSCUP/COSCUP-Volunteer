@@ -795,11 +795,6 @@ def team_expense_index(pid, tid):
 
             items = []
             for item in Budget.get_by_tid(pid=pid, tid=select_team):
-                if item['enabled']:
-                    item['enabled'] = 'true'
-                else:
-                    item['enabled'] = 'false'
-
                 items.append(item)
 
             bank = User.get_bank(uid=g.user['account']['_id'])
@@ -828,4 +823,54 @@ def team_expense_lists(pid, tid):
     if request.method == 'GET':
         return render_template('./expense_lists.html', project=project,
                 team=team, budget_menu=budget_admin)
+
+@VIEW_TEAM.route('/<pid>/<tid>/expense/my', methods=('GET', 'POST'))
+def team_expense_my(pid, tid):
+    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
+                g.user['account']['_id'] in team['owners'] or \
+                g.user['account']['_id'] in project['owners'])
+
+    if not is_admin:
+        return redirect('/')
+
+    budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
+
+    if request.method == 'GET':
+        return render_template('./expense_my.html', project=project,
+                team=team, budget_menu=budget_admin)
+
+    elif request.method == 'POST':
+        data = request.get_json()
+
+        if data['casename'] == 'get':
+            teams = []
+            for _team in Team.list_by_pid(pid=project['_id']):
+                teams.append({'name': _team['name'], 'tid': _team['tid']})
+
+            buids = set()
+            uids = set()
+            items = []
+            for item in Expense.get_by_create_by(pid=pid, create_by=g.user['account']['_id']):
+                buids.add(item['request']['buid'])
+                uids.add(item['create_by'])
+                items.append(item)
+
+            budgets = {}
+            if buids:
+                for raw in Budget.get(buids=list(buids), pid=pid):
+                    budgets[raw['_id']] = raw
+
+            users = {}
+            if uids:
+                user_datas = User.get_info(uids=list(uids))
+                for uid in user_datas:
+                    users[uid] = {
+                            'oauth': user_datas[uid]['oauth'],
+                            'profile': {'badge_name': user_datas[uid]['profile']['badge_name']}, }
+
+            return jsonify({'teams': teams, 'items': items, 'budgets': budgets, 'users': users, 'status': Expense.status()})
 

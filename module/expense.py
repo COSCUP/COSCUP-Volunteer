@@ -73,3 +73,8 @@ class Expense(object):
                 return_document=ReturnDocument.AFTER,
             )
 
+    @staticmethod
+    def get_by_create_by(pid, create_by):
+        ''' Get by create_by '''
+        return ExpenseDB().find({'pid': pid, 'create_by': create_by})
+
