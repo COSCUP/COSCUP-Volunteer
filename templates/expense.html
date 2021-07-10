@@ -21,8 +21,12 @@
       <div class="column">
           <div class="content">
               <div class="field is-grouped is-grouped-right">
-                  <div class="buttons is-success" v-if="is_loading > 0">
-                      <button class="button is-loading"></button>
+                  <div class="buttons">
+                      <button class="button is-loading" v-if="is_loading > 0"></button>
+                      <a class="button" :href="'/budget/'+pid">
+                          <span class="icon"><i class="fas fa-funnel-dollar"></i></span>
+                          <span>預算表 [[pid]]</span>
+                      </a>
                   </div>
               </div>
           </div>

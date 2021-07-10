@@ -22,6 +22,10 @@
           <div class="content">
               <div class="field is-grouped is-grouped-right">
                   <div class="buttons">
+                      <a class="button" :href="'/expense/'+pid">
+                          <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span>
+                          <span>已送出申請表 [[pid]]</span>
+                      </a>
                       <button class="button" v-on:click="create_budget">
                           <span class="icon"><i class="fas fa-plus-circle"></i></span>
                           <span>建立已核准的預算項目</span>
