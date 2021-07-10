@@ -1,5 +1,5 @@
 {% extends "expense_menu.html" %}
-{% block expense_subtitle %}編輯組員{% endblock %}
+{% block expense_subtitle %}可申請的預算列表{% endblock %}
 {% block expense_lists_menu %}is-active{% endblock %}
 {% block expense_body %}
 <div class="column">
@@ -52,7 +52,7 @@
                           </div>
                       </td>
                   </tr>
-                  <tr v-for="item, index in items" :class="{'is-delete': item.enabled === 'false'}">
+                  <tr v-for="item, index in items" :class="{'is-delete': item.enabled === false}">
                       <td class="is-vcentered">
                           <span class="tag is-dark">[[ item.bid ]]</span>
                       </td>

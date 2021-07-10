@@ -1,0 +1,191 @@
+{% extends "expense_menu.html" %}
+{% block expense_subtitle %}我的申請單{% endblock %}
+{% block expense_my_menu %}is-active{% endblock %}
+{% block expense_body %}
+<div class="column">
+    <div id="expensemy" class="container" v-cloak>
+      <div class="column">
+          <table class="table is-fullwidth">
+              <thead>
+                  <tr>
+                      <th>申請單號</th>
+                      <th>狀態</th>
+                      <th>預算編號</th>
+                      <th>金額</th>
+                      <th>期望出款時間</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr v-if="items.length == 0">
+                      <td colspan="8" class="has-text-centered">
+                          <span class="icon"><i class="fas fa-info-circle"></i></span>
+                          <span>目前沒有項目</span>
+                      </td>
+                  </tr>
+                  <tr v-for="item, index in items" :class="{'is-delete': item.enabled === false}">
+                      <td class="is-vcentered">
+                          <p><span class="tag">[[ item._id ]]</span></p>
+                          <p class="is-size-7">[[ new Date(item.create_at).toLocaleString() ]]</p>
+                      </td>
+                      <td class="is-vcentered">
+                          <span class="tag is-warning is-clickable" @click="edit(item, index)" v-if="item.status == '1'">
+                              <span class="icon"><i class="far fa-hand-paper"></i></span>
+                              <span>[[ status[item.status] ]]</span>
+                          </span>
+                          <span class="tag is-link is-clickable" @click="edit(item, index)" v-if="item.status == '2'">
+                              <span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
+                              <span>[[ status[item.status] ]]</span>
+                          </span>
+                          <span class="tag is-success is-clickable" @click="edit(item, index)" v-if="item.status == '3'">
+                              <span class="icon"><i class="fas fa-clipboard-check"></i></span>
+                              <span>[[ status[item.status] ]]</span>
+                          </span>
+                      </td>
+                      <td class="is-vcentered">
+                          <span class="tag is-dark">[[ budgets[item.request.buid].bid ]]</span>
+                          <span><a @click="edit(item, index)">[[ budgets[item.request.buid].name ]]</a></span>
+                      </td>
+                      <td class="is-vcentered">
+                          <div class="field is-grouped is-grouped-multiline">
+                              <div class="control">
+                                  <div class="tags has-addons">
+                                      <span class="tag is-dark"><span class="icon"><i class="fas fa-file-invoice-dollar"></i></span></span>
+                                      <span class="tag is-link is-light">[[ item.invoices.length ]]</span>
+                                  </div>
+                              </div>
+                              <div class="control" v-for="invoice in item.invoices">
+                                  <div class="tags has-addons">
+                                      <span class="tag is-info">[[ invoice.currency ]]</span>
+                                      <span class="tag is-success is-light">$[[ invoice.total.toLocaleString('en') ]]</span>
+                                  </div>
+                              </div>
+                          </div>
+                      </td>
+                      <td class="is-vcentered">[[ item.request.paydate ]]</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    <!-- modal -->
+    <div class="modal" :class="{'is-active': modaldata.show === true}">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+          <header class="modal-card-head">
+              <p class="modal-card-title">申請預算經費 - [[ modaldata.name ]]</p>
+              <button class="delete" aria-label="close" @click="close"></button>
+          </header>
+          <section class="modal-card-body">
+              <div class="content">
+                  <h4>預算表資訊</h4>
+                  <table class="table is-bordered is-narrow is-striped">
+                      <thead>
+                          <tr>
+                              <th>項目</th>
+                              <th>名稱</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>預算表編號</td>
+                              <td><span class="tag is-dark">[[ modaldata.bid ]]</span></td>
+                          </tr>
+                          <tr>
+                              <td>組別 / 預算建立者</td>
+                              <td>
+                                  <div class="field-body">
+                                      <div class="field">
+                                          <span class="select is-small">
+                                              <select v-model="modaldata.tid" disabled>
+                                                  <option v-for="team in teams" :value="team.tid">[[ team.name ]]</option>
+                                              </select>
+                                          </span>
+                                      </div>
+                                      <div class="filed">
+                                          <input class="input is-small" type="text" v-model="modaldata.uid" disabled>
+                                      </div>
+                                  </div>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>預算總金額</td>
+                              <td><span class="tag">[[ modaldata.currency ]]</span> <span>$[[ modaldata.total.toLocaleString('en') ]]</span></td>
+                          </tr>
+                          <tr>
+                              <td>預計支出時間</td>
+                              <td>[[ modaldata.paydate ]]</td>
+                          </tr>
+                          <tr>
+                              <td>說明</td>
+                              <td>[[ modaldata.desc ]]</td>
+                          </tr>
+                          <tr>
+                              <td>估算方式</td>
+                              <td>[[ modaldata.estimate ]]</td>
+                          </tr>
+                          <tr>
+                              <td>唯一編號</td>
+                              <td><span class="tag">[[ modaldata._id ]]</span></td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="field">
+                  <div class="control">
+                      <button class="button is-info" @click="close" :class="{'is-loading': modaldata.is_loading}">
+                          確定
+                      </button>
+                  </div>
+              </div>
+          </section>
+          <footer class="modal-card-foot">
+          </footer>
+      </div>
+    </div>
+    <!-- modal -->
+        </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $expensemy = new Vue({
+            el: '#expensemy',
+            data: {
+                is_loading: 0,
+                modaldata: {show: false, total: 0},
+                budgets: {},
+                users: {},
+                status: {},
+                teams: [],
+                items: []
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                create_expense: function() {
+                    this.modaldata.show = true;
+                    document.querySelector('html').classList.toggle('is-clipped');
+                },
+                close: function() {
+                    this.modaldata = {show: false, total: 0};
+                    document.querySelector('html').classList.toggle('is-clipped');
+                },
+                load: function() {
+                    ++this.is_loading;
+                    axios.post('./my', {casename: 'get'}).then(function(resp) {
+                        $expensemy.teams = resp.data.teams;
+                        $expensemy.status = resp.data.status;
+                        $expensemy.users = resp.data.users;
+                        $expensemy.budgets = resp.data.budgets;
+                        $expensemy.items = resp.data.items;
+                        --$expensemy.is_loading;
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}

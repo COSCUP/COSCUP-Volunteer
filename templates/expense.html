@@ -43,12 +43,12 @@
               </thead>
               <tbody>
                   <tr v-if="items.length == 0">
-                      <td colspan="6" class="has-text-centered">
+                      <td colspan="8" class="has-text-centered">
                           <span class="icon"><i class="fas fa-info-circle"></i></span>
                           <span>目前沒有項目</span>
                       </td>
                   </tr>
-                  <tr v-for="item, index in items" :class="{'is-delete': item.enabled === 'false'}">
+                  <tr v-for="item, index in items" :class="{'is-delete': item.enabled === false}">
                       <td class="is-vcentered">
                           <p><span class="tag">[[ item._id ]]</span></p>
                           <p class="is-size-7">[[ new Date(item.create_at).toLocaleString() ]]</p>
@@ -232,17 +232,14 @@
                   </div>
               </div>
               <form @submit.prevent="to_update">
-              <div class="field">
-                  <div class="control">
-                      <button class="button is-link" type="submit" :class="{'is-loading': modaldata.is_loading}">
-                          更新
-                      </button>
-                      <button class="button is-warning" @click="close" :class="{'is-loading': modaldata.is_loading}">取消</button>
+                  <div class="field">
+                      <div class="control">
+                          <button class="button is-link" type="submit" :class="{'is-loading': modaldata.is_loading}">
+                              更新
+                          </button>
+                          <button class="button is-warning" @click="close" :class="{'is-loading': modaldata.is_loading}">取消</button>
+                      </div>
                   </div>
-              </div>
-              <div class="field">
-                  <pre>[[ modaldata ]]</pre>
-              </div>
               </form>
           </section>
           <footer class="modal-card-foot">
@@ -279,9 +276,6 @@
                     document.querySelector('html').classList.toggle('is-clipped');
                 },
                 to_update: function() {
-                    console.info('submit');
-                    console.info(this.modaldata);
-
                     ++this.modaldata.is_loading;
 
                     axios.post('./'+this.pid, {casename: 'update', data: this.modaldata}).then(function(resp) {
@@ -306,8 +300,6 @@
                         $expense.users = resp.data.users;
                         $expense.status = resp.data.status;
 
-                        console.info(resp.data);
-                        console.info(this);
                         --$expense.is_loading;
                     });
                 }
