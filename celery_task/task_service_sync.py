@@ -86,7 +86,9 @@ def service_sync_gsuite_memberchange(sender, **kwargs):
             team_member_change_db.find_one_and_update({'_id': raw['_id']}, {'$set': {'done.gsuite_staff': True}})
 
         elif raw['case'] == 'del':
-            sync_gsuite.del_users_from_group(group=project['mailling_staff'], users=(user['mail'], ))
+            if not Team.participate_in(uid=raw['uid'], pid=raw['pid']):
+                sync_gsuite.del_users_from_group(group=project['mailling_staff'], users=(user['mail'], ))
+
             team_member_change_db.find_one_and_update({'_id': raw['_id']}, {'$set': {'done.gsuite_staff': True}})
 
 
