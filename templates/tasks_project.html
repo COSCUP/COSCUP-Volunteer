@@ -338,6 +338,9 @@
                                                 <a class="button" :href="'mailto:'+modal.peoples[uid].mail">
                                                     <span class="icon"><i class="far fa-paper-plane"></i></span>
                                                 </a>
+                                                <button @click="cancel_user(modal, uid, $event)" class="button is-danger">
+                                                    <span class="icon"><i class="fas fa-user-times"></i></span>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -505,6 +508,22 @@
                                 btn.classList.remove('is-loading');
                             });
                     });
+
+                },
+                cancel_user: function(data, uid, $e) {
+                    if (confirm('確認取消？')) {
+                        axios.post('./{{project._id}}', {casename: 'cancel_user', task_id: data._id, uid: uid},
+                            {validateStatus: function (status){return status < 500;}}).then(function(resp) {
+                                if (resp.status != 200) {
+                                    if (confirm('需要登入志工服務才可以使用，前往登入？')) {
+                                        window.location.href = '/oauth2callback?r=/tasks/{{project._id}}';
+                                    }
+                                } else {
+                                    $tasks.detail(resp.data.data);
+                                    $tasks.load();
+                                }
+                        });
+                    }
 
                 },
                 load: function() {

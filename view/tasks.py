@@ -90,6 +90,19 @@ def project(pid):
             page_args(data=data, uid=uid)
 
             return jsonify({'data': data})
+
+        elif post_data['casename'] == 'cancel_user':
+            if not uid:
+                return jsonify({'info': 'Need login'}), 401
+
+            if not is_in_project:
+                return jsonify({'info': 'Need as staff'}), 401
+
+            data = Tasks.cancel(pid=pid, task_id=post_data['task_id'], uid=post_data['uid'])
+            page_args(data=data, uid=uid)
+
+            return jsonify({'data': data})
+
         elif post_data['casename'] == 'peoples':
             task_data = Tasks.get_with_pid(pid=pid, _id=post_data['task_id'])
             if not task_data:
