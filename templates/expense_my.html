@@ -67,11 +67,11 @@
           </table>
       </div>
     <!-- modal -->
-    <div class="modal" :class="{'is-active': modaldata.show === true}">
+    <div class="modal" :class="{'is-active': modaldata.show === true}" v-if="modaldata.request">
       <div class="modal-background"></div>
       <div class="modal-card">
           <header class="modal-card-head">
-              <p class="modal-card-title">申請預算經費 - [[ modaldata.name ]]</p>
+              <p class="modal-card-title">申請預算經費 - [[ budgets[modaldata.request['buid'] ]['name'] ]]</p>
               <button class="delete" aria-label="close" @click="close"></button>
           </header>
           <section class="modal-card-body">
@@ -87,7 +87,7 @@
                       <tbody>
                           <tr>
                               <td>預算表編號</td>
-                              <td><span class="tag is-dark">[[ modaldata.bid ]]</span></td>
+                              <td><span class="tag is-dark">[[ budgets[modaldata.request['buid'] ]['bid'] ]]</span></td>
                           </tr>
                           <tr>
                               <td>組別 / 預算建立者</td>
@@ -101,26 +101,29 @@
                                           </span>
                                       </div>
                                       <div class="filed">
-                                          <input class="input is-small" type="text" v-model="modaldata.uid" disabled>
+                                          <input class="input is-small" type="text" v-model="budgets[modaldata.request['buid'] ].uid" disabled>
                                       </div>
                                   </div>
                               </td>
                           </tr>
                           <tr>
                               <td>預算總金額</td>
-                              <td><span class="tag">[[ modaldata.currency ]]</span> <span>$[[ modaldata.total.toLocaleString('en') ]]</span></td>
+                              <td>
+                                  <span class="tag">[[ budgets[modaldata.request['buid'] ].currency ]]</span>
+                                  <span>$[[ budgets[modaldata.request['buid'] ].total.toLocaleString('en') ]]</span>
+                              </td>
                           </tr>
                           <tr>
                               <td>預計支出時間</td>
-                              <td>[[ modaldata.paydate ]]</td>
+                              <td>[[ budgets[modaldata.request['buid'] ].paydate ]]</td>
                           </tr>
                           <tr>
                               <td>說明</td>
-                              <td>[[ modaldata.desc ]]</td>
+                              <td>[[ budgets[modaldata.request['buid'] ].desc ]]</td>
                           </tr>
                           <tr>
                               <td>估算方式</td>
-                              <td>[[ modaldata.estimate ]]</td>
+                              <td>[[ budgets[modaldata.request['buid'] ].estimate ]]</td>
                           </tr>
                           <tr>
                               <td>唯一編號</td>
@@ -128,6 +131,38 @@
                           </tr>
                       </tbody>
                   </table>
+              </div>
+              <div class="content">
+                  <h4>檢附單據</h4>
+              </div>
+              <div class="field" v-for="invoice, index in modaldata.invoices">
+                  <div class="field-body">
+                      <div class="field">
+                          <div class="control">
+                              [[ index+1 ]]. [[ invoice.name ]]
+                          </div>
+                      </div>
+                      <div class="field">
+                          <div class="control">
+                              <div class="tags has-addons">
+                                  <span class="tag is-info">[[ invoice.currency ]]</span>
+                                  <span class="tag is-success is-light">$[[ invoice.total.toLocaleString('en') ]]</span>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="field">
+                          <div class="control">
+                              <span v-if="invoice.status=='not_send'">還未寄出</span>
+                              <span v-if="invoice.status=='sent'">已寄出</span>
+                          </div>
+                      </div>
+                      <div class="field">
+                          <div class="control">
+                              <span v-if="invoice.received">還未收到</span>
+                              <span v-if="!invoice.received">已收到</span>
+                          </div>
+                      </div>
+                  </div>
               </div>
               <div class="field">
                   <div class="control">
@@ -170,6 +205,11 @@
                 },
                 close: function() {
                     this.modaldata = {show: false, total: 0};
+                    document.querySelector('html').classList.toggle('is-clipped');
+                },
+                edit: function(item, index) {
+                    console.info(item);
+                    this.modaldata = Object.assign({}, item, {show: true, total: 0});
                     document.querySelector('html').classList.toggle('is-clipped');
                 },
                 load: function() {

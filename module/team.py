@@ -40,6 +40,7 @@ class Team(object):
         teamdb = TeamDB(pid, tid)
         teamdb.update_users(field='chiefs', add_uids=add_uids, del_uids=del_uids)
 
+    @staticmethod
     def update_members(pid, tid, add_uids=None, del_uids=None, make_record=True):
         ''' update chiefs
 
