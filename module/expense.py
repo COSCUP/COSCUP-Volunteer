@@ -1,5 +1,6 @@
 from pymongo.collection import ReturnDocument
 
+from models.budgetdb import BudgetDB
 from models.expensedb import ExpenseDB
 
 
@@ -77,4 +78,43 @@ class Expense(object):
     def get_by_create_by(pid, create_by):
         ''' Get by create_by '''
         return ExpenseDB().find({'pid': pid, 'create_by': create_by})
+
+    @staticmethod
+    def dl_format(pid):
+        raws = []
+        for expense in Expense.get_all_by_pid(pid=pid):
+            base = {
+                    'request.id': expense['_id'],
+                    'request.pid': expense['pid'],
+                    'request.tid': expense['tid'],
+                    'note.user': expense['note']['myself'],
+                    'note.finance': expense['note']['to_create'],
+                    'budget._id': expense['request']['buid'],
+                    'budget.bid': '',
+                    'request.desc': expense['request']['desc'],
+                    'request.paydate': expense['request']['paydate'],
+                    'request.status': expense['status'],
+                    'request.status_text': ExpenseDB.status()[expense['status']],
+                    'request.create_at': expense['create_at'],
+                    'request.create_by': expense['create_by'],
+            }
+
+            for budget in BudgetDB().find({'_id': expense['request']['buid']}):
+                base['budget.bid'] = budget['bid']
+
+            for key in expense['bank']:
+                base['bank.%s' % key] = expense['bank'][key]
+
+            for invoice in expense['invoices']:
+                data = {}
+                data.update(base)
+                invoice_data = {}
+
+                for key in invoice:
+                    invoice_data['invoice.%s' % key] = invoice[key]
+
+                data.update(invoice_data)
+                raws.append(data)
+
+        return raws
 
