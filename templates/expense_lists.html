@@ -6,13 +6,18 @@
     <div id="expenselists" class="container" v-cloak>
       <div class="column">
           <div class="content">
-              <div class="field is-grouped is-grouped-right">
+              <div class="field is-grouped is-grouped-right is-grouped-multiline">
                   <div class="control">
                       <div class="select" :class="{'is-loading': is_loading > 0}">
                           <select v-model="select_team">
                               <option v-for="team in teams" :value="team.tid">[[ team.name ]]</option>
                           </select>
                       </div>
+                  </div>
+                  <div class="control">
+                      <a class="button is-info is-outlined" target="_blank" href="https://github.com/COSCUP/COSCUP-Volunteer/wiki/%E9%A0%90%E7%AE%97%E3%80%81%E7%B6%93%E8%B2%BB%E7%94%B3%E8%AB%8B%E6%B5%81%E7%A8%8B">
+                          <span class="icon"><i class="far fa-question-circle"></i></span>
+                      </a>
                   </div>
               </div>
           </div>
@@ -41,13 +46,18 @@
                               <span class="icon"><i class="fas fa-info-circle"></i></span>
                               <span>目前沒有項目，如果要報其他組別的預算，可以選擇。</span>
                           </div>
-                          <div class="field">
+                          <div class="field is-grouped is-grouped-centered is-grouped-multiline">
                               <div class="control">
                                   <div class="select" :class="{'is-loading': is_loading > 0}">
                                       <select v-model="select_team">
                                           <option v-for="team in teams" :value="team.tid">[[ team.name ]]</option>
                                       </select>
                                   </div>
+                              </div>
+                              <div class="control">
+                                  <a class="button is-info is-outlined" target="_blank" href="https://github.com/COSCUP/COSCUP-Volunteer/wiki/%E9%A0%90%E7%AE%97%E3%80%81%E7%B6%93%E8%B2%BB%E7%94%B3%E8%AB%8B%E6%B5%81%E7%A8%8B">
+                                      <span class="icon"><i class="far fa-question-circle"></i></span>
+                                  </a>
                               </div>
                           </div>
                       </td>
