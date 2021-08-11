@@ -1,4 +1,9 @@
+import csv
+import io
+from datetime import datetime
+
 from flask import Blueprint
+from flask import Response
 from flask import g
 from flask import jsonify
 from flask import redirect
@@ -61,4 +66,37 @@ def by_project_index(pid):
             result = Expense.update_status(expense_id=data['data']['_id'], status=data['data']['status'])
 
             return jsonify({'result': result})
+
+@VIEW_EXPENSE.route('/<pid>/dl', methods=('GET', 'POST'))
+def by_project_dl(pid):
+    project = Project.get(pid)
+
+    if not project:
+        return redirect('/')
+
+    is_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
+    if not is_admin:
+        return redirect('/')
+
+    if request.method == 'GET':
+        raws = Expense.dl_format(pid=pid)
+
+        if not raws:
+            return u'', 204
+
+        with io.StringIO() as files:
+            csv_writer = csv.DictWriter(files, fieldnames=list(raws[0].keys()), quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writeheader()
+            csv_writer.writerows(raws)
+
+            filename = 'coscup_expense_%s_%s.csv' % (pid, datetime.now().strftime('%Y%m%d_%H%M%S'))
+
+            return Response(
+                    files.getvalue(),
+                    mimetype='text/csv',
+                    headers={'Content-disposition': 'attachment; filename=%s' % filename,
+                             'x-filename': filename,
+                    })
+
+    return u'', 204
 
