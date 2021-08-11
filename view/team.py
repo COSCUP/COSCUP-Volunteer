@@ -15,6 +15,7 @@ from flask import url_for
 from markdown import markdown
 
 import setting
+from celery_task.task_expense import expense_create
 from models.teamdb import TeamMemberChangedDB
 from models.teamdb import TeamPlanDB
 from module.budget import Budget
@@ -802,7 +803,9 @@ def team_expense_index(pid, tid):
             return jsonify({'teams': teams, 'items': items, 'select_team': select_team, 'bank': bank})
 
         elif data['casename'] == 'add_expense':
-            Expense.proess_and_add(pid=project['_id'], tid=team['tid'], uid=g.user['account']['_id'], data=data)
+            # create expense and send notification.
+            expense = Expense.proess_and_add(pid=project['_id'], tid=team['tid'], uid=g.user['account']['_id'], data=data)
+            expense_create.apply_async(kwargs={'expense': expense})
             return jsonify(data)
 
 @VIEW_TEAM.route('/<pid>/<tid>/expense/lists', methods=('GET', 'POST'))
