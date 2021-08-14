@@ -52,7 +52,13 @@ def index(pid, tid):
         data = request.get_json()
 
         if 'casename' in data and data['casename'] == 'get':
-            return jsonify({'campaigns': list(SenderCampaign.get_list(pid=team['pid'], tid=team['tid']))})
+            campaigns = list(SenderCampaign.get_list(pid=team['pid'], tid=team['tid']))
+            raw_users_info = User.get_info(uids=[c['created']['uid'] for c in campaigns])
+            users_info = {}
+            for uid in raw_users_info:
+                users_info[uid] = {'uid': uid, 'name': raw_users_info[uid]['profile']['badge_name']}
+
+            return jsonify({'campaigns': campaigns, 'users_info': users_info})
 
         if 'casename' in data and data['casename'] == 'create':
             r = SenderCampaign.create(

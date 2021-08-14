@@ -14,25 +14,34 @@
       <div class="columns">
           <div id="campaign" class="column is-three-fifths is-offset-one-fifth" v-cloak>
               <div class="buttons is-right">
-                  <button class="button" v-on:click="showModal">建立 Campaign</button>
+                  <button class="button" v-on:click="showModal">
+                      <span class="icon"><i class="fas fa-plus-circle"></i></span>
+                      <span>建立 Campaign</span>
+                  </button>
               </div>
-              <table class="table is-fullwidth">
-                  <thead>
-                      <tr>
-                          <th>Name</th>
-                          <th>Create by</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr v-for="campaign in campaigns">
-                          <td>
-                              <a :href="'./campaign/' + campaign._id">[[ campaign.name ]]</a><br>
-                              <span>Subject: [[ campaign.mail.subject ]]</span>
-                          </td>
-                          <td>[[ campaign.created.uid ]]</td>
-                      </tr>
-                  </tbody>
-              </table>
+              <div class="box content" v-for="campaign in campaigns">
+                  <h3>
+                      <a :href="'./campaign/' + campaign._id">[[ campaign.name ]]</a>
+                      <small>
+                          <a :href="'/user/'+campaign.created.uid">
+                              <span class="icon"><i class="fas fa-user"></i></span>
+                              <span>[[ users_info[campaign.created.uid].name ]]</span>
+                          </a>
+                      </small>
+                  </h3>
+                  <div class="tags has-addons mb-0">
+                      <span class="tag is-info">Subject</span>
+                      <span class="tag">[[ campaign.mail.subject ]]</span>
+                  </div>
+                  <div class="tags">
+                      <span v-if="campaign.receiver.all_users" class="tag is-danger">全站志工</span>
+                      <span v-for="team in campaign.receiver.teams" class="tag is-success is-light">[[ team ]]</span>
+                  </div>
+                  <div class="tags has-addons mb-0">
+                      <span class="tag is-info">Created at</span>
+                      <span class="tag">[[ new Date(campaign.created.at*1000).toLocaleString() ]]</span>
+                  </div>
+              </div>
           </div>
       </div>
   </div>
@@ -86,7 +95,8 @@
         let $campaign = new Vue({
             el: '#campaign',
             data: {
-                campaigns: []
+                campaigns: [],
+                users_info: {}
             },
             mounted: function() {
                 this.load();
@@ -99,6 +109,7 @@
                 load: function() {
                     axios.post('./', {casename: 'get'}).then(function(resp) {
                         $campaign.campaigns = resp.data.campaigns;
+                        $campaign.users_info = resp.data.users_info;
                     });
                 }
             },
