@@ -11,6 +11,7 @@ from models.teamdb import TeamDB
 from models.teamdb import TeamMemberChangedDB
 from models.teamdb import TeamMemberTagsDB
 from models.teamdb import TeamPlanDB
+from models.telegram_db import TelegramDB
 from models.users_db import UsersDB
 from models.usessiondb import USessionDB
 from models.waitlistdb import WaitListDB
@@ -30,6 +31,7 @@ if __name__ == '__main__':
     TeamMemberChangedDB().index()
     TeamMemberTagsDB().index()
     TeamPlanDB().index()
+    TelegramDB().index()
     USessionDB().index()
     UsersDB().index()
     WaitListDB().index()
