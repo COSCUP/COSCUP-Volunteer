@@ -21,6 +21,7 @@ ADD ./models/projectdb.py ./models/projectdb.py
 ADD ./models/senderdb.py ./models/senderdb.py
 ADD ./models/tasksdb.py ./models/tasksdb.py
 ADD ./models/teamdb.py ./models/teamdb.py
+ADD ./models/telegram_db.py ./models/telegram_db.py
 ADD ./models/users_db.py ./models/users_db.py
 ADD ./models/usessiondb.py ./models/usessiondb.py
 ADD ./models/waitlistdb.py ./models/waitlistdb.py
@@ -43,6 +44,7 @@ ADD ./module/sender.py ./module/sender.py
 ADD ./module/service_sync.py ./module/service_sync.py
 ADD ./module/tasks.py ./module/tasks.py
 ADD ./module/team.py ./module/team.py
+ADD ./module/telegram_bot.py ./module/telegram_bot.py
 ADD ./module/users.py ./module/users.py
 ADD ./module/usession.py ./module/usession.py
 ADD ./module/waitlist.py ./module/waitlist.py
@@ -82,6 +84,7 @@ ADD ./view/sender.py ./view/sender.py
 ADD ./view/setting.py ./view/setting.py
 ADD ./view/tasks.py ./view/tasks.py
 ADD ./view/team.py ./view/team.py
+ADD ./view/telegram.py ./view/telegram.py
 ADD ./view/user.py ./view/user.py
 ADD ./view/utils.py ./view/utils.py
 

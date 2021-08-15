@@ -1,3 +1,4 @@
+import json
 import math
 
 import arrow
@@ -12,6 +13,7 @@ from flask import session
 from flask import url_for
 
 from celery_task.task_service_sync import service_sync_mattermost_invite
+from models.telegram_db import TelegramDB
 from module.dietary_habit import DietaryHabit
 from module.mattermost_link import MattermostLink
 from module.mc import MC
@@ -164,6 +166,24 @@ def link_chat():
         else:
             MattermostLink.reset(uid=g.user['account']['_id'])
             return redirect(url_for('setting.link_chat', _scheme='https', _external=True))
+
+
+@VIEW_SETTING.route('/link/telegram', methods=('GET', 'POST'))
+def link_telegram():
+    if request.method == 'GET':
+        telegram_data = []
+        for tg in TelegramDB().find({'uid': g.user['account']['_id']}):
+            tg['added'] = arrow.get(tg['added']).isoformat()
+            telegram_data.append(tg)
+
+        return render_template('./setting_link_telegram.html', telegram_data=json.dumps(telegram_data))
+
+    elif request.method == 'POST':
+        data = request.get_json()
+        if 'casename' in data and data['casename'] == 'del_account':
+            TelegramDB().delete_many({'uid': g.user['account']['_id']})
+
+        return jsonify({})
 
 
 @VIEW_SETTING.route('/security', methods=('GET', 'POST'))

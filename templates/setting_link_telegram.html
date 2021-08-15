@@ -1,0 +1,65 @@
+{% extends "setting.html" %}
+{% block head_title_setting %}連結 Telegram 帳號{% endblock %}
+{% block setting_link_telegram %}is-active{% endblock %}
+{% block setting_body %}
+<div class="columns">
+    <div id="settingtg" class="column" v-cloak>
+        <div class='content'  v-if="accounts.length == 0">
+            <h3>連結 Telegram 帳號</h3>
+            <p>可以綁定 Telegram 帳號來當作除了 Mattermost 的第二個接收通知的方式。</p>
+            <h4>加入 @coscup_volunteer_bot</h4>
+            <article class="message is-dark">
+                <div class="message-body">
+                    <figure class="image is-128x128">
+                        <img src="https://chart.googleapis.com/chart?cht=qr&chs=256x256&chld=L|1&chl=https%3A%2F%2Ft.me%2Fcoscup_volunteer_bot%3Fstart%3Dlinkme">
+                    </figure>
+                    <a class="button is-small"
+                        href="https://t.me/coscup_volunteer_bot?start=linkme" target="_blank">https://t.me/coscup_volunteer_bot?start=linkme</a>
+                </div>
+            </article>
+            <article class="message is-dark">
+                <div class="message-body">
+                    <a class="button is-warning" href="./telegram">重新整理，確認是否完成綁定。</a>
+                </div>
+            </article>
+        </div>
+        <div class='content'  v-if="accounts.length > 0">
+            <h3>連結 Telegram 帳號</h3>
+            <p>可以綁定 Telegram(<a href="https://t.me/coscup_volunteer_bot?start=linkme">@coscup_volunteer_bot</a>) 帳號來當作除了 Mattermost 的第二個接收通知的方式。</p>
+            <h4>已連結的帳號</h4>
+            <article class="message is-info" v-for="tg in accounts">
+                <div class="message-body">
+                    username: <span class="tag">@[[ tg.username ]]</span><br>
+                    added at: <span class="tag">[[ new Date(tg.added).toLocaleString() ]]</span>
+                </div>
+            </article>
+            <article class="message is-dnager">
+                <div class="message-body">
+                    <button class="button is-danger" @click="del_account">移除綁定</button>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function() {
+        let $settingtg = new Vue({
+            el: '#settingtg',
+            data: {
+                accounts: JSON.parse('{{ telegram_data|safe }}')
+            },
+            methods: {
+                del_account: function() {
+                    axios.post('./telegram', {casename: 'del_account'}).then(function(resp) {
+                        window.location.href = './telegram';
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}

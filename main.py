@@ -44,6 +44,7 @@ from view.sender import VIEW_SENDER
 from view.setting import VIEW_SETTING
 from view.tasks import VIEW_TASKS
 from view.team import VIEW_TEAM
+from view.telegram import VIEW_TELEGRAM
 from view.user import VIEW_USER
 
 
@@ -60,6 +61,7 @@ app.register_blueprint(VIEW_SENDER)
 app.register_blueprint(VIEW_SETTING)
 app.register_blueprint(VIEW_TASKS)
 app.register_blueprint(VIEW_TEAM)
+app.register_blueprint(VIEW_TELEGRAM)
 app.register_blueprint(VIEW_USER)
 
 
@@ -72,6 +74,7 @@ NO_NEED_LOGIN_PATH = (
     '/bug-report',
     '/robots.txt',
     '/api/members',
+    '/telegram/r',
 )
 
 @app.before_request
@@ -284,3 +287,4 @@ got_request_exception.connect(error_exception, app)
 
 if __name__ == '__main__':
     app.run(debug=False, host=setting.SERVER_HOST, port=setting.SERVER_PORT)
+
