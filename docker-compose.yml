@@ -1,0 +1,87 @@
+version: "3.9"
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - $PWD/logs/nginx:/var/log/nginx
+      - $PWD/nginx/sites:/etc/nginx/sites-available
+    depends_on:
+      - webapp
+    networks:
+      - backend
+
+  webappbase:
+    image: "coscupweb-base:22.03.13"
+    build:
+      context: .
+      dockerfile: ./Dockerfile-base
+
+  webapp:
+    image: "volunteer-app:prod"
+    build:
+      context: .
+      dockerfile: ./Dockerfile-app
+    links:
+      - "memcached-prod:memcached"
+      - "queue_sender:rabbitmq"
+      - "secretary_mongo:mongo"
+    volumes:
+      - $PWD/logs/apps:/app/log
+    depends_on:
+      - memcached-prod
+      - queue_sender
+      - secretary_mongo
+    expose:
+      - "5000"
+    deploy:
+      replicas: 4
+    networks:
+      - backend
+    command: ["uwsgi", "./uwsgi.ini"]
+
+  celery_worker:
+    image: "volunteer-app:prod"
+    links:
+      - "queue_sender:rabbitmq"
+      - "secretary_mongo:mongo"
+    volumes:
+      - $PWD/logs/workers:/app/log
+    depends_on:
+      - queue_sender
+    environment:
+      - LD_PRELOAD=/usr/local/lib/libjemalloc.so
+      - C_FORCE_ROOT=true
+    networks:
+      - backend
+    command: ["celery", "-A", "celery_task", "worker", "-B", "-l", "info", "-O", "fair", "-c", "4", "--logfile", "./log/log.log"]
+
+  memcached-prod:
+    image: "memcached:1.6.6-alpine"
+    deploy:
+      replicas: 1
+    networks:
+      - backend
+
+  queue_sender:
+    image: "rabbitmq:3.8.5-management-alpine"
+    deploy:
+      replicas: 1
+    depends_on:
+      - secretary_mongo
+    networks:
+      - backend
+
+  secretary_mongo:
+    image: "mongo:4.2.2-bionic"
+    deploy:
+      replicas: 1
+    networks:
+      - backend

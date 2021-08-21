@@ -17,6 +17,7 @@ class ExpenseDB(DBBase):
         self.create_index([('pid', 1), ('tid', 1), ('request.buid', 1)])
         self.create_index([('pid', 1), ('tid', 1), ('create_by', 1)])
 
+    @staticmethod
     def status():
         ''' Status mapping '''
         return {'1': u'已申請',
