@@ -24,6 +24,7 @@ MC_SERVERS = ['memcached', ]
 MONGO_HOST = 'mongo'
 MONGO_PORT = '27017'
 MONGO_DBNAME = '{{DB_NAME}}'
+MONGO_MOCK = True
 
 # ----- RabbitMQ ----- #
 RABBITMQ = 'guest:guest@rabbitmq:5672'
@@ -66,4 +67,3 @@ GITLAB_TOKEN = '{{GITLAB_TOKEN}}'
 # ----- Telegram ----- #
 TELEGRAM_TOKEN = '{{TELEGRAM_TOKEN}}'
 TELEGRAM_WEBHOOK = 'https://%s/{{WEBHOOK_PATH}}' % DOMAIN
-

@@ -1,0 +1,29 @@
+name: Pytest
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  run_test:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install memcached libs
+        run: sudo apt-get install ca-certificates libmemcached-dev
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install PIP
+        run: pip install -r requirements.txt
+      - name: Install pytest and pytest-cov
+        run: pip install pytest pytest-cov
+      - name: Create setting.py
+        run: mv setting_sample.py setting.py
+      - name: Run Testing
+        run: PYTHONPATH=./ pytest -vv --cov-report=term-missing --cov ./
