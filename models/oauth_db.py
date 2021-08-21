@@ -1,10 +1,12 @@
+''' oauth database '''
 from models.base import DBBase
 
 
-class OAuthDB(DBBase):
+class OAuthDB(DBBase):  # pylint: disable=abstract-method
     ''' OAuthDB Collection '''
+
     def __init__(self):
-        super(OAuthDB, self).__init__('oauth')
+        super().__init__('oauth')
 
     def index(self):
         ''' Index '''
@@ -17,7 +19,7 @@ class OAuthDB(DBBase):
         :param dict data: user data
 
         '''
-        self.find_one_and_update(
+        return self.find_one_and_update(
             {'_id': mail},
             {'$set': {'data': data}},
             upsert=True)
@@ -57,4 +59,4 @@ class OAuthDB(DBBase):
         :param str uid: uid
 
         '''
-        OAuthDB().find_one_and_update({'_id': mail}, {'$set': {'owner': uid}})
+        self.find_one_and_update({'_id': mail}, {'$set': {'owner': uid}})

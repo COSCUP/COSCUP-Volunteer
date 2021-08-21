@@ -9,6 +9,7 @@ boto3
 celery<6
 flask
 markdown
+mongomock
 phonenumbers
 pydantic
 pylibmc

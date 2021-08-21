@@ -1,22 +1,37 @@
+''' DB base '''
 from time import time
-
-import pymongo
-from pymongo.collection import Collection
 
 import setting
 
+if setting.MONGO_MOCK:
+    import mongomock
+    from mongomock.collection import Collection
+    from mongomock.store import DatabaseStore
+    MOCK_DB_STORE = DatabaseStore()
+else:
+    import pymongo
+    from pymongo.collection import Collection
+    MOCK_DB_STORE = None
 
-class DBBase(Collection):
+
+class DBBase(Collection):  # pylint: disable=abstract-method
     ''' DBBase class
 
     :param str name: collection name
 
     '''
-    def __init__(self, name):
-        client = pymongo.MongoClient('mongodb://%s:%s' % (
-                setting.MONGO_HOST, setting.MONGO_PORT))[setting.MONGO_DBNAME]
 
-        super(DBBase, self).__init__(client, name)
+    def __init__(self, name):
+        if not setting.MONGO_MOCK:
+            client = pymongo.MongoClient(
+                f'mongodb://{setting.MONGO_HOST}:{setting.MONGO_PORT}')[setting.MONGO_DBNAME]
+            super_args = {'database': client, 'name': name}
+        else:
+            client = mongomock.MongoClient()['testing']
+            super_args = {'database': client, 'name': name,
+                          '_db_store': MOCK_DB_STORE}
+
+        super().__init__(**super_args)
 
     @staticmethod
     def make_create_at(data):
@@ -26,14 +41,3 @@ class DBBase(Collection):
 
         '''
         data['created_at'] = time()
-
-
-class TestDB(DBBase):
-    def __init__(self):
-        super(TestDB, self).__init__('test_')
-
-
-if __name__ == '__main__':
-    test = TestDB()
-    pid = test.insert_one({'name': 'Toomore', 'age': 35}).inserted_id
-    print(pid)

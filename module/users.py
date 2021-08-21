@@ -1,13 +1,12 @@
-import logging
+''' users '''
+from pymongo.collection import ReturnDocument
 
 from models.oauth_db import OAuthDB
 from models.users_db import TobeVolunteerDB, UsersDB
-from pymongo.collection import ReturnDocument
-
 from module.skill import TobeVolunteerStruct
 
 
-class User(object):
+class User:
     ''' User
 
     :param str uid: user id
@@ -37,15 +36,18 @@ class User(object):
         '''
         if not force:
             oauth_data = OAuthDB().find_one({'_id': mail}, {'owner': 1})
+            if oauth_data is None:
+                raise Exception(f'mail: `{mail}` not in the oauth dbs')
+
             if 'owner' in oauth_data and oauth_data['owner']:
-                raise Exception('mail:`%s` already bind' % mail)
+                raise Exception(f'mail:`{mail}` already bind')
 
         user = UsersDB().add(UsersDB.new(mail=mail))
         OAuthDB().setup_owner(mail=user['mail'], uid=user['_id'])
 
         return user
 
-    def update_profile(self, data):
+    def update_profile(self, data: dict) -> dict:
         ''' update profile
 
         :param dict data: data
@@ -57,7 +59,7 @@ class User(object):
             return_document=ReturnDocument.AFTER,
         )
 
-    def update_profile_real(self, data):
+    def update_profile_real(self, data: dict) -> dict:
         ''' update profile
 
         :param dict data: data
@@ -95,26 +97,26 @@ class User(object):
         if need_sensitive:
             base_fields['profile_real.roc_id'] = 1
 
-        for u in UsersDB().find({'_id': {'$in': uids}}, base_fields):
-            users[u['_id']] = u
+        for user in UsersDB().find({'_id': {'$in': uids}}, base_fields):
+            users[user['_id']] = user
             oauth_data = OAuthDB().find_one(
-                {'owner': u['_id']},
+                {'owner': user['_id']},
                 {'data.name': 1, 'data.picture': 1, 'data.email': 1},
             )
-            users[u['_id']]['oauth'] = {
+            users[user['_id']]['oauth'] = {
                 'name': oauth_data['data']['name'],
                 'picture': oauth_data['data']['picture'],
                 'email': oauth_data['data']['email'],
             }
 
-            if 'profile' not in u:
-                users[u['_id']]['profile'] = {
+            if 'profile' not in user:
+                users[user['_id']]['profile'] = {
                     'badge_name': oauth_data['data']['name'],
                     'intro': '',
                 }
 
-            if 'profile_real' not in u:
-                users[u['_id']]['profile_real'] = {
+            if 'profile_real' not in user:
+                users[user['_id']]['profile_real'] = {
                     'phone': '',
                     'name': '',
                 }
@@ -125,9 +127,9 @@ class User(object):
     def get_bank(uid):
         ''' Get bank info '''
         bank = {'code': '', 'no': '', 'branch': '', 'name': ''}
-        for u in UsersDB().find({'_id': uid}, {'profile_real.bank': 1}):
-            if 'profile_real' in u and 'bank' in u['profile_real']:
-                bank.update(u['profile_real']['bank'])
+        for user in UsersDB().find({'_id': uid}, {'profile_real.bank': 1}):
+            if 'profile_real' in user and 'bank' in user['profile_real']:
+                bank.update(user['profile_real']['bank'])
 
         return bank
 
