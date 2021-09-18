@@ -214,9 +214,29 @@ class SenderReceiver(object):
         sender_receiver_db = SenderReceiverDB()
         sender_receiver_db.remove_past(pid=pid, cid=cid)
 
+        uids = []
+        for data in datas:
+            if 'uid' in data and data['uid']:
+                uids.append(data['uid'])
+
+        user_infos = User.get_info(uids=uids)
+        user_info_uids = {}
+        for uid, data in user_infos.items():
+            user_info_uids[uid] = {
+                    'name': data['profile']['badge_name'],
+                    'mail': data['oauth']['email'],
+            }
+
         save_datas = []
         for data in datas:
-            _data = SenderReceiverDB.new(pid=pid, cid=cid, name=data['name'], mail=data['mail'])
+            if 'uid' in data and data['uid'] and data['uid'] in user_info_uids:
+                _data = SenderReceiverDB.new(pid=pid, cid=cid,
+                        name=user_info_uids[data['uid']]['name'],
+                        mail=user_info_uids[data['uid']]['mail'],
+                    )
+            else:
+                _data = SenderReceiverDB.new(pid=pid, cid=cid, name=data['name'], mail=data['mail'])
+
             _data['data'].update(data)
             save_datas.append(_data)
 
@@ -231,9 +251,29 @@ class SenderReceiver(object):
         :param list datas: list of dict data
 
         '''
+        uids = []
+        for data in datas:
+            if 'uid' in data and data['uid']:
+                uids.append(data['uid'])
+
+        user_infos = User.get_info(uids=uids)
+        user_info_uids = {}
+        for uid, data in user_infos.items():
+            user_info_uids[uid] = {
+                    'name': data['profile']['badge_name'],
+                    'mail': data['oauth']['email'],
+            }
+
         save_datas = []
         for data in datas:
-            _data = SenderReceiverDB.new(pid=pid, cid=cid, name=data['name'], mail=data['mail'])
+            if 'uid' in data and data['uid'] and data['uid'] in user_info_uids:
+                _data = SenderReceiverDB.new(pid=pid, cid=cid,
+                        name=user_info_uids[data['uid']]['name'],
+                        mail=user_info_uids[data['uid']]['mail'],
+                    )
+            else:
+                _data = SenderReceiverDB.new(pid=pid, cid=cid, name=data['name'], mail=data['mail'])
+
             _data['data'].update(data)
             save_datas.append(_data)
 
