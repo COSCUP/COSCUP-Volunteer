@@ -1,11 +1,12 @@
-FROM alpine:3.14.0
+FROM alpine:3.14.2
 
 WORKDIR /app
 ADD ./requirements.txt ./requirements.txt
 RUN \
   apk update && apk upgrade                                   && \
-  apk add python3 curl ca-certificates cmake g++ make            \
-          gcc musl-dev libmemcached-dev python3-dev zlib-dev  && \
+  apk add --no-cache python3 ca-certificates libmemcached-dev && \
+  apk add --no-cache --virtual .build-deps curl cmake zlib-dev   \
+          g++ make gcc musl-dev python3-dev libffi-dev openssl-dev && \
   wget https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2 && \
   tar xvjf jemalloc-5.2.1.tar.bz2 && cd jemalloc-5.2.1 && ./configure && make && make install && \
   cd ../ && rm -rf ./jemalloc* && \
@@ -13,5 +14,5 @@ RUN \
   python3 get-pip.py                                          && \
   rm get-pip.py                                               && \
   pip install -r ./requirements.txt                           && \
-  apk del curl gcc musl-dev python3-dev zlib-dev cmake g++ make && \
+  apk del .build-deps                                         && \
   rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
