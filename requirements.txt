@@ -13,3 +13,4 @@ phonenumbers
 pylibmc
 pymongo
 requests
+uwsgi
