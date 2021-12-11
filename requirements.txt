@@ -6,7 +6,7 @@ google-auth-oauthlib
 arrow
 blinker
 boto3
-celery<5
+celery<6
 flask
 markdown
 phonenumbers
