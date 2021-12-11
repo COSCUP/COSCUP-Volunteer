@@ -100,6 +100,9 @@ def profile_real():
             if 'bank' not in user['profile_real']:
                 user['profile_real']['bank'] = {}
 
+            if 'address' not in user['profile_real']:
+                user['profile_real']['address'] = {}
+
             if 'dietary_habit' not in user['profile_real']:
                 user['profile_real']['dietary_habit'] = []
 
@@ -132,6 +135,11 @@ def profile_real():
                     'no': post_data['data']['bank'].get('no', '').strip(),
                     'branch': post_data['data']['bank'].get('branch', '').strip(),
                     'name': post_data['data']['bank'].get('name', '').strip(),
+                },
+                'address': {
+                    'code': post_data['data']['address'].get('code', '').strip(),
+                    'receiver': post_data['data']['address'].get('receiver', '').strip(),
+                    'address': post_data['data']['address'].get('address', '').strip(),
                 }
             }
 

@@ -128,6 +128,16 @@ class User(object):
         return bank
 
     @staticmethod
+    def get_address(uid: str) -> dict:
+        ''' Get Address '''
+        address = {'code': '', 'receiver': '', 'address': ''}
+        for user in UsersDB().find({'_id': uid}, {'profile_real.address': 1}):
+            if 'profile_real' in user and 'address' in user['profile_real']:
+                address.update(user['profile_real']['address'])
+
+        return address
+
+    @staticmethod
     def get_all_users(include_suspend: bool = False):
         ''' Get all users '''
         query = {}
