@@ -1,18 +1,12 @@
+''' setting '''
 import json
 import math
 
 import arrow
 import phonenumbers
-from flask import Blueprint
-from flask import g
-from flask import jsonify
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import session
-from flask import url_for
-
 from celery_task.task_service_sync import service_sync_mattermost_invite
+from flask import (Blueprint, g, jsonify, redirect, render_template, request,
+                   session, url_for)
 from models.telegram_db import TelegramDB
 from module.dietary_habit import DietaryHabit
 from module.mattermost_link import MattermostLink
@@ -20,7 +14,6 @@ from module.mc import MC
 from module.users import User
 from module.usession import USession
 from module.waitlist import WaitList
-
 
 VIEW_SETTING = Blueprint('setting', __name__, url_prefix='/setting')
 
@@ -61,7 +54,8 @@ def profile_real():
         else:
             try:
                 phone = phonenumbers.parse(user['profile_real']['phone'], None)
-                user['profile_real']['phone'] = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.NATIONAL)
+                user['profile_real']['phone'] = phonenumbers.format_number(
+                    phone, phonenumbers.PhoneNumberFormat.NATIONAL)
 
                 default_code = phone.country_code
 
@@ -71,10 +65,11 @@ def profile_real():
         if 'bank' not in user['profile_real']:
             user['profile_real']['bank'] = {}
 
-        phone_codes = sorted(phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key= lambda x: x[1][0])
+        phone_codes = sorted(
+            phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key=lambda x: x[1][0])
 
         return render_template('./setting_profile_real.html', user=user,
-                phone_codes=phone_codes, default_code=default_code)
+                               phone_codes=phone_codes, default_code=default_code)
 
     elif request.method == 'POST':
         post_data = request.get_json()
@@ -86,9 +81,10 @@ def profile_real():
                 user = {'profile_real': g.user['account']['profile_real']}
 
                 try:
-                    phone = phonenumbers.parse(user['profile_real']['phone'], None)
+                    phone = phonenumbers.parse(
+                        user['profile_real']['phone'], None)
                     user['profile_real']['phone'] = phonenumbers.format_number(
-                            phone, phonenumbers.PhoneNumberFormat.NATIONAL)
+                        phone, phonenumbers.PhoneNumberFormat.NATIONAL)
 
                     default_code = phone.country_code
 
@@ -106,21 +102,24 @@ def profile_real():
             if 'dietary_habit' not in user['profile_real']:
                 user['profile_real']['dietary_habit'] = []
 
-            phone_codes = sorted(phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key= lambda x: x[1][0])
+            phone_codes = sorted(
+                phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key=lambda x: x[1][0])
 
             return jsonify({'profile': user['profile_real'],
                             'phone_codes': phone_codes,
                             'default_code': default_code,
                             'dietary_habit': list(DietaryHabit.ITEMS.items()),
-                        })
+                            })
 
         elif post_data['casename'] == 'update':
             phone = ''
             if 'phone' in post_data['data'] and post_data['data']['phone'] and \
                     'phone_code' in post_data['data'] and post_data['data']['phone_code']:
                 try:
-                    phone = phonenumbers.parse('+%(phone_code)s %(phone)s' % post_data['data'])
-                    phone = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.E164)
+                    phone = phonenumbers.parse(
+                        '+%(phone_code)s %(phone)s' % post_data['data'])
+                    phone = phonenumbers.format_number(
+                        phone, phonenumbers.PhoneNumberFormat.E164)
                 except phonenumbers.phonenumberutil.NumberParseException:
                     phone = ''
 
@@ -169,7 +168,7 @@ def link_chat():
         if 'casename' in data:
             if data['casename'] == 'invite':
                 service_sync_mattermost_invite.apply_async(
-                        kwargs={'uids': (g.user['account']['_id'], )})
+                    kwargs={'uids': (g.user['account']['_id'], )})
                 return jsonify(data)
         else:
             MattermostLink.reset(uid=g.user['account']['_id'])
@@ -227,7 +226,7 @@ def security():
             records.append(raw)
 
         return render_template('./setting_security.html',
-                records=records, alive_session=alive_session)
+                               records=records, alive_session=alive_session)
 
     elif request.method == 'POST':
         data = request.get_json()
@@ -240,8 +239,9 @@ def security():
 def waitting():
     waitting_lists = []
 
-    for raw  in WaitList.find_history(uid=g.user['account']['_id']):
-        raw['hr_time'] = arrow.get(raw['_id'].generation_time).to('Asia/Taipei').format('YYYY-MM-DD')
+    for raw in WaitList.find_history(uid=g.user['account']['_id']):
+        raw['hr_time'] = arrow.get(raw['_id'].generation_time).to(
+            'Asia/Taipei').format('YYYY-MM-DD')
 
         if 'result' in raw:
             if raw['result'] == 'approval':
@@ -253,7 +253,7 @@ def waitting():
 
         waitting_lists.append(raw)
 
-    waitting_lists = sorted(waitting_lists, key=lambda x: x['_id'], reverse=True)
+    waitting_lists = sorted(
+        waitting_lists, key=lambda x: x['_id'], reverse=True)
 
     return render_template('./setting_waitting.html', waitting_lists=waitting_lists)
-
