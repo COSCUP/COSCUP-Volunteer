@@ -2,30 +2,28 @@
 {% block head_title_setting %}關於我{% endblock %}
 {% block setting_profile %}is-active{% endblock %}
 {% block setting_body %}
-<div class="columns">
+<div class="columns" id="profile">
     <div class="column">
         <div class="content">
             <h2>個人資訊</h2>
             <hr>
-            <form method="POST">
-                <div class="field">
-                    <label class="label">Name*</label>
-                    <div class="control">
-                        <input class="input" name="badge_name" type="text" value="{{user.profile.badge_name}}" required>
-                    </div>
-                    <p class="help is-success">名牌顯示的稱呼。</p>
+            <div class="field">
+                <label class="label">Name*</label>
+                <div class="control">
+                    <input class="input" name="badge_name" type="text" v-model="profile.badge_name" required>
                 </div>
-                <div class="field">
-                    <label class="label">Intro</label>
-                    <div class="control">
-                        <textarea class="textarea" name="intro" placeholder="自我介紹 ...">{{user.profile.intro}}</textarea>
-                    </div>
-                    <p class="help is-success">可使用 markdown 語法</p>
+                <p class="help is-success">名牌顯示的稱呼。</p>
+            </div>
+            <div class="field">
+                <label class="label">Intro</label>
+                <div class="control">
+                    <textarea class="textarea" name="intro" placeholder="自我介紹 ..." v-model="profile.intro"></textarea>
                 </div>
-                <div class="field">
-                    <button class="button is-primary" type="submit">Update</button>
-                </div>
-            </form>
+                <p class="help is-success">可使用 markdown 語法</p>
+            </div>
+            <div class="field">
+                <button class="button is-primary" :class="{'is-loading': is_loading}" @click="save_profile">Update</button>
+            </div>
         </div>
     </div>
     <div class="column is-two-fifths">
@@ -33,7 +31,7 @@
             <article class="message is-small is-dark">
                 <div class="message-body">
                     <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
-                    這裡的資訊會公開，讓其他人來瞭解你的部分。這裡的內容會呈現在<a href="/user/{{user._id}}">「關於我」</a>的頁面。
+                    這裡的資訊會公開，讓其他人來瞭解你的部分。這裡的內容會呈現在<a :href="'/user/'+profile.id">「關於我」</a>的頁面。
                 </div>
             </article>
             <article class="message is-small is-info">
@@ -45,4 +43,40 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $profile = new Vue({
+            el: '#profile',
+            data: {
+                profile: {},
+                is_loading: 0
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                load: function() {
+                    ++this.is_loading;
+                    let $this = this;
+                    axios.post('./profile', {casename: 'get'}).then(function(resp) {
+                        $this.profile = resp.data.profile;
+                        --$this.is_loading;
+                    });
+                },
+                save_profile: function() {
+                    ++this.is_loading;
+                    let $this = this;
+                    axios.post('./profile', {casename: 'save', data: this.profile}).then(function(resp) {
+                        $this.load();
+                        --$this.is_loading;
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
 {% endblock %}
