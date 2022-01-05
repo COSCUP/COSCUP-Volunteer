@@ -24,21 +24,37 @@ def index():
 
 
 @VIEW_SETTING.route('/profile', methods=('GET', 'POST'))
-def profile():
+def profile_page():
+    ''' profile '''
     if request.method == 'GET':
         user = g.user['account']
         if 'profile' not in user:
             user['profile'] = {}
 
         return render_template('./setting_profile.html', user=user)
-    elif request.method == 'POST':
-        data = {
-            'badge_name': request.form['badge_name'].strip(),
-            'intro': request.form['intro'].strip(),
-        }
-        User(uid=g.user['account']['_id']).update_profile(data)
-        MC.get_client().delete('sid:%s' % session['sid'])
-        return redirect(url_for('setting.profile', _scheme='https', _external=True))
+
+    if request.method == 'POST':
+        post_data = request.get_json()
+
+        if post_data['casename'] == 'get':
+            user = g.user['account']
+            profile = {}
+            if 'profile' in user:
+                profile['badge_name'] = user['profile']['badge_name']
+                profile['intro'] = user['profile']['intro']
+                profile['id'] = user['_id']
+
+            return jsonify({'profile': profile})
+
+        if post_data['casename'] == 'save':
+            data = {
+                'badge_name': post_data['data']['badge_name'].strip(),
+                'intro': post_data['data']['intro'].strip(),
+            }
+            User(uid=g.user['account']['_id']).update_profile(data)
+            MC.get_client().delete(f"sid:{session['sid']}")
+
+        return jsonify({})
 
 
 @VIEW_SETTING.route('/profile_real', methods=('GET', 'POST'))
