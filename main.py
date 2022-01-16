@@ -111,6 +111,11 @@ def need_login():
                             uid=session_data['uid'])], key=lambda x: x['pid'], reverse=True)
 
                     mem_cahce.set(f"sid:{session['sid']}", g.user, 600)
+            else:
+                session.pop('sid', None)
+                session['r'] = request.path
+
+                return redirect(url_for('oauth2callback', _scheme='https', _external=True))
 
         return None
 
