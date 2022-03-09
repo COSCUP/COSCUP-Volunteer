@@ -2,27 +2,109 @@
 {% block head_title_setting %}關於我{% endblock %}
 {% block setting_profile %}is-active{% endblock %}
 {% block setting_body %}
-<div class="columns" id="profile">
+<div class="columns" id="profile" v-cloak>
     <div class="column">
         <div class="content">
             <h2>個人資訊</h2>
-            <hr>
             <div class="field">
                 <label class="label">Name*</label>
                 <div class="control">
-                    <input class="input" name="badge_name" type="text" v-model="profile.badge_name" required>
+                    <input class="input" name="badge_name" type="text" v-model.trim="profile.badge_name" required>
                 </div>
                 <p class="help is-success">名牌顯示的稱呼。</p>
             </div>
             <div class="field">
                 <label class="label">Intro</label>
                 <div class="control">
-                    <textarea class="textarea" name="intro" placeholder="自我介紹 ..." v-model="profile.intro"></textarea>
+                    <textarea class="textarea" name="intro" placeholder="自我介紹 ..." v-model.trim="profile.intro"></textarea>
                 </div>
                 <p class="help is-success">可使用 markdown 語法</p>
             </div>
             <div class="field">
-                <button class="button is-primary" :class="{'is-loading': is_loading}" @click="save_profile">Update</button>
+                <div class="control">
+                    <button class="button is-primary" :class="{'is-loading': is_loading}" @click="save_profile">更新 個人資訊</button>
+                </div>
+            </div>
+            <hr>
+            <h2>招募資訊</h2>
+            <div class="field">
+                <label class="label">將我放入可招募人才庫</label>
+                <div class="control">
+                    <label class="checkbox"
+                       :class="{'has-text-info': bev.ok}">
+                        <input type="checkbox" v-model="bev.ok">
+                        目前有空，可以招募我當工人
+                    </label>
+                </div>
+            </div>
+            <article class="message is-small is-info" v-if="bev.ok">
+                <div class="message-body">
+                    <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
+                    勾選並完成以下的問題，送出。資料會彙整在每一屆的籌備志工庫中。
+                </div>
+            </article>
+            <div class="field">
+                <label class="label">想加入的組別</label>
+                <p class="help">挑選一些比較感興趣的組別加入</p>
+                <div class="control">
+                    <label class="checkbox mr-3 mb-2"
+                           :class="{'has-text-info': bev.teams != undefined && bev.teams.includes(name)}"
+                        v-for="[key, name] in Object.entries(teams_enum)">
+                        <input type="checkbox" v-model="bev.teams" :value="name">
+                        [[ teams_enum_desc[key] ]]
+                    </label>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">符合你的描述</label>
+                <p class="help">可能是技能、可能是情境，哪一些符合你呢？</p>
+                <div class="control">
+                    <label class="checkbox mr-3 mb-2"
+                           :class="{'has-text-info': bev.skill != undefined && bev.skill.includes(name)}"
+                        v-for="[key, name] in Object.entries(skill_enum)">
+                        <input type="checkbox" v-model="bev.skill" :value="name">
+                        [[ skill_enum_desc[key] ]]
+                    </label>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">非會期可投入時間</label>
+                <p class="help">在會前及會後，你平均而言「每週」能夠投入「多少小時」協助 COSCUP 的工作呢？</p>
+                <div class="field has-addons">
+                    <div class="control">
+                        <button class="button is-static">大約</button>
+                    </div>
+                    <div class="control">
+                        <input class="input" type="number" v-model.number="bev.hours">
+                    </div>
+                    <div class="control">
+                        <button class="button is-static">小時/週</button>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">身分</label>
+                <div class="control">
+                    <label class="radio"
+                       :class="{'has-text-info': bev.status == name}"
+                        v-for="[key, name] in Object.entries(status_enum)">
+                        <input type="radio" v-model="bev.status" :value="name">
+                        [[ status_enum_desc[key] ]]
+                    </label>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">補充說明</label>
+                <p class="help">有無其他項目需要補述的部分，都可以寫在這裡補充</p>
+                <div class="control">
+                    <textarea class="textarea" v-model="bev.desc"></textarea>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-info is-light is-outlined"
+                        :class="{'is-loading': is_loading}" @click="save_tobe_volunteer">更新 招募資訊</button>
+                </div>
             </div>
         </div>
     </div>
@@ -52,6 +134,13 @@
             el: '#profile',
             data: {
                 profile: {},
+                bev: {},
+                teams_enum: {},
+                teams_enum_desc: {},
+                skill_enum: {},
+                skill_enum_desc: {},
+                status_enum: {},
+                status_enum_desc: {},
                 is_loading: 0
             },
             mounted: function() {
@@ -63,6 +152,27 @@
                     let $this = this;
                     axios.post('./profile', {casename: 'get'}).then(function(resp) {
                         $this.profile = resp.data.profile;
+                        $this.teams_enum = resp.data.team_enum;
+                        $this.teams_enum_desc = resp.data.team_enum_desc;
+                        $this.skill_enum = resp.data.skill_enum;
+                        $this.skill_enum_desc = resp.data.skill_enum_desc;
+                        $this.status_enum = resp.data.status_enum;
+                        $this.status_enum_desc = resp.data.status_enum_desc;
+                        --$this.is_loading;
+                    });
+
+                    ++this.is_loading;
+                    axios.post('./profile', {casename: 'get_tobe_volunteer'}).then(function(resp) {
+                        $this.bev = resp.data.tobe_volunteer;
+                        --$this.is_loading;
+                    });
+                },
+                save_tobe_volunteer: function() {
+                    ++this.is_loading;
+                    let $this = this;
+                    axios.post('./profile', {casename: 'save_tobe_volunteer', data: this.bev}).then(function(resp) {
+                        $this.load();
+                        alert('更新招募資訊完成');
                         --$this.is_loading;
                     });
                 },
@@ -71,6 +181,7 @@
                     let $this = this;
                     axios.post('./profile', {casename: 'save', data: this.profile}).then(function(resp) {
                         $this.load();
+                        alert('更新完成');
                         --$this.is_loading;
                     });
                 }
