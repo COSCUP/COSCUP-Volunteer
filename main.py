@@ -28,6 +28,7 @@ from view.expense import VIEW_EXPENSE
 from view.guide import VIEW_GUIDE
 from view.links import VIEW_LINKS
 from view.project import VIEW_PROJECT
+from view.recruit import VIEW_RECRUIT
 from view.sender import VIEW_SENDER
 from view.setting import VIEW_SETTING
 from view.tasks import VIEW_TASKS
@@ -50,6 +51,7 @@ app.register_blueprint(VIEW_EXPENSE)
 app.register_blueprint(VIEW_GUIDE)
 app.register_blueprint(VIEW_LINKS)
 app.register_blueprint(VIEW_PROJECT)
+app.register_blueprint(VIEW_RECRUIT)
 app.register_blueprint(VIEW_SENDER)
 app.register_blueprint(VIEW_SETTING)
 app.register_blueprint(VIEW_TASKS)
@@ -290,18 +292,19 @@ def exception_func():
 
 def error_exception(sender, exception, **extra):
     ''' error_exception '''
-    logging.info('sender: %s, exception: %s, extra: %s', sender, exception, extra)
+    logging.info('sender: %s, exception: %s, extra: %s',
+                 sender, exception, extra)
 
     mail_sys_weberror.apply_async(
         kwargs={
             'title': f'{request.method}, {request.path}, {arrow.now()}',
             'body': f'''<b>{request.method}</b> {request.path}<br>
-            <pre>{os.environ}</pre>
-            <pre>{request.headers}</pre>
-            <pre>User: {g.get('user', {}).get('account', {}).get('_id')}\n\n
-            sid: {session.get('sid')}\n\n
-            args: {request.args}\n\nform: {request.form}\n\n
-            values: {request.values}\n\n{traceback.format_exc()}</pre>'''
+<pre>{os.environ}</pre>
+<pre>{request.headers}</pre>
+<pre>User: {g.get('user', {}).get('account', {}).get('_id')}\n\n
+sid: {session.get('sid')}\n\n
+args: {request.args}\n\nform: {request.form}\n\n
+values: {request.values}\n\n{traceback.format_exc()}</pre>'''
         })
 
 

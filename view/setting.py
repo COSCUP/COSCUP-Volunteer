@@ -11,7 +11,9 @@ from models.telegram_db import TelegramDB
 from module.dietary_habit import DietaryHabit
 from module.mattermost_link import MattermostLink
 from module.mc import MC
-from module.users import User
+from module.skill import (SkillEnum, SkillEnumDesc, StatusEnum, StatusEnumDesc,
+                          TeamsEnum, TeamsEnumDesc, TobeVolunteerStruct)
+from module.users import TobeVolunteer, User
 from module.usession import USession
 from module.waitlist import WaitList
 
@@ -38,21 +40,50 @@ def profile_page():
 
         if post_data['casename'] == 'get':
             user = g.user['account']
+            if 'profile' not in user:
+                user['profile'] = {}
+
             profile = {}
             if 'profile' in user:
-                profile['badge_name'] = user['profile']['badge_name']
-                profile['intro'] = user['profile']['intro']
+                if 'badge_name' in user['profile'] and user['profile']['badge_name'].strip():
+                    profile['badge_name'] = user['profile']['badge_name'].strip()
+
+                profile['intro'] = user['profile'].get('intro', '')
                 profile['id'] = user['_id']
 
-            return jsonify({'profile': profile})
+            return jsonify({
+                'profile': profile,
+                'team_enum': {key: item.value for key, item in TeamsEnum.__members__.items()},
+                'team_enum_desc': {key: item.value for key, item in TeamsEnumDesc.__members__.items()},
+                'skill_enum': {key: item.value for key, item in SkillEnum.__members__.items()},
+                'skill_enum_desc': {key: item.value for key, item in SkillEnumDesc.__members__.items()},
+                'status_enum': {key: item.value for key, item in StatusEnum.__members__.items()},
+                'status_enum_desc': {key: item.value for key, item in StatusEnumDesc.__members__.items()},
+            })
+
+        if post_data['casename'] == 'get_tobe_volunteer':
+            data = TobeVolunteer.get(uid=g.user['account']['_id'])
+
+            return jsonify({'tobe_volunteer': data})
+
+        if post_data['casename'] == 'save_tobe_volunteer':
+            data = TobeVolunteerStruct.parse_obj(post_data['data']).dict()
+            data['uid'] = g.user['account']['_id']
+            TobeVolunteer.save(data=data)
+
+            return jsonify({})
 
         if post_data['casename'] == 'save':
-            data = {
-                'badge_name': post_data['data']['badge_name'].strip(),
-                'intro': post_data['data']['intro'].strip(),
-            }
-            User(uid=g.user['account']['_id']).update_profile(data)
-            MC.get_client().delete(f"sid:{session['sid']}")
+            data = {}
+            if 'badge_name' in post_data['data'] and post_data['data']['badge_name']:
+                data['badge_name'] = post_data['data']['badge_name'].strip()
+
+            if 'intro' in post_data['data'] and post_data['data']['intro']:
+                data['intro'] = post_data['data']['intro'].strip()
+
+            if data:
+                User(uid=g.user['account']['_id']).update_profile(data)
+                MC.get_client().delete(f"sid:{session['sid']}")
 
         return jsonify({})
 
