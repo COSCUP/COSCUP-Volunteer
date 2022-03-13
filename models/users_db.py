@@ -12,20 +12,15 @@ class UsersDB(DBBase):
         super(UsersDB, self).__init__('users')
 
     def index(self):
-        ''' Index '''
         self.create_index([('mail', 1), ])
         self.create_index([('property.suspend', 1), ])
 
     @staticmethod
-    def new(mail):
-        ''' New user account
-
-        :param str mail: mail
-        :rtype: dict
+    def new(mail: str) -> dict:
+        ''' Create a new user account
 
         .. note:: ``mail`` bind to login oauth account. Maybe need ``alias`` for
         some case.
-
         '''
         return {
             '_id': '%0.8x' % uuid4().fields[0],
@@ -33,13 +28,7 @@ class UsersDB(DBBase):
             'created_at': int(time()),
         }
 
-    def add(self, data):
-        ''' Add data
-
-        :param dict data: user data
-        :rtype: dict
-
-        '''
+    def add(self, data: dict) -> dict:
         return self.find_one_and_update(
             {'_id': data['_id']},
             {'$set': data},

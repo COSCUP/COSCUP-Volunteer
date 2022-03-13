@@ -24,7 +24,7 @@ class WaitList(object):
         :param str uid: uid
 
         '''
-        return WaitListDB().is_in_wait(pid=pid, tid=tid, uid=uid)
+        return WaitListDB().is_in_waiting_list(pid=pid, tid=tid, uid=uid)
 
     @staticmethod
     def list_by_team(pid, tid, uid=None):

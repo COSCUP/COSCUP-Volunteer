@@ -1,3 +1,4 @@
+from typing import Any
 from uuid import uuid4
 from datetime import datetime
 
@@ -10,8 +11,7 @@ class TasksDB(DBBase):
         super(TasksDB, self).__init__('tasks')
 
     @staticmethod
-    def new(pid, title, cate, desc, limit, starttime, created_by, endtime=None):
-        ''' new data '''
+    def new(pid: str, title: str, cate: str, desc: str, limit: int, starttime: Any, created_by: str, endtime: str | None = None):
         return {
             '_id': '%0.8x' % uuid4().fields[0],
             'pid': pid,
@@ -33,8 +33,7 @@ class TasksStarDB(DBBase):
         super(TasksStarDB, self).__init__('tasks_star')
 
     @staticmethod
-    def new(pid, uid):
-        ''' new data '''
+    def new(pid: str, uid: str):
         return {
             'pid': pid,
             'uid': uid,

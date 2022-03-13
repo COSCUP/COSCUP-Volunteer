@@ -1,4 +1,5 @@
 from time import time
+from typing import Iterable
 from uuid import uuid4
 
 from pymongo.collection import ReturnDocument
@@ -34,7 +35,7 @@ class SenderCampaignDB(DBBase):
 
     @staticmethod
     def new(name, pid, tid, uid):
-        ''' new a struct '''
+        ''' create a new struct '''
         return {
             '_id': uuid4().hex,
             'name': name,
@@ -72,15 +73,8 @@ class SenderLogsDB(DBBase):
     def __init__(self):
         super(SenderLogsDB, self).__init__('sender_logs')
 
-    def save(self, cid, layout, desc, receivers):
-        ''' Save log
-
-        :param str cid: cid
-        :param str layout: layout
-        :param str desc: desc
-        :param list receivers: receivers
-
-        '''
+    def save(self, cid: str, layout: str, desc: str, receivers: list):
+        ''' Save log '''
 
         data = {
             'cid': cid,
@@ -98,15 +92,8 @@ class SenderSESLogsDB(DBBase):
     def __init__(self):
         super(SenderSESLogsDB, self).__init__('sender_ses_logs')
 
-    def save(self, cid, mail, name, ses_result):
-        ''' Save log
-
-        :param str cid: cid
-        :param str mail: mail
-        :param str name: name
-        :param dict ses_result: from ses return result
-
-        '''
+    def save(self, cid: str, mail: str, name: str, ses_result: dict):
+        ''' Save log '''
         data = {
             'cid': cid,
             'mail': mail,
@@ -136,13 +123,12 @@ class SenderReceiverDB(DBBase):
         super(SenderReceiverDB, self).__init__('sender_receiver')
 
     def index(self):
-        ''' Index '''
         self.create_index([('pid', 1), ])
         self.create_index([('data.mail', 1), ])
 
     @staticmethod
-    def new(pid, cid, name, mail):
-        ''' new a struct '''
+    def new(pid: str, cid: str, name: str, mail: str):
+        ''' create a new struct '''
         return {
             'pid': pid,
             'cid': cid,
@@ -152,7 +138,7 @@ class SenderReceiverDB(DBBase):
             },
         }
 
-    def remove_past(self, pid, cid):
+    def remove_past(self, pid: str, cid: str):
         ''' Remove past data
 
         - ``cid``: campaign id
@@ -161,7 +147,7 @@ class SenderReceiverDB(DBBase):
         '''
         self.delete_many({'pid': pid, 'cid': cid})
 
-    def update_data(self, pid, cid, datas):
+    def update_data(self, pid: str, cid: str, datas: Iterable[dict]):
         ''' Update datas
 
         - ``cid``: campaign id

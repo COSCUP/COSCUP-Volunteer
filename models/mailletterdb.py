@@ -11,40 +11,24 @@ class MailLetterDB(DBBase):
         super(MailLetterDB, self).__init__('mailletter')
 
     def index(self):
-        ''' Index '''
         self.create_index([('code.welcome', 1), ])
 
-    def create(self, uid):
-        ''' Add user into sendlist
-
-        :param str uid: user id
-
-        '''
+    def create(self, uid: str):
+        ''' Add user into sendlist'''
         self.find_one_and_update({'_id': uid}, {'$set': {'create_at': time()}}, upsert=True)
 
-    def is_sent(self, uid, code):
-        ''' Check is sent or not
-
-        :param str uid: user id
-        :param str code: code
-        :rtype: float
-
-        '''
+    def is_sent(self, uid: str, code: str) -> float:
+        ''' Check if it is sent or not'''
         raw = self.find_one({'_id': uid}, {'code.%s' % code: 1})
         if raw and 'code' in raw and code in raw['code']:
             return raw['code'][code]
 
         return 0
 
-    def make_sent(self, uid, code):
-        ''' Make sent
+    def make_sent(self, uid: str, code: str) -> dict:
+        '''Make sent
 
-        :param str uid: user id
-        :param str code: code
-        :rtype: dict
-        :return: return raw data
-
-        '''
+        :return: raw data'''
         return self.find_one_and_update(
             {'_id': uid},
             {'$set': {'code.%s' % code: time()}},
@@ -52,11 +36,7 @@ class MailLetterDB(DBBase):
             return_document=ReturnDocument.AFTER,
         )
 
-    def need_to_send(self, code):
-        ''' Find need to send list
-
-        :param str code: code
-
-        '''
+    def need_to_send(self, code: str):
+        ''' Find need to send list'''
         for raw in self.find({'code.%s' % code: {'$exists': False}}):
             yield raw

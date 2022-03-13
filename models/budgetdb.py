@@ -26,13 +26,11 @@ class BudgetDB(DBBase):
         super(BudgetDB, self).__init__('budget')
 
     def index(self):
-        ''' Index '''
         self.create_index([('pid', 1), ('tid', 1)])
         self.create_index([('pid', 1), ('bid', 1)])
 
     @staticmethod
     def new(pid, tid, uid):
-        ''' Create new '''
         return {
             '_id': u'%x' % uuid4().node,
             'pid': pid,
@@ -49,12 +47,7 @@ class BudgetDB(DBBase):
             'create_at': datetime.today(),
         }
 
-    def add(self, data):
-        ''' Add data
-
-        :param dict data: data
-
-        '''
+    def add(self, data: dict):
         return self.find_one_and_update(
             {'pid': data['pid'], 'tid': data['tid'], '_id': data['_id']},
             {'$set': data},
@@ -62,12 +55,7 @@ class BudgetDB(DBBase):
             return_document=ReturnDocument.AFTER,
         )
 
-    def edit(self, _id, data):
-        ''' Edit data
-
-        :param dict data: data
-
-        '''
+    def edit(self, _id, data: dict):
         return self.find_one_and_update(
             {'_id': _id},
             {'$set': data},

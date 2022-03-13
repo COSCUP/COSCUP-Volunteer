@@ -1,3 +1,4 @@
+from typing import Any
 from models.base import DBBase
 
 
@@ -10,26 +11,19 @@ class OAuthDB(DBBase):
         ''' Index '''
         self.create_index([('owner', 1), ])
 
-    def add_data(self, mail, data):
-        ''' Add user data
-
-        :param str mail: email
-        :param dict data: user data
-
-        '''
+    def add_data(self, mail: str, user_data: dict):
+        '''Add user data'''
         self.find_one_and_update(
             {'_id': mail},
-            {'$set': {'data': data}},
+            {'$set': {'data': user_data}},
             upsert=True)
 
-    def add_token(self, mail, credentials):
+    def add_token(self, mail: str, credentials: Any):
         ''' Add user oauth token
 
-        :param str mail: email
         :param dict credentials: user oauth token, from ``flow.credentials``
 
-        .. note:: Not to save ``client_id``, ``client_secret``
-
+        .. note:: Will not save ``client_id``, ``client_secret``
         '''
         oauth = self.find_one({'_id': mail}, {'token': 1})
         if oauth and 'token' in oauth:
@@ -50,11 +44,6 @@ class OAuthDB(DBBase):
             {'$set': {'token': data}},
             upsert=True)
 
-    def setup_owner(self, mail, uid):
-        ''' Setup owner
-
-        :param str mail: mail
-        :param str uid: uid
-
-        '''
+    def setup_owner(self, mail: str, uid: str):
+        '''Setup owner'''
         OAuthDB().find_one_and_update({'_id': mail}, {'$set': {'owner': uid}})

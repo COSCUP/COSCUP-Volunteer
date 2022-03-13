@@ -11,11 +11,11 @@ class MattermostLinkDB(DBBase):
         - create_at: int
 
     '''
+
     def __init__(self):
         super(MattermostLinkDB, self).__init__('mattermost_link')
 
     def index(self):
-        ''' Index '''
         self.create_index([('data.user_id', 1), ])
         self.create_index([('data.user_name', 1), ])
 

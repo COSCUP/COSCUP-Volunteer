@@ -18,18 +18,12 @@ class USessionDB(DBBase):
         self.token = token
 
     def index(self):
-        ''' Index '''
         self.create_index([('created_at', 1), ])
         self.create_index([('ipinfo', 1), ])
         self.create_index([('uid', 1), ])
         self.create_index([('alive', 1), ])
 
-    def save(self, data):
-        ''' save
-
-        :param dict data: data
-
-        '''
+    def save(self, data: dict):
         doc = {}
         doc.update(data)
         doc['_id'] = self.token
@@ -37,5 +31,4 @@ class USessionDB(DBBase):
         return self.insert_one(doc)
 
     def get(self):
-        ''' Get data '''
         return self.find_one({'_id': self.token, 'alive': True})

@@ -7,24 +7,15 @@ import setting
 
 
 class DBBase(Collection):
-    ''' DBBase class
-
-    :param str name: collection name
-
-    '''
-    def __init__(self, name):
+    def __init__(self, name: str):
         client = pymongo.MongoClient('mongodb://%s:%s' % (
                 setting.MONGO_HOST, setting.MONGO_PORT))[setting.MONGO_DBNAME]
 
         super(DBBase, self).__init__(client, name)
 
     @staticmethod
-    def make_create_at(data):
-        ''' make create_at timestamp
-
-        :param dict data: data
-
-        '''
+    def make_create_at(data: dict):
+        ''' make create_at timestamp'''
         data['created_at'] = time()
 
 

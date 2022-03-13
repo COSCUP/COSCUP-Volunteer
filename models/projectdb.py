@@ -11,18 +11,16 @@ class ProjectDB(DBBase):
         - ``name``: show name
         - ``action_date``: timestamp
         - ``owners``: list of uid
-
     '''
+
     def __init__(self, pid):
         super(ProjectDB, self).__init__('project')
         self.pid = pid
 
     def index(self):
-        ''' Index '''
         self.create_index([('owners', 1), ('action_date', -1)])
 
     def default(self):
-        ''' default data '''
         r = {
             '_id': self.pid,
             'name': '',
@@ -33,12 +31,8 @@ class ProjectDB(DBBase):
         self.make_create_at(r)
         return r
 
-    def add(self, data):
-        ''' Add data
-
-        :param dict data: data
-
-        '''
+    def add(self, data: dict):
+        '''Add data'''
         return self.find_one_and_update(
             {'_id': data['_id']},
             {'$set': data},

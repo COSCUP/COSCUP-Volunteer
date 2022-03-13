@@ -9,19 +9,10 @@ class WaitListDB(DBBase):
         super(WaitListDB, self).__init__('waitlist')
 
     def index(self):
-        ''' Index '''
         self.create_index([('pid', 1), ])
         self.create_index([('uid', 1), ])
 
-    def join_to(self, pid, tid, uid, note=None):
-        ''' Join to
-
-        :param str pid: project id
-        :param str tid: team id
-        :param str uid: user id
-        :param str note: note
-
-        '''
+    def join_to(self, pid: str, tid: str, uid: str, note: str | None = None):
         return self.find_one_and_update(
             {'pid': pid, 'tid': tid, 'uid': uid, 'result': {'$exists': False}},
             {'$set': {'note': note}},
@@ -29,26 +20,12 @@ class WaitListDB(DBBase):
             return_document=ReturnDocument.AFTER,
         )
 
-    def is_in_wait(self, pid, tid, uid):
-        ''' Is in waitting list
-
-        :param str pid: project id
-        :param str tid: team id
-        :param str uid: user id
-
-        '''
+    def is_in_waiting_list(self, pid: str, tid: str, uid: str):
         return self.count_documents({'pid': pid, 'tid': tid, 'uid': uid, 'result': {'$exists': False}})
 
-    def list_by(self, pid, tid=None, uid=None, _all=False):
-        ''' List by
+    def list_by(self, pid: str, tid: str | None = None, uid: str | None = None, _all: bool = False):
+        query: dict[str, dict | str] = {'pid': pid}
 
-        :param str pid: project id
-        :param str tid: team id
-        :param str uid: user id
-        :param bool _all: show all waitlist
-
-        '''
-        query = {'pid': pid}
         if tid:
             query['tid'] = tid
 
@@ -63,15 +40,7 @@ class WaitListDB(DBBase):
 
         return self.find(query)
 
-    def make_result(self, _id, pid, uid, result):
-        ''' Make result
-
-        :param str _id: waitlist id
-        :param str pid: project id
-        :param str uid: user id
-        :param str result: result in approval, deny.
-
-        '''
+    def make_result(self, _id: str, pid: str, uid: str, result: str):
         if result in ('approval', 'deny'):
             return self.find_one_and_update(
                 {'_id': ObjectId(_id), 'pid': pid, 'uid': uid},

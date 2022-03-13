@@ -1,8 +1,13 @@
 from time import time
+from typing import TypedDict
 
 from pymongo.collection import ReturnDocument
 
 from models.base import DBBase
+
+class AddTagMemberPayload(TypedDict):
+    id: str
+    name: str
 
 
 class TeamDB(DBBase):
@@ -17,19 +22,17 @@ class TeamDB(DBBase):
         - ``members``: (list) team members
 
     '''
-    def __init__(self, pid, tid):
+    def __init__(self, pid: str, tid: str):
         super(TeamDB, self).__init__('team')
         self.pid = pid
         self.tid = tid
 
     def index(self):
-        ''' Index '''
         self.create_index([('chiefs', 1), ])
         self.create_index([('members', 1), ])
         self.create_index([('pid', 1), ])
 
     def default(self):
-        ''' default data '''
         r = {
             'pid': self.pid,
             'tid': self.tid,
@@ -43,12 +46,7 @@ class TeamDB(DBBase):
         self.make_create_at(r)
         return r
 
-    def add(self, data):
-        ''' Add data
-
-        :param dict data: data
-
-        '''
+    def add(self, data: dict):
         return self.find_one_and_update(
             {'pid': self.pid, 'tid': self.tid},
             {'$set': data},
@@ -56,12 +54,7 @@ class TeamDB(DBBase):
             return_document=ReturnDocument.AFTER,
         )
 
-    def update_setting(self, data):
-        ''' update setting
-
-        :param dict data: data
-
-        '''
+    def update_setting(self, data: dict):
         return self.find_one_and_update(
             {'pid': self.pid, 'tid': self.tid},
             {'$set': data},
@@ -69,14 +62,7 @@ class TeamDB(DBBase):
         )
 
 
-    def update_users(self, field, add_uids, del_uids):
-        ''' Update users
-
-        :param str field: field name
-        :param list add_uids: add uids
-        :param list del_uids: del uids
-
-        '''
+    def update_users(self, field: str, add_uids: list, del_uids: list):
         if add_uids:
             self.find_one_and_update(
                 {'pid': self.pid, 'tid': self.tid},
@@ -91,12 +77,8 @@ class TeamDB(DBBase):
         ''' Get data '''
         return self.find_one({'pid': self.pid, 'tid': self.tid})
 
-    def add_tag_member(self, tag_data):
-        ''' Add tag member
-
-        data: {'id': str, 'name': str}
-
-        '''
+    def add_tag_member(self, tag_data: AddTagMemberPayload):
+        ''' Add tag member '''
         for data in self.find({'pid': self.pid, 'tid': self.tid}, {'tag_members': 1}):
             if 'tag_members' not in data:
                 data['tag_members'] = []
@@ -127,15 +109,10 @@ class TeamMemberTagsDB(DBBase):
         super(TeamMemberTagsDB, self).__init__('team_member_tags')
 
     def index(self):
-        ''' Index '''
         self.create_index([('pid', 1), ('tid', 1)])
 
-    def update(self, pid, tid, uid, tags):
-        ''' update team
-
-        :param list tags: tag_id in tags array
-
-        '''
+    def update(self, pid: str, tid: str, uid: str, tags: list):
+        ''' update team '''
         return self.find_one_and_update(
             {'pid': pid, 'tid': tid, 'uid': uid},
             {'$set': {'tags': tags}},
@@ -162,14 +139,8 @@ class TeamMemberChangedDB(DBBase):
         self.create_index([('pid', 1), ])
         self.create_index([('case', 1), ])
 
-    def make_record(self, pid, tid, add_uids=None, del_uids=None, waiting_uids=None, deny_uids=None):
+    def make_record(self, pid: str, tid: str, add_uids: list | None = None, del_uids: list | None = None, waiting_uids: list | None = None, deny_uids: list | None = None):
         ''' make record
-
-        :param str pid: project id
-        :param str tid: team id
-        :param list add_uids: add user list
-        :param list del_uids: del user list
-        :param list waiting_uids: waiting user list
 
         .. note::
             - waiting: user send request, and waiting.
@@ -205,17 +176,9 @@ class TeamPlanDB(DBBase):
         super(TeamPlanDB, self).__init__('team_plan')
 
     def index(self):
-        ''' Index '''
         self.create_index([('pid', 1), ])
 
-    def save(self, pid, tid, data):
-        ''' Save data
-
-        :param str pid: project id
-        :param str tid: team id
-        :patam list data: plan data
-
-        '''
+    def save(self, pid: str, tid: str, data: list):
         return self.find_one_and_update(
             {'pid': pid, 'tid': tid},
             {'$set': {'data': data}},
