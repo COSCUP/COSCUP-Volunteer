@@ -87,8 +87,8 @@ def need_login():
         return redirect(request.path[:-1])
 
     if 'sid' in session and session['sid']:
-        mem_cahce = MC.get_client()
-        user_g_data = mem_cahce.get(f"sid:{session['sid']}")
+        mem_cache = MC.get_client()
+        user_g_data = mem_cache.get(f"sid:{session['sid']}")
 
         if user_g_data:
             g.user = user_g_data  # pylint: disable=assigning-non-slot
@@ -96,8 +96,10 @@ def need_login():
             session_data = USession.get(session['sid'])
             if session_data:
                 user_data = User(uid=session_data['uid']).get()
-                if 'property' in user_data and 'suspend' in user_data['property'] and \
-                        user_data['property']['suspend']:
+                if  user_data and \
+                    'property' in user_data and \
+                    'suspend' in user_data['property'] and \
+                    user_data['property']['suspend']:
                     session.pop('sid', None)
                     return redirect(url_for('index', _scheme='https', _external=True))
 
@@ -105,15 +107,18 @@ def need_login():
                 g.user['account'] = User(uid=session_data['uid']).get()
 
                 if g.user['account']:
-                    g.user['data'] = OAuth(
-                        mail=g.user['account']['mail']).get()['data']
-                    g.user['participate_in'] = sorted([
-                        {'pid': team['pid'], 'tid': team['tid'],
-                            'name': team['name']}
-                        for team in Team.participate_in(
-                            uid=session_data['uid'])], key=lambda x: x['pid'], reverse=True)
+                    mail_account = OAuth(
+                        mail=g.user['account']['mail']).get()
+                    
+                    if mail_account:
+                        g.user['data'] = mail_account['data']
+                        g.user['participate_in'] = sorted([
+                            {'pid': team['pid'], 'tid': team['tid'],
+                                'name': team['name']}
+                            for team in Team.participate_in(
+                                uid=session_data['uid'])], key=lambda x: x['pid'], reverse=True)
 
-                    mem_cahce.set(f"sid:{session['sid']}", g.user, 600)
+                    mem_cache.set(f"sid:{session['sid']}", g.user, 600)
             else:
                 session.pop('sid', None)
                 session['r'] = request.path
@@ -223,6 +228,7 @@ def oauth2callback():
             user = User.create(mail=user_info['email'])
             MailLetterDB().create(uid=user['_id'])
 
+        assert user
         user_session = USession.make_new(
             uid=user['_id'], header=dict(request.headers))
         session['sid'] = user_session.inserted_id
