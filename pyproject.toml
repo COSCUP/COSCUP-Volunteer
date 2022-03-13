@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "coscup-volunteer"
+version = "0.1.0"
+description = "COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政流程建立。"
+authors = ["Your Name <you@example.com>"]
+license = "AGPL-3.0"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+google-api-python-client = "^2.40.0"
+google-auth = "^2.6.0"
+google-auth-httplib2 = "^0.1.0"
+google-auth-oauthlib = "^0.5.0"
+arrow = "^1.2.2"
+blinker = "^1.4"
+boto3 = "^1.21.18"
+celery = "<6"
+Flask = "^2.0.3"
+Markdown = "^3.3.6"
+phonenumbers = "^8.12.45"
+pylibmc = "^1.6.1"
+pymongo = "^4.0.2"
+requests = "^2.27.1"
+uWSGI = "^2.0.20"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

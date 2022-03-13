@@ -20,9 +20,12 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py     && \
   python3 get-pip.py                                          && \
   rm get-pip.py
 
+# Install `poetry`
+RUN pip install poetry
+
 # Install PIP dependencies
-ADD ./requirements.txt ./requirements.txt
-RUN pip install -r ./requirements.txt
+ADD pyproject.toml poetry.lock /app/
+RUN poetry install
 
 # Cleanup
 RUN apk del .build-deps && \
