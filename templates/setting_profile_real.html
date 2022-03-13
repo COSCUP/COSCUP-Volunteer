@@ -6,7 +6,6 @@
     <div class="column">
         <div class="content">
             <h2>真實個人資訊</h2>
-            <hr>
             <form id="profileform" method="POST" v-on:submit.prevent="send" v-cloak>
                 <div class="field">
                     <label class="label">姓名 <span class="tag is-info is-light">住宿</span> <span class="tag is-warning is-light">志工時數</span></label>
@@ -56,8 +55,8 @@
                     </div>
                     <p class="help is-success">完整的學校/公司名稱</p>
                 </div>
+                <hr style="border: 3px solid #cfe8d4;border-radius: 3px;">
                 <h3>飲食習慣 <span class="tag is-link is-light">餐點外燴</span></h3>
-                <hr>
                 <div class="field">
                     <label class="label">需注意的項目</label>
                     <div class="control">
@@ -67,8 +66,39 @@
                         </label>
                     </div>
                 </div>
+                <hr style="border: 3px solid #cfe8d4;border-radius: 3px;">
+                <h3>收件地址 <span class="tag is-link is-light">紀念品發送</span></h3>
+                <div class="field is-horizontal">
+                    <div class="field-body">
+                        <div class="field">
+                            <label class="label">郵遞區號</label>
+                            <div class="control">
+                                <input class="input" name="address_code" pattern="[0-9\-]{3,7}" v-model="profile.address.code">
+                            </div>
+                            <p class="help is-success"><a target="_blank" href="https://www.post.gov.tw/post/internet/Postal/index.jsp?ID=208">郵遞區號，最好為 3+3 的方式提供</a>，格式為 ######</p>
+                        </div>
+                        <div class="field">
+                            <label class="label">收件人</label>
+                            <div class="control">
+                                <input class="input" name="address_receiver" v-model="profile.address.receiver">
+                            </div>
+                            <p class="help is-success">本名或暱稱，可以知道是寄給你的</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-body">
+                        <div class="field">
+                            <label class="label">地址</label>
+                            <div class="control">
+                                <input class="input" name="address" v-model="profile.address.address">
+                            </div>
+                            <p class="help is-success">請記得包含縣市、區域的地址。例如：台北市信義區 ...</p>
+                        </div>
+                    </div>
+                </div>
+                <hr style="border: 3px solid #cfe8d4;border-radius: 3px;">
                 <h3>銀行資訊 <span class="tag is-link is-light">交通費補助</span></h3>
-                <hr>
                 <div class="field is-horizontal">
                     <div class="field-body">
                         <div class="field">

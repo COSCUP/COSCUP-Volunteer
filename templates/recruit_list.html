@@ -1,0 +1,184 @@
+{% extends "team_edit.html" %}
+{% block head_title_team %}招募人才庫{% endblock %}
+{% block team_edit_recruit_menu %}is-active{% endblock %}
+{% block team_edit_body %}
+<div class="content" id="recruit" v-cloak>
+    <div class="field is-grouped is-grouped-right is-grouped-multiline">
+        <div class="control" v-for="[key, value] in Object.entries(teams_enum)">
+            <span class="tag is-light" :class="{'is-info': q.teams.includes(teams_enum[key])}">
+                <label class="checkbox">
+                    <input type="checkbox" :value="value" v-model="q.teams">
+                    [[ teams_enum_desc[key] ]]
+                    <span class="ml-1" v-if="q.teams.includes(teams_enum[key])">
+                        ([[ count_teams[ teams_enum[key] ] || 0 ]])
+                    </span>
+                </label>
+            </span>
+        </div>
+    </div>
+    <div class="field is-grouped is-grouped-right is-grouped-multiline">
+        <div class="control" v-for="[key, value] in Object.entries(skill_enum)">
+            <span class="tag is-light" :class="{'is-success': q.skill.includes(skill_enum[key])}">
+                <label class="checkbox">
+                    <input type="checkbox" :value="value" v-model="q.skill">
+                    [[ skill_enum_desc[key] ]]
+                    <span class="ml-1" v-if="q.skill.includes(skill_enum[key])">
+                        ([[ count_skill[ skill_enum[key] ] || 0 ]])
+                    </span>
+                </label>
+            </span>
+        </div>
+    </div>
+    <div class="field is-grouped is-grouped-right is-grouped-multiline">
+        <div class="control" v-for="[key, value] in Object.entries(status_enum)">
+            <span class="tag is-light" :class="{'is-warning': q.status.includes(status_enum[key])}">
+                <label class="checkbox">
+                    <input type="checkbox" :value="value" v-model="q.status">
+                    [[ status_enum_desc[key] ]]
+                    <span class="ml-1" v-if="q.status.includes(status_enum[key])">
+                        ([[ count_status[ status_enum[key] ] || 0 ]])
+                    </span>
+                </label>
+            </span>
+        </div>
+    </div>
+    <div class="field is-grouped is-grouped-right">
+        <div class="control" v-if="is_loading > 0">
+            <a class="button is-loading"></a>
+        </div>
+    </div>
+    <div class="table-container">
+        <table class="table is-hoverable">
+            <thead>
+                <tr>
+                    <th>Picture</th>
+                    <th>Name</th>
+                    <th>Tags</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="u in members">
+                    <td class="is-vcentered">
+                        <a :href="'/user/'+ u._id">
+                            <figure class="image is-32x32"><img class="is-rounded" :src="u.oauth['picture']"></figure>
+                        </a>
+                    </td>
+                    <td class="is-vcentered">
+                        <a :href="'/user/'+u._id">[[ u.profile.badge_name ]]</a><br>
+                        <span class="tag">[[ u.uid ]]</span>
+                    </td>
+                    <td class="is-vcentered">
+                        <span class="tags">
+                            <span class="tag is-info is-light" v-for="tag in u.teams">[[ teams_enum_desc[ teams_enum_rev[tag] ] ]]</span>
+                            <span class="tag is-success is-light" v-for="tag in u.skill">[[ skill_enum_desc[ skill_enum_rev[tag] ] ]]</span>
+                            <span class="tag is-warning is-light">[[ status_enum_desc[ status_enum_rev[u.status] ] ]]</span>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $recruit = new Vue({
+            el: '#recruit',
+            data: {
+                members: [],
+                teams_enum: {},
+                teams_enum_rev: {},
+                teams_enum_desc: {},
+                skill_enum: {},
+                skill_enum_rev: {},
+                skill_enum_desc: {},
+                status_enum: {},
+                status_enum_rev: {},
+                status_enum_desc: {},
+                count_teams: {},
+                count_skill: {},
+                count_status: {},
+                q: {teams: [], skill: [], status: []},
+                is_loading: 0
+            },
+            watch: {
+                q: {
+                    handler: function() {
+                        this.load_query();
+                    },
+                    deep: true
+                }
+            },
+            mounted: function() {
+                this.load();
+                this.load_query();
+            },
+            methods: {
+                load_query: function() {
+                    ++this.is_loading;
+                    let $this = this;
+
+                    axios.post('./list', {casename: 'query', query: this.q}).then(function(resp) {
+                        $this.count_teams = {};
+                        $this.count_skill = {};
+                        $this.count_status = {};
+
+                        resp.data.members.forEach(function(raw) {
+                            raw.teams.forEach(function(team) {
+                                if ($this.count_teams[team] == undefined) {
+                                    $this.count_teams[team] = 0;
+                                }
+                                if ($this.q.teams.includes(team)) {
+                                    $this.count_teams[team]++;
+                                }
+                            });
+                            raw.skill.forEach(function(skill) {
+                                if ($this.count_skill[skill] == undefined) {
+                                    $this.count_skill[skill] = 0;
+                                }
+                                if ($this.q.skill.includes(skill)) {
+                                    $this.count_skill[skill]++;
+                                }
+                            });
+                            if ($this.count_status[raw.status] == undefined) {
+                                $this.count_status[raw.status] = 0;
+                            }
+                            if ($this.q.status.includes(raw.status)) {
+                                $this.count_status[raw.status]++;
+                            }
+                        });
+                        $this.members = resp.data.members;
+                        --$this.is_loading;
+                    });
+                },
+                load: function() {
+                    ++this.is_loading;
+                    let $this = this;
+
+                    axios.post('./list', {casename: 'get'}).then(function(resp) {
+                        $this.teams_enum = resp.data.team_enum;
+                        for (const [key, value] of Object.entries($this.teams_enum)) {
+                            $this.teams_enum_rev[value] = key;
+                        }
+                        $this.teams_enum_desc = resp.data.team_enum_desc;
+                        $this.skill_enum = resp.data.skill_enum;
+                        for (const [key, value] of Object.entries($this.skill_enum)) {
+                            $this.skill_enum_rev[value] = key;
+                        }
+                        $this.skill_enum_desc = resp.data.skill_enum_desc;
+                        $this.status_enum = resp.data.status_enum;
+                        for (const [key, value] of Object.entries($this.status_enum)) {
+                            $this.status_enum_rev[value] = key;
+                        }
+                        $this.status_enum_desc = resp.data.status_enum_desc;
+                        --$this.is_loading;
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}

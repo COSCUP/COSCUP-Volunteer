@@ -1,9 +1,10 @@
-FROM coscupweb-base:21.07.08
+FROM coscupweb-base:22.01.05
 
 ADD ./client_secret.json ./client_secret.json
 ADD ./privacy.md ./privacy.md
 ADD ./secretary-e00794553a7d.json ./secretary-e00794553a7d.json
 ADD ./setting.py ./setting.py
+ADD ./uwsgi.ini ./uwsgi.ini
 
 ADD ./celery_task/celery.py ./celery_task/celery.py
 ADD ./celery_task/task*.py ./celery_task/
@@ -42,6 +43,7 @@ ADD ./module/project.py ./module/project.py
 ADD ./module/project_working.py ./module/project_working.py
 ADD ./module/sender.py ./module/sender.py
 ADD ./module/service_sync.py ./module/service_sync.py
+ADD ./module/skill.py ./module/skill.py
 ADD ./module/tasks.py ./module/tasks.py
 ADD ./module/team.py ./module/team.py
 ADD ./module/telegram_bot.py ./module/telegram_bot.py
@@ -61,6 +63,7 @@ ADD ./templates/index.html ./templates/index.html
 ADD ./templates/index_guide.html ./templates/index_guide.html
 ADD ./templates/privacy.html ./templates/privacy.html
 ADD ./templates/project*.html ./templates/
+ADD ./templates/recruit_list.html ./templates/recruit_list.html
 ADD ./templates/sender*.html ./templates/
 ADD ./templates/setting*.html ./templates/
 ADD ./templates/tasks*.html ./templates/
@@ -80,6 +83,7 @@ ADD ./view/expense.py ./view/expense.py
 ADD ./view/guide.py ./view/guide.py
 ADD ./view/links.py ./view/links.py
 ADD ./view/project.py ./view/project.py
+ADD ./view/recruit.py ./view/recruit.py
 ADD ./view/sender.py ./view/sender.py
 ADD ./view/setting.py ./view/setting.py
 ADD ./view/tasks.py ./view/tasks.py
