@@ -1,18 +1,29 @@
+# FIXME: multi-stage build
 FROM alpine:3.15.0
 
 WORKDIR /app
-ADD ./requirements.txt ./requirements.txt
+
+# Install dependencies with apk.
 RUN \
   apk update && apk upgrade                                   && \
   apk add --no-cache python3 ca-certificates libmemcached-dev && \
   apk add --no-cache --virtual .build-deps curl cmake zlib-dev   \
-          g++ make gcc musl-dev python3-dev libffi-dev openssl-dev && \
-  wget https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2 && \
+          g++ make gcc musl-dev python3-dev libffi-dev openssl-dev
+
+# Prepare `jemalloc`
+RUN wget https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2 && \
   tar xvjf jemalloc-5.2.1.tar.bz2 && cd jemalloc-5.2.1 && ./configure && make && make install && \
-  cd ../ && rm -rf ./jemalloc* && \
-  curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py     && \
+  cd ../ && rm -rf ./jemalloc*
+
+# Prepare `pip`
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py     && \
   python3 get-pip.py                                          && \
-  rm get-pip.py                                               && \
-  pip install -r ./requirements.txt                           && \
-  apk del .build-deps                                         && \
-  rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
+  rm get-pip.py
+
+# Install PIP dependencies
+ADD ./requirements.txt ./requirements.txt
+RUN pip install -r ./requirements.txt
+
+# Cleanup
+RUN apk del .build-deps && \
+    rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
