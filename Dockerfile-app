@@ -1,10 +1,9 @@
-FROM coscupweb-base:21.12.11
+FROM coscupweb-base:22.03.13
 
 ADD ./client_secret.json ./client_secret.json
 ADD ./privacy.md ./privacy.md
 ADD ./secretary-e00794553a7d.json ./secretary-e00794553a7d.json
 ADD ./setting.py ./setting.py
-ADD ./uwsgi.ini ./uwsgi.ini
 
 ADD ./celery_task/celery.py ./celery_task/celery.py
 ADD ./celery_task/task*.py ./celery_task/
