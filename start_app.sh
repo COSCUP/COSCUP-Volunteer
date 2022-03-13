@@ -8,7 +8,7 @@ docker run -d --restart='always' \
            -v $(pwd)/log:/app/log \
            -p 127.0.0.1:6699:5000 \
            -e LD_PRELOAD=/usr/local/lib/libjemalloc.so \
-           volunteer-app:prod uwsgi ./uwsgi.ini
+           volunteer-app:prod poetry run uwsgi ./uwsgi.ini
 
 docker run -d --restart='always' \
            --name volunteer-2 \
@@ -20,4 +20,4 @@ docker run -d --restart='always' \
            -v $(pwd)/log:/app/log \
            -p 127.0.0.1:6688:5000 \
            -e LD_PRELOAD=/usr/local/lib/libjemalloc.so \
-           volunteer-app:prod uwsgi ./uwsgi.ini
+           volunteer-app:prod poetry run uwsgi ./uwsgi.ini
