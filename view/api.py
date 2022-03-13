@@ -9,9 +9,11 @@ from module.users import User
 
 VIEW_API = Blueprint('api', __name__, url_prefix='/api')
 
+
 @VIEW_API.route('/')
 def index():
     return u'hi'
+
 
 @VIEW_API.route('/members')
 def project_members():
@@ -34,7 +36,9 @@ def project_members():
             })
 
         data['members'] = []
-        for user in User.get_info(uids=list(set(team['members']) - set(team['chiefs']))).values():
+        for user in User.get_info(
+                uids=list(set(team['members']) -
+                          set(team['chiefs']))).values():
             h = hashlib.md5()
             h.update(user['oauth']['email'].encode('utf-8'))
             data['members'].append({

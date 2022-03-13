@@ -7,6 +7,7 @@ from models.mattermost_link_db import MattermostLinkDB
 
 class MattermostLink(object):
     ''' MattermostLink '''
+
     def __init__(self, uid):
         self.uid = uid
         self.raw = MattermostLinkDB().find_one({'_id': uid})
@@ -19,7 +20,8 @@ class MattermostLink(object):
     @classmethod
     def verify_save(cls, data):
         ''' verify and save data '''
-        if 'token' in data and data['token'] == setting.MATTERMOST_SLASH_VOLUNTEER:
+        if 'token' in data and data[
+                'token'] == setting.MATTERMOST_SLASH_VOLUNTEER:
             if 'text' in data and data['text']:
                 texts = data['text'].split(' ')
                 if len(texts) < 2:
@@ -31,7 +33,12 @@ class MattermostLink(object):
                     uid, code = pwd.split('.')
                     mml = cls(uid=uid)
                     if code == mml.raw['code']:
-                        MattermostLinkDB().find_one_and_update({'_id': uid}, {'$set': {'data': data, 'create_at': time()}})
+                        MattermostLinkDB().find_one_and_update(
+                            {'_id': uid},
+                            {'$set': {
+                                'data': data,
+                                'create_at': time()
+                            }})
                         return True
 
         return False

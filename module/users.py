@@ -11,6 +11,7 @@ class User(object):
     :param str mail: mail
 
     '''
+
     def __init__(self, uid=None, mail=None):
         self.uid = uid
         self.mail = mail
@@ -21,7 +22,12 @@ class User(object):
         :rtype: dict
 
         '''
-        return UsersDB().find_one({'$or': [{'_id': self.uid}, {'mail': self.mail}]})
+        return UsersDB().find_one(
+            {'$or': [{
+                '_id': self.uid
+            }, {
+                'mail': self.mail
+            }]})
 
     @staticmethod
     def create(mail, force=False):
@@ -49,7 +55,9 @@ class User(object):
         '''
         return UsersDB().find_one_and_update(
             {'_id': self.uid},
-            {'$set': {'profile': data}},
+            {'$set': {
+                'profile': data
+            }},
             return_document=ReturnDocument.AFTER,
         )
 
@@ -61,7 +69,9 @@ class User(object):
         '''
         return UsersDB().find_one_and_update(
             {'_id': self.uid},
-            {'$set': {'profile_real': data}},
+            {'$set': {
+                'profile_real': data
+            }},
             return_document=ReturnDocument.AFTER,
         )
 
@@ -69,7 +79,9 @@ class User(object):
         ''' Property suspend '''
         return UsersDB().find_one_and_update(
             {'_id': self.uid},
-            {'$set': {'property.suspend': value}},
+            {'$set': {
+                'property.suspend': value
+            }},
             return_document=ReturnDocument.AFTER,
         )
 
@@ -82,11 +94,12 @@ class User(object):
 
         '''
         users = {}
-        base_fields = {'profile': 1,
-                 'profile_real.phone': 1,
-                 'profile_real.name': 1,
-                 'profile_real.dietary_habit': 1,
-                 }
+        base_fields = {
+            'profile': 1,
+            'profile_real.phone': 1,
+            'profile_real.name': 1,
+            'profile_real.dietary_habit': 1,
+        }
 
         if need_sensitive:
             base_fields['profile_real.roc_id'] = 1
@@ -94,8 +107,12 @@ class User(object):
         for u in UsersDB().find({'_id': {'$in': uids}}, base_fields):
             users[u['_id']] = u
             oauth_data = OAuthDB().find_one(
-                    {'owner': u['_id']},
-                    {'data.name': 1, 'data.picture': 1, 'data.email': 1},
+                {'owner': u['_id']},
+                {
+                    'data.name': 1,
+                    'data.picture': 1,
+                    'data.email': 1
+                },
             )
             users[u['_id']]['oauth'] = {
                 'name': oauth_data['data']['name'],
@@ -120,7 +137,7 @@ class User(object):
     @staticmethod
     def get_bank(uid):
         ''' Get bank info '''
-        bank =  { 'code' : '', 'no' : '', 'branch' : '', 'name' : '' }
+        bank = {'code': '', 'no': '', 'branch': '', 'name': ''}
         for u in UsersDB().find({'_id': uid}, {'profile_real.bank': 1}):
             if 'profile_real' in u and 'bank' in u['profile_real']:
                 bank.update(u['profile_real']['bank'])
@@ -144,9 +161,16 @@ class User(object):
         if not include_suspend:
             query = {
                 '$or': [
-                    {'property.suspend': {'$exists': False}},
-                    {'property.suspend': False},
-                ]}
+                    {
+                        'property.suspend': {
+                            '$exists': False
+                        }
+                    },
+                    {
+                        'property.suspend': False
+                    },
+                ]
+            }
 
         for row in UsersDB().find(query, {'_id': 1}):
             yield row
@@ -158,9 +182,15 @@ class User(object):
         if not include_suspend:
             query = {
                 '$or': [
-                    {'property.suspend': {'$exists': False}},
-                    {'property.suspend': False},
-                ]}
+                    {
+                        'property.suspend': {
+                            '$exists': False
+                        }
+                    },
+                    {
+                        'property.suspend': False
+                    },
+                ]
+            }
 
         return UsersDB().count_documents(query)
-

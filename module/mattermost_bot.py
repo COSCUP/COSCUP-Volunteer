@@ -10,6 +10,7 @@ from module.mattermost_link import MattermostLink
 
 
 class MattermostBot(Session):
+
     def __init__(self, token, base_url, log_name='MattermostBot'):
         super(MattermostBot, self).__init__()
         self.token = token
@@ -18,7 +19,9 @@ class MattermostBot(Session):
 
     def log_rate_limit(self, headers):
         ''' Get log info from headers '''
-        self.log.info('X-Ratelimit-Limit: %s, X-Ratelimit-Remaining: %s, X-Ratelimit-Reset: %s' % (
+        self.log.info(
+            'X-Ratelimit-Limit: %s, X-Ratelimit-Remaining: %s, X-Ratelimit-Reset: %s'
+            % (
                 headers.get('X-Ratelimit-Limit'),
                 headers.get('X-Ratelimit-Remaining'),
                 headers.get('X-Ratelimit-Reset'),
@@ -26,19 +29,25 @@ class MattermostBot(Session):
 
     def get(self, path, **kwargs):
         headers = {'Authorization': 'Bearer %s' % self.token}
-        r = super(MattermostBot, self).get('%s%s' % (self.base_url, path), headers=headers, **kwargs)
+        r = super(MattermostBot, self).get('%s%s' % (self.base_url, path),
+                                           headers=headers,
+                                           **kwargs)
         self.log_rate_limit(r.headers)
         return r
 
     def post(self, path, **kwargs):
         headers = {'Authorization': 'Bearer %s' % self.token}
-        r = super(MattermostBot, self).post('%s%s' % (self.base_url, path), headers=headers, **kwargs)
+        r = super(MattermostBot, self).post('%s%s' % (self.base_url, path),
+                                            headers=headers,
+                                            **kwargs)
         self.log_rate_limit(r.headers)
         return r
 
     def put(self, path, **kwargs):
         headers = {'Authorization': 'Bearer %s' % self.token}
-        r = super(MattermostBot, self).put('%s%s' % (self.base_url, path), headers=headers, **kwargs)
+        r = super(MattermostBot, self).put('%s%s' % (self.base_url, path),
+                                           headers=headers,
+                                           **kwargs)
         self.log_rate_limit(r.headers)
         return r
 
@@ -52,7 +61,7 @@ class MattermostBot(Session):
             yield u
             n += 1
 
-        while(n == per_page):
+        while (n == per_page):
             page += 1
             n = 0
             for u in self.get_users(page=page, per_page=per_page).json():
@@ -69,7 +78,11 @@ class MattermostBot(Session):
         return self.post('/channels/direct', json=users)
 
     def posts(self, channel_id, message):
-        return self.post('/posts', json={'channel_id': channel_id, 'message': message})
+        return self.post('/posts',
+                         json={
+                             'channel_id': channel_id,
+                             'message': message
+                         })
 
     def get_posts_from_channel(self, channel_id):
         return self.get('/channels/%s/posts' % channel_id)
@@ -77,7 +90,11 @@ class MattermostBot(Session):
     def post_invite_by_email(self, team_id, emails):
         return self.post('/teams/%s/invite/email' % team_id, json=emails)
 
-    def post_invite_guests_by_email(self, team_id, emails, channels, message=None):
+    def post_invite_guests_by_email(self,
+                                    team_id,
+                                    emails,
+                                    channels,
+                                    message=None):
         data = {
             'emails': emails,
             'channels': channels,
@@ -88,7 +105,8 @@ class MattermostBot(Session):
         return self.post('/teams/%s/invite-guests/email' % team_id, json=data)
 
     def post_user_to_channel(self, channel_id, uid):
-        return self.post('/channels/%s/members' % channel_id, json={'user_id': uid})
+        return self.post('/channels/%s/members' % channel_id,
+                         json={'user_id': uid})
 
     def put_users_patch(self, uid, position):
         data = {
@@ -99,6 +117,7 @@ class MattermostBot(Session):
 
 class MattermostTools(MattermostBot):
     ''' MattermostTools for more implement in operation '''
+
     def __init__(self, token, base_url):
         super(MattermostTools, self).__init__(token=token, base_url=base_url)
 
@@ -123,7 +142,8 @@ class MattermostTools(MattermostBot):
                 mail = oauth['_id']
 
         if mail:
-            mm_user = MattermostUsersDB().find_one({'email': mail.strip()}, {'_id': 1})
+            mm_user = MattermostUsersDB().find_one({'email': mail.strip()},
+                                                   {'_id': 1})
             if mm_user:
                 return mm_user['_id']
 
@@ -140,7 +160,8 @@ class MattermostTools(MattermostBot):
         if mm_user:
             return mm_user['username']
 
-        ml = MattermostLinkDB().find_one({'data.user_id': mid}, {'data.user_name': 1})
+        ml = MattermostLinkDB().find_one({'data.user_id': mid},
+                                         {'data.user_name': 1})
         if ml and 'data' in ml:
             return ml['data']['user_name']
 

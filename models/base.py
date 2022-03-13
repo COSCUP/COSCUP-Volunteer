@@ -7,9 +7,11 @@ import setting
 
 
 class DBBase(Collection):
+
     def __init__(self, name: str):
-        client = pymongo.MongoClient('mongodb://%s:%s' % (
-                setting.MONGO_HOST, setting.MONGO_PORT))[setting.MONGO_DBNAME]
+        client = pymongo.MongoClient(
+            'mongodb://%s:%s' %
+            (setting.MONGO_HOST, setting.MONGO_PORT))[setting.MONGO_DBNAME]
 
         super(DBBase, self).__init__(client, name)
 
@@ -20,6 +22,7 @@ class DBBase(Collection):
 
 
 class TestDB(DBBase):
+
     def __init__(self):
         super(TestDB, self).__init__('test_')
 

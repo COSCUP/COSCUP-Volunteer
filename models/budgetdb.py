@@ -5,6 +5,7 @@ from pymongo.collection import ReturnDocument
 
 from models.base import DBBase
 
+
 class BudgetDB(DBBase):
     ''' Budget Collection
 
@@ -22,6 +23,7 @@ class BudgetDB(DBBase):
         - ``create_at``: create date
 
     '''
+
     def __init__(self):
         super(BudgetDB, self).__init__('budget')
 
@@ -49,7 +51,11 @@ class BudgetDB(DBBase):
 
     def add(self, data: dict):
         return self.find_one_and_update(
-            {'pid': data['pid'], 'tid': data['tid'], '_id': data['_id']},
+            {
+                'pid': data['pid'],
+                'tid': data['tid'],
+                '_id': data['_id']
+            },
             {'$set': data},
             upsert=True,
             return_document=ReturnDocument.AFTER,
@@ -61,4 +67,3 @@ class BudgetDB(DBBase):
             {'$set': data},
             return_document=ReturnDocument.AFTER,
         )
-

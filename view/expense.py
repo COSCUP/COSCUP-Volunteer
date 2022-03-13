@@ -18,6 +18,7 @@ from module.users import User
 
 VIEW_EXPENSE = Blueprint('expense', __name__, url_prefix='/expense')
 
+
 @VIEW_EXPENSE.route('/<pid>', methods=('GET', 'POST'))
 def by_project_index(pid):
     project = Project.get(pid)
@@ -30,7 +31,9 @@ def by_project_index(pid):
         return redirect('/')
 
     if request.method == 'GET':
-        return render_template('./expense.html', project=project, is_admin=is_admin)
+        return render_template('./expense.html',
+                               project=project,
+                               is_admin=is_admin)
 
     elif request.method == 'POST':
         data = request.get_json()
@@ -54,18 +57,29 @@ def by_project_index(pid):
                 user_datas = User.get_info(uids=list(uids))
                 for uid in user_datas:
                     users[uid] = {
-                            'oauth': user_datas[uid]['oauth'],
-                            'profile': {'badge_name': user_datas[uid]['profile']['badge_name']}, }
+                        'oauth': user_datas[uid]['oauth'],
+                        'profile': {
+                            'badge_name':
+                            user_datas[uid]['profile']['badge_name']
+                        },
+                    }
 
-            return jsonify({'datas': datas, 'budgets': budgets, 'users': users,
-                    'status': Expense.status()})
+            return jsonify({
+                'datas': datas,
+                'budgets': budgets,
+                'users': users,
+                'status': Expense.status()
+            })
 
         elif data['casename'] == 'update':
             # update invoices
-            Expense.update_invoices(expense_id=data['data']['_id'], invoices=data['data']['invoices'])
-            result = Expense.update_status(expense_id=data['data']['_id'], status=data['data']['status'])
+            Expense.update_invoices(expense_id=data['data']['_id'],
+                                    invoices=data['data']['invoices'])
+            result = Expense.update_status(expense_id=data['data']['_id'],
+                                           status=data['data']['status'])
 
             return jsonify({'result': result})
+
 
 @VIEW_EXPENSE.route('/<pid>/dl', methods=('GET', 'POST'))
 def by_project_dl(pid):
@@ -85,18 +99,21 @@ def by_project_dl(pid):
             return u'', 204
 
         with io.StringIO() as files:
-            csv_writer = csv.DictWriter(files, fieldnames=list(raws[0].keys()), quoting=csv.QUOTE_MINIMAL)
+            csv_writer = csv.DictWriter(files,
+                                        fieldnames=list(raws[0].keys()),
+                                        quoting=csv.QUOTE_MINIMAL)
             csv_writer.writeheader()
             csv_writer.writerows(raws)
 
-            filename = 'coscup_expense_%s_%s.csv' % (pid, datetime.now().strftime('%Y%m%d_%H%M%S'))
+            filename = 'coscup_expense_%s_%s.csv' % (
+                pid, datetime.now().strftime('%Y%m%d_%H%M%S'))
 
-            return Response(
-                    files.getvalue(),
-                    mimetype='text/csv',
-                    headers={'Content-disposition': 'attachment; filename=%s' % filename,
-                             'x-filename': filename,
-                    })
+            return Response(files.getvalue(),
+                            mimetype='text/csv',
+                            headers={
+                                'Content-disposition':
+                                'attachment; filename=%s' % filename,
+                                'x-filename': filename,
+                            })
 
     return u'', 204
-

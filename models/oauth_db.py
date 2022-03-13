@@ -4,19 +4,22 @@ from models.base import DBBase
 
 class OAuthDB(DBBase):
     ''' OAuthDB Collection '''
+
     def __init__(self):
         super(OAuthDB, self).__init__('oauth')
 
     def index(self):
         ''' Index '''
-        self.create_index([('owner', 1), ])
+        self.create_index([
+            ('owner', 1),
+        ])
 
     def add_data(self, mail: str, user_data: dict):
         '''Add user data'''
-        self.find_one_and_update(
-            {'_id': mail},
-            {'$set': {'data': user_data}},
-            upsert=True)
+        self.find_one_and_update({'_id': mail}, {'$set': {
+            'data': user_data
+        }},
+                                 upsert=True)
 
     def add_token(self, mail: str, credentials: Any):
         ''' Add user oauth token
@@ -39,10 +42,10 @@ class OAuthDB(DBBase):
         data['id_token'] = credentials.id_token
         data['scopes'] = credentials.scopes
 
-        self.find_one_and_update(
-            {'_id': mail},
-            {'$set': {'token': data}},
-            upsert=True)
+        self.find_one_and_update({'_id': mail}, {'$set': {
+            'token': data
+        }},
+                                 upsert=True)
 
     def setup_owner(self, mail: str, uid: str):
         '''Setup owner'''

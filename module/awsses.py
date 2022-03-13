@@ -27,10 +27,11 @@ class AWSS3(object):
     __slots__ = ('client', 'bucket')
 
     def __init__(self, aws_access_key_id, aws_secret_access_key, bucket):
-        self.client = boto3.client('s3',
-                aws_access_key_id=aws_access_key_id,
-                aws_secret_access_key=aws_secret_access_key,
-            )
+        self.client = boto3.client(
+            's3',
+            aws_access_key_id=aws_access_key_id,
+            aws_secret_access_key=aws_secret_access_key,
+        )
         self.bucket = bucket
 
     def get_object(self, key):
@@ -45,14 +46,15 @@ class AWSS3(object):
         '''
         return self.client.get_object(Bucket=self.bucket, Key=key)
 
-
     def convert_to_attachment(self, key):
         s3object = self.get_object(key)
         attachment = MIMEBase(
-                s3object['ContentType'].split('/')[0],
-                '%s; name="%s"' % (s3object['ContentType'].split('/')[1], Charset('utf-8').header_encode(basename(key)))
-            )
-        attachment.add_header('Content-Disposition', 'attachment; filename="%s"' % Charset('utf-8').header_encode(basename(key)))
+            s3object['ContentType'].split('/')[0],
+            '%s; name="%s"' % (s3object['ContentType'].split('/')[1],
+                               Charset('utf-8').header_encode(basename(key))))
+        attachment.add_header(
+            'Content-Disposition', 'attachment; filename="%s"' %
+            Charset('utf-8').header_encode(basename(key)))
         attachment.set_payload(s3object['Body'].read())
         encoders.encode_base64(attachment)
 
@@ -72,11 +74,10 @@ class AWSSES(object):
 
     def __init__(self, aws_access_key_id, aws_secret_access_key, source):
         self.client = boto3.client('ses',
-                aws_access_key_id=aws_access_key_id,
-                aws_secret_access_key=aws_secret_access_key,
-                region_name='us-east-1')
+                                   aws_access_key_id=aws_access_key_id,
+                                   aws_secret_access_key=aws_secret_access_key,
+                                   region_name='us-east-1')
         self.source = source
-
 
     @staticmethod
     def format_mail(name, mail):
@@ -92,7 +93,6 @@ class AWSSES(object):
 
         return mail
 
-
     def send_email(self, *args, **kwargs):
         ''' Send mail
 
@@ -103,7 +103,6 @@ class AWSSES(object):
 
         '''
         return self.client.send_email(*args, **kwargs)
-
 
     def raw_mail(self, **kwargs):
         ''' To make raw mail content
@@ -119,7 +118,8 @@ class AWSSES(object):
 
         '''
         msg_all = MIMEMultipart()
-        msg_all['From'] = self.format_mail(self.source['name'], self.source['mail'])
+        msg_all['From'] = self.format_mail(self.source['name'],
+                                           self.source['mail'])
 
         to_list = []
         for to in kwargs['to_addresses']:
@@ -147,7 +147,6 @@ class AWSSES(object):
 
         return msg_all
 
-
     def send_raw_email(self, **kwargs):
         ''' send raw email
 
@@ -168,7 +167,7 @@ class AWSSES(object):
         '''
         if 'data_str' in kwargs:
             return self.client.send_raw_email(
-                    RawMessage={'Data': kwargs['data_str']})
+                RawMessage={'Data': kwargs['data_str']})
 
         if 'data' in kwargs:
             data = kwargs['data']
@@ -176,4 +175,4 @@ class AWSSES(object):
             data = self.raw_mail(**kwargs)
 
         return self.client.send_raw_email(
-                RawMessage={'Data': data.as_string()})
+            RawMessage={'Data': data.as_string()})

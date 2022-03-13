@@ -17,8 +17,9 @@ SECRET_KEY = '{{SECRET_KEY}}'
 DOMAIN = '{{DOMAIN}}'
 
 # memcached container
-MC_SERVERS = ['memcached', ]
-
+MC_SERVERS = [
+    'memcached',
+]
 
 # ----- MongoDB ----- #
 MONGO_HOST = 'mongo'
@@ -66,4 +67,3 @@ GITLAB_TOKEN = '{{GITLAB_TOKEN}}'
 # ----- Telegram ----- #
 TELEGRAM_TOKEN = '{{TELEGRAM_TOKEN}}'
 TELEGRAM_WEBHOOK = 'https://%s/{{WEBHOOK_PATH}}' % DOMAIN
-

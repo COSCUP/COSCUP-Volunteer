@@ -8,12 +8,17 @@ from models.base import DBBase
 
 class UsersDB(DBBase):
     ''' UsersDB Collection '''
+
     def __init__(self):
         super(UsersDB, self).__init__('users')
 
     def index(self):
-        self.create_index([('mail', 1), ])
-        self.create_index([('property.suspend', 1), ])
+        self.create_index([
+            ('mail', 1),
+        ])
+        self.create_index([
+            ('property.suspend', 1),
+        ])
 
     @staticmethod
     def new(mail: str) -> dict:

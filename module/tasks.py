@@ -9,7 +9,16 @@ class Tasks(object):
     ''' Tasks class '''
 
     @classmethod
-    def add(cls, pid, title, cate, desc, limit, starttime, created_by, endtime=None, task_id=None):
+    def add(cls,
+            pid,
+            title,
+            cate,
+            desc,
+            limit,
+            starttime,
+            created_by,
+            endtime=None,
+            task_id=None):
         ''' add new task
 
         :param str pid: pid
@@ -23,9 +32,14 @@ class Tasks(object):
         :param str task_id: task id
 
         '''
-        data = TasksDB.new(
-            pid=pid, title=title, cate=cate, desc=desc, limit=limit,
-            starttime=starttime, created_by=created_by, endtime=endtime)
+        data = TasksDB.new(pid=pid,
+                           title=title,
+                           cate=cate,
+                           desc=desc,
+                           limit=limit,
+                           starttime=starttime,
+                           created_by=created_by,
+                           endtime=endtime)
 
         if task_id is not None:
             if not cls.get_with_pid(pid=pid, _id=task_id):
@@ -37,7 +51,10 @@ class Tasks(object):
             data.pop('created_at', None)
 
         return TasksDB().find_one_and_update(
-            {'_id': data['_id'], 'pid': data['pid']},
+            {
+                '_id': data['_id'],
+                'pid': data['pid']
+            },
             {'$set': data},
             upsert=True,
             return_document=ReturnDocument.AFTER,
@@ -73,8 +90,13 @@ class Tasks(object):
     def join(pid, task_id, uid):
         ''' Join to '''
         return TasksDB().find_one_and_update(
-            {'_id': task_id, 'pid': pid},
-            {'$addToSet': {'people': uid}},
+            {
+                '_id': task_id,
+                'pid': pid
+            },
+            {'$addToSet': {
+                'people': uid
+            }},
             return_document=ReturnDocument.AFTER,
         )
 
@@ -82,15 +104,23 @@ class Tasks(object):
     def cancel(pid, task_id, uid):
         ''' cancel join '''
         return TasksDB().find_one_and_update(
-            {'_id': task_id, 'pid': pid},
-            {'$pull': {'people': uid}},
+            {
+                '_id': task_id,
+                'pid': pid
+            },
+            {'$pull': {
+                'people': uid
+            }},
             return_document=ReturnDocument.AFTER,
         )
 
     @staticmethod
     def get_peoples_info(pid, task_id):
         ''' Get peoples info '''
-        uids = TasksDB().find_one({'pid': pid, '_id': task_id}, {'people': 1})['people']
+        uids = TasksDB().find_one({
+            'pid': pid,
+            '_id': task_id
+        }, {'people': 1})['people']
         return User.get_info(uids=uids)
 
 

@@ -6,6 +6,7 @@ from module.mc import MC
 
 class USession(object):
     ''' USession Class '''
+
     @staticmethod
     def make_new(uid, header):
         ''' make new session record
@@ -14,7 +15,12 @@ class USession(object):
         :param dict header: headers
 
         '''
-        doc = {'uid': uid, 'header': header, 'created_at': time(), 'alive': True}
+        doc = {
+            'uid': uid,
+            'header': header,
+            'created_at': time(),
+            'alive': True
+        }
         return USessionDB().save(doc)
 
     @staticmethod
@@ -29,7 +35,12 @@ class USession(object):
     @staticmethod
     def get_no_ipinfo():
         ''' Get no ipinfo '''
-        for raw in USessionDB().find({'ipinfo': {'$exists': False}}, {'header.X-Real-Ip': 1, 'header.X-Forwarded-For': 1}):
+        for raw in USessionDB().find({'ipinfo': {
+                '$exists': False
+        }}, {
+                'header.X-Real-Ip': 1,
+                'header.X-Forwarded-For': 1
+        }):
             yield raw
 
     @staticmethod
@@ -39,7 +50,10 @@ class USession(object):
         :param str sid: usession id
 
         '''
-        USessionDB().find_one_and_update({'_id': sid}, {'$set': {'ipinfo': data}})
+        USessionDB().find_one_and_update({'_id': sid},
+                                         {'$set': {
+                                             'ipinfo': data
+                                         }})
 
     @staticmethod
     def get_recently(uid, limit=25):
@@ -48,7 +62,9 @@ class USession(object):
         :param str uid: uid
 
         '''
-        for raw in USessionDB(token='').find({'uid': uid}, sort=(('created_at', -1), ), limit=limit):
+        for raw in USessionDB(token='').find({'uid': uid},
+                                             sort=(('created_at', -1), ),
+                                             limit=limit):
             yield raw
 
     @staticmethod
@@ -58,7 +74,11 @@ class USession(object):
         :param str uid: uid
 
         '''
-        for raw in USessionDB(token='').find({'uid': uid, 'alive': True}, sort=(('created_at', -1), )):
+        for raw in USessionDB(token='').find({
+                'uid': uid,
+                'alive': True
+        },
+                                             sort=(('created_at', -1), )):
             yield raw
 
     @staticmethod
@@ -73,7 +93,10 @@ class USession(object):
         if uid:
             query['uid'] = uid
 
-        USessionDB(token='').find_one_and_update(query, {'$set': {'alive': False}})
+        USessionDB(token='').find_one_and_update(query,
+                                                 {'$set': {
+                                                     'alive': False
+                                                 }})
         MC.get_client().delete('sid:%s' % sid)
 
     @staticmethod
@@ -83,8 +106,15 @@ class USession(object):
         :param int days: days
 
         '''
-        target = time() - 86400*days
+        target = time() - 86400 * days
         return USessionDB(token='').update_many(
-            {'alive': True, 'created_at': {'$lte': target}},
-            {'$set': {'alive': False}},
+            {
+                'alive': True,
+                'created_at': {
+                    '$lte': target
+                }
+            },
+            {'$set': {
+                'alive': False
+            }},
         )

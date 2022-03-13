@@ -7,11 +7,19 @@ from models.base import DBBase
 
 class TasksDB(DBBase):
     ''' TasksDB Collection '''
+
     def __init__(self):
         super(TasksDB, self).__init__('tasks')
 
     @staticmethod
-    def new(pid: str, title: str, cate: str, desc: str, limit: int, starttime: Any, created_by: str, endtime: str | None = None):
+    def new(pid: str,
+            title: str,
+            cate: str,
+            desc: str,
+            limit: int,
+            starttime: Any,
+            created_by: str,
+            endtime: str | None = None):
         return {
             '_id': '%0.8x' % uuid4().fields[0],
             'pid': pid,
@@ -29,6 +37,7 @@ class TasksDB(DBBase):
 
 class TasksStarDB(DBBase):
     ''' TasksStarDB Collection '''
+
     def __init__(self):
         super(TasksStarDB, self).__init__('tasks_star')
 

@@ -26,7 +26,10 @@ class SenderCampaign(object):
 
         '''
 
-        data = SenderCampaignDB.new(name=name.strip(), pid=pid, tid=tid, uid=uid)
+        data = SenderCampaignDB.new(name=name.strip(),
+                                    pid=pid,
+                                    tid=tid,
+                                    uid=uid)
         return SenderCampaignDB().save(data)
 
     @staticmethod
@@ -56,7 +59,10 @@ class SenderCampaign(object):
         :param str tid: tid
 
         '''
-        return SenderCampaignDB().find({'created.pid': pid, 'created.tid': tid})
+        return SenderCampaignDB().find({
+            'created.pid': pid,
+            'created.tid': tid
+        })
 
     @staticmethod
     def save_mail(cid, subject, content, preheader, layout):
@@ -71,12 +77,14 @@ class SenderCampaign(object):
         '''
         return SenderCampaignDB().find_one_and_update(
             {'_id': cid},
-            {'$set': {
-                'mail.subject': subject,
-                'mail.content': content,
-                'mail.preheader': preheader,
-                'mail.layout': layout,
-            }},
+            {
+                '$set': {
+                    'mail.subject': subject,
+                    'mail.content': content,
+                    'mail.preheader': preheader,
+                    'mail.layout': layout,
+                }
+            },
             return_document=ReturnDocument.AFTER,
         )
 
@@ -113,8 +121,10 @@ class SenderMailer(object):
     :param dict source: {'name': str, 'mail': str}
 
     '''
+
     def __init__(self, template_path, subject, content, source=None):
-        body = SandboxedEnvironment().from_string(open(template_path, 'r').read()).render(**content)
+        body = SandboxedEnvironment().from_string(
+            open(template_path, 'r').read()).render(**content)
 
         self.tpl = SandboxedEnvironment().from_string(body)
         self.subject = SandboxedEnvironment().from_string(subject)
@@ -123,7 +133,8 @@ class SenderMailer(object):
             source = setting.AWS_SES_FROM
 
         self.awsses = AWSSES(aws_access_key_id=setting.AWS_ID,
-                aws_secret_access_key=setting.AWS_KEY, source=source)
+                             aws_secret_access_key=setting.AWS_KEY,
+                             source=source)
 
     def send(self, to_list, data, x_coscup=None):
         ''' Send mail
@@ -143,18 +154,24 @@ class SenderMailer(object):
 
 class SenderMailerVolunteer(SenderMailer):
     ''' Sender using volunteer template '''
+
     def __init__(self, subject, content, source=None):
         super(SenderMailerVolunteer, self).__init__(
             template_path='/app/templates/mail/sender_base.html',
-            subject=subject, content=content, source=source)
+            subject=subject,
+            content=content,
+            source=source)
 
 
 class SenderMailerCOSCUP(SenderMailer):
     ''' Sender using COSCUP template '''
+
     def __init__(self, subject, content, source=None):
         super(SenderMailerCOSCUP, self).__init__(
             template_path='/app/templates/mail/coscup_base.html',
-            subject=subject, content=content, source=source)
+            subject=subject,
+            content=content,
+            source=source)
 
 
 class SenderLogs(object):
@@ -170,7 +187,10 @@ class SenderLogs(object):
         :param list receivers: receivers
 
         '''
-        SenderLogsDB().save(cid=cid, layout=layout, desc=desc, receivers=receivers)
+        SenderLogsDB().save(cid=cid,
+                            layout=layout,
+                            desc=desc,
+                            receivers=receivers)
 
     @staticmethod
     def get(cid):
@@ -196,7 +216,10 @@ class SenderSESLogs(object):
         :param dict result: result
 
         '''
-        SenderSESLogsDB().save(cid=cid, mail=mail, name=name, ses_result=result)
+        SenderSESLogsDB().save(cid=cid,
+                               mail=mail,
+                               name=name,
+                               ses_result=result)
 
 
 class SenderReceiver(object):
@@ -223,19 +246,24 @@ class SenderReceiver(object):
         user_info_uids = {}
         for uid, data in user_infos.items():
             user_info_uids[uid] = {
-                    'name': data['profile']['badge_name'],
-                    'mail': data['oauth']['email'],
+                'name': data['profile']['badge_name'],
+                'mail': data['oauth']['email'],
             }
 
         save_datas = []
         for data in datas:
             if 'uid' in data and data['uid'] and data['uid'] in user_info_uids:
-                _data = SenderReceiverDB.new(pid=pid, cid=cid,
-                        name=user_info_uids[data['uid']]['name'],
-                        mail=user_info_uids[data['uid']]['mail'],
-                    )
+                _data = SenderReceiverDB.new(
+                    pid=pid,
+                    cid=cid,
+                    name=user_info_uids[data['uid']]['name'],
+                    mail=user_info_uids[data['uid']]['mail'],
+                )
             else:
-                _data = SenderReceiverDB.new(pid=pid, cid=cid, name=data['name'], mail=data['mail'])
+                _data = SenderReceiverDB.new(pid=pid,
+                                             cid=cid,
+                                             name=data['name'],
+                                             mail=data['mail'])
 
             _data['data'].update(data)
             save_datas.append(_data)
@@ -260,19 +288,24 @@ class SenderReceiver(object):
         user_info_uids = {}
         for uid, data in user_infos.items():
             user_info_uids[uid] = {
-                    'name': data['profile']['badge_name'],
-                    'mail': data['oauth']['email'],
+                'name': data['profile']['badge_name'],
+                'mail': data['oauth']['email'],
             }
 
         save_datas = []
         for data in datas:
             if 'uid' in data and data['uid'] and data['uid'] in user_info_uids:
-                _data = SenderReceiverDB.new(pid=pid, cid=cid,
-                        name=user_info_uids[data['uid']]['name'],
-                        mail=user_info_uids[data['uid']]['mail'],
-                    )
+                _data = SenderReceiverDB.new(
+                    pid=pid,
+                    cid=cid,
+                    name=user_info_uids[data['uid']]['name'],
+                    mail=user_info_uids[data['uid']]['mail'],
+                )
             else:
-                _data = SenderReceiverDB.new(pid=pid, cid=cid, name=data['name'], mail=data['mail'])
+                _data = SenderReceiverDB.new(pid=pid,
+                                             cid=cid,
+                                             name=data['name'],
+                                             mail=data['mail'])
 
             _data['data'].update(data)
             save_datas.append(_data)
@@ -384,4 +417,3 @@ class SenderReceiver(object):
             ))
 
         return (('name', 'mail'), raws)
-

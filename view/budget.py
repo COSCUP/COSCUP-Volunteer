@@ -26,7 +26,9 @@ def by_project_index(pid):
         return redirect('/')
 
     if request.method == 'GET':
-        return render_template('./budget.html', project=project, is_admin=is_admin)
+        return render_template('./budget.html',
+                               project=project,
+                               is_admin=is_admin)
 
     elif request.method == 'POST':
         data = request.get_json()
@@ -57,10 +59,16 @@ def by_project_index(pid):
 
                 items.append(item)
 
-            return jsonify({'teams': teams, 'default_budget': default_budget, 'items': items})
+            return jsonify({
+                'teams': teams,
+                'default_budget': default_budget,
+                'items': items
+            })
 
         elif data['casename'] == 'add':
-            item = Budget.add(pid=pid, tid=data['data']['tid'], data=data['data'])
+            item = Budget.add(pid=pid,
+                              tid=data['data']['tid'],
+                              data=data['data'])
             return jsonify({'data': item})
 
         elif data['casename'] == 'edit':
@@ -79,4 +87,3 @@ def by_project_index(pid):
             return jsonify({'data': item})
 
     return jsonify({})
-

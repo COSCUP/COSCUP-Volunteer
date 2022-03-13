@@ -10,6 +10,7 @@ VIEW_LINKS = Blueprint('links', __name__, url_prefix='/links')
 def index():
     return u'hi'
 
+
 @VIEW_LINKS.route('/chat', methods=('POST', ))
 def link_chat():
     if request.method == 'POST':

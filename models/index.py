@@ -16,7 +16,6 @@ from models.users_db import UsersDB
 from models.usessiondb import USessionDB
 from models.waitlistdb import WaitListDB
 
-
 if __name__ == '__main__':
     BudgetDB().index()
     ExpenseDB().index()
@@ -35,4 +34,3 @@ if __name__ == '__main__':
     USessionDB().index()
     UsersDB().index()
     WaitListDB().index()
-

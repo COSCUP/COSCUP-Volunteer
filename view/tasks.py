@@ -20,7 +20,9 @@ VIEW_TASKS = Blueprint('tasks', __name__, url_prefix='/tasks')
 
 @VIEW_TASKS.route('/')
 def index():
-    return redirect(url_for('tasks.project', pid='2020', _scheme='https', _external=True))
+    return redirect(
+        url_for('tasks.project', pid='2020', _scheme='https', _external=True))
+
 
 @VIEW_TASKS.route('/<pid>', methods=('GET', 'POST'))
 def project(pid):
@@ -63,7 +65,11 @@ def project(pid):
             if uid:
                 is_star = TasksStar.status(pid, uid)['add']
 
-            return jsonify({'datas': datas, 'is_in_project': is_in_project, 'is_star': is_star})
+            return jsonify({
+                'datas': datas,
+                'is_in_project': is_in_project,
+                'is_star': is_star
+            })
 
         elif post_data['casename'] == 'star':
             if not uid:
@@ -98,7 +104,9 @@ def project(pid):
             if not is_in_project:
                 return jsonify({'info': 'Need as staff'}), 401
 
-            data = Tasks.cancel(pid=pid, task_id=post_data['task_id'], uid=post_data['uid'])
+            data = Tasks.cancel(pid=pid,
+                                task_id=post_data['task_id'],
+                                uid=post_data['uid'])
             page_args(data=data, uid=uid)
 
             return jsonify({'data': data})
@@ -110,18 +118,24 @@ def project(pid):
 
             creator = {}
             if task_data:
-                user_info = User.get_info(uids=[task_data['created_by'], ])
-                creator['name'] = user_info[task_data['created_by']]['profile']['badge_name']
+                user_info = User.get_info(uids=[
+                    task_data['created_by'],
+                ])
+                creator['name'] = user_info[
+                    task_data['created_by']]['profile']['badge_name']
                 creator['uid'] = task_data['created_by']
 
-                mid = MattermostTools.find_possible_mid(uid=task_data['created_by'])
+                mid = MattermostTools.find_possible_mid(
+                    uid=task_data['created_by'])
                 if mid:
-                    creator['mattermost_uid'] = MattermostTools.find_user_name(mid=mid)
+                    creator['mattermost_uid'] = MattermostTools.find_user_name(
+                        mid=mid)
 
             if not is_in_project:
                 return jsonify({'peoples': {}, 'creator': creator})
 
-            users_info = Tasks.get_peoples_info(pid=pid, task_id=post_data['task_id'])
+            users_info = Tasks.get_peoples_info(pid=pid,
+                                                task_id=post_data['task_id'])
             peoples = {}
             for uid in users_info:
                 user = users_info[uid]
@@ -135,7 +149,9 @@ def project(pid):
 
                 mid = MattermostTools.find_possible_mid(uid=uid)
                 if mid:
-                    peoples[uid]['mattermost_uid'] = MattermostTools.find_user_name(mid=mid)
+                    peoples[uid][
+                        'mattermost_uid'] = MattermostTools.find_user_name(
+                            mid=mid)
 
             return jsonify({'peoples': peoples, 'creator': creator})
 
@@ -157,20 +173,24 @@ def add(pid, task_id=None):
 
     if request.method == 'GET':
         catelist = Tasks.get_cate(pid=pid)
-        return render_template('./tasks_add.html', project=project,
-                catelist=catelist, task_id=task_id)
+        return render_template('./tasks_add.html',
+                               project=project,
+                               catelist=catelist,
+                               task_id=task_id)
 
     elif request.method == 'POST':
         post_data = request.get_json()
 
         if post_data['casename'] == 'add':
             data = post_data['data']
-            starttime = arrow.get('%(date)s %(starttime)s' % data, tzinfo='Asia/Taipei').datetime
+            starttime = arrow.get('%(date)s %(starttime)s' % data,
+                                  tzinfo='Asia/Taipei').datetime
             endtime = None
             task_id = None
 
             if 'endtime' in data and data['endtime']:
-                endtime = arrow.get('%(date)s %(endtime)s' % data, tzinfo='Asia/Taipei').datetime
+                endtime = arrow.get('%(date)s %(endtime)s' % data,
+                                    tzinfo='Asia/Taipei').datetime
 
             if 'task_id' in post_data:
                 task_id = post_data['task_id']
@@ -179,12 +199,21 @@ def add(pid, task_id=None):
             if 'task_id' in post_data and not post_data['task_id']:
                 send_star = True
 
-            raw = Tasks.add(pid=pid, title=data['title'].strip(), cate=data['cate'].strip(),
-                    desc=data['desc'], limit=max((1, int(data['limit']))), starttime=starttime,
-                    created_by=uid, endtime=endtime, task_id=task_id)
+            raw = Tasks.add(pid=pid,
+                            title=data['title'].strip(),
+                            cate=data['cate'].strip(),
+                            desc=data['desc'],
+                            limit=max((1, int(data['limit']))),
+                            starttime=starttime,
+                            created_by=uid,
+                            endtime=endtime,
+                            task_id=task_id)
 
             if send_star:
-                mail_tasks_star.apply_async(kwargs={'pid': pid, 'task_id': raw['_id']})
+                mail_tasks_star.apply_async(kwargs={
+                    'pid': pid,
+                    'task_id': raw['_id']
+                })
 
             return jsonify({'data': raw})
 
@@ -209,11 +238,13 @@ def add(pid, task_id=None):
                 endtime = arrow.get(data['endtime']).to('Asia/Taipei')
                 data['endtime'] = endtime.format('HH:mm')
 
-            data['_is_creator'] = g.user['account']['_id'] == data['created_by']
+            data['_is_creator'] = g.user['account']['_id'] == data[
+                'created_by']
 
             return jsonify({'data': data})
 
         return jsonify({})
+
 
 @VIEW_TASKS.route('/<pid>/r/<task_id>', methods=('GET', 'POST'))
 def read(pid, task_id):
@@ -223,24 +254,33 @@ def read(pid, task_id):
 
     task = Tasks.get_with_pid(pid=pid, _id=task_id)
     if not task:
-        return redirect(url_for('tasks.project', pid=pid, _scheme='https', _external=True))
+        return redirect(
+            url_for('tasks.project', pid=pid, _scheme='https', _external=True))
 
-    task['starttime'] = arrow.get(task['starttime']).to('Asia/Taipei').format('YYYY-MM-DD HH:mm')
+    task['starttime'] = arrow.get(
+        task['starttime']).to('Asia/Taipei').format('YYYY-MM-DD HH:mm')
     if task['endtime']:
-        task['endtime'] = arrow.get(task['endtime']).to('Asia/Taipei').format('YYYY-MM-DD HH:mm')
+        task['endtime'] = arrow.get(
+            task['endtime']).to('Asia/Taipei').format('YYYY-MM-DD HH:mm')
 
     uid = g.get('user', {}).get('account', {}).get('_id')
     if request.method == 'GET':
         creator = {}
-        user_info = User.get_info(uids=[task['created_by'], ])
-        creator['name'] = user_info[task['created_by']]['profile']['badge_name']
+        user_info = User.get_info(uids=[
+            task['created_by'],
+        ])
+        creator['name'] = user_info[
+            task['created_by']]['profile']['badge_name']
         creator['uid'] = task['created_by']
 
         mid = MattermostTools.find_possible_mid(uid=task['created_by'])
         if mid:
             creator['mattermost_uid'] = MattermostTools.find_user_name(mid=mid)
 
-        return render_template('./tasks_detail.html', task=task, creator=creator, uid=uid)
+        return render_template('./tasks_detail.html',
+                               task=task,
+                               creator=creator,
+                               uid=uid)
 
     elif request.method == 'POST':
         if not uid:

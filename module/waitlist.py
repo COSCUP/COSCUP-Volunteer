@@ -3,6 +3,7 @@ from models.waitlistdb import WaitListDB
 
 class WaitList(object):
     ''' WaitList object '''
+
     @staticmethod
     def join_to(pid, tid, uid, note):
         ''' Join to
@@ -47,7 +48,10 @@ class WaitList(object):
         :param str result: result in approval, deny.
 
         '''
-        return WaitListDB().make_result(_id=wid, pid=pid, uid=uid, result=result)
+        return WaitListDB().make_result(_id=wid,
+                                        pid=pid,
+                                        uid=uid,
+                                        result=result)
 
     @staticmethod
     def find_history(uid, pid=None):

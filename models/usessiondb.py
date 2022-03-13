@@ -7,6 +7,7 @@ from models.base import DBBase
 
 class USessionDB(DBBase):
     ''' USessionDB Collection '''
+
     def __init__(self, token=None):
         super(USessionDB, self).__init__('usession')
 
@@ -18,10 +19,18 @@ class USessionDB(DBBase):
         self.token = token
 
     def index(self):
-        self.create_index([('created_at', 1), ])
-        self.create_index([('ipinfo', 1), ])
-        self.create_index([('uid', 1), ])
-        self.create_index([('alive', 1), ])
+        self.create_index([
+            ('created_at', 1),
+        ])
+        self.create_index([
+            ('ipinfo', 1),
+        ])
+        self.create_index([
+            ('uid', 1),
+        ])
+        self.create_index([
+            ('alive', 1),
+        ])
 
     def save(self, data: dict):
         doc = {}

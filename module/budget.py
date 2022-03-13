@@ -16,7 +16,12 @@ class Budget(object):
 
         '''
         if TeamDB(pid=None, tid=None).count_documents({
-                'pid': pid, 'chiefs': uid, 'tid': {'$in': ['finance', 'coordinator']}}):
+                'pid': pid,
+                'chiefs': uid,
+                'tid': {
+                    '$in': ['finance', 'coordinator']
+                }
+        }):
             return True
 
         if ProjectDB(pid=None).count_documents({'_id': pid, 'owners': uid}):
@@ -40,7 +45,8 @@ class Budget(object):
         ''' Edit new data '''
         save = {'pid': data['pid']}
 
-        for key in ('name', 'tid', 'uid', 'bid', 'currency', 'total', 'desc', 'estimate', 'enabled', 'paydate'):
+        for key in ('name', 'tid', 'uid', 'bid', 'currency', 'total', 'desc',
+                    'estimate', 'enabled', 'paydate'):
             if key in data:
                 save[key] = data[key]
 
@@ -67,4 +73,3 @@ class Budget(object):
     def get_by_tid(pid, tid):
         ''' Get by pid '''
         return BudgetDB().find({'pid': pid, 'tid': tid})
-

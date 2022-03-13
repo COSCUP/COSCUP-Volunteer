@@ -70,6 +70,7 @@ class SenderCampaignDB(DBBase):
 
 class SenderLogsDB(DBBase):
     ''' SenderLogsDB Collection '''
+
     def __init__(self):
         super(SenderLogsDB, self).__init__('sender_logs')
 
@@ -89,6 +90,7 @@ class SenderLogsDB(DBBase):
 
 class SenderSESLogsDB(DBBase):
     ''' SenderSESLogsDB Collection '''
+
     def __init__(self):
         super(SenderSESLogsDB, self).__init__('sender_ses_logs')
 
@@ -123,8 +125,12 @@ class SenderReceiverDB(DBBase):
         super(SenderReceiverDB, self).__init__('sender_receiver')
 
     def index(self):
-        self.create_index([('pid', 1), ])
-        self.create_index([('data.mail', 1), ])
+        self.create_index([
+            ('pid', 1),
+        ])
+        self.create_index([
+            ('data.mail', 1),
+        ])
 
     @staticmethod
     def new(pid: str, cid: str, name: str, mail: str):
@@ -164,7 +170,11 @@ class SenderReceiverDB(DBBase):
                 _data[k] = _data[k].strip()
 
             self.find_one_and_update(
-                {'pid': pid, 'cid': cid, 'data.mail': data['data']['mail']},
+                {
+                    'pid': pid,
+                    'cid': cid,
+                    'data.mail': data['data']['mail']
+                },
                 {'$set': _data},
                 upsert=True,
             )

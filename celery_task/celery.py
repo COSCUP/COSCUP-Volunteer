@@ -24,14 +24,30 @@ app = Celery(
 
 app.conf.task_queues = (
     Queue('celery', Exchange('celery', type='direct'), routing_key='celery'),
-    Queue('CS_expense', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.expense.#'),
-    Queue('CS_ipinfo', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.ipinfo.#'),
-    Queue('CS_mail_member', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.member.#'),
-    Queue('CS_mail_sys', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.sys.#'),
-    Queue('CS_mail_tasks', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.tasks.#'),
-    Queue('CS_sender_mailer', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.sender.mailer.#'),
-    Queue('CS_service_sync', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.servicesync.#'),
-    Queue('CS_session', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.session.#'),
+    Queue('CS_expense',
+          Exchange('COSCUP-SECRETARY', type='topic'),
+          routing_key='cs.expense.#'),
+    Queue('CS_ipinfo',
+          Exchange('COSCUP-SECRETARY', type='topic'),
+          routing_key='cs.ipinfo.#'),
+    Queue('CS_mail_member',
+          Exchange('COSCUP-SECRETARY', type='topic'),
+          routing_key='cs.mail.member.#'),
+    Queue('CS_mail_sys',
+          Exchange('COSCUP-SECRETARY', type='topic'),
+          routing_key='cs.mail.sys.#'),
+    Queue('CS_mail_tasks',
+          Exchange('COSCUP-SECRETARY', type='topic'),
+          routing_key='cs.mail.tasks.#'),
+    Queue('CS_sender_mailer',
+          Exchange('COSCUP-SECRETARY', type='topic'),
+          routing_key='cs.sender.mailer.#'),
+    Queue('CS_service_sync',
+          Exchange('COSCUP-SECRETARY', type='topic'),
+          routing_key='cs.servicesync.#'),
+    Queue('CS_session',
+          Exchange('COSCUP-SECRETARY', type='topic'),
+          routing_key='cs.session.#'),
 )
 
 app.conf.acks_late = True
@@ -88,7 +104,9 @@ app.conf.beat_schedule = {
     'service_sync.mattermost.users.force': {
         'task': 'servicesync.mattermost.users',
         'schedule': crontab(hour='*/8', minute='17'),
-        'kwargs': {'force': True},
+        'kwargs': {
+            'force': True
+        },
         'options': {
             'exchange': 'COSCUP-SECRETARY',
             'routing_key': 'cs.servicesync.mattermost.users',
@@ -159,13 +177,19 @@ app.conf.beat_schedule = {
     },
 }
 
+
 @task_failure.connect
 def on_failure(**kwargs):
     ses = AWSSES(setting.AWS_ID, setting.AWS_KEY, setting.AWS_SES_FROM)
     raw_mail = ses.raw_mail(
-        to_addresses=[setting.ADMIN_To, ],
-        subject='[COSCUP-SECRETARY] %s [%s]' % (kwargs['sender'].name, kwargs['sender'].request.id),
-        body='kwargs: <pre>%s</pre><br>einfo: <pre>%s</pre><br>request: <pre>%s</pre>' % (
-            kwargs['kwargs'], kwargs['einfo'].traceback, kwargs['sender'].request),
+        to_addresses=[
+            setting.ADMIN_To,
+        ],
+        subject='[COSCUP-SECRETARY] %s [%s]' %
+        (kwargs['sender'].name, kwargs['sender'].request.id),
+        body=
+        'kwargs: <pre>%s</pre><br>einfo: <pre>%s</pre><br>request: <pre>%s</pre>'
+        % (kwargs['kwargs'], kwargs['einfo'].traceback,
+           kwargs['sender'].request),
     )
     ses.send_raw_email(data=raw_mail)

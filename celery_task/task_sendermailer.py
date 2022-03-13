@@ -11,9 +11,13 @@ from module.sender import SenderSESLogs
 logger = get_task_logger(__name__)
 
 
-@app.task(bind=True, name='sender.mailer.start',
-    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
-    routing_key='cs.sender.mailer.start', exchange='COSCUP-SECRETARY')
+@app.task(bind=True,
+          name='sender.mailer.start',
+          autoretry_for=(Exception, ),
+          retry_backoff=True,
+          max_retries=5,
+          routing_key='cs.sender.mailer.start',
+          exchange='COSCUP-SECRETARY')
 def sender_mailer_start(sender, **kwargs):
     '''campaign_data, team, uids, layout'''
     campaign_data = kwargs['campaign_data']
@@ -24,12 +28,22 @@ def sender_mailer_start(sender, **kwargs):
 
     for user_data in user_datas:
         sender_mailer_start_one.apply_async(
-                kwargs={'campaign_data': campaign_data, 'team_name': team_name, 'user_data': user_data, 'layout': layout, 'source': source})
+            kwargs={
+                'campaign_data': campaign_data,
+                'team_name': team_name,
+                'user_data': user_data,
+                'layout': layout,
+                'source': source
+            })
 
 
-@app.task(bind=True, name='sender.mailer.start.one',
-    autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
-    routing_key='cs.sender.mailer.start.one', exchange='COSCUP-SECRETARY')
+@app.task(bind=True,
+          name='sender.mailer.start.one',
+          autoretry_for=(Exception, ),
+          retry_backoff=True,
+          max_retries=5,
+          routing_key='cs.sender.mailer.start.one',
+          exchange='COSCUP-SECRETARY')
 def sender_mailer_start_one(sender, **kwargs):
     campaign_data = kwargs['campaign_data']
     team_name = kwargs['team_name']
@@ -43,16 +57,22 @@ def sender_mailer_start_one(sender, **kwargs):
         sender_template = SenderMailerCOSCUP
 
     sender_mailer = sender_template(
-            subject=campaign_data['mail']['subject'],
-            content={'preheader': campaign_data['mail']['preheader'],
-                     'body': markdown(campaign_data['mail']['content']),
-                     'send_by': team_name, },
-            source=source,
-        )
+        subject=campaign_data['mail']['subject'],
+        content={
+            'preheader': campaign_data['mail']['preheader'],
+            'body': markdown(campaign_data['mail']['content']),
+            'send_by': team_name,
+        },
+        source=source,
+    )
 
     result = sender_mailer.send(
-        to_list=[{'name': user_data['name'],
-                  'mail': user_data['mail']}, ],
+        to_list=[
+            {
+                'name': user_data['name'],
+                'mail': user_data['mail']
+            },
+        ],
         data=user_data,
         x_coscup=campaign_data['_id'],
     )
@@ -60,11 +80,11 @@ def sender_mailer_start_one(sender, **kwargs):
     logger.info(result)
 
     SenderSESLogs.save(
-            cid=campaign_data['_id'],
-            name=user_data['name'],
-            mail=user_data['mail'],
-            result=result,
-        )
+        cid=campaign_data['_id'],
+        name=user_data['name'],
+        mail=user_data['mail'],
+        result=result,
+    )
 
     if result['ResponseMetadata']['HTTPStatusCode'] != 200:
         raise Exception('Send mail error, do retry ...')

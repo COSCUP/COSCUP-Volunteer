@@ -38,10 +38,16 @@ class Team(object):
 
         '''
         teamdb = TeamDB(pid, tid)
-        teamdb.update_users(field='chiefs', add_uids=add_uids, del_uids=del_uids)
+        teamdb.update_users(field='chiefs',
+                            add_uids=add_uids,
+                            del_uids=del_uids)
 
     @staticmethod
-    def update_members(pid, tid, add_uids=None, del_uids=None, make_record=True):
+    def update_members(pid,
+                       tid,
+                       add_uids=None,
+                       del_uids=None,
+                       make_record=True):
         ''' update chiefs
 
         :param list add_uids: add uids
@@ -52,10 +58,15 @@ class Team(object):
 
         '''
         teamdb = TeamDB(pid, tid)
-        teamdb.update_users(field='members', add_uids=add_uids, del_uids=del_uids)
+        teamdb.update_users(field='members',
+                            add_uids=add_uids,
+                            del_uids=del_uids)
 
         if make_record:
-            TeamMemberChangedDB().make_record(pid=pid, tid=tid, add_uids=add_uids, del_uids=del_uids)
+            TeamMemberChangedDB().make_record(pid=pid,
+                                              tid=tid,
+                                              add_uids=add_uids,
+                                              del_uids=del_uids)
 
     @staticmethod
     def list_by_pid(pid, show_all=False):
@@ -68,8 +79,16 @@ class Team(object):
             return TeamDB(None, None).find({'pid': pid})
 
         return TeamDB(None, None).find({
-                'pid': pid,
-                '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]})
+            'pid':
+            pid,
+            '$or': [{
+                'disabled': {
+                    '$exists': False
+                }
+            }, {
+                'disabled': False
+            }]
+        })
 
     @staticmethod
     def get(pid, tid):
@@ -89,11 +108,29 @@ class Team(object):
 
         '''
         query = {
-                '$or': [
-                    {'members': uid, '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]},
-                    {'chiefs': uid, '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]},
-                ],
-            }
+            '$or': [
+                {
+                    'members': uid,
+                    '$or': [{
+                        'disabled': {
+                            '$exists': False
+                        }
+                    }, {
+                        'disabled': False
+                    }]
+                },
+                {
+                    'chiefs': uid,
+                    '$or': [{
+                        'disabled': {
+                            '$exists': False
+                        }
+                    }, {
+                        'disabled': False
+                    }]
+                },
+            ],
+        }
 
         if pid:
             query['pid'] = {'$in': pid}
@@ -111,7 +148,8 @@ class Team(object):
         '''
         teamdb = TeamDB(pid=pid, tid=tid)
         _data = {}
-        for k in ('name', 'public_desc', 'desc', 'chiefs', 'members', 'owners', 'headcount', 'mailling', 'disabled'):
+        for k in ('name', 'public_desc', 'desc', 'chiefs', 'members', 'owners',
+                  'headcount', 'mailling', 'disabled'):
             if k in data:
                 _data[k] = data[k]
 
@@ -176,19 +214,28 @@ class Team(object):
         '''
         team_member_tags_db = TeamMemberTagsDB()
         for uid in data:
-            team_member_tags_db.update(pid=pid, tid=tid, uid=uid, tags=data[uid])
+            team_member_tags_db.update(pid=pid,
+                                       tid=tid,
+                                       uid=uid,
+                                       tags=data[uid])
 
     @staticmethod
     def del_tag(pid, tid, tag_id):
         ''' Delete tag '''
-        TeamDB(pid=pid, tid=tid).update_one(
-                {'pid': pid, 'tid': tid},
-                {'$pull': {'tag_members': {'id': tag_id}}}
-            )
-        TeamMemberTagsDB().update_many(
-                {'pid': pid, 'tid': tid},
-                {'$pull': {'tags.tags': tag_id}}
-            )
+        TeamDB(pid=pid, tid=tid).update_one({
+            'pid': pid,
+            'tid': tid
+        }, {'$pull': {
+            'tag_members': {
+                'id': tag_id
+            }
+        }})
+        TeamMemberTagsDB().update_many({
+            'pid': pid,
+            'tid': tid
+        }, {'$pull': {
+            'tags.tags': tag_id
+        }})
 
     @staticmethod
     def get_members_tags(pid, tid):
@@ -214,4 +261,3 @@ class Team(object):
             uids.append(raw['uid'])
 
         return uids
-

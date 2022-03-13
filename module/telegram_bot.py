@@ -7,23 +7,28 @@ from module.mc import MC
 
 
 class TelegramBot(Session):
+
     def __init__(self, token):
         super(TelegramBot, self).__init__()
         self.url = 'https://api.telegram.org/bot%s' % token
 
     def get(self, path, **kwargs):
         ''' GET '''
-        return super(TelegramBot, self).get(self.url+path, **kwargs)
+        return super(TelegramBot, self).get(self.url + path, **kwargs)
 
     def post(self, path, **kwargs):
         ''' POST '''
-        return super(TelegramBot, self).post(self.url+path, **kwargs)
+        return super(TelegramBot, self).post(self.url + path, **kwargs)
 
     def get_me(self):
         ''' Get me '''
         return self.post('/getMe')
 
-    def send_message(self, chat_id, text, parse_mode='Markdown', reply_markup=None):
+    def send_message(self,
+                     chat_id,
+                     text,
+                     parse_mode='Markdown',
+                     reply_markup=None):
         ''' Send message '''
         data = {'chat_id': chat_id, 'text': text, 'parse_mode': parse_mode}
         if reply_markup is not None:
@@ -84,11 +89,11 @@ class TelegramBot(Session):
     def temp_fetch_user_data(data, expired_time=400):
         ''' temp fetch user data '''
         mc = MC.get_client()
-        mc.set('tgu:%s' % data['message']['from']['id'], data['message']['from'], expired_time)
+        mc.set('tgu:%s' % data['message']['from']['id'],
+               data['message']['from'], expired_time)
 
     @staticmethod
     def get_temp_user_dta(chat_id):
         ''' Get temp user data '''
         mc = MC.get_client()
         return mc.get('tgu:%s' % chat_id)
-

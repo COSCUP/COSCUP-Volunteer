@@ -37,7 +37,8 @@ from view.user import VIEW_USER
 
 logging.basicConfig(
     filename='./log/log.log',
-    format='%(asctime)s [%(levelname)-5.5s][%(thread)6.6s] [%(module)s:%(funcName)s#%(lineno)d]: %(message)s',  # pylint: disable=line-too-long
+    format=
+    '%(asctime)s [%(levelname)-5.5s][%(thread)6.6s] [%(module)s:%(funcName)s#%(lineno)d]: %(message)s',  # pylint: disable=line-too-long
     datefmt='%Y-%m-%d %H:%M:%S',
     level=logging.DEBUG)
 
@@ -57,7 +58,6 @@ app.register_blueprint(VIEW_TEAM)
 app.register_blueprint(VIEW_TELEGRAM)
 app.register_blueprint(VIEW_USER)
 
-
 NO_NEED_LOGIN_PATH = (
     '/',
     '/oauth2callback',
@@ -74,11 +74,13 @@ NO_NEED_LOGIN_PATH = (
 @app.before_request
 def need_login():
     ''' need_login '''
-    logging.info('[X-SSL-SESSION-ID: %s] [X-REAL-IP: %s] [USER-AGENT: %s] [SESSION: %s]',
-                 request.headers.get('X-SSL-SESSION-ID'),
-                 request.headers.get('X-REAL-IP'),
-                 request.headers.get('USER-AGENT'),
-                 session, )
+    logging.info(
+        '[X-SSL-SESSION-ID: %s] [X-REAL-IP: %s] [USER-AGENT: %s] [SESSION: %s]',
+        request.headers.get('X-SSL-SESSION-ID'),
+        request.headers.get('X-REAL-IP'),
+        request.headers.get('USER-AGENT'),
+        session,
+    )
 
     if request.path.startswith('/user') and request.path[-1] == '/':
         return redirect(request.path[:-1])
@@ -98,22 +100,26 @@ def need_login():
                     'suspend' in user_data['property'] and \
                     user_data['property']['suspend']:
                     session.pop('sid', None)
-                    return redirect(url_for('index', _scheme='https', _external=True))
+                    return redirect(
+                        url_for('index', _scheme='https', _external=True))
 
                 g.user = {}  # pylint: disable=assigning-non-slot
                 g.user['account'] = User(uid=session_data['uid']).get()
 
                 if g.user['account']:
-                    mail_account = OAuth(
-                        mail=g.user['account']['mail']).get()
-                    
+                    mail_account = OAuth(mail=g.user['account']['mail']).get()
+
                     if mail_account:
                         g.user['data'] = mail_account['data']
-                        g.user['participate_in'] = sorted([
-                            {'pid': team['pid'], 'tid': team['tid'],
-                                'name': team['name']}
-                            for team in Team.participate_in(
-                                uid=session_data['uid'])], key=lambda x: x['pid'], reverse=True)
+                        g.user['participate_in'] = sorted(
+                            [{
+                                'pid': team['pid'],
+                                'tid': team['tid'],
+                                'name': team['name']
+                            } for team in Team.participate_in(
+                                uid=session_data['uid'])],
+                            key=lambda x: x['pid'],
+                            reverse=True)
 
                         mem_cache.set(f"sid:{session['sid']}", g.user, 600)
                     else:
@@ -131,7 +137,8 @@ def need_login():
 
         session['r'] = request.path
         logging.info('r: %s', session['r'])
-        return redirect(url_for('oauth2callback', _scheme='https', _external=True))
+        return redirect(
+            url_for('oauth2callback', _scheme='https', _external=True))
 
     session.pop('sid', None)
     session['r'] = request.path
@@ -160,7 +167,8 @@ def index():
         'mattermost': False,
     }
 
-    if 'profile' in g.user['account'] and 'intro' in g.user['account']['profile']:
+    if 'profile' in g.user['account'] and 'intro' in g.user['account'][
+            'profile']:
         if len(g.user['account']['profile']['intro']) > 100:
             check['profile'] = True
 
@@ -206,13 +214,16 @@ def oauth2callback():
             url_query['state'][0] == session.get('state'):
         flow.fetch_token(authorization_response=url)
 
-        auth_client = discovery.build(
-            'oauth2', 'v2', credentials=flow.credentials, cache_discovery=False)
+        auth_client = discovery.build('oauth2',
+                                      'v2',
+                                      credentials=flow.credentials,
+                                      cache_discovery=False)
         user_info = auth_client.userinfo().get().execute()
 
         # ----- save oauth info ----- #
         OAuth.add(mail=user_info['email'],
-                  data=user_info, token=flow.credentials)
+                  data=user_info,
+                  token=flow.credentials)
 
         # ----- Check account or create ----- #
         owner = OAuth.owner(mail=user_info['email'])
@@ -223,8 +234,8 @@ def oauth2callback():
             MailLetterDB().create(uid=user['_id'])
 
         assert user
-        user_session = USession.make_new(
-            uid=user['_id'], header=dict(request.headers))
+        user_session = USession.make_new(uid=user['_id'],
+                                         header=dict(request.headers))
         session['sid'] = user_session.inserted_id
 
         if 'r' in session:
@@ -286,19 +297,22 @@ Allow: /'''
 def exception_func():
     ''' exception_func '''
     try:
-        1/0
+        1 / 0
     except Exception as error:
         raise Exception('Error: [{error}]') from error
 
 
 def error_exception(sender, exception, **extra):
     ''' error_exception '''
-    logging.info('sender: %s, exception: %s, extra: %s', sender, exception, extra)
+    logging.info('sender: %s, exception: %s, extra: %s', sender, exception,
+                 extra)
 
     mail_sys_weberror.apply_async(
         kwargs={
-            'title': f'{request.method}, {request.path}, {arrow.now()}',
-            'body': f'''<b>{request.method}</b> {request.path}<br>
+            'title':
+            f'{request.method}, {request.path}, {arrow.now()}',
+            'body':
+            f'''<b>{request.method}</b> {request.path}<br>
             <pre>{os.environ}</pre>
             <pre>{request.headers}</pre>
             <pre>User: {g.get('user', {}).get('account', {}).get('_id')}\n\n
@@ -309,7 +323,6 @@ def error_exception(sender, exception, **extra):
 
 
 got_request_exception.connect(error_exception, app)
-
 
 if __name__ == '__main__':
     app.run(debug=False, host=setting.SERVER_HOST, port=setting.SERVER_PORT)

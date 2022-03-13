@@ -1,5 +1,3 @@
-
-
 class DietaryHabit(object):
     ''' DietaryHabit class '''
 
