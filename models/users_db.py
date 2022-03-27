@@ -8,6 +8,7 @@ from models.base import DBBase
 
 class UsersDB(DBBase):
     ''' UsersDB Collection '''
+
     def __init__(self):
         super(UsersDB, self).__init__('users')
 
@@ -42,6 +43,22 @@ class UsersDB(DBBase):
         '''
         return self.find_one_and_update(
             {'_id': data['_id']},
+            {'$set': data},
+            upsert=True,
+            return_document=ReturnDocument.AFTER,
+        )
+
+
+class TobeVolunteerDB(DBBase):
+    ''' TobeVolunteer Collection '''
+
+    def __init__(self):
+        super().__init__('tobe_volunteer')
+
+    def add(self, data: dict):
+        ''' add '''
+        self.find_one_and_update(
+            {'_id': data['uid']},
             {'$set': data},
             upsert=True,
             return_document=ReturnDocument.AFTER,

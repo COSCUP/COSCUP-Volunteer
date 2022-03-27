@@ -1,26 +1,21 @@
+''' setting '''
 import json
 import math
 
 import arrow
 import phonenumbers
-from flask import Blueprint
-from flask import g
-from flask import jsonify
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import session
-from flask import url_for
-
 from celery_task.task_service_sync import service_sync_mattermost_invite
+from flask import (Blueprint, g, jsonify, redirect, render_template, request,
+                   session, url_for)
 from models.telegram_db import TelegramDB
 from module.dietary_habit import DietaryHabit
 from module.mattermost_link import MattermostLink
 from module.mc import MC
-from module.users import User
+from module.skill import (SkillEnum, SkillEnumDesc, StatusEnum, StatusEnumDesc,
+                          TeamsEnum, TeamsEnumDesc, TobeVolunteerStruct)
+from module.users import TobeVolunteer, User
 from module.usession import USession
 from module.waitlist import WaitList
-
 
 VIEW_SETTING = Blueprint('setting', __name__, url_prefix='/setting')
 
@@ -31,21 +26,66 @@ def index():
 
 
 @VIEW_SETTING.route('/profile', methods=('GET', 'POST'))
-def profile():
+def profile_page():
+    ''' profile '''
     if request.method == 'GET':
         user = g.user['account']
         if 'profile' not in user:
             user['profile'] = {}
 
         return render_template('./setting_profile.html', user=user)
-    elif request.method == 'POST':
-        data = {
-            'badge_name': request.form['badge_name'].strip(),
-            'intro': request.form['intro'].strip(),
-        }
-        User(uid=g.user['account']['_id']).update_profile(data)
-        MC.get_client().delete('sid:%s' % session['sid'])
-        return redirect(url_for('setting.profile', _scheme='https', _external=True))
+
+    if request.method == 'POST':
+        post_data = request.get_json()
+
+        if post_data['casename'] == 'get':
+            user = g.user['account']
+            if 'profile' not in user:
+                user['profile'] = {}
+
+            profile = {}
+            if 'profile' in user:
+                if 'badge_name' in user['profile'] and user['profile']['badge_name'].strip():
+                    profile['badge_name'] = user['profile']['badge_name'].strip()
+
+                profile['intro'] = user['profile'].get('intro', '')
+                profile['id'] = user['_id']
+
+            return jsonify({
+                'profile': profile,
+                'team_enum': {key: item.value for key, item in TeamsEnum.__members__.items()},
+                'team_enum_desc': {key: item.value for key, item in TeamsEnumDesc.__members__.items()},
+                'skill_enum': {key: item.value for key, item in SkillEnum.__members__.items()},
+                'skill_enum_desc': {key: item.value for key, item in SkillEnumDesc.__members__.items()},
+                'status_enum': {key: item.value for key, item in StatusEnum.__members__.items()},
+                'status_enum_desc': {key: item.value for key, item in StatusEnumDesc.__members__.items()},
+            })
+
+        if post_data['casename'] == 'get_tobe_volunteer':
+            data = TobeVolunteer.get(uid=g.user['account']['_id'])
+
+            return jsonify({'tobe_volunteer': data})
+
+        if post_data['casename'] == 'save_tobe_volunteer':
+            data = TobeVolunteerStruct.parse_obj(post_data['data']).dict()
+            data['uid'] = g.user['account']['_id']
+            TobeVolunteer.save(data=data)
+
+            return jsonify({})
+
+        if post_data['casename'] == 'save':
+            data = {}
+            if 'badge_name' in post_data['data'] and post_data['data']['badge_name']:
+                data['badge_name'] = post_data['data']['badge_name'].strip()
+
+            if 'intro' in post_data['data'] and post_data['data']['intro']:
+                data['intro'] = post_data['data']['intro'].strip()
+
+            if data:
+                User(uid=g.user['account']['_id']).update_profile(data)
+                MC.get_client().delete(f"sid:{session['sid']}")
+
+        return jsonify({})
 
 
 @VIEW_SETTING.route('/profile_real', methods=('GET', 'POST'))
@@ -61,7 +101,8 @@ def profile_real():
         else:
             try:
                 phone = phonenumbers.parse(user['profile_real']['phone'], None)
-                user['profile_real']['phone'] = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.NATIONAL)
+                user['profile_real']['phone'] = phonenumbers.format_number(
+                    phone, phonenumbers.PhoneNumberFormat.NATIONAL)
 
                 default_code = phone.country_code
 
@@ -71,10 +112,11 @@ def profile_real():
         if 'bank' not in user['profile_real']:
             user['profile_real']['bank'] = {}
 
-        phone_codes = sorted(phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key= lambda x: x[1][0])
+        phone_codes = sorted(
+            phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key=lambda x: x[1][0])
 
         return render_template('./setting_profile_real.html', user=user,
-                phone_codes=phone_codes, default_code=default_code)
+                               phone_codes=phone_codes, default_code=default_code)
 
     elif request.method == 'POST':
         post_data = request.get_json()
@@ -86,9 +128,10 @@ def profile_real():
                 user = {'profile_real': g.user['account']['profile_real']}
 
                 try:
-                    phone = phonenumbers.parse(user['profile_real']['phone'], None)
+                    phone = phonenumbers.parse(
+                        user['profile_real']['phone'], None)
                     user['profile_real']['phone'] = phonenumbers.format_number(
-                            phone, phonenumbers.PhoneNumberFormat.NATIONAL)
+                        phone, phonenumbers.PhoneNumberFormat.NATIONAL)
 
                     default_code = phone.country_code
 
@@ -106,21 +149,24 @@ def profile_real():
             if 'dietary_habit' not in user['profile_real']:
                 user['profile_real']['dietary_habit'] = []
 
-            phone_codes = sorted(phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key= lambda x: x[1][0])
+            phone_codes = sorted(
+                phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key=lambda x: x[1][0])
 
             return jsonify({'profile': user['profile_real'],
                             'phone_codes': phone_codes,
                             'default_code': default_code,
                             'dietary_habit': list(DietaryHabit.ITEMS.items()),
-                        })
+                            })
 
         elif post_data['casename'] == 'update':
             phone = ''
             if 'phone' in post_data['data'] and post_data['data']['phone'] and \
                     'phone_code' in post_data['data'] and post_data['data']['phone_code']:
                 try:
-                    phone = phonenumbers.parse('+%(phone_code)s %(phone)s' % post_data['data'])
-                    phone = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.E164)
+                    phone = phonenumbers.parse(
+                        '+%(phone_code)s %(phone)s' % post_data['data'])
+                    phone = phonenumbers.format_number(
+                        phone, phonenumbers.PhoneNumberFormat.E164)
                 except phonenumbers.phonenumberutil.NumberParseException:
                     phone = ''
 
@@ -169,7 +215,7 @@ def link_chat():
         if 'casename' in data:
             if data['casename'] == 'invite':
                 service_sync_mattermost_invite.apply_async(
-                        kwargs={'uids': (g.user['account']['_id'], )})
+                    kwargs={'uids': (g.user['account']['_id'], )})
                 return jsonify(data)
         else:
             MattermostLink.reset(uid=g.user['account']['_id'])
@@ -227,7 +273,7 @@ def security():
             records.append(raw)
 
         return render_template('./setting_security.html',
-                records=records, alive_session=alive_session)
+                               records=records, alive_session=alive_session)
 
     elif request.method == 'POST':
         data = request.get_json()
@@ -240,8 +286,9 @@ def security():
 def waitting():
     waitting_lists = []
 
-    for raw  in WaitList.find_history(uid=g.user['account']['_id']):
-        raw['hr_time'] = arrow.get(raw['_id'].generation_time).to('Asia/Taipei').format('YYYY-MM-DD')
+    for raw in WaitList.find_history(uid=g.user['account']['_id']):
+        raw['hr_time'] = arrow.get(raw['_id'].generation_time).to(
+            'Asia/Taipei').format('YYYY-MM-DD')
 
         if 'result' in raw:
             if raw['result'] == 'approval':
@@ -253,7 +300,7 @@ def waitting():
 
         waitting_lists.append(raw)
 
-    waitting_lists = sorted(waitting_lists, key=lambda x: x['_id'], reverse=True)
+    waitting_lists = sorted(
+        waitting_lists, key=lambda x: x['_id'], reverse=True)
 
     return render_template('./setting_waitting.html', waitting_lists=waitting_lists)
-
