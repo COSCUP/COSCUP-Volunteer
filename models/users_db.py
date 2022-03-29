@@ -1,3 +1,4 @@
+''' User database '''
 from time import time
 from uuid import uuid4
 
@@ -10,7 +11,7 @@ class UsersDB(DBBase):
     ''' UsersDB Collection '''
 
     def __init__(self):
-        super(UsersDB, self).__init__('users')
+        super().__init__('users')
 
     def index(self):
         ''' Index '''
@@ -29,7 +30,7 @@ class UsersDB(DBBase):
 
         '''
         return {
-            '_id': '%0.8x' % uuid4().fields[0],
+            '_id': f'{uuid4().fields[0]:08x}',
             'mail': mail,
             'created_at': int(time()),
         }
