@@ -36,6 +36,9 @@ class User:
         '''
         if not force:
             oauth_data = OAuthDB().find_one({'_id': mail}, {'owner': 1})
+            if oauth_data is None:
+                raise Exception(f'mail: `{mail}` not in the oauth dbs')
+
             if 'owner' in oauth_data and oauth_data['owner']:
                 raise Exception(f'mail:`{mail}` already bind')
 

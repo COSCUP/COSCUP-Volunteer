@@ -2,7 +2,7 @@
 from models.base import DBBase
 
 
-class OAuthDB(DBBase):
+class OAuthDB(DBBase):  # pylint: disable=abstract-method
     ''' OAuthDB Collection '''
 
     def __init__(self):
