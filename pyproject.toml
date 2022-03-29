@@ -1,0 +1,11 @@
+# https://docs.pytest.org/en/7.1.x/reference/customize.html#pyproject-toml
+[tool.pytest.ini_options]
+required_plugins = "pytest-cov"
+
+# https://coverage.readthedocs.io/en/latest/config.html?highlight=pyproject.toml
+[tool.coverage.run]
+omit = ["setting_sample.py", "setting.py", "tests/*"]
+
+# https://githb.com/PyCQA/isort/wiki/isort-Settings
+[tool.isort]
+virtual_env = "./venv"
