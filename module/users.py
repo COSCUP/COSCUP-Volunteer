@@ -47,7 +47,7 @@ class User:
 
         return user
 
-    def update_profile(self, data):
+    def update_profile(self, data: dict) -> dict:
         ''' update profile
 
         :param dict data: data
@@ -59,7 +59,7 @@ class User:
             return_document=ReturnDocument.AFTER,
         )
 
-    def update_profile_real(self, data):
+    def update_profile_real(self, data: dict) -> dict:
         ''' update profile
 
         :param dict data: data

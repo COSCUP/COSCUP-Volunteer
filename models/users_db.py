@@ -7,7 +7,7 @@ from pymongo.collection import ReturnDocument
 from models.base import DBBase
 
 
-class UsersDB(DBBase):
+class UsersDB(DBBase):  # pylint: disable=abstract-method
     ''' UsersDB Collection '''
 
     def __init__(self):
@@ -50,7 +50,7 @@ class UsersDB(DBBase):
         )
 
 
-class TobeVolunteerDB(DBBase):
+class TobeVolunteerDB(DBBase):  # pylint: disable=abstract-method
     ''' TobeVolunteer Collection '''
 
     def __init__(self):
