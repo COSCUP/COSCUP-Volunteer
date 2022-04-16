@@ -1,0 +1,32 @@
+name: BuildImages
+
+on:
+  push:
+    paths:
+      - 'Dockerfile-**'
+  workflow_dispatch:
+
+jobs:
+  docker:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build base
+        uses: docker/build-push-action@v2
+        id: base
+        with:
+          context: .
+          file: Dockerfile-base
+          tags: coscupweb-base:22.03.13
+          load: true
+      - name: List images
+        run: docker images
+      - name: Rename sample setting file
+        run: mv ./setting_sample.py ./setting.py
+      - name: Build app
+        run: docker build --no-cache=true -t volunteer-app:prod -f ./Dockerfile-app ./
+      - name: List images
+        run: docker images
