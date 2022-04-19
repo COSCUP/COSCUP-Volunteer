@@ -1,14 +1,12 @@
-from __future__ import absolute_import
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 from celery import Celery
 from celery.schedules import crontab
 from celery.signals import task_failure
 from kombu import Exchange, Queue, binding
 
-from module.awsses import AWSSES
-
 import setting
+from module.awsses import AWSSES
 
 app = Celery(
     main='celery_task',
@@ -24,14 +22,22 @@ app = Celery(
 
 app.conf.task_queues = (
     Queue('celery', Exchange('celery', type='direct'), routing_key='celery'),
-    Queue('CS_expense', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.expense.#'),
-    Queue('CS_ipinfo', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.ipinfo.#'),
-    Queue('CS_mail_member', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.member.#'),
-    Queue('CS_mail_sys', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.sys.#'),
-    Queue('CS_mail_tasks', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.mail.tasks.#'),
-    Queue('CS_sender_mailer', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.sender.mailer.#'),
-    Queue('CS_service_sync', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.servicesync.#'),
-    Queue('CS_session', Exchange('COSCUP-SECRETARY', type='topic'), routing_key='cs.session.#'),
+    Queue('CS_expense', Exchange('COSCUP-SECRETARY',
+          type='topic'), routing_key='cs.expense.#'),
+    Queue('CS_ipinfo', Exchange('COSCUP-SECRETARY',
+          type='topic'), routing_key='cs.ipinfo.#'),
+    Queue('CS_mail_member', Exchange('COSCUP-SECRETARY',
+          type='topic'), routing_key='cs.mail.member.#'),
+    Queue('CS_mail_sys', Exchange('COSCUP-SECRETARY',
+          type='topic'), routing_key='cs.mail.sys.#'),
+    Queue('CS_mail_tasks', Exchange('COSCUP-SECRETARY',
+          type='topic'), routing_key='cs.mail.tasks.#'),
+    Queue('CS_sender_mailer', Exchange('COSCUP-SECRETARY',
+          type='topic'), routing_key='cs.sender.mailer.#'),
+    Queue('CS_service_sync', Exchange('COSCUP-SECRETARY',
+          type='topic'), routing_key='cs.servicesync.#'),
+    Queue('CS_session', Exchange('COSCUP-SECRETARY',
+          type='topic'), routing_key='cs.session.#'),
 )
 
 app.conf.acks_late = True
@@ -40,7 +46,7 @@ app.conf.worker_prefetch_multiplier = 2
 app.conf.accept_content = ('json', 'pickle')
 
 app.conf.beat_schedule = {
-    #'mail-sys-test': {
+    # 'mail-sys-test': {
     #    'task': 'mail.sys.test',
     #    'schedule': crontab(minute='*/5'),
     #    'kwargs': {'msg': 'In testing'},
@@ -48,7 +54,7 @@ app.conf.beat_schedule = {
     #        'exchange': 'COSCUP-SECRETARY',
     #        'routing_key': 'cs.mail.sys.test',
     #    },
-    #},
+    # },
     'ipinfo-update-usession': {
         'task': 'ipinfo.update.usession',
         'schedule': crontab(minute='*/5'),
@@ -159,12 +165,14 @@ app.conf.beat_schedule = {
     },
 }
 
+
 @task_failure.connect
 def on_failure(**kwargs):
     ses = AWSSES(setting.AWS_ID, setting.AWS_KEY, setting.AWS_SES_FROM)
     raw_mail = ses.raw_mail(
         to_addresses=[setting.ADMIN_To, ],
-        subject='[COSCUP-SECRETARY] %s [%s]' % (kwargs['sender'].name, kwargs['sender'].request.id),
+        subject='[COSCUP-SECRETARY] %s [%s]' % (
+            kwargs['sender'].name, kwargs['sender'].request.id),
         body='kwargs: <pre>%s</pre><br>einfo: <pre>%s</pre><br>request: <pre>%s</pre>' % (
             kwargs['kwargs'], kwargs['einfo'].traceback, kwargs['sender'].request),
     )

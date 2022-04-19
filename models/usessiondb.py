@@ -1,3 +1,4 @@
+''' USessionDB '''
 import hashlib
 from time import time
 from uuid import uuid4
@@ -7,13 +8,14 @@ from models.base import DBBase
 
 class USessionDB(DBBase):
     ''' USessionDB Collection '''
+
     def __init__(self, token=None):
-        super(USessionDB, self).__init__('usession')
+        super().__init__('usession')
 
         if token is None:
-            m = hashlib.sha256()
-            m.update(('%s%s' % (uuid4().hex, time())).encode('utf8'))
-            token = m.hexdigest()
+            message = hashlib.sha256()
+            message.update((f'{uuid4().hex}{time()}').encode('utf8'))
+            token = message.hexdigest()
 
         self.token = token
 
@@ -24,7 +26,7 @@ class USessionDB(DBBase):
         self.create_index([('uid', 1), ])
         self.create_index([('alive', 1), ])
 
-    def save(self, data):
+    def add(self, data):
         ''' save
 
         :param dict data: data

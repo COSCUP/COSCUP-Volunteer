@@ -1,45 +1,47 @@
+''' Project '''
 import csv
 import io
 import logging
 import math
 
 import arrow
-from celery_task.task_service_sync import service_sync_mattermost_add_channel
 from flask import (Blueprint, g, jsonify, redirect, render_template, request,
                    url_for)
+
+import setting
+from celery_task.task_service_sync import service_sync_mattermost_add_channel
 from models.oauth_db import OAuthDB
 from models.teamdb import TeamMemberChangedDB
 from models.users_db import UsersDB
 from module.dietary_habit import DietaryHabit
 from module.form import Form, FormAccommodation, FormTrafficFeeMapping
-from module.mattermost_bot import MattermostBot, MattermostTools
+from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.team import Team
 from module.users import User
-
-import setting
 
 VIEW_PROJECT = Blueprint('project', __name__, url_prefix='/project')
 
 
 @VIEW_PROJECT.route('/')
 def index():
+    ''' Index page '''
     projects = []
-    data = list(Project.all())
-    for d in data:
-        date = arrow.get(d['action_date'])
-        d['action_date_str'] = '%s (%s)' % (
-            date.format('YYYY-MM-DD'), date.humanize(arrow.now()))
+    datas = list(Project.all())
+    for data in datas:
+        date = arrow.get(data['action_date'])
+        data['action_date_str'] = f"{date.format('YYYY-MM-DD')} ({date.humanize(arrow.now())})"
 
     per = 3
-    for i in range(int(math.ceil(len(data) / float(per)))):
-        projects.append(data[per*i:min([per*(i+1), len(data)])])
+    for i in range(int(math.ceil(len(datas) / float(per)))):
+        projects.append(datas[per*i:min([per*(i+1), len(datas)])])
 
     return render_template('./project_index.html', projects=projects)
 
 
 @VIEW_PROJECT.route('/<pid>/edit', methods=('GET', 'POST'))
 def project_edit(pid):
+    ''' Project edit '''
     project = Project.get(pid)
     if g.user['account']['_id'] not in project['owners']:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
@@ -50,11 +52,12 @@ def project_edit(pid):
 
         return render_template('./project_edit.html', project=project)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data = {
             'desc': request.form['desc'].strip(),
             'name': request.form['name'].strip(),
-            'volunteer_certificate_hours': max([0, int(request.form['volunteer_certificate_hours'])]),
+            'volunteer_certificate_hours': max([0,
+                                                int(request.form['volunteer_certificate_hours'])]),
             'calendar': request.form['calendar'].strip(),
             'mailling_staff': request.form['mailling_staff'].strip(),
             'mailling_leader': request.form['mailling_leader'].strip(),
@@ -66,9 +69,12 @@ def project_edit(pid):
         Project.update(pid, data)
         return redirect(url_for('project.project_edit', pid=pid, _scheme='https', _external=True))
 
+    return '', 404
+
 
 @VIEW_PROJECT.route('/<pid>/edit/team', methods=('GET', 'POST'))
 def project_edit_create_team(pid):
+    ''' Project edit create team '''
     project = Project.get(pid)
     if g.user['account']['_id'] not in project['owners']:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
@@ -79,6 +85,7 @@ def project_edit_create_team(pid):
 
 @VIEW_PROJECT.route('/<pid>/form', methods=('GET', 'POST'))
 def project_form(pid):
+    ''' Project form '''
     project = Project.get(pid)
     if g.user['account']['_id'] not in project['owners']:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
@@ -86,9 +93,13 @@ def project_form(pid):
     if request.method == 'GET':
         return render_template('./project_form.html', project=project)
 
+    return '', 404
+
 
 @VIEW_PROJECT.route('/<pid>/form/api', methods=('GET', 'POST'))
 def project_form_api(pid):
+    ''' Project form API '''
+    # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
     project = Project.get(pid)
     if g.user['account']['_id'] not in project['owners']:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
@@ -229,14 +240,14 @@ def project_form_api(pid):
                         continue
                     all_users[raw['uid']]['clothes'] = raw['data']['clothes']
 
-                for uid in all_users:
+                for uid, value in all_users.items():
                     data = {
                         'uid': uid,
                         'picture': user_info[uid]['oauth']['picture'],
                         'name': user_info[uid]['profile']['badge_name'],
-                        '_has_data': bool(all_users[uid].get('clothes', False)),
-                        'tid': all_users[uid]['tid'],
-                        'clothes': all_users[uid].get('clothes'),
+                        '_has_data': bool(value.get('clothes', False)),
+                        'tid': value['tid'],
+                        'clothes': value.get('clothes'),
                     }
                     csv_writer.writerow(data)
 
@@ -292,14 +303,14 @@ def project_form_api(pid):
 
                     all_users[raw['uid']]['y18'] = raw['data']['y18']
 
-                for uid in all_users:
+                for uid, value in all_users.items():
                     data = {
                         'uid': uid,
                         'picture': user_info[uid]['oauth']['picture'],
                         'name': user_info[uid]['profile']['badge_name'],
-                        '_has_data': True if all_users[uid].get('y18') is not None else False,
-                        'tid': all_users[uid]['tid'],
-                        'y18': all_users[uid].get('y18'),
+                        '_has_data': bool(value.get('y18')),
+                        'tid': value['tid'],
+                        'y18': value.get('y18'),
                     }
                     csv_writer.writerow(data)
 
@@ -309,9 +320,12 @@ def project_form_api(pid):
 
                 return jsonify({'result': result})
 
+    return jsonify({}), 404
+
 
 @VIEW_PROJECT.route('/<pid>/edit/team/api', methods=('GET', 'POST'))
 def project_edit_create_team_api(pid):
+    ''' Project edit create team API '''
     project = Project.get(pid)
     if g.user['account']['_id'] not in project['owners']:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
@@ -319,7 +333,8 @@ def project_edit_create_team_api(pid):
     if request.method == 'GET':
         _team = Team.get(pid, request.args['tid'].strip())
         team = {}
-        for k in ('name', 'chiefs', 'members', 'owners', 'tid', 'headcount', 'mailling', 'disabled'):
+        for k in ('name', 'chiefs', 'members', 'owners', 'tid',
+                  'headcount', 'mailling', 'disabled'):
             if k in _team:
                 team[k] = _team[k]
 
@@ -330,7 +345,7 @@ def project_edit_create_team_api(pid):
 
         return jsonify(team)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data = request.json
         if data['submittype'] == 'update':
             chiefs = data['chiefs']
@@ -348,41 +363,46 @@ def project_edit_create_team_api(pid):
                 pid=pid, tids=(data['tid'], ))[data['tid']])
 
             TeamMemberChangedDB().make_record(pid=pid, tid=data['tid'],
-                                              add_uids=new_members-old_members, del_uids=old_members-new_members)
+                                              action={'add': new_members-old_members,
+                                                      'del': old_members-new_members})
 
             Team.update_setting(pid=pid, tid=data['tid'], data=data)
             service_sync_mattermost_add_channel.apply_async(
                 kwargs={'pid': pid, 'uids': list(new_members)})
 
-            return u'%s' % data
-        elif data['submittype'] == 'create':
+            return f'{data}'
+
+        if data['submittype'] == 'create':
             Team.create(
                 pid=pid, tid=data['tid'], name=data['name'], owners=project['owners'])
-            return u'%s' % data
+            return f'{data}'
+
+    return '', 404
 
 
 @VIEW_PROJECT.route('/<pid>/')
 def team_page(pid):
+    ''' Team page '''
     teams = []
     project = Project.get(pid)
     if not project:
-        return u'no data', 404
+        return 'no data', 404
 
     data = list(Team.list_by_pid(project['_id']))
     uids = []
-    for t in data:
-        uids.extend(t['chiefs'])
+    for team in data:
+        uids.extend(team['chiefs'])
 
     total = 0
     user_info = User.get_info(uids)
-    for t in data:
-        t['chiefs_name'] = []
-        for uid in t['chiefs']:
-            t['chiefs_name'].append(
-                '<a href="/user/%s">%s</a>' % (uid, user_info[uid]['profile']['badge_name']))
+    for team in data:
+        team['chiefs_name'] = []
+        for uid in team['chiefs']:
+            team['chiefs_name'].append(
+                f'''<a href="/user/{uid}">{user_info[uid]['profile']['badge_name']}</a>''')
 
-        t['count'] = len(set(t['chiefs'] + t['members']))
-        total += t['count']
+        team['count'] = len(set(team['chiefs'] + team['members']))
+        total += team['count']
 
     # ----- group for layout ----- #
     per = 3
@@ -399,8 +419,9 @@ def team_page(pid):
                            )
 
 
-@VIEW_PROJECT.route('/<pid>/form_traffic_mapping', methods=('GET', 'POST'))
+@ VIEW_PROJECT.route('/<pid>/form_traffic_mapping', methods=('GET', 'POST'))
 def project_form_traffic_mapping(pid):
+    ''' Project form traffic mapping '''
     project = Project.get(pid)
     if g.user['account']['_id'] not in project['owners']:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
@@ -408,7 +429,7 @@ def project_form_traffic_mapping(pid):
     if request.method == 'GET':
         return render_template('./project_form_traffic_mapping.html', project=project)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data = request.get_json()
         if 'casename' in data and data['casename'] == 'init':
             return jsonify({
@@ -425,9 +446,12 @@ def project_form_traffic_mapping(pid):
             result = FormTrafficFeeMapping.save(pid=pid, data=feemapping)
             return jsonify({'data': result['data']})
 
+    return '', 404
 
-@VIEW_PROJECT.route('/<pid>/form/accommodation', methods=('GET', 'POST'))
+
+@ VIEW_PROJECT.route('/<pid>/form/accommodation', methods=('GET', 'POST'))
 def project_form_accommodation(pid):
+    ''' Project form accommodation '''
     project = Project.get(pid)
     if g.user['account']['_id'] not in project['owners']:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
@@ -435,7 +459,7 @@ def project_form_accommodation(pid):
     if request.method == 'GET':
         return render_template('./project_form_accommodation.html', project=project)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         post_data = request.get_json()
 
         if post_data['casename'] == 'get':
@@ -470,7 +494,7 @@ def project_form_accommodation(pid):
 
             return jsonify({'datas': datas})
 
-        elif post_data['casename'] == 'update':
+        if post_data['casename'] == 'update':
             for data in post_data['datas']:
                 logging.info('uid: %s, room: %s',
                              data['uid'].strip(), data['room'].strip())
@@ -479,9 +503,12 @@ def project_form_accommodation(pid):
 
             return jsonify({})
 
+    return jsonify({}), 404
 
-@VIEW_PROJECT.route('/<pid>/dietary_habit', methods=('GET', 'POST'))
+
+@ VIEW_PROJECT.route('/<pid>/dietary_habit', methods=('GET', 'POST'))
 def project_dietary_habit(pid):
+    ''' Project dietary habit '''
     project = Project.get(pid)
     if g.user['account']['_id'] not in project['owners']:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
@@ -489,7 +516,7 @@ def project_dietary_habit(pid):
     if request.method == 'GET':
         return render_template('./project_dietary_habit.html', project=project)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         post_data = request.get_json()
 
         if post_data['casename'] == 'get':
@@ -502,13 +529,13 @@ def project_dietary_habit(pid):
                 uids=list(all_users.keys()), need_sensitive=True)
 
             datas = []
-            for uid in all_users:
+            for uid, value in all_users.items():
                 user_info = user_infos[uid]
                 data = {
                     'uid': uid,
                     'name': user_info['profile']['badge_name'],
                     'picture': user_info['oauth']['picture'],
-                    'tid': all_users[uid]['tid'],
+                    'tid': value['tid'],
                     'dietary_habit': [],
                 }
 
@@ -519,9 +546,12 @@ def project_dietary_habit(pid):
 
             return jsonify({'datas': datas, 'dietary_habit': DietaryHabit.ITEMS})
 
+    return '', 404
 
-@VIEW_PROJECT.route('/<pid>/contact_book', methods=('GET', 'POST'))
+
+@ VIEW_PROJECT.route('/<pid>/contact_book', methods=('GET', 'POST'))
 def project_contact_book(pid):
+    ''' Project contact book '''
     project = Project.get(pid)
     if g.user['account']['_id'] not in project['owners']:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
@@ -529,7 +559,7 @@ def project_contact_book(pid):
     if request.method == 'GET':
         return render_template('./project_contact_book.html', project=project)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         post_data = request.get_json()
 
         if post_data['casename'] == 'get':
@@ -541,18 +571,16 @@ def project_contact_book(pid):
             user_infos = User.get_info(
                 uids=list(all_users.keys()), need_sensitive=True)
 
-            mmb = MattermostBot(token=setting.MATTERMOST_BOT_TOKEN,
-                                base_url=setting.MATTERMOST_BASEURL)
             mmt = MattermostTools(
                 token=setting.MATTERMOST_BOT_TOKEN, base_url=setting.MATTERMOST_BASEURL)
             datas = []
-            for uid in all_users:
+            for uid, value in all_users.items():
                 user_info = user_infos[uid]
                 data = {
                     'uid': uid,
                     'name': user_info['profile']['badge_name'],
                     'picture': user_info['oauth']['picture'],
-                    'tid': all_users[uid]['tid'],
+                    'tid': value['tid'],
                     'email': user_info['oauth']['email'],
                 }
 
@@ -564,3 +592,5 @@ def project_contact_book(pid):
                 datas.append(data)
 
             return jsonify({'datas': datas})
+
+    return jsonify({}), 404

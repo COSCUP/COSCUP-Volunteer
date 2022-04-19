@@ -1,12 +1,14 @@
+''' OAuth '''
 from models.oauth_db import OAuthDB
 
 
-class OAuth(object):
+class OAuth:
     ''' OAuth
 
     :param str mail: mail
 
     '''
+
     def __init__(self, mail):
         self.mail = mail
 
@@ -43,6 +45,6 @@ class OAuth(object):
         '''
         data = OAuthDB().find_one({'_id': mail}, {'owner': 1})
         if not data:
-            raise Exception('No oauth data of `%s`' % mail)
+            raise Exception(f'No oauth data of `{mail}`')
 
         return data.get('owner')

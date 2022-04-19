@@ -1,4 +1,5 @@
 ''' skill '''
+# pylint: disable=too-few-public-methods
 from enum import Enum, IntEnum, unique
 from typing import List
 
@@ -110,6 +111,7 @@ class TobeVolunteerStruct(BaseModel):
     desc: str = ''
 
     class Config:
+        ''' Config '''
         use_enum_values = True
 
 
@@ -120,4 +122,5 @@ class RecruitQuery(BaseModel):
     status: List[StatusEnum] = []
 
     class Config:
+        ''' Config '''
         use_enum_values = True

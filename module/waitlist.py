@@ -1,7 +1,8 @@
+''' WaitList '''
 from models.waitlistdb import WaitListDB
 
 
-class WaitList(object):
+class WaitList:
     ''' WaitList object '''
     @staticmethod
     def join_to(pid, tid, uid, note):

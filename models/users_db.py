@@ -39,7 +39,6 @@ class UsersDB(DBBase):  # pylint: disable=abstract-method
         ''' Add data
 
         :param dict data: user data
-        :rtype: dict
 
         '''
         return self.find_one_and_update(

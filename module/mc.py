@@ -1,11 +1,14 @@
+''' MC '''
 import pylibmc
 
 import setting
 
 
-class MC(object):
+class MC:  # pylint: disable=too-few-public-methods
+    ''' Memcached cache '''
     @staticmethod
     def get_client():
+        ''' Get client '''
         return pylibmc.Client(setting.MC_SERVERS,
-                binary=True,
-                behaviors={"tcp_nodelay": True, "ketama": True})
+                              binary=True,
+                              behaviors={'tcp_nodelay': True, 'ketama': True})

@@ -1,3 +1,4 @@
+''' User '''
 import html
 import re
 from urllib.parse import quote_plus
@@ -5,6 +6,7 @@ from urllib.parse import quote_plus
 import arrow
 from flask import Blueprint, redirect, render_template, url_for
 from markdown import markdown
+
 from module.gsuite import GSuite
 from module.mattermost_bot import MattermostTools
 from module.oauth import OAuth
@@ -17,16 +19,18 @@ VIEW_USER = Blueprint('user', __name__, url_prefix='/user')
 
 @VIEW_USER.route('/')
 def index():
-    return u'user'
+    ''' Index '''
+    return 'user'
 
 
 @VIEW_USER.route('/<uid>/<nickname>')
 @VIEW_USER.route('/<uid>')
 def user_page(uid, nickname=None):
+    ''' User page '''
     user = User(uid=uid).get()
 
     if not user:
-        return u'', 200
+        return '', 200
 
     oauth = OAuth(user['mail']).get()
 
@@ -56,18 +60,18 @@ def user_page(uid, nickname=None):
                            markdown(html.escape(user['profile']['intro'])))
 
     participate_in = []
-    for p in Team.participate_in(uid):
-        p['_project'] = Project.get(p['pid'])
-        p['_title'] = '???'
-        if uid in p['chiefs']:
-            p['_title'] = 'chief'
-        elif uid in p['members']:
-            p['_title'] = 'member'
+    for item in Team.participate_in(uid):
+        item['_project'] = Project.get(item['pid'])
+        item['_title'] = '???'
+        if uid in item['chiefs']:
+            item['_title'] = 'chief'
+        elif uid in item['members']:
+            item['_title'] = 'member'
 
-        p['_action_date'] = arrow.get(
-            p['_project']['action_date']).format('YYYY/MM')
+        item['_action_date'] = arrow.get(
+            item['_project']['action_date']).format('YYYY/MM')
 
-        participate_in.append(p)
+        participate_in.append(item)
 
     participate_in = sorted(
         participate_in, key=lambda p: p['_project']['action_date'], reverse=True)

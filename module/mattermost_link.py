@@ -1,3 +1,4 @@
+''' MattermostLink '''
 from time import time
 from uuid import uuid4
 
@@ -5,8 +6,9 @@ import setting
 from models.mattermost_link_db import MattermostLinkDB
 
 
-class MattermostLink(object):
+class MattermostLink:
     ''' MattermostLink '''
+
     def __init__(self, uid):
         self.uid = uid
         self.raw = MattermostLinkDB().find_one({'_id': uid})
@@ -31,11 +33,13 @@ class MattermostLink(object):
                     uid, code = pwd.split('.')
                     mml = cls(uid=uid)
                     if code == mml.raw['code']:
-                        MattermostLinkDB().find_one_and_update({'_id': uid}, {'$set': {'data': data, 'create_at': time()}})
+                        MattermostLinkDB().find_one_and_update(
+                            {'_id': uid}, {'$set': {'data': data, 'create_at': time()}})
                         return True
 
         return False
 
     @staticmethod
     def reset(uid):
+        ''' Reset the link '''
         MattermostLinkDB().delete_one({'_id': uid})

@@ -1,9 +1,9 @@
 ''' recruit.py '''
 from flask import Blueprint, g, jsonify, redirect, render_template, request
+
 from module.skill import (RecruitQuery, SkillEnum, SkillEnumDesc, StatusEnum,
                           StatusEnumDesc, TeamsEnum, TeamsEnumDesc)
 from module.users import TobeVolunteer, User
-
 from view.utils import check_the_team_and_project_are_existed
 
 VIEW_RECRUIT = Blueprint('recruit', __name__, url_prefix='/recruit')
@@ -11,7 +11,7 @@ VIEW_RECRUIT = Blueprint('recruit', __name__, url_prefix='/recruit')
 
 @VIEW_RECRUIT.route('/<pid>/<tid>/list', methods=('GET', 'POST'))
 def recurit_list(pid, tid):
-    ''' index '''
+    ''' List page '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
@@ -34,11 +34,15 @@ def recurit_list(pid, tid):
         if post_data['casename'] == 'get':
             return jsonify({
                 'team_enum': {key: item.value for key, item in TeamsEnum.__members__.items()},
-                'team_enum_desc': {key: item.value for key, item in TeamsEnumDesc.__members__.items()},
-                'skill_enum': {key: item.value for key, item in SkillEnum.__members__.items()},
-                'skill_enum_desc': {key: item.value for key, item in SkillEnumDesc.__members__.items()},
+                'team_enum_desc': {key: item.value for key, item in
+                                   TeamsEnumDesc.__members__.items()},
+                'skill_enum': {key: item.value for key, item in
+                               SkillEnum.__members__.items()},
+                'skill_enum_desc': {key: item.value for key, item in
+                                    SkillEnumDesc.__members__.items()},
                 'status_enum': {key: item.value for key, item in StatusEnum.__members__.items()},
-                'status_enum_desc': {key: item.value for key, item in StatusEnumDesc.__members__.items()},
+                'status_enum_desc': {key: item.value for key, item in
+                                     StatusEnumDesc.__members__.items()},
             })
 
         if post_data['casename'] == 'query':
@@ -53,3 +57,5 @@ def recurit_list(pid, tid):
                     'oauth': {'picture': users_info[member['uid']]['oauth']['picture']}})
 
             return jsonify({'members': data})
+
+    return jsonify({})

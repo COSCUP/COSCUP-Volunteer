@@ -1,35 +1,41 @@
+''' GSuite '''
 from __future__ import print_function
 
-import json
 import re
 
-from googleapiclient.discovery import build
 from google.oauth2 import service_account
+from googleapiclient import errors
+from googleapiclient.discovery import build
 
 RE_PICTURE = re.compile(r'(https://.+){1,}=?s([\d]{1,}-c)')
 
 
-class GSuite(object):
-    __slots__ = ('service')
+class GSuite:
+    ''' GSuite '''
+    __slots__ = ('service', )
 
     SCOPES = ('https://www.googleapis.com/auth/admin.directory.user',
               'https://www.googleapis.com/auth/admin.directory.group',
-             )
+              )
 
     def __init__(self, credentialfile, with_subject):
         creds = service_account.Credentials.from_service_account_file(
-                credentialfile, scopes=self.SCOPES).with_subject(with_subject)
+            credentialfile, scopes=self.SCOPES).with_subject(with_subject)
 
-        self.service = build('admin', 'directory_v1', credentials=creds, cache_discovery=False)
+        self.service = build('admin', 'directory_v1',
+                             credentials=creds, cache_discovery=False)
 
     @property
     def print_scopes(self):
+        ''' Print the scopes '''
         return ','.join(self.SCOPES)
 
     def users_list(self):
+        ''' Users.list '''
         return self.service.users().list(customer='my_customer', orderBy='email').execute()
 
     def users_get(self, user_key):
+        ''' Users.get '''
         return self.service.users().get(userKey=user_key).execute()
 
     # ----- Groups ----- #
@@ -41,7 +47,8 @@ class GSuite(object):
 
     def groups_list(self, page_token=None):
         ''' Groups.list '''
-        return self.service.groups().list(customer='my_customer', orderBy='email', pageToken=page_token).execute()
+        return self.service.groups().list(customer='my_customer',
+                                          orderBy='email', pageToken=page_token).execute()
 
     def groups_list_loop(self, page_token=None):
         ''' Groups.list.loop '''
@@ -78,13 +85,15 @@ class GSuite(object):
             yield member
 
         while 'nextPageToken' in members:
-            members = self.members_list(group_key, page_token=members['nextPageToken'])
+            members = self.members_list(
+                group_key, page_token=members['nextPageToken'])
             for member in members.get('members', []):
                 yield member
 
     def members_insert(self, group_key, email, role='MEMBER', delivery_settings='ALL_MAIL'):
         ''' members.insert '''
-        body = {'email': email, 'role': role, 'delivery_settings': delivery_settings}
+        body = {'email': email, 'role': role,
+                'delivery_settings': delivery_settings}
         return self.service.members().insert(groupKey=group_key, body=body).execute()
 
     def members_has_member(self, group_key, email):
@@ -93,7 +102,7 @@ class GSuite(object):
             if self.members_get(group_key=group_key, email=email):
                 return {'isMember': True}
             return {'isMember': False}
-        except:
+        except errors.HttpError:
             return {'isMember': False}
 
     def members_get(self, group_key, email):
@@ -111,7 +120,6 @@ class GSuite(object):
 
         if result:
             _url, _size = result.groups()
-            return url.replace('s%s' % _size, 's%s-c' % size)
+            return url.replace(f's{_size}', f's{size}-c')
 
         return url
-

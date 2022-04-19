@@ -1,3 +1,4 @@
+''' TeamDB '''
 from time import time
 
 from pymongo.collection import ReturnDocument
@@ -17,8 +18,9 @@ class TeamDB(DBBase):
         - ``members``: (list) team members
 
     '''
+
     def __init__(self, pid, tid):
-        super(TeamDB, self).__init__('team')
+        super().__init__('team')
         self.pid = pid
         self.tid = tid
 
@@ -30,7 +32,7 @@ class TeamDB(DBBase):
 
     def default(self):
         ''' default data '''
-        r = {
+        result = {
             'pid': self.pid,
             'tid': self.tid,
             'name': '',
@@ -40,8 +42,8 @@ class TeamDB(DBBase):
             'desc': '',
             'tag_members': [],
         }
-        self.make_create_at(r)
-        return r
+        self.make_create_at(result)
+        return result
 
     def add(self, data):
         ''' Add data
@@ -67,7 +69,6 @@ class TeamDB(DBBase):
             {'$set': data},
             return_document=ReturnDocument.AFTER,
         )
-
 
     def update_users(self, field, add_uids, del_uids):
         ''' Update users
@@ -123,14 +124,15 @@ class TeamMemberTagsDB(DBBase):
         - ``tags``: [tag_id, ...]
 
     '''
+
     def __init__(self):
-        super(TeamMemberTagsDB, self).__init__('team_member_tags')
+        super().__init__('team_member_tags')
 
     def index(self):
         ''' Index '''
         self.create_index([('pid', 1), ('tid', 1)])
 
-    def update(self, pid, tid, uid, tags):
+    def update_and_add(self, pid, tid, uid, tags):
         ''' update team
 
         :param list tags: tag_id in tags array
@@ -154,22 +156,21 @@ class TeamMemberChangedDB(DBBase):
         - ``case``: ``add``, ``del``, ``waiting``
 
     '''
+
     def __init__(self):
-        super(TeamMemberChangedDB, self).__init__('team_member_changed')
+        super().__init__('team_member_changed')
 
     def index(self):
         ''' Index '''
         self.create_index([('pid', 1), ])
         self.create_index([('case', 1), ])
 
-    def make_record(self, pid, tid, add_uids=None, del_uids=None, waiting_uids=None, deny_uids=None):
+    def make_record(self, pid, tid, action):
         ''' make record
 
         :param str pid: project id
         :param str tid: team id
-        :param list add_uids: add user list
-        :param list del_uids: del user list
-        :param list waiting_uids: waiting user list
+        :param dict action: action in key name: add, del, waiting, deny
 
         .. note::
             - waiting: user send request, and waiting.
@@ -178,37 +179,42 @@ class TeamMemberChangedDB(DBBase):
             - del: was joined, but remove.
 
         '''
-        if add_uids:
-            query = [{'pid': pid, 'tid': tid, 'case': 'add', 'uid': uid, 'create_at': time()} for uid in add_uids if uid]
+        if 'add' in action and action['add']:
+            query = [{'pid': pid, 'tid': tid, 'case': 'add', 'uid': uid,
+                      'create_at': time()} for uid in action['add'] if uid]
             if query:
                 self.insert_many(query)
 
-        if del_uids:
-            query = [{'pid': pid, 'tid': tid, 'case': 'del', 'uid': uid, 'create_at': time()} for uid in del_uids if uid]
+        if 'del' in action and action['del']:
+            query = [{'pid': pid, 'tid': tid, 'case': 'del', 'uid': uid,
+                      'create_at': time()} for uid in action['del'] if uid]
             if query:
                 self.insert_many(query)
 
-        if waiting_uids:
-            query = [{'pid': pid, 'tid': tid, 'case': 'waiting', 'uid': uid, 'create_at': time()} for uid in waiting_uids if uid]
+        if 'waiting' in action and action['waiting']:
+            query = [{'pid': pid, 'tid': tid, 'case': 'waiting', 'uid': uid,
+                      'create_at': time()} for uid in action['waiting'] if uid]
             if query:
                 self.insert_many(query)
 
-        if deny_uids:
-            query = [{'pid': pid, 'tid': tid, 'case': 'deny', 'uid': uid, 'create_at': time()} for uid in deny_uids if uid]
+        if 'deny' in action and action['deny']:
+            query = [{'pid': pid, 'tid': tid, 'case': 'deny', 'uid': uid,
+                      'create_at': time()} for uid in action['deny'] if uid]
             if query:
                 self.insert_many(query)
 
 
 class TeamPlanDB(DBBase):
     ''' TeamPlan Collection '''
+
     def __init__(self):
-        super(TeamPlanDB, self).__init__('team_plan')
+        super().__init__('team_plan')
 
     def index(self):
         ''' Index '''
         self.create_index([('pid', 1), ])
 
-    def save(self, pid, tid, data):
+    def add(self, pid, tid, data):
         ''' Save data
 
         :param str pid: project id

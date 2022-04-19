@@ -1,18 +1,19 @@
+''' Task '''
 from pymongo.collection import ReturnDocument
 
-from models.tasksdb import TasksDB
-from models.tasksdb import TasksStarDB
+from models.tasksdb import TasksDB, TasksStarDB
 from module.users import User
 
 
-class Tasks(object):
+class Tasks:
     ''' Tasks class '''
 
     @classmethod
-    def add(cls, pid, title, cate, desc, limit, starttime, created_by, endtime=None, task_id=None):
+    def add(cls, pid, body, endtime=None, task_id=None):
         ''' add new task
 
         :param str pid: pid
+        :param dict body: body
         :param str title: title
         :param str cate: cate
         :param str desc: description
@@ -23,13 +24,11 @@ class Tasks(object):
         :param str task_id: task id
 
         '''
-        data = TasksDB.new(
-            pid=pid, title=title, cate=cate, desc=desc, limit=limit,
-            starttime=starttime, created_by=created_by, endtime=endtime)
+        data = TasksDB.new(pid=pid, body=body, endtime=endtime)
 
         if task_id is not None:
             if not cls.get_with_pid(pid=pid, _id=task_id):
-                raise Exception('No task_id: %s', task_id)
+                raise Exception(f'No task_id: {task_id}')
 
             data['_id'] = task_id
             data.pop('people', None)
@@ -90,11 +89,12 @@ class Tasks(object):
     @staticmethod
     def get_peoples_info(pid, task_id):
         ''' Get peoples info '''
-        uids = TasksDB().find_one({'pid': pid, '_id': task_id}, {'people': 1})['people']
+        uids = TasksDB().find_one(
+            {'pid': pid, '_id': task_id}, {'people': 1})['people']
         return User.get_info(uids=uids)
 
 
-class TasksStar(object):
+class TasksStar:
     ''' TasksStar object '''
 
     @staticmethod
@@ -126,9 +126,9 @@ class TasksStar(object):
         if data:
             TasksStarDB().delete_one({'pid': pid, 'uid': uid})
             return {'add': False}
-        else:
-            TasksStarDB().insert(TasksStarDB.new(pid=pid, uid=uid))
-            return {'add': True}
+
+        TasksStarDB().insert(TasksStarDB.new(pid=pid, uid=uid))
+        return {'add': True}
 
     @staticmethod
     def get(pid):

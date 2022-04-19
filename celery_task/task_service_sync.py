@@ -2,7 +2,10 @@ from __future__ import absolute_import, unicode_literals
 
 from time import time
 
+from celery.utils.log import get_task_logger
+
 import setting
+from celery_task.celery import app
 from models.mattermostdb import MattermostUsersDB
 from models.teamdb import TeamDB, TeamMemberChangedDB
 from module.mattermost_bot import MattermostBot, MattermostTools
@@ -11,9 +14,6 @@ from module.service_sync import SyncGSuite
 from module.team import Team
 from module.users import User
 from module.usession import USession
-
-from celery.utils.log import get_task_logger
-from celery_task.celery import app
 
 logger = get_task_logger(__name__)
 
@@ -36,7 +36,7 @@ def service_sync_mattermost_users(sender, **kwargs):
         n = 0
         for u in mmb.get_users_loop():
             n += 1
-            mmusers_db.save(data=u)
+            mmusers_db.add(data=u)
 
         logger.info('Sync count: %s' % n)
 

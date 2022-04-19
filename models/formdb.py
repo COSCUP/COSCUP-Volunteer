@@ -1,6 +1,8 @@
+''' FormDB '''
 from pymongo.collection import ReturnDocument
 
 from models.base import DBBase
+
 
 class FormDB(DBBase):
     ''' Form Collection
@@ -10,8 +12,9 @@ class FormDB(DBBase):
         - ``available`` bool to check use or not
 
     '''
+
     def __init__(self):
-        super(FormDB, self).__init__('form')
+        super().__init__('form')
 
     def index(self):
         ''' Index '''
@@ -29,7 +32,7 @@ class FormDB(DBBase):
         '''
         _data = {}
         for k in data:
-            _data['data.%s' % k] = data[k]
+            _data[f'data.{k}'] = data[k]
 
         return self.find_one_and_update(
             {'case': case, 'pid': pid, 'uid': uid},
@@ -41,10 +44,11 @@ class FormDB(DBBase):
 
 class FormTrafficFeeMappingDB(DBBase):
     ''' Form traffic fee mapping Collection '''
-    def __init__(self):
-        super(FormTrafficFeeMappingDB, self).__init__('form_traffic_fee_mapping')
 
-    def save(self, pid, data):
+    def __init__(self):
+        super().__init__('form_traffic_fee_mapping')
+
+    def save(self, pid, data):  # pylint: disable=arguments-differ
         ''' Save location / fee data
 
         :param str pid: pid
@@ -52,8 +56,8 @@ class FormTrafficFeeMappingDB(DBBase):
 
         '''
         return self.find_one_and_update(
-                {'_id': pid},
-                {'$set': {'data': data}},
-                upsert=True,
-                return_document=ReturnDocument.AFTER,
-            )
+            {'_id': pid},
+            {'$set': {'data': data}},
+            upsert=True,
+            return_document=ReturnDocument.AFTER,
+        )
