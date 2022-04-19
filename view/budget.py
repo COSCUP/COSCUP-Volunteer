@@ -1,10 +1,5 @@
-from flask import Blueprint
-from flask import g
-from flask import jsonify
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import url_for
+''' Budget '''
+from flask import Blueprint, g, jsonify, redirect, render_template, request
 
 from module.budget import Budget
 from module.project import Project
@@ -16,6 +11,7 @@ VIEW_BUDGET = Blueprint('budget', __name__, url_prefix='/budget')
 @VIEW_BUDGET.route('/<pid>', methods=('GET', 'POST'))
 def by_project_index(pid):
     ''' index '''
+    # pylint: disable=too-many-return-statements,too-many-branches
     project = Project.get(pid)
 
     if not project:
@@ -28,7 +24,7 @@ def by_project_index(pid):
     if request.method == 'GET':
         return render_template('./budget.html', project=project, is_admin=is_admin)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data = request.get_json()
 
         if data['casename'] == 'get':
@@ -59,11 +55,12 @@ def by_project_index(pid):
 
             return jsonify({'teams': teams, 'default_budget': default_budget, 'items': items})
 
-        elif data['casename'] == 'add':
-            item = Budget.add(pid=pid, tid=data['data']['tid'], data=data['data'])
+        if data['casename'] == 'add':
+            item = Budget.add(
+                pid=pid, tid=data['data']['tid'], data=data['data'])
             return jsonify({'data': item})
 
-        elif data['casename'] == 'edit':
+        if data['casename'] == 'edit':
             if data['data']['enabled'] == 'true':
                 data['data']['enabled'] = True
             else:
@@ -79,4 +76,3 @@ def by_project_index(pid):
             return jsonify({'data': item})
 
     return jsonify({})
-

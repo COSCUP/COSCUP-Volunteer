@@ -1,3 +1,4 @@
+''' Index DB '''
 from models.budgetdb import BudgetDB
 from models.expensedb import ExpenseDB
 from models.formdb import FormDB
@@ -7,15 +8,12 @@ from models.mattermostdb import MattermostUsersDB
 from models.oauth_db import OAuthDB
 from models.projectdb import ProjectDB
 from models.senderdb import SenderReceiverDB
-from models.teamdb import TeamDB
-from models.teamdb import TeamMemberChangedDB
-from models.teamdb import TeamMemberTagsDB
-from models.teamdb import TeamPlanDB
+from models.teamdb import (TeamDB, TeamMemberChangedDB, TeamMemberTagsDB,
+                           TeamPlanDB)
 from models.telegram_db import TelegramDB
 from models.users_db import UsersDB
 from models.usessiondb import USessionDB
 from models.waitlistdb import WaitListDB
-
 
 if __name__ == '__main__':
     BudgetDB().index()
@@ -35,4 +33,3 @@ if __name__ == '__main__':
     USessionDB().index()
     UsersDB().index()
     WaitListDB().index()
-

@@ -16,7 +16,7 @@ from os.path import basename
 import boto3
 
 
-class AWSS3(object):
+class AWSS3:
     ''' AWSS3
 
     :param str aws_access_key_id: aws_access_key_id
@@ -28,9 +28,9 @@ class AWSS3(object):
 
     def __init__(self, aws_access_key_id, aws_secret_access_key, bucket):
         self.client = boto3.client('s3',
-                aws_access_key_id=aws_access_key_id,
-                aws_secret_access_key=aws_secret_access_key,
-            )
+                                   aws_access_key_id=aws_access_key_id,
+                                   aws_secret_access_key=aws_secret_access_key,
+                                   )
         self.bucket = bucket
 
     def get_object(self, key):
@@ -45,21 +45,23 @@ class AWSS3(object):
         '''
         return self.client.get_object(Bucket=self.bucket, Key=key)
 
-
     def convert_to_attachment(self, key):
+        ''' Convert the object to match attachment '''
         s3object = self.get_object(key)
         attachment = MIMEBase(
-                s3object['ContentType'].split('/')[0],
-                '%s; name="%s"' % (s3object['ContentType'].split('/')[1], Charset('utf-8').header_encode(basename(key)))
-            )
-        attachment.add_header('Content-Disposition', 'attachment; filename="%s"' % Charset('utf-8').header_encode(basename(key)))
+            s3object['ContentType'].split('/')[0],
+            f'''{s3object['ContentType'].split('/')[1]}; name="{Charset('utf-8').header_encode(basename(key))}"'''  # pylint: disable=line-too-long
+        )
+        attachment.add_header(
+            'Content-Disposition',
+            f'''attachment; filename="{Charset('utf-8').header_encode(basename(key))}"''')
         attachment.set_payload(s3object['Body'].read())
         encoders.encode_base64(attachment)
 
         return attachment
 
 
-class AWSSES(object):
+class AWSSES:
     ''' AWSSES
 
     :param str aws_access_key_id: aws_access_key_id
@@ -72,11 +74,10 @@ class AWSSES(object):
 
     def __init__(self, aws_access_key_id, aws_secret_access_key, source):
         self.client = boto3.client('ses',
-                aws_access_key_id=aws_access_key_id,
-                aws_secret_access_key=aws_secret_access_key,
-                region_name='us-east-1')
+                                   aws_access_key_id=aws_access_key_id,
+                                   aws_secret_access_key=aws_secret_access_key,
+                                   region_name='us-east-1')
         self.source = source
-
 
     @staticmethod
     def format_mail(name, mail):
@@ -92,7 +93,6 @@ class AWSSES(object):
 
         return mail
 
-
     def send_email(self, *args, **kwargs):
         ''' Send mail
 
@@ -103,7 +103,6 @@ class AWSSES(object):
 
         '''
         return self.client.send_email(*args, **kwargs)
-
 
     def raw_mail(self, **kwargs):
         ''' To make raw mail content
@@ -119,17 +118,19 @@ class AWSSES(object):
 
         '''
         msg_all = MIMEMultipart()
-        msg_all['From'] = self.format_mail(self.source['name'], self.source['mail'])
+        msg_all['From'] = self.format_mail(
+            self.source['name'], self.source['mail'])
 
         to_list = []
-        for to in kwargs['to_addresses']:
-            to_list.append(self.format_mail(to['name'], to['mail']))
+        for to_user in kwargs['to_addresses']:
+            to_list.append(self.format_mail(to_user['name'], to_user['mail']))
         msg_all['To'] = ','.join(to_list)
 
         cc_list = []
         if 'cc_addresses' in kwargs and kwargs['cc_addresses']:
-            for cc in kwargs['cc_addresses']:
-                cc_list.append(self.format_mail(cc['name'], cc['mail']))
+            for cc_user in kwargs['cc_addresses']:
+                cc_list.append(self.format_mail(
+                    cc_user['name'], cc_user['mail']))
 
             if cc_list:
                 msg_all['Cc'] = ','.join(cc_list)
@@ -146,7 +147,6 @@ class AWSSES(object):
                 msg_all.attach(attach)
 
         return msg_all
-
 
     def send_raw_email(self, **kwargs):
         ''' send raw email
@@ -168,12 +168,11 @@ class AWSSES(object):
         '''
         if 'data_str' in kwargs:
             return self.client.send_raw_email(
-                    RawMessage={'Data': kwargs['data_str']})
+                RawMessage={'Data': kwargs['data_str']})
 
-        if 'data' in kwargs:
-            data = kwargs['data']
-        else:
+        data = kwargs.get('data')
+        if not data:
             data = self.raw_mail(**kwargs)
 
         return self.client.send_raw_email(
-                RawMessage={'Data': data.as_string()})
+            RawMessage={'Data': data.as_string()})

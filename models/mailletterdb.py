@@ -1,3 +1,4 @@
+''' MailLetterDB '''
 from time import time
 
 from pymongo.collection import ReturnDocument
@@ -7,8 +8,9 @@ from models.base import DBBase
 
 class MailLetterDB(DBBase):
     ''' MailLetterDB Collection '''
+
     def __init__(self):
-        super(MailLetterDB, self).__init__('mailletter')
+        super().__init__('mailletter')
 
     def index(self):
         ''' Index '''
@@ -20,7 +22,8 @@ class MailLetterDB(DBBase):
         :param str uid: user id
 
         '''
-        self.find_one_and_update({'_id': uid}, {'$set': {'create_at': time()}}, upsert=True)
+        self.find_one_and_update(
+            {'_id': uid}, {'$set': {'create_at': time()}}, upsert=True)
 
     def is_sent(self, uid, code):
         ''' Check is sent or not
@@ -30,7 +33,7 @@ class MailLetterDB(DBBase):
         :rtype: float
 
         '''
-        raw = self.find_one({'_id': uid}, {'code.%s' % code: 1})
+        raw = self.find_one({'_id': uid}, {f'code.{code}': 1})
         if raw and 'code' in raw and code in raw['code']:
             return raw['code'][code]
 
@@ -47,7 +50,7 @@ class MailLetterDB(DBBase):
         '''
         return self.find_one_and_update(
             {'_id': uid},
-            {'$set': {'code.%s' % code: time()}},
+            {'$set': {f'code.{code}': time()}},
             upsert=True,
             return_document=ReturnDocument.AFTER,
         )
@@ -58,5 +61,5 @@ class MailLetterDB(DBBase):
         :param str code: code
 
         '''
-        for raw in self.find({'code.%s' % code: {'$exists': False}}):
+        for raw in self.find({f'code.{code}': {'$exists': False}}):
             yield raw

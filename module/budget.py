@@ -1,9 +1,10 @@
+''' Budget '''
 from models.budgetdb import BudgetDB
 from models.projectdb import ProjectDB
 from models.teamdb import TeamDB
 
 
-class Budget(object):
+class Budget:
     ''' Budget class '''
 
     @staticmethod
@@ -29,7 +30,7 @@ class Budget(object):
         ''' Add new data '''
         save = BudgetDB.new(pid=pid, tid=tid, uid=data['uid'])
 
-        for key in save:
+        for key in save.copy():
             if key in data:
                 save[key] = data[key]
 
@@ -38,9 +39,10 @@ class Budget(object):
     @staticmethod
     def edit(pid, data):
         ''' Edit new data '''
-        save = {'pid': data['pid']}
+        save = {'pid': pid}
 
-        for key in ('name', 'tid', 'uid', 'bid', 'currency', 'total', 'desc', 'estimate', 'enabled', 'paydate'):
+        for key in ('name', 'tid', 'uid', 'bid', 'currency', 'total',
+                    'desc', 'estimate', 'enabled', 'paydate'):
             if key in data:
                 save[key] = data[key]
 
@@ -67,4 +69,3 @@ class Budget(object):
     def get_by_tid(pid, tid):
         ''' Get by pid '''
         return BudgetDB().find({'pid': pid, 'tid': tid})
-

@@ -1,14 +1,14 @@
+''' Form '''
 import logging
 from uuid import uuid4
 
 from pymongo.collection import ReturnDocument
 
-from models.formdb import FormDB
-from models.formdb import FormTrafficFeeMappingDB
+from models.formdb import FormDB, FormTrafficFeeMappingDB
 from module.users import User
 
 
-class Form(object):
+class Form:  # pylint: disable=too-many-public-methods
     ''' Form Object '''
     @staticmethod
     def update_appreciation(pid, uid, data):
@@ -263,7 +263,7 @@ class Form(object):
             yield raw
 
 
-class FormTrafficFeeMapping(object):
+class FormTrafficFeeMapping:
     ''' FormTrafficFeeMapping object '''
 
     @staticmethod
@@ -290,7 +290,7 @@ class FormTrafficFeeMapping(object):
         return FormTrafficFeeMappingDB().find_one({'_id': pid})
 
 
-class FormAccommodation(object):
+class FormAccommodation:
     ''' FormAccommodation object '''
     @staticmethod
     def get(pid):
@@ -309,10 +309,11 @@ class FormAccommodation(object):
         '''
         _update = {'data.room': room}
         if change_key:
-            _update['data.room_key'] = '%0.8x' % uuid4().fields[0]
+            _update['data.room_key'] = f'{uuid4().fields[0]:08x}'
 
         _query = {'case': 'accommodation', 'pid': pid, 'uid': uid}
-        _query['$or'] = [{'data.room': {'$ne': room}}, {'data.room': {'$exists': False}}]
+        _query['$or'] = [{'data.room': {'$ne': room}},
+                         {'data.room': {'$exists': False}}]
 
         return FormDB().find_one_and_update(
             _query, {'$set': _update},
@@ -324,9 +325,9 @@ class FormAccommodation(object):
         ''' update room key '''
         for uid in uids:
             FormDB().find_one_and_update(
-                {'case': 'accommodation', 'pid': pid, 'uid': uid}, {'$set': {'data.room_key': '%0.8x' % uuid4().fields[0]}},
+                {'case': 'accommodation', 'pid': pid, 'uid': uid}, {
+                    '$set': {'data.room_key': f'{uuid4().fields[0]:08x}'}},
             )
-
 
     @staticmethod
     def get_room_mate(pid, uid):
@@ -336,11 +337,13 @@ class FormAccommodation(object):
         :param str uid: uid
 
         '''
-        user_room = FormDB().find_one({'case': 'accommodation', 'pid': pid, 'uid': uid})
+        user_room = FormDB().find_one(
+            {'case': 'accommodation', 'pid': pid, 'uid': uid})
         mate = None
         if user_room and 'room' in user_room['data'] and user_room['data']['room']:
             mate = FormDB().find_one(
-                {'case': 'accommodation', 'pid': pid, 'uid': {'$ne': uid}, 'data.room': user_room['data']['room']})
+                {'case': 'accommodation', 'pid': pid,
+                 'uid': {'$ne': uid}, 'data.room': user_room['data']['room']})
 
         return (user_room, mate)
 
@@ -359,39 +362,43 @@ class FormAccommodation(object):
             return_document=ReturnDocument.AFTER,
         )
 
-        ex_mate = FormDB().find_one({'case': 'accommodation', 'pid': pid, 'data.room_exkey': data['data']['room_key']})
+        ex_mate = FormDB().find_one(
+            {'case': 'accommodation', 'pid': pid, 'data.room_exkey': data['data']['room_key']})
         if not ex_mate:
-            logging.info(u'等待交換中 %s', exkey)
-            return u'等待交換中'
+            logging.info('等待交換中 `%s`', exkey)
+            return '等待交換中'
 
         # do exchange
-        new_room = 'R-'+'%0.4x' % uuid4().fields[0]
+        new_room = 'R-'+f'{uuid4().fields[0]:04x}'
 
         FormDB().update_many(
-            {'case': 'accommodation', 'pid': pid, 'uid': {'$in': (uid, ex_mate['uid'])}},
+            {'case': 'accommodation', 'pid': pid,
+                'uid': {'$in': (uid, ex_mate['uid'])}},
             {'$set': {'data.room': new_room}, '$unset': {'data.room_exkey': 1}},
         )
 
         cls.update_room_key(pid=pid, uids=(uid, ex_mate['uid']))
 
-        logging.info(u'已交換 %s %s %s', new_room, uid, ex_mate['uid'])
+        logging.info('已交換 %s %s %s', new_room, uid, ex_mate['uid'])
 
         old_mates = list(FormDB().find(
-                {'case': 'accommodation', 'pid': pid,
-                 'data.room': {'$in': (data['data']['room'], ex_mate['data']['room'])}}))
+            {'case': 'accommodation', 'pid': pid,
+             'data.room': {'$in': (data['data']['room'], ex_mate['data']['room'])}}))
 
-        logging.info('old_mates: %s', ', '.join([mate['uid'] for mate in old_mates]))
+        logging.info('old_mates: %s', ', '.join(
+            [mate['uid'] for mate in old_mates]))
 
         if len(old_mates) < 2:
-            return u'交換完畢'
+            return '交換完畢'
 
         uids = [mate['uid'] for mate in old_mates]
         user_infos = User.get_info(uids=uids, need_sensitive=True)
-        if user_infos[uids[0]]['profile_real']['roc_id'][1] != user_infos[uids[1]]['profile_real']['roc_id'][1]:
-            logging.info(u'old_mates 性別不同，不交換。')
-            return u'交換完畢'
+        if user_infos[uids[0]]['profile_real']['roc_id'][1] != user_infos[
+                uids[1]]['profile_real']['roc_id'][1]:
+            logging.info('old_mates 性別不同，不交換。')
+            return '交換完畢'
 
-        new_room = 'R-'+'%0.4x' % uuid4().fields[0]
+        new_room = 'R-'+f'{uuid4().fields[0]:04x}'
 
         FormDB().update_many(
             {'case': 'accommodation', 'pid': pid, 'uid': {'$in': uids}},
@@ -402,4 +409,4 @@ class FormAccommodation(object):
 
         logging.info('old_mates new rooms: %s, %s', new_room, ', '.join(uids))
 
-        return u'交換完畢'
+        return '交換完畢'

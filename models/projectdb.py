@@ -1,3 +1,4 @@
+''' ProjectDB '''
 from pymongo.collection import ReturnDocument
 
 from models.base import DBBase
@@ -13,8 +14,9 @@ class ProjectDB(DBBase):
         - ``owners``: list of uid
 
     '''
+
     def __init__(self, pid):
-        super(ProjectDB, self).__init__('project')
+        super().__init__('project')
         self.pid = pid
 
     def index(self):
@@ -23,15 +25,15 @@ class ProjectDB(DBBase):
 
     def default(self):
         ''' default data '''
-        r = {
+        result = {
             '_id': self.pid,
             'name': '',
             'action_date': 0,
             'desc': '',
             'owners': [],
         }
-        self.make_create_at(r)
-        return r
+        self.make_create_at(result)
+        return result
 
     def add(self, data):
         ''' Add data

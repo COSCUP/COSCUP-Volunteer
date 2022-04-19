@@ -4,9 +4,10 @@ import math
 
 import arrow
 import phonenumbers
-from celery_task.task_service_sync import service_sync_mattermost_invite
 from flask import (Blueprint, g, jsonify, redirect, render_template, request,
                    session, url_for)
+
+from celery_task.task_service_sync import service_sync_mattermost_invite
 from models.telegram_db import TelegramDB
 from module.dietary_habit import DietaryHabit
 from module.mattermost_link import MattermostLink
@@ -22,12 +23,14 @@ VIEW_SETTING = Blueprint('setting', __name__, url_prefix='/setting')
 
 @VIEW_SETTING.route('/')
 def index():
+    ''' Index page '''
     return render_template('./setting_index.html')
 
 
 @VIEW_SETTING.route('/profile', methods=('GET', 'POST'))
 def profile_page():
     ''' profile '''
+    # pylint: disable=too-many-branches
     if request.method == 'GET':
         user = g.user['account']
         if 'profile' not in user:
@@ -54,11 +57,15 @@ def profile_page():
             return jsonify({
                 'profile': profile,
                 'team_enum': {key: item.value for key, item in TeamsEnum.__members__.items()},
-                'team_enum_desc': {key: item.value for key, item in TeamsEnumDesc.__members__.items()},
-                'skill_enum': {key: item.value for key, item in SkillEnum.__members__.items()},
-                'skill_enum_desc': {key: item.value for key, item in SkillEnumDesc.__members__.items()},
+                'team_enum_desc': {key: item.value for key, item in
+                                   TeamsEnumDesc.__members__.items()},
+                'skill_enum': {key: item.value for key, item in
+                               SkillEnum.__members__.items()},
+                'skill_enum_desc': {key: item.value for key, item in
+                                    SkillEnumDesc.__members__.items()},
                 'status_enum': {key: item.value for key, item in StatusEnum.__members__.items()},
-                'status_enum_desc': {key: item.value for key, item in StatusEnumDesc.__members__.items()},
+                'status_enum_desc': {key: item.value for key, item in
+                                     StatusEnumDesc.__members__.items()},
             })
 
         if post_data['casename'] == 'get_tobe_volunteer':
@@ -87,38 +94,17 @@ def profile_page():
 
         return jsonify({})
 
+    return jsonify({}), 404
+
 
 @VIEW_SETTING.route('/profile_real', methods=('GET', 'POST'))
 def profile_real():
+    ''' Profile real '''
+    # pylint: disable=too-many-branches
     if request.method == 'GET':
         return render_template('./setting_profile_real.html')
 
-        user = g.user['account']
-
-        default_code = '886'
-        if 'profile_real' not in user:
-            user['profile_real'] = {}
-        else:
-            try:
-                phone = phonenumbers.parse(user['profile_real']['phone'], None)
-                user['profile_real']['phone'] = phonenumbers.format_number(
-                    phone, phonenumbers.PhoneNumberFormat.NATIONAL)
-
-                default_code = phone.country_code
-
-            except phonenumbers.phonenumberutil.NumberParseException:
-                pass
-
-        if 'bank' not in user['profile_real']:
-            user['profile_real']['bank'] = {}
-
-        phone_codes = sorted(
-            phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key=lambda x: x[1][0])
-
-        return render_template('./setting_profile_real.html', user=user,
-                               phone_codes=phone_codes, default_code=default_code)
-
-    elif request.method == 'POST':
+    if request.method == 'POST':
         post_data = request.get_json()
 
         if post_data['casename'] == 'get':
@@ -158,13 +144,13 @@ def profile_real():
                             'dietary_habit': list(DietaryHabit.ITEMS.items()),
                             })
 
-        elif post_data['casename'] == 'update':
+        if post_data['casename'] == 'update':
             phone = ''
             if 'phone' in post_data['data'] and post_data['data']['phone'] and \
                     'phone_code' in post_data['data'] and post_data['data']['phone_code']:
                 try:
                     phone = phonenumbers.parse(
-                        '+%(phone_code)s %(phone)s' % post_data['data'])
+                        f"+{post_data['data']['phone_code']} {post_data['data']['phone']}")
                     phone = phonenumbers.format_number(
                         phone, phonenumbers.PhoneNumberFormat.E164)
                 except phonenumbers.phonenumberutil.NumberParseException:
@@ -199,18 +185,21 @@ def profile_real():
             data['birthday'] = birthday
 
             User(uid=g.user['account']['_id']).update_profile_real(data)
-            MC.get_client().delete('sid:%s' % session['sid'])
+            MC.get_client().delete(f"sid:{session['sid']}")
 
             return jsonify(data)
+
+    return jsonify({}), 404
 
 
 @VIEW_SETTING.route('/link/chat', methods=('GET', 'POST'))
 def link_chat():
+    ''' Link to chat '''
     if request.method == 'GET':
         mml = MattermostLink(uid=g.user['account']['_id'])
         return render_template('./setting_link_chat.html', mml=mml)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data = request.get_json()
         if 'casename' in data:
             if data['casename'] == 'invite':
@@ -221,27 +210,34 @@ def link_chat():
             MattermostLink.reset(uid=g.user['account']['_id'])
             return redirect(url_for('setting.link_chat', _scheme='https', _external=True))
 
+    return '', 404
+
 
 @VIEW_SETTING.route('/link/telegram', methods=('GET', 'POST'))
 def link_telegram():
+    ''' Link to Telegram '''
     if request.method == 'GET':
         telegram_data = []
-        for tg in TelegramDB().find({'uid': g.user['account']['_id']}):
-            tg['added'] = arrow.get(tg['added']).isoformat()
-            telegram_data.append(tg)
+        for tg_info in TelegramDB().find({'uid': g.user['account']['_id']}):
+            tg_info['added'] = arrow.get(tg_info['added']).isoformat()
+            telegram_data.append(tg_info)
 
-        return render_template('./setting_link_telegram.html', telegram_data=json.dumps(telegram_data))
+        return render_template('./setting_link_telegram.html',
+                               telegram_data=json.dumps(telegram_data))
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data = request.get_json()
         if 'casename' in data and data['casename'] == 'del_account':
             TelegramDB().delete_many({'uid': g.user['account']['_id']})
 
         return jsonify({})
 
+    return jsonify({}), 404
+
 
 @VIEW_SETTING.route('/security', methods=('GET', 'POST'))
 def security():
+    ''' security '''
     if request.method == 'GET':
         _now = arrow.now()
 
@@ -275,15 +271,18 @@ def security():
         return render_template('./setting_security.html',
                                records=records, alive_session=alive_session)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data = request.get_json()
         USession.make_dead(sid=data['sid'], uid=g.user['account']['_id'])
 
         return jsonify(data)
 
+    return jsonify({}), 404
+
 
 @VIEW_SETTING.route('/waitting')
 def waitting():
+    ''' waiting, the `waitting` is typo '''
     waitting_lists = []
 
     for raw in WaitList.find_history(uid=g.user['account']['_id']):

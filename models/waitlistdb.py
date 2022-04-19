@@ -1,12 +1,15 @@
+''' WaitListDB '''
 from bson.objectid import ObjectId
 from pymongo.collection import ReturnDocument
 
 from models.base import DBBase
 
+
 class WaitListDB(DBBase):
     ''' WaitList Collection '''
+
     def __init__(self):
-        super(WaitListDB, self).__init__('waitlist')
+        super().__init__('waitlist')
 
     def index(self):
         ''' Index '''
@@ -37,7 +40,8 @@ class WaitListDB(DBBase):
         :param str uid: user id
 
         '''
-        return self.count_documents({'pid': pid, 'tid': tid, 'uid': uid, 'result': {'$exists': False}})
+        return self.count_documents({
+            'pid': pid, 'tid': tid, 'uid': uid, 'result': {'$exists': False}})
 
     def list_by(self, pid, tid=None, uid=None, _all=False):
         ''' List by
@@ -78,3 +82,5 @@ class WaitListDB(DBBase):
                 {'$set': {'result': result}},
                 return_document=ReturnDocument.AFTER,
             )
+
+        return None

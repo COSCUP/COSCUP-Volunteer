@@ -1,3 +1,4 @@
+''' BudgetDB '''
 from datetime import datetime
 from uuid import uuid4
 
@@ -25,7 +26,7 @@ class BudgetDB(DBBase):
     '''
 
     def __init__(self):
-        super(BudgetDB, self).__init__('budget')
+        super().__init__('budget')
 
     def index(self):
         ''' Index '''
@@ -36,7 +37,7 @@ class BudgetDB(DBBase):
     def new(pid, tid, uid):
         ''' Create new '''
         return {
-            '_id': u'%x' % uuid4().node,
+            '_id': f'{uuid4().node:x}',
             'pid': pid,
             'tid': tid,
             'bid': '',

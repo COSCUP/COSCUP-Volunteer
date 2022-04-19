@@ -1,7 +1,9 @@
+''' utils '''
 from flask import redirect
 
 from module.project import Project
 from module.team import Team
+
 
 def check_the_team_and_project_are_existed(pid, tid):
     ''' Base check the team and profect are existed

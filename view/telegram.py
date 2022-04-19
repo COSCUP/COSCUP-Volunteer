@@ -1,12 +1,8 @@
+''' Telegram '''
 import logging
 
 import arrow
-from flask import Blueprint
-from flask import g
-from flask import jsonify
-from flask import redirect
-from flask import request
-from flask import url_for
+from flask import Blueprint, g, redirect, request, url_for
 
 import setting
 from models.telegram_db import TelegramDB
@@ -18,50 +14,57 @@ VIEW_TELEGRAM = Blueprint('telegram', __name__, url_prefix='/telegram')
 
 @VIEW_TELEGRAM.route('/r', methods=('POST', ))
 def receive():
+    ''' receive '''
     data = request.get_json()
-    logging.info('[telegram] %s' % data)
+    logging.info('[telegram] %s', data)
 
     if TelegramBot.is_command_start_linkme(data):
         uuid_data = TelegramBot.gen_uuid(chat_id=data['message']['from']['id'])
         TelegramBot.temp_fetch_user_data(data=data)
 
-        r = TelegramBot(token=setting.TELEGRAM_TOKEN).send_message(
-                chat_id=data['message']['from']['id'],
-                text=u'請繼續前往志工平台登入驗證，感謝！',
-                reply_markup={
-                        'inline_keyboard': [
-                            [{'text': u'驗證（verify）', 'url': 'https://%s/telegram/verify/%s' % (setting.DOMAIN, uuid_data['uuid'])}, ],
-                        ]},
-            )
+        resp = TelegramBot(token=setting.TELEGRAM_TOKEN).send_message(
+            chat_id=data['message']['from']['id'],
+            text='請繼續前往志工平台登入驗證，感謝！',
+            reply_markup={
+                'inline_keyboard': [
+                    [{'text': '驗證（verify）',
+                      'url': f"https://{setting.DOMAIN}/telegram/verify/{uuid_data['uuid']}"}, ],
+                ]},
+        )
 
-        logging.info('[Telegram][Send] %s' % r.json())
+        logging.info('[Telegram][Send] %s', resp.json())
 
-    return u'', 200
+    return '', 200
 
 
 @VIEW_TELEGRAM.route('/verify/<tg_uuid>', methods=('GET', 'POST'))
 def link_telegram_verify(tg_uuid):
+    ''' Link Telegram verify '''
     if request.method == 'GET':
-        mc = MC.get_client()
-        data = mc.get('tg:%s' % tg_uuid)
+        mem_cache = MC.get_client()
+        data = mem_cache.get(f'tg:{tg_uuid}')
         if not data:
-            return u'Expired. `/linkme` again', 406
+            return 'Expired. `/linkme` again', 406
 
-        user_data = mc.get('tgu:%s' % data['chat_id'])
+        user_data = mem_cache.get(f"tgu:{data['chat_id']}")
         if data and user_data:
-            save_data = {'uid': g.user['account']['_id'], 'added': arrow.now().datetime}
+            save_data = {'uid': g.user['account']
+                         ['_id'], 'added': arrow.now().datetime}
             save_data.update(user_data)
-            TelegramDB().save(save_data)
+            TelegramDB().add(save_data)
 
-            r = TelegramBot(token=setting.TELEGRAM_TOKEN).send_message(
-                    chat_id=save_data['id'],
-                    text=u'與 [%(uid)s](https://volunteer.coscup.org/user/%(uid)s) 完成帳號綁定！（Completed）' % save_data)
+            TelegramBot(token=setting.TELEGRAM_TOKEN).send_message(
+                chat_id=save_data['id'],
+                text='與 [%(uid)s](https://volunteer.coscup.org/user/%(uid)s) 完成帳號綁定！（Completed）' % save_data)  # pylint: disable=line-too-long
 
-            mc.delete_multi(['tg:%s' % tg_uuid, 'tgu:%s' % g.user['account']['_id']])
+            mem_cache.delete_multi(
+                [f'tg:{tg_uuid}', f"tgu:{g.user['account']['_id']}"])
 
-            logging.info('[Telegram][Send] linkme: %(id)s %(uid)s' % save_data)
+            logging.info('[Telegram][Send] linkme: %s %s',
+                         save_data['id'], save_data['uid'])
 
             return redirect(url_for('setting.link_telegram', _scheme='https', _external=True))
 
-        return u'Expired. `/linkme` again', 406
+        return 'Expired. `/linkme` again', 406
 
+    return '', 404

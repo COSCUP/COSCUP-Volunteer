@@ -1,3 +1,4 @@
+''' Sender DB '''
 from time import time
 from uuid import uuid4
 
@@ -30,7 +31,7 @@ class SenderCampaignDB(DBBase):
     '''
 
     def __init__(self):
-        super(SenderCampaignDB, self).__init__('sender_campaign')
+        super().__init__('sender_campaign')
 
     @staticmethod
     def new(name, pid, tid, uid):
@@ -58,7 +59,8 @@ class SenderCampaignDB(DBBase):
             },
         }
 
-    def save(self, data):
+    def add(self, data):
+        ''' Save data '''
         return self.find_one_and_update(
             {'_id': data['_id']},
             {'$set': data},
@@ -69,10 +71,11 @@ class SenderCampaignDB(DBBase):
 
 class SenderLogsDB(DBBase):
     ''' SenderLogsDB Collection '''
-    def __init__(self):
-        super(SenderLogsDB, self).__init__('sender_logs')
 
-    def save(self, cid, layout, desc, receivers):
+    def __init__(self):
+        super().__init__('sender_logs')
+
+    def add(self, cid, layout, desc, receivers):
         ''' Save log
 
         :param str cid: cid
@@ -95,10 +98,11 @@ class SenderLogsDB(DBBase):
 
 class SenderSESLogsDB(DBBase):
     ''' SenderSESLogsDB Collection '''
-    def __init__(self):
-        super(SenderSESLogsDB, self).__init__('sender_ses_logs')
 
-    def save(self, cid, mail, name, ses_result):
+    def __init__(self):
+        super().__init__('sender_ses_logs')
+
+    def add(self, cid, mail, name, ses_result):
         ''' Save log
 
         :param str cid: cid
@@ -133,7 +137,7 @@ class SenderReceiverDB(DBBase):
     '''
 
     def __init__(self):
-        super(SenderReceiverDB, self).__init__('sender_receiver')
+        super().__init__('sender_receiver')
 
     def index(self):
         ''' Index '''
@@ -172,10 +176,10 @@ class SenderReceiverDB(DBBase):
         for data in datas:
             _data = {}
             for k in data['data']:
-                _data['data.%s' % k] = data['data'][k]
+                _data[f'data.{k}'] = data['data'][k]
 
-            for k in _data:
-                _data[k] = _data[k].strip()
+            for key, value in _data.copy().items():
+                _data[key] = value.strip()
 
             self.find_one_and_update(
                 {'pid': pid, 'cid': cid, 'data.mail': data['data']['mail']},

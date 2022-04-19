@@ -1,3 +1,5 @@
+''' TelegramBot '''
+# pylint: disable=arguments-renamed,arguments-differ
 from time import time
 from uuid import uuid4
 
@@ -7,17 +9,19 @@ from module.mc import MC
 
 
 class TelegramBot(Session):
+    ''' TelegramBot '''
+
     def __init__(self, token):
-        super(TelegramBot, self).__init__()
-        self.url = 'https://api.telegram.org/bot%s' % token
+        super().__init__()
+        self.url = f'https://api.telegram.org/bot{token}'
 
     def get(self, path, **kwargs):
         ''' GET '''
-        return super(TelegramBot, self).get(self.url+path, **kwargs)
+        return super().get(self.url+path, **kwargs)
 
     def post(self, path, **kwargs):
         ''' POST '''
-        return super(TelegramBot, self).post(self.url+path, **kwargs)
+        return super().post(self.url+path, **kwargs)
 
     def get_me(self):
         ''' Get me '''
@@ -74,24 +78,24 @@ class TelegramBot(Session):
         data = {
             'uuid': str(uuid4()),
             'chat_id': chat_id,
-            'code': '%0.8x' % uuid4().fields[0],
+            'code': f'{uuid4().fields[0]:08x}',
             'expired': int(time()) + expired_time,
         }
 
-        mc = MC.get_client()
-        mc.set('tg:%s' % data['uuid'], data, expired_time)
+        mem_cache = MC.get_client()
+        mem_cache.set(f"tg:{data['uuid']}", data, expired_time)
 
-        return mc.get('tg:%s' % data['uuid'])
+        return mem_cache.get(f"tg:{data['uuid']}")
 
     @staticmethod
     def temp_fetch_user_data(data, expired_time=400):
         ''' temp fetch user data '''
-        mc = MC.get_client()
-        mc.set('tgu:%s' % data['message']['from']['id'],
-               data['message']['from'], expired_time)
+        mem_cache = MC.get_client()
+        mem_cache.set(f"tgu:{data['message']['from']['id']}",
+                      data['message']['from'], expired_time)
 
     @staticmethod
     def get_temp_user_dta(chat_id):
         ''' Get temp user data '''
-        mc = MC.get_client()
-        return mc.get('tgu:%s' % chat_id)
+        mem_cache = MC.get_client()
+        return mem_cache.get(f'tgu:{chat_id}')

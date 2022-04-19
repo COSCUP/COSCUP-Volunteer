@@ -1,17 +1,12 @@
+''' Tasks '''
 import arrow
-from flask import Blueprint
-from flask import g
-from flask import jsonify
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import url_for
+from flask import (Blueprint, g, jsonify, redirect, render_template, request,
+                   url_for)
 
 from celery_task.task_mail_sys import mail_tasks_star
 from module.mattermost_bot import MattermostTools
 from module.project import Project
-from module.tasks import Tasks
-from module.tasks import TasksStar
+from module.tasks import Tasks, TasksStar
 from module.team import Team
 from module.users import User
 
@@ -20,24 +15,28 @@ VIEW_TASKS = Blueprint('tasks', __name__, url_prefix='/tasks')
 
 @VIEW_TASKS.route('/')
 def index():
+    ''' Index page '''
     return redirect(url_for('tasks.project', pid='2020', _scheme='https', _external=True))
+
 
 @VIEW_TASKS.route('/<pid>', methods=('GET', 'POST'))
 def project(pid):
+    ''' Project '''
+    # pylint: disable=too-many-locals,too-many-return-statements,too-many-branches,too-many-statements
     uid = g.get('user', {}).get('account', {}).get('_id')
 
-    project = Project.get(pid=pid)
-    if not project:
-        return u'404', 404
+    project_info = Project.get(pid=pid)
+    if not project_info:
+        return '404', 404
 
     is_in_project = False
     if uid:
         is_in_project = bool(Team.participate_in(uid, pid))
 
     if request.method == 'GET':
-        return render_template('./tasks_project.html', project=project)
+        return render_template('./tasks_project.html', project=project_info)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         post_data = request.get_json()
 
         def page_args(data, uid):
@@ -65,7 +64,7 @@ def project(pid):
 
             return jsonify({'datas': datas, 'is_in_project': is_in_project, 'is_star': is_star})
 
-        elif post_data['casename'] == 'star':
+        if post_data['casename'] == 'star':
             if not uid:
                 return jsonify({'info': 'Need login'}), 401
 
@@ -73,7 +72,7 @@ def project(pid):
 
             return jsonify({'is_star': result['add']})
 
-        elif post_data['casename'] == 'join':
+        if post_data['casename'] == 'join':
             if not uid:
                 return jsonify({'info': 'Need login'}), 401
 
@@ -82,7 +81,7 @@ def project(pid):
 
             return jsonify({'data': data})
 
-        elif post_data['casename'] == 'cancel':
+        if post_data['casename'] == 'cancel':
             if not uid:
                 return jsonify({'info': 'Need login'}), 401
 
@@ -91,19 +90,20 @@ def project(pid):
 
             return jsonify({'data': data})
 
-        elif post_data['casename'] == 'cancel_user':
+        if post_data['casename'] == 'cancel_user':
             if not uid:
                 return jsonify({'info': 'Need login'}), 401
 
             if not is_in_project:
                 return jsonify({'info': 'Need as staff'}), 401
 
-            data = Tasks.cancel(pid=pid, task_id=post_data['task_id'], uid=post_data['uid'])
+            data = Tasks.cancel(
+                pid=pid, task_id=post_data['task_id'], uid=post_data['uid'])
             page_args(data=data, uid=uid)
 
             return jsonify({'data': data})
 
-        elif post_data['casename'] == 'peoples':
+        if post_data['casename'] == 'peoples':
             task_data = Tasks.get_with_pid(pid=pid, _id=post_data['task_id'])
             if not task_data:
                 return jsonify({}), 404
@@ -111,21 +111,23 @@ def project(pid):
             creator = {}
             if task_data:
                 user_info = User.get_info(uids=[task_data['created_by'], ])
-                creator['name'] = user_info[task_data['created_by']]['profile']['badge_name']
+                creator['name'] = user_info[task_data['created_by']
+                                            ]['profile']['badge_name']
                 creator['uid'] = task_data['created_by']
 
-                mid = MattermostTools.find_possible_mid(uid=task_data['created_by'])
+                mid = MattermostTools.find_possible_mid(
+                    uid=task_data['created_by'])
                 if mid:
-                    creator['mattermost_uid'] = MattermostTools.find_user_name(mid=mid)
+                    creator['mattermost_uid'] = MattermostTools.find_user_name(
+                        mid=mid)
 
             if not is_in_project:
                 return jsonify({'peoples': {}, 'creator': creator})
 
-            users_info = Tasks.get_peoples_info(pid=pid, task_id=post_data['task_id'])
+            users_info = Tasks.get_peoples_info(
+                pid=pid, task_id=post_data['task_id'])
             peoples = {}
-            for uid in users_info:
-                user = users_info[uid]
-
+            for uid, user in users_info.items():
                 peoples[uid] = {
                     'name': user['profile']['badge_name'],
                     'mail': user['oauth']['email'],
@@ -135,14 +137,19 @@ def project(pid):
 
                 mid = MattermostTools.find_possible_mid(uid=uid)
                 if mid:
-                    peoples[uid]['mattermost_uid'] = MattermostTools.find_user_name(mid=mid)
+                    peoples[uid]['mattermost_uid'] = MattermostTools.find_user_name(
+                        mid=mid)
 
             return jsonify({'peoples': peoples, 'creator': creator})
+
+    return jsonify({}), 404
 
 
 @VIEW_TASKS.route('/<pid>/add', methods=('GET', 'POST'))
 @VIEW_TASKS.route('/<pid>/edit/<task_id>', methods=('GET', 'POST'))
 def add(pid, task_id=None):
+    ''' Add '''
+    # pylint: disable=too-many-return-statements,too-many-branches
     uid = g.get('user', {}).get('account', {}).get('_id')
     if not uid:
         return jsonify({'info': 'Need login'}), 401
@@ -151,26 +158,28 @@ def add(pid, task_id=None):
     if not is_in_project:
         return jsonify({'info': 'Not in project'}), 401
 
-    project = Project.get(pid=pid)
-    if not project:
-        return u'404', 404
+    project_info = Project.get(pid=pid)
+    if not project_info:
+        return '404', 404
 
     if request.method == 'GET':
         catelist = Tasks.get_cate(pid=pid)
-        return render_template('./tasks_add.html', project=project,
-                catelist=catelist, task_id=task_id)
+        return render_template('./tasks_add.html', project=project_info,
+                               catelist=catelist, task_id=task_id)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         post_data = request.get_json()
 
         if post_data['casename'] == 'add':
             data = post_data['data']
-            starttime = arrow.get('%(date)s %(starttime)s' % data, tzinfo='Asia/Taipei').datetime
+            starttime = arrow.get(f"{data['date']} {data['starttime']}",
+                                  tzinfo='Asia/Taipei').datetime
             endtime = None
             task_id = None
 
             if 'endtime' in data and data['endtime']:
-                endtime = arrow.get('%(date)s %(endtime)s' % data, tzinfo='Asia/Taipei').datetime
+                endtime = arrow.get(f"{data['date']} {data['endtime']}",
+                                    tzinfo='Asia/Taipei').datetime
 
             if 'task_id' in post_data:
                 task_id = post_data['task_id']
@@ -179,16 +188,22 @@ def add(pid, task_id=None):
             if 'task_id' in post_data and not post_data['task_id']:
                 send_star = True
 
-            raw = Tasks.add(pid=pid, title=data['title'].strip(), cate=data['cate'].strip(),
-                    desc=data['desc'], limit=max((1, int(data['limit']))), starttime=starttime,
-                    created_by=uid, endtime=endtime, task_id=task_id)
+            raw = Tasks.add(pid=pid,
+                            body={'title': data['title'].strip(),
+                                  'cate': data['cate'].strip(),
+                                  'desc': data['desc'],
+                                  'limit': max((1, int(data['limit']))),
+                                  'starttime': starttime,
+                                  'created_by': uid},
+                            endtime=endtime, task_id=task_id)
 
             if send_star:
-                mail_tasks_star.apply_async(kwargs={'pid': pid, 'task_id': raw['_id']})
+                mail_tasks_star.apply_async(
+                    kwargs={'pid': pid, 'task_id': raw['_id']})
 
             return jsonify({'data': raw})
 
-        elif post_data['casename'] == 'del':
+        if post_data['casename'] == 'del':
             data = Tasks.get_with_pid(pid=pid, _id=post_data['task_id'])
             if not data:
                 return jsonify({}), 404
@@ -196,7 +211,7 @@ def add(pid, task_id=None):
             if data['created_by'] == g.user['account']['_id']:
                 Tasks.delete(pid=pid, _id=data['_id'])
 
-        elif post_data['casename'] == 'get':
+        if post_data['casename'] == 'get':
             data = Tasks.get_with_pid(pid=pid, _id=task_id)
             if not data:
                 return jsonify({}), 404
@@ -215,19 +230,25 @@ def add(pid, task_id=None):
 
         return jsonify({})
 
+    return jsonify({})
+
+
 @VIEW_TASKS.route('/<pid>/r/<task_id>', methods=('GET', 'POST'))
 def read(pid, task_id):
-    project = Project.get(pid=pid)
-    if not project:
-        return u'404', 404
+    ''' Read '''
+    project_info = Project.get(pid=pid)
+    if not project_info:
+        return '404', 404
 
     task = Tasks.get_with_pid(pid=pid, _id=task_id)
     if not task:
         return redirect(url_for('tasks.project', pid=pid, _scheme='https', _external=True))
 
-    task['starttime'] = arrow.get(task['starttime']).to('Asia/Taipei').format('YYYY-MM-DD HH:mm')
+    task['starttime'] = arrow.get(task['starttime']).to(
+        'Asia/Taipei').format('YYYY-MM-DD HH:mm')
     if task['endtime']:
-        task['endtime'] = arrow.get(task['endtime']).to('Asia/Taipei').format('YYYY-MM-DD HH:mm')
+        task['endtime'] = arrow.get(task['endtime']).to(
+            'Asia/Taipei').format('YYYY-MM-DD HH:mm')
 
     uid = g.get('user', {}).get('account', {}).get('_id')
     if request.method == 'GET':
@@ -242,7 +263,7 @@ def read(pid, task_id):
 
         return render_template('./tasks_detail.html', task=task, creator=creator, uid=uid)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         if not uid:
             return jsonify({'info': 'Need login'}), 401
 
@@ -254,3 +275,4 @@ def read(pid, task_id):
             Tasks.cancel(pid=pid, task_id=task['_id'], uid=uid)
 
         return jsonify({})
+    return jsonify({})

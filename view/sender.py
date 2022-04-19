@@ -1,17 +1,15 @@
+''' Sneder '''
 import csv
 import io
-import json
-import logging
 import random
 
 import arrow
-from celery_task.task_sendermailer import sender_mailer_start
 from flask import Blueprint, g, jsonify, redirect, render_template, request
-from markdown import markdown
+
+from celery_task.task_sendermailer import sender_mailer_start
 from module.sender import SenderCampaign, SenderLogs, SenderReceiver
 from module.team import Team
 from module.users import User
-
 from view.utils import check_the_team_and_project_are_existed
 
 VIEW_SENDER = Blueprint('sender', __name__, url_prefix='/sender')
@@ -19,6 +17,7 @@ VIEW_SENDER = Blueprint('sender', __name__, url_prefix='/sender')
 
 @VIEW_SENDER.route('/<pid>/<tid>/', methods=('GET', 'POST'))
 def index(pid, tid):
+    ''' Index page '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
@@ -31,18 +30,16 @@ def index(pid, tid):
     if not is_admin:
         return redirect('/')
 
-    ''' ..note::
-        1. create campaign (campaign name) / list campaign
-        2. write title, content(jinja2, markdown)
-        3. pick up receiver
-        4. send / send test
-
-    '''
+    # ..note::
+    # 1. create campaign (campaign name) / list campaign
+    # 2. write title, content(jinja2, markdown)
+    # 3. pick up receiver
+    # 4. send / send test
 
     if request.method == 'GET':
         return render_template('./sender.html')
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data = request.get_json()
 
         if 'casename' in data and data['casename'] == 'get':
@@ -51,21 +48,24 @@ def index(pid, tid):
             raw_users_info = User.get_info(
                 uids=[c['created']['uid'] for c in campaigns])
             users_info = {}
-            for uid in raw_users_info:
+            for uid, value in raw_users_info.items():
                 users_info[uid] = {
-                    'uid': uid, 'name': raw_users_info[uid]['profile']['badge_name']}
+                    'uid': uid, 'name': value['profile']['badge_name']}
 
             return jsonify({'campaigns': campaigns, 'users_info': users_info})
 
         if 'casename' in data and data['casename'] == 'create':
-            r = SenderCampaign.create(
+            resp = SenderCampaign.create(
                 name=data['name'], pid=team['pid'], tid=team['tid'], uid=g.user['account']['_id'])
 
-            return jsonify({'cid': r['_id']})
+            return jsonify({'cid': resp['_id']})
+
+    return jsonify({})
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/', methods=('GET', 'POST'))
 def campaign(pid, tid, cid):
+    ''' campaign '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
@@ -85,6 +85,7 @@ def campaign(pid, tid, cid):
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/content', methods=('GET', 'POST'))
 def campaign_content(pid, tid, cid):
+    ''' Campaign content '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
@@ -103,7 +104,7 @@ def campaign_content(pid, tid, cid):
 
         return render_template('./sender_campaign_content.html', campaign=campaign_data, team=team)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data = request.get_json()
 
         if 'casename' in data and data['casename'] == 'get':
@@ -112,18 +113,22 @@ def campaign_content(pid, tid, cid):
             return jsonify({'mail': campaign_data['mail']})
 
         if 'casename' in data and data['casename'] == 'save':
-            r = SenderCampaign.save_mail(
+            resp = SenderCampaign.save_mail(
                 cid=cid,
                 subject=data['data']['subject'].strip(),
                 content=data['data']['content'].strip(),
                 preheader=data['data']['preheader'].strip(),
                 layout=data['data']['layout'].strip(),
             )
-            return jsonify({'mail': r['mail']})
+            return jsonify({'mail': resp['mail']})
+
+    return jsonify({}), 404
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/receiver', methods=('GET', 'POST'))
 def campaign_receiver(pid, tid, cid):
+    ''' campaign receiver '''
+    # pylint: disable=too-many-branches,too-many-locals,too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
@@ -173,9 +178,9 @@ def campaign_receiver(pid, tid, cid):
             tids = [team['tid'] for team in Team.list_by_pid(pid=team['pid'])]
 
             _result = []
-            for tid in tids:
-                if tid in data['pickteams']:
-                    _result.append(tid)
+            for tid_info in tids:
+                if tid_info in data['pickteams']:
+                    _result.append(tid_info)
 
             _team_w_tags = []
             if 'tag_members' in team:
@@ -208,9 +213,13 @@ def campaign_receiver(pid, tid, cid):
                             'uploadtype': request.form['uploadtype'],
                             })
 
+    return jsonify({}), 404
+
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/schedule', methods=('GET', 'POST'))
 def campaign_schedule(pid, tid, cid):
+    ''' campaign schedule '''
+    # pylint: disable=too-many-locals,too-many-branches,too-many-statements,too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
@@ -235,7 +244,8 @@ def campaign_schedule(pid, tid, cid):
             logs = []
             for log in SenderLogs.get(cid=cid):
                 logs.append({
-                    'time': arrow.get(log['create_at']).to('Asia/Taipei').format('YYYY-MM-DD HH:mm:ss'),
+                    'time': arrow.get(log['create_at']).to(
+                            'Asia/Taipei').format('YYYY-MM-DD HH:mm:ss'),
                     'cid': log['cid'],
                     'count': len(log['receivers']),
                     'layout': log['layout'],
@@ -259,8 +269,9 @@ def campaign_schedule(pid, tid, cid):
             if 'team_w_tags' in campaign_data['receiver'] and \
                     team['tid'] in campaign_data['receiver']['team_w_tags'] and \
                     campaign_data['receiver']['team_w_tags'][team['tid']]:
-                fields, raws = SenderReceiver.get_by_tags(pid=team['pid'], tid=team['tid'],
-                                                          tags=campaign_data['receiver']['team_w_tags'][team['tid']])
+                fields, raws = SenderReceiver.get_by_tags(
+                    pid=team['pid'], tid=team['tid'],
+                    tags=campaign_data['receiver']['team_w_tags'][team['tid']])
 
                 for raw in raws:
                     user_datas.append(dict(zip(fields, raw)))
@@ -271,14 +282,16 @@ def campaign_schedule(pid, tid, cid):
                     user_datas.append(dict(zip(fields, raw)))
 
             SenderLogs.save(cid=cid,
-                            layout=campaign_data['mail']['layout'], desc=u'Send', receivers=user_datas)
+                            layout=campaign_data['mail']['layout'],
+                            desc='Send', receivers=user_datas)
 
             source = None
             if campaign_data['mail']['layout'] == '2':
                 if 'mailling' in team and team['mailling']:
                     source = {'name': team['name'], 'mail': team['mailling']}
-                    if not (source['name'].startswith('COSCUP') or source['name'].startswith('coscup')):
-                        source['name'] = 'COSCUP %s' % source['name']
+                    if not (source['name'].startswith('COSCUP') or
+                            source['name'].startswith('coscup')):
+                        source['name'] = f"COSCUP {source['name']}"
                 else:
                     source = {'name': 'COSCUP Attendee',
                               'mail': 'attendee@coscup.org'}
@@ -305,8 +318,9 @@ def campaign_schedule(pid, tid, cid):
             if 'team_w_tags' in campaign_data['receiver'] and \
                     team['tid'] in campaign_data['receiver']['team_w_tags'] and \
                     campaign_data['receiver']['team_w_tags'][team['tid']]:
-                fields, raws = SenderReceiver.get_by_tags(pid=team['pid'], tid=team['tid'],
-                                                          tags=campaign_data['receiver']['team_w_tags'][team['tid']])
+                fields, raws = SenderReceiver.get_by_tags(
+                    pid=team['pid'], tid=team['tid'],
+                    tags=campaign_data['receiver']['team_w_tags'][team['tid']])
                 if raws:
                     user_datas.append(dict(zip(fields, random.choice(raws))))
 
@@ -324,14 +338,16 @@ def campaign_schedule(pid, tid, cid):
                 })
 
             SenderLogs.save(cid=cid,
-                            layout=campaign_data['mail']['layout'], desc=u'Test Send', receivers=user_datas)
+                            layout=campaign_data['mail']['layout'],
+                            desc='Test Send', receivers=user_datas)
 
             source = None
             if campaign_data['mail']['layout'] == '2':
                 if 'mailling' in team and team['mailling']:
                     source = {'name': team['name'], 'mail': team['mailling']}
-                    if not (source['name'].startswith('COSCUP') or source['name'].startswith('coscup')):
-                        source['name'] = 'COSCUP %s' % source['name']
+                    if not (source['name'].startswith('COSCUP') or
+                            source['name'].startswith('coscup')):
+                        source['name'] = f"COSCUP {source['name']}"
                 else:
                     source = {'name': 'COSCUP Attendee',
                               'mail': 'attendee@coscup.org'}
@@ -341,3 +357,5 @@ def campaign_schedule(pid, tid, cid):
                 'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
 
             return jsonify(data)
+
+    return jsonify({}), 404
