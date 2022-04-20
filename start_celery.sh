@@ -1,3 +1,6 @@
+#!/usr/bin/env sh
+# -*- coding: utf-8 -*-
+
 docker run -d --restart='always' \
            --name volunteer_celery \
            --link secretary_mongo:mongo \

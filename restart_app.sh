@@ -1,3 +1,6 @@
+#!/usr/bin/env sh
+# -*- coding: utf-8 -*-
+
 sh ./build-app.sh
 
 docker stop -t 1 volunteer_celery
