@@ -5,6 +5,9 @@ on:
     paths:
       - 'Dockerfile-**'
       - 'docker-compose.yml'
+      - '.github/workflows/docker-compose.yml'
+    branches:
+      - 'code-style'
   workflow_dispatch:
 
 jobs:
@@ -18,6 +21,10 @@ jobs:
       - name: Rename sample setting file
         run: mv ./setting_sample.py ./setting.py
       - name: UP
-        run: docker-compose up
+        run: docker-compose up -d
       - name: List images
         run: docker images
+      - name: List container
+        run: docker ps -a
+      - name: Cat Celery Log
+        run: cat ./logs/workers/log.log
