@@ -55,13 +55,15 @@ services:
     volumes:
       - $PWD/logs/workers:/app/log
     depends_on:
+      - memcached-prod
       - queue_sender
+      - secretary_mongo
     environment:
       - LD_PRELOAD=/usr/local/lib/libjemalloc.so
       - C_FORCE_ROOT=true
     networks:
       - backend
-    command: ["celery", "-A", "celery_task", "worker", "-B", "-l", "info", "-O", "fair", "-c", "4", "--logfile", "./log/log.log"]
+    command: ["celery", "-A", "celery_task.celery_main", "worker", "-B", "-l", "info", "-O", "fair", "-c", "4", "--logfile", "./log/log.log"]
 
   memcached-prod:
     image: "memcached:1.6.6-alpine"
