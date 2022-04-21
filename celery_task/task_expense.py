@@ -1,9 +1,11 @@
+''' Task expense '''
+# pylint: disable=unused-argument
 from __future__ import absolute_import, unicode_literals
 
 from celery.utils.log import get_task_logger
 
 import setting
-from celery_task.celery import app
+from celery_task.celery_main import app
 from models.teamdb import TeamDB
 from module.budget import Budget
 from module.mattermost_bot import MattermostTools
@@ -17,6 +19,7 @@ logger = get_task_logger(__name__)
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=2,
           routing_key='cs.expense.create', exchange='COSCUP-SECRETARY')
 def expense_create(sender, **kwargs):
+    ''' Expense create '''
     pid = kwargs['expense']['pid']
     buid = kwargs['expense']['request']['buid']
 
@@ -47,8 +50,9 @@ def expense_create(sender, **kwargs):
             channel_info = mmt.create_a_direct_message(
                 users=(mid, setting.MATTERMOST_BOT_ID)).json()
 
-            r = mmt.posts(
+            resp = mmt.posts(
                 channel_id=channel_info['id'],
-                message=u'收到 **%s** 申請費用 - **%s**，前往 [管理費用](https://volunteer.coscup.org/expense/%s)' % (
-                        users[uid]['profile']['badge_name'], budget['name'], pid))
-            logger.info(r.json())
+                message=f"""收到 **{users[uid]['profile']['badge_name']}**
+申請費用 - **{budget['name']}**，前往 [管理費用](https://volunteer.coscup.org/expense/{pid})""",
+            )
+            logger.info(resp.json())

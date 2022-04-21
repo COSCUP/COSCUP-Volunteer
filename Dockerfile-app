@@ -6,7 +6,7 @@ ADD ./privacy.md ./privacy.md
 ADD ./setting.py ./setting.py
 ADD ./uwsgi.ini ./uwsgi.ini
 
-ADD ./celery_task/celery.py ./celery_task/celery.py
+ADD ./celery_task/celery_main.py ./celery_task/celery_main.py
 ADD ./celery_task/task*.py ./celery_task/
 
 ADD ./models/base.py ./models/base.py

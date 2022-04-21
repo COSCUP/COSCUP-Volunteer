@@ -1,3 +1,5 @@
+''' Task mail sys '''
+# pylint: disable=unused-argument
 from __future__ import absolute_import, unicode_literals
 
 from bson.objectid import ObjectId
@@ -5,7 +7,7 @@ from celery.utils.log import get_task_logger
 from jinja2 import Environment, FileSystemLoader
 
 import setting
-from celery_task.celery import app
+from celery_task.celery_main import app
 from celery_task.task_service_sync import (service_sync_mattermost_add_channel,
                                            service_sync_mattermost_invite)
 from models.mailletterdb import MailLetterDB
@@ -24,7 +26,8 @@ logger = get_task_logger(__name__)
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.sys.test', exchange='COSCUP-SECRETARY')
 def mail_sys_test(sender, **kwargs):
-    logger.info('!!! [%s]' % kwargs)
+    ''' mail sys test '''
+    logger.info('!!! [%s]', kwargs)
     raise Exception('Test in error and send mail.')
 
 
@@ -32,11 +35,12 @@ def mail_sys_test(sender, **kwargs):
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.sys.weberror', exchange='COSCUP-SECRETARY')
 def mail_sys_weberror(sender, **kwargs):
+    ''' mail sys weberror '''
     ses = AWSSES(setting.AWS_ID, setting.AWS_KEY, setting.AWS_SES_FROM)
 
     raw_mail = ses.raw_mail(
         to_addresses=[setting.ADMIN_To, ],
-        subject='[COSCUP-SECRETARY] %s' % kwargs['title'],
+        subject=f"[COSCUP-SECRETARY] {kwargs['title']}",
         body=kwargs['body'],
     )
 
@@ -46,9 +50,10 @@ def mail_sys_weberror(sender, **kwargs):
 @app.task(bind=True, name='mail.member.waiting',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.waiting', exchange='COSCUP-SECRETARY')
-def mail_member_waiting(sender, **kwargs):
-    TPLENV = Environment(loader=FileSystemLoader('./templates/mail'))
-    template = TPLENV.get_template('./base_member_waiting.html')
+def mail_member_waiting(sender):
+    ''' mail member waiting '''
+    template = Environment(loader=FileSystemLoader(
+        './templates/mail')).get_template('./base_member_waiting.html')
 
     team_member_change_db = TeamMemberChangedDB()
     awsses = AWSSES(
@@ -80,32 +85,33 @@ def mail_member_waiting(sender, **kwargs):
             raw_mail = awsses.raw_mail(
                 to_addresses=(dict(
                     name=users[uid]['profile']['badge_name'], mail=users[uid]['oauth']['email']), ),
-                subject=u'申請加入通知信 - %s' % users[raw['uid']
-                                                ]['profile']['badge_name'],
+                subject=f"申請加入通知信 - {users[raw['uid']]['profile']['badge_name']}",
                 body=body,
             )
 
-            r = mail_member_send.apply_async(
+            resp = mail_member_send.apply_async(
                 kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
-            logger.info(r)
+            logger.info(resp)
 
             mid = mmt.find_possible_mid(uid=uid)
             if mid:
                 channel_info = mmt.create_a_direct_message(
                     users=(mid, setting.MATTERMOST_BOT_ID)).json()
 
-                r = mmt.posts(
+                resp = mmt.posts(
                     channel_id=channel_info['id'],
-                    message=u'收到 **%s** 申請加入 **%s**，前往 [管理組員](https://volunteer.coscup.org/team/%s/%s/edit_user)' % (users[raw['uid']]['profile']['badge_name'], team['name'], team['pid'], team['tid']))
-                logger.info(r.json())
+                    message=f"收到 **{users[raw['uid']]['profile']['badge_name']}** 申請加入 **{team['name']}**，前往 [管理組員](https://volunteer.coscup.org/team/{team['pid']}/{team['tid']}/edit_user)",  # pylint: disable=line-too-long
+                )
+                logger.info(resp.json())
 
 
 @app.task(bind=True, name='mail.member.deny',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.deny', exchange='COSCUP-SECRETARY')
-def mail_member_deny(sender, **kwargs):
-    TPLENV = Environment(loader=FileSystemLoader('./templates/mail'))
-    template = TPLENV.get_template('./base_member_deny.html')
+def mail_member_deny(sender):
+    ''' mail member deny '''
+    tplenv = Environment(loader=FileSystemLoader('./templates/mail'))
+    template = tplenv.get_template('./base_member_deny.html')
 
     team_member_change_db = TeamMemberChangedDB()
     awsses = AWSSES(
@@ -129,21 +135,22 @@ def mail_member_deny(sender, **kwargs):
         raw_mail = awsses.raw_mail(
             to_addresses=(
                 dict(name=user['profile']['badge_name'], mail=user['oauth']['email']), ),
-            subject=u'申請加入 %s 未核准' % team['name'],
+            subject=f"申請加入 {team['name']} 未核准",
             body=body,
         )
 
-        r = mail_member_send.apply_async(
+        resp = mail_member_send.apply_async(
             kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
-        logger.info(r)
+        logger.info(resp)
 
 
 @app.task(bind=True, name='mail.member.add',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.add', exchange='COSCUP-SECRETARY')
-def mail_member_add(sender, **kwargs):
-    TPLENV = Environment(loader=FileSystemLoader('./templates/mail'))
-    template = TPLENV.get_template('./base_member_add.html')
+def mail_member_add(sender):
+    ''' mail member add '''
+    tplenv = Environment(loader=FileSystemLoader('./templates/mail'))
+    template = tplenv.get_template('./base_member_add.html')
 
     team_member_change_db = TeamMemberChangedDB()
     awsses = AWSSES(
@@ -165,23 +172,24 @@ def mail_member_add(sender, **kwargs):
         raw_mail = awsses.raw_mail(
             to_addresses=(
                 dict(name=user['profile']['badge_name'], mail=user['oauth']['email']), ),
-            subject=u'申請加入 %s 核准' % team['name'],
+            subject=f"申請加入 {team['name']} 核准",
             body=body,
         )
 
-        r = mail_member_send.apply_async(
+        resp = mail_member_send.apply_async(
             kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
         service_sync_mattermost_add_channel.apply_async(
             kwargs={'pid': raw['pid'], 'uids': (raw['uid'], )})
-        logger.info(r)
+        logger.info(resp)
 
 
 @app.task(bind=True, name='mail.member.del',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.del', exchange='COSCUP-SECRETARY')
-def mail_member_del(sender, **kwargs):
-    TPLENV = Environment(loader=FileSystemLoader('./templates/mail'))
-    template = TPLENV.get_template('./base_member_del.html')
+def mail_member_del(sender):
+    ''' mail member del '''
+    tplenv = Environment(loader=FileSystemLoader('./templates/mail'))
+    template = tplenv.get_template('./base_member_del.html')
 
     team_member_change_db = TeamMemberChangedDB()
     awsses = AWSSES(
@@ -203,21 +211,22 @@ def mail_member_del(sender, **kwargs):
         raw_mail = awsses.raw_mail(
             to_addresses=(
                 dict(name=user['profile']['badge_name'], mail=user['oauth']['email']), ),
-            subject=u'您已被移除 %s 的組員資格！' % team['name'],
+            subject=f"您已被移除 {team['name']} 的組員資格！",
             body=body,
         )
 
-        r = mail_member_send.apply_async(
+        resp = mail_member_send.apply_async(
             kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
-        logger.info(r)
+        logger.info(resp)
 
 
 @app.task(bind=True, name='mail.member.welcome',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.welcom', exchange='COSCUP-SECRETARY')
-def mail_member_welcome(sender, **kwargs):
-    TPLENV = Environment(loader=FileSystemLoader('./templates/mail'))
-    template = TPLENV.get_template('./welcome.html')
+def mail_member_welcome(sender):
+    ''' mail member welcome '''
+    tplenv = Environment(loader=FileSystemLoader('./templates/mail'))
+    template = tplenv.get_template('./welcome.html')
 
     awsses = AWSSES(
         aws_access_key_id=setting.AWS_ID,
@@ -225,8 +234,8 @@ def mail_member_welcome(sender, **kwargs):
         source=setting.AWS_SES_FROM)
 
     uids = []
-    for u in MailLetterDB().need_to_send(code='welcome'):
-        uids.append(u['_id'])
+    for user in MailLetterDB().need_to_send(code='welcome'):
+        uids.append(user['_id'])
 
     if not uids:
         return
@@ -235,14 +244,14 @@ def mail_member_welcome(sender, **kwargs):
     users = User.get_info(uids=uids)
 
     for uid in uids:
-        logger.info('uid: %s' % uid)
+        logger.info('uid: %s', uid)
         body = template.render(
             name=users[uid]['profile']['badge_name'], )
 
         raw_mail = awsses.raw_mail(
             to_addresses=(dict(
                 name=users[uid]['profile']['badge_name'], mail=users[uid]['oauth']['email']), ),
-            subject=u'歡迎使用志工服務系統 - %s' % users[uid]['profile']['badge_name'],
+            subject=f"歡迎使用志工服務系統 - {users[uid]['profile']['badge_name']}",
             body=body,
         )
 
@@ -258,6 +267,7 @@ def mail_member_welcome(sender, **kwargs):
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.send', exchange='COSCUP-SECRETARY')
 def mail_member_send(sender, **kwargs):
+    ''' mail member send '''
     team_member_change_db = TeamMemberChangedDB()
     awsses = AWSSES(
         aws_access_key_id=setting.AWS_ID,
@@ -277,6 +287,7 @@ def mail_member_send(sender, **kwargs):
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.tasks.star', exchange='COSCUP-SECRETARY')
 def mail_tasks_star(sender, **kwargs):
+    ''' mail tasks star '''
     pid = kwargs['pid']
     task_id = kwargs['task_id']
 
@@ -289,10 +300,10 @@ def mail_tasks_star(sender, **kwargs):
     logger.info(uids)
 
     users = User.get_info(uids=uids)
-    for uid in users:
+    for user_info in users.items():
         user = {}
-        user['name'] = users[uid]['profile']['badge_name']
-        user['mail'] = users[uid]['oauth']['email']
+        user['name'] = user_info['profile']['badge_name']
+        user['mail'] = user_info['oauth']['email']
         mail_tasks_star_one.apply_async(kwargs={
             'pid': pid, 'task_id': task_id, 'user': user, 'task': task})
 
@@ -301,10 +312,11 @@ def mail_tasks_star(sender, **kwargs):
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.tasks.star.one', exchange='COSCUP-SECRETARY')
 def mail_tasks_star_one(sender, **kwargs):
+    ''' mail tasks star one '''
     logger.info(kwargs)
 
-    TPLENV = Environment(loader=FileSystemLoader('./templates/mail'))
-    template = TPLENV.get_template('./tasks_star.html')
+    tplenv = Environment(loader=FileSystemLoader('./templates/mail'))
+    template = tplenv.get_template('./tasks_star.html')
 
     awsses = AWSSES(
         aws_access_key_id=setting.AWS_ID,
@@ -315,8 +327,7 @@ def mail_tasks_star_one(sender, **kwargs):
 
     raw_mail = awsses.raw_mail(
         to_addresses=(kwargs['user'], ),
-        subject=u'有一筆新志工任務 - %s [%s]' % (kwargs['task']
-                                         ['title'], kwargs['task_id']),
+        subject=f"有一筆新志工任務 - {kwargs['task']['title']} [{kwargs['task_id']}]",
         body=body,
     )
 
