@@ -76,6 +76,7 @@ NO_NEED_LOGIN_PATH = (
 @app.before_request
 def need_login():
     ''' need_login '''
+    # pylint: disable=too-many-return-statements
     logging.info('[X-SSL-SESSION-ID: %s] [X-REAL-IP: %s] [USER-AGENT: %s] [SESSION: %s]',
                  request.headers.get('X-SSL-SESSION-ID'),
                  request.headers.get('X-REAL-IP'),
