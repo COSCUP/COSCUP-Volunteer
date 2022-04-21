@@ -49,6 +49,9 @@ services:
 
   celery_worker:
     image: "volunteer-app:prod"
+    build:
+      context: .
+      dockerfile: ./Dockerfile-app
     links:
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
