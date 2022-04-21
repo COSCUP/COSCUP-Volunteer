@@ -1,9 +1,11 @@
+''' Task sender mailer '''
+# pylint: disable=unused-argument
 from __future__ import absolute_import, unicode_literals
 
 from celery.utils.log import get_task_logger
 from markdown import markdown
 
-from celery_task.celery import app
+from celery_task.celery_main import app
 from module.sender import (SenderMailerCOSCUP, SenderMailerVolunteer,
                            SenderSESLogs)
 
@@ -23,13 +25,15 @@ def sender_mailer_start(sender, **kwargs):
 
     for user_data in user_datas:
         sender_mailer_start_one.apply_async(
-            kwargs={'campaign_data': campaign_data, 'team_name': team_name, 'user_data': user_data, 'layout': layout, 'source': source})
+            kwargs={'campaign_data': campaign_data, 'team_name': team_name,
+                    'user_data': user_data, 'layout': layout, 'source': source})
 
 
 @app.task(bind=True, name='sender.mailer.start.one',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.sender.mailer.start.one', exchange='COSCUP-SECRETARY')
 def sender_mailer_start_one(sender, **kwargs):
+    '''sender mailer start one '''
     campaign_data = kwargs['campaign_data']
     team_name = kwargs['team_name']
     user_data = kwargs['user_data']

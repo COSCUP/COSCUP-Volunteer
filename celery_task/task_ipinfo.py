@@ -1,9 +1,11 @@
+''' Task ipinfo '''
+# pylint: disable=unused-argument
 from __future__ import absolute_import, unicode_literals
 
 from celery.utils.log import get_task_logger
 
 import setting
-from celery_task.celery import app
+from celery_task.celery_main import app
 from module.ipinfo import IPInfo
 from module.usession import USession
 
@@ -13,26 +15,29 @@ logger = get_task_logger(__name__)
 @app.task(bind=True, name='ipinfo.update.usession',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.ipinfo.update.usession', exchange='COSCUP-SECRETARY')
-def ipinfo_update_usession(sender, **kwargs):
-    for u in USession.get_no_ipinfo():
+def ipinfo_update_usession(sender):
+    ''' IPInfo update usession '''
+    for user in USession.get_no_ipinfo():
         ipinfo_update_usession_one.apply_async(
-            kwargs={'ip': u['header']['X-Real-Ip'], 'sid': u['_id']})
+            kwargs={'ip': user['header']['X-Real-Ip'], 'sid': user['_id']})
 
 
 @app.task(bind=True, name='ipinfo.update.usession.one',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.ipinfo.update.usession.one', exchange='COSCUP-SECRETARY')
 def ipinfo_update_usession_one(sender, **kwargs):
+    ''' update session ipinfo '''
     logger.info(kwargs)
 
-    r = IPInfo(setting.IPINFO_TOKEN).get(ip=kwargs['ip'])
-    USession.update_ipinfo(sid=kwargs['sid'], data=r.json())
+    resp = IPInfo(setting.IPINFO_TOKEN).get(ip=kwargs['ip'])
+    USession.update_ipinfo(sid=kwargs['sid'], data=resp.json())
 
 
 @app.task(bind=True, name='session.daily.clean',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.session.daily.clean', exchange='COSCUP-SECRETARY')
-def session_daily_clean(sender, **kwargs):
+def session_daily_clean(sender):
+    ''' Daily clean session '''
     clean = USession.clean()
-    logger.info('matched: %s, modified: %s, raw_result: %s' %
-                (clean.matched_count, clean.modified_count, clean.raw_result))
+    logger.info('matched: %s, modified: %s, raw_result: %s',
+                clean.matched_count, clean.modified_count, clean.raw_result)

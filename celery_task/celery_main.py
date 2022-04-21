@@ -1,16 +1,17 @@
+''' Celery '''
 from __future__ import absolute_import, unicode_literals
 
 from celery import Celery
 from celery.schedules import crontab
 from celery.signals import task_failure
-from kombu import Exchange, Queue, binding
+from kombu import Exchange, Queue
 
 import setting
 from module.awsses import AWSSES
 
 app = Celery(
     main='celery_task',
-    broker='amqp://%s' % setting.RABBITMQ,
+    broker=f'amqp://{setting.RABBITMQ}',
     include=(
         'celery_task.task_expense',
         'celery_task.task_ipinfo',
@@ -168,12 +169,13 @@ app.conf.beat_schedule = {
 
 @task_failure.connect
 def on_failure(**kwargs):
+    ''' on failure '''
     ses = AWSSES(setting.AWS_ID, setting.AWS_KEY, setting.AWS_SES_FROM)
     raw_mail = ses.raw_mail(
         to_addresses=[setting.ADMIN_To, ],
-        subject='[COSCUP-SECRETARY] %s [%s]' % (
-            kwargs['sender'].name, kwargs['sender'].request.id),
-        body='kwargs: <pre>%s</pre><br>einfo: <pre>%s</pre><br>request: <pre>%s</pre>' % (
-            kwargs['kwargs'], kwargs['einfo'].traceback, kwargs['sender'].request),
+        subject=f"[COSCUP-SECRETARY] {kwargs['sender'].name} [{kwargs['sender'].request.id}]",
+        body=f"""kwargs: <pre>{kwargs['kwargs']}</pre><br>
+einfo: <pre>{kwargs['einfo'].traceback}</pre><br>
+request: <pre>{kwargs['sender'].request}</pre>""",
     )
     ses.send_raw_email(data=raw_mail)
