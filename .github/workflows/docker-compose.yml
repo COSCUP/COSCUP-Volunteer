@@ -27,4 +27,9 @@ jobs:
       - name: List container
         run: docker ps -a
       - name: Cat Celery Log
-        run: cat ./logs/workers/log.log
+        run: |
+          sleep 30 ;
+          ls -alh ;
+          ls -alh ./logs ;
+          ls -alh ./logs/workers ;
+          cat ./logs/workers/log.log

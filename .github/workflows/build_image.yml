@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'Dockerfile-**'
+      - '.github/workflows/build_image.yml'
   workflow_dispatch:
 
 jobs:
