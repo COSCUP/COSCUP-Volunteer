@@ -28,7 +28,7 @@ services:
     image: "volunteer-app:prod"
     build:
       context: .
-      dockerfile: ./Dockerfile-app
+      dockerfile: ./Dockerfile-app-dev
     links:
       - "memcached-prod:memcached"
       - "queue_sender:rabbitmq"
@@ -51,7 +51,7 @@ services:
     image: "volunteer-app:prod"
     build:
       context: .
-      dockerfile: ./Dockerfile-app
+      dockerfile: ./Dockerfile-app-dev
     links:
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
