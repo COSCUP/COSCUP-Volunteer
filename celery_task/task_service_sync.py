@@ -158,7 +158,7 @@ def service_sync_gsuite_team_leader(sender, **kwargs):
     sync_gsuite.add_users_into_group(group=project['mailling_leader'], users=[
                                      u['oauth']['email'] for u in users_info.values()])
 
-    logger.info('%s %s', project['mailling_staff'], [
+    logger.info('%s %s', project['mailling_leader'], [
                 u['oauth']['email'] for u in users_info.values()])
 
 

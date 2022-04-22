@@ -5,20 +5,13 @@ import logging
 import random
 
 import arrow
-from flask import Blueprint
-from flask import g
-from flask import jsonify
-from flask import redirect
-from flask import render_template
-from flask import request
-from markdown import markdown
-
 from celery_task.task_sendermailer import sender_mailer_start
-from module.sender import SenderCampaign
-from module.sender import SenderLogs
-from module.sender import SenderReceiver
+from flask import Blueprint, g, jsonify, redirect, render_template, request
+from markdown import markdown
+from module.sender import SenderCampaign, SenderLogs, SenderReceiver
 from module.team import Team
 from module.users import User
+
 from view.utils import check_the_team_and_project_are_existed
 
 VIEW_SENDER = Blueprint('sender', __name__, url_prefix='/sender')
@@ -26,12 +19,13 @@ VIEW_SENDER = Blueprint('sender', __name__, url_prefix='/sender')
 
 @VIEW_SENDER.route('/<pid>/<tid>/', methods=('GET', 'POST'))
 def index(pid, tid):
-    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    team, project, _redirect = check_the_team_and_project_are_existed(
+        pid=pid, tid=tid)
     if _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
-                g.user['account']['_id'] in team['owners'] or \
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or
+                g.user['account']['_id'] in team['owners'] or
                 g.user['account']['_id'] in project['owners'])
 
     if not is_admin:
@@ -52,29 +46,33 @@ def index(pid, tid):
         data = request.get_json()
 
         if 'casename' in data and data['casename'] == 'get':
-            campaigns = list(SenderCampaign.get_list(pid=team['pid'], tid=team['tid']))
-            raw_users_info = User.get_info(uids=[c['created']['uid'] for c in campaigns])
+            campaigns = list(SenderCampaign.get_list(
+                pid=team['pid'], tid=team['tid']))
+            raw_users_info = User.get_info(
+                uids=[c['created']['uid'] for c in campaigns])
             users_info = {}
             for uid in raw_users_info:
-                users_info[uid] = {'uid': uid, 'name': raw_users_info[uid]['profile']['badge_name']}
+                users_info[uid] = {
+                    'uid': uid, 'name': raw_users_info[uid]['profile']['badge_name']}
 
             return jsonify({'campaigns': campaigns, 'users_info': users_info})
 
         if 'casename' in data and data['casename'] == 'create':
             r = SenderCampaign.create(
-                    name=data['name'], pid=team['pid'], tid=team['tid'], uid=g.user['account']['_id'])
+                name=data['name'], pid=team['pid'], tid=team['tid'], uid=g.user['account']['_id'])
 
             return jsonify({'cid': r['_id']})
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/', methods=('GET', 'POST'))
 def campaign(pid, tid, cid):
-    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    team, project, _redirect = check_the_team_and_project_are_existed(
+        pid=pid, tid=tid)
     if _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
-                g.user['account']['_id'] in team['owners'] or \
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or
+                g.user['account']['_id'] in team['owners'] or
                 g.user['account']['_id'] in project['owners'])
 
     if not is_admin:
@@ -87,19 +85,21 @@ def campaign(pid, tid, cid):
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/content', methods=('GET', 'POST'))
 def campaign_content(pid, tid, cid):
-    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    team, project, _redirect = check_the_team_and_project_are_existed(
+        pid=pid, tid=tid)
     if _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
-                g.user['account']['_id'] in team['owners'] or \
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or
+                g.user['account']['_id'] in team['owners'] or
                 g.user['account']['_id'] in project['owners'])
 
     if not is_admin:
         return redirect('/')
 
     if request.method == 'GET':
-        campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
+        campaign_data = SenderCampaign.get(
+            cid=cid, pid=team['pid'], tid=team['tid'])
 
         return render_template('./sender_campaign_content.html', campaign=campaign_data, team=team)
 
@@ -107,7 +107,8 @@ def campaign_content(pid, tid, cid):
         data = request.get_json()
 
         if 'casename' in data and data['casename'] == 'get':
-            campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
+            campaign_data = SenderCampaign.get(
+                cid=cid, pid=team['pid'], tid=team['tid'])
             return jsonify({'mail': campaign_data['mail']})
 
         if 'casename' in data and data['casename'] == 'save':
@@ -123,18 +124,20 @@ def campaign_content(pid, tid, cid):
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/receiver', methods=('GET', 'POST'))
 def campaign_receiver(pid, tid, cid):
-    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    team, project, _redirect = check_the_team_and_project_are_existed(
+        pid=pid, tid=tid)
     if _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
-                g.user['account']['_id'] in team['owners'] or \
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or
+                g.user['account']['_id'] in team['owners'] or
                 g.user['account']['_id'] in project['owners'])
 
     if not is_admin:
         return redirect('/')
 
-    campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
+    campaign_data = SenderCampaign.get(
+        cid=cid, pid=team['pid'], tid=team['tid'])
     if request.method == 'GET':
         return render_template('./sender_campaign_receiver.html', campaign=campaign_data, team=team)
 
@@ -164,7 +167,7 @@ def campaign_receiver(pid, tid, cid):
                             'is_all_users': campaign_data['receiver']['all_users'],
                             'all_users_count': User.count(),
                             'filedata': sender_receiver,
-                           })
+                            })
 
         if data and 'casename' in data and data['casename'] == 'save':
             tids = [team['tid'] for team in Team.list_by_pid(pid=team['pid'])]
@@ -181,42 +184,47 @@ def campaign_receiver(pid, tid, cid):
                         _team_w_tags.append(tag['id'])
 
             return jsonify(SenderCampaign.save_receiver(
-                    cid=cid, teams=_result, team_w_tags={team['tid']: _team_w_tags},
-                    all_users=bool(data['is_all_users']))['receiver'])
+                cid=cid, teams=_result, team_w_tags={
+                    team['tid']: _team_w_tags},
+                all_users=bool(data['is_all_users']))['receiver'])
 
         if request.form['uploadtype'] == 'remove':
             SenderReceiver.remove(pid=team['pid'], cid=cid)
 
             return jsonify({'file': [],
                             'uploadtype': request.form['uploadtype'],
-                           })
+                            })
 
         if request.files and 'file' in request.files:
-            csv_file = list(csv.DictReader(io.StringIO(request.files['file'].read().decode('utf8'))))
+            csv_file = list(csv.DictReader(io.StringIO(
+                request.files['file'].read().decode('utf8'))))
             if request.form['uploadtype'] == 'replace':
-                SenderReceiver.replace(pid=team['pid'], cid=cid, datas=csv_file)
+                SenderReceiver.replace(
+                    pid=team['pid'], cid=cid, datas=csv_file)
             elif request.form['uploadtype'] == 'update':
                 SenderReceiver.update(pid=team['pid'], cid=cid, datas=csv_file)
 
             return jsonify({'file': csv_file,
                             'uploadtype': request.form['uploadtype'],
-                           })
+                            })
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/schedule', methods=('GET', 'POST'))
 def campaign_schedule(pid, tid, cid):
-    team, project, _redirect = check_the_team_and_project_are_existed(pid=pid, tid=tid)
+    team, project, _redirect = check_the_team_and_project_are_existed(
+        pid=pid, tid=tid)
     if _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or \
-                g.user['account']['_id'] in team['owners'] or \
+    is_admin = (g.user['account']['_id'] in team['chiefs'] or
+                g.user['account']['_id'] in team['owners'] or
                 g.user['account']['_id'] in project['owners'])
 
     if not is_admin:
         return redirect('/')
 
-    campaign_data = SenderCampaign.get(cid=cid, pid=team['pid'], tid=team['tid'])
+    campaign_data = SenderCampaign.get(
+        cid=cid, pid=team['pid'], tid=team['tid'])
     if request.method == 'GET':
         return render_template('./sender_campaign_schedule.html', campaign=campaign_data, team=team)
 
@@ -240,7 +248,7 @@ def campaign_schedule(pid, tid, cid):
             user_datas = []
 
             fields, raws = SenderReceiver.get_from_user(
-                    pid=team['pid'], tids=campaign_data['receiver']['teams'])
+                pid=team['pid'], tids=campaign_data['receiver']['teams'])
             for raw in raws:
                 user_datas.append(dict(zip(fields, raw)))
 
@@ -252,7 +260,7 @@ def campaign_schedule(pid, tid, cid):
                     team['tid'] in campaign_data['receiver']['team_w_tags'] and \
                     campaign_data['receiver']['team_w_tags'][team['tid']]:
                 fields, raws = SenderReceiver.get_by_tags(pid=team['pid'], tid=team['tid'],
-                        tags=campaign_data['receiver']['team_w_tags'][team['tid']])
+                                                          tags=campaign_data['receiver']['team_w_tags'][team['tid']])
 
                 for raw in raws:
                     user_datas.append(dict(zip(fields, raw)))
@@ -263,7 +271,7 @@ def campaign_schedule(pid, tid, cid):
                     user_datas.append(dict(zip(fields, raw)))
 
             SenderLogs.save(cid=cid,
-                    layout=campaign_data['mail']['layout'], desc=u'Send', receivers=user_datas)
+                            layout=campaign_data['mail']['layout'], desc=u'Send', receivers=user_datas)
 
             source = None
             if campaign_data['mail']['layout'] == '2':
@@ -272,11 +280,12 @@ def campaign_schedule(pid, tid, cid):
                     if not (source['name'].startswith('COSCUP') or source['name'].startswith('coscup')):
                         source['name'] = 'COSCUP %s' % source['name']
                 else:
-                    source = {'name': 'COSCUP Attendee', 'mail': 'attendee@coscup.org'}
+                    source = {'name': 'COSCUP Attendee',
+                              'mail': 'attendee@coscup.org'}
 
             sender_mailer_start.apply_async(kwargs={
-                    'campaign_data': campaign_data, 'team_name': team['name'], 'source': source,
-                    'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
+                'campaign_data': campaign_data, 'team_name': team['name'], 'source': source,
+                'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
 
             return jsonify(data)
 
@@ -285,7 +294,7 @@ def campaign_schedule(pid, tid, cid):
             user_datas = []
 
             fields, raws = SenderReceiver.get_from_user(
-                    pid=team['pid'], tids=campaign_data['receiver']['teams'])
+                pid=team['pid'], tids=campaign_data['receiver']['teams'])
             if raws:
                 user_datas.append(dict(zip(fields, random.choice(raws))))
 
@@ -297,7 +306,7 @@ def campaign_schedule(pid, tid, cid):
                     team['tid'] in campaign_data['receiver']['team_w_tags'] and \
                     campaign_data['receiver']['team_w_tags'][team['tid']]:
                 fields, raws = SenderReceiver.get_by_tags(pid=team['pid'], tid=team['tid'],
-                        tags=campaign_data['receiver']['team_w_tags'][team['tid']])
+                                                          tags=campaign_data['receiver']['team_w_tags'][team['tid']])
                 if raws:
                     user_datas.append(dict(zip(fields, random.choice(raws))))
 
@@ -315,7 +324,7 @@ def campaign_schedule(pid, tid, cid):
                 })
 
             SenderLogs.save(cid=cid,
-                    layout=campaign_data['mail']['layout'], desc=u'Test Send', receivers=user_datas)
+                            layout=campaign_data['mail']['layout'], desc=u'Test Send', receivers=user_datas)
 
             source = None
             if campaign_data['mail']['layout'] == '2':
@@ -324,11 +333,11 @@ def campaign_schedule(pid, tid, cid):
                     if not (source['name'].startswith('COSCUP') or source['name'].startswith('coscup')):
                         source['name'] = 'COSCUP %s' % source['name']
                 else:
-                    source = {'name': 'COSCUP Attendee', 'mail': 'attendee@coscup.org'}
+                    source = {'name': 'COSCUP Attendee',
+                              'mail': 'attendee@coscup.org'}
 
             sender_mailer_start.apply_async(kwargs={
-                    'campaign_data': campaign_data, 'team_name': team['name'], 'source': source,
-                    'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
+                'campaign_data': campaign_data, 'team_name': team['name'], 'source': source,
+                'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
 
             return jsonify(data)
-

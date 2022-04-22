@@ -1,5 +1,5 @@
-from uuid import uuid4
 from time import time
+from uuid import uuid4
 
 from requests.sessions import Session
 
@@ -57,6 +57,9 @@ class TelegramBot(Session):
     @staticmethod
     def is_command_start_linkme(data: dict) -> bool:
         ''' command start '''
+        if 'message' not in data:
+            return False
+
         if data['message']['from']['is_bot']:
             return False
 
@@ -84,11 +87,11 @@ class TelegramBot(Session):
     def temp_fetch_user_data(data, expired_time=400):
         ''' temp fetch user data '''
         mc = MC.get_client()
-        mc.set('tgu:%s' % data['message']['from']['id'], data['message']['from'], expired_time)
+        mc.set('tgu:%s' % data['message']['from']['id'],
+               data['message']['from'], expired_time)
 
     @staticmethod
     def get_temp_user_dta(chat_id):
         ''' Get temp user data '''
         mc = MC.get_client()
         return mc.get('tgu:%s' % chat_id)
-
