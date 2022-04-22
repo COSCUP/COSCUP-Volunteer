@@ -1,8 +1,8 @@
 FROM coscupweb-base:22.03.13
 
-ADD ./client_secret.json ./client_secret.json
+#ADD ./client_secret.json ./client_secret.json
 ADD ./privacy.md ./privacy.md
-ADD ./secretary-e00794553a7d.json ./secretary-e00794553a7d.json
+#ADD ./secretary-e00794553a7d.json ./secretary-e00794553a7d.json
 ADD ./setting.py ./setting.py
 ADD ./uwsgi.ini ./uwsgi.ini
 

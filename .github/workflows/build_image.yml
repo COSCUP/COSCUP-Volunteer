@@ -27,6 +27,6 @@ jobs:
       - name: Rename sample setting file
         run: mv ./setting_sample.py ./setting.py
       - name: Build app
-        run: docker build --no-cache=true -t volunteer-app:prod -f ./Dockerfile-app ./
+        run: docker build --no-cache=true -t volunteer-app:prod -f ./Dockerfile-app-dev ./
       - name: List images
         run: docker images
