@@ -372,7 +372,7 @@ def team_join_to(pid, tid):
         TeamMemberChangedDB().make_record(
             pid=pid, tid=tid, action={'waiting': (g.user['account']['_id'], )})
 
-        return redirect(f'/team/{pid}/{tid}/join_to' % (pid, tid))
+        return redirect(f'/team/{pid}/{tid}/join_to')
 
     return '', 404
 
