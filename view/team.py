@@ -922,7 +922,7 @@ def team_expense_index(pid, tid):
                 select_team = team['tid']
 
             items = []
-            for item in Budget.get_by_tid(pid=pid, tid=select_team):
+            for item in Budget.get_by_tid(pid=pid, tid=select_team, only_enable=True):
                 items.append(item)
 
             bank = User.get_bank(uid=g.user['account']['_id'])

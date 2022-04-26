@@ -69,6 +69,9 @@ class Budget:
         return BudgetDB().find({'pid': pid}, sort=(('tid', 1), ))
 
     @staticmethod
-    def get_by_tid(pid, tid):
+    def get_by_tid(pid, tid, only_enable=False):
         ''' Get by pid '''
-        return BudgetDB().find({'pid': pid, 'tid': tid})
+        if not only_enable:
+            return BudgetDB().find({'pid': pid, 'tid': tid})
+
+        return BudgetDB().find({'pid': pid, 'tid': tid, 'enabled': True})
