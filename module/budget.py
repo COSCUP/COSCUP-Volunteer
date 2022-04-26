@@ -12,12 +12,15 @@ class Budget:
         ''' check user is admin
 
         - project owner
-        - finance chiefs
+        - finance chiefs or members
         - coordinator chiefs
 
         '''
         if TeamDB(pid=None, tid=None).count_documents({
-                'pid': pid, 'chiefs': uid, 'tid': {'$in': ['finance', 'coordinator']}}):
+                'pid': pid,
+                'tid': {'$in': ['finance', 'coordinator']},
+                '$or': [{'chiefs': uid}, {'members': uid}],
+        }):
             return True
 
         if ProjectDB(pid=None).count_documents({'_id': pid, 'owners': uid}):
