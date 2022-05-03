@@ -50,6 +50,30 @@ GNU Affero General Public License version 3 (AGPL-3.0)
 
     sh ./restart_app.sh
 
+## Local Development
+
+### 安裝依賴
+
+您可能需要先安裝 `libmemcached` 和 `poetry`，才能安裝依賴。
+
+    brew install libmemcached  # macOS
+    pip install poetry  # Install Poetry
+
+    poetry install  # Install Dependencies
+
+### 設定 VS Code
+
+找到 poetry 建立的 virtual environment：
+
+    poetry env list --full-path
+
+然後 <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>，輸入 `Python: Select Interpreter`，
+選擇 `輸入直譯器路徑`，填入路徑即可。
+
+## Nginx 設定
+
+（待補）
+
 ## Issues
 
 問題回報請使用 Issues、如果遇到安全問題的回報，可以使用 GPG 加密後回報。
