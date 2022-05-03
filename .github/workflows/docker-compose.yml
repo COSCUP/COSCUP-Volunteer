@@ -2,12 +2,6 @@ name: DockerCompose
 
 on:
   push:
-    paths:
-      - 'Dockerfile-**'
-      - 'docker-compose.yml'
-      - '.github/workflows/docker-compose.yml'
-    branches:
-      - 'code-style'
   workflow_dispatch:
 
 jobs:
