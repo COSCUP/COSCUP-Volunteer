@@ -57,9 +57,10 @@ GNU Affero General Public License version 3 (AGPL-3.0)
 您可能需要先安裝 `libmemcached` 和 `poetry`，才能安裝依賴。
 
     brew install libmemcached  # macOS
-    pip install poetry  # Install Poetry
 
-    poetry install  # Install Dependencies
+Poetry 的安裝請使用[官方文件](https://python-poetry.org/docs/)建議安裝在全域環境。
+
+    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
 
 ### 設定 VS Code
 
@@ -69,10 +70,6 @@ GNU Affero General Public License version 3 (AGPL-3.0)
 
 然後 <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>，輸入 `Python: Select Interpreter`，
 選擇 `輸入直譯器路徑`，填入路徑即可。
-
-## Nginx 設定
-
-（待補）
 
 ## Issues
 
