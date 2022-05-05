@@ -82,6 +82,13 @@ class Expense:
         return ExpenseDB().find({'pid': pid, 'create_by': create_by})
 
     @staticmethod
+    def get_has_sent(pid, budget_id):
+        ''' Get has sent and not canceled '''
+        query = {'pid': pid, 'request.buid': budget_id}
+        for raw in ExpenseDB().find(query, {'invoices': 1}):
+            yield raw
+
+    @staticmethod
     def dl_format(pid):
         ''' Make the download format(CSV) '''
         raws = []

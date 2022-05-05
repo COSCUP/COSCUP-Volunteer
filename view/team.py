@@ -937,6 +937,11 @@ def team_expense_index(pid, tid):
             expense_create.apply_async(kwargs={'expense': expense})
             return jsonify(data)
 
+        if data['casename'] == 'get_has_sent':
+            data = Expense.get_has_sent(
+                pid=project['_id'], budget_id=data['buid'])
+            return jsonify({'data': list(data)})
+
     return jsonify({}), 404
 
 

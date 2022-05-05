@@ -143,6 +143,48 @@
                       </tbody>
                   </table>
               </div>
+              <div class="content">
+                  <h4>已申請的單據</h4>
+              </div>
+              <div class="content">
+              <div class="field" v-for="invoice, index in has_sent_invoices">
+                  <div class="field-body">
+                      <div class="field">
+                          <label class="label">[[ index+1 ]]. 發票號碼或收據</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="invoice.name" disabled>
+                          </div>
+                      </div>
+                      <div class="field">
+                          <label class="label">單據金額</label>
+                          <div class="field has-addons">
+                              <div class="control">
+                                  <span class="select">
+                                      <select v-model="invoice.currency" disabled>
+                                          <option>TWD</option>
+                                          <option>USD</option>
+                                      </select>
+                                  </span>
+                              </div>
+                              <div class="control">
+                                  <input class="input" type="number" step="0.01" v-model.number="invoice.total" disabled>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="field">
+                          <label class="label">單據狀況</label>
+                          <div class="control">
+                              <span class="select">
+                                  <select v-model="invoice.status" disabled>
+                                      <option value="sent">已寄出</option>
+                                      <option value="not_send">還未寄出</option>
+                                  </select>
+                              </span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              </div>
               <form @submit.prevent="submit_expense">
               <div class="content">
                   <h4>檢附單據</h4>
@@ -199,15 +241,47 @@
                   </a>
               </div>
               <div class="content" v-if="invoices.length > 0">
-                  <h4 class="mt-5">申請金額</h4>
+                  <h4 class="mt-5">申請金額試算</h4>
               </div>
-              <div class="field" v-if="invoices.length > 0">
-                  <label class="label">合計</label>
-                  <div class="field is-grouped is-grouped-multiline">
-                      <div class="control" v-for="[currency, total] in Object.entries(invoices_total)">
-                          <div class="tags has-addons">
-                              <span class="tag is-info">[[ currency ]]</span>
-                              <span class="tag is-success is-light">$[[ total.toLocaleString('en') ]]</span>
+              <div class="field">
+                  <div class="field-body">
+                      <div class="field has-background-link-light p-3" v-if="invoices.length > 0">
+                          <label class="label">此次申請合計</label>
+                          <div class="field is-grouped is-grouped-multiline">
+                              <div class="control" v-for="[currency, total] in Object.entries(invoices_total)">
+                                  <div class="tags has-addons">
+                                      <span class="tag is-info">[[ currency ]]</span>
+                                      <span class="tag is-success is-light" :class="{'is-danger': total < 0}">
+                                          $[[ total.toLocaleString('en') ]]
+                                      </span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="field has-background-warning-light p-3" v-if="has_sent_invoices.length > 0">
+                          <label class="label">已申請合計</label>
+                          <div class="field is-grouped is-grouped-multiline">
+                              <div class="control" v-for="[currency, total] in Object.entries(has_sent_invoices_total)">
+                                  <div class="tags has-addons">
+                                      <span class="tag is-info">[[ currency ]]</span>
+                                      <span class="tag is-success is-light" :class="{'is-danger': total < 0}">
+                                          $[[ total.toLocaleString('en') ]]
+                                      </span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="field has-background-info-light p-3" v-if="has_sent_invoices.length > 0">
+                          <label class="label">預算餘額計算</label>
+                          <div class="field is-grouped is-grouped-multiline">
+                              <div class="control" v-for="[currency, total] in Object.entries(diff_invoices_total)">
+                                  <div class="tags has-addons">
+                                      <span class="tag is-info">[[ currency ]]</span>
+                                      <span class="tag is-success is-light" :class="{'is-danger': total < 0}">
+                                          $[[ total.toLocaleString('en') ]]
+                                      </span>
+                                  </div>
+                              </div>
                           </div>
                       </div>
                   </div>
@@ -299,6 +373,9 @@
                 default_invoice: {name: '', currency: 'TWD', total: 0, status: ''},
                 invoices: [],
                 invoices_total: {},
+                has_sent_invoices: [],
+                has_sent_invoices_total: {},
+                diff_invoices_total: {},
                 bank: {},
                 bank_alert: 0,
                 teams: [],
@@ -345,6 +422,38 @@
                         }
                         $expenselists.invoices_total[raw.currency] += raw.total;
                     });
+                    this.cal_invoices_total();
+                },
+                sum_has_sent_invoices: function() {
+                    this.has_sent_invoices_total = {};
+                    $this = this;
+                    this.has_sent_invoices.forEach(function(raw) {
+                        if ($this.has_sent_invoices_total[raw.currency] === undefined) {
+                            $this.has_sent_invoices_total[raw.currency] = 0;
+                        }
+                        $this.has_sent_invoices_total[raw.currency] += raw.total;
+                    });
+                },
+                cal_invoices_total: function() {
+                    let base = {};
+                    base[this.modaldata.currency] = this.modaldata.total;
+                    let diff_total = Object.assign({}, base);
+
+                    Object.entries(this.has_sent_invoices_total).forEach(function(raw) {
+                        if (diff_total[raw[0]] === undefined) {
+                            diff_total[raw[0]] = 0;
+                        }
+                        diff_total[raw[0]] -= raw[1];
+                    });
+
+                    Object.entries(this.invoices_total).forEach(function(raw) {
+                        if (diff_total[raw[0]] === undefined) {
+                            diff_total[raw[0]] = 0;
+                        }
+                        diff_total[raw[0]] -= raw[1];
+                    });
+
+                    this.diff_invoices_total = Object.assign({}, diff_total);
                 },
                 load: function() {
                     ++this.is_loading;
@@ -365,8 +474,26 @@
                     });
                 },
                 create: function(item) {
+                    ++this.is_loading;
                     this.modaldata = Object.assign({}, item);
                     this.create_expense();
+                    if (this.invoices.length == 0) {
+                        this.add_invoice();
+                    }
+                    this.has_sent_invoices = [];
+                    $this = this;
+                    axios.post('./', {casename: 'get_has_sent', buid: this.modaldata._id}).then(function(resp) {
+                        console.info(resp.data.data);
+                        resp.data.data.forEach(function(raw) {
+                            raw.invoices.forEach(function(invoice) {
+                                invoice['expense_id'] = raw._id;
+                                $this.has_sent_invoices.push(invoice);
+                            });
+                        });
+                        $this.sum_has_sent_invoices();
+                        $this.cal_invoices_total();
+                        --$this.is_loading;
+                    });
                 },
                 submit_expense: function() {
                     ++this.modaldata.is_loading;
