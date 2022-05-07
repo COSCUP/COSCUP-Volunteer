@@ -1,4 +1,4 @@
-FROM alpine:3.15.2
+FROM alpine:3.15.4
 
 WORKDIR /app
 ADD pyproject.toml poetry.lock ./
@@ -8,8 +8,8 @@ RUN \
   apk add --no-cache python3 ca-certificates libmemcached-dev && \
   apk add --no-cache --virtual .build-deps curl cmake zlib-dev   \
           g++ make gcc musl-dev python3-dev libffi-dev openssl-dev && \
-  wget https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2 && \
-  tar xvjf jemalloc-5.2.1.tar.bz2 && cd jemalloc-5.2.1 && ./configure && make && make install && \
+  wget https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2 && \
+  tar xvjf jemalloc-5.3.0.tar.bz2 && cd jemalloc-5.3.0 && ./configure && make && make install && \
   cd ../ && rm -rf ./jemalloc* && \
   curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 - && \
   find $HOME/.poetry/lib/poetry/_vendor/ -mindepth 1 -maxdepth 1 -not -name py3.9 -type d  | xargs rm -rf && \

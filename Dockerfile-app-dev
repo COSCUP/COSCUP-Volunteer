@@ -1,4 +1,4 @@
-FROM coscupweb-base:22.05.04
+FROM coscupweb-base:22.05.07
 
 #ADD ./client_secret.json ./client_secret.json
 ADD ./privacy.md ./privacy.md
