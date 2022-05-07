@@ -85,14 +85,14 @@ python-versions = "*"
 
 [[package]]
 name = "boto3"
-version = "1.22.5"
+version = "1.22.9"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">= 3.6"
 
 [package.dependencies]
-botocore = ">=1.25.5,<1.26.0"
+botocore = ">=1.25.9,<1.26.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.5.0,<0.6.0"
 
@@ -101,7 +101,7 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.25.5"
+version = "1.25.9"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
@@ -514,7 +514,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "markdown"
-version = "3.3.6"
+version = "3.3.7"
 description = "Python implementation of Markdown."
 category = "main"
 optional = false
@@ -581,7 +581,7 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "phonenumbers"
-version = "8.12.47"
+version = "8.12.48"
 description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
 category = "main"
 optional = false
@@ -968,8 +968,8 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.9"
-content-hash = "abd77ddff8b816a06e8f5af6470c37140c285893dd54efe714d429349aba9502"
+python-versions = "^3.8"
+content-hash = "7726a0ed86a0d49c2b1a47e0e44094fda187ddabadf7502c74d58cd9f099aa9c"
 
 [metadata.files]
 amqp = [
@@ -1004,11 +1004,12 @@ blinker = [
     {file = "blinker-1.4.tar.gz", hash = "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"},
 ]
 boto3 = [
-    {file = "boto3-1.22.5-py3-none-any.whl", hash = "sha256:e6b4a4970cb9210d455f348577d9e0485f86c44baf278b8220e8ab5587d03470"},
-    {file = "boto3-1.22.5.tar.gz", hash = "sha256:dbbeee6d535a311d4d646a9dd683b216bf17d59345367432a22a21b50eb43a8e"},
+    {file = "boto3-1.22.9-py3-none-any.whl", hash = "sha256:65e45029d234ff94ba8aa3bacb9df00fbbb2f1d9ee7fd1c2e40f4815d12ec3f5"},
+    {file = "boto3-1.22.9.tar.gz", hash = "sha256:441b619067cb205bfcd0e66fe085c16989ab65bd348823013e11bef991c00a5c"},
 ]
 botocore = [
-    {file = "botocore-1.25.5-py3-none-any.whl", hash = "sha256:bcbacc0ec0a1f44cbf7e6d8112af8096eed41bec75e90af06f8bf61f20d820aa"},
+    {file = "botocore-1.25.9-py3-none-any.whl", hash = "sha256:71962de55b053a0124a0514155f4cdcf0bce81795ffc2bd6e000c1594e99125a"},
+    {file = "botocore-1.25.9.tar.gz", hash = "sha256:a1d26b95aaa5b2e126df74b223d774fae7e6597bb55c363782178f5b87f0cad3"},
 ]
 cachetools = [
     {file = "cachetools-5.0.0-py3-none-any.whl", hash = "sha256:8fecd4203a38af17928be7b90689d8083603073622229ca7077b72d8e5a976e4"},
@@ -1197,8 +1198,8 @@ lazy-object-proxy = [
     {file = "lazy_object_proxy-1.7.1-pp37.pp38-none-any.whl", hash = "sha256:d66906d5785da8e0be7360912e99c9188b70f52c422f9fc18223347235691a84"},
 ]
 markdown = [
-    {file = "Markdown-3.3.6-py3-none-any.whl", hash = "sha256:9923332318f843411e9932237530df53162e29dc7a4e2b91e35764583c46c9a3"},
-    {file = "Markdown-3.3.6.tar.gz", hash = "sha256:76df8ae32294ec39dcf89340382882dfa12975f87f45c3ed1ecdb1e8cefc7006"},
+    {file = "Markdown-3.3.7-py3-none-any.whl", hash = "sha256:f5da449a6e1c989a4cea2631aa8ee67caa5a2ef855d551c88f9e309f4634c621"},
+    {file = "Markdown-3.3.7.tar.gz", hash = "sha256:cbb516f16218e643d8e0a95b309f77eb118cb138d39a4f27851e6a63581db874"},
 ]
 markupsafe = [
     {file = "MarkupSafe-2.1.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:86b1f75c4e7c2ac2ccdaec2b9022845dbb81880ca318bb7a0a01fbf7813e3812"},
@@ -1259,8 +1260,8 @@ packaging = [
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
 ]
 phonenumbers = [
-    {file = "phonenumbers-8.12.47-py2.py3-none-any.whl", hash = "sha256:065fc5930ceff3147f50beb4c6d253c25ab0a467ac461174c62696c119593f7e"},
-    {file = "phonenumbers-8.12.47.tar.gz", hash = "sha256:56fd605d2f5460e1df2117085b653bb38322295ec658e6acaafc9c976867d522"},
+    {file = "phonenumbers-8.12.48-py2.py3-none-any.whl", hash = "sha256:429273b98966475d0c18ee293096eaf81c6b5727d0d55c7ba5ce9c60ec8c59ef"},
+    {file = "phonenumbers-8.12.48.tar.gz", hash = "sha256:af0681fbfe9fa0721376ad9b729e772e5d20bf2cf50d9dd8ca2f0bdd78e9f0ce"},
 ]
 platformdirs = [
     {file = "platformdirs-2.5.2-py3-none-any.whl", hash = "sha256:027d8e83a2d7de06bbac4e5ef7e023c02b863d7ea5d079477e722bb41ab25788"},
