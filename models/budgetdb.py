@@ -1,5 +1,7 @@
 ''' BudgetDB '''
+import string
 from datetime import datetime
+from random import choices
 from uuid import uuid4
 
 from pymongo.collection import ReturnDocument
@@ -48,6 +50,7 @@ class BudgetDB(DBBase):
             'paydate': '',
             'desc': '',
             'estimate': '',
+            'code': ''.join(choices(string.ascii_uppercase+string.digits, k=4)),
             'enabled': True,
             'create_at': datetime.today(),
         }

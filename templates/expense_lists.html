@@ -138,7 +138,7 @@
                           </tr>
                           <tr>
                               <td>唯一編號</td>
-                              <td><span class="tag">[[ modaldata._id ]]</span></td>
+                              <td><span class="tag is-success is-light">[[ modaldata.code ]]</span></td>
                           </tr>
                       </tbody>
                   </table>
@@ -271,7 +271,7 @@
                               </div>
                           </div>
                       </div>
-                      <div class="field has-background-info-light p-3" v-if="has_sent_invoices.length > 0">
+                      <div class="field has-background-info-light p-3" v-if="invoices.length > 0">
                           <label class="label">預算餘額計算</label>
                           <div class="field is-grouped is-grouped-multiline">
                               <div class="control" v-for="[currency, total] in Object.entries(diff_invoices_total)">
@@ -368,8 +368,8 @@
                 is_loading: 0,
                 select_team: '',
                 modaldata: {show: false, total: 0},
-                expense_request: {paydate: '', desc: '', buid: ''},
-                default_expense_request: {paydate: '', desc: '', buid: ''},
+                expense_request: {paydate: '', desc: '', buid: '', code: ''},
+                default_expense_request: {paydate: '', desc: '', buid: '', code: ''},
                 default_invoice: {name: '', currency: 'TWD', total: 0, status: ''},
                 invoices: [],
                 invoices_total: {},
@@ -483,7 +483,6 @@
                     this.has_sent_invoices = [];
                     $this = this;
                     axios.post('./', {casename: 'get_has_sent', buid: this.modaldata._id}).then(function(resp) {
-                        console.info(resp.data.data);
                         resp.data.data.forEach(function(raw) {
                             raw.invoices.forEach(function(invoice) {
                                 invoice['expense_id'] = raw._id;
@@ -499,6 +498,7 @@
                     ++this.modaldata.is_loading;
 
                     this.expense_request.buid = this.modaldata._id;
+                    this.expense_request.code = this.modaldata.code;
 
                     this.close();
 

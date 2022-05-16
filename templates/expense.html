@@ -45,6 +45,7 @@
                       <th>申請單號</th>
                       <th>狀態</th>
                       <th>預算編號</th>
+                      <th>預算唯一編號</th>
                       <th>部門</th>
                       <th></th>
                       <th>申請人</th>
@@ -81,6 +82,9 @@
                       <td class="is-vcentered">
                           <span class="tag is-dark">[[ budgets[item.request.buid].bid ]]</span>
                           <span><a @click="edit(item, index)">[[ budgets[item.request.buid].name ]]</a></span>
+                      </td>
+                      <td class="is-vcentered">
+                          <span class="tag is-success is-light">[[ item.request.code ]]</span>
                       </td>
                       <td class="is-vcentered">[[ item.tid ]]</td>
                       <td class="is-vcentered">
