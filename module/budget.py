@@ -1,7 +1,67 @@
 ''' Budget '''
+import re
+from enum import Enum
+from typing import Union
+
+import arrow
+from pydantic import BaseModel, error_wrappers, validator
+
 from models.budgetdb import BudgetDB
 from models.projectdb import ProjectDB
 from models.teamdb import TeamDB
+
+
+class Action(Enum):
+    ''' Action '''
+    ADD = 'add'
+    UPDATE = 'update'
+
+
+class Currency(Enum):
+    ''' Currency '''
+    TWD = 'TWD'
+    USD = 'USD'
+
+
+class BudgetImportItem(BaseModel):
+    ''' Base Item '''
+    # pylint: disable=no-self-argument,no-self-use
+    action: Action
+    bid: str
+    tid: str
+    uid: str
+    name: str
+    desc: str
+    total: Union[str, int, float]
+    currency: Currency
+    paydate: str
+    estimate: str
+
+    class Config:  # pylint: disable=too-few-public-methods
+        ''' Model config '''
+        use_enum_values = True
+
+    @validator('total')
+    def verify_total(cls, value):
+        ''' verify total '''
+        value = re.sub('[^0-9.]', '', value)
+        if '.' in value:
+            return float(value)
+
+        return int(value)
+
+    @validator('paydate')
+    def verify_paydate(cls, value, **kwargs):
+        ''' verify paydate '''
+        if not value:
+            return ''
+
+        try:
+            date = arrow.get(value)
+            return date.format('YYYY-MM-DD')
+        except arrow.parser.ParserError:
+            kwargs['values']['desc'] = f"預計付款時間：{value}\n{kwargs['values']['desc']}"
+            return ''
 
 
 class Budget:
@@ -75,3 +135,30 @@ class Budget:
             return BudgetDB().find({'pid': pid, 'tid': tid})
 
         return BudgetDB().find({'pid': pid, 'tid': tid, 'enabled': True})
+
+    @staticmethod
+    def get_by_bid(pid, bid):
+        ''' Get the one data in pid, bid '''
+        for raw in BudgetDB().find({'pid': pid, 'bid': bid}, {'_id': 1}):
+            return raw
+
+    @staticmethod
+    def verify_batch_items(items):
+        ''' verify the batch items '''
+        result = []
+        error_result = []
+        _n = 0
+        for raw in items:
+            try:
+                item = BudgetImportItem.parse_obj(raw)
+                result.append(item.dict())
+            except error_wrappers.ValidationError as error:
+                error_infos = []
+                for error_info in error.errors():
+                    error_infos.append(
+                        {'loc': error_info['loc'], 'msg': error_info['msg']})
+                error_result.append((_n, error_infos))
+
+            _n += 1
+
+        return result, error_result

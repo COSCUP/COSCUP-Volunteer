@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block head_title %} 大量上傳預算項目{% endblock %}
+{% block body %}
+<section class="hero is-link is-small">
+  <div class="hero-body">
+    <h1 class="title">
+        Batch upload budget items
+    </h1>
+    <p class="subtitle">大量上傳預算項目</p>
+  </div>
+</section>
+<section class="section">
+  <div id="batch" class="container" v-cloak>
+      <div class="column">
+          <div class="content">
+              <div class="field is-grouped is-grouped-right">
+                  <div class="buttons">
+                      <a class="button" :href="'/expense/'+pid">
+                          <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span>
+                          <span>已送出申請表 [[pid]]</span>
+                      </a>
+                      <a class="button" :href="'/budget/'+pid">
+                          <span class="icon"><i class="fas fa-funnel-dollar"></i></span>
+                          <span>已核准的預算項目</span>
+                      </a>
+                      <a class="button is-info is-outlined" target="_blank" href="https://github.com/COSCUP/COSCUP-Volunteer/wiki/%E9%A0%90%E7%AE%97%E8%A1%A8%EF%BC%88budget%EF%BC%89#%E5%A4%A7%E9%87%8F%E5%8C%AF%E5%85%A5%E9%A0%90%E7%AE%97%E9%A0%85%E7%9B%AE%E6%A0%BC%E5%BC%8F%E8%A1%A8">
+                          <span class="icon"><i class="far fa-question-circle"></i></span>
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="column">
+          <div class="field box">
+              <div class="content">
+                  <p>上傳格式請<a target="_blank" href="https://github.com/COSCUP/COSCUP-Volunteer/wiki/%E9%A0%90%E7%AE%97%E8%A1%A8%EF%BC%88budget%EF%BC%89#%E5%A4%A7%E9%87%8F%E5%8C%AF%E5%85%A5%E9%A0%90%E7%AE%97%E9%A0%85%E7%9B%AE%E6%A0%BC%E5%BC%8F%E8%A1%A8">參考說明與下載範本格式</a>。今年的組別代碼如下：</p>
+              </div>
+              <table class="table is-bordered is-striped is-narrow">
+                  <thead>
+                      <tr>
+                          <th>代碼</th>
+                          <th>名稱</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr v-for="team, index in teams">
+                          <td>[[ team.tid ]]</td>
+                          <td>[[ team.name ]]</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+          <div class="field box">
+              <div class="content">
+                  <h3>上傳預算表</h3>
+                  <div class="control">
+                      <div class="file">
+                          <label class="file-label">
+                              <input class="file-input" type="file" ref="file" name="resume"
+                                     v-on:change="handleupload" accept="text/csv">
+                              <span class="file-cta">
+                                  <span class="file-icon">
+                                      <i class="fas fa-upload"></i>
+                                  </span>
+                                  <span v-if="!file" class="file-label">
+                                      選擇檔案…
+                                  </span>
+                                  <span v-if="file" class="file-label">
+                                      [[ file.name ]]
+                                  </span>
+                              </span>
+                          </label>
+                          <button v-if="is_loading > 0" class="button is-loading is-success is-outlined ml-3"></button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="field box" v-if="error_items.length > 0 || dup_bids.length > 0">
+              <div class="content">
+                  <h3>錯誤的資料格式 ([[ error_items.length + dup_bids.length ]])</h3>
+                  <article class="message is-warning">
+                      <div class="message-body">
+                          需修正或是移除不完整項目才可以上傳
+                      </div>
+                  </article>
+                  <p v-if="dup_bids.length > 0">重複的預算編號：[[ dup_bids.join(', ') ]]</p>
+                  <ul v-if="error_items.length > 0">
+                      <li v-for="er_item in error_items">
+                          在第 <strong>[[ er_item[0] + 3 ]]</strong> 列資料格式錯誤
+                          <ol v-if="er_item != undefined">
+                              <li v-for="er_info in er_item[1]">[[ er_info.loc ]]: [[ er_info.msg ]]</li>
+                          </ol>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+          <div class="field box" v-if="items.length > 0">
+              <div class="content">
+                  <h3>可以被匯入的項目 ([[items.length]])</h3>
+                  <table class="table is-fullwidth">
+                      <thead>
+                          <tr>
+                              <th>Action</th>
+                              <th>預算編號</th>
+                              <th>名稱</th>
+                              <th>部門</th>
+                              <th>申請人</th>
+                              <th>金額</th>
+                              <th>預計支出日期</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr v-for="item, index in items">
+                              <td>
+                                  <span class="tag is-light" :class="{'is-info': item.action === 'add', 'is-success': item.action === 'edit'}">
+                                      [[ item.action ]]
+                                  </span>
+                              </td>
+                              <td>
+                                  [[ item.bid ]]
+                              </td>
+                              <td> [[ item.name ]]</td>
+                              <td>[[ item.tid ]]</td>
+                              <td>[[ item.uid ]]</td>
+                              <td><span class="tag">[[ item.currency ]]</span>[[ item.total.toLocaleString('en') ]]</td>
+                              <td>[[ item.paydate ]]</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+          <div class="field box" v-if="dup_bids.length == 0 && error_items.length == 0 && items.length > 0">
+              <div class="content">
+                  <h3>預備匯入</h3>
+                  <p>確認匯入 [[ items.length ]] 項目？</p>
+                  <a class="button is-info" @click="save" :class="{'is-loading': is_loading > 0}">
+                      <span class="icon"><i class="fas fa-save"></i></span>
+                      <span>確認匯入</span>
+                  </a>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $batch= new Vue({
+            el: '#batch',
+            data: {
+                pid: '{{ project._id }}',
+                teams: [],
+                items: [],
+                error_items: [],
+                is_loading: 0,
+                teams: [],
+                dup_bids: [],
+                file: null
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                load: function() {
+                    axios.post('./'+this.pid, {casename: 'get'}).then(function(resp) {
+                        $batch.teams = resp.data.teams;
+                    });
+                },
+                handleupload: function() {
+                    ++this.is_loading;
+                    this.file = this.$refs.file.files[0];
+
+                    let formData = new FormData();
+                    formData.append('casename', 'verify');
+                    formData.append('file', this.file);
+
+                    $this = $batch;
+                    axios.post('./'+this.pid, formData, {header: {'Content-Type': 'multipart/form-data'}}).then(function(resp) {
+                        $this.items = resp.data.confirmed;
+                        $this.error_items = resp.data.error_items;
+                        $this.dup_bids = resp.data.dup_bids;
+                        --$this.is_loading;
+                    });
+                },
+                save: function() {
+                    ++this.is_loading;
+                    let formData = new FormData();
+                    formData.append('casename', 'save');
+                    formData.append('file', this.file);
+
+                    $this = $batch;
+                    axios.post('./'+this.pid, formData, {header: {'Content-Type': 'multipart/form-data'}}).then(function(resp) {
+                        window.location = '/budget/' + $this.pid;
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}
