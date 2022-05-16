@@ -46,6 +46,7 @@
               <thead>
                   <tr>
                       <th>預算編號</th>
+                      <th>唯一編號</th>
                       <th>名稱</th>
                       <th>部門</th>
                       <th>申請人</th>
@@ -63,6 +64,9 @@
                   <tr v-for="item, index in items" :class="{'is-delete': item.enabled === 'false'}">
                       <td>
                           [[ item.bid ]]
+                      </td>
+                      <td>
+                          <span class="tag is-success is-light">[[ item.code ]]</span>
                       </td>
                       <td>
                           <a class="is-link" @click="edit(item, index)">[[ item.name ]]</a>

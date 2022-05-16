@@ -932,7 +932,7 @@ def team_expense_index(pid, tid):
 
         if data['casename'] == 'add_expense':
             # create expense and send notification.
-            expense = Expense.proess_and_add(
+            expense = Expense.process_and_add(
                 pid=project['_id'], tid=team['tid'], uid=g.user['account']['_id'], data=data)
             expense_create.apply_async(kwargs={'expense': expense})
             return jsonify(data)

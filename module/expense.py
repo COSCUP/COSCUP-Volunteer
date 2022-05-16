@@ -8,7 +8,7 @@ from models.expensedb import ExpenseDB
 class Expense:
     ''' Expense class '''
     @staticmethod
-    def proess_and_add(pid, tid, uid, data):
+    def process_and_add(pid, tid, uid, data):
         ''' Process data from web '''
         save = ExpenseDB.new(pid=pid, tid=tid, uid=uid)
 
@@ -16,6 +16,7 @@ class Expense:
             'buid': data['expense_request']['buid'],
             'desc': data['expense_request']['desc'],
             'paydate': data['expense_request']['paydate'],
+            'code': data['expense_request']['code'],
         }
 
         save['bank'] = {
