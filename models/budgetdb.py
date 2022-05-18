@@ -50,7 +50,7 @@ class BudgetDB(DBBase):
             'paydate': '',
             'desc': '',
             'estimate': '',
-            'code': ''.join(choices(string.ascii_uppercase+string.digits, k=4)),
+            'code': f"B-{''.join(choices(string.ascii_uppercase+string.digits, k=4))}",
             'enabled': True,
             'create_at': datetime.today(),
         }

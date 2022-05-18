@@ -143,6 +143,23 @@
                       </tbody>
                   </table>
               </div>
+              <div class="content" v-if="has_sent_expenses.size > 0">
+                  <h4>與其他申請單有關聯</h4>
+              </div>
+              <div class="content" v-if="has_sent_expenses.size > 0">
+                  <div class="field is-grouped is-grouped-multiline">
+                      <div class="control" v-for="expense_code in has_sent_expenses">
+                          <span class="tag is-light"
+                               :class="{'is-link': expense_request.relevant.includes(expense_code)}">
+                              <label class="checkbox">
+                                  <input type="checkbox" class="mr-1"
+                                         :value="expense_code" v-model="expense_request.relevant">
+                                  [[ expense_code ]]
+                              </label>
+                          </span>
+                      </div>
+                  </div>
+              </div>
               <div class="content">
                   <h4>已申請的單據</h4>
               </div>
@@ -189,7 +206,15 @@
               <div class="content">
                   <h4>檢附單據</h4>
               </div>
-              <div class="field" v-for="invoice, index in invoices">
+              <div class="field">
+                  <div class="control">
+                      <label class="checkbox">
+                          <input type="checkbox" class="mr-1" v-model="modaldata.no_invoices">
+                          無單據
+                      </label>
+                  </div>
+              </div>
+              <div class="field" v-if="!modaldata.no_invoices" v-for="invoice, index in invoices">
                   <div class="field-body">
                       <div class="field">
                           <label class="label">[[ index+1 ]]. 發票號碼或收據</label>
@@ -234,7 +259,7 @@
                       </div>
                   </div>
               </div>
-              <div class="field">
+              <div class="field" v-if="!modaldata.no_invoices">
                   <a class="button is-small is-dark is-outlined" @click="add_invoice">
                       <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span>
                       <span>新增單據</span>
@@ -367,15 +392,16 @@
             data: {
                 is_loading: 0,
                 select_team: '',
-                modaldata: {show: false, total: 0},
-                expense_request: {paydate: '', desc: '', buid: '', code: ''},
-                default_expense_request: {paydate: '', desc: '', buid: '', code: ''},
+                modaldata: {show: false, total: 0, no_invoices: false},
+                expense_request: {paydate: '', desc: '', buid: '', code: '', relevant: []},
+                default_expense_request: {paydate: '', desc: '', buid: '', code: '', relevant: []},
                 default_invoice: {name: '', currency: 'TWD', total: 0, status: ''},
                 invoices: [],
                 invoices_total: {},
                 has_sent_invoices: [],
                 has_sent_invoices_total: {},
                 diff_invoices_total: {},
+                has_sent_expenses: new Set(),
                 bank: {},
                 bank_alert: 0,
                 teams: [],
@@ -481,9 +507,11 @@
                         this.add_invoice();
                     }
                     this.has_sent_invoices = [];
+                    this.has_sent_expenses = new Set();
                     $this = this;
                     axios.post('./', {casename: 'get_has_sent', buid: this.modaldata._id}).then(function(resp) {
                         resp.data.data.forEach(function(raw) {
+                            $this.has_sent_expenses.add(raw.code);
                             raw.invoices.forEach(function(invoice) {
                                 invoice['expense_id'] = raw._id;
                                 $this.has_sent_invoices.push(invoice);
@@ -499,6 +527,10 @@
 
                     this.expense_request.buid = this.modaldata._id;
                     this.expense_request.code = this.modaldata.code;
+
+                    if (this.modaldata.no_invoices) {
+                        this.invoices = [];
+                    }
 
                     this.close();
 
