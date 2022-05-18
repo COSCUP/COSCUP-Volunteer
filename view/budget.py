@@ -1,6 +1,7 @@
 ''' Budget '''
 import csv
 import io
+from typing import cast
 
 from flask import Blueprint, g, jsonify, redirect, render_template, request
 
@@ -28,12 +29,13 @@ def batch(pid):
 
     if request.method == 'POST':
         if request.is_json:
-            data = request.get_json()
+            data = cast(dict, request.get_json())
 
-            if data and 'casename' in data and data['casename'] == 'get':
-                teams = []
-                for team in Team.list_by_pid(pid=project['_id']):
-                    teams.append({'name': team['name'], 'tid': team['tid']})
+            if data and data.get('casename') == 'get':
+                teams = [
+                    {'name': team['name'], 'tid': team['tid']}
+                    for team in Team.list_by_pid(pid=project['_id'])
+                ]
 
                 return jsonify({'teams': teams})
 
@@ -45,16 +47,20 @@ def batch(pid):
 
             dedup_result = []
             dup_bids = []
+
+            # Conditions
+            #
+            # ``item`` will be defined in the following loop.
+            has_bid_in_budget = lambda bid: Budget.get_by_bid(pid=pid, bid=bid)
+            has_added = lambda item: item['action'] == 'add' and has_bid_in_budget(item['bid'])
+            did_update_nonexisted_entry = lambda item: \
+                item['action'] == 'update' and not has_bid_in_budget(item['bid'])
+
             for item in result:
-                if item['action'] == 'add' and Budget.get_by_bid(pid=pid, bid=item['bid']):
+                if has_added(item) or did_update_nonexisted_entry(item):
                     dup_bids.append(item['bid'])
-                    continue
-
-                if item['action'] == 'update' and not Budget.get_by_bid(pid=pid, bid=item['bid']):
-                    dup_bids.append(item['bid'])
-                    continue
-
-                dedup_result.append(item)
+                else:
+                    dedup_result.append(item)
 
             if request.form['casename'] == 'verify':
                 return jsonify({
@@ -94,7 +100,7 @@ def by_project_index(pid):
         return render_template('./budget.html', project=project, is_admin=is_admin)
 
     if request.method == 'POST':
-        data = request.get_json()
+        data = cast(dict, request.get_json())
 
         if data['casename'] == 'get':
             teams = []
