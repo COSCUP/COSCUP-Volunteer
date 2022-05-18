@@ -153,7 +153,6 @@
                 },
                 makechange: function($e) {
                     axios.post('./accommodation', {'casename': 'makechange', 'key': this.room.exkey}).then(function(resp) {
-                        console.info(resp.data.data);
                         alert(resp.data.msg);
                         window.location.href = './accommodation';
                     });
@@ -166,7 +165,7 @@
                 },
                 send: function($e) {
                     axios.post('./accommodation', {'casename': 'update', selected: this.raw.selected}).then(function(resp) {
-                        console.info(resp.data.data);
+                        alert('已更新！');
                     });
                 }
             },

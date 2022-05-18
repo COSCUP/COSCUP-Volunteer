@@ -24,7 +24,7 @@
                   </tr>
                   <tr v-for="item, index in items" :class="{'is-delete': item.enabled === false}">
                       <td class="is-vcentered">
-                          <p><span class="tag">[[ item._id ]]</span></p>
+                          <p><span class="tag is-link is-light">[[ item.code ]]</span></p>
                           <p class="is-size-7">[[ new Date(item.create_at).toLocaleString() ]]</p>
                       </td>
                       <td class="is-vcentered">
@@ -127,10 +127,16 @@
                           </tr>
                           <tr>
                               <td>唯一編號</td>
-                              <td><span class="tag">[[ modaldata._id ]]</span></td>
+                              <td><span class="tag is-link is-light">[[ modaldata.code ]]</span></td>
                           </tr>
                       </tbody>
                   </table>
+              </div>
+              <div class="content" v-if="modaldata.relevant_code.length > 0">
+                  <h4>與其他申請單有關聯</h4>
+                  <div class="tags">
+                      <span class="tag is-link is-light" v-for="relevant in modaldata.relevant_code">[[ relevant ]]</span>
+                  </div>
               </div>
               <div class="content">
                   <h4>檢附單據</h4>
@@ -208,7 +214,6 @@
                     document.querySelector('html').classList.toggle('is-clipped');
                 },
                 edit: function(item, index) {
-                    console.info(item);
                     this.modaldata = Object.assign({}, item, {show: true, total: 0});
                     document.querySelector('html').classList.toggle('is-clipped');
                 },

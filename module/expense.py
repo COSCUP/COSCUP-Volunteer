@@ -19,6 +19,14 @@ class Expense:
             'code': data['expense_request']['code'],
         }
 
+        # check the relevant expense codes
+        for expense in ExpenseDB().find({'pid': pid,
+                                         'code': {
+                                             '$in': list(filter(
+                                                 lambda x: x,
+                                                 data['expense_request']['relevant']))}}):
+            save['relevant_code'].append(expense['code'])
+
         save['bank'] = {
             'branch': data['bank']['branch'],
             'code': data['bank']['code'],
@@ -86,7 +94,7 @@ class Expense:
     def get_has_sent(pid, budget_id):
         ''' Get has sent and not canceled '''
         query = {'pid': pid, 'request.buid': budget_id}
-        for raw in ExpenseDB().find(query, {'invoices': 1}):
+        for raw in ExpenseDB().find(query, {'invoices': 1, 'code': 1}):
             yield raw
 
     @staticmethod
