@@ -26,16 +26,16 @@ class Currency(Enum):
 class BudgetImportItem(BaseModel):
     ''' Base Item '''
     # pylint: disable=no-self-argument,no-self-use
-    action: Action
-    bid: str
-    tid: str
-    uid: str
-    name: str
-    desc: str
-    total: Union[str, int, float]
-    currency: Currency
-    paydate: str
-    estimate: str
+    action: Action  # 匯入行為 (add/update)
+    bid: str  # 編號（預算表編號）
+    tid: str  # 組別（依組別代碼）
+    uid: str  # 申請人
+    name: str  # 項目名稱
+    desc: str  # 項目說明
+    total: Union[str, int, float]  # 核定金額
+    currency: Currency  # 核定貨幣 (ISO4217)
+    paydate: str  # 預定支出日期 (YYYY-MM-DD)
+    estimate: str  # 估算方式
 
     class Config:  # pylint: disable=too-few-public-methods
         ''' Model config '''
@@ -138,7 +138,7 @@ class Budget:
 
     @staticmethod
     def get_by_bid(pid, bid):
-        ''' Get the one data in pid, bid '''
+        ''' Get a item according to the specified ``pid`` and ``bid``. '''
         for raw in BudgetDB().find({'pid': pid, 'bid': bid}, {'_id': 1}):
             return raw
 
@@ -147,18 +147,15 @@ class Budget:
         ''' verify the batch items '''
         result = []
         error_result = []
-        _n = 0
-        for raw in items:
+        for (n, raw) in enumerate(items):
             try:
                 item = BudgetImportItem.parse_obj(raw)
                 result.append(item.dict())
             except error_wrappers.ValidationError as error:
-                error_infos = []
-                for error_info in error.errors():
-                    error_infos.append(
-                        {'loc': error_info['loc'], 'msg': error_info['msg']})
-                error_result.append((_n, error_infos))
-
-            _n += 1
+                error_infos = [
+                    {'loc': error_info['loc'], 'msg': error_info['msg']}
+                    for error_info in error.errors()
+                ]
+                error_result.append((n, error_infos))
 
         return result, error_result

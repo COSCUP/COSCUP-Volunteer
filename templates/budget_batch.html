@@ -33,7 +33,7 @@
       <div class="column">
           <div class="field box">
               <div class="content">
-                  <p>上傳格式請<a target="_blank" href="https://github.com/COSCUP/COSCUP-Volunteer/wiki/%E9%A0%90%E7%AE%97%E8%A1%A8%EF%BC%88budget%EF%BC%89#%E5%A4%A7%E9%87%8F%E5%8C%AF%E5%85%A5%E9%A0%90%E7%AE%97%E9%A0%85%E7%9B%AE%E6%A0%BC%E5%BC%8F%E8%A1%A8">參考說明與下載範本格式</a>。今年的組別代碼如下：</p>
+                  <p>上傳格式請 <a target="_blank" href="https://github.com/COSCUP/COSCUP-Volunteer/wiki/%E9%A0%90%E7%AE%97%E8%A1%A8%EF%BC%88budget%EF%BC%89#%E5%A4%A7%E9%87%8F%E5%8C%AF%E5%85%A5%E9%A0%90%E7%AE%97%E9%A0%85%E7%9B%AE%E6%A0%BC%E5%BC%8F%E8%A1%A8">參考說明與下載範本格式</a>。今年的組別代碼如下：</p>
               </div>
               <table class="table is-bordered is-striped is-narrow">
                   <thead>
@@ -147,7 +147,7 @@
 <script src="/js/axios.min.js"></script>
 <script>
     (function () {
-        let $batch= new Vue({
+        const $batch = new Vue({
             el: '#batch',
             data: {
                 pid: '{{ project._id }}',
@@ -172,12 +172,12 @@
                     ++this.is_loading;
                     this.file = this.$refs.file.files[0];
 
-                    let formData = new FormData();
+                    const formData = new FormData();
                     formData.append('casename', 'verify');
                     formData.append('file', this.file);
 
-                    $this = $batch;
-                    axios.post('./'+this.pid, formData, {header: {'Content-Type': 'multipart/form-data'}}).then(function(resp) {
+                    const $this = $batch;
+                    axios.post(`./${this.pid}`, formData, {header: {'Content-Type': 'multipart/form-data'}}).then(function(resp) {
                         $this.items = resp.data.confirmed;
                         $this.error_items = resp.data.error_items;
                         $this.dup_bids = resp.data.dup_bids;
@@ -186,13 +186,13 @@
                 },
                 save: function() {
                     ++this.is_loading;
-                    let formData = new FormData();
+                    const formData = new FormData();
                     formData.append('casename', 'save');
                     formData.append('file', this.file);
 
-                    $this = $batch;
-                    axios.post('./'+this.pid, formData, {header: {'Content-Type': 'multipart/form-data'}}).then(function(resp) {
-                        window.location = '/budget/' + $this.pid;
+                    const $this = $batch;
+                    axios.post(`./${this.pid}`, formData, {header: {'Content-Type': 'multipart/form-data'}}).then(function(resp) {
+                        window.location = `/budget/${$this.pid}`;
                     });
                 }
             },
