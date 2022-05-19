@@ -950,11 +950,8 @@ def team_expense_lists(pid, tid):
     if _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or
-                g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
-
-    if not is_admin:
+    if not (g.user['account']['_id'] in team['members'] or
+            g.user['account']['_id'] in team['chiefs']):
         return redirect('/')
 
     if request.method == 'GET':
