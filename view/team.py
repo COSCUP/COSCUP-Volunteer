@@ -902,11 +902,8 @@ def team_expense_index(pid, tid):
     if _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or
-                g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
-
-    if not is_admin:
+    if not (g.user['account']['_id'] in team['members'] or
+            g.user['account']['_id'] in team['chiefs']):
         return redirect('/')
 
     if request.method == 'POST':
@@ -960,9 +957,8 @@ def team_expense_lists(pid, tid):
     if not is_admin:
         return redirect('/')
 
-    budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
-
     if request.method == 'GET':
+        budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
         return render_template('./expense_lists.html', project=project,
                                team=team, budget_menu=budget_admin)
 
@@ -978,16 +974,12 @@ def team_expense_my(pid, tid):
     if _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or
-                g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
-
-    if not is_admin:
+    if not (g.user['account']['_id'] in team['members'] or
+            g.user['account']['_id'] in team['chiefs']):
         return redirect('/')
 
-    budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
-
     if request.method == 'GET':
+        budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
         return render_template('./expense_my.html', project=project,
                                team=team, budget_menu=budget_admin)
 
