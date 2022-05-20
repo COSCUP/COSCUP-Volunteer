@@ -310,7 +310,3 @@ values: {request.values}\n\n{traceback.format_exc()}</pre>'''
 
 
 got_request_exception.connect(error_exception, app)
-
-
-if __name__ == '__main__':
-    app.run(debug=False, host=setting.SERVER_HOST, port=setting.SERVER_PORT)
