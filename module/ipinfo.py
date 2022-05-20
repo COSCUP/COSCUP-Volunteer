@@ -1,22 +1,20 @@
 ''' IPInfo '''
-# pylint: disable=arguments-renamed,arguments-differ
-from requests import Session
+from requests import Response, Session
 
 
 class IPInfo(Session):
     ''' IPInfo '''
 
-    def __init__(self, token):
+    def __init__(self, token: str):
         super().__init__()
+        self.url = 'https://ipinfo.io/'
         self.token = token
+        self.headers.update({'Authorization': f'Bearer {self.token}'})
 
-    def get(self, ip):
+    def get_info(self, ip_address: str) -> Response:
         ''' Get info
 
         :param str ip: ip
 
         '''
-        headers = {
-            'Authorization': f'Bearer {self.token}',
-        }
-        return super().get(f'https://ipinfo.io/{ip}', headers=headers)
+        return super().get(f'{self.url}{ip_address}')
