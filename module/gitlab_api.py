@@ -1,34 +1,22 @@
 ''' GitlabAPI '''
-# pylint: disable=arguments-renamed,arguments-differ
-from requests.sessions import Session
+from requests import Response, Session
 
 
 class GitlabAPI(Session):
     ''' GitlabAPI '''
 
-    def __init__(self, token):
+    def __init__(self, token: str) -> None:
         super().__init__()
         self.url = 'https://gitlab.com/api/v4'
         self.token = token
         self.headers.update({'Authorization': f'Bearer {self.token}'})
 
-    def get(self, path, **kwargs):
-        ''' GET '''
-        return super().get(self.url+path, **kwargs)
-
-    def post(self, path, **kwargs):
-        ''' POST '''
-        return super().post(self.url+path, **kwargs)
-
-    def delete(self, path, **kwargs):
-        ''' DELETE '''
-        return super().delete(self.url+path, **kwargs)
-
-    def get_project(self, project_id):
+    def get_project(self, project_id: str) -> Response:
         ''' Get Project '''
-        return self.get(f'/projects/{project_id}')
+        return self.get(url=f'{self.url}/projects/{project_id}')
 
-    def post_invite_to_project(self, project_id, email, access_level=30):
+    def post_invite_to_project(self, project_id: str, email: str,
+                               access_level: int = 30) -> Response:
         ''' Post invite to project
 
         access_level 30 => Developer
@@ -36,9 +24,9 @@ class GitlabAPI(Session):
         https://docs.gitlab.com/ee/api/invitations.html#valid-access-levels
         https://docs.gitlab.com/ee/user/permissions.html#project-members-permissions
         '''
-        return self.post(f'/projects/{project_id}/invitations',
+        return self.post(url=f'{self.url}/projects/{project_id}/invitations',
                          data={'email': email, 'access_level': access_level})
 
-    def delete_invite_to_project(self, project_id, email):
+    def delete_invite_to_project(self, project_id: str, email: str) -> Response:
         ''' DELETE invite to project '''
-        return self.delete(f'/projects/{project_id}/invitations/{email}')
+        return self.delete(url=f'{self.url}/projects/{project_id}/invitations/{email}')

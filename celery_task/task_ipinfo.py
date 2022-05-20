@@ -29,7 +29,7 @@ def ipinfo_update_usession_one(sender, **kwargs):
     ''' update session ipinfo '''
     logger.info(kwargs)
 
-    resp = IPInfo(setting.IPINFO_TOKEN).get(ip=kwargs['ip'])
+    resp = IPInfo(setting.IPINFO_TOKEN).get_info(ip_address=kwargs['ip'])
     USession.update_ipinfo(sid=kwargs['sid'], data=resp.json())
 
 

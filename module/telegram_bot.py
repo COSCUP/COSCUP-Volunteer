@@ -1,54 +1,52 @@
 ''' TelegramBot '''
-# pylint: disable=arguments-renamed,arguments-differ
 from time import time
+from typing import Any, Union
 from uuid import uuid4
 
-from requests.sessions import Session
+from requests import Response, Session
 
 from module.mc import MC
 
 
-class TelegramBot(Session):
-    ''' TelegramBot '''
+class Telegram(Session):
+    ''' Telegram '''
 
-    def __init__(self, token):
+    def __init__(self, token: str):
         super().__init__()
         self.url = f'https://api.telegram.org/bot{token}'
 
-    def get(self, path, **kwargs):
-        ''' GET '''
-        return super().get(self.url+path, **kwargs)
-
-    def post(self, path, **kwargs):
-        ''' POST '''
-        return super().post(self.url+path, **kwargs)
-
-    def get_me(self):
+    def get_me(self) -> Response:
         ''' Get me '''
-        return self.post('/getMe')
+        return self.post(f'{self.url}/getMe')
 
-    def send_message(self, chat_id, text, parse_mode='Markdown', reply_markup=None):
+    def send_message(self, chat_id: str, text: str,
+                     parse_mode: str = 'Markdown',
+                     reply_markup: Union[dict[str, Any], None] = None) -> Response:
         ''' Send message '''
-        data = {'chat_id': chat_id, 'text': text, 'parse_mode': parse_mode}
+        data = {
+            'chat_id': chat_id,
+            'text': text,
+            'parse_mode': parse_mode}  # type: dict[str, Union[str, dict[str, Any]]]
+
         if reply_markup is not None:
             data['reply_markup'] = reply_markup
 
-        return self.post('/sendMessage', json=data)
+        return self.post(f'{self.url}/sendMessage', json=data)
 
-    def set_webhook(self, url):
+    def set_webhook(self, url: str) -> Response:
         ''' Set webhook '''
-        return self.post('/setWebhook', json={'url': url})
+        return self.post(f'{self.url}/setWebhook', json={'url': url})
 
-    def get_webhook_info(self, url):
+    def get_webhook_info(self, url: str) -> Response:
         ''' Get webhook info '''
-        return self.post('/getWebhookInfo', json={'url': url})
+        return self.post(f'{self.url}/getWebhookInfo', json={'url': url})
 
-    def delete_webhook(self):
+    def delete_webhook(self) -> Response:
         ''' delete webhook '''
-        return self.post('/deleteWebhook')
+        return self.post(f'{self.url}/deleteWebhook')
 
     @staticmethod
-    def is_command_start(data: dict) -> bool:
+    def is_command_start(data: dict[str, Any]) -> bool:
         ''' command start '''
         if data['message']['from']['is_bot']:
             return False
@@ -59,7 +57,7 @@ class TelegramBot(Session):
         return False
 
     @staticmethod
-    def is_command_start_linkme(data: dict) -> bool:
+    def is_command_start_linkme(data: dict[str, Any]) -> bool:
         ''' command start '''
         if 'message' not in data:
             return False
@@ -71,6 +69,13 @@ class TelegramBot(Session):
             return True
 
         return False
+
+
+class TelegramBot(Telegram):
+    ''' TelegramBot '''
+
+    def __init__(self, token: str):
+        super().__init__(token=token)
 
     @staticmethod
     def gen_uuid(chat_id, expired_time=300) -> dict:
