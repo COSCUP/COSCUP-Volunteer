@@ -102,7 +102,7 @@ class TasksStar:
         ''' add '''
         data = TasksStarDB().find_one({'pid': pid, 'uid': uid})
         if not data:
-            return TasksStarDB().insert(TasksStarDB.new(pid=pid, uid=uid))
+            return TasksStarDB().insert_one(TasksStarDB.new(pid=pid, uid=uid))
 
         return data
 
@@ -127,7 +127,7 @@ class TasksStar:
             TasksStarDB().delete_one({'pid': pid, 'uid': uid})
             return {'add': False}
 
-        TasksStarDB().insert(TasksStarDB.new(pid=pid, uid=uid))
+        TasksStarDB().insert_one(TasksStarDB.new(pid=pid, uid=uid))
         return {'add': True}
 
     @staticmethod
