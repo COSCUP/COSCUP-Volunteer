@@ -12,6 +12,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
 from os.path import basename
+from typing import Any
 
 import boto3
 
@@ -26,14 +27,14 @@ class AWSS3:
     '''
     __slots__ = ('client', 'bucket')
 
-    def __init__(self, aws_access_key_id, aws_secret_access_key, bucket):
+    def __init__(self, aws_access_key_id: str, aws_secret_access_key: str, bucket: str) -> None:
         self.client = boto3.client('s3',
                                    aws_access_key_id=aws_access_key_id,
                                    aws_secret_access_key=aws_secret_access_key,
                                    )
         self.bucket = bucket
 
-    def get_object(self, key):
+    def get_object(self, key: str) -> Any:
         ''' Get object
 
         :param str key: key name
@@ -45,7 +46,7 @@ class AWSS3:
         '''
         return self.client.get_object(Bucket=self.bucket, Key=key)
 
-    def convert_to_attachment(self, key):
+    def convert_to_attachment(self, key: str) -> MIMEBase:
         ''' Convert the object to match attachment '''
         s3object = self.get_object(key)
         attachment = MIMEBase(
@@ -72,7 +73,8 @@ class AWSSES:
 
     __slots__ = ('client', 'source')
 
-    def __init__(self, aws_access_key_id, aws_secret_access_key, source):
+    def __init__(self, aws_access_key_id: str, aws_secret_access_key: str,
+                 source: dict[str, str]) -> None:
         self.client = boto3.client('ses',
                                    aws_access_key_id=aws_access_key_id,
                                    aws_secret_access_key=aws_secret_access_key,
@@ -80,7 +82,7 @@ class AWSSES:
         self.source = source
 
     @staticmethod
-    def format_mail(name, mail):
+    def format_mail(name: str, mail: str) -> str:
         ''' Encode header to base64
 
             :param str name: user name
@@ -93,7 +95,7 @@ class AWSSES:
 
         return mail
 
-    def send_email(self, *args, **kwargs):
+    def send_email(self, *args: Any, **kwargs: Any) -> Any:
         ''' Send mail
 
         ``*args``, ``**kwargs`` are the same with :meth:`SES.Client.send_email`
@@ -104,7 +106,7 @@ class AWSSES:
         '''
         return self.client.send_email(*args, **kwargs)
 
-    def raw_mail(self, **kwargs):
+    def raw_mail(self, **kwargs: Any) -> Any:
         ''' To make raw mail content
 
         :param list to_addresses: to
@@ -118,6 +120,7 @@ class AWSSES:
 
         '''
         msg_all = MIMEMultipart()
+
         msg_all['From'] = self.format_mail(
             self.source['name'], self.source['mail'])
 
@@ -148,7 +151,7 @@ class AWSSES:
 
         return msg_all
 
-    def send_raw_email(self, **kwargs):
+    def send_raw_email(self, **kwargs: Any) -> Any:
         ''' send raw email
 
         if no ``data``, must have ``from``, ``to``, ``subject``, ``body``, ``attachment``
