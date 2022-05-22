@@ -1,18 +1,22 @@
 ''' oauth database '''
+from typing import Any
+
+import google_auth_oauthlib.flow  # type: ignore
+
 from models.base import DBBase
 
 
 class OAuthDB(DBBase):  # pylint: disable=abstract-method
     ''' OAuthDB Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('oauth')
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('owner', 1), ])
 
-    def add_data(self, mail, data):
+    def add_data(self, mail: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Add user data
 
         :param str mail: email
@@ -24,7 +28,7 @@ class OAuthDB(DBBase):  # pylint: disable=abstract-method
             {'$set': {'data': data}},
             upsert=True)
 
-    def add_token(self, mail, credentials):
+    def add_token(self, mail: str, credentials: google_auth_oauthlib.flow) -> None:
         ''' Add user oauth token
 
         :param str mail: email
@@ -52,7 +56,7 @@ class OAuthDB(DBBase):  # pylint: disable=abstract-method
             {'$set': {'token': data}},
             upsert=True)
 
-    def setup_owner(self, mail, uid):
+    def setup_owner(self, mail: str, uid: str) -> None:
         ''' Setup owner
 
         :param str mail: mail

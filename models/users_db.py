@@ -1,5 +1,6 @@
 ''' User database '''
 from time import time
+from typing import Any
 from uuid import uuid4
 
 from pymongo.collection import ReturnDocument
@@ -10,16 +11,16 @@ from models.base import DBBase
 class UsersDB(DBBase):  # pylint: disable=abstract-method
     ''' UsersDB Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('users')
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('mail', 1), ])
         self.create_index([('property.suspend', 1), ])
 
     @staticmethod
-    def new(mail):
+    def new(mail: str) -> dict[str, Any]:
         ''' New user account
 
         :param str mail: mail
@@ -35,7 +36,7 @@ class UsersDB(DBBase):  # pylint: disable=abstract-method
             'created_at': int(time()),
         }
 
-    def add(self, data):
+    def add(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' Add data
 
         :param dict data: user data
@@ -52,10 +53,10 @@ class UsersDB(DBBase):  # pylint: disable=abstract-method
 class TobeVolunteerDB(DBBase):  # pylint: disable=abstract-method
     ''' TobeVolunteer Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('tobe_volunteer')
 
-    def add(self, data: dict):
+    def add(self, data: dict[str, Any]) -> None:
         ''' add '''
         self.find_one_and_update(
             {'_id': data['uid']},
