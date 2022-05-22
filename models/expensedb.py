@@ -2,6 +2,7 @@
 import string
 from datetime import datetime
 from random import choices
+from typing import Any
 from uuid import uuid4
 
 from pymongo.collection import ReturnDocument
@@ -12,17 +13,17 @@ from models.base import DBBase
 class ExpenseDB(DBBase):
     ''' Expense Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('expense')
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('pid', 1), ('tid', 1)])
         self.create_index([('pid', 1), ('tid', 1), ('request.buid', 1)])
         self.create_index([('pid', 1), ('tid', 1), ('create_by', 1)])
 
     @staticmethod
-    def status():
+    def status() -> dict[str, str]:
         ''' Status mapping '''
         return {'1': '已申請',
                 '2': '已出款',
@@ -30,7 +31,7 @@ class ExpenseDB(DBBase):
                 }
 
     @staticmethod
-    def new(pid, tid, uid):
+    def new(pid: str, tid: str, uid: str) -> dict[str, Any]:
         ''' Create new '''
         return {
             '_id': f'{uuid4().node:x}',
@@ -47,7 +48,7 @@ class ExpenseDB(DBBase):
             'create_at': datetime.today(),
         }
 
-    def add(self, data):
+    def add(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' Add data
 
         :param dict data: data

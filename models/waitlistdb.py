@@ -1,6 +1,9 @@
 ''' WaitListDB '''
+from typing import Any, Literal, Optional, Union
+
 from bson.objectid import ObjectId
 from pymongo.collection import ReturnDocument
+from pymongo.cursor import Cursor
 
 from models.base import DBBase
 
@@ -8,15 +11,15 @@ from models.base import DBBase
 class WaitListDB(DBBase):
     ''' WaitList Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('waitlist')
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('pid', 1), ])
         self.create_index([('uid', 1), ])
 
-    def join_to(self, pid, tid, uid, note=None):
+    def join_to(self, pid: str, tid: str, uid: str, note: Optional[str] = None) -> dict[str, None]:
         ''' Join to
 
         :param str pid: project id
@@ -32,7 +35,7 @@ class WaitListDB(DBBase):
             return_document=ReturnDocument.AFTER,
         )
 
-    def is_in_wait(self, pid, tid, uid):
+    def is_in_wait(self, pid: str, tid: str, uid: str) -> int:
         ''' Is in waitting list
 
         :param str pid: project id
@@ -43,7 +46,8 @@ class WaitListDB(DBBase):
         return self.count_documents({
             'pid': pid, 'tid': tid, 'uid': uid, 'result': {'$exists': False}})
 
-    def list_by(self, pid, tid=None, uid=None, _all=False):
+    def list_by(self, pid: str, tid: Optional[str] = None, uid: Optional[str] = None,
+                _all: bool = False) -> Union[Optional[dict[str, Any]], Cursor[dict[str, Any]]]:
         ''' List by
 
         :param str pid: project id
@@ -52,7 +56,7 @@ class WaitListDB(DBBase):
         :param bool _all: show all waitlist
 
         '''
-        query = {'pid': pid}
+        query: dict[str, Any] = {'pid': pid}
         if tid:
             query['tid'] = tid
 
@@ -67,7 +71,8 @@ class WaitListDB(DBBase):
 
         return self.find(query)
 
-    def make_result(self, _id, pid, uid, result):
+    def make_result(self, _id: str, pid: str, uid: str,
+                    result: Literal['approval', 'deny']) -> Optional[dict[str, Any]]:
         ''' Make result
 
         :param str _id: waitlist id

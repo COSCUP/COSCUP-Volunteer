@@ -1,4 +1,6 @@
 ''' FormDB '''
+from typing import Any
+
 from pymongo.collection import ReturnDocument
 
 from models.base import DBBase
@@ -13,15 +15,15 @@ class FormDB(DBBase):
 
     '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('form')
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('case', 1), ])
         self.create_index([('pid', 1), ])
 
-    def add_by_case(self, case, pid, uid, data):
+    def add_by_case(self, case: str, pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' add data by case
 
         :param str case: form case
@@ -45,10 +47,10 @@ class FormDB(DBBase):
 class FormTrafficFeeMappingDB(DBBase):
     ''' Form traffic fee mapping Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('form_traffic_fee_mapping')
 
-    def save(self, pid, data):  # pylint: disable=arguments-differ
+    def save(self, pid: str, data: dict[str, Any]) -> dict[str, Any]:  # pylint: disable=arguments-differ
         ''' Save location / fee data
 
         :param str pid: pid
