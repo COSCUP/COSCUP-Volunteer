@@ -1,5 +1,5 @@
 ''' MC '''
-import pylibmc
+import pylibmc  # type: ignore
 from pylibmc import Client
 
 import setting

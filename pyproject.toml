@@ -65,3 +65,12 @@ warn_return_any = true
 implicit_reexport = false
 strict_equality = true
 # --strict end
+
+[tool.pylint.main]
+extension-pkg-whitelist = "pydantic"
+
+[tool.pylint."messages control"]
+disable = ["W0223"]
+
+[tool.pylint.typecheck]
+generated-members = ["setting", "googleapiclient.discovery.*", "pymongo"]
