@@ -6,7 +6,7 @@ authors = ["COSCUP Volunteer <volunteer@coscup.org>"]
 license = "AGPL-3.0"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 google-api-python-client = "^2.40.0"
 google-auth = "^2.6.0"
 google-auth-httplib2 = "^0.1.0"
