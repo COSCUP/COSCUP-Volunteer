@@ -1,5 +1,8 @@
 ''' USession '''
 from time import time
+from typing import Any, Generator, Optional
+
+from pymongo.results import InsertOneResult, UpdateResult
 
 from models.usessiondb import USessionDB
 from module.mc import MC
@@ -8,7 +11,7 @@ from module.mc import MC
 class USession:
     ''' USession Class '''
     @staticmethod
-    def make_new(uid, header):
+    def make_new(uid: str, header: dict[str, Any]) -> InsertOneResult:
         ''' make new session record
 
         :param str uid: uid
@@ -20,7 +23,7 @@ class USession:
         return USessionDB().add(doc)
 
     @staticmethod
-    def get(sid):
+    def get(sid: Optional[str]) -> Optional[dict[str, Any]]:
         ''' Get usession data
 
         :param str sid: usession id
@@ -29,14 +32,14 @@ class USession:
         return USessionDB(token=sid).get()
 
     @staticmethod
-    def get_no_ipinfo():
+    def get_no_ipinfo() -> Generator[dict[str, Any], None, None]:
         ''' Get no ipinfo '''
         for raw in USessionDB().find({'ipinfo': {'$exists': False}},
                                      {'header.X-Real-Ip': 1, 'header.X-Forwarded-For': 1}):
             yield raw
 
     @staticmethod
-    def update_ipinfo(sid, data):
+    def update_ipinfo(sid: str, data: dict[str, Any]) -> None:
         ''' Update session ipinfo
 
         :param str sid: usession id
@@ -46,7 +49,7 @@ class USession:
             {'_id': sid}, {'$set': {'ipinfo': data}})
 
     @staticmethod
-    def get_recently(uid, limit=25):
+    def get_recently(uid: str, limit: int = 25) -> Generator[dict[str, Any], None, None]:
         ''' Get recently record
 
         :param str uid: uid
@@ -58,7 +61,7 @@ class USession:
             yield raw
 
     @staticmethod
-    def get_alive(uid):
+    def get_alive(uid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get alive session
 
         :param str uid: uid
@@ -69,7 +72,7 @@ class USession:
             yield raw
 
     @staticmethod
-    def make_dead(sid, uid=None):
+    def make_dead(sid: str, uid: Optional[str] = None) -> None:
         ''' Make session to dead
 
         :param str sid: sid
@@ -85,7 +88,7 @@ class USession:
         MC.get_client().delete(f'sid:{sid}')
 
     @staticmethod
-    def clean(days=3):
+    def clean(days: int = 3) -> UpdateResult:
         ''' Make expired
 
         :param int days: days

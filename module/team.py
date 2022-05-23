@@ -1,5 +1,8 @@
 ''' Team '''
+from typing import Any, Optional
 from uuid import uuid4
+
+from pymongo.cursor import Cursor
 
 from models.teamdb import TeamDB, TeamMemberChangedDB, TeamMemberTagsDB
 
@@ -8,7 +11,7 @@ class Team:
     ''' Team module '''
 
     @staticmethod
-    def create(pid, tid, name, owners):
+    def create(pid: str, tid: str, name: str, owners: list[str]) -> dict[str, Any]:
         ''' Create team
 
         :param str pid: project id
@@ -29,7 +32,9 @@ class Team:
         return teamdb.add(data)
 
     @staticmethod
-    def update_chiefs(pid, tid, add_uids=None, del_uids=None):
+    def update_chiefs(pid: str, tid: str,
+                      add_uids: Optional[list[str]] = None,
+                      del_uids: Optional[list[str]] = None) -> None:
         ''' update chiefs
 
         :param list add_uids: add uids
@@ -41,7 +46,10 @@ class Team:
             field='chiefs', add_uids=add_uids, del_uids=del_uids)
 
     @staticmethod
-    def update_members(pid, tid, add_uids=None, del_uids=None, make_record=True):
+    def update_members(pid: str, tid: str,
+                       add_uids: Optional[list[str]] = None,
+                       del_uids: Optional[list[str]] = None,
+                       make_record: bool = True) -> None:
         ''' update chiefs
 
         :param list add_uids: add uids
@@ -60,21 +68,21 @@ class Team:
                 pid=pid, tid=tid, action={'add': add_uids, 'del': del_uids})
 
     @staticmethod
-    def list_by_pid(pid, show_all=False):
+    def list_by_pid(pid: str, show_all: bool = False) -> Cursor[dict[str, None]]:
         ''' List all team in project
 
         :param str pid: project id
 
         '''
         if show_all:
-            return TeamDB(None, None).find({'pid': pid})
+            return TeamDB('', '').find({'pid': pid})
 
-        return TeamDB(None, None).find({
+        return TeamDB('', '').find({
             'pid': pid,
             '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]})
 
     @staticmethod
-    def get(pid, tid):
+    def get(pid: str, tid: str) -> Optional[dict[str, Any]]:
         ''' Get team data
 
         :param str pid: project id
@@ -84,13 +92,13 @@ class Team:
         return TeamDB(pid=pid, tid=tid).get()
 
     @staticmethod
-    def participate_in(uid, pid=None):
+    def participate_in(uid: str, pid: Optional[str] = None) -> Cursor[dict[str, None]]:
         ''' participate in
 
         :param str uid: uid
 
         '''
-        query = {
+        query: dict[str, Any] = {
             '$or': [
                 {'members': uid, '$or': [
                     {'disabled': {'$exists': False}}, {'disabled': False}]},
@@ -102,10 +110,10 @@ class Team:
         if pid:
             query['pid'] = {'$in': pid}
 
-        return TeamDB(None, None).find(query)
+        return TeamDB('', '').find(query)
 
     @staticmethod
-    def update_setting(pid, tid, data):
+    def update_setting(pid: str, tid: str, data: dict[str, Any]) -> Optional[dict[str, Any]]:
         ''' update setting
 
         :param str pid: project id
@@ -140,7 +148,7 @@ class Team:
         return None
 
     @staticmethod
-    def get_users(pid, tids):
+    def get_users(pid: str, tids: list[str]) -> dict[str, Any]:
         ''' Get all users by team
 
         :param str pid: project id
@@ -150,12 +158,16 @@ class Team:
         users = {}
         for tid in tids:
             team = TeamDB(pid=pid, tid=tid).get()
+            if not team:
+                raise Exception(f"no team: {tid}")
+
             users[tid] = team['chiefs'] + team['members']
 
         return users
 
     @staticmethod
-    def add_tag_member(pid, tid, tag_name, tag_id=None):
+    def add_tag_member(pid: str, tid: str,
+                       tag_name: str, tag_id: Optional[str] = None) -> dict[str, Any]:
         ''' Add tag member
 
         :param str pid: project id
@@ -173,7 +185,7 @@ class Team:
         return data
 
     @staticmethod
-    def add_tags_to_members(pid, tid, data):
+    def add_tags_to_members(pid: str, tid: str, data: dict[str, Any]) -> None:
         ''' Add tags to member
 
         :param str pid: project id
@@ -187,7 +199,7 @@ class Team:
                 pid=pid, tid=tid, uid=uid, tags=data[uid])
 
     @staticmethod
-    def del_tag(pid, tid, tag_id):
+    def del_tag(pid: str, tid: str, tag_id: str) -> None:
         ''' Delete tag '''
         TeamDB(pid=pid, tid=tid).update_one(
             {'pid': pid, 'tid': tid},
@@ -199,7 +211,7 @@ class Team:
         )
 
     @staticmethod
-    def get_members_tags(pid, tid):
+    def get_members_tags(pid: str, tid: str) -> dict[str, Any]:
         ''' Get members tags info '''
         datas = {}
         for raw in TeamMemberTagsDB().find({'pid': pid, 'tid': tid}):
@@ -208,13 +220,13 @@ class Team:
         return datas
 
     @staticmethod
-    def get_members_uid_by_tags(pid, tid, tags):
+    def get_members_uid_by_tags(pid: str, tid: str, tags: list[str]) -> list[str]:
         ''' Get members by tags '''
         _or = []
         for tag in tags:
             _or.append({'tags.tags': tag})
 
-        query = {'pid': pid, 'tid': tid}
+        query: dict[str, Any] = {'pid': pid, 'tid': tid}
         query['$or'] = _or
 
         uids = []

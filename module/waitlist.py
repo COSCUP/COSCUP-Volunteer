@@ -1,11 +1,15 @@
 ''' WaitList '''
+from typing import Any, Generator, Literal, Optional, Union
+
+from pymongo.cursor import Cursor
+
 from models.waitlistdb import WaitListDB
 
 
 class WaitList:
     ''' WaitList object '''
     @staticmethod
-    def join_to(pid, tid, uid, note):
+    def join_to(pid: str, tid: str, uid: str, note: str) -> dict[str, Any]:
         ''' Join to
 
         :param str pid: project id
@@ -17,7 +21,7 @@ class WaitList:
         return WaitListDB().join_to(pid=pid, tid=tid, uid=uid, note=note)
 
     @staticmethod
-    def is_in_wait(pid, tid, uid):
+    def is_in_wait(pid: str, tid: str, uid: str) -> int:
         ''' is in wait list
 
         :param str pid: project id
@@ -28,7 +32,8 @@ class WaitList:
         return WaitListDB().is_in_wait(pid=pid, tid=tid, uid=uid)
 
     @staticmethod
-    def list_by_team(pid, tid, uid=None):
+    def list_by_team(pid: str, tid: str, uid: Optional[str] = None) -> \
+            Union[Optional[dict[str, Any]], Cursor[dict[str, Any]]]:
         ''' List team waitting user
 
         :param str pid: project id
@@ -39,7 +44,8 @@ class WaitList:
         return WaitListDB().list_by(pid=pid, tid=tid, uid=uid)
 
     @staticmethod
-    def make_result(wid, pid, uid, result):
+    def make_result(wid: str, pid: str, uid: str,
+                    result: Literal['approval', 'deny']) -> Optional[dict[str, Any]]:
         ''' make result
 
         :param str wid: waitlist id
@@ -51,7 +57,7 @@ class WaitList:
         return WaitListDB().make_result(_id=wid, pid=pid, uid=uid, result=result)
 
     @staticmethod
-    def find_history(uid, pid=None):
+    def find_history(uid: str, pid: Optional[str] = None) -> Cursor[dict[str, Any]]:
         ''' Find some one history
 
         :param str pid: project id
@@ -65,7 +71,7 @@ class WaitList:
         return WaitListDB().find(query)
 
     @staticmethod
-    def find_history_in_team(uid, pid, tid):
+    def find_history_in_team(uid: str, pid: str, tid: str) -> Generator[dict[str, Any], None, None]:
         ''' Find some one history in team
 
         :param str uid: user id
