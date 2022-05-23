@@ -34,7 +34,7 @@ class WaitList:
     @staticmethod
     def list_by_team(pid: str, tid: str, uid: Optional[str] = None) -> \
             Union[Optional[dict[str, Any]], Cursor[dict[str, Any]]]:
-        ''' List team waitting user
+        ''' List team waiting user
 
         :param str pid: project id
         :param str tid: team id
