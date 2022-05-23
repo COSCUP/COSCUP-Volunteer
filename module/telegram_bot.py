@@ -11,7 +11,7 @@ from module.mc import MC
 class Telegram(Session):
     ''' Telegram '''
 
-    def __init__(self, token: str):
+    def __init__(self, token: str) -> None:
         super().__init__()
         self.url = f'https://api.telegram.org/bot{token}'
 
@@ -74,11 +74,11 @@ class Telegram(Session):
 class TelegramBot(Telegram):
     ''' TelegramBot '''
 
-    def __init__(self, token: str):
+    def __init__(self, token: str) -> None:
         super().__init__(token=token)
 
     @staticmethod
-    def gen_uuid(chat_id, expired_time=300) -> dict:
+    def gen_uuid(chat_id: str, expired_time: int = 300) -> dict[str, Any]:
         ''' Gen uuid for verify '''
         data = {
             'uuid': str(uuid4()),
@@ -90,17 +90,17 @@ class TelegramBot(Telegram):
         mem_cache = MC.get_client()
         mem_cache.set(f"tg:{data['uuid']}", data, expired_time)
 
-        return mem_cache.get(f"tg:{data['uuid']}")
+        return dict(mem_cache.get(f"tg:{data['uuid']}"))
 
     @staticmethod
-    def temp_fetch_user_data(data, expired_time=400):
+    def temp_fetch_user_data(data: dict[str, Any], expired_time: int = 400) -> None:
         ''' temp fetch user data '''
         mem_cache = MC.get_client()
         mem_cache.set(f"tgu:{data['message']['from']['id']}",
                       data['message']['from'], expired_time)
 
     @staticmethod
-    def get_temp_user_dta(chat_id):
+    def get_temp_user_dta(chat_id: str) -> dict[str, Any]:
         ''' Get temp user data '''
         mem_cache = MC.get_client()
-        return mem_cache.get(f'tgu:{chat_id}')
+        return dict(mem_cache.get(f'tgu:{chat_id}'))

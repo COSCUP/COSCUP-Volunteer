@@ -71,7 +71,9 @@ class TeamDB(DBBase):
             return_document=ReturnDocument.AFTER,
         )
 
-    def update_users(self, field: str, add_uids: list[str], del_uids: list[str]) -> None:
+    def update_users(self, field: str,
+                     add_uids: Optional[list[str]] = None,
+                     del_uids: Optional[list[str]] = None) -> None:
         ''' Update users
 
         :param str field: field name
@@ -166,7 +168,7 @@ class TeamMemberChangedDB(DBBase):
         self.create_index([('pid', 1), ])
         self.create_index([('case', 1), ])
 
-    def make_record(self, pid: str, tid: str, action: dict[str, list[str]]) -> None:
+    def make_record(self, pid: str, tid: str, action: dict[str, Optional[list[str]]]) -> None:
         ''' make record
 
         :param str pid: project id

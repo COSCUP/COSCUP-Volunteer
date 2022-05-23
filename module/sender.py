@@ -1,7 +1,10 @@
 ''' Sender '''
 # pylint: disable=too-few-public-methods
+from typing import Any, Generator, Optional, Union
+
 from jinja2.sandbox import SandboxedEnvironment
 from pymongo.collection import ReturnDocument
+from pymongo.cursor import Cursor
 
 import setting
 from models.senderdb import (SenderCampaignDB, SenderLogsDB, SenderReceiverDB,
@@ -15,7 +18,7 @@ class SenderCampaign:
     ''' SenderCampaign class '''
 
     @staticmethod
-    def create(name, pid, tid, uid):
+    def create(name: str, pid: str, tid: str, uid: str) -> dict[str, Any]:
         ''' Create new campaign
 
         :param str name: campaign name
@@ -30,7 +33,8 @@ class SenderCampaign:
         return SenderCampaignDB().add(data)
 
     @staticmethod
-    def get(cid, pid=None, tid=None):
+    def get(cid: str, pid: Optional[str] = None,
+            tid: Optional[str] = None) -> Optional[dict[str, Any]]:
         ''' Get campaign
 
         :param str cid: cid
@@ -49,7 +53,7 @@ class SenderCampaign:
         return SenderCampaignDB().find_one(query)
 
     @staticmethod
-    def get_list(pid, tid):
+    def get_list(pid: str, tid: str) -> Cursor[dict[str, Any]]:
         ''' Get list campaign
 
         :param str pid: pid
@@ -59,7 +63,8 @@ class SenderCampaign:
         return SenderCampaignDB().find({'created.pid': pid, 'created.tid': tid})
 
     @staticmethod
-    def save_mail(cid, subject, content, preheader, layout):
+    def save_mail(cid: str, subject: str, content: str,
+                  preheader: str, layout: str) -> dict[str, Any]:
         ''' Save mail data
 
         :param str cid: cid
@@ -81,7 +86,9 @@ class SenderCampaign:
         )
 
     @staticmethod
-    def save_receiver(cid, teams, team_w_tags, users=None, all_users=False):
+    def save_receiver(cid: str, teams: list[str], team_w_tags: dict[str, list[str]],
+                      users: Optional[dict[str, Any]] = None,
+                      all_users: bool = False) -> dict[str, Any]:
         ''' Save receiver
 
         :param str cid: cid
@@ -93,7 +100,7 @@ class SenderCampaign:
         .. note:: ``users`` not in completed implement
 
         '''
-        update = {'receiver.teams': teams}
+        update: dict[str, Any] = {'receiver.teams': teams}
         update['receiver.users'] = users if users else []
         update['receiver.all_users'] = all_users
         update['receiver.team_w_tags'] = team_w_tags
@@ -114,7 +121,8 @@ class SenderMailer:
 
     '''
 
-    def __init__(self, template_path, subject, content, source=None):
+    def __init__(self, template_path: str, subject: str,
+                 content: dict[str, Any], source: Optional[dict[str, str]] = None) -> None:
         with open(template_path, 'r', encoding='UTF8') as files:
             body = SandboxedEnvironment().from_string(files.read()).render(**content)
 
@@ -127,7 +135,8 @@ class SenderMailer:
             self.awsses = AWSSES(aws_access_key_id=setting.AWS_ID,
                                  aws_secret_access_key=setting.AWS_KEY, source=source)
 
-    def send(self, to_list, data, x_coscup=None):
+    def send(self, to_list: list[dict[str, str]],
+             data: dict[str, Any], x_coscup: Optional[str] = None) -> Any:
         ''' Send mail
 
         :param list to_list: [{'name': str, 'mail': str}, ]
@@ -146,7 +155,8 @@ class SenderMailer:
 class SenderMailerVolunteer(SenderMailer):
     ''' Sender using volunteer template '''
 
-    def __init__(self, subject, content, source=None):
+    def __init__(self, subject: str, content: dict[str, Any],
+                 source: Optional[dict[str, str]] = None) -> None:
         super().__init__(
             template_path='/app/templates/mail/sender_base.html',
             subject=subject, content=content, source=source)
@@ -155,7 +165,8 @@ class SenderMailerVolunteer(SenderMailer):
 class SenderMailerCOSCUP(SenderMailer):
     ''' Sender using COSCUP template '''
 
-    def __init__(self, subject, content, source=None):
+    def __init__(self, subject: str, content: dict[str, Any],
+                 source: Optional[dict[str, str]] = None):
         super().__init__(
             template_path='/app/templates/mail/coscup_base.html',
             subject=subject, content=content, source=source)
@@ -165,7 +176,7 @@ class SenderLogs:
     ''' SenderLogs object '''
 
     @staticmethod
-    def save(cid, layout, desc, receivers):
+    def save(cid: str, layout: str, desc: str, receivers: list[dict[str, Any]]) -> None:
         ''' save log
 
         :param str cid: cid
@@ -177,7 +188,7 @@ class SenderLogs:
         SenderLogsDB().add(cid=cid, layout=layout, desc=desc, receivers=receivers)
 
     @staticmethod
-    def get(cid):
+    def get(cid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get log
 
         :param str cid: cid
@@ -191,7 +202,7 @@ class SenderSESLogs:
     ''' SenderSESLogs '''
 
     @staticmethod
-    def save(cid, name, mail, result):
+    def save(cid: str, name: str, mail: str, result: dict[str, Any]) -> None:
         ''' Save log
 
         :param str cid: cid
@@ -207,7 +218,7 @@ class SenderReceiver:
     ''' SenderReceiver object '''
 
     @staticmethod
-    def replace(pid, cid, datas):
+    def replace(pid: str, cid: str, datas: list[dict[str, Any]]) -> None:
         ''' Replace
 
         :param str pid: pid
@@ -250,7 +261,7 @@ class SenderReceiver:
         sender_receiver_db.update_data(pid=pid, cid=cid, datas=save_datas)
 
     @staticmethod
-    def update(pid, cid, datas):
+    def update(pid: str, cid: str, datas: list[dict[str, Any]]) -> None:
         ''' Update
 
         :param str pid: pid
@@ -290,7 +301,7 @@ class SenderReceiver:
         SenderReceiverDB().update_data(pid=pid, cid=cid, datas=save_datas)
 
     @staticmethod
-    def remove(pid, cid):
+    def remove(pid: str, cid: str) -> None:
         ''' Update
 
         :param str pid: pid
@@ -300,7 +311,7 @@ class SenderReceiver:
         SenderReceiverDB().remove_past(pid=pid, cid=cid)
 
     @staticmethod
-    def get(pid, cid):
+    def get(pid: str, cid: str) -> tuple[list[str], list[list[str]]]:
         ''' Get
 
         :param str pid: pid
@@ -327,7 +338,8 @@ class SenderReceiver:
         return fields, raws
 
     @staticmethod
-    def get_from_user(pid, tids):
+    def get_from_user(pid: str,
+                      tids: Union[str, list[str]]) -> tuple[tuple[str, str], list[list[str]]]:
         ''' Get users from userdb by project, team
 
         :param str pid: pid
@@ -336,10 +348,14 @@ class SenderReceiver:
         :return: fields, raws
 
         '''
-        if isinstance(tids, str):
-            tids = (tids, )
+        _tids: list[str]
 
-        team_users = Team.get_users(pid=pid, tids=tids)
+        if isinstance(tids, str):
+            _tids = [tids, ]
+        else:
+            _tids = tids
+
+        team_users = Team.get_users(pid=pid, tids=_tids)
         uids = []
         for user_ids in team_users.values():
             uids.extend(user_ids)
@@ -364,7 +380,7 @@ class SenderReceiver:
         return (('name', 'mail'), raws)
 
     @staticmethod
-    def get_all_users():
+    def get_all_users() -> tuple[tuple[str, str], list[tuple[str, str]]]:
         ''' Get all users '''
         uids = []
         for user in User.get_all_users():
@@ -381,7 +397,8 @@ class SenderReceiver:
         return (('name', 'mail'), raws)
 
     @staticmethod
-    def get_by_tags(pid, tid, tags):
+    def get_by_tags(pid: str, tid: str,
+                    tags: list[str]) -> tuple[tuple[str, str], list[tuple[str, str]]]:
         ''' Get users by tags '''
         uids = Team.get_members_uid_by_tags(pid=pid, tid=tid, tags=tags)
 

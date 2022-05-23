@@ -1,5 +1,6 @@
 ''' MattermostLink '''
 from time import time
+from typing import Any
 from uuid import uuid4
 
 import setting
@@ -9,7 +10,7 @@ from models.mattermost_link_db import MattermostLinkDB
 class MattermostLink:
     ''' MattermostLink '''
 
-    def __init__(self, uid):
+    def __init__(self, uid: str) -> None:
         self.uid = uid
         self.raw = MattermostLinkDB().find_one({'_id': uid})
 
@@ -19,7 +20,7 @@ class MattermostLink:
             self.raw = mml_db.find_one({'_id': uid})
 
     @classmethod
-    def verify_save(cls, data):
+    def verify_save(cls, data: dict[str, Any]) -> bool:
         ''' verify and save data '''
         if 'token' in data and data['token'] == setting.MATTERMOST_SLASH_VOLUNTEER:
             if 'text' in data and data['text']:
@@ -32,7 +33,7 @@ class MattermostLink:
                 if cmd == 'verify':
                     uid, code = pwd.split('.')
                     mml = cls(uid=uid)
-                    if code == mml.raw['code']:
+                    if mml.raw and code == mml.raw['code']:
                         MattermostLinkDB().find_one_and_update(
                             {'_id': uid}, {'$set': {'data': data, 'create_at': time()}})
                         return True
@@ -40,6 +41,6 @@ class MattermostLink:
         return False
 
     @staticmethod
-    def reset(uid):
+    def reset(uid: str) -> None:
         ''' Reset the link '''
         MattermostLinkDB().delete_one({'_id': uid})

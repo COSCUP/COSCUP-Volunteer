@@ -15,7 +15,7 @@ class DietaryHabit:  # pylint: disable=too-few-public-methods
     }
 
     @classmethod
-    def valid(cls, items_no):
+    def valid(cls, items_no: list[str]) -> list[str]:
         ''' valid data '''
         result = []
         for num in cls.ITEMS:

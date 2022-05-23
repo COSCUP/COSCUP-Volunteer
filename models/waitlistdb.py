@@ -19,7 +19,7 @@ class WaitListDB(DBBase):
         self.create_index([('pid', 1), ])
         self.create_index([('uid', 1), ])
 
-    def join_to(self, pid: str, tid: str, uid: str, note: Optional[str] = None) -> dict[str, None]:
+    def join_to(self, pid: str, tid: str, uid: str, note: Optional[str] = None) -> dict[str, Any]:
         ''' Join to
 
         :param str pid: project id
