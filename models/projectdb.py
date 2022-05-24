@@ -1,4 +1,6 @@
 ''' ProjectDB '''
+from typing import Any
+
 from pymongo.collection import ReturnDocument
 
 from models.base import DBBase
@@ -15,15 +17,15 @@ class ProjectDB(DBBase):
 
     '''
 
-    def __init__(self, pid):
+    def __init__(self, pid: str) -> None:
         super().__init__('project')
         self.pid = pid
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('owners', 1), ('action_date', -1)])
 
-    def default(self):
+    def default(self) -> dict[str, Any]:
         ''' default data '''
         result = {
             '_id': self.pid,
@@ -35,7 +37,7 @@ class ProjectDB(DBBase):
         self.make_create_at(result)
         return result
 
-    def add(self, data):
+    def add(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' Add data
 
         :param dict data: data

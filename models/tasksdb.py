@@ -1,5 +1,6 @@
 ''' TasksDB '''
 from datetime import datetime
+from typing import Any, Optional
 from uuid import uuid4
 
 from models.base import DBBase
@@ -8,11 +9,11 @@ from models.base import DBBase
 class TasksDB(DBBase):
     ''' TasksDB Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('tasks')
 
     @staticmethod
-    def new(pid, body, endtime=None):
+    def new(pid: str, body: dict[str, Any], endtime: Optional[datetime] = None) -> dict[str, Any]:
         ''' new data '''
         return {
             '_id': f'{uuid4().fields[0]:08x}',
@@ -32,11 +33,11 @@ class TasksDB(DBBase):
 class TasksStarDB(DBBase):
     ''' TasksStarDB Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('tasks_star')
 
     @staticmethod
-    def new(pid, uid):
+    def new(pid: str, uid: str) -> dict[str, Any]:
         ''' new data '''
         return {
             'pid': pid,

@@ -12,11 +12,11 @@ class SyncGSuite(GSuite):
 
     '''
 
-    def __init__(self, credentialfile, with_subject):
+    def __init__(self, credentialfile: str, with_subject: str) -> None:
         super().__init__(
             credentialfile=credentialfile, with_subject=with_subject)
 
-    def add_users_into_group(self, group, users):
+    def add_users_into_group(self, group: str, users: list[str]) -> None:
         ''' Add some users into one group
 
         :param str group: group_key or mail
@@ -32,7 +32,7 @@ class SyncGSuite(GSuite):
                 logging.info('Add [%s] into [%s]', user, group_info['id'])
                 self.members_insert(group_key=group_info['id'], email=user)
 
-    def del_users_from_group(self, group, users):
+    def del_users_from_group(self, group: str, users: list[str]) -> None:
         ''' del some users from one group
 
         :param str group: group_key or mail

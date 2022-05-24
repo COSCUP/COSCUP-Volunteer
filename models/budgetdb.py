@@ -2,6 +2,7 @@
 import string
 from datetime import datetime
 from random import choices
+from typing import Any
 from uuid import uuid4
 
 from pymongo.collection import ReturnDocument
@@ -27,16 +28,16 @@ class BudgetDB(DBBase):
 
     '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('budget')
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('pid', 1), ('tid', 1)])
         self.create_index([('pid', 1), ('bid', 1)])
 
     @staticmethod
-    def new(pid, tid, uid):
+    def new(pid: str, tid: str, uid: str) -> dict[str, Any]:
         ''' Create new '''
         return {
             '_id': f'{uuid4().node:x}',
@@ -55,7 +56,7 @@ class BudgetDB(DBBase):
             'create_at': datetime.today(),
         }
 
-    def add(self, data):
+    def add(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' Add data
 
         :param dict data: data
@@ -68,7 +69,7 @@ class BudgetDB(DBBase):
             return_document=ReturnDocument.AFTER,
         )
 
-    def edit(self, _id, data):
+    def edit(self, _id: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Edit data
 
         :param dict data: data

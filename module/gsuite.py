@@ -4,9 +4,9 @@ from __future__ import print_function
 import re
 from typing import Any, Generator, Union
 
-from google.oauth2 import service_account
-from googleapiclient import errors
-from googleapiclient.discovery import build
+from google.oauth2 import service_account  # type: ignore
+from googleapiclient import errors  # type: ignore
+from googleapiclient.discovery import build  # type:ignore
 
 RE_PICTURE = re.compile(r'(https://.+){1,}=?s([\d]{1,}-c)')
 

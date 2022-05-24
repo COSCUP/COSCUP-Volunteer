@@ -1,5 +1,8 @@
 ''' Project '''
+from typing import Any, Optional
+
 import arrow
+from pymongo.cursor import Cursor
 
 from models.projectdb import ProjectDB
 
@@ -7,7 +10,7 @@ from models.projectdb import ProjectDB
 class Project:
     ''' Project module '''
     @staticmethod
-    def create(pid, name, owners, action_date):
+    def create(pid: str, name: str, owners: list[str], action_date: str) -> dict[str, Any]:
         ''' Create project
 
         :param str pid: project id
@@ -26,12 +29,12 @@ class Project:
         return projectdb.add(data)
 
     @staticmethod
-    def all():
+    def all() -> Cursor[dict[str, Any]]:
         ''' List all project '''
-        return ProjectDB(pid=None).find({}, sort=(('action_date', -1), ))
+        return ProjectDB(pid='').find({}, sort=(('action_date', -1), ))
 
     @staticmethod
-    def get(pid):
+    def get(pid: str) -> Optional[dict[str, Any]]:
         ''' Get project info
 
         :param str pid: project id
@@ -40,7 +43,7 @@ class Project:
         return ProjectDB(pid).find_one({'_id': pid})
 
     @staticmethod
-    def update(pid, data):
+    def update(pid: str, data: dict[str, Any]) -> None:
         ''' update data
 
         :param dict data: data

@@ -1,7 +1,7 @@
 ''' skill '''
 # pylint: disable=too-few-public-methods
 from enum import Enum, IntEnum, unique
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -107,7 +107,7 @@ class TobeVolunteerStruct(BaseModel):
     teams: List[TeamsEnum] = []
     skill: List[SkillEnum] = []
     hours: int = 0
-    status: StatusEnum = 0
+    status: Optional[StatusEnum]
     desc: str = ''
 
     class Config:
