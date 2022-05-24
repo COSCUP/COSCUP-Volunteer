@@ -112,7 +112,8 @@ class TasksStar:
         ''' add '''
         data = TasksStarDB().find_one({'pid': pid, 'uid': uid})
         if not data:
-            return TasksStarDB().insert_one(TasksStarDB.new(pid=pid, uid=uid))
+            TasksStarDB().insert_one(TasksStarDB.new(pid=pid, uid=uid))
+            data = TasksStarDB().find_one({'pid': pid, 'uid': uid})
 
         return data
 
