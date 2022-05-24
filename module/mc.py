@@ -1,5 +1,6 @@
 ''' MC '''
-import pylibmc
+import pylibmc  # type: ignore
+from pylibmc import Client
 
 import setting
 
@@ -7,7 +8,7 @@ import setting
 class MC:  # pylint: disable=too-few-public-methods
     ''' Memcached cache '''
     @staticmethod
-    def get_client():
+    def get_client() -> Client:
         ''' Get client '''
         return pylibmc.Client(setting.MC_SERVERS,
                               binary=True,

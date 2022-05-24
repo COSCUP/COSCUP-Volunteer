@@ -1,10 +1,11 @@
 ''' Budget '''
 import re
 from enum import Enum
-from typing import Union
+from typing import Any, Optional, Union
 
 import arrow
 from pydantic import BaseModel, error_wrappers, validator
+from pymongo.cursor import Cursor
 
 from models.budgetdb import BudgetDB
 from models.projectdb import ProjectDB
@@ -42,7 +43,7 @@ class BudgetImportItem(BaseModel):
         use_enum_values = True
 
     @validator('total')
-    def verify_total(cls, value):
+    def verify_total(cls, value: str) -> Union[int, float]:
         ''' verify total '''
         value = re.sub('[^0-9.]', '', value)
         if '.' in value:
@@ -51,7 +52,7 @@ class BudgetImportItem(BaseModel):
         return int(value)
 
     @validator('paydate')
-    def verify_paydate(cls, value, **kwargs):
+    def verify_paydate(cls, value: str, **kwargs: Any) -> str:
         ''' verify paydate '''
         if not value:
             return ''
@@ -68,7 +69,7 @@ class Budget:
     ''' Budget class '''
 
     @staticmethod
-    def is_admin(pid, uid):
+    def is_admin(pid: str, uid: str) -> bool:
         ''' check user is admin
 
         - project owner
@@ -76,20 +77,20 @@ class Budget:
         - coordinator chiefs
 
         '''
-        if TeamDB(pid=None, tid=None).count_documents({
+        if TeamDB(pid='', tid='').count_documents({
                 'pid': pid,
                 'tid': {'$in': ['finance', 'coordinator']},
                 '$or': [{'chiefs': uid}, {'members': uid}],
         }):
             return True
 
-        if ProjectDB(pid=None).count_documents({'_id': pid, 'owners': uid}):
+        if ProjectDB(pid='').count_documents({'_id': pid, 'owners': uid}):
             return True
 
         return False
 
     @staticmethod
-    def add(pid, tid, data):
+    def add(pid: str, tid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Add new data '''
         save = BudgetDB.new(pid=pid, tid=tid, uid=data['uid'])
 
@@ -100,8 +101,9 @@ class Budget:
         return BudgetDB().add(save)
 
     @staticmethod
-    def edit(pid, data):
+    def edit(pid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Edit new data '''
+        save: dict[str, Any]
         save = {'pid': pid}
 
         for key in ('name', 'tid', 'uid', 'bid', 'currency', 'total',
@@ -115,8 +117,9 @@ class Budget:
         return BudgetDB().edit(_id=data['_id'], data=save)
 
     @staticmethod
-    def get(buids, pid=None):
+    def get(buids: list[str], pid: Optional[str] = None) -> Cursor[dict[str, Any]]:
         ''' Get by buid '''
+        query: dict[str, Any]
         query = {'_id': {'$in': buids}}
         if pid is not None:
             query['pid'] = pid
@@ -124,12 +127,12 @@ class Budget:
         return BudgetDB().find(query)
 
     @staticmethod
-    def get_by_pid(pid):
+    def get_by_pid(pid: str) -> Cursor[dict[str, Any]]:
         ''' Get by pid '''
         return BudgetDB().find({'pid': pid}, sort=(('tid', 1), ))
 
     @staticmethod
-    def get_by_tid(pid, tid, only_enable=False):
+    def get_by_tid(pid: str, tid: str, only_enable: bool = False) -> Cursor[dict[str, Any]]:
         ''' Get by pid '''
         if not only_enable:
             return BudgetDB().find({'pid': pid, 'tid': tid})
@@ -137,17 +140,20 @@ class Budget:
         return BudgetDB().find({'pid': pid, 'tid': tid, 'enabled': True})
 
     @staticmethod
-    def get_by_bid(pid, bid):
+    def get_by_bid(pid: str, bid: str) -> Optional[dict[str, Any]]:
         ''' Get a item according to the specified ``pid`` and ``bid``. '''
         for raw in BudgetDB().find({'pid': pid, 'bid': bid}, {'_id': 1}):
             return raw
 
+        return None
+
     @staticmethod
-    def verify_batch_items(items):
+    def verify_batch_items(items: list[dict[str, Any]]) -> \
+            tuple[list[dict[str, Any]], list[tuple[int, Optional[list[dict[str, Any]]]]]]:
         ''' verify the batch items '''
-        result = []
-        error_result = []
-        for (n, raw) in enumerate(items):
+        result: list[dict[str, Any]] = []
+        error_result: list[tuple[int, Optional[list[dict[str, Any]]]]] = []
+        for (serial_no, raw) in enumerate(items):
             try:
                 item = BudgetImportItem.parse_obj(raw)
                 result.append(item.dict())
@@ -156,6 +162,6 @@ class Budget:
                     {'loc': error_info['loc'], 'msg': error_info['msg']}
                     for error_info in error.errors()
                 ]
-                error_result.append((n, error_infos))
+                error_result.append((serial_no, error_infos))
 
         return result, error_result

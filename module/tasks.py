@@ -1,5 +1,9 @@
 ''' Task '''
+from datetime import datetime
+from typing import Any, Generator, Optional
+
 from pymongo.collection import ReturnDocument
+from pymongo.results import DeleteResult
 
 from models.tasksdb import TasksDB, TasksStarDB
 from module.users import User
@@ -9,7 +13,8 @@ class Tasks:
     ''' Tasks class '''
 
     @classmethod
-    def add(cls, pid, body, endtime=None, task_id=None):
+    def add(cls, pid: str, body: dict[str, Any],
+            endtime: Optional[datetime] = None, task_id: Optional[str] = None) -> dict[str, Any]:
         ''' add new task
 
         :param str pid: pid
@@ -43,12 +48,12 @@ class Tasks:
         )
 
     @staticmethod
-    def delete(pid, _id):
+    def delete(pid: str, _id: str) -> None:
         ''' Del task '''
         TasksDB().delete_one({'_id': _id, 'pid': pid})
 
     @staticmethod
-    def get_by_pid(pid):
+    def get_by_pid(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get by pid
 
         :param str pid: pid
@@ -58,18 +63,18 @@ class Tasks:
             yield raw
 
     @staticmethod
-    def get_with_pid(pid, _id):
+    def get_with_pid(pid: str, _id: str) -> Optional[dict[str, Any]]:
         ''' Get with pid '''
         return TasksDB().find_one({'pid': pid, '_id': _id})
 
     @staticmethod
-    def get_cate(pid):
+    def get_cate(pid: str) -> list[dict[str, Any]]:
         ''' Get cate '''
         cates = TasksDB().find({'pid': pid}).distinct('cate')
         return [cate for cate in cates if cate]
 
     @staticmethod
-    def join(pid, task_id, uid):
+    def join(pid: str, task_id: str, uid: str) -> dict[str, Any]:
         ''' Join to '''
         return TasksDB().find_one_and_update(
             {'_id': task_id, 'pid': pid},
@@ -78,7 +83,7 @@ class Tasks:
         )
 
     @staticmethod
-    def cancel(pid, task_id, uid):
+    def cancel(pid: str, task_id: str, uid: str) -> dict[str, Any]:
         ''' cancel join '''
         return TasksDB().find_one_and_update(
             {'_id': task_id, 'pid': pid},
@@ -87,18 +92,23 @@ class Tasks:
         )
 
     @staticmethod
-    def get_peoples_info(pid, task_id):
+    def get_peoples_info(pid: str, task_id: str) -> Optional[dict[str, Any]]:
         ''' Get peoples info '''
-        uids = TasksDB().find_one(
-            {'pid': pid, '_id': task_id}, {'people': 1})['people']
-        return User.get_info(uids=uids)
+        task = TasksDB().find_one(
+            {'pid': pid, '_id': task_id}, {'people': 1})
+
+        if task:
+            uids = task['people']
+            return User.get_info(uids=uids)
+
+        return None
 
 
 class TasksStar:
     ''' TasksStar object '''
 
     @staticmethod
-    def add(pid, uid):
+    def add(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' add '''
         data = TasksStarDB().find_one({'pid': pid, 'uid': uid})
         if not data:
@@ -107,12 +117,12 @@ class TasksStar:
         return data
 
     @staticmethod
-    def delete(pid, uid):
+    def delete(pid: str, uid: str) -> DeleteResult:
         ''' delete '''
         return TasksStarDB().delete_one({'pid': pid, 'uid': uid})
 
     @staticmethod
-    def status(pid, uid):
+    def status(pid: str, uid: str) -> dict[str, bool]:
         ''' ststus '''
         if TasksStarDB().find_one({'pid': pid, 'uid': uid}):
             return {'add': True}
@@ -120,7 +130,7 @@ class TasksStar:
         return {'add': False}
 
     @staticmethod
-    def toggle(pid, uid):
+    def toggle(pid: str, uid: str) -> dict[str, bool]:
         ''' toggle '''
         data = TasksStarDB().find_one({'pid': pid, 'uid': uid})
         if data:
@@ -131,7 +141,7 @@ class TasksStar:
         return {'add': True}
 
     @staticmethod
-    def get(pid):
+    def get(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all star users '''
         for user in TasksStarDB().find({'pid': pid}, {'uid': 1}):
             yield user

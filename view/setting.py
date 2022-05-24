@@ -1,11 +1,12 @@
 ''' setting '''
 import json
 import math
+from typing import Text, Union
 
 import arrow
 import phonenumbers
-from flask import (Blueprint, g, jsonify, redirect, render_template, request,
-                   session, url_for)
+from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
+                   request, session, url_for)
 
 from celery_task.task_service_sync import service_sync_mattermost_invite
 from models.telegram_db import TelegramDB
@@ -22,13 +23,13 @@ VIEW_SETTING = Blueprint('setting', __name__, url_prefix='/setting')
 
 
 @VIEW_SETTING.route('/')
-def index():
+def index() -> Text:
     ''' Index page '''
     return render_template('./setting_index.html')
 
 
 @VIEW_SETTING.route('/profile', methods=('GET', 'POST'))
-def profile_page():
+def profile_page() -> Union[Text, Response]:
     ''' profile '''
     # pylint: disable=too-many-branches
     if request.method == 'GET':

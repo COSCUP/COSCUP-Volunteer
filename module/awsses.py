@@ -14,7 +14,7 @@ from email.utils import formataddr
 from os.path import basename
 from typing import Any
 
-import boto3
+import boto3  # type:ignore
 
 
 class AWSS3:

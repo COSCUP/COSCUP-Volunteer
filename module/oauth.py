@@ -1,4 +1,6 @@
 ''' OAuth '''
+from typing import Any, Optional
+
 from models.oauth_db import OAuthDB
 
 
@@ -9,15 +11,16 @@ class OAuth:
 
     '''
 
-    def __init__(self, mail):
+    def __init__(self, mail: str) -> None:
         self.mail = mail
 
-    def get(self):
+    def get(self) -> Optional[dict[str, Any]]:
         ''' Get data '''
         return OAuthDB().find_one({'_id': self.mail})
 
     @staticmethod
-    def add(mail, data=None, token=None):
+    def add(mail: str, data: Optional[dict[str, Any]] = None,
+            token: Optional[dict[str, Any]] = None) -> None:
         ''' add data, token
 
         :param str mail: mail
@@ -36,7 +39,7 @@ class OAuth:
             oauth_db.add_token(mail, token)
 
     @staticmethod
-    def owner(mail):
+    def owner(mail: str) -> Optional[str]:
         ''' return the owner
 
         :param str mail: mail

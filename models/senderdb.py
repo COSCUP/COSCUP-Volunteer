@@ -1,5 +1,6 @@
 ''' Sender DB '''
 from time import time
+from typing import Any
 from uuid import uuid4
 
 from pymongo.collection import ReturnDocument
@@ -30,11 +31,11 @@ class SenderCampaignDB(DBBase):
 
     '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('sender_campaign')
 
     @staticmethod
-    def new(name, pid, tid, uid):
+    def new(name: str, pid: str, tid: str, uid: str) -> dict[str, Any]:
         ''' new a struct '''
         return {
             '_id': uuid4().hex,
@@ -59,7 +60,7 @@ class SenderCampaignDB(DBBase):
             },
         }
 
-    def add(self, data):
+    def add(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' Save data '''
         return self.find_one_and_update(
             {'_id': data['_id']},
@@ -72,10 +73,10 @@ class SenderCampaignDB(DBBase):
 class SenderLogsDB(DBBase):
     ''' SenderLogsDB Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('sender_logs')
 
-    def add(self, cid, layout, desc, receivers):
+    def add(self, cid: str, layout: str, desc: str, receivers: list[dict[str, Any]]) -> None:
         ''' Save log
 
         :param str cid: cid
@@ -99,10 +100,10 @@ class SenderLogsDB(DBBase):
 class SenderSESLogsDB(DBBase):
     ''' SenderSESLogsDB Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('sender_ses_logs')
 
-    def add(self, cid, mail, name, ses_result):
+    def add(self, cid: str, mail: str, name: str, ses_result: dict[str, Any]) -> None:
         ''' Save log
 
         :param str cid: cid
@@ -136,16 +137,16 @@ class SenderReceiverDB(DBBase):
 
     '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('sender_receiver')
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('pid', 1), ])
         self.create_index([('data.mail', 1), ])
 
     @staticmethod
-    def new(pid, cid, name, mail):
+    def new(pid: str, cid: str, name: str, mail: str) -> dict[str, Any]:
         ''' new a struct '''
         return {
             'pid': pid,
@@ -156,7 +157,7 @@ class SenderReceiverDB(DBBase):
             },
         }
 
-    def remove_past(self, pid, cid):
+    def remove_past(self, pid: str, cid: str) -> None:
         ''' Remove past data
 
         - ``cid``: campaign id
@@ -165,7 +166,7 @@ class SenderReceiverDB(DBBase):
         '''
         self.delete_many({'pid': pid, 'cid': cid})
 
-    def update_data(self, pid, cid, datas):
+    def update_data(self, pid: str, cid: str, datas: list[dict[str, Any]]) -> None:
         ''' Update datas
 
         - ``cid``: campaign id

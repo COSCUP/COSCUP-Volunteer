@@ -1,5 +1,6 @@
 ''' TeamDB '''
 from time import time
+from typing import Any, Optional
 
 from pymongo.collection import ReturnDocument
 
@@ -19,18 +20,18 @@ class TeamDB(DBBase):
 
     '''
 
-    def __init__(self, pid, tid):
+    def __init__(self, pid: str, tid: str) -> None:
         super().__init__('team')
         self.pid = pid
         self.tid = tid
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('chiefs', 1), ])
         self.create_index([('members', 1), ])
         self.create_index([('pid', 1), ])
 
-    def default(self):
+    def default(self) -> dict[str, Any]:
         ''' default data '''
         result = {
             'pid': self.pid,
@@ -45,7 +46,7 @@ class TeamDB(DBBase):
         self.make_create_at(result)
         return result
 
-    def add(self, data):
+    def add(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' Add data
 
         :param dict data: data
@@ -58,7 +59,7 @@ class TeamDB(DBBase):
             return_document=ReturnDocument.AFTER,
         )
 
-    def update_setting(self, data):
+    def update_setting(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' update setting
 
         :param dict data: data
@@ -70,7 +71,9 @@ class TeamDB(DBBase):
             return_document=ReturnDocument.AFTER,
         )
 
-    def update_users(self, field, add_uids, del_uids):
+    def update_users(self, field: str,
+                     add_uids: Optional[list[str]] = None,
+                     del_uids: Optional[list[str]] = None) -> None:
         ''' Update users
 
         :param str field: field name
@@ -88,11 +91,11 @@ class TeamDB(DBBase):
                 {'pid': self.pid, 'tid': self.tid},
                 {'$pullAll': {field: del_uids}})
 
-    def get(self):
+    def get(self) -> Optional[dict[str, Any]]:
         ''' Get data '''
         return self.find_one({'pid': self.pid, 'tid': self.tid})
 
-    def add_tag_member(self, tag_data):
+    def add_tag_member(self, tag_data: dict[str, str]) -> None:
         ''' Add tag member
 
         data: {'id': str, 'name': str}
@@ -125,14 +128,14 @@ class TeamMemberTagsDB(DBBase):
 
     '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('team_member_tags')
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('pid', 1), ('tid', 1)])
 
-    def update_and_add(self, pid, tid, uid, tags):
+    def update_and_add(self, pid: str, tid: str, uid: str, tags: list[str]) -> dict[str, Any]:
         ''' update team
 
         :param list tags: tag_id in tags array
@@ -157,15 +160,15 @@ class TeamMemberChangedDB(DBBase):
 
     '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('team_member_changed')
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('pid', 1), ])
         self.create_index([('case', 1), ])
 
-    def make_record(self, pid, tid, action):
+    def make_record(self, pid: str, tid: str, action: dict[str, Optional[list[str]]]) -> None:
         ''' make record
 
         :param str pid: project id
@@ -207,14 +210,14 @@ class TeamMemberChangedDB(DBBase):
 class TeamPlanDB(DBBase):
     ''' TeamPlan Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('team_plan')
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('pid', 1), ])
 
-    def add(self, pid, tid, data):
+    def add(self, pid: str, tid: str, data: list[dict[str, Any]]) -> dict[str, Any]:
         ''' Save data
 
         :param str pid: project id

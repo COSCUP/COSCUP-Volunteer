@@ -1,5 +1,6 @@
 ''' MailLetterDB '''
 from time import time
+from typing import Any, Generator
 
 from pymongo.collection import ReturnDocument
 
@@ -9,14 +10,14 @@ from models.base import DBBase
 class MailLetterDB(DBBase):
     ''' MailLetterDB Collection '''
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('mailletter')
 
-    def index(self):
+    def index(self) -> None:
         ''' Index '''
         self.create_index([('code.welcome', 1), ])
 
-    def create(self, uid):
+    def create(self, uid: str) -> None:
         ''' Add user into sendlist
 
         :param str uid: user id
@@ -25,7 +26,7 @@ class MailLetterDB(DBBase):
         self.find_one_and_update(
             {'_id': uid}, {'$set': {'create_at': time()}}, upsert=True)
 
-    def is_sent(self, uid, code):
+    def is_sent(self, uid: str, code: str) -> float:
         ''' Check is sent or not
 
         :param str uid: user id
@@ -35,11 +36,11 @@ class MailLetterDB(DBBase):
         '''
         raw = self.find_one({'_id': uid}, {f'code.{code}': 1})
         if raw and 'code' in raw and code in raw['code']:
-            return raw['code'][code]
+            return float(raw['code'][code])
 
         return 0
 
-    def make_sent(self, uid, code):
+    def make_sent(self, uid: str, code: str) -> dict[str, Any]:
         ''' Make sent
 
         :param str uid: user id
@@ -55,7 +56,7 @@ class MailLetterDB(DBBase):
             return_document=ReturnDocument.AFTER,
         )
 
-    def need_to_send(self, code):
+    def need_to_send(self, code: str) -> Generator[dict[str, Any], None, None]:
         ''' Find need to send list
 
         :param str code: code

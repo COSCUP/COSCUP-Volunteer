@@ -1,5 +1,7 @@
 ''' Form '''
 import logging
+from collections.abc import Iterable
+from typing import Any, Generator, Optional
 from uuid import uuid4
 
 from pymongo.collection import ReturnDocument
@@ -11,7 +13,7 @@ from module.users import User
 class Form:  # pylint: disable=too-many-public-methods
     ''' Form Object '''
     @staticmethod
-    def update_appreciation(pid, uid, data):
+    def update_appreciation(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update appreciation
 
         :param str pid: project id
@@ -28,7 +30,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().add_by_case(case='appreciation', pid=pid, uid=uid, data=data)
 
     @staticmethod
-    def get_appreciation(pid, uid):
+    def get_appreciation(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get appreciation
 
         :param str pid: project id
@@ -38,7 +40,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().find_one({'case': 'appreciation', 'pid': pid, 'uid': uid})
 
     @staticmethod
-    def all_appreciation(pid):
+    def all_appreciation(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all appreciation
 
         :param str pid: project id
@@ -48,7 +50,7 @@ class Form:  # pylint: disable=too-many-public-methods
             yield raw
 
     @staticmethod
-    def update_volunteer_certificate(pid, uid, data):
+    def update_volunteer_certificate(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update volunteer certificate
 
         :param str pid: project id
@@ -63,7 +65,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().add_by_case(case='volunteer_certificate', pid=pid, uid=uid, data=data)
 
     @staticmethod
-    def get_volunteer_certificate(pid, uid):
+    def get_volunteer_certificate(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get volunteer certificate
 
         :param str pid: project id
@@ -73,7 +75,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().find_one({'case': 'volunteer_certificate', 'pid': pid, 'uid': uid})
 
     @staticmethod
-    def all_volunteer_certificate(pid):
+    def all_volunteer_certificate(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get All volunteer certificate
 
         :param str pid: project id
@@ -83,7 +85,7 @@ class Form:  # pylint: disable=too-many-public-methods
             yield raw
 
     @staticmethod
-    def update_traffic_fee(pid, uid, data):
+    def update_traffic_fee(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update traffic fee
 
         :param str pid: project id
@@ -101,7 +103,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().add_by_case(case='traffic_fee', pid=pid, uid=uid, data=data)
 
     @staticmethod
-    def get_traffic_fee(pid, uid):
+    def get_traffic_fee(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get traffic fee
 
         :param str pid: project id
@@ -111,7 +113,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().find_one({'case': 'traffic_fee', 'pid': pid, 'uid': uid})
 
     @staticmethod
-    def all_traffic_fee(pid):
+    def all_traffic_fee(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get All traffic_fee
 
         :param str pid: project id
@@ -121,7 +123,7 @@ class Form:  # pylint: disable=too-many-public-methods
             yield raw
 
     @staticmethod
-    def update_accommodation(pid, uid, data):
+    def update_accommodation(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update accommodation
 
         :param str pid: project id
@@ -137,7 +139,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().add_by_case(case='accommodation', pid=pid, uid=uid, data=data)
 
     @staticmethod
-    def get_accommodation(pid, uid):
+    def get_accommodation(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get accommodation
 
         :param str pid: project id
@@ -147,7 +149,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().find_one({'case': 'accommodation', 'pid': pid, 'uid': uid})
 
     @staticmethod
-    def all_accommodation(pid):
+    def all_accommodation(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all accommodation
 
         :param str pid: project id
@@ -157,7 +159,7 @@ class Form:  # pylint: disable=too-many-public-methods
             yield raw
 
     @staticmethod
-    def update_clothes(pid, uid, data):
+    def update_clothes(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update clothes
 
         :param str pid: project id
@@ -172,7 +174,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().add_by_case(case='clothes', pid=pid, uid=uid, data=data)
 
     @staticmethod
-    def get_clothes(pid, uid):
+    def get_clothes(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get clothes
 
         :param str pid: project id
@@ -182,7 +184,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().find_one({'case': 'clothes', 'pid': pid, 'uid': uid})
 
     @staticmethod
-    def all_clothes(pid):
+    def all_clothes(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all clothes
 
         :param str pid: project id
@@ -192,7 +194,7 @@ class Form:  # pylint: disable=too-many-public-methods
             yield raw
 
     @staticmethod
-    def update_parking_card(pid, uid, data):
+    def update_parking_card(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update parking card
 
         :param str pid: project id
@@ -208,7 +210,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().add_by_case(case='parking_card', pid=pid, uid=uid, data=data)
 
     @staticmethod
-    def get_parking_card(pid, uid):
+    def get_parking_card(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get parking card
 
         :param str pid: project id
@@ -218,7 +220,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().find_one({'case': 'parking_card', 'pid': pid, 'uid': uid})
 
     @staticmethod
-    def all_parking_card(pid):
+    def all_parking_card(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all parking card
 
         :param str pid: project id
@@ -228,7 +230,7 @@ class Form:  # pylint: disable=too-many-public-methods
             yield raw
 
     @staticmethod
-    def update_drink(pid, uid, data):
+    def update_drink(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update drink
 
         :param str pid: project id
@@ -243,7 +245,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().add_by_case(case='drink', pid=pid, uid=uid, data=data)
 
     @staticmethod
-    def get_drink(pid, uid):
+    def get_drink(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get drink
 
         :param str pid: project id
@@ -253,7 +255,7 @@ class Form:  # pylint: disable=too-many-public-methods
         return FormDB().find_one({'case': 'drink', 'pid': pid, 'uid': uid})
 
     @staticmethod
-    def all_drink(pid):
+    def all_drink(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all drink
 
         :param str pid: project id
@@ -267,7 +269,7 @@ class FormTrafficFeeMapping:
     ''' FormTrafficFeeMapping object '''
 
     @staticmethod
-    def save(pid, data):
+    def save(pid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Save mapping data
 
         :param str pid: pid
@@ -281,7 +283,7 @@ class FormTrafficFeeMapping:
         return FormTrafficFeeMappingDB().save(pid=pid, data=_data)
 
     @staticmethod
-    def get(pid):
+    def get(pid: str) -> Optional[dict[str, Any]]:
         ''' Get
 
         :param str pid: pid
@@ -293,13 +295,13 @@ class FormTrafficFeeMapping:
 class FormAccommodation:
     ''' FormAccommodation object '''
     @staticmethod
-    def get(pid):
+    def get(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get data '''
         for raw in FormDB().find({'case': 'accommodation', 'pid': pid, 'data.key': {'$ne': 'no'}}):
             yield raw
 
     @staticmethod
-    def update_room(pid, uid, room, change_key=True):
+    def update_room(pid: str, uid: str, room: str, change_key: bool = True) -> dict[str, Any]:
         ''' Update room no
 
         :param str pid: pid
@@ -311,6 +313,7 @@ class FormAccommodation:
         if change_key:
             _update['data.room_key'] = f'{uuid4().fields[0]:08x}'
 
+        _query: dict[str, Any]
         _query = {'case': 'accommodation', 'pid': pid, 'uid': uid}
         _query['$or'] = [{'data.room': {'$ne': room}},
                          {'data.room': {'$exists': False}}]
@@ -321,7 +324,7 @@ class FormAccommodation:
         )
 
     @staticmethod
-    def update_room_key(pid, uids):
+    def update_room_key(pid: str, uids: Iterable[str]) -> None:
         ''' update room key '''
         for uid in uids:
             FormDB().find_one_and_update(
@@ -330,7 +333,8 @@ class FormAccommodation:
             )
 
     @staticmethod
-    def get_room_mate(pid, uid):
+    def get_room_mate(pid: str, uid: str) -> \
+            tuple[Optional[dict[str, Any]], Optional[dict[str, Any]]]:
         ''' Get room mate
 
         :param str pid: pid
@@ -348,7 +352,7 @@ class FormAccommodation:
         return (user_room, mate)
 
     @classmethod
-    def make_exchange(cls, pid, uid, exkey):
+    def make_exchange(cls, pid: str, uid: str, exkey: str) -> str:
         ''' make exchange
 
         :param str pid: pid

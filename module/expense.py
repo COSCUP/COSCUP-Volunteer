@@ -1,5 +1,8 @@
 ''' Expense '''
+from typing import Any, Generator
+
 from pymongo.collection import ReturnDocument
+from pymongo.cursor import Cursor
 
 from models.budgetdb import BudgetDB
 from models.expensedb import ExpenseDB
@@ -8,7 +11,7 @@ from models.expensedb import ExpenseDB
 class Expense:
     ''' Expense class '''
     @staticmethod
-    def process_and_add(pid, tid, uid, data):
+    def process_and_add(pid: str, tid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Process data from web '''
         save = ExpenseDB.new(pid=pid, tid=tid, uid=uid)
 
@@ -47,18 +50,18 @@ class Expense:
         return ExpenseDB().add(data=save)
 
     @staticmethod
-    def status():
+    def status() -> dict[str, str]:
         ''' Get status '''
         return ExpenseDB.status()
 
     @staticmethod
-    def get_all_by_pid(pid):
+    def get_all_by_pid(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all '''
         for raw in ExpenseDB().find({'pid': pid}):
             yield raw
 
     @staticmethod
-    def update_invoices(expense_id, invoices):
+    def update_invoices(expense_id: str, invoices: list[dict[str, Any]]) -> dict[str, Any]:
         ''' Only update invoices '''
         _invoices = []
         for invoice in invoices:
@@ -77,7 +80,7 @@ class Expense:
         )
 
     @staticmethod
-    def update_status(expense_id, status):
+    def update_status(expense_id: str, status: str) -> dict[str, Any]:
         ''' update status '''
         return ExpenseDB().find_one_and_update(
             {'_id': expense_id},
@@ -86,19 +89,19 @@ class Expense:
         )
 
     @staticmethod
-    def get_by_create_by(pid, create_by):
+    def get_by_create_by(pid: str, create_by: str) -> Cursor[dict[str, Any]]:
         ''' Get by create_by '''
         return ExpenseDB().find({'pid': pid, 'create_by': create_by})
 
     @staticmethod
-    def get_has_sent(pid, budget_id):
+    def get_has_sent(pid: str, budget_id: str) -> Generator[dict[str, Any], None, None]:
         ''' Get has sent and not canceled '''
         query = {'pid': pid, 'request.buid': budget_id}
         for raw in ExpenseDB().find(query, {'invoices': 1, 'code': 1}):
             yield raw
 
     @staticmethod
-    def dl_format(pid):
+    def dl_format(pid: str) -> list[dict[str, Any]]:
         ''' Make the download format(CSV) '''
         raws = []
         for expense in Expense.get_all_by_pid(pid=pid):

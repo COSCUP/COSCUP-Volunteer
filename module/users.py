@@ -1,4 +1,6 @@
 ''' users '''
+from typing import Any, Generator, Optional
+
 from pymongo.collection import ReturnDocument
 
 from models.oauth_db import OAuthDB
@@ -14,11 +16,11 @@ class User:
 
     '''
 
-    def __init__(self, uid=None, mail=None):
+    def __init__(self, uid: Optional[str] = None, mail: Optional[str] = None) -> None:
         self.uid = uid
         self.mail = mail
 
-    def get(self):
+    def get(self) -> Optional[dict[str, Any]]:
         ''' Get user data
 
         :rtype: dict
@@ -27,7 +29,7 @@ class User:
         return UsersDB().find_one({'$or': [{'_id': self.uid}, {'mail': self.mail}]})
 
     @staticmethod
-    def create(mail, force=False):
+    def create(mail: str, force: bool = False) -> dict[str, Any]:
         ''' create user
 
         :param str mail: mail
@@ -47,7 +49,7 @@ class User:
 
         return user
 
-    def update_profile(self, data: dict) -> dict:
+    def update_profile(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' update profile
 
         :param dict data: data
@@ -59,7 +61,7 @@ class User:
             return_document=ReturnDocument.AFTER,
         )
 
-    def update_profile_real(self, data: dict) -> dict:
+    def update_profile_real(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' update profile
 
         :param dict data: data
@@ -71,7 +73,7 @@ class User:
             return_document=ReturnDocument.AFTER,
         )
 
-    def property_suspend(self, value: bool = True) -> dict:
+    def property_suspend(self, value: bool = True) -> dict[str, Any]:
         ''' Property suspend '''
         return UsersDB().find_one_and_update(
             {'_id': self.uid},
@@ -80,7 +82,7 @@ class User:
         )
 
     @staticmethod
-    def get_info(uids, need_sensitive=False):
+    def get_info(uids: list[str], need_sensitive: bool = False) -> dict[str, Any]:
         ''' Get user info
 
         :param list uids: uid
@@ -103,6 +105,10 @@ class User:
                 {'owner': user['_id']},
                 {'data.name': 1, 'data.picture': 1, 'data.email': 1},
             )
+
+            if not oauth_data:
+                raise Exception(f"no user's oauth: {user['_id']}")
+
             users[user['_id']]['oauth'] = {
                 'name': oauth_data['data']['name'],
                 'picture': oauth_data['data']['picture'],
@@ -124,7 +130,7 @@ class User:
         return users
 
     @staticmethod
-    def get_bank(uid):
+    def get_bank(uid: str) -> dict[str, Any]:
         ''' Get bank info '''
         bank = {'code': '', 'no': '', 'branch': '', 'name': ''}
         for user in UsersDB().find({'_id': uid}, {'profile_real.bank': 1}):
@@ -134,7 +140,7 @@ class User:
         return bank
 
     @staticmethod
-    def get_address(uid: str) -> dict:
+    def get_address(uid: str) -> dict[str, Any]:
         ''' Get Address '''
         address = {'code': '', 'receiver': '', 'address': ''}
         for user in UsersDB().find({'_id': uid}, {'profile_real.address': 1}):
@@ -144,7 +150,7 @@ class User:
         return address
 
     @staticmethod
-    def get_all_users(include_suspend: bool = False):
+    def get_all_users(include_suspend: bool = False) -> Generator[dict[str, Any], None, None]:
         ''' Get all users '''
         query = {}
         if not include_suspend:
@@ -158,7 +164,7 @@ class User:
             yield row
 
     @staticmethod
-    def count(include_suspend: bool = False):
+    def count(include_suspend: bool = False) -> int:
         ''' Count users '''
         query = {}
         if not include_suspend:
@@ -174,12 +180,12 @@ class User:
 class TobeVolunteer:
     ''' TobeVolunteer '''
     @staticmethod
-    def save(data):
+    def save(data: dict[str, Any]) -> None:
         ''' save '''
         TobeVolunteerDB().add(data=data)
 
     @staticmethod
-    def get(uid):
+    def get(uid: str) -> dict[str, Any]:
         ''' get data '''
         data = {}
         for item in TobeVolunteerDB().find({'_id': uid}):
@@ -189,10 +195,10 @@ class TobeVolunteer:
         return TobeVolunteerStruct.parse_obj(data).dict()
 
     @staticmethod
-    def query(query):
+    def query(query: dict[str, Any]) -> Generator[dict[str, Any], None, None]:
         ''' query '''
-        _query = {'ok': True}
-        _or = []
+        _query: dict[str, Any] = {'ok': True}
+        _or: list[dict[str, Any]] = []
 
         if query['skill']:
             _or.append({'skill': {'$in': query['skill']}})
