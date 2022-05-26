@@ -43,6 +43,8 @@ logging.basicConfig(
     level=logging.DEBUG)
 
 app = Flask(__name__)
+app.config['SESSION_COOKIE_NAME'] = '__Host-vl'
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_SECURE'] = True
 app.secret_key = setting.SECRET_KEY
 app.register_blueprint(VIEW_API)
