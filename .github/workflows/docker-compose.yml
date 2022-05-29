@@ -15,14 +15,14 @@ jobs:
       - name: Rename sample setting file
         run: mv ./setting_sample.py ./setting.py
       - name: UP
-        run: docker-compose up -d
+        run: docker compose up -d
       - name: List images
         run: docker images
       - name: List container
         run: docker ps -a
       - name: Cat Celery Log
         run: |
-          sleep 30 ;
+          sleep 45 ;
           ls -alh ;
           ls -alh ./logs ;
           ls -alh ./logs/workers ;

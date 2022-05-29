@@ -9,7 +9,7 @@ GNU Affero General Public License version 3 (AGPL-3.0)
 
 ## For Developer
 
-目前我們使用 docker-compose 的方式進行開發，可以使用 `docker-compose up` 來建立與啟動必要的服務。完成後可以連到 `http://127.0.0.1:80` 看到首頁！
+目前我們使用 `docker compose` 的方式進行開發，可以使用 `docker compose up` 來建立與啟動必要的服務。完成後可以連到 `http://127.0.0.1:80` 看到首頁！
 
 ### Code Style
 
@@ -71,6 +71,19 @@ Poetry 的安裝請使用[官方文件](https://python-poetry.org/docs/)建議�
 然後 <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>，輸入 `Python: Select Interpreter`，
 選擇 `輸入直譯器路徑`，填入路徑即可。
 
+### Build from Docker-Compose
+
+We use the `[docker compose](https://docs.docker.com/compose/)` to run the project in containers,
+please pre-install [Docker Engine](https://docs.docker.com/engine/) or [Docker Desktop](https://docs.docker.com/get-docker/) before get start.
+
+    docker compose build --no-cache  # only to build the base images, or ...
+    docker compose up  # build and run
+
+wait an amount until all available, open browser and visit to:
+
+    http://127.0.0.1:80/
+
+
 ## 如何貢獻專案
 
 ### Fork me
@@ -86,7 +99,7 @@ Poetry 的安裝請使用[官方文件](https://python-poetry.org/docs/)建議�
 1. 參考這兩份資訊，瞭解平台的[架構](https://github.com/COSCUP/COSCUP-Volunteer/wiki/How-to-make-COSCUP-Volunteer%3F)與[服務](https://github.com/COSCUP/COSCUP-Volunteer/wiki/What-service-is-in-the-COSCUP-Volunteer%3F)。
 2. 查看目前已知的問題 [Issues](https://github.com/COSCUP/COSCUP-Volunteer/issues)。
 3. 查看目前的開發 [roadmap](https://github.com/COSCUP/COSCUP-Volunteer/wiki/roadmap)。
-4. 或是到 [COSCUP 行政組 - 開發組](https://chat.coscup.org/coscup/channels/secretary-develop)頻道討論。 
+4. 或是到 [COSCUP 行政組 - 開發組](https://chat.coscup.org/coscup/channels/secretary-develop)頻道討論。
 
 ## Issues
 
