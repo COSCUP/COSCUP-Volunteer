@@ -15,7 +15,9 @@ from models.users_db import UsersDB
 from models.usessiondb import USessionDB
 from models.waitlistdb import WaitListDB
 
-if __name__ == '__main__':
+
+def make_index() -> None:
+    ''' Make index for all collections '''
     BudgetDB().index()
     ExpenseDB().index()
     FormDB().index()
@@ -33,3 +35,7 @@ if __name__ == '__main__':
     USessionDB().index()
     UsersDB().index()
     WaitListDB().index()
+
+
+if __name__ == '__main__':
+    make_index()

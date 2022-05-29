@@ -1,6 +1,7 @@
 FROM coscupweb-base:22.05.23
 
 #ADD ./client_secret.json ./client_secret.json
+ADD ./cmd ./cmd
 ADD ./privacy.md ./privacy.md
 #ADD ./secretary-e00794553a7d.json ./secretary-e00794553a7d.json
 ADD ./setting.py ./setting.py

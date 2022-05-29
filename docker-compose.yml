@@ -24,6 +24,27 @@ services:
       context: .
       dockerfile: ./Dockerfile-base-dev
 
+  cmdapp:
+    image: "volunteer-app:prod"
+    build:
+      context: .
+      dockerfile: ./Dockerfile-app-dev
+    links:
+      - "memcached-prod:memcached"
+      - "queue_sender:rabbitmq"
+      - "secretary_mongo:mongo"
+    volumes:
+      - $PWD/logs/apps:/app/log
+    depends_on:
+      - memcached-prod
+      - queue_sender
+      - secretary_mongo
+    networks:
+      - backend
+    environment:
+      - PYTHONPATH=/app
+    entrypoint: ["poetry", "run", "python3", "cmd/main.py"]
+
   webapp:
     image: "volunteer-app:prod"
     build:
@@ -45,7 +66,7 @@ services:
       replicas: 4
     networks:
       - backend
-    command: ["poetry", "run", "uwsgi", "./uwsgi.ini"]
+    entrypoint: ["poetry", "run", "uwsgi", "./uwsgi.ini"]
 
   celery_worker:
     image: "volunteer-app:prod"
@@ -66,7 +87,7 @@ services:
       - C_FORCE_ROOT=true
     networks:
       - backend
-    command: ["poetry", "run", "celery", "-A", "celery_task.celery_main", "worker", "-B", "-l", "info", "-O", "fair", "-c", "4", "--logfile", "./log/log.log"]
+    entrypoint: ["poetry", "run", "celery", "-A", "celery_task.celery_main", "worker", "-B", "-l", "info", "-O", "fair", "-c", "4", "--logfile", "./log/log.log"]
 
   memcached-prod:
     image: "memcached:1.6.15-alpine"
