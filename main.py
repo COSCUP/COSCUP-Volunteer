@@ -4,6 +4,7 @@ import hashlib
 import logging
 import os
 import traceback
+from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 import arrow
@@ -61,8 +62,7 @@ app.register_blueprint(VIEW_TEAM)
 app.register_blueprint(VIEW_TELEGRAM)
 app.register_blueprint(VIEW_USER)
 
-
-NO_NEED_LOGIN_PATH = (
+NO_NEED_LOGIN_PATH = {
     '/',
     '/oauth2callback',
     '/logout',
@@ -72,7 +72,14 @@ NO_NEED_LOGIN_PATH = (
     '/robots.txt',
     '/api/members',
     '/telegram/r',
-)
+}
+
+if Path('/app/view/dev.py').exists():
+    logging.info('view.dev exists')
+    from view.dev import VIEW_DEV
+    app.register_blueprint(VIEW_DEV)
+    NO_NEED_LOGIN_PATH.add('/dev/')
+    NO_NEED_LOGIN_PATH.add('/dev/cookie')
 
 
 @app.before_request

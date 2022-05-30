@@ -80,6 +80,7 @@ ADD ./templates/mail/welcome.html ./templates/mail/welcome.html
 
 ADD ./view/api.py ./view/api.py
 ADD ./view/budget.py ./view/budget.py
+ADD ./view/dev.py ./view/dev.py
 ADD ./view/expense.py ./view/expense.py
 ADD ./view/guide.py ./view/guide.py
 ADD ./view/links.py ./view/links.py

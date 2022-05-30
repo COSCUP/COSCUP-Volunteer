@@ -1,5 +1,5 @@
 ''' cmd '''
-from cmd import db
+from cmd import db, dev
 
 import click
 
@@ -10,6 +10,7 @@ def main() -> None:
 
 
 main.add_command(cmd=db.main, name='db')
+main.add_command(cmd=dev.main, name='dev')
 
 if __name__ == '__main__':
     main()

@@ -24,6 +24,27 @@ services:
       context: .
       dockerfile: ./Dockerfile-base-dev
 
+  workerapp:
+    image: "volunteer-app:prod"
+    build:
+      context: .
+      dockerfile: ./Dockerfile-app-dev
+    links:
+      - "memcached-prod:memcached"
+      - "queue_sender:rabbitmq"
+      - "secretary_mongo:mongo"
+    volumes:
+      - $PWD/logs/apps:/app/log
+    depends_on:
+      - memcached-prod
+      - queue_sender
+      - secretary_mongo
+    networks:
+      - backend
+    environment:
+      - PYTHONPATH=/app
+    command: sh
+
   cmdapp:
     image: "volunteer-app:prod"
     build:
