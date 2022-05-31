@@ -5,6 +5,7 @@ from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
 
 from models.users_db import UsersDB
 from models.usessiondb import USessionDB
+from module.project import Project
 
 VIEW_DEV = Blueprint('dev', __name__, url_prefix='/dev')
 
@@ -26,10 +27,10 @@ def index() -> Text:
         if data:
             if 'casename' in data and data['casename'] == 'get':
                 accounts = []
-                sessions = []
                 for user in UsersDB().find():
                     accounts.append(user)
 
+                sessions = []
                 for usession in USessionDB().find():
                     sessions.append(usession)
 
@@ -37,7 +38,18 @@ def index() -> Text:
                     'sid': session['sid'],
                     'accounts': accounts,
                     'sessions': sessions,
+                    'projects': list(Project.all()),
                 })
+
+            if 'casename' in data and data['casename'] == 'create_project':
+                usession = USessionDB().find_one({'_id': session['sid']})
+                if usession:
+                    project_data = data['project']
+                    Project.create(pid=project_data['pid'],
+                                   name=project_data['name'],
+                                   owners=[usession['uid'], ],
+                                   action_date=project_data['action_date'],
+                                   )
 
     return jsonify({})
 
