@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block head_title %} - {{g.user.data.name}} Dev Setting {%block head_title_setting%}{%endblock%} [{{g.user.account._id}}]{% endblock %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        Development Setting
+    </h1>
+    <p class="subtitle">設定頁面</p>
+  </div>
+</section>
+<section class="section">
+  <div id="devp" class="container" v-cloak>
+      <div class="columns">
+          <div class="column is-one-fifth"></div>
+          <div class="column">
+              <div class="content">
+                  <h2>Accounts ([[ accounts.length ]])</h2>
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th>ID</th>
+                              <th>Email</th>
+                              <th>Create At</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr v-for="account in accounts">
+                              <td>[[ account._id ]]</td>
+                              <td>[[ account.mail ]]</td>
+                              <td>[[ new Date(account.created_at*1000).toLocaleString() ]]</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="content">
+                  <h2>Sessions ([[ sessions.length ]])</h2>
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th>UID</th>
+                              <th>Session ID(sid) / Alive / Create At</th>
+                              <th>Switch to</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr v-for="session in sessions">
+                              <td>[[ session.uid ]]</td>
+                              <td>
+                                  [[ session._id ]]<br>
+                                  [[ session.alive ]] [[ new Date(session.created_at*1000).toLocaleString() ]]
+                              </td>
+                              <td style="vertical-align:middle;">
+                                  <a class="button is-link is-small is-light is-outlined"
+                                      v-if="sid != session._id"
+                                      :href="'./cookie?sid='+session._id">Switch</a>
+                                  <span class="tag is-success" v-if="sid == session._id">Current</span>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="content">
+                  <h2>個人資訊 ({{count}})</h2>
+              </div>
+          </div>
+          <div class="column is-one-fifth"></div>
+      </div>
+  </div>
+</section>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $devp = new Vue({
+            el: '#devp',
+            data: {
+                sid: '',
+                accounts: [],
+                sessions: []
+            },
+            mounted: function() {
+                this.load();
+            },
+            methods: {
+                load: function() {
+                    let $this = this;
+                    axios.post('./', {casename: 'get'}).then(function(resp) {
+                        $this.sid = resp.data.sid;
+                        $this.accounts = resp.data.accounts;
+                        $this.sessions = resp.data.sessions;
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}

@@ -59,6 +59,11 @@ def user_add() -> None:
     click.echo(click.style(
         f'session id: {user_session.inserted_id}', fg='green', bold=True))
 
+    click.echo(click.style(
+        '-> Please visit these link to setup the cookie/session:', fg='green', bold=True))
+    click.echo(click.style(
+        f'-> http://127.0.0.1/dev/cookie?sid={user_session.inserted_id}', fg='green', bold=True))
+
     for user_session in USessionDB().find():
         click.echo(user_session)
 
