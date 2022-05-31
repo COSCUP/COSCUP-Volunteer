@@ -83,6 +83,15 @@ wait an amount until all available, open browser and visit to:
 
     http://127.0.0.1:80/
 
+To create an user for dev
+
+    docker compose run --rm cmdapp dev user_add
+
+This command will create an user account and register an session, so you need to feed the cookie for your browser.
+Visit the dev page to setup.
+
+    http://127.0.0.1:80/dev/
+
 
 ## 如何貢獻專案
 
@@ -90,6 +99,7 @@ wait an amount until all available, open browser and visit to:
 
 1. 使用 [github fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) 的方式建立一份到自己的帳號底下。（詳細的操作可以參考 [Working with forks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks)）
 2. 參考 `README.md` 的 `Local Development` 先建立起本地端開發環境。
+
 ### Create a Pull Request(PR)
 
 如果你的開發很順利，覺得可以送出一版 PR 讓我們 review，也請透過 Github [create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) 的方式發給我們！

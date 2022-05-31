@@ -34,6 +34,7 @@ RUN curl -L -0 volunteer.coscup.org/faw/webfonts/fa-solid-900.woff > /cdnhost/we
 RUN curl -L -0 volunteer.coscup.org/faw/webfonts/fa-solid-900.woff2 > /cdnhost/webfonts/fa-solid-900.woff2;
 RUN curl -L -0 volunteer.coscup.org/js/vue.min.js > /cdnhost/vue.min.js;
 RUN curl -L -0 volunteer.coscup.org/js/axios.min.js > /cdnhost/axios.min.js;
+RUN curl -L -0 volunteer.coscup.org/js/axios.min.map > /cdnhost/axios.min.map;
 #RUN chown www-data:www-data /cdnhost/*
 RUN chown nginx:nginx /cdnhost/*
 
