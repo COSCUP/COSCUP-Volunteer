@@ -1,8 +1,6 @@
 ''' dev '''
 import click
 
-from models.oauth_db import OAuthDB
-from models.usessiondb import USessionDB
 from module.oauth import OAuth
 from module.users import User
 from module.usession import USession
@@ -41,9 +39,6 @@ def user_add() -> None:
     OAuth.add(mail=user_info['email'],
               data=user_info, token=Token())
 
-    for user_oauth in OAuthDB().find():
-        click.echo(user_oauth)
-
     # ----- Check account or create ----- #
     owner = OAuth.owner(mail=user_info['email'])
     if owner:
@@ -51,21 +46,17 @@ def user_add() -> None:
     else:
         user = User.create(mail=user_info['email'])
 
-    click.echo(click.style(
-        f"user id: {user['_id']}", fg='green', bold=True))
-
     user_session = USession.make_new(uid=user['_id'], header={})
 
+    click.echo(click.style('\n[!] Next step', bold=True))
     click.echo(click.style(
-        f'session id: {user_session.inserted_id}', fg='green', bold=True))
-
+        ' | Please visit these link to setup the cookie/session:', fg='yellow', bold=True))
     click.echo(click.style(
-        '-> Please visit these link to setup the cookie/session:', fg='green', bold=True))
+        f'   -> http://127.0.0.1/dev/cookie?sid={user_session.inserted_id}', fg='green', bold=True))
+    click.echo('')
     click.echo(click.style(
-        f'-> http://127.0.0.1/dev/cookie?sid={user_session.inserted_id}', fg='green', bold=True))
-
-    for user_session in USessionDB().find():
-        click.echo(user_session)
+        'Thank you for your contribution!', fg='cyan', bold=True))
+    click.echo('')
 
 
 main.add_command(cmd=user_add)

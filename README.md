@@ -71,23 +71,32 @@ Poetry 的安裝請使用[官方文件](https://python-poetry.org/docs/)建議�
 然後 <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>，輸入 `Python: Select Interpreter`，
 選擇 `輸入直譯器路徑`，填入路徑即可。
 
-### Build from Docker-Compose
+### Build from Docker Compose
 
-We use the `[docker compose](https://docs.docker.com/compose/)` to run the project in containers,
-please pre-install [Docker Engine](https://docs.docker.com/engine/) or [Docker Desktop](https://docs.docker.com/get-docker/) before get start.
+We use the [docker compose](https://docs.docker.com/compose/) (not `docker-compose`) to run the project in containers, please pre-install [Docker Engine](https://docs.docker.com/engine/) or [Docker Desktop](https://docs.docker.com/get-docker/) before get start.
 
-    docker compose build --no-cache  # only to build the base images, or ...
-    docker compose up  # build and run
+Only to build the base images
 
-wait an amount until all available, open browser and visit to:
+    docker compose build --no-cache
+
+Or build and run ...
+
+    docker compose up --build
+
+Wait an amount until all services are available, open browser and visit to:
 
     http://127.0.0.1:80/
+
+**Notice: Because of the cookie with secure attributes (`__Host-`) at local for `127.0.0.1` is not allowed for Chrome and Safari ([1056543](https://bugs.chromium.org/p/chromium/issues/detail?id=1056543), [1263426](https://bugs.chromium.org/p/chromium/issues/detail?id=1263426)), the following steps are works only in [Firefox](https://www.mozilla.org/firefox/).**
 
 To create an user for dev
 
     docker compose run --rm cmdapp dev user_add
 
 This command will create an user account and register an session, so you need to feed the cookie for your browser.
+
+    http://127.0.0.1/dev/cookie?sid={sid}
+
 Visit the dev page to setup.
 
     http://127.0.0.1:80/dev/

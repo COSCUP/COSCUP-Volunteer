@@ -61,7 +61,62 @@
                   </table>
               </div>
               <div class="content">
-                  <h2>個人資訊 ({{count}})</h2>
+                  <h2>Projects ([[ projects.length ]])</h2>
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th>PID</th>
+                              <th>Name</th>
+                              <th>Action Date</th>
+                              <th>Setting</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr v-for="project in projects">
+                              <td>[[ project._id ]]</td>
+                              <td>[[ project.name]]</td>
+                              <td>[[ new Date(project.action_date*1000).toLocaleString() ]]</td>
+                              <td>
+                                  <a class="button is-link is-light is-outlined is-small"
+                                      :href="`/project/${project._id}/edit`">Setting</a>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="content">
+                  <details>
+                  <summary class="is-clickable">To create a project</summary>
+                  <h3>Create a Project</h3>
+                  <div class="field-body">
+                      <div class="field">
+                          <label class="label">Pid</label>
+                          <div class="control">
+                              <input class="input" name="pid" type="text" v-model.trim="project.pid" required>
+                          </div>
+                          <p class="help is-success">Project id, ex. 2022, 2023 ...</p>
+                      </div>
+                      <div class="field">
+                          <label class="label">Name</label>
+                          <div class="control">
+                              <input class="input" name="name" type="text" v-model.trim="project.name" required>
+                          </div>
+                          <p class="help is-success">Project name, ex. COSCUP 2022, COSCUP 2023 ...</p>
+                      </div>
+                      <div class="field">
+                          <label class="label">Action Date</label>
+                          <div class="control">
+                              <input class="input" type="date" v-model.trim="project.action_date">
+                          </div>
+                          <p class="help is-success">Which date is the action's first day.</p>
+                      </div>
+                  </div>
+                  <div class="field">
+                      <div class="control">
+                          <button class="button is-primary" :class="{'is-loading': is_loading}" @click="create_project">Create Project</button>
+                      </div>
+                  </div>
+                  </details>
               </div>
           </div>
           <div class="column is-one-fifth"></div>
@@ -78,18 +133,28 @@
             data: {
                 sid: '',
                 accounts: [],
-                sessions: []
+                sessions: [],
+                projects: [],
+                project: {pid: '', name: '', action_date: ''},
+                is_loading: 0
             },
             mounted: function() {
                 this.load();
             },
             methods: {
+                create_project: function() {
+                    let $this = this;
+                    axios.post('./', {casename: 'create_project', project: this.project}).then(function(resp) {
+                        window.location.href = '/dev/';
+                    });
+                },
                 load: function() {
                     let $this = this;
                     axios.post('./', {casename: 'get'}).then(function(resp) {
                         $this.sid = resp.data.sid;
                         $this.accounts = resp.data.accounts;
                         $this.sessions = resp.data.sessions;
+                        $this.projects = resp.data.projects;
                     });
                 }
             },

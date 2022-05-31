@@ -132,3 +132,11 @@ services:
       replicas: 1
     networks:
       - backend
+
+  link_mongo:
+    image: "mongo:5.0.8-focal"
+    deploy:
+      replicas: 1
+    networks:
+      - backend
+    entrypoint: ["mongo", "secretary_mongo:27017"]
