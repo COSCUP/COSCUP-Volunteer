@@ -20,7 +20,7 @@ RUN mkdir cdnhost
 RUN curl -L -0 volunteer.coscup.org/img/coscup_volunteer_og.png > /cdnhost/coscup_volunteer_og.png;
 
 RUN curl -L -0 volunteer.coscup.org/favicon.ico > /cdnhost/favicon.ico;
-RUN curl -L -0 volunteer.coscup.org/css/bulma.min.091.css > /cdnhost/bulma.min.091.css;
+RUN curl -L -0 volunteer.coscup.org/css/bulma.min.css > /cdnhost/bulma.min.css;
 
 RUN mkdir /cdnhost/css;
 RUN curl -L -0 volunteer.coscup.org/faw/css/all.min.css > /cdnhost/css/all.min.css;
