@@ -19,7 +19,7 @@ services:
       - backend
 
   webappbase:
-    image: "coscupweb-base:22.05.23"
+    image: "coscupweb-base:22.06.01"
     build:
       context: .
       dockerfile: ./Dockerfile-base-dev
