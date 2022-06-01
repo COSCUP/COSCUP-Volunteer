@@ -15,7 +15,7 @@ jobs:
       - name: Rename sample setting file
         run: mv ./setting_sample.py ./setting.py
       - name: UP
-        run: docker compose up -d
+        run: docker compose up -d --build
       - name: List images
         run: docker images
       - name: List container

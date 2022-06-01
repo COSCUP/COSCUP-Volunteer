@@ -64,7 +64,7 @@ services:
       - backend
     environment:
       - PYTHONPATH=/app
-    entrypoint: ["poetry", "run", "python3", "cmd/main.py"]
+    entrypoint: ["poetry", "run", "python3", "cmdtools/main.py"]
 
   webapp:
     image: "volunteer-app:prod"
