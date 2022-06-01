@@ -14,10 +14,8 @@ jobs:
         run: docker images
       - name: Rename sample setting file
         run: mv ./setting_sample.py ./setting.py
-      - name: Build images
-        run: docker compose build --no-cache
       - name: UP
-        run: docker compose up --detach
+        run: docker compose up --build --detach
       - name: List images
         run: docker images
       - name: List container
