@@ -1,0 +1,34 @@
+site_name: COSCUP Volunteer
+repo_url: https://github.com/COSCUP/COSCUP-Volunteer
+repo_name: COSCUP/COSCUP-Volunteer
+edit_uri: edit/master/docs_dev/docs/
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Setup: setup.md
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    primary: green
+  language: en
+  features:
+    - content.code.annotate
+extra:
+  analytics:
+    provider: google
+    property: UA-156956691-1
+markdown_extensions:
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - attr_list
+  - md_in_html
