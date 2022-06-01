@@ -1,11 +1,14 @@
-site_name: COSCUP Volunteer
+site_name: COSCUP Volunteer Docs
 repo_url: https://github.com/COSCUP/COSCUP-Volunteer
 repo_name: COSCUP/COSCUP-Volunteer
 edit_uri: edit/master/docs_dev/docs/
+copyright: "CC BY 4.0 2022 COSCUP Volunteer"
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
-  - Setup: setup.md
+  - Developers:
+    - Overview for Beginners: dev-beginners.md
+    - Setup: dev-setup.md
+  - Security: security.md
 theme:
   name: material
   icon:
@@ -15,12 +18,17 @@ theme:
   language: en
   features:
     - content.code.annotate
+    - navigation.tabs
+    - navigation.top
 extra:
   analytics:
     provider: google
     property: UA-156956691-1
 markdown_extensions:
   - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
