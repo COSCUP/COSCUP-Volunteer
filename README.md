@@ -75,11 +75,21 @@ Poetry 的安裝請使用[官方文件](https://python-poetry.org/docs/)建議�
 
 We use the [docker compose](https://docs.docker.com/compose/) (not `docker-compose`) to run the project in containers, please pre-install [Docker Engine](https://docs.docker.com/engine/) or [Docker Desktop](https://docs.docker.com/get-docker/) before get start.
 
-Only to build the base images
+Build the base images first. (**Notice: In this way, you no need to sign in to Docker Desktop account.**)
+
+    docker build -t coscupweb-base:22.06.01 -f ./Dockerfile-base-dev
+
+Setup the `setting.py`
+
+    cp setting_sample.py setting.py
+
+Edit the `setting.py`, make `MONGO_MOCK` to `False`.
+
+Build the rest of app images
 
     docker compose build --no-cache
 
-Or build and run ...
+Or direct up to build and run ...
 
     docker compose up --build
 

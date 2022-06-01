@@ -18,12 +18,6 @@ services:
     networks:
       - backend
 
-  webappbase:
-    image: "coscupweb-base:22.06.01"
-    build:
-      context: .
-      dockerfile: ./Dockerfile-base-dev
-
   workerapp:
     image: "volunteer-app:prod"
     build:
