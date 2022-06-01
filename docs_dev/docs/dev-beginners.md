@@ -1,4 +1,18 @@
-# Getting Started
+# Overview for Beginners
+
+Fork the project from gihub and make [pull request] to the origin repository.
+
+[pull request]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests
+
+## Github
+
+### Sign commits or tags
+
+We prefer your commits or tags are signed.
+
+!!! tip
+
+    How to sign your commits or tags, please read [this docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification).
 
 ## Repository
 
@@ -40,28 +54,27 @@ If you want development at root system instead of docker containers, please inst
 
 === "macOS"
 
-    ``` sh
-    brew install libmemcached
-    ```
+        brew install libmemcached
 
-=== "ubuntu"
+=== "Ubuntu"
 
-    ``` sh
-    apt-get install libmemcached-dev
-    ```
+        apt-get install libmemcached-dev
 
 ## Development Environment
 
 Install the packages.
 
     poetry install
+
+Shell within the virtual environment.
+
     poetry shell
 
 Find out the poetry env full path.
 
     poetry env list --full-path
 
-### Setup IDE
+### Setting up IDE
 
 === "VS Code"
     Setup the `Python: Select Interpreter` ++cmd+shift+p++, and input the poetry's env full path.
