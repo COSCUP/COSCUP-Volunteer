@@ -1,7 +1,7 @@
-''' cmd '''
-from cmd import db, dev
-
+''' cmd tools '''
 import click
+
+from cmdtools import db, dev
 
 
 @click.group(name='cmd groups')
