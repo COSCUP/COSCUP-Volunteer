@@ -1,8 +1,8 @@
 # Overview for Beginners
 
-Fork the project from gihub and make [pull request] to the origin repository.
+Fork the project from gihub and make [pull requests] to the origin repository.
 
-[pull request]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests
+[pull requests]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests
 
 ## Github
 
