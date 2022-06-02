@@ -46,7 +46,7 @@ Please install [Poetry](https://python-poetry.org/) for dependency management an
 
     curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
 
-After the poetry is installed, run
+After the poetry is installed, you could run `poetry install` to install the packages at local.
 
 ### libmemcached (optional)
 
@@ -70,11 +70,11 @@ Shell within the virtual environment.
 
     poetry shell
 
-Find out the poetry env full path.
+### Setting up IDE
+
+Setting up your IDE for `pylint` and `autopep8`. Find out the poetry env full path.
 
     poetry env list --full-path
-
-### Setting up IDE
 
 === "VS Code"
     Setup the `Python: Select Interpreter` ++cmd+shift+p++, and input the poetry's env full path.

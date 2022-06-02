@@ -7,7 +7,7 @@ nav:
   - Home: index.md
   - Developers:
     - Overview for Beginners: dev-beginners.md
-    - Setup: dev-setup.md
+    - Build Base Image: dev-build-base-image.md
   - Security: security.md
 theme:
   name: material
