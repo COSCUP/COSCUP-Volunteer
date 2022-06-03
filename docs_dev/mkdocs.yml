@@ -8,14 +8,31 @@ nav:
   - Developers:
     - Overview for Beginners: dev-beginners.md
     - Build Base Image: dev-build-base-image.md
+    - API: dev-api.md
   - Security: security.md
 theme:
   name: material
   icon:
     repo: fontawesome/brands/github
   palette:
-    primary: green
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: green
+      accent: green
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: green
+      accent: green
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
   language: en
+  font:
+    text: Roboto
+    code: Courier Prime
   features:
     - content.code.annotate
     - navigation.tabs
