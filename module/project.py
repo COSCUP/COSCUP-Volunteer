@@ -52,7 +52,7 @@ class Project:
         _data = {}
         for k in ('name', 'desc', 'volunteer_certificate_hours', 'calendar',
                   'mailling_staff', 'mailling_leader', 'shared_drive', 'mattermost_ch_id',
-                  'traffic_fee_doc', 'gitlab_project_id'):
+                  'traffic_fee_doc', 'gitlab_project_id', 'parking_card'):
             if k in data:
                 _data[k] = data[k]
 

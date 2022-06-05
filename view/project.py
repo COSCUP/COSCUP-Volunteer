@@ -50,6 +50,9 @@ def project_edit(pid):
         if 'volunteer_certificate_hours' not in project:
             project['volunteer_certificate_hours'] = 0
 
+        if 'parking_card' in project:
+            project['parking_card'] = ', '.join(project['parking_card'])
+
         return render_template('./project_edit.html', project=project)
 
     if request.method == 'POST':
@@ -65,6 +68,7 @@ def project_edit(pid):
             'mattermost_ch_id': request.form['mattermost_ch_id'].strip(),
             'traffic_fee_doc': request.form['traffic_fee_doc'].strip(),
             'gitlab_project_id': request.form['gitlab_project_id'].strip(),
+            'parking_card': list(map(str.strip, request.form['parking_card'].strip().split(','))),
         }
         Project.update(pid, data)
         return redirect(url_for('project.project_edit', pid=pid, _scheme='https', _external=True))
