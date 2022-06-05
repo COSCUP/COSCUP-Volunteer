@@ -753,12 +753,13 @@ def team_form_parking_card(pid, tid):
         if post_data['casename'] == 'get':
             data = Form.get_parking_card(
                 pid=team['pid'], uid=g.user['account']['_id'])
-            if not data:
-                return jsonify({'data': {'carno': '', 'dates': []}})
 
             parking_card_options = []
             if 'parking_card' in project:
                 parking_card_options = project['parking_card']
+
+            if not data:
+                return jsonify({'data': {'carno': '', 'dates': []}, 'parking_card_options': parking_card_options})
 
             return jsonify({'data': data['data'], 'parking_card_options': parking_card_options})
 
