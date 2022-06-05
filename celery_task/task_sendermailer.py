@@ -49,6 +49,7 @@ def sender_mailer_start_one(sender, **kwargs):
         subject=campaign_data['mail']['subject'],
         content={'preheader': campaign_data['mail']['preheader'],
                  'body': markdown(campaign_data['mail']['content']),
+                 'text_body': campaign_data['mail']['content'],
                  'send_by': team_name, },
         source=source,
     )

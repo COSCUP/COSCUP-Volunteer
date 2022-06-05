@@ -173,7 +173,7 @@
                             let formData = new FormData();
                             formData.append('file', $campaignreceiverform.file);
                             formData.append('uploadtype', $campaignreceiverform.uploadtype);
-                            axios.post('./receiver', formData, {header: {'Content-Type': 'multipart/form-data'}}).then(function(resp) {
+                            axios.post('./receiver', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then(function(resp) {
                                 window.location.href = './receiver';
                             });
                         }
