@@ -147,7 +147,10 @@ def campaign_receiver(pid, tid, cid):
         return render_template('./sender_campaign_receiver.html', campaign=campaign_data, team=team)
 
     if request.method == 'POST':
-        data = request.get_json()
+        data = {}
+
+        if request.is_json:
+            data = request.get_json()
 
         if data and 'casename' in data and data['casename'] == 'getinit':
             teams = []

@@ -112,14 +112,16 @@ class AWSSES:
         :param list to_addresses: to
         :param str subject: subject
         :param str body: body
+        :param str text_body: body format in text
         :param str x_coscup: (optional) for mail header ``X-Coscup``
         :param list cc_addresses: (optional) cc
         :param list attachment: (optional) attachment
+        :param str list_unsubscribe: (Optional) url for unsubscribe
 
         :rtype: :py:class:`email.mime.multipart.MIMEMultipart`
 
         '''
-        msg_all = MIMEMultipart()
+        msg_all = MIMEMultipart('mixed')
 
         msg_all['From'] = self.format_mail(
             self.source['name'], self.source['mail'])
@@ -143,7 +145,17 @@ class AWSSES:
         if 'x_coscup' in kwargs and kwargs['x_coscup']:
             msg_all['X-Coscup'] = kwargs['x_coscup']
 
-        msg_all.attach(MIMEText(kwargs['body'], 'html', 'utf-8'))
+        if 'list_unsubscribe' in kwargs and kwargs['list_unsubscribe']:
+            msg_all['List-Unsubscribe'] = kwargs['list_unsubscribe']
+
+        body_mine = MIMEMultipart('alternative')
+
+        if 'text_body' in kwargs and kwargs['text_body']:
+            body_mine.attach(MIMEText(kwargs['text_body'], 'plain', 'utf-8'))
+
+        body_mine.attach(MIMEText(kwargs['body'], 'html', 'utf-8'))
+
+        msg_all.attach(body_mine)
 
         if 'attachment' in kwargs and kwargs['attachment']:
             for attach in kwargs['attachment']:
