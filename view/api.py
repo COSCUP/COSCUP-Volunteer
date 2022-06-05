@@ -30,7 +30,7 @@ def project_members():
         
         # User.get_info() returns a dict, which is unordered.
         # Therefore, instead of dict.values(), we iterate
-        # the team['chief'] to ensure its order as same as the backend's.
+        # the team['chief'] to ensure that its order is as same as the backend's.
         chiefs_infos = User.get_info(uids=team['chiefs'])
         for uid in team['chiefs']:
             if uid not in chiefs_infos:
