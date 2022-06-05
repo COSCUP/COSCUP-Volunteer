@@ -29,17 +29,9 @@
             <div class="field">
                 <label class="label">需求天數</label>
                 <div class="control">
-                    <label class="checkbox mr-3">
-                        <input type="checkbox" value="2020-07-31" v-model="data.dates">
-                        2020-07-31
-                    </label>
-                    <label class="checkbox mr-3">
-                        <input type="checkbox" value="2020-08-01" v-model="data.dates">
-                        2020-08-01
-                    </label>
-                    <label class="checkbox mr-3">
-                        <input type="checkbox" value="2020-08-02" v-model="data.dates">
-                        2020-08-02
+                    <label class="checkbox mr-3" v-for="op in parking_card_options">
+                        <input type="checkbox" :value="op" v-model="data.dates">
+                        [[ op ]]
                     </label>
                 </div>
             </div>
@@ -60,7 +52,8 @@
             el: '#parkingcard',
             data: {
                 data: {carno: '', dates: []},
-                posted_data: {}
+                posted_data: {},
+                parking_card_options: []
             },
             mounted: function() {
                 this.load();
@@ -70,6 +63,7 @@
                     axios.post('./parking_card', {casename: 'get'}).then(function(resp) {
                         $parkingcard.data = resp.data.data;
                         $parkingcard.posted_data = Object.assign({}, resp.data.data);
+                        $parkingcard.parking_card_options = resp.data.parking_card_options;
                     });
                 },
                 submit: function($e) {

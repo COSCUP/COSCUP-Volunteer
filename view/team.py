@@ -756,7 +756,11 @@ def team_form_parking_card(pid, tid):
             if not data:
                 return jsonify({'data': {'carno': '', 'dates': []}})
 
-            return jsonify({'data': data['data']})
+            parking_card_options = []
+            if 'parking_card' in project:
+                parking_card_options = project['parking_card']
+
+            return jsonify({'data': data['data'], 'parking_card_options': parking_card_options})
 
         if post_data['casename'] == 'post':
             if 'data' in post_data and post_data['data']:
