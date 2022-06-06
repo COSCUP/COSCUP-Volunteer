@@ -1,4 +1,9 @@
-''' Index DB '''
+''' Create the collection index
+
+This file is executed to create the index in MongoDB. All models
+with `index()` will be aggregated here.
+
+'''
 from models.budgetdb import BudgetDB
 from models.expensedb import ExpenseDB
 from models.formdb import FormDB
@@ -17,7 +22,7 @@ from models.waitlistdb import WaitListDB
 
 
 def make_index() -> None:
-    ''' Make index for all collections '''
+    ''' Make index for the collection with `index()` '''
     BudgetDB().index()
     ExpenseDB().index()
     FormDB().index()
