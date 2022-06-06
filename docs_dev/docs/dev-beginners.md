@@ -12,7 +12,7 @@ We prefer your commits or tags are signed.
 
 !!! tip
 
-    How to sign your commits or tags, please read [this docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification).
+    Please read [this docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification) to learn about how to sign your commits and tags.
 
 ## Repository
 
@@ -22,11 +22,11 @@ Click [Fork](https://github.com/COSCUP/COSCUP-Volunteer/fork) button on the top-
 
 ### Clone
 
-`git clone` from the repo you are forked.
+`git clone` from the repo you have forked.
 
 ## Code style
 
-The code is compliant in [PEP8](https://peps.python.org/pep-0008/) and [typing hint](https://docs.python.org/3/library/typing.html) ([PEP484](https://peps.python.org/pep-0483/)).
+The codebase is compliant in [PEP8](https://peps.python.org/pep-0008/) and [typing hint](https://docs.python.org/3/library/typing.html) ([PEP484](https://peps.python.org/pep-0483/)).
 
  - pylint
  - autopep8
