@@ -7,29 +7,33 @@ from models.base import DBBase
 
 
 class FormDB(DBBase):
-    ''' Form Collection
-
-    .. note::
-        - ``pid``, ``uid``, ``form_case``
-        - ``available`` bool to check use or not
-
-    '''
+    ''' Form Collection '''
 
     def __init__(self) -> None:
         super().__init__('form')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `case`
+            - `pid`
+
+        '''
         self.create_index([('case', 1), ])
         self.create_index([('pid', 1), ])
 
     def add_by_case(self, case: str, pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
-        ''' add data by case
+        ''' Add data by case
 
-        :param str case: form case
-        :param str pid: project id
-        :param str uid: user id
-        :param dict data: form data
+        Args:
+            case (str): Case name.
+            pid (str): Project id.
+            uid (str): User id.
+            data (dict): The data to insert / update.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         _data = {}
@@ -53,8 +57,14 @@ class FormTrafficFeeMappingDB(DBBase):
     def save(self, pid: str, data: dict[str, Any]) -> dict[str, Any]:  # pylint: disable=arguments-differ
         ''' Save location / fee data
 
-        :param str pid: pid
-        :param dict data: {'(location)': (fee)}
+        Args:
+            pid (str): Project id.
+            data (dict): The data to insert / update.
+
+              Format: `{'{location}': {fee}, ...}`
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(

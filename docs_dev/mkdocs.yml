@@ -10,6 +10,14 @@ nav:
     - Build Base Image: dev-build-base-image.md
     - API: dev-api.md
   - Security: security.md
+  - Code Reference:
+    - Overview: code_reference/overview.md
+    - Models:
+      - base: code_reference/models/base.md
+      - budgetdb: code_reference/models/budgetdb.md
+      - expensedb: code_reference/models/expensedb.md
+      - formdb: code_reference/models/formdb.md
+      - index: code_reference/models/index.md
 theme:
   name: material
   icon:
@@ -41,6 +49,17 @@ extra:
   analytics:
     provider: google
     property: UA-156956691-1
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+            show_signature_annotations: true
+            separate_signature: true
+          import:
+            - https://requests.readthedocs.io/en/master/objects.inv
 markdown_extensions:
   - pymdownx.details
   - pymdownx.emoji:

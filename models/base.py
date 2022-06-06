@@ -1,4 +1,10 @@
-''' DB base '''
+# -*- coding: utf-8 -*-
+''' DB base
+
+    The base module for connect to MongoDB. In testing mode, we use the `mongomock`
+    for mock data and need set the `MONGO_MOCK` to be `True` in `setting.py`.
+
+'''
 from time import time
 from typing import TYPE_CHECKING, Any
 
@@ -25,7 +31,8 @@ else:
     class DBBase(Collection):  # pylint: disable=abstract-method
         ''' DBBase class
 
-        :param str name: collection name
+        Attributes:
+            name (str): collection name.
 
         '''
 
@@ -43,9 +50,10 @@ else:
 
         @staticmethod
         def make_create_at(data: dict[str, Any]) -> None:
-            ''' make create_at timestamp
+            ''' make `create_at` timestamp
 
-            :param dict data: data
+            Args:
+                data (dict): make the timestamp into `create_at` field
 
             '''
             data['created_at'] = time()

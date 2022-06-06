@@ -17,14 +17,26 @@ class ExpenseDB(DBBase):
         super().__init__('expense')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `pid`, `tid`
+            - `pid`, `tid`, `request.buid`
+            - `pid`, `tid`, `create_by`
+
+        '''
         self.create_index([('pid', 1), ('tid', 1)])
         self.create_index([('pid', 1), ('tid', 1), ('request.buid', 1)])
         self.create_index([('pid', 1), ('tid', 1), ('create_by', 1)])
 
     @staticmethod
     def status() -> dict[str, str]:
-        ''' Status mapping '''
+        ''' Status mapping
+
+        Returns:
+            `1`: `已申請`, `2`: `已出款`, `3`: `已完成`.
+
+        '''
         return {'1': '已申請',
                 '2': '已出款',
                 '3': '已完成',
@@ -32,7 +44,37 @@ class ExpenseDB(DBBase):
 
     @staticmethod
     def new(pid: str, tid: str, uid: str) -> dict[str, Any]:
-        ''' Create new '''
+        ''' Create new data object
+
+        Args:
+            pid (str): project id
+            tid (str): team id
+            uid (str): user id
+
+        Struct:
+            - ``_id``: Unique expense id.
+            - ``pid``: Project id.
+            - ``tid``: Team id.
+            - ``request``: This object include the budget data in
+                           `buid`, `desc`, `paydate`, `code`.
+            - ``invoices``: List of invoice data, in
+                            `currency`, `name`, `status`, `total`, `received`.
+            - ``bank``: User's bank account info, the data from user's
+                        real_profile in settings.
+            - ``status``: The mappings from [`ExpenseDB.status`][models.expensedb.ExpenseDB.status].
+            - ``note``: Note fields, but not implememnt in expense page.
+            - ``code``: Random shorter code for reference in batch.
+            - ``releveant_code``: The codes are releveant to others.
+            - ``create_by``: Create by who in `uid`.
+            - ``create_at``: When to created.
+
+        Returns:
+            Return an base data object in `dict`.
+
+        TODO:
+            Need refactor in pydantic.
+
+        '''
         return {
             '_id': f'{uuid4().node:x}',
             'pid': pid,
@@ -49,9 +91,13 @@ class ExpenseDB(DBBase):
         }
 
     def add(self, data: dict[str, Any]) -> dict[str, Any]:
-        ''' Add data
+        ''' Add data, using `pid`, `tid`, `_id` as the key to insert / update.
 
-        :param dict data: data
+        Args:
+            data (dict): the data to insert / update.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(
