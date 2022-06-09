@@ -9,34 +9,43 @@ from models.base import DBBase
 
 
 class SenderCampaignDB(DBBase):
-    ''' SenderCampaign Collection
-
-    :Struct:
-        - ``_id``: cid
-        - ``name``: campaign name
-        - ``created``:
-            - ``pid``: pid
-            - ``tid``: tid
-            - ``uid``: uid
-            - ``at``: created at
-        - ``receiver``:
-            - ``teams``: team in list
-            - ``users``: user in list
-            - ``team_w_tags``: team tags
-            - ``all_users``: bool, send to all platform users
-
-        - ``mail``:
-            - ``subject``: subject
-            - ``content``: content, support markdown
-
-    '''
+    ''' SenderCampaign Collection '''
 
     def __init__(self) -> None:
         super().__init__('sender_campaign')
 
     @staticmethod
     def new(name: str, pid: str, tid: str, uid: str) -> dict[str, Any]:
-        ''' new a struct '''
+        ''' new a default struct
+
+        Args:
+            name (str): Campaign name.
+            pid (str): Project id.
+            tid (str): Team id.
+            uid (str): User id.
+
+        Returns:
+            Return a default struct.
+
+        Struct:
+            - ``_id``: Unique id, or `cid`.
+            - ``name``: Campaign name.
+            - ``created``:
+                - ``pid``: Project id.
+                - ``tid``: Team id.
+                - ``uid``: User id.
+                - ``at``: Created at.
+            - ``receiver``:
+                - ``teams``: List of team id(`tid`)
+                - ``users``: List of user id(`uid)
+                - ``team_w_tags``: List of the tag id created by team.
+                - ``all_users``: `bool` Is send to all platform's users.
+
+            - ``mail``:
+                - ``subject``: Subject.
+                - ``content``: Content, and Markdown format supported.
+
+        '''
         return {
             '_id': uuid4().hex,
             'name': name,
@@ -61,7 +70,15 @@ class SenderCampaignDB(DBBase):
         }
 
     def add(self, data: dict[str, Any]) -> dict[str, Any]:
-        ''' Save data '''
+        ''' Save data
+
+        Args:
+            data (dict): The data to insert / update.
+
+        Returns:
+            Return the inserted / updated data.
+
+        '''
         return self.find_one_and_update(
             {'_id': data['_id']},
             {'$set': data},
@@ -79,10 +96,11 @@ class SenderLogsDB(DBBase):
     def add(self, cid: str, layout: str, desc: str, receivers: list[dict[str, Any]]) -> None:
         ''' Save log
 
-        :param str cid: cid
-        :param str layout: layout
-        :param str desc: desc
-        :param list receivers: receivers
+        Args:
+            cid (str): Campaign id, the `id` is from [models.senderdb.SenderCampaignDB][].
+            layout (str): In `1`, `2`.
+            desc (str): Description.
+            receivers (list): List of user info or replace data. Required fields in `name`, `mail`.
 
         '''
 
@@ -106,10 +124,12 @@ class SenderSESLogsDB(DBBase):
     def add(self, cid: str, mail: str, name: str, ses_result: dict[str, Any]) -> None:
         ''' Save log
 
-        :param str cid: cid
-        :param str mail: mail
-        :param str name: name
-        :param dict ses_result: from ses return result
+        Args:
+            cid (str): Campaign id, the `id` is from [models.senderdb.SenderCampaignDB][].
+            mail (str): User mail.
+            name (str): User name.
+            ses_result (str): The result from the return of
+                              [SES.Client.send_email][] / [SES.Client.send_raw_email][].
 
         '''
         data = {
@@ -126,14 +146,7 @@ class SenderSESLogsDB(DBBase):
 class SenderReceiverDB(DBBase):
     ''' SenderReceiver Collection
 
-    :Struct:
-        - ``_id``: ObjectID
-        - ``cid``: campaign id
-        - ``pid``: project id
-        - ``data``: data in dict
-          - ``mail``: mail and unit
-          - ``name``: name
-          - (and any other field)
+    For User to upload the list of receivers in CSV.
 
     '''
 
@@ -141,13 +154,39 @@ class SenderReceiverDB(DBBase):
         super().__init__('sender_receiver')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `pid`
+            - `data.mail`
+
+        '''
         self.create_index([('pid', 1), ])
         self.create_index([('data.mail', 1), ])
 
     @staticmethod
     def new(pid: str, cid: str, name: str, mail: str) -> dict[str, Any]:
-        ''' new a struct '''
+        ''' new a struct
+
+        Args:
+            pid (str): Project id.
+            cid (str): Campaign id, the `id` is from [models.senderdb.SenderCampaignDB][].
+            mail (str): User's mail.
+            name (str): User name.
+
+        Returns:
+            Return a default struct.
+
+        Struct:
+            - ``_id``: Random id in `ObjectID`.
+            - ``cid``: Campaign id
+            - ``pid``: Project id
+            - ``data``: `dict`
+                - ``mail``: User mail.
+                - ``name``: User name.
+                - ``...``: *(... and any other fields.)*
+
+        '''
         return {
             'pid': pid,
             'cid': cid,
@@ -160,8 +199,9 @@ class SenderReceiverDB(DBBase):
     def remove_past(self, pid: str, cid: str) -> None:
         ''' Remove past data
 
-        - ``cid``: campaign id
-        - ``pid``: project id
+        Args:
+            pid (str): Project id.
+            cid (str): Campaign id, the `id` is from [models.senderdb.SenderCampaignDB][].
 
         '''
         self.delete_many({'pid': pid, 'cid': cid})
@@ -169,9 +209,10 @@ class SenderReceiverDB(DBBase):
     def update_data(self, pid: str, cid: str, datas: list[dict[str, Any]]) -> None:
         ''' Update datas
 
-        - ``cid``: campaign id
-        - ``pid``: project id
-        - ``datas``: datas
+        Args:
+            pid (str): Project id.
+            cid (str): Campaign id, the `id` is from [models.senderdb.SenderCampaignDB][].
+            datas (list): List of data to inserted / updated. Must have `mail`, `name`.
 
         '''
         for data in datas:

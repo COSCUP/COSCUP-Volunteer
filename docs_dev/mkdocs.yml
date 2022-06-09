@@ -18,6 +18,18 @@ nav:
       - expensedb: code_reference/models/expensedb.md
       - formdb: code_reference/models/formdb.md
       - index: code_reference/models/index.md
+      - mailletterdb: code_reference/models/mailletterdb.md
+      - mattermost_link_db: code_reference/models/mattermost_link_db.md
+      - mattermostdb: code_reference/models/mattermostdb.md
+      - oauth_db: code_reference/models/oauth_db.md
+      - projectdb: code_reference/models/projectdb.md
+      - senderdb: code_reference/models/senderdb.md
+      - tasksdb: code_reference/models/tasksdb.md
+      - teamdb: code_reference/models/teamdb.md
+      - telegram_db: code_reference/models/telegram_db.md
+      - users_db: code_reference/models/users_db.md
+      - usessiondb: code_reference/models/usessiondb.md
+      - waitlistdb: code_reference/models/waitlistdb.md
 theme:
   name: material
   icon:
@@ -59,6 +71,10 @@ plugins:
             show_signature_annotations: true
             separate_signature: true
           import:
+            - https://boto3.amazonaws.com/v1/documentation/api/latest/objects.inv
+            - https://docs.python.org/3/objects.inv
+            - https://google-auth-oauthlib.readthedocs.io/en/latest/objects.inv
+            - https://google-auth.readthedocs.io/en/stable/objects.inv
             - https://requests.readthedocs.io/en/master/objects.inv
 markdown_extensions:
   - pymdownx.details

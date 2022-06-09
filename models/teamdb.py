@@ -10,13 +10,12 @@ from models.base import DBBase
 class TeamDB(DBBase):
     ''' Team Collection
 
-    :Struct:
-        - ``pid``: from project id
-        - ``tid``: team id
-        - ``name``: team name
-        - ``owners``: (list) owners for team admin
-        - ``chiefs``: (list) team chiefs
-        - ``members``: (list) team members
+    Attributes:
+        pid (str): Project id.
+        tid (str): Team id.
+
+    Note:
+        For some use cases, the `pid`, `tid` could be empty strings.
 
     '''
 
@@ -26,13 +25,37 @@ class TeamDB(DBBase):
         self.tid = tid
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `chiefs`
+            - `members`
+            - `pid`
+
+        '''
         self.create_index([('chiefs', 1), ])
         self.create_index([('members', 1), ])
         self.create_index([('pid', 1), ])
 
     def default(self) -> dict[str, Any]:
-        ''' default data '''
+        ''' default data
+
+        Returns:
+            Return a default struct.
+
+        Struct:
+            - ``pid``: Project id.
+            - ``tid``: Team id.
+            - ``name``: Team name.
+            - ``owners``: `list` List of `uid` as team admin.
+            - ``chiefs``: `list` List of `uid` as team chiefs.
+            - ``members``: `list` List of `uid` as team members.
+            - ``desc``: Description.
+            - ``tag_members``: List of data
+                               `{'id': '<random code>', 'name': '<tag name>'}`.
+                               The tags for team to mark on members.
+
+        '''
         result = {
             'pid': self.pid,
             'tid': self.tid,
@@ -49,7 +72,11 @@ class TeamDB(DBBase):
     def add(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' Add data
 
-        :param dict data: data
+        Args:
+            data (dict): The data to inserted / updated.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(
@@ -62,7 +89,11 @@ class TeamDB(DBBase):
     def update_setting(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' update setting
 
-        :param dict data: data
+        Args:
+            data (dict): The data to inserted / updated.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(
@@ -76,9 +107,10 @@ class TeamDB(DBBase):
                      del_uids: Optional[list[str]] = None) -> None:
         ''' Update users
 
-        :param str field: field name
-        :param list add_uids: add uids
-        :param list del_uids: del uids
+        Args:
+            field (str): The `field` should be `chiefs`, `members`, `owners`.
+            add_uids (list): Optional, list of uids for add them into the `field`.
+            del_uids (list): Optional, list of uids for delete them from the `field`.
 
         '''
         if add_uids:
@@ -92,13 +124,21 @@ class TeamDB(DBBase):
                 {'$pullAll': {field: del_uids}})
 
     def get(self) -> Optional[dict[str, Any]]:
-        ''' Get data '''
+        ''' Get data
+
+        Returns:
+            Return the team info in `pid`, `tid`.
+
+        '''
         return self.find_one({'pid': self.pid, 'tid': self.tid})
 
     def add_tag_member(self, tag_data: dict[str, str]) -> None:
         ''' Add tag member
 
-        data: {'id': str, 'name': str}
+        Args:
+            tag_data (dict): The tag data should be:
+
+                `{'id': '<random code>', 'name': '<tag name>'}`.
 
         '''
         for data in self.find({'pid': self.pid, 'tid': self.tid}, {'tag_members': 1}):
@@ -120,11 +160,13 @@ class TeamDB(DBBase):
 class TeamMemberTagsDB(DBBase):
     ''' TeamMemberTagsDB Collection
 
-    :Struct:
-        - ``pid``: from project id
-        - ``tid``: team id
-        - ``uid``: user id
-        - ``tags``: [tag_id, ...]
+    Save the member's tag info.
+
+    Struct:
+        - ``pid``: Project id.
+        - ``tid``: Team id.
+        - ``uid``: User id.
+        - ``tags``: List of tag id.
 
     '''
 
@@ -132,13 +174,25 @@ class TeamMemberTagsDB(DBBase):
         super().__init__('team_member_tags')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `pid`, `tid`
+
+        '''
         self.create_index([('pid', 1), ('tid', 1)])
 
     def update_and_add(self, pid: str, tid: str, uid: str, tags: list[str]) -> dict[str, Any]:
         ''' update team
 
-        :param list tags: tag_id in tags array
+        Args:
+            pid (str): Project id.
+            tid (str): Team id.
+            uid (str): User id.
+            tags (list): List of tag id.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(
@@ -164,22 +218,30 @@ class TeamMemberChangedDB(DBBase):
         super().__init__('team_member_changed')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `pid`
+            - `case`
+
+        '''
         self.create_index([('pid', 1), ])
         self.create_index([('case', 1), ])
 
     def make_record(self, pid: str, tid: str, action: dict[str, Optional[list[str]]]) -> None:
         ''' make record
 
-        :param str pid: project id
-        :param str tid: team id
-        :param dict action: action in key name: add, del, waiting, deny
+        Args:
+            pid (str): Project id.
+            tid (str): Team id.
+            action (dict):
 
-        .. note::
-            - waiting: user send request, and waiting.
-            - deny: user send request, but deny.
-            - add/approve: join.
-            - del: was joined, but remove.
+                - `add`: Optional, list of uids. Add or approve to join.
+                - `del`: Optional, list of uids. Was joined, but remove now.
+                - `waiting`: Optional, list of uids. User has sent the request,
+                             and waiting the chiefs to review.
+                - `deny`: Optional, list of uids. User has sent the request,
+                          but has to deny.
 
         '''
         if 'add' in action and action['add']:
@@ -214,15 +276,29 @@ class TeamPlanDB(DBBase):
         super().__init__('team_plan')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `pid`
+
+        '''
         self.create_index([('pid', 1), ])
 
     def add(self, pid: str, tid: str, data: list[dict[str, Any]]) -> dict[str, Any]:
         ''' Save data
 
-        :param str pid: project id
-        :param str tid: team id
-        :patam list data: plan data
+        Args:
+            pid (str): Project id.
+            tid (str): Team id.
+            data (dict): List of data to inserted / updated.
+
+                - `title`: Plan title.
+                - `start`: Date in `YYYY-MM-DD` format.
+                - `end`: Date in `YYYY-MM-DD` format.
+                - `desc`: Description.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(

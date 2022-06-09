@@ -9,11 +9,23 @@ from models.base import DBBase
 class ProjectDB(DBBase):
     ''' Project Collection
 
-    :Struct:
-        - ``_id``: project id (pid)
-        - ``name``: show name
-        - ``action_date``: timestamp
-        - ``owners``: list of uid
+    Struct:
+        - ``_id``: Project id (pid)
+        - ``name``: Project name for display.
+        - ``action_date``: `timestamp` The first date of the event launched.
+        - ``created_at``: `timestamp` The data created at.
+        - ``desc``: Description.
+        - ``owners``: List of uid. The permissions of `owner` has the top level over the project.
+        - ``calendar``: Google Calendar id. The ID patten should be
+                        `{a-z0-9_}@group.calendar.google.com`.
+        - ``gitlab_project_id``: Gitlab project id.
+        - ``mailling_leader``: The mailing-list for team leaders.
+        - ``mailling_staff``: The mailing-list for all project staffs.
+        - ``mattermost_ch_id``: The chat room for Mattermost.
+        - ``shared_drive``: Google Shared Drive URL.
+        - ``traffic_fee_doc``: The announcement URL of the traffic subsidy document.
+        - ``volunteer_certificate_hours``: The hours for volunteers to apply for.
+        - ``parking_card``: The options for parking card in form.
 
     '''
 
@@ -22,11 +34,22 @@ class ProjectDB(DBBase):
         self.pid = pid
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `owners`, `action_date`
+
+        '''
         self.create_index([('owners', 1), ('action_date', -1)])
 
     def default(self) -> dict[str, Any]:
-        ''' default data '''
+        ''' default data
+
+        Returns:
+            The default data will only return the required fields in `_id`, `name`,
+                `action_date`, `desc`, `owners`.
+
+        '''
         result = {
             '_id': self.pid,
             'name': '',
@@ -40,7 +63,11 @@ class ProjectDB(DBBase):
     def add(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' Add data
 
-        :param dict data: data
+        Args:
+            data (dict): The data to inserted / updated.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(

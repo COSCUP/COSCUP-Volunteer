@@ -15,7 +15,13 @@ class UsersDB(DBBase):  # pylint: disable=abstract-method
         super().__init__('users')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `mail`
+            - `property.suspend`
+
+        '''
         self.create_index([('mail', 1), ])
         self.create_index([('property.suspend', 1), ])
 
@@ -23,11 +29,15 @@ class UsersDB(DBBase):  # pylint: disable=abstract-method
     def new(mail: str) -> dict[str, Any]:
         ''' New user account
 
-        :param str mail: mail
-        :rtype: dict
+        Args:
+            mail (str): Mail address.
 
-        .. note:: ``mail`` bind to login oauth account. Maybe need ``alias`` for
-        some case.
+        Returns:
+            Return the user base object and the `_id` it will be the user id.
+
+        TODO:
+            ``mail`` bind to login oauth account. Maybe need ``alias`` for
+            some case like one user have more mail account to register.
 
         '''
         return {
@@ -39,7 +49,11 @@ class UsersDB(DBBase):  # pylint: disable=abstract-method
     def add(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' Add data
 
-        :param dict data: user data
+        Args:
+            data (dict): The data to insert / update.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(
@@ -57,7 +71,12 @@ class TobeVolunteerDB(DBBase):  # pylint: disable=abstract-method
         super().__init__('tobe_volunteer')
 
     def add(self, data: dict[str, Any]) -> None:
-        ''' add '''
+        ''' add
+
+        Args:
+            data (dict): The data to insert / update.
+
+        '''
         self.find_one_and_update(
             {'_id': data['uid']},
             {'$set': data},
