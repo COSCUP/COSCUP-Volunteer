@@ -34,6 +34,7 @@ RABBITMQ = 'guest:guest@rabbitmq:5672'
 AWS_ID = '{{AWS_ID}}'
 AWS_KEY = '{{AWS_KEY}}'
 AWS_SES_FROM = {'name': '{{SENDER_NAME}}', 'mail': '{{SENDER_MAIL}}'}
+AWS_LIST_UNSUBSCRIBE = '<mailto:{{YOUR_MAIL}}>'
 
 # for alert/error mail, send to admin
 ADMIN_To = {'name': '{{YOUR_NAME}}', 'mail': '{{YOUR_MAIL}}'}

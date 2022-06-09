@@ -27,7 +27,12 @@ def project_members():
         data['tid'] = team['tid']
 
         data['chiefs'] = []
-        for user in User.get_info(uids=team['chiefs']).values():
+        chiefs_infos = User.get_info(uids=team['chiefs'])
+        for uid in team['chiefs']:
+            if uid not in chiefs_infos:
+                continue
+
+            user = chiefs_infos[uid]
             h_msg = hashlib.md5()
             h_msg.update(user['oauth']['email'].encode('utf-8'))
             data['chiefs'].append({
