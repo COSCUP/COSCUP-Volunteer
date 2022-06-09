@@ -1,8 +1,6 @@
 ''' AWS SDK API Integration
 
-:Integration:
-    - S3 :class:`AWSS3`
-    - SES :class:`AWSSES`
+Integration `S3.client`, `SES.client`
 
 '''
 from email import encoders
@@ -20,9 +18,10 @@ import boto3  # type:ignore
 class AWSS3:
     ''' AWSS3
 
-    :param str aws_access_key_id: aws_access_key_id
-    :param str aws_secret_access_key: aws_secret_access_key
-    :param str bucket: bucket name
+    Attributes:
+        aws_access_key_id (str): aws_access_key_id.
+        aws_secret_access_key (str): aws_secret_access_key.
+        bucket (str): bucket name.
 
     '''
     __slots__ = ('client', 'bucket')
@@ -37,17 +36,25 @@ class AWSS3:
     def get_object(self, key: str) -> Any:
         ''' Get object
 
-        :param str key: key name
-        :rtype: dict
+        Args:
+            key (str): Object key.
 
-        .. seealso::
-            :meth:`S3.Client.get_object`
+        Returns:
+            Return the object. -> [S3.Client.get_object][]
 
         '''
         return self.client.get_object(Bucket=self.bucket, Key=key)
 
     def convert_to_attachment(self, key: str) -> MIMEBase:
-        ''' Convert the object to match attachment '''
+        ''' Convert the object to match attachment
+
+        Args:
+            key (str): Object key.
+
+        Returns:
+            Get the object and turn into attachment format to use.
+
+        '''
         s3object = self.get_object(key)
         attachment = MIMEBase(
             s3object['ContentType'].split('/')[0],
@@ -65,9 +72,10 @@ class AWSS3:
 class AWSSES:
     ''' AWSSES
 
-    :param str aws_access_key_id: aws_access_key_id
-    :param str aws_secret_access_key: aws_secret_access_key
-    :param dict source: ``{'name': '', 'mail': ''}``, mail's ``from``
+    Attributes:
+        aws_access_key_id (str): aws_access_key_id.
+        aws_secret_access_key (str): aws_secret_access_key.
+        source (dict): `{'name': <str>, 'mail': <str>}`, for mail `FROM`.
 
     '''
 
@@ -83,12 +91,15 @@ class AWSSES:
 
     @staticmethod
     def format_mail(name: str, mail: str) -> str:
-        ''' Encode header to base64
+        ''' Encode the `user`, `mail` to base64 for Email-Headers format.
 
-            :param str name: user name
-            :param str mail: user mail
-            :rtype: str
-            :return: a string of ``name <mail>`` in ``base64``.
+            Args:
+                name (str): name.
+                mail (str): mail address.
+
+            Returns:
+                Return the excoded string.
+
         '''
         if name:
             return formataddr((name, mail))
@@ -98,10 +109,10 @@ class AWSSES:
     def send_email(self, *args: Any, **kwargs: Any) -> Any:
         ''' Send mail
 
-        ``*args``, ``**kwargs`` are the same with :meth:`SES.Client.send_email`
+        ``*args``, ``**kwargs`` are the same with [SES.Client.send_email][]
 
-        .. seealso::
-            :meth:`SES.Client.send_email`
+        See Also:
+            [SES.Client.send_email][]
 
         '''
         return self.client.send_email(*args, **kwargs)

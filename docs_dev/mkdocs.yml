@@ -30,6 +30,8 @@ nav:
       - users_db: code_reference/models/users_db.md
       - usessiondb: code_reference/models/usessiondb.md
       - waitlistdb: code_reference/models/waitlistdb.md
+    - Module:
+      - awsses: code_reference/module/awsses.md
 theme:
   name: material
   icon:
