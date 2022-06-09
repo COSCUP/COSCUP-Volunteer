@@ -5,11 +5,11 @@ from models.base import DBBase
 class MattermostLinkDB(DBBase):
     ''' MattermostLinkDB Collection
 
-    struct:
-        - _id: uid
-        - code: uuid4 ...
-        - data: mattermost request data
-        - create_at: int
+    Struct:
+        - ``_id``: User id.
+        - ``code``: Random code for the user to verify in Mattermost.
+        - ``data``: `dict` User info data from Mattermost.
+        - ``create_at``: `timestamp`
 
     '''
 
@@ -17,6 +17,12 @@ class MattermostLinkDB(DBBase):
         super().__init__('mattermost_link')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `data.user_id`
+            - `data.user_name`
+
+        '''
         self.create_index([('data.user_id', 1), ])
         self.create_index([('data.user_name', 1), ])

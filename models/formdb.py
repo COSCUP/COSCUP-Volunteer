@@ -61,7 +61,7 @@ class FormTrafficFeeMappingDB(DBBase):
             pid (str): Project id.
             data (dict): The data to insert / update.
 
-              Format: `{'{location}': {fee}, ...}`
+                Format: `{'{location}': {fee}, ...}`
 
         Returns:
             Return the inserted / updated data.

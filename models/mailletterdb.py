@@ -1,4 +1,19 @@
-''' MailLetterDB '''
+''' MailLetterDB
+
+This models will save the record of what the platform send the specific case of mail to user.
+(like: `welcome` letter)
+
+The base struct::
+
+    {
+        "_id" : <user id>,
+        "create_at" : <timestamp>,
+        "code" : {
+            "welcome" : <timestamp>
+        }
+    }
+
+'''
 from time import time
 from typing import Any, Generator
 
@@ -14,13 +29,19 @@ class MailLetterDB(DBBase):
         super().__init__('mailletter')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `code.welcome`
+
+        '''
         self.create_index([('code.welcome', 1), ])
 
     def create(self, uid: str) -> None:
         ''' Add user into sendlist
 
-        :param str uid: user id
+        Args:
+            uid (str): User id.
 
         '''
         self.find_one_and_update(
@@ -29,9 +50,12 @@ class MailLetterDB(DBBase):
     def is_sent(self, uid: str, code: str) -> float:
         ''' Check is sent or not
 
-        :param str uid: user id
-        :param str code: code
-        :rtype: float
+        Args:
+            uid (str): User id.
+            code (str): case code.
+
+        Returns:
+            The `timestamp` value. `0` has not sent.
 
         '''
         raw = self.find_one({'_id': uid}, {f'code.{code}': 1})
@@ -41,12 +65,14 @@ class MailLetterDB(DBBase):
         return 0
 
     def make_sent(self, uid: str, code: str) -> dict[str, Any]:
-        ''' Make sent
+        ''' Make sent record
 
-        :param str uid: user id
-        :param str code: code
-        :rtype: dict
-        :return: return raw data
+        Args:
+            uid (str): User id.
+            code (str): Case code.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(
@@ -57,9 +83,13 @@ class MailLetterDB(DBBase):
         )
 
     def need_to_send(self, code: str) -> Generator[dict[str, Any], None, None]:
-        ''' Find need to send list
+        ''' Find need to send the list of user
 
-        :param str code: code
+        Args:
+            code (str): Case code.
+
+        Yields:
+            The data haven't been sent yet.
 
         '''
         for raw in self.find({f'code.{code}': {'$exists': False}}):

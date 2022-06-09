@@ -13,11 +13,33 @@ class TelegramDB(DBBase):
         super().__init__('telegram')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `uid`, `uid`
+
+        '''
         self.create_index([('uid', 1), ])
 
     def add(self, data: dict[str, Any]) -> None:
-        ''' save data '''
+        ''' save data
+
+        Args:
+            data (dict): The data to insert / update.
+
+        The data's struct
+
+        Struct:
+            - `_id`: telegram id.
+            - `added`: Added time in datatime.
+            - `first_name`: First name.
+            - `id`: telegram id.
+            - `is_bot`: `bool`.
+            - `language_code`: Language in ISO 639.
+            - `uid`: Mapping to our user id.
+            - `username`: User name.
+
+        '''
         self.find_one_and_update(
             {'_id': data['id']},
             {'$set': data},

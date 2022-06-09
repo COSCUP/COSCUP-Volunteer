@@ -10,7 +10,12 @@ from models.base import DBBase
 
 
 class USessionDB(DBBase):
-    ''' USessionDB Collection '''
+    ''' USessionDB Collection
+
+    Attributes:
+        token (str): If is `None`, it will generate an random sha256 code.
+
+    '''
 
     def __init__(self, token: Optional[str] = None) -> None:
         super().__init__('usession')
@@ -23,7 +28,15 @@ class USessionDB(DBBase):
         self.token = token
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `created_at`
+            - `ipinfo`
+            - `uid`
+            - `alive`
+
+        '''
         self.create_index([('created_at', 1), ])
         self.create_index([('ipinfo', 1), ])
         self.create_index([('uid', 1), ])
@@ -32,7 +45,11 @@ class USessionDB(DBBase):
     def add(self, data: dict[str, Any]) -> InsertOneResult:
         ''' save
 
-        :param dict data: data
+        Args:
+            data (dict): The data to insert.
+
+        Returns:
+            Return the inserted data.
 
         '''
         doc = {}
@@ -42,5 +59,10 @@ class USessionDB(DBBase):
         return self.insert_one(doc)
 
     def get(self) -> Optional[dict[str, Any]]:
-        ''' Get data '''
+        ''' Get data
+
+        Returns:
+            Return the data.
+
+        '''
         return self.find_one({'_id': self.token, 'alive': True})

@@ -15,17 +15,27 @@ class WaitListDB(DBBase):
         super().__init__('waitlist')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `pid`
+            - `uid`
+
+        '''
         self.create_index([('pid', 1), ])
         self.create_index([('uid', 1), ])
 
     def join_to(self, pid: str, tid: str, uid: str, note: Optional[str] = None) -> dict[str, Any]:
         ''' Join to
 
-        :param str pid: project id
-        :param str tid: team id
-        :param str uid: user id
-        :param str note: note
+        Args:
+            pid (str): Project id.
+            tid (str): Team id.
+            uid (str): User id.
+            note (str): Optional. The note from user.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(
@@ -38,9 +48,13 @@ class WaitListDB(DBBase):
     def is_in_wait(self, pid: str, tid: str, uid: str) -> int:
         ''' Is in waitting list
 
-        :param str pid: project id
-        :param str tid: team id
-        :param str uid: user id
+        Args:
+            pid (str): Project id.
+            tid (str): Team id.
+            uid (str): User id.
+
+        Returns:
+            How many requests are in waiting.
 
         '''
         return self.count_documents({
@@ -50,10 +64,15 @@ class WaitListDB(DBBase):
                 _all: bool = False) -> Union[Optional[dict[str, Any]], Cursor[dict[str, Any]]]:
         ''' List by
 
-        :param str pid: project id
-        :param str tid: team id
-        :param str uid: user id
-        :param bool _all: show all waitlist
+        Args:
+            pid (str): Project id.
+            tid (str): Team id.
+            uid (str): User id.
+            _all (bool): To return all include waiting requests.
+
+        Returns:
+            If `uid` is specified, the return will be `dict` or `None`.
+                Otherwise the return could be iterable.
 
         '''
         query: dict[str, Any] = {'pid': pid}
@@ -75,10 +94,14 @@ class WaitListDB(DBBase):
                     result: Literal['approval', 'deny']) -> Optional[dict[str, Any]]:
         ''' Make result
 
-        :param str _id: waitlist id
-        :param str pid: project id
-        :param str uid: user id
-        :param str result: result in approval, deny.
+        Args:
+            _id (str): waitlist id.
+            pid (str): Project id.
+            uid (str): User id.
+            result (Literal): In `approval` or `deny`.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         if result in ('approval', 'deny'):

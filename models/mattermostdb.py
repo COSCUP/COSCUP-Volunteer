@@ -9,7 +9,7 @@ from models.base import DBBase
 class MattermostUsersDB(DBBase):
     ''' MattermostUsersDB Collection
 
-    sync users from Mattermost
+    Sync user datas from Mattermost for mapping.
 
     '''
 
@@ -17,13 +17,22 @@ class MattermostUsersDB(DBBase):
         super().__init__('mattermost_users')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `email`
+
+        '''
         self.create_index([('email', 1), ])
 
     def add(self, data: dict[str, Any]) -> dict[str, Any]:
-        ''' save data from fetch get_users api
+        ''' Save data from `/users` api
 
-        :params dict data: data
+        Args:
+            data (dict): The data responsed from api.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(

@@ -1,7 +1,7 @@
 ''' oauth database '''
 from typing import Any
 
-import google_auth_oauthlib.flow  # type: ignore
+from google.oauth2.credentials import Credentials  # type: ignore
 
 from models.base import DBBase
 
@@ -13,14 +13,23 @@ class OAuthDB(DBBase):  # pylint: disable=abstract-method
         super().__init__('oauth')
 
     def index(self) -> None:
-        ''' Index '''
+        ''' To make collection's index
+
+        Indexs:
+            - `owner`
+
+        '''
         self.create_index([('owner', 1), ])
 
     def add_data(self, mail: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Add user data
 
-        :param str mail: email
-        :param dict data: user data
+        Args:
+            mail (str): Email address as unique key to save.
+            data (dict): The data from Google OAuth return.
+
+        Returns:
+            Return the inserted / updated data.
 
         '''
         return self.find_one_and_update(
@@ -28,13 +37,12 @@ class OAuthDB(DBBase):  # pylint: disable=abstract-method
             {'$set': {'data': data}},
             upsert=True)
 
-    def add_token(self, mail: str, credentials: google_auth_oauthlib.flow) -> None:
+    def add_token(self, mail: str, credentials: Credentials) -> None:
         ''' Add user oauth token
 
-        :param str mail: email
-        :param dict credentials: user oauth token, from ``flow.credentials``
-
-        .. note:: Not to save ``client_id``, ``client_secret``
+        Args:
+            mail (str): Email address.
+            credentials: [google.oauth2.credentials.Credentials][]
 
         '''
         oauth = self.find_one({'_id': mail}, {'token': 1})
@@ -57,10 +65,11 @@ class OAuthDB(DBBase):  # pylint: disable=abstract-method
             upsert=True)
 
     def setup_owner(self, mail: str, uid: str) -> None:
-        ''' Setup owner
+        ''' Setup user id into `owner` field
 
-        :param str mail: mail
-        :param str uid: uid
+        Args:
+            mail (str): Email address.
+            uid (str): User id.
 
         '''
         self.find_one_and_update({'_id': mail}, {'$set': {'owner': uid}})
