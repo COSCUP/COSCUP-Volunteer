@@ -27,6 +27,9 @@ class ProjectDB(DBBase):
         - ``volunteer_certificate_hours``: The hours for volunteers to apply for.
         - ``parking_card``: The options for parking card in form.
 
+    TODO:
+        Need refactor in pydantic.
+
     '''
 
     def __init__(self, pid: str) -> None:

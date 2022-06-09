@@ -39,6 +39,9 @@ class TelegramDB(DBBase):
             - `uid`: Mapping to our user id.
             - `username`: User name.
 
+        TODO:
+            Need refactor in pydantic.
+
         '''
         self.find_one_and_update(
             {'_id': data['id']},

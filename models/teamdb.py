@@ -55,6 +55,9 @@ class TeamDB(DBBase):
                                `{'id': '<random code>', 'name': '<tag name>'}`.
                                The tags for team to mark on members.
 
+        TODO:
+            Need refactor in pydantic.
+
         '''
         result = {
             'pid': self.pid,
@@ -168,6 +171,9 @@ class TeamMemberTagsDB(DBBase):
         - ``uid``: User id.
         - ``tags``: List of tag id.
 
+    TODO:
+        Need refactor in pydantic.
+
     '''
 
     def __init__(self) -> None:
@@ -211,6 +217,9 @@ class TeamMemberChangedDB(DBBase):
         - ``tid``: team id
         - ``uid``: user id
         - ``case``: ``add``, ``del``, ``waiting``
+
+    TODO:
+        Need refactor in pydantic.
 
     '''
 
