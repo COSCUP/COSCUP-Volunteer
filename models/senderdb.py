@@ -45,6 +45,9 @@ class SenderCampaignDB(DBBase):
                 - ``subject``: Subject.
                 - ``content``: Content, and Markdown format supported.
 
+        TODO:
+            Need refactor in pydantic.
+
         '''
         return {
             '_id': uuid4().hex,
@@ -185,6 +188,9 @@ class SenderReceiverDB(DBBase):
                 - ``mail``: User mail.
                 - ``name``: User name.
                 - ``...``: *(... and any other fields.)*
+
+        TODO:
+            Need refactor in pydantic.
 
         '''
         return {

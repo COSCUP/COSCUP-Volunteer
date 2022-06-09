@@ -38,6 +38,9 @@ class TasksDB(DBBase):
             - ``created_by``: Created by who in user id.
             - ``created_at``: Created at in [datetime.datetime][].
 
+        TODO:
+            Need refactor in pydantic.
+
         '''
         return {
             '_id': f'{uuid4().fields[0]:08x}',
@@ -75,6 +78,9 @@ class TasksStarDB(DBBase):
             - ``pid``: Project id.
             - ``uid``: User id.
             - ``created_at``: Created at in [datetime.datetime][].
+
+        TODO:
+            Need refactor in pydantic.
 
         '''
         return {
