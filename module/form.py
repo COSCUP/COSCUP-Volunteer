@@ -16,15 +16,20 @@ class Form:  # pylint: disable=too-many-public-methods
     def update_appreciation(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update appreciation
 
-        :param str pid: project id
-        :param str uid: user id
-        :param dict data: form data
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+            data (dict): The data to update.
 
-        .. note::
-            - data:
-                - available: bool
-                - key: ``oauth``, ``badge_name``, ``real_name``
-                - value: the name
+                - `available`: `bool`.
+                - `key`: In one of `oauth`, `badge_name`, `real_name`.
+                - `value`: As user name.
+
+        Returns:
+            Return the added data.
+
+        TODO:
+            Need refactor in pydantic.
 
         '''
         return FormDB().add_by_case(case='appreciation', pid=pid, uid=uid, data=data)
@@ -33,8 +38,12 @@ class Form:  # pylint: disable=too-many-public-methods
     def get_appreciation(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get appreciation
 
-        :param str pid: project id
-        :param str uid: user id
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            The data or `None`.
 
         '''
         return FormDB().find_one({'case': 'appreciation', 'pid': pid, 'uid': uid})
@@ -43,7 +52,11 @@ class Form:  # pylint: disable=too-many-public-methods
     def all_appreciation(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all appreciation
 
-        :param str pid: project id
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Return the data in `pid`.
 
         '''
         for raw in FormDB().find({'case': 'appreciation', 'pid': pid}):
@@ -53,13 +66,18 @@ class Form:  # pylint: disable=too-many-public-methods
     def update_volunteer_certificate(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update volunteer certificate
 
-        :param str pid: project id
-        :param str uid: user id
-        :param dict data: form data
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+            data (dict): The data to update.
 
-        .. note::
-            - data:
-                - value: bool
+                - `value`: `bool`.
+
+        Returns:
+            Return the added data.
+
+        TODO:
+            Need refactor in pydantic.
 
         '''
         return FormDB().add_by_case(case='volunteer_certificate', pid=pid, uid=uid, data=data)
@@ -68,8 +86,12 @@ class Form:  # pylint: disable=too-many-public-methods
     def get_volunteer_certificate(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get volunteer certificate
 
-        :param str pid: project id
-        :param str uid: user id
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            The data or `None`.
 
         '''
         return FormDB().find_one({'case': 'volunteer_certificate', 'pid': pid, 'uid': uid})
@@ -78,7 +100,11 @@ class Form:  # pylint: disable=too-many-public-methods
     def all_volunteer_certificate(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get All volunteer certificate
 
-        :param str pid: project id
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Return the data in `pid`.
 
         '''
         for raw in FormDB().find({'case': 'volunteer_certificate', 'pid': pid}):
@@ -88,16 +114,21 @@ class Form:  # pylint: disable=too-many-public-methods
     def update_traffic_fee(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update traffic fee
 
-        :param str pid: project id
-        :param str uid: user id
-        :param dict data: form data
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+            data (dict): The data to update.
 
-        .. note::
-            - data:
-                - howto: str
-                - apply: bool
-                - fromwhere: str
-                - fee: int
+                - `apply`: `bool`.
+                - `fee`: `int`.
+                - `fromwhere`: `str`.
+                - `howto`: `str`.
+
+        Returns:
+            Return the added data.
+
+        TODO:
+            Need refactor in pydantic.
 
         '''
         return FormDB().add_by_case(case='traffic_fee', pid=pid, uid=uid, data=data)
@@ -106,8 +137,12 @@ class Form:  # pylint: disable=too-many-public-methods
     def get_traffic_fee(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get traffic fee
 
-        :param str pid: project id
-        :param str uid: user id
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            The data or `None`.
 
         '''
         return FormDB().find_one({'case': 'traffic_fee', 'pid': pid, 'uid': uid})
@@ -116,7 +151,11 @@ class Form:  # pylint: disable=too-many-public-methods
     def all_traffic_fee(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get All traffic_fee
 
-        :param str pid: project id
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Return the data in `pid`.
 
         '''
         for raw in FormDB().find({'case': 'traffic_fee', 'pid': pid}):
@@ -126,14 +165,26 @@ class Form:  # pylint: disable=too-many-public-methods
     def update_accommodation(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update accommodation
 
-        :param str pid: project id
-        :param str uid: user id
-        :param dict data: form data
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+            data (dict): The data to update.
 
-        .. note::
-            - data:
-                - status: bool
-                - key: str, in ('no', 'yes', 'yes-longtraffic')
+                - `key`: In one of `yes-longtraffic`, `yes`, `no`.
+                - `status`: `bool`.
+                - `room`: Optional. The room numbers.
+                - `room_key`: Optional. The key for exchange the place for
+                              some users want live together.
+
+        Returns:
+            Return the added data.
+
+        See Also:
+            The more about how to use the `room_key` to exchange the `room`,
+                please move to [module.form.FormAccommodation][].
+
+        TODO:
+            Need refactor in pydantic.
 
         '''
         return FormDB().add_by_case(case='accommodation', pid=pid, uid=uid, data=data)
@@ -142,8 +193,12 @@ class Form:  # pylint: disable=too-many-public-methods
     def get_accommodation(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get accommodation
 
-        :param str pid: project id
-        :param str uid: user id
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            The data or `None`.
 
         '''
         return FormDB().find_one({'case': 'accommodation', 'pid': pid, 'uid': uid})
@@ -152,7 +207,11 @@ class Form:  # pylint: disable=too-many-public-methods
     def all_accommodation(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all accommodation
 
-        :param str pid: project id
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Return the data in `pid`.
 
         '''
         for raw in FormDB().find({'case': 'accommodation', 'pid': pid}):
@@ -162,13 +221,18 @@ class Form:  # pylint: disable=too-many-public-methods
     def update_clothes(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update clothes
 
-        :param str pid: project id
-        :param str uid: user id
-        :param dict data: form data
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+            data (dict): The data to update.
 
-        .. note::
-            - data:
-                - clothes: str, 'S / 38.5 / 55'
+                - `clothes`: `S / 38.5 / 55` ...
+
+        Returns:
+            Return the added data.
+
+        TODO:
+            Need refactor in pydantic.
 
         '''
         return FormDB().add_by_case(case='clothes', pid=pid, uid=uid, data=data)
@@ -177,8 +241,12 @@ class Form:  # pylint: disable=too-many-public-methods
     def get_clothes(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get clothes
 
-        :param str pid: project id
-        :param str uid: user id
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            The data or `None`.
 
         '''
         return FormDB().find_one({'case': 'clothes', 'pid': pid, 'uid': uid})
@@ -187,7 +255,11 @@ class Form:  # pylint: disable=too-many-public-methods
     def all_clothes(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all clothes
 
-        :param str pid: project id
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Return the data in `pid`.
 
         '''
         for raw in FormDB().find({'case': 'clothes', 'pid': pid}):
@@ -197,14 +269,20 @@ class Form:  # pylint: disable=too-many-public-methods
     def update_parking_card(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update parking card
 
-        :param str pid: project id
-        :param str uid: user id
-        :param dict data: form data
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+            data (dict): The data to update.
 
-        .. note::
-            - data:
-                - carno: str
-                - dates: list, ['2020-07-31', ]
+                - `carno`: The license plate.
+                - `dates`: List of dates. The dates options are from
+                           the collection of `db.project.parking_card`.
+
+        Returns:
+            Return the added data.
+
+        TODO:
+            Need refactor in pydantic.
 
         '''
         return FormDB().add_by_case(case='parking_card', pid=pid, uid=uid, data=data)
@@ -213,8 +291,12 @@ class Form:  # pylint: disable=too-many-public-methods
     def get_parking_card(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get parking card
 
-        :param str pid: project id
-        :param str uid: user id
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            The data or `None`.
 
         '''
         return FormDB().find_one({'case': 'parking_card', 'pid': pid, 'uid': uid})
@@ -223,7 +305,11 @@ class Form:  # pylint: disable=too-many-public-methods
     def all_parking_card(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all parking card
 
-        :param str pid: project id
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Return the data in `pid`.
 
         '''
         for raw in FormDB().find({'case': 'parking_card', 'pid': pid}):
@@ -233,13 +319,18 @@ class Form:  # pylint: disable=too-many-public-methods
     def update_drink(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update drink
 
-        :param str pid: project id
-        :param str uid: user id
-        :param dict data: form data
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+            data (dict): The data to update.
 
-        .. note::
-            - data:
-                - y18: bool
+                - `y18`: `bool`.
+
+        Returns:
+            Return the added data.
+
+        TODO:
+            Need refactor in pydantic.
 
         '''
         return FormDB().add_by_case(case='drink', pid=pid, uid=uid, data=data)
@@ -248,8 +339,12 @@ class Form:  # pylint: disable=too-many-public-methods
     def get_drink(pid: str, uid: str) -> Optional[dict[str, Any]]:
         ''' Get drink
 
-        :param str pid: project id
-        :param str uid: user id
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            The data or `None`.
 
         '''
         return FormDB().find_one({'case': 'drink', 'pid': pid, 'uid': uid})
@@ -258,7 +353,11 @@ class Form:  # pylint: disable=too-many-public-methods
     def all_drink(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get all drink
 
-        :param str pid: project id
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Return the data in `pid`.
 
         '''
         for raw in FormDB().find({'case': 'drink', 'pid': pid}):
@@ -275,6 +374,13 @@ class FormTrafficFeeMapping:
         :param str pid: pid
         :param dict data: location/fee mapping
 
+        Args:
+            pid (str): Project id.
+            data (dict): location/fee mapping datas.
+
+        Returns:
+            Return the saved data.
+
         '''
         _data = {}
         for location in data:
@@ -288,6 +394,12 @@ class FormTrafficFeeMapping:
 
         :param str pid: pid
 
+        Args:
+            pid (str): Project id.
+
+        Returns:
+            The data or `None`.
+
         '''
         return FormTrafficFeeMappingDB().find_one({'_id': pid})
 
@@ -296,7 +408,15 @@ class FormAccommodation:
     ''' FormAccommodation object '''
     @staticmethod
     def get(pid: str) -> Generator[dict[str, Any], None, None]:
-        ''' Get data '''
+        ''' Get data, and in `yes-longtraffic`, `yes`.
+
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Return the data in `pid`.
+
+        '''
         for raw in FormDB().find({'case': 'accommodation', 'pid': pid, 'data.key': {'$ne': 'no'}}):
             yield raw
 
@@ -304,9 +424,16 @@ class FormAccommodation:
     def update_room(pid: str, uid: str, room: str, change_key: bool = True) -> dict[str, Any]:
         ''' Update room no
 
-        :param str pid: pid
-        :param str uid: uid
-        :param str room: room
+        Update will happend in `room`
+
+        - Not the same with `room`.
+        - Not yet have the `room`.
+
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+            room (str): Room numbers.
+            change_key (bool): To generate a new `room_key`.
 
         '''
         _update = {'data.room': room}
@@ -325,7 +452,13 @@ class FormAccommodation:
 
     @staticmethod
     def update_room_key(pid: str, uids: Iterable[str]) -> None:
-        ''' update room key '''
+        ''' update / regenerate the room key
+
+        Args:
+            pid (str): Project id.
+            uid (list): User ids.
+
+        '''
         for uid in uids:
             FormDB().find_one_and_update(
                 {'case': 'accommodation', 'pid': pid, 'uid': uid}, {
@@ -337,8 +470,15 @@ class FormAccommodation:
             tuple[Optional[dict[str, Any]], Optional[dict[str, Any]]]:
         ''' Get room mate
 
-        :param str pid: pid
-        :param str uid: uid
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            (`user_room`, `mate`)
+
+                - `user_room`: User's room info.
+                - `mate`: User's room mate info.
 
         '''
         user_room = FormDB().find_one(
@@ -355,9 +495,10 @@ class FormAccommodation:
     def make_exchange(cls, pid: str, uid: str, exkey: str) -> str:
         ''' make exchange
 
-        :param str pid: pid
-        :param str uid: uid
-        :param str exkey: key
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+            exkey (str): Exchange key.
 
         '''
         data = FormDB().find_one_and_update(

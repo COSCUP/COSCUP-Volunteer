@@ -12,7 +12,40 @@ class Expense:
     ''' Expense class '''
     @staticmethod
     def process_and_add(pid: str, tid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
-        ''' Process data from web '''
+        ''' Process data from web
+
+        Args:
+            pid (str): Project id.
+            tid (str): Team id.
+            uid (str): User id.
+            data (dict): The data from user to submit the expense requests.
+                These fields are required:
+
+                - `expense_request`
+                    - `buid`: Budget id.
+                    - `desc`: Description.
+                    - `paydate`: The pay date.
+                    - `code`: Short code.
+                    - `relevant`: Relevant budget id.
+                - `bank`:
+                    - `branch`: Bank branch.
+                    - `code`: Bank code.
+                    - `name`: Account name.
+                    - `no`: Account no.
+                - `invoices`: (List of data).
+                    - `currency`: List of the values in [module.budget.Currency][]
+                    - `name`: Invoice name.
+                    - `status`: Invoice status. (`not_send`, `sent`)
+                    - `total`: Invoice total.
+                    - `received`: (bool) is received or not.
+
+        Returns:
+            Return the added data.
+
+        TODO:
+            Need refactor in pydantic.
+
+        '''
         save = ExpenseDB.new(pid=pid, tid=tid, uid=uid)
 
         save['request'] = {
@@ -51,18 +84,50 @@ class Expense:
 
     @staticmethod
     def status() -> dict[str, str]:
-        ''' Get status '''
+        ''' Get status
+
+        Returns:
+            Return the status mapping from [models.expensedb.ExpenseDB.status][]
+
+        '''
         return ExpenseDB.status()
 
     @staticmethod
     def get_all_by_pid(pid: str) -> Generator[dict[str, Any], None, None]:
-        ''' Get all '''
+        ''' Get all
+
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Return the expenses data in `pid`.
+
+        '''
         for raw in ExpenseDB().find({'pid': pid}):
             yield raw
 
     @staticmethod
     def update_invoices(expense_id: str, invoices: list[dict[str, Any]]) -> dict[str, Any]:
-        ''' Only update invoices '''
+        ''' Only update invoices
+
+        Args:
+            expense_id (str): The expense id is the unique `_id`.
+            invoices (list): List of invoice datas.
+                These fields are required:
+
+                - `currency`: List of the values in [module.budget.Currency][]
+                - `name`: Invoice name.
+                - `status`: Invoice status. (`not_send`, `sent`)
+                - `total`: Invoice total.
+                - `received`: (bool) is received or not.
+
+        Returns:
+            Return the updated data.
+
+        TODO:
+            Need refactor in pydantic.
+
+        '''
         _invoices = []
         for invoice in invoices:
             _invoices.append(
@@ -81,7 +146,16 @@ class Expense:
 
     @staticmethod
     def update_status(expense_id: str, status: str) -> dict[str, Any]:
-        ''' update status '''
+        ''' update status
+
+        Args:
+            expense_id (str): The expense id is the unique `_id`.
+            status (str): The key in [module.expense.Expense.status][].
+
+        Returns:
+            Return the updated data.
+
+        '''
         return ExpenseDB().find_one_and_update(
             {'_id': expense_id},
             {'$set': {'status': status.strip()}},
@@ -90,19 +164,55 @@ class Expense:
 
     @staticmethod
     def get_by_create_by(pid: str, create_by: str) -> Cursor[dict[str, Any]]:
-        ''' Get by create_by '''
+        ''' Get by create_by
+
+        Args:
+            pid (str): Project id.
+            create_by (str): Created by.
+
+        Returns:
+            Return the datas in [pymongo.cursor.Cursor][].
+
+        '''
         return ExpenseDB().find({'pid': pid, 'create_by': create_by})
 
     @staticmethod
     def get_has_sent(pid: str, budget_id: str) -> Generator[dict[str, Any], None, None]:
-        ''' Get has sent and not canceled '''
+        ''' Get has sent and not canceled
+
+        Args:
+            pid (str): Project id.
+            budget_id (str):
+
+        Returns:
+            Return the datas in [pymongo.cursor.Cursor][].
+
+        '''
         query = {'pid': pid, 'request.buid': budget_id}
         for raw in ExpenseDB().find(query, {'invoices': 1, 'code': 1}):
             yield raw
 
     @staticmethod
     def dl_format(pid: str) -> list[dict[str, Any]]:
-        ''' Make the download format(CSV) '''
+        ''' Make the download format(CSV)
+
+        The fields datas:
+
+            - `request.id`: `expense._id`.
+            - `request.pid`: `expense.pid`.
+            - `request.tid`: `expense.tid`.
+            - `note.user`: `expense.note.myself`.
+            - `note.finance`: `expense.note.to_create`.
+            - `budget._id`: `expense.request.buid`.
+            - `budget.bid`: (no data).
+            - `request.desc`: `expense.request.desc`.
+            - `request.paydate`: `expense.request.paydate`.
+            - `request.status`: `expense.status`.
+            - `request.status_text`: `ExpenseDB.status()[expense['status']]`.
+            - `request.create_at`: `expense.create_at`.
+            - `request.create_by`: `expense.create_by`.
+
+        '''
         raws = []
         for expense in Expense.get_all_by_pid(pid=pid):
             base = {

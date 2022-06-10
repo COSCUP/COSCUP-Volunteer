@@ -13,30 +13,57 @@ from models.teamdb import TeamDB
 
 
 class Action(Enum):
-    ''' Action '''
+    ''' Action
+
+    Attributes:
+        ADD (str): `add`
+        UPDATE (str): `update`
+
+    '''
     ADD = 'add'
     UPDATE = 'update'
 
 
 class Currency(Enum):
-    ''' Currency '''
+    ''' Currency
+
+    Format in ISO4217
+
+    Attributes:
+        TWD (str): TWD
+        USD (str): USD
+
+    '''
     TWD = 'TWD'
     USD = 'USD'
 
 
 class BudgetImportItem(BaseModel):
-    ''' Base Item '''
+    ''' Base Item
+
+    Attributes:
+        action (Action): `匯入行為`
+        bid (str): `編號（預算表編號）`
+        uid (str): User name, not relate to `uid`. `申請人`
+        name (str): The name of budget. `項目名稱`
+        desc (str): Description. `項目說明`
+        total (str | int | float): Total of budget. `核定金額`
+        currency (Currency): Currency. `核定貨幣 (ISO4217)`
+        paydate (str): `預定支出日期 (YYYY-MM-DD)`
+        estimate (str): `估算方式`
+
+    '''
     # pylint: disable=no-self-argument,no-self-use
-    action: Action  # 匯入行為 (add/update)
-    bid: str  # 編號（預算表編號）
-    tid: str  # 組別（依組別代碼）
-    uid: str  # 申請人
-    name: str  # 項目名稱
-    desc: str  # 項目說明
-    total: Union[str, int, float]  # 核定金額
-    currency: Currency  # 核定貨幣 (ISO4217)
-    paydate: str  # 預定支出日期 (YYYY-MM-DD)
-    estimate: str  # 估算方式
+    action: Action
+    bid: str
+    tid: str
+    uid: str
+    name: str
+    desc: str
+    total: Union[str, int, float]
+    currency: Currency
+    paydate: str
+    estimate: str
 
     class Config:  # pylint: disable=too-few-public-methods
         ''' Model config '''
@@ -44,7 +71,14 @@ class BudgetImportItem(BaseModel):
 
     @validator('total')
     def verify_total(cls, value: str) -> Union[int, float]:
-        ''' verify total '''
+        ''' verify total.
+
+        If is string, turn to int | float.
+
+        Returns:
+            int or float
+
+        '''
         value = re.sub('[^0-9.]', '', value)
         if '.' in value:
             return float(value)
@@ -53,7 +87,16 @@ class BudgetImportItem(BaseModel):
 
     @validator('paydate')
     def verify_paydate(cls, value: str, **kwargs: Any) -> str:
-        ''' verify paydate '''
+        ''' verify paydate
+
+        Check if the type is date format (`YYYY-MM-DD`) or empty string.
+            If the strings can not be parsed, the original strings
+            will insert into the `desc` at the beginning with `預計付款時間：{paydate}`.
+
+        Returns:
+            `''` or `YYYY-MM-DD`
+
+        '''
         if not value:
             return ''
 
@@ -72,9 +115,16 @@ class Budget:
     def is_admin(pid: str, uid: str) -> bool:
         ''' check user is admin
 
-        - project owner
-        - finance chiefs or members
-        - coordinator chiefs
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            What cases will return `true`:
+
+                - Project owner
+                - Finace team chiefs and members
+                - coordinator chiefs
 
         '''
         if TeamDB(pid='', tid='').count_documents({
@@ -91,7 +141,17 @@ class Budget:
 
     @staticmethod
     def add(pid: str, tid: str, data: dict[str, Any]) -> dict[str, Any]:
-        ''' Add new data '''
+        ''' Add new data
+
+        Args:
+            pid (str): Project id.
+            tid (str): Team id.
+            data (dict): The data to add.
+
+        Returns:
+            Return the added data.
+
+        '''
         save = BudgetDB.new(pid=pid, tid=tid, uid=data['uid'])
 
         for key in save.copy():
@@ -102,7 +162,18 @@ class Budget:
 
     @staticmethod
     def edit(pid: str, data: dict[str, Any]) -> dict[str, Any]:
-        ''' Edit new data '''
+        ''' Edit new data
+
+        Args:
+            pid (str): Project id.
+            data (dict): The data to edit. Only in those fields
+                could be update: `name`, `tid`, `uid`, `bid`, `currency`, `total`,
+                `desc`, `estimate`, `enabled`, `paydate`.
+
+        Returns:
+            Return the updated data.
+
+        '''
         save: dict[str, Any]
         save = {'pid': pid}
 
@@ -118,7 +189,16 @@ class Budget:
 
     @staticmethod
     def get(buids: list[str], pid: Optional[str] = None) -> Cursor[dict[str, Any]]:
-        ''' Get by buid '''
+        ''' Get by buid
+
+        Args:
+            buids (list): Budget unique ids.
+            pid (str): Project id.
+
+        Returns:
+            [pymongo.cursor.Cursor][]
+
+        '''
         query: dict[str, Any]
         query = {'_id': {'$in': buids}}
         if pid is not None:
@@ -128,12 +208,30 @@ class Budget:
 
     @staticmethod
     def get_by_pid(pid: str) -> Cursor[dict[str, Any]]:
-        ''' Get by pid '''
+        ''' Get by pid
+
+        Args:
+            pid (str): Project id.
+
+        Returns:
+            [pymongo.cursor.Cursor][]
+
+        '''
         return BudgetDB().find({'pid': pid}, sort=(('tid', 1), ))
 
     @staticmethod
     def get_by_tid(pid: str, tid: str, only_enable: bool = False) -> Cursor[dict[str, Any]]:
-        ''' Get by pid '''
+        ''' Get by pid
+
+        Args:
+            pid (str): Project id.
+            tid (str): Team id.
+            only_enable (bool): Only query the enabled.
+
+        Returns:
+            [pymongo.cursor.Cursor][]
+
+        '''
         if not only_enable:
             return BudgetDB().find({'pid': pid, 'tid': tid})
 
@@ -141,7 +239,16 @@ class Budget:
 
     @staticmethod
     def get_by_bid(pid: str, bid: str) -> Optional[dict[str, Any]]:
-        ''' Get a item according to the specified ``pid`` and ``bid``. '''
+        ''' Get a item according to the specified ``pid`` and ``bid``.
+
+        Args:
+            pid (str): Project id.
+            bid (str): Budget id.
+
+        Returns:
+            Only return the budget unique id (`_id`).
+
+        '''
         for raw in BudgetDB().find({'pid': pid, 'bid': bid}, {'_id': 1}):
             return raw
 
@@ -150,7 +257,15 @@ class Budget:
     @staticmethod
     def verify_batch_items(items: list[dict[str, Any]]) -> \
             tuple[list[dict[str, Any]], list[tuple[int, Optional[list[dict[str, Any]]]]]]:
-        ''' verify the batch items '''
+        ''' verify the batch items by [module.budget.BudgetImportItem][].
+
+        Args:
+            items (dict): The items may from the front-end datas.
+
+        Returns:
+            Return a tuple in (list of `result`, list of `error_resut`)
+
+        '''
         result: list[dict[str, Any]] = []
         error_result: list[tuple[int, Optional[list[dict[str, Any]]]]] = []
         for (serial_no, raw) in enumerate(items):

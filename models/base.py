@@ -31,7 +31,7 @@ else:
     class DBBase(Collection):  # pylint: disable=abstract-method
         ''' DBBase class
 
-        Attributes:
+        Args:
             name (str): collection name.
 
         '''
