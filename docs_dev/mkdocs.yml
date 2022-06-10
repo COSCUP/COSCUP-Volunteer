@@ -32,6 +32,12 @@ nav:
       - waitlistdb: code_reference/models/waitlistdb.md
     - Module:
       - awsses: code_reference/module/awsses.md
+      - budget: code_reference/module/budget.md
+      - dietary_habit: code_reference/module/dietary_habit.md
+      - expense: code_reference/module/expense.md
+      - form: code_reference/module/form.md
+      - gitlab_api: code_reference/module/gitlab_api.md
+      - gsuite: code_reference/module/gsuite.md
 theme:
   name: material
   icon:
@@ -77,6 +83,7 @@ plugins:
             - https://docs.python.org/3/objects.inv
             - https://google-auth-oauthlib.readthedocs.io/en/latest/objects.inv
             - https://google-auth.readthedocs.io/en/stable/objects.inv
+            - https://pymongo.readthedocs.io/en/stable/objects.inv
             - https://requests.readthedocs.io/en/master/objects.inv
 markdown_extensions:
   - pymdownx.details

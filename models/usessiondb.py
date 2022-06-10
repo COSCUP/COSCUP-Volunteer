@@ -12,8 +12,11 @@ from models.base import DBBase
 class USessionDB(DBBase):
     ''' USessionDB Collection
 
-    Attributes:
+    Args:
         token (str): If is `None`, it will generate an random sha256 code.
+
+    Attributes:
+        token (str): An session token.
 
     '''
 

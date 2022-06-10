@@ -10,6 +10,10 @@ from models.base import DBBase
 class TeamDB(DBBase):
     ''' Team Collection
 
+    Args:
+        pid (str): Project id.
+        tid (str): Team id.
+
     Attributes:
         pid (str): Project id.
         tid (str): Team id.

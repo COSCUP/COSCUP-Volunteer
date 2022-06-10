@@ -12,7 +12,13 @@ RE_PICTURE = re.compile(r'(https://.+){1,}=?s([\d]{1,}-c)')
 
 
 class GSuite:
-    ''' GSuite '''
+    ''' GSuite
+
+    Args:
+        credentialfile (str): The path to a JSON file.
+        with_subject (str): Email address of the Google Workspace admin.
+
+    '''
     __slots__ = ('service', )
 
     SCOPES = ('https://www.googleapis.com/auth/admin.directory.user',
@@ -28,38 +34,83 @@ class GSuite:
 
     @property
     def print_scopes(self) -> str:
-        ''' Print the scopes '''
+        ''' Print the scopes
+
+        Returns:
+            Return an long strings and be chained by `,`.
+
+        '''
         return ','.join(self.SCOPES)
 
     # ----- Users.list ----- #
-    # https://googleapis.github.io/google-api-python-client/docs/dyn/admin_directory_v1.users.html#list
     def users_list(self) -> Any:
-        ''' Users.list '''
+        ''' Users.list
+
+        Reference:
+
+            - https://googleapis.github.io/google-api-python-client/docs/dyn/\
+admin_directory_v1.users.html#list
+
+        '''
         return self.service.users().list(customer='my_customer', orderBy='email').execute()
 
     # ----- Users.get ----- #
-    # https://googleapis.github.io/google-api-python-client/docs/dyn/admin_directory_v1.users.html#get
     def users_get(self, user_key: str) -> Any:
-        ''' Users.get '''
+        ''' Users.get
+
+        Args:
+            user_key (str): mail or google user id.
+
+        Reference:
+
+            - https://googleapis.github.io/google-api-python-client/docs/\
+dyn/admin_directory_v1.users.html#get
+
+        '''
         return self.service.users().get(userKey=user_key).execute()
 
     # ----- Groups ----- #
-    # https://developers.google.com/admin-sdk/directory/v1/reference/groups
-    # https://googleapis.github.io/google-api-python-client/docs/dyn/admin_directory_v1.groups.html
     def groups_get(self, group_key: str) -> Any:
-        ''' Groups.get '''
+        ''' Groups.get
+
+        Args:
+            group_key (str): mail or group id.
+
+        Reference:
+
+            - https://developers.google.com/admin-sdk/directory/v1/reference/groups
+            - https://googleapis.github.io/google-api-python-client/docs/\
+dyn/admin_directory_v1.groups.html
+
+        '''
         return self.service.groups().get(groupKey=group_key).execute()
 
     # ----- Groups.list ----- #
-    # https://googleapis.github.io/google-api-python-client/docs/dyn/admin_directory_v1.groups.html#list
     def groups_list(self, page_token: Union[str, None] = None) -> Any:
-        ''' Groups.list '''
+        ''' Groups.list
+
+        Args:
+            page_token (str): The next page token, it will be supplied in
+                              the result if has the next page.
+
+        Reference:
+
+            - https://googleapis.github.io/google-api-python-client/docs/\
+dyn/admin_directory_v1.groups.html#list
+
+        '''
         return self.service.groups().list(customer='my_customer',
                                           orderBy='email', pageToken=page_token).execute()
 
     def groups_list_loop(self, page_token: Union[str, None] = None) ->\
             Generator[dict[str, str], None, None]:
-        ''' Groups.list.loop '''
+        ''' Groups.list.loop
+
+        Args:
+            page_token (str): The next page token, it will be supplied in
+                              the result if has the next page.
+
+        '''
         groups = self.groups_list(page_token=page_token)
         for group in groups['groups']:
             yield group
@@ -70,7 +121,14 @@ class GSuite:
 
     def groups_insert(self, email: str, description: Union[str, None] = None,
                       name: Union[str, None] = None) -> Any:
-        ''' Groups.insert '''
+        ''' Groups.insert
+
+        Args:
+            email (str): Email.
+            description (str): Description.
+            name (str): Group name.
+
+        '''
         body = {'email': email}
         if description is not None:
             body['description'] = description
@@ -81,14 +139,30 @@ class GSuite:
         return self.service.groups().insert(body=body).execute()
 
     # ----- Members ----- #
-    # https://developers.google.com/admin-sdk/directory/v1/reference/members
-    # https://googleapis.github.io/google-api-python-client/docs/dyn/admin_directory_v1.members.html
     def members_list(self, group_key: str, page_token: Union[str, None] = None) -> Any:
-        ''' members.list '''
+        ''' members.list
+
+        Args:
+            group_key (str): mail or group id.
+            page_token (str): The next page token, it will be supplied in
+                              the result if has the next page.
+
+        Reference:
+
+            - https://developers.google.com/admin-sdk/directory/v1/reference/members
+            - https://googleapis.github.io/google-api-python-client/docs/\
+dyn/admin_directory_v1.members.html
+
+        '''
         return self.service.members().list(groupKey=group_key, pageToken=page_token).execute()
 
     def members_list_loop(self, group_key: str) -> Generator[dict[str, str], None, None]:
-        ''' members.list.loop '''
+        ''' members.list.loop
+
+        Args:
+            group_key (str): mail or group id.
+
+        '''
         members = self.members_list(group_key)
         for member in members.get('members', []):
             yield member
@@ -101,13 +175,31 @@ class GSuite:
 
     def members_insert(self, group_key: str, email: str,
                        role: str = 'MEMBER', delivery_settings: str = 'ALL_MAIL') -> Any:
-        ''' members.insert '''
+        ''' members.insert
+
+        Args:
+            group_key (str): mail or group id.
+            email (str): Email.
+            role (str): `MANAGER`, `MEMBER`, `OWNER`
+            delivery_settings (str): `ALL_MAIL`, `DAILY`, `DIGEST`, `DISABLED`, `NONE`.
+
+        Reference:
+
+            - https://developers.google.com/admin-sdk/directory/reference/rest/v1/members
+
+        '''
         body = {'email': email, 'role': role,
                 'delivery_settings': delivery_settings}
         return self.service.members().insert(groupKey=group_key, body=body).execute()
 
     def members_has_member(self, group_key: str, email: str) -> dict[str, bool]:
-        ''' members.hasMember '''
+        ''' members.hasMember
+
+        Args:
+            group_key (str): mail or group id.
+            email (str): Email.
+
+        '''
         try:
             if self.members_get(group_key=group_key, email=email):
                 return {'isMember': True}
@@ -116,16 +208,37 @@ class GSuite:
             return {'isMember': False}
 
     def members_get(self, group_key: str, email: str) -> Any:
-        ''' members.get '''
+        ''' members.get
+
+        Args:
+            group_key (str): mail or group id.
+            email (str): Email.
+
+        '''
         return self.service.members().get(groupKey=group_key, memberKey=email).execute()
 
     def members_delete(self, group_key: str, email: str) -> Any:
-        ''' members.delete '''
+        ''' members.delete
+
+        Args:
+            group_key (str): mail or group id.
+            email (str): Email.
+
+        '''
         return self.service.members().delete(groupKey=group_key, memberKey=email).execute()
 
     @staticmethod
     def size_picture(url: str, size: int = 512) -> str:
-        ''' Convert picture size '''
+        ''' Convert picture size
+
+        Args:
+            url (str): The url of the image.
+            size (int): Replace the size.
+
+        Returns:
+            Return the url of the right size of the image.
+
+        '''
         result = RE_PICTURE.match(url)
 
         if result:

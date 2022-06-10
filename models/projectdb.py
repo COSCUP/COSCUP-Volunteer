@@ -9,6 +9,12 @@ from models.base import DBBase
 class ProjectDB(DBBase):
     ''' Project Collection
 
+    Args:
+        pid (str): Project id.
+
+    Attributes:
+        pid (str): Project id.
+
     Struct:
         - ``_id``: Project id (pid)
         - ``name``: Project name for display.
