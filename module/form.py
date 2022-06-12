@@ -456,7 +456,7 @@ class FormAccommodation:
 
         Args:
             pid (str): Project id.
-            uid (list): User ids.
+            uids (list): User ids.
 
         '''
         for uid in uids:

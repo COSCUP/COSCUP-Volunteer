@@ -216,7 +216,7 @@ class TeamMemberTagsDB(DBBase):
 class TeamMemberChangedDB(DBBase):
     ''' TeamMemberChangedDB Collection
 
-    :Struct:
+    Struct:
         - ``pid``: from project id
         - ``tid``: team id
         - ``uid``: user id

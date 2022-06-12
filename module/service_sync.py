@@ -7,8 +7,9 @@ from module.gsuite import GSuite
 class SyncGSuite(GSuite):
     ''' Sync GSuite
 
-    :param str credentialfile: credentialfile path
-    :param str with_subject: admin user
+    Args:
+        credentialfile (str): Credentialfile path.
+        with_subject (str): Admin user mail.
 
     '''
 
@@ -19,8 +20,9 @@ class SyncGSuite(GSuite):
     def add_users_into_group(self, group: str, users: list[str]) -> None:
         ''' Add some users into one group
 
-        :param str group: group_key or mail
-        :param list users: users's mail
+        Args:
+            group (str): group_key or mail.
+            users (list): List of user mails.
 
         '''
         group_info = self.groups_get(group_key=group)
@@ -35,8 +37,9 @@ class SyncGSuite(GSuite):
     def del_users_from_group(self, group: str, users: list[str]) -> None:
         ''' del some users from one group
 
-        :param str group: group_key or mail
-        :param list users: users's mail
+        Args:
+            group (str): group_key or mail.
+            users (list): List of user mails.
 
         '''
         group_info = self.groups_get(group_key=group)

@@ -1,7 +1,7 @@
 ''' MattermostBot '''
 # pylint: disable=arguments-renamed,arguments-differ
 import logging
-from typing import Any, Generator, Optional
+from typing import Any, Generator, Optional, Union
 
 from requests import Response, Session
 
@@ -12,7 +12,17 @@ from module.mattermost_link import MattermostLink
 
 
 class MattermostBot(Session):
-    ''' MattermostBot '''
+    ''' MattermostBot
+
+    Args:
+        token (str): API token.
+        base_url (str): API base url.
+        log_name (str): Log name.
+
+    Note:
+        The `headers` will update the `Authorization` in `Bearer {self.token}`.
+
+    '''
 
     def __init__(self, token: str, base_url: str, log_name: str = 'MattermostBot') -> None:
         super().__init__()
@@ -22,7 +32,12 @@ class MattermostBot(Session):
         self.headers.update({'Authorization': f'Bearer {self.token}'})
 
     def log_rate_limit(self, headers: dict[str, Any]) -> None:
-        ''' Get log info from headers '''
+        ''' Get log info from headers
+
+        Args:
+            headers (dict): [requests.Response.headers][].
+
+        '''
         self.log.info('X-Ratelimit-Limit: %s, X-Ratelimit-Remaining: %s, X-Ratelimit-Reset: %s',
                       headers.get('X-Ratelimit-Limit'),
                       headers.get('X-Ratelimit-Remaining'),
@@ -30,11 +45,28 @@ class MattermostBot(Session):
                       )
 
     def get_users(self, page: int, per_page: int = 200) -> Response:
-        ''' Get users '''
+        ''' Get users
+
+        Args:
+            page (int): Page.
+            per_page (int): Numbers per page.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         return self.get(f'{self.base_url}/users', params={'page': page, 'per_page': per_page})
 
     def get_users_loop(self, per_page: int = 200) -> Generator[dict[str, Any], None, None]:
-        ''' Get users in loop '''
+        ''' Get users in loop
+
+        Args:
+            per_page (int): Numbers per page.
+
+        Yields:
+            Yield the user's info.
+
+        '''
         page = 0
         num = 0
         for user in self.get_users(page=page, per_page=per_page).json():
@@ -49,33 +81,92 @@ class MattermostBot(Session):
                 num += 1
 
     def get_users_stats(self) -> Response:
-        ''' Get users stats '''
+        ''' Get users stats
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         return self.get(f'{self.base_url}/users/stats')
 
     def get_user_by_username(self, username: str) -> Response:
-        ''' Get user by username '''
+        ''' Get user by username
+
+        Args:
+            username (str): Username.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         return self.get(f'{self.base_url}/users/username/{username}')
 
-    def create_a_direct_message(self, users: str) -> Response:
-        ''' Create a direct messge '''
+    def create_a_direct_message(self,
+                                users: Union[list[str], tuple[str, str]]) -> Response:
+        ''' Create a direct messge
+
+        Args:
+            users (list | tuple): Two uids in list or tuple.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         return self.post(f'{self.base_url}/channels/direct', json=users)
 
     def posts(self, channel_id: str, message: str) -> Response:
-        ''' Posts message '''
+        ''' Posts message
+
+        Args:
+            channel_id (str): Channel id.
+            message (str): Messages.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         return self.post(f'{self.base_url}/posts',
                          json={'channel_id': channel_id, 'message': message})
 
     def get_posts_from_channel(self, channel_id: str) -> Response:
-        ''' Get post from channel '''
+        ''' Get post from channel
+
+        Args:
+            channel_id (str): Channel id.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         return self.get(f'{self.base_url}/channels/{channel_id}/posts')
 
     def post_invite_by_email(self, team_id: str, emails: list[str]) -> Response:
-        ''' Post an invite by email '''
+        ''' Post an invite by email
+
+        Args:
+            team_id (str): Team id.
+            emails (list): Email addresses.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         return self.post(f'{self.base_url}/teams/{team_id}/invite/email', json=emails)
 
     def post_invite_guests_by_email(self, team_id: str, emails: list[str],
                                     channels: list[str], message: Optional[str] = None) -> Response:
-        ''' Post an invite to guest by email '''
+        ''' Post an invite to guest by email
+
+        Args:
+            team_id (str): Team id.
+            emails (list): Email addresses.
+            channels (list): Channel ids.
+            message (str): Messages.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         data: dict[str, Any] = {
             'emails': emails,
             'channels': channels,
@@ -86,11 +177,29 @@ class MattermostBot(Session):
         return self.post(f'{self.base_url}/teams/{team_id}/invite-guests/email', json=data)
 
     def post_user_to_channel(self, channel_id: str, uid: str) -> Response:
-        ''' Post user to channel '''
+        ''' Post user to channel
+
+        Args:
+            channel_id (str): Channel id.
+            uid (str): User id.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         return self.post(f'{self.base_url}/channels/{channel_id}/members', json={'user_id': uid})
 
     def put_users_patch(self, uid: str, position: str) -> Response:
-        ''' Update user '''
+        ''' Update user
+
+        Args:
+            uid (str): User id.
+            position (str): Position title.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         data = {
             'position': position,
         }
@@ -98,7 +207,13 @@ class MattermostBot(Session):
 
 
 class MattermostTools(MattermostBot):
-    ''' MattermostTools for more implement in operation '''
+    ''' MattermostTools for more implement in operation
+
+    Args:
+        token (str): API token.
+        base_url (str): The API base url.
+
+    '''
 
     def __init__(self, token: str, base_url: str) -> None:
         super().__init__(token=token, base_url=base_url)
@@ -107,8 +222,12 @@ class MattermostTools(MattermostBot):
     def find_possible_mid(uid: str, mail: Optional[str] = None) -> str:
         ''' Find any possible mattermost user id
 
-        :param str uid: uid
-        :param str mail: user mail
+        Args:
+            uid (str): User id.
+            mail (str): User email address.
+
+        Returns:
+            Return the user's mattermost id or `''`.
 
         '''
         mml = MattermostLink(uid)
@@ -135,7 +254,11 @@ class MattermostTools(MattermostBot):
     def find_user_name(mid: str) -> str:
         ''' Find user_name by mid
 
-        :param str mid: mid
+        Args:
+            mid (str): Mattermost user id.
+
+        Returns:
+            Return the user's mattermost user name or `''`.
 
         '''
         mm_user = MattermostUsersDB().find_one({'_id': mid}, {'username': 1})
