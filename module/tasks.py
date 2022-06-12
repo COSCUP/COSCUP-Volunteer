@@ -17,16 +17,18 @@ class Tasks:
             endtime: Optional[datetime] = None, task_id: Optional[str] = None) -> dict[str, Any]:
         ''' add new task
 
-        :param str pid: pid
-        :param dict body: body
-        :param str title: title
-        :param str cate: cate
-        :param str desc: description
-        :param int limit: user limit
-        :param datetime starttime: start datetime
-        :param datetime endtime: end datetime
-        :param str created_by: uid
-        :param str task_id: task id
+        Args:
+            pid (str): Project id.
+            body (dict): The data to add.
+
+                - `title`: Task title.
+                - `cate`: Take category.
+                - `desc`: Description.
+                - `limit`: `int` User limit.
+                - `starttime`: Start time in ISO8601.
+
+            endtime (datetime): End time in ISO8601.
+            task_id (str): Task id
 
         '''
         data = TasksDB.new(pid=pid, body=body, endtime=endtime)
@@ -49,14 +51,24 @@ class Tasks:
 
     @staticmethod
     def delete(pid: str, _id: str) -> None:
-        ''' Del task '''
+        ''' Del task
+
+        Args:
+            pid (str): Project id.
+            _id (str): task unique id.
+
+        '''
         TasksDB().delete_one({'_id': _id, 'pid': pid})
 
     @staticmethod
     def get_by_pid(pid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get by pid
 
-        :param str pid: pid
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Yield return the data.
 
         '''
         for raw in TasksDB().find({'pid': pid}, sort=(('starttime', 1), )):
@@ -64,18 +76,45 @@ class Tasks:
 
     @staticmethod
     def get_with_pid(pid: str, _id: str) -> Optional[dict[str, Any]]:
-        ''' Get with pid '''
+        ''' Get with pid
+
+        Args:
+            pid (str): Project id.
+            _id (str): task unique id.
+
+        Returns:
+            Return the data.
+
+        '''
         return TasksDB().find_one({'pid': pid, '_id': _id})
 
     @staticmethod
     def get_cate(pid: str) -> list[dict[str, Any]]:
-        ''' Get cate '''
+        ''' Get cate
+
+        Args:
+            pid (str): Project id.
+
+        Returns:
+            Return the datas.
+
+        '''
         cates = TasksDB().find({'pid': pid}).distinct('cate')
         return [cate for cate in cates if cate]
 
     @staticmethod
     def join(pid: str, task_id: str, uid: str) -> dict[str, Any]:
-        ''' Join to '''
+        ''' Join to
+
+        Args:
+            pid (str): Project id.
+            task_id (str): Task id.
+            uid (str): User id.
+
+        Returns:
+            Return the added data.
+
+        '''
         return TasksDB().find_one_and_update(
             {'_id': task_id, 'pid': pid},
             {'$addToSet': {'people': uid}},
@@ -84,7 +123,17 @@ class Tasks:
 
     @staticmethod
     def cancel(pid: str, task_id: str, uid: str) -> dict[str, Any]:
-        ''' cancel join '''
+        ''' cancel join
+
+        Args:
+            pid (str): Project id.
+            task_id (str): Task id.
+            uid (str): User id.
+
+        Returns:
+            Return the updated data.
+
+        '''
         return TasksDB().find_one_and_update(
             {'_id': task_id, 'pid': pid},
             {'$pull': {'people': uid}},
@@ -93,7 +142,16 @@ class Tasks:
 
     @staticmethod
     def get_peoples_info(pid: str, task_id: str) -> Optional[dict[str, Any]]:
-        ''' Get peoples info '''
+        ''' Get peoples info
+
+        Args:
+            pid (str): Project id.
+            task_id (str): Task id.
+
+        Returns:
+            Return the datas.
+
+        '''
         task = TasksDB().find_one(
             {'pid': pid, '_id': task_id}, {'people': 1})
 
@@ -109,7 +167,16 @@ class TasksStar:
 
     @staticmethod
     def add(pid: str, uid: str) -> Optional[dict[str, Any]]:
-        ''' add '''
+        ''' add
+
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            Return the data.
+
+        '''
         data = TasksStarDB().find_one({'pid': pid, 'uid': uid})
         if not data:
             TasksStarDB().insert_one(TasksStarDB.new(pid=pid, uid=uid))
@@ -119,12 +186,30 @@ class TasksStar:
 
     @staticmethod
     def delete(pid: str, uid: str) -> DeleteResult:
-        ''' delete '''
+        ''' delete
+
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            Return the delete result in [pymongo.results.DeleteResult][].
+
+        '''
         return TasksStarDB().delete_one({'pid': pid, 'uid': uid})
 
     @staticmethod
     def status(pid: str, uid: str) -> dict[str, bool]:
-        ''' ststus '''
+        ''' ststus
+
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            `{'add': <bool>}`
+
+        '''
         if TasksStarDB().find_one({'pid': pid, 'uid': uid}):
             return {'add': True}
 
@@ -132,7 +217,16 @@ class TasksStar:
 
     @staticmethod
     def toggle(pid: str, uid: str) -> dict[str, bool]:
-        ''' toggle '''
+        ''' toggle
+
+        Args:
+            pid (str): Project id.
+            uid (str): User id.
+
+        Returns:
+            `{'add': <bool>}`
+
+        '''
         data = TasksStarDB().find_one({'pid': pid, 'uid': uid})
         if data:
             TasksStarDB().delete_one({'pid': pid, 'uid': uid})
@@ -143,6 +237,14 @@ class TasksStar:
 
     @staticmethod
     def get(pid: str) -> Generator[dict[str, Any], None, None]:
-        ''' Get all star users '''
+        ''' Get all star users
+
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Return the datas.
+
+        '''
         for user in TasksStarDB().find({'pid': pid}, {'uid': 1}):
             yield user

@@ -8,7 +8,12 @@ from models.mattermost_link_db import MattermostLinkDB
 
 
 class MattermostLink:
-    ''' MattermostLink '''
+    ''' MattermostLink
+
+    Args:
+        uid (str): User id.
+
+    '''
 
     def __init__(self, uid: str) -> None:
         self.uid = uid
@@ -21,7 +26,15 @@ class MattermostLink:
 
     @classmethod
     def verify_save(cls, data: dict[str, Any]) -> bool:
-        ''' verify and save data '''
+        ''' verify and save data
+
+        Args:
+            data (dict): Check the `token`, and verify the user's code.
+
+        Returns:
+            `true` or `false`.
+
+        '''
         if 'token' in data and data['token'] == setting.MATTERMOST_SLASH_VOLUNTEER:
             if 'text' in data and data['text']:
                 texts = data['text'].split(' ')
@@ -42,5 +55,10 @@ class MattermostLink:
 
     @staticmethod
     def reset(uid: str) -> None:
-        ''' Reset the link '''
+        ''' Reset the link
+
+        Args:
+            uid (str): User id.
+
+        '''
         MattermostLinkDB().delete_one({'_id': uid})

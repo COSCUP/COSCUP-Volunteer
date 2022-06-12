@@ -11,8 +11,9 @@ from module.skill import TobeVolunteerStruct
 class User:
     ''' User
 
-    :param str uid: user id
-    :param str mail: mail
+    Args:
+        uid (str): User id.
+        mail (str): User mail.
 
     '''
 
@@ -23,7 +24,8 @@ class User:
     def get(self) -> Optional[dict[str, Any]]:
         ''' Get user data
 
-        :rtype: dict
+        Returns:
+            Return user info.
 
         '''
         return UsersDB().find_one({'$or': [{'_id': self.uid}, {'mail': self.mail}]})
@@ -32,8 +34,12 @@ class User:
     def create(mail: str, force: bool = False) -> dict[str, Any]:
         ''' create user
 
-        :param str mail: mail
-        :rtype: dict
+        Args:
+            mail (str): User mail.
+            force (bool): Force to create.
+
+        Returns:
+            Return the created data.
 
         '''
         if not force:
@@ -52,7 +58,14 @@ class User:
     def update_profile(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' update profile
 
-        :param dict data: data
+        Args:
+            data (dict): Profile data.
+
+        Returns:
+            Return the updated data.
+
+        Bug:
+            Need to verify and filter.
 
         '''
         return UsersDB().find_one_and_update(
@@ -64,7 +77,14 @@ class User:
     def update_profile_real(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' update profile
 
-        :param dict data: data
+        Args:
+            data (dict): Profile data.
+
+        Returns:
+            Return the updated data.
+
+        Bug:
+            Need to verify and filter.
 
         '''
         return UsersDB().find_one_and_update(
@@ -74,7 +94,15 @@ class User:
         )
 
     def property_suspend(self, value: bool = True) -> dict[str, Any]:
-        ''' Property suspend '''
+        ''' Property suspend
+
+        Args:
+            value (bool): suspend or not.
+
+        Returns:
+            Return the updated data.
+
+        '''
         return UsersDB().find_one_and_update(
             {'_id': self.uid},
             {'$set': {'property.suspend': value}},
@@ -85,8 +113,15 @@ class User:
     def get_info(uids: list[str], need_sensitive: bool = False) -> dict[str, Any]:
         ''' Get user info
 
-        :param list uids: uid
-        :param bool need_sensitive: show sensitive data
+        Args:
+            uids (list): List of `uid`.
+            need_sensitive (bool): Return sensitive data.
+
+        Returns:
+            Return the user data.
+
+        TODO:
+            Need refactor in pydantic.
 
         '''
         users = {}
@@ -131,7 +166,18 @@ class User:
 
     @staticmethod
     def get_bank(uid: str) -> dict[str, Any]:
-        ''' Get bank info '''
+        ''' Get bank info
+
+        Args:
+            uid (str): User id.
+
+        Returns:
+            Return the data.
+
+        TODO:
+            Need refactor in pydantic.
+
+        '''
         bank = {'code': '', 'no': '', 'branch': '', 'name': ''}
         for user in UsersDB().find({'_id': uid}, {'profile_real.bank': 1}):
             if 'profile_real' in user and 'bank' in user['profile_real']:
@@ -141,7 +187,18 @@ class User:
 
     @staticmethod
     def get_address(uid: str) -> dict[str, Any]:
-        ''' Get Address '''
+        ''' Get Address
+
+        Args:
+            uid (str): User id.
+
+        Returns:
+            Return the data.
+
+        TODO:
+            Need refactor in pydantic.
+
+        '''
         address = {'code': '', 'receiver': '', 'address': ''}
         for user in UsersDB().find({'_id': uid}, {'profile_real.address': 1}):
             if 'profile_real' in user and 'address' in user['profile_real']:
@@ -151,7 +208,15 @@ class User:
 
     @staticmethod
     def get_all_users(include_suspend: bool = False) -> Generator[dict[str, Any], None, None]:
-        ''' Get all users '''
+        ''' Get all users
+
+        Args:
+            include_suspend (bool): Include suspend.
+
+        Yields:
+            Return all users datas.
+
+        '''
         query = {}
         if not include_suspend:
             query = {
@@ -165,7 +230,15 @@ class User:
 
     @staticmethod
     def count(include_suspend: bool = False) -> int:
-        ''' Count users '''
+        ''' Count users
+
+        Args:
+            include_suspend (bool): Include suspend.
+
+        Returns:
+            Count users.
+
+        '''
         query = {}
         if not include_suspend:
             query = {
@@ -181,12 +254,28 @@ class TobeVolunteer:
     ''' TobeVolunteer '''
     @staticmethod
     def save(data: dict[str, Any]) -> None:
-        ''' save '''
+        ''' save
+
+        Args:
+            data (dict): The save data.
+
+        Bug:
+            Need to verify and filter.
+
+        '''
         TobeVolunteerDB().add(data=data)
 
     @staticmethod
     def get(uid: str) -> dict[str, Any]:
-        ''' get data '''
+        ''' get data
+
+        Args:
+            uid (str): User id.
+
+        Returns:
+            Return the data.
+
+        '''
         data = {}
         for item in TobeVolunteerDB().find({'_id': uid}):
             data.update(item)
@@ -196,7 +285,15 @@ class TobeVolunteer:
 
     @staticmethod
     def query(query: dict[str, Any]) -> Generator[dict[str, Any], None, None]:
-        ''' query '''
+        ''' query
+
+        Args:
+            query (dict): Query data
+
+        Bug:
+            Need to verify and filter.
+
+        '''
         _query: dict[str, Any] = {'ok': True}
         _or: list[dict[str, Any]] = []
 

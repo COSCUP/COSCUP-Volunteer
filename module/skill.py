@@ -101,7 +101,18 @@ class StatusEnumDesc(str, Enum):
 
 
 class TobeVolunteerStruct(BaseModel):
-    ''' TobeVolunteer '''
+    ''' TobeVolunteer
+
+    Struct:
+        - `uid`: user is.
+        - `ok`: OK to be volunteer.
+        - `teams`: List of [module.skill.TeamsEnum][].
+        - `skill`: List of [module.skill.SkillEnum][].
+        - `hours`: Hours.
+        - `status`: Status in [module.skill.StatusEnum][].
+        - `desc`: Description.
+
+    '''
     uid: str = ''
     ok: bool = False
     teams: List[TeamsEnum] = []
@@ -116,7 +127,14 @@ class TobeVolunteerStruct(BaseModel):
 
 
 class RecruitQuery(BaseModel):
-    ''' RecruitQuery '''
+    ''' RecruitQuery
+
+    Struct:
+        - `teams`: List of [module.skill.TeamsEnum][].
+        - `skill`: List of [module.skill.SkillEnum][].
+        - `status`: List of [module.skill.StatusEnum][].
+
+    '''
     teams: List[TeamsEnum] = []
     skill: List[SkillEnum] = []
     status: List[StatusEnum] = []

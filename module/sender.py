@@ -1,6 +1,6 @@
 ''' Sender '''
 # pylint: disable=too-few-public-methods
-from typing import Any, Generator, Optional, Union
+from typing import Any, Generator, Literal, Optional, Union
 
 from jinja2.sandbox import SandboxedEnvironment
 from pymongo.collection import ReturnDocument
@@ -21,10 +21,14 @@ class SenderCampaign:
     def create(name: str, pid: str, tid: str, uid: str) -> dict[str, Any]:
         ''' Create new campaign
 
-        :param str name: campaign name
-        :param str pid: pid
-        :param str tid: tid
-        :param str uid: uid
+        Args:
+            name (str): Campaign name.
+            pid (str): Project id.
+            tid (str): Team id.
+            uid (str): User id.
+
+        Returns:
+            Return the added data.
 
         '''
 
@@ -37,9 +41,13 @@ class SenderCampaign:
             tid: Optional[str] = None) -> Optional[dict[str, Any]]:
         ''' Get campaign
 
-        :param str cid: cid
-        :param str pid: pid
-        :param str tid: tid
+        Args:
+            cid (str): Campaign id.
+            pid (str): Project id.
+            tid (str): Team id.
+
+        Returns:
+            Return the campaign data.
 
         '''
         query = {'_id': cid}
@@ -56,22 +64,30 @@ class SenderCampaign:
     def get_list(pid: str, tid: str) -> Cursor[dict[str, Any]]:
         ''' Get list campaign
 
-        :param str pid: pid
-        :param str tid: tid
+        Args:
+            pid (str): Project id.
+            tid (str): Team id.
+
+        Returns:
+            Return the [pymongo.cursor.Cursor][].
 
         '''
         return SenderCampaignDB().find({'created.pid': pid, 'created.tid': tid})
 
     @staticmethod
     def save_mail(cid: str, subject: str, content: str,
-                  preheader: str, layout: str) -> dict[str, Any]:
+                  preheader: str, layout: Literal['1', '2']) -> dict[str, Any]:
         ''' Save mail data
 
-        :param str cid: cid
-        :param str subject: subject
-        :param str content: content
-        :param str preheader: preheader
-        :param str layout: layout
+        Args:
+            cid (str): Campaign id.
+            subject (str): Mail subject.
+            content (str): Mail content.
+            preheader (str): The preheader in mail.
+            layout (str): In which layout. `1`: In Volunteer layout. `2`: In COSCUP layout.
+
+        Returns:
+            Return the added / updated data.
 
         '''
         return SenderCampaignDB().find_one_and_update(
@@ -91,13 +107,13 @@ class SenderCampaign:
                       all_users: bool = False) -> dict[str, Any]:
         ''' Save receiver
 
-        :param str cid: cid
-        :param list teams: teams
-        :param list team_w_tags: {'team': [tag, ...]}
-        :param list users: users
-        :param bool all_users: all volunteer users
-
-        .. note:: ``users`` not in completed implement
+        Args:
+            cid (str): Campaign id.
+            teams (list): List of `tid`.
+            team_w_tags (dict): With team's internal tags. `{'<tid>': [<tag>, ...]}`.
+            users (list): List of user/mail. `{'name': <username>, 'mail': <mail>}`.
+                          **(not in completed implement)**
+            all_users (bool): All volunteers in platform.
 
         '''
         update: dict[str, Any] = {'receiver.teams': teams}
@@ -115,9 +131,10 @@ class SenderCampaign:
 class SenderMailer:
     ''' Sender Mailer
 
-    :param str template_path: template path
-    :param str subject: subject
-    :param dict source: {'name': str, 'mail': str}
+    Args:
+        template_path (str): Mail template path.
+        subject (str): Mail subject.
+        source (dict): Mail `FROM`, `{'name': <name>, 'mail': <mail>}`.
 
     '''
 
@@ -142,8 +159,12 @@ class SenderMailer:
              data: dict[str, Any], x_coscup: Optional[str] = None) -> Any:
         ''' Send mail
 
-        :param list to_list: [{'name': str, 'mail': str}, ]
-        :param dict data: data for render
+        Args:
+            to_list (list): List of user/mail in `{'name': <name>, 'mail': <mail>}`.
+            data (dict): Mail datas. More details: [module.awsses.AWSSES.raw_mail][].
+
+        Returns:
+            More details: [module.awsses.AWSSES.send_raw_email][].
 
         '''
         raw_mail = self.awsses.raw_mail(
@@ -158,7 +179,13 @@ class SenderMailer:
 
 
 class SenderMailerVolunteer(SenderMailer):
-    ''' Sender using volunteer template '''
+    ''' Sender using volunteer template
+
+    Args:
+        subject (str): Mail subject.
+        source (dict): Mail `FROM`, `{'name': <name>, 'mail': <mail>}`.
+
+    '''
 
     def __init__(self, subject: str, content: dict[str, Any],
                  source: Optional[dict[str, str]] = None) -> None:
@@ -168,7 +195,13 @@ class SenderMailerVolunteer(SenderMailer):
 
 
 class SenderMailerCOSCUP(SenderMailer):
-    ''' Sender using COSCUP template '''
+    ''' Sender using COSCUP template
+
+    Args:
+        subject (str): Mail subject.
+        source (dict): Mail `FROM`, `{'name': <name>, 'mail': <mail>}`.
+
+    '''
 
     def __init__(self, subject: str, content: dict[str, Any],
                  source: Optional[dict[str, str]] = None):
@@ -210,10 +243,11 @@ class SenderSESLogs:
     def save(cid: str, name: str, mail: str, result: dict[str, Any]) -> None:
         ''' Save log
 
-        :param str cid: cid
-        :param str name: name
-        :param str mail: mail
-        :param dict result: result
+        Args:
+            cid (str): Campaign id.
+            name (str): User name.
+            mail (str): User mail.
+            result (str): The result from [SES.Client.send_email][], [SES.Client.send_raw_email][].
 
         '''
         SenderSESLogsDB().add(cid=cid, mail=mail, name=name, ses_result=result)
@@ -226,9 +260,11 @@ class SenderReceiver:
     def replace(pid: str, cid: str, datas: list[dict[str, Any]]) -> None:
         ''' Replace
 
-        :param str pid: pid
-        :param str cid: cid
-        :param list datas: list of dict data
+        Args:
+            pid (str): Project id.
+            cid (str): Campaign id.
+            datas (list): List of receiver datas. `name`, `mail` are required
+                or include `uid` for auto replace the `name`, `mail` value.
 
         '''
         sender_receiver_db = SenderReceiverDB()
@@ -269,9 +305,11 @@ class SenderReceiver:
     def update(pid: str, cid: str, datas: list[dict[str, Any]]) -> None:
         ''' Update
 
-        :param str pid: pid
-        :param str cid: cid
-        :param list datas: list of dict data
+        Args:
+            pid (str): Project id.
+            cid (str): Campaign id.
+            datas (list): List of receiver datas. `name`, `mail` are required
+                or include `uid` for auto replace the `name`, `mail` value.
 
         '''
         uids = []
@@ -309,8 +347,9 @@ class SenderReceiver:
     def remove(pid: str, cid: str) -> None:
         ''' Update
 
-        :param str pid: pid
-        :param str cid: cid
+        Args:
+            pid (str): Project id.
+            cid (str): Campaign id.
 
         '''
         SenderReceiverDB().remove_past(pid=pid, cid=cid)
@@ -319,10 +358,12 @@ class SenderReceiver:
     def get(pid: str, cid: str) -> tuple[list[str], list[list[str]]]:
         ''' Get
 
-        :param str pid: pid
-        :param str cid: cid
+        Args:
+            pid (str): Project id.
+            cid (str): Campaign id.
 
-        :return: fields, raws
+        Returns:
+            Return a tuple with all fields at first. The second is the all datas.
 
         '''
         datas = list(SenderReceiverDB().find({'pid': pid, 'cid': cid}))
@@ -347,10 +388,12 @@ class SenderReceiver:
                       tids: Union[str, list[str]]) -> tuple[tuple[str, str], list[list[str]]]:
         ''' Get users from userdb by project, team
 
-        :param str pid: pid
-        :param str tids: team id or ids
+        Args:
+            pid (str): Project id.
+            tids (list): List of `tid`.
 
-        :return: fields, raws
+        Returns:
+            Return a tuple with `('name', 'mail')` at first. The second is the all datas.
 
         '''
         _tids: list[str]
@@ -386,7 +429,12 @@ class SenderReceiver:
 
     @staticmethod
     def get_all_users() -> tuple[tuple[str, str], list[tuple[str, str]]]:
-        ''' Get all users '''
+        ''' Get all users
+
+        Returns:
+            Return a tuple with `('name', 'mail')` at first. The second is the all datas.
+
+        '''
         uids = []
         for user in User.get_all_users():
             uids.append(user['_id'])
@@ -404,7 +452,12 @@ class SenderReceiver:
     @staticmethod
     def get_by_tags(pid: str, tid: str,
                     tags: list[str]) -> tuple[tuple[str, str], list[tuple[str, str]]]:
-        ''' Get users by tags '''
+        ''' Get users by tags
+
+        Returns:
+            Return a tuple with `('name', 'mail')` at first. The second is the all datas.
+
+        '''
         uids = Team.get_members_uid_by_tags(pid=pid, tid=tid, tags=tags)
 
         user_infos = User.get_info(uids=uids)

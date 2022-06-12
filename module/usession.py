@@ -14,8 +14,12 @@ class USession:
     def make_new(uid: str, header: dict[str, Any]) -> InsertOneResult:
         ''' make new session record
 
-        :param str uid: uid
-        :param dict header: headers
+        Args:
+            uid (str): User id.
+            header (dict): User's request header.
+
+        Returns:
+            Return the [pymongo.results.InsertOneResult][] object.
 
         '''
         doc = {'uid': uid, 'header': header,
@@ -26,14 +30,23 @@ class USession:
     def get(sid: Optional[str]) -> Optional[dict[str, Any]]:
         ''' Get usession data
 
-        :param str sid: usession id
+        Args:
+            sid (str): usession id.
+
+        Returns:
+            Return the usession data.
 
         '''
         return USessionDB(token=sid).get()
 
     @staticmethod
     def get_no_ipinfo() -> Generator[dict[str, Any], None, None]:
-        ''' Get no ipinfo '''
+        ''' Get no ipinfo
+
+        Yields:
+            Return the data, `ipinfo` is not exist.
+
+        '''
         for raw in USessionDB().find({'ipinfo': {'$exists': False}},
                                      {'header.X-Real-Ip': 1, 'header.X-Forwarded-For': 1}):
             yield raw
@@ -42,7 +55,9 @@ class USession:
     def update_ipinfo(sid: str, data: dict[str, Any]) -> None:
         ''' Update session ipinfo
 
-        :param str sid: usession id
+        Args:
+            sid (str): usession id.
+            data (dict): The ipinfo response data.
 
         '''
         USessionDB().find_one_and_update(
@@ -52,7 +67,12 @@ class USession:
     def get_recently(uid: str, limit: int = 25) -> Generator[dict[str, Any], None, None]:
         ''' Get recently record
 
-        :param str uid: uid
+        Args:
+            uid (str): User id.
+            limit (int): Limit.
+
+        Yields:
+            Return the recently datas.
 
         '''
         for raw in USessionDB(token='').find({'uid': uid},
@@ -64,7 +84,11 @@ class USession:
     def get_alive(uid: str) -> Generator[dict[str, Any], None, None]:
         ''' Get alive session
 
-        :param str uid: uid
+        Args:
+            uid (str): User id.
+
+        Yields:
+            Return the datas.
 
         '''
         for raw in USessionDB(token='').find({'uid': uid, 'alive': True},
@@ -75,8 +99,9 @@ class USession:
     def make_dead(sid: str, uid: Optional[str] = None) -> None:
         ''' Make session to dead
 
-        :param str sid: sid
-        :param str uid: uid
+        Args:
+            sid (str): usession id.
+            uid (str): User id.
 
         '''
         query = {'_id': sid}
@@ -92,6 +117,12 @@ class USession:
         ''' Make expired
 
         :param int days: days
+
+        Args:
+            days (int): The long days to clean.
+
+        Returns:
+            Return the [pymongo.results.UpdateResult][] object.
 
         '''
         target = time() - 86400*days

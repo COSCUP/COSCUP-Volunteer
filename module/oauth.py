@@ -7,7 +7,8 @@ from models.oauth_db import OAuthDB
 class OAuth:
     ''' OAuth
 
-    :param str mail: mail
+    Args:
+        mail (str): Mail address
 
     '''
 
@@ -15,7 +16,12 @@ class OAuth:
         self.mail = mail
 
     def get(self) -> Optional[dict[str, Any]]:
-        ''' Get data '''
+        ''' Get data
+
+        Returns:
+            Return the data by the mail.
+
+        '''
         return OAuthDB().find_one({'_id': self.mail})
 
     @staticmethod
@@ -23,9 +29,10 @@ class OAuth:
             token: Optional[dict[str, Any]] = None) -> None:
         ''' add data, token
 
-        :param str mail: mail
-        :param dict data: return user data
-        :param dict token: oauth token data
+        Args:
+            mail (str): Mail address.
+            data (dict): The data from the oauth response.
+            token (dict): OAuth token.
 
         '''
 
@@ -42,8 +49,11 @@ class OAuth:
     def owner(mail: str) -> Optional[str]:
         ''' return the owner
 
-        :param str mail: mail
-        :rtype: str or None
+        Args:
+            mail (str): Mail address.
+
+        Raises:
+            Exception: No oauth data of `{mail}`.
 
         '''
         data = OAuthDB().find_one({'_id': mail}, {'owner': 1})

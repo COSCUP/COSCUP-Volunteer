@@ -9,7 +9,12 @@ from module.mc import MC
 
 
 class Telegram(Session):
-    ''' Telegram '''
+    ''' Telegram
+
+    Args:
+        token (str): API token.
+
+    '''
 
     def __init__(self, token: str) -> None:
         super().__init__()
@@ -22,7 +27,18 @@ class Telegram(Session):
     def send_message(self, chat_id: str, text: str,
                      parse_mode: str = 'Markdown',
                      reply_markup: Union[dict[str, Any], None] = None) -> Response:
-        ''' Send message '''
+        ''' Send message
+
+        Args:
+            chat_id (str): Chat id.
+            text (str): Text.
+            parse_mode (str): `Markdown`, `MarkdownV2`, `HTML`.
+            reply_markup (dict): Reply markup.
+
+        References:
+            https://core.telegram.org/bots/api#sendmessage
+
+        '''
         data = {
             'chat_id': chat_id,
             'text': text,
@@ -34,20 +50,49 @@ class Telegram(Session):
         return self.post(f'{self.url}/sendMessage', json=data)
 
     def set_webhook(self, url: str) -> Response:
-        ''' Set webhook '''
+        ''' Set webhook
+
+        Args:
+            url (str): URL.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         return self.post(f'{self.url}/setWebhook', json={'url': url})
 
     def get_webhook_info(self, url: str) -> Response:
-        ''' Get webhook info '''
+        ''' Get webhook info
+
+        Args:
+            url (str): URL.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         return self.post(f'{self.url}/getWebhookInfo', json={'url': url})
 
     def delete_webhook(self) -> Response:
-        ''' delete webhook '''
+        ''' delete webhook
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
         return self.post(f'{self.url}/deleteWebhook')
 
     @staticmethod
     def is_command_start(data: dict[str, Any]) -> bool:
-        ''' command start '''
+        ''' command start
+
+        Args:
+            data (dict): The data from telegram return.
+
+        Returns:
+            Check the `message.from.is_bot` ot `message.text`.
+
+        '''
         if data['message']['from']['is_bot']:
             return False
 
@@ -58,7 +103,15 @@ class Telegram(Session):
 
     @staticmethod
     def is_command_start_linkme(data: dict[str, Any]) -> bool:
-        ''' command start '''
+        ''' command start
+
+        Args:
+            data (dict): The data from telegram return.
+
+        Returns:
+            Check the `message.from.is_bot` ot `message.text`.
+
+        '''
         if 'message' not in data:
             return False
 
@@ -72,14 +125,28 @@ class Telegram(Session):
 
 
 class TelegramBot(Telegram):
-    ''' TelegramBot '''
+    ''' TelegramBot
+
+    Args:
+        token (str): API token.
+
+    '''
 
     def __init__(self, token: str) -> None:
         super().__init__(token=token)
 
     @staticmethod
     def gen_uuid(chat_id: str, expired_time: int = 300) -> dict[str, Any]:
-        ''' Gen uuid for verify '''
+        ''' Gen uuid for verify
+
+        Args:
+            chat_id (str): Chat id.
+            expired_time (int): Expired time.
+
+        Returns:
+            Return the data.
+
+        '''
         data = {
             'uuid': str(uuid4()),
             'chat_id': chat_id,
@@ -94,13 +161,33 @@ class TelegramBot(Telegram):
 
     @staticmethod
     def temp_fetch_user_data(data: dict[str, Any], expired_time: int = 400) -> None:
-        ''' temp fetch user data '''
+        ''' temp fetch user data
+
+        Args:
+            data (dict): The data to cache.
+            expired_time (int): Expired time.
+
+        '''
         mem_cache = MC.get_client()
         mem_cache.set(f"tgu:{data['message']['from']['id']}",
                       data['message']['from'], expired_time)
 
     @staticmethod
     def get_temp_user_dta(chat_id: str) -> dict[str, Any]:
-        ''' Get temp user data '''
+        ''' Get temp user data
+
+        Args:
+            chat_id (str): Chat id.
+
+        Returns:
+            Return the data.
+
+        '''
         mem_cache = MC.get_client()
-        return dict(mem_cache.get(f'tgu:{chat_id}'))
+
+        data = mem_cache.get(f'tgu:{chat_id}')
+
+        if data:
+            return dict(data)
+
+        return {}

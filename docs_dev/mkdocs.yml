@@ -36,8 +36,22 @@ nav:
       - dietary_habit: code_reference/module/dietary_habit.md
       - expense: code_reference/module/expense.md
       - form: code_reference/module/form.md
-      - gitlab_api: code_reference/module/gitlab_api.md
-      - gsuite: code_reference/module/gsuite.md
+      - mc: code_reference/module/mc.md
+      - oauth: code_reference/module/oauth.md
+      - project: code_reference/module/project.md
+      - sender: code_reference/module/sender.md
+      - service_sync: code_reference/module/service_sync.md
+      - skill: code_reference/module/skill.md
+      - tasks: code_reference/module/tasks.md
+      - users: code_reference/module/users.md
+      - usession: code_reference/module/usession.md
+      - waitlist: code_reference/module/waitlist.md
+      - Third Party API:
+        - gitlab_api: code_reference/module/gitlab_api.md
+        - gsuite: code_reference/module/gsuite.md
+        - ipinfo: code_reference/module/ipinfo.md
+        - mattermost: code_reference/module/mattermost.md
+        - telegram_bot: code_reference/module/telegram_bot.md
 theme:
   name: material
   icon:
@@ -85,6 +99,7 @@ plugins:
             - https://google-auth.readthedocs.io/en/stable/objects.inv
             - https://pymongo.readthedocs.io/en/stable/objects.inv
             - https://requests.readthedocs.io/en/master/objects.inv
+            - https://sendapatch.se/projects/pylibmc/objects.inv
 markdown_extensions:
   - pymdownx.details
   - pymdownx.emoji:

@@ -13,10 +13,14 @@ class Project:
     def create(pid: str, name: str, owners: list[str], action_date: str) -> dict[str, Any]:
         ''' Create project
 
-        :param str pid: project id
-        :param str name: project name
-        :param list owners: str of list
-        :param str action_date: date format
+        Args:
+            pid (str): Project id.
+            name (str): Project name.
+            owners (list): List of owner's uids.
+            action_date: The date at the event first date.
+
+        Returns:
+            Return the added data.
 
         '''
         projectdb = ProjectDB(pid)
@@ -30,14 +34,23 @@ class Project:
 
     @staticmethod
     def all() -> Cursor[dict[str, Any]]:
-        ''' List all project '''
+        ''' List all project
+
+        Returns:
+            Return all projects and order by `action_date`(desc).
+
+        '''
         return ProjectDB(pid='').find({}, sort=(('action_date', -1), ))
 
     @staticmethod
     def get(pid: str) -> Optional[dict[str, Any]]:
         ''' Get project info
 
-        :param str pid: project id
+        Args:
+            pid (str): Project id.
+
+        Returns:
+            Return the project info.
 
         '''
         return ProjectDB(pid).find_one({'_id': pid})
@@ -46,7 +59,13 @@ class Project:
     def update(pid: str, data: dict[str, Any]) -> None:
         ''' update data
 
-        :param dict data: data
+        Args:
+            pid (str): Project id.
+            data (dict): The data to update. These fields can be updated:
+                         `name`, `desc`, `volunteer_certificate_hours`, `calendar`,
+                         `mailling_staff`, `mailling_leader`, `shared_drive`,
+                         `mattermost_ch_id`, `traffic_fee_doc`, `gitlab_project_id`,
+                         `parking_card`.
 
         '''
         _data = {}

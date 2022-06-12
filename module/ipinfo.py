@@ -3,7 +3,19 @@ from requests import Response, Session
 
 
 class IPInfo(Session):
-    ''' IPInfo '''
+    ''' IPInfo
+
+    Args:
+        token (str): IPInfo's API token.
+
+    Attributes:
+        url (str): `https://ipinfo.io/`
+        token (str): API token.
+
+    Note:
+        The `headers` will update the `Authorization` in `Bearer {self.token}`.
+
+    '''
 
     def __init__(self, token: str):
         super().__init__()
@@ -14,7 +26,11 @@ class IPInfo(Session):
     def get_info(self, ip_address: str) -> Response:
         ''' Get info
 
-        :param str ip: ip
+        Args:
+            ip_address (str): IP address.
+
+        Returns:
+            Return the [requests.Response][] object.
 
         '''
         return super().get(f'{self.url}{ip_address}')
