@@ -43,4 +43,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DOC_S3_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DOC_S3_KEY }}
-        run: poetry run aws s3 sync ./site s3://coscup-volunteer-docs/ --acl public-read
+        run: cd docs_dev; poetry run aws s3 sync ./site s3://coscup-volunteer-docs/ --acl public-read
