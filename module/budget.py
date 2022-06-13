@@ -53,7 +53,7 @@ class BudgetImportItem(BaseModel):
         estimate (str): `估算方式`
 
     '''
-    # pylint: disable=no-self-argument,no-self-use
+    # pylint: disable=no-self-argument
     action: Action
     bid: str
     tid: str
