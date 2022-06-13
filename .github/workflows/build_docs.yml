@@ -1,0 +1,46 @@
+name: BuildDocs
+
+on:
+  push:
+    branches:
+      - master
+      - 'dev_docs'
+    paths:
+      - 'models/*'
+      - 'module/*'
+      - 'docs_dev/*'
+      - '.github/workflows/build_docs.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install memcached libs
+        run: sudo apt-get install ca-certificates libmemcached-dev
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.1.13
+          virtualenvs-create: true
+          virtualenvs-in-project: false
+          installer-parallel: true
+      - name: Install dependencies
+        run: poetry install
+      - name: Create setting.py
+        run: mv setting_sample.py setting.py
+      - name: Build Docs
+        env:
+          PYTHONPATH: '../'
+        runs: cd docs_dev; mkdocs -v build;
+      - name: Upload to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DOC_S3_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DOC_S3_KEY }}
+        run: aws s3 sync ./site s3://coscup-volunteer-docs/ --acl public-read
