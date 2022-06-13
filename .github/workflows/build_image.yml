@@ -21,7 +21,7 @@ jobs:
         with:
           context: .
           file: Dockerfile-base-dev
-          tags: coscupweb-base:22.06.01
+          tags: coscupweb-base:22.06.13
           load: true
       - name: List images
         run: docker images
