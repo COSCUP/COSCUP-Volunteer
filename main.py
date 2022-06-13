@@ -74,6 +74,9 @@ NO_NEED_LOGIN_PATH = {
     '/telegram/r',
 }
 
+
+# For development mode.
+# if `./view/dev.py` is exist, Append the `/dev` path into.
 if Path('/app/view/dev.py').exists():
     logging.info('view.dev exists')
     from view.dev import VIEW_DEV

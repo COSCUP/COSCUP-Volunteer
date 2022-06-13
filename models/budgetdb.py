@@ -36,7 +36,8 @@ class BudgetDB(DBBase):
             - ``_id``: Unique budget id.
             - ``pid``: Project id.
             - ``tid``: Team id.
-            - ``bid``: This buDget id is from the google spreadsheet by serials in manually.
+            - ``bid``: This buDget id is from the google spreadsheet
+                       by serials in manually.
             - ``name``: Team name.
             - ``uid``: User id.
             - ``currency``: Now only support in `TWD`, `USD`.
