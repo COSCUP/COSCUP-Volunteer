@@ -5,10 +5,11 @@ edit_uri: edit/master/docs_dev/docs/
 copyright: "CC BY 4.0 2022 COSCUP Volunteer"
 nav:
   - Home: index.md
+  - Introduction: intro.md
   - Developers:
-    - Overview for Beginners: dev-beginners.md
-    - Build Base Image: dev-build-base-image.md
-    - API: dev-api.md
+    - Overview for Beginners: dev/beginners.md
+    - Build Base Image: dev/build-base-image.md
+    - API: dev/api.md
   - Security: security.md
   - Code Reference:
     - Overview: code_reference/overview.md
