@@ -2,10 +2,22 @@
 
 If you want to start contributing to the project, here is the path you can take step by step to arrive.
 
-1. [How to make COSCUP Volunteer?](#how-to-make-coscup-volunteer)
-2. [What service is in the COSCUP Volunteer?](#what-service-is-in-the-coscup-volunteer)
+1. [What service is in the COSCUP Volunteer?](#what-service-is-in-the-coscup-volunteer)
+2. [How to make COSCUP Volunteer?](#how-to-make-coscup-volunteer)
 3. [Roadmap](#roadmap)
 4. [How to contribute?](#how-to-contribute)
+
+## What Service is in the COSCUP Volunteer?
+
+<figure markdown>
+  <a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_services.svg">
+    <img alt="coscup_volunteer_infra" src="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_services.svg">
+  </a>
+  <figcaption>Services, <small><a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_services.svg">[original]</a></small></figcaption>
+</figure>
+
+Those services have been implemented in the volunteer platform. Those services are
+served by the **Secretary Team（行政組）** in the COSCUP.
 
 ## How to Make COSCUP Volunteer?
 
@@ -13,7 +25,7 @@ If you want to start contributing to the project, here is the path you can take 
   <a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_infra.svg">
     <img alt="coscup_volunteer_infra" src="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_infra.svg">
   </a>
-  <figcaption>Infrastructure</figcaption>
+  <figcaption>Infrastructure, <small><a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_infra.svg">[original]</a></small></figcaption>
 </figure>
 
 This figure is the whole picture about the infrastructure of the volunteer platform on the production.
@@ -23,17 +35,6 @@ into containers by using upstream to round robin the containers. And we also hav
 `t3a.nano` placed at the front of them, this instance will do the job of encrypting / decrypting
 the connections from requests and to responses.
 
-## What Service is in the COSCUP Volunteer?
-
-<figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_services.svg">
-    <img alt="coscup_volunteer_infra" src="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_services.svg">
-  </a>
-  <figcaption>Services</figcaption>
-</figure>
-
-Those services have been implemented in the volunteer platform. Those services are
-served by the **Secretary Team（行政組）** in the COSCUP.
 
 ## Roadmap
 
@@ -41,7 +42,7 @@ served by the **Secretary Team（行政組）** in the COSCUP.
   <a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_roadmap.svg">
     <img alt="coscup_volunteer_roadmap" src="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_roadmap.svg">
   </a>
-  <figcaption>Roadmap</figcaption>
+  <figcaption>Roadmap, <small><a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_roadmap.svg">[original]</a></small></figcaption>
 </figure>
 
 
@@ -50,8 +51,8 @@ served by the **Secretary Team（行政組）** in the COSCUP.
 If you are a `coder` (COS**<u>C</u>**UP), you can start from this [section](dev/beginners.md).
 
 If you are a `user` or `promoter` (COSC**<u>UP</u>**) and found a bug or have any refreshed ideals.
-You can post your thoughts or questions at [Discussions](https://github.com/COSCUP/COSCUP-Volunteer/discussions)
-at the project on Github.
+You can post your thoughts or questions to [discussions](https://github.com/COSCUP/COSCUP-Volunteer/discussions)
+of the project on Github.
 
 ???+ Info
 
