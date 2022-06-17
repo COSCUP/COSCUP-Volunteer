@@ -5,10 +5,16 @@ edit_uri: https://github.com/COSCUP/COSCUP-Volunteer/blob/master/docs_dev/docs/
 copyright: "CC BY 4.0 2022 COSCUP Volunteer"
 nav:
   - Home: index.md
-  - Introduction: intro.md
+  - Introduction:
+    - Overview: intro.md
+    - Contributing: contribute.md
   - Developers:
     - Developer Beginner: dev/beginners.md
     - Build Base Image: dev/build-base-image.md
+    - Contributing:
+      - Contributing on Github: dev/contribute-on-github.md
+      - Developer Certificate of Origin (DCO): dev/dco.md
+      - How to sign-off commits: dev/how-to-signoff.md
     - API: dev/api.md
   - Security: security.md
   - Code Reference:

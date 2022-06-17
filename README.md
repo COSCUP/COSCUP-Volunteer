@@ -112,7 +112,10 @@ Visit the dev page to setup.
     http://127.0.0.1:80/dev/
 
 
-## 如何貢獻專案
+## 如何貢獻專案 How to contribute?
+
+The more details about how to contribute, please learn more
+from [Volunteer Docs](https://volunteer.coscup.org/docs/).
 
 ### Fork me
 
@@ -125,10 +128,12 @@ Visit the dev page to setup.
 
 ### More Details
 
-1. 參考這兩份資訊，瞭解平台的[架構](https://github.com/COSCUP/COSCUP-Volunteer/wiki/How-to-make-COSCUP-Volunteer%3F)與[服務](https://github.com/COSCUP/COSCUP-Volunteer/wiki/What-service-is-in-the-COSCUP-Volunteer%3F)。
+1. 請先閱讀開發文件中的 [Introduction](https://volunteer.coscup.org/docs/intro/)，了解平台的架構與服務。
 2. 查看目前已知的問題 [Issues](https://github.com/COSCUP/COSCUP-Volunteer/issues)。
-3. 查看目前的開發 [roadmap](https://github.com/COSCUP/COSCUP-Volunteer/wiki/roadmap)。
+3. 查看目前的開發 [roadmap](https://volunteer.coscup.org/docs/intro/#roadmap)。
 4. 或是到 [COSCUP 行政組 - 開發組](https://chat.coscup.org/coscup/channels/secretary-develop)頻道討論。
+
+更詳細的開發內容可以參考[開發文件](https://volunteer.coscup.org/docs/)。
 
 ## Issues
 
