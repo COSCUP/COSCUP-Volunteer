@@ -681,15 +681,31 @@ def team_form_clothes(pid, tid):
         if post_data['casename'] == 'get':
             data = Form.get_clothes(
                 pid=team['pid'], uid=g.user['account']['_id'])
-            if not data:
-                data = {'data': {'clothes': ''}}
 
-            return jsonify({'clothes': data['data']['clothes']})
+            in_action = False
+            htg = ''
+            if not data:
+                data = {'data': {'clothes': '',
+                                 'htg': htg, 'in_action': in_action}}
+
+            if project['action_date']+86400*10 >= arrow.now().timestamp():
+                in_action = True
+
+            if 'htg' in data['data']:
+                htg = data['data']['htg']
+
+            return jsonify({
+                'clothes': data['data']['clothes'],
+                'htg': htg,
+                'in_action': in_action,
+            })
 
         if post_data['casename'] == 'post':
             if 'clothes' in post_data and post_data['clothes']:
-                Form.update_clothes(pid=team['pid'], uid=g.user['account']['_id'], data={
-                                    'clothes': post_data['clothes']})
+                Form.update_clothes(pid=team['pid'], uid=g.user['account']['_id'],
+                                    data={'clothes': post_data['clothes'],
+                                          'htg': post_data['htg'],
+                                          })
                 return jsonify({})
 
     return jsonify({})

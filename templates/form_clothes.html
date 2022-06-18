@@ -4,8 +4,8 @@
 {% block form_menu_clothes%}is-active{% endblock %}
 {% block form_body %}
 <div class="columns">
-    <div id="clothesform" class="column is-three-fifths">
-        <form @submit.prevent="submit" v-cloak>
+    <div id="clothesform" class="column is-three-fifths" v-cloak>
+        <form @submit.prevent="submit">
             <div class="field">
                 <div class="control">
                     <a @click="is_active=!is_active">
@@ -40,6 +40,24 @@
                     </div>
                 </div>
             </div>
+            <div class="field" v-if="!in_action">
+                <label class="label">取得方式</label>
+                <div class="control">
+                    <label class="radio mr-3">
+                        <input type="radio" value="1" v-model="htg">
+                        活動日自取
+                    </label>
+                    <label class="radio mr-3">
+                        <input type="radio" value="2" v-model="htg">
+                        友人代領
+                    </label>
+                </div>
+            </div>
+            <div class="field" v-if="!in_action">
+                <div class="notification is-success is-light">
+                    由於我們在 2021 年活動為線上舉辦，今年 2022 年回到實體活動，承諾在今年兌現的工人衣服會透過<strong>「活動日自取」</strong>或<strong>「友人代領」</strong>的方式發送，請勾選你可以取得的方式，感謝！
+                </div>
+            </div>
             <div class="field" v-if="submit_size.length > 0">
                 <div class="control">
                     目前收到的資料：[[ submit_size ]]
@@ -71,17 +89,22 @@
             data: {
                 debug: null,
                 is_active: false,
+                in_action: true,
                 size: '',
-                submit_size: ''
+                submit_size: '',
+                htg: ''
             },
             mounted: function() {
                 this.load();
             },
             methods: {
                 load: function() {
+                    let $this = this;
                     axios.post('./clothes', {casename: 'get'}).then(function(resp) {
-                        $clothesform.size = resp.data.clothes;
-                        $clothesform.submit_size = resp.data.clothes;
+                        $this.in_action = resp.data.in_action;
+                        $this.htg = resp.data.htg;
+                        $this.size = resp.data.clothes;
+                        $this.submit_size = resp.data.clothes;
                     });
                 },
                 submit: function($e) {
@@ -93,8 +116,10 @@
                         input.disabled = true;
                     });
 
-                    axios.post('./clothes', {casename: 'post', clothes: this.size}).then(function(resp) {
-                        $clothesform.load();
+                    let $this = this;
+                    axios.post('./clothes', {casename: 'post', clothes: this.size,
+                                             in_action: this.in_action, htg: this.htg}).then(function(resp) {
+                        $this.load();
                         $btn.classList.remove('is-loading');
 
                         $inputs.forEach(function(input) {
