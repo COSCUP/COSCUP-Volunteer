@@ -234,7 +234,7 @@ def project_form_api(pid):
             user_info = User.get_info(uids=list(all_users.keys()))
 
             fieldnames = ('uid', 'picture', 'name',
-                          '_has_data', 'tid', 'clothes')
+                          '_has_data', 'tid', 'clothes', 'htg')
             with io.StringIO() as str_io:
                 csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
                 csv_writer.writeheader()
@@ -242,7 +242,11 @@ def project_form_api(pid):
                 for raw in Form.all_clothes(pid):
                     if raw['uid'] not in all_users:
                         continue
+
                     all_users[raw['uid']]['clothes'] = raw['data']['clothes']
+
+                    if 'htg' in raw['data']:
+                        all_users[raw['uid']]['htg'] = raw['data']['htg']
 
                 for uid, value in all_users.items():
                     data = {
@@ -252,6 +256,7 @@ def project_form_api(pid):
                         '_has_data': bool(value.get('clothes', False)),
                         'tid': value['tid'],
                         'clothes': value.get('clothes'),
+                        'htg': value.get('htg'),
                     }
                     csv_writer.writerow(data)
 
