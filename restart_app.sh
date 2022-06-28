@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 sh ./build-app.sh
 
 docker stop -t 1 volunteer_celery

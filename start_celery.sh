@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 docker run -d --restart='always' \
            --name volunteer_celery \
            --link secretary_mongo:mongo \
