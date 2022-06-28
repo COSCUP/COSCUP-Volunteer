@@ -46,7 +46,7 @@ Please install [Poetry](https://python-poetry.org/) for dependency management an
 
     curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
 
-If you got error like `'urllib.error.URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed'`, go check your python3 folder `/Applications/Python 3.10/` and click `Install Certificates.command` file.
+When you encountered such an error like `'urllib.error.URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed'` on macOS, you can navigate to your Python 3 installation folder (such as `/Application/Python 3.10/`) and run `Install Certificates.command`.
 
 After the poetry is installed, you could run `poetry install` to install the packages at local.
 
