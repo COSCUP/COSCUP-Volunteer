@@ -325,3 +325,12 @@ def api_token() -> str | Response:
             }})
 
     return jsonify({}), 404
+
+
+@VIEW_SETTING.route('/waitting')
+def mails() -> str | Response:
+    ''' about mails '''
+    if request.method == 'GET':
+        return render_template('./setting_mails.html')
+
+    return jsonify({}), 404

@@ -244,17 +244,9 @@ def mail_member_del(sender: Any) -> None:
 
 @app.task(bind=True, name='mail.member.welcome',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
-          routing_key='cs.mail.member.welcom', exchange='COSCUP-SECRETARY')
+          routing_key='cs.mail.member.welcome', exchange='COSCUP-SECRETARY')
 def mail_member_welcome(sender: Any) -> None:
     ''' mail member welcome '''
-    tplenv = Environment(loader=FileSystemLoader('./templates/mail'))
-    template = tplenv.get_template('./welcome.html')
-
-    awsses = AWSSES(
-        aws_access_key_id=setting.AWS_ID,
-        aws_secret_access_key=setting.AWS_KEY,
-        source=setting.AWS_SES_FROM)
-
     uids = []
     for user in MailLetterDB().need_to_send(code='welcome'):
         uids.append(user['_id'])
@@ -263,9 +255,25 @@ def mail_member_welcome(sender: Any) -> None:
         return
 
     service_sync_mattermost_invite.apply_async(kwargs={'uids': uids})
-    users = User.get_info(uids=uids)
+    mail_member_welcome_send.apply_async(kwargs={'uids': uids})
 
-    for uid in uids:
+
+@app.task(bind=True, name='mail.member.welcome.send',
+          autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
+          routing_key='cs.mail.member.welcome.send', exchange='COSCUP-SECRETARY')
+def mail_member_welcome_send(sender: Any, **kwargs: list[str]) -> None:
+    ''' mail member welcome to send '''
+    users = User.get_info(uids=kwargs['uids'])
+
+    tplenv = Environment(loader=FileSystemLoader('./templates/mail'))
+    template = tplenv.get_template('./welcome.html')
+
+    awsses = AWSSES(
+        aws_access_key_id=setting.AWS_ID,
+        aws_secret_access_key=setting.AWS_KEY,
+        source=setting.AWS_SES_FROM)
+
+    for uid in kwargs['uids']:
         logger.info('uid: %s', uid)
         body = template.render(
             name=users[uid]['profile']['badge_name'], )
