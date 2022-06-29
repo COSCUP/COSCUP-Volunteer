@@ -231,6 +231,7 @@
                                       <td>
                                           <span v-if="invoice.status === 'not_send'" class="tag is-warning">還未寄出</span>
                                           <span v-if="invoice.status === 'sent'" class="tag is-success is-light">已寄出</span>
+                                          <span v-if="invoice.status === 'no_invoice'" class="tag is-info is-light">無單據</span>
                                       </td>
                                       <td class="has-text-centered">
                                           <label class="checkbox">
