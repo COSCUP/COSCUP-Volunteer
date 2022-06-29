@@ -160,6 +160,7 @@
                           <div class="control">
                               <span v-if="invoice.status=='not_send'">還未寄出</span>
                               <span v-if="invoice.status=='sent'">已寄出</span>
+                              <span v-if="invoice.status=='no_invoice'">無單據</span>
                           </div>
                       </div>
                       <div class="field">
