@@ -206,15 +206,7 @@
               <div class="content">
                   <h4>檢附單據</h4>
               </div>
-              <div class="field">
-                  <div class="control">
-                      <label class="checkbox">
-                          <input type="checkbox" class="mr-1" v-model="modaldata.no_invoices">
-                          無單據
-                      </label>
-                  </div>
-              </div>
-              <div class="field" v-if="!modaldata.no_invoices" v-for="invoice, index in invoices">
+              <div class="field" v-for="invoice, index in invoices">
                   <div class="field-body">
                       <div class="field">
                           <label class="label">[[ index+1 ]]. 發票號碼或收據</label>
@@ -247,6 +239,7 @@
                                       <option value="" disabled>請選擇</option>
                                       <option value="sent">已寄出</option>
                                       <option value="not_send">還未寄出</option>
+                                      <option value="no_invoice">無單據</option>
                                   </select>
                               </span>
                           </div>
@@ -259,10 +252,10 @@
                       </div>
                   </div>
               </div>
-              <div class="field" v-if="!modaldata.no_invoices">
+              <div class="field">
                   <a class="button is-small is-dark is-outlined" @click="add_invoice">
                       <span class="icon"><i class="fas fa-file-invoice-dollar"></i></span>
-                      <span>新增單據</span>
+                      <span>新增金額項目或單據</span>
                   </a>
               </div>
               <div class="content" v-if="invoices.length > 0">
@@ -392,7 +385,7 @@
             data: {
                 is_loading: 0,
                 select_team: '',
-                modaldata: {show: false, total: 0, no_invoices: false},
+                modaldata: {show: false, total: 0},
                 expense_request: {paydate: '', desc: '', buid: '', code: '', relevant: []},
                 default_expense_request: {paydate: '', desc: '', buid: '', code: '', relevant: []},
                 default_invoice: {name: '', currency: 'TWD', total: 0, status: ''},
@@ -527,10 +520,6 @@
 
                     this.expense_request.buid = this.modaldata._id;
                     this.expense_request.code = this.modaldata.code;
-
-                    if (this.modaldata.no_invoices) {
-                        this.invoices = [];
-                    }
 
                     this.close();
 
