@@ -35,7 +35,7 @@ class Expense:
                 - `invoices`: (List of data).
                     - `currency`: List of the values in [module.budget.Currency][]
                     - `name`: Invoice name.
-                    - `status`: Invoice status. (`not_send`, `sent`)
+                    - `status`: Invoice status. (`not_send`, `sent`, `no_invoice`)
                     - `total`: Invoice total.
                     - `received`: (bool) is received or not.
 
@@ -71,6 +71,9 @@ class Expense:
         }
 
         for invoice in data['invoices']:
+            if invoice['status'] not in ('', 'not_send', 'sent', 'no_invoice'):
+                continue
+
             save['invoices'].append(
                 {
                     'currency': invoice['currency'],
@@ -117,7 +120,7 @@ class Expense:
 
                 - `currency`: List of the values in [module.budget.Currency][]
                 - `name`: Invoice name.
-                - `status`: Invoice status. (`not_send`, `sent`)
+                - `status`: Invoice status. (`not_send`, `sent`, `no_invoice`)
                 - `total`: Invoice total.
                 - `received`: (bool) is received or not.
 
