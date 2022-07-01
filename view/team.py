@@ -1066,4 +1066,14 @@ def team_expense_my(pid, tid):
 
             return jsonify({'data': data})
 
+        if data['casename'] == 'remove':
+            status = ''
+            for expense in Expense.get_by_eid(expense_id=data['eid']):
+                status = expense['status']
+
+            if status in ('1', ):
+                Expense.update_enable(expense_id=data['eid'], enable=False)
+
+            return jsonify({})
+
     return jsonify({}), 404

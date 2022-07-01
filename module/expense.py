@@ -186,6 +186,24 @@ class Expense:
         )
 
     @staticmethod
+    def update_enable(expense_id: str, enable: bool) -> dict[str, Any]:
+        ''' update enable
+
+        Args:
+            expense_id (str): The expense id is the unique `_id`.
+            enable (bool): update the enable.
+
+        Returns:
+            Return the updated data.
+
+        '''
+        return ExpenseDB().find_one_and_update(
+            {'_id': expense_id},
+            {'$set': {'enable': bool(enable)}},
+            return_document=ReturnDocument.AFTER,
+        )
+
+    @staticmethod
     def update_bank(expense_id: str, bank: dict[str, Any]) -> dict[str, Any]:
         ''' Update bank info
 
@@ -240,7 +258,7 @@ class Expense:
             Return the datas in [pymongo.cursor.Cursor][].
 
         '''
-        return ExpenseDB().find({'pid': pid, 'create_by': create_by})
+        return ExpenseDB().find({'pid': pid, 'create_by': create_by, 'enable': True})
 
     @staticmethod
     def get_has_sent(pid: str, budget_id: str) -> Generator[dict[str, Any], None, None]:
@@ -254,7 +272,7 @@ class Expense:
             Return the datas in [pymongo.cursor.Cursor][].
 
         '''
-        query = {'pid': pid, 'request.buid': budget_id}
+        query = {'pid': pid, 'request.buid': budget_id, 'enable': True}
         for raw in ExpenseDB().find(query, {'invoices': 1, 'code': 1}):
             yield raw
 
@@ -267,6 +285,7 @@ class Expense:
             - `request.id`: `expense._id`.
             - `request.pid`: `expense.pid`.
             - `request.tid`: `expense.tid`.
+            - `request.enable`: `expense.enable`.
             - `note.user`: `expense.note.myself`.
             - `note.finance`: `expense.note.to_create`.
             - `budget._id`: `expense.request.buid`.
@@ -285,6 +304,7 @@ class Expense:
                 'request.id': expense['_id'],
                 'request.pid': expense['pid'],
                 'request.tid': expense['tid'],
+                'request.enable': expense['enable'],
                 'note.user': expense['note']['myself'],
                 'note.finance': expense['note']['to_create'],
                 'budget._id': expense['request']['buid'],

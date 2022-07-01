@@ -255,20 +255,28 @@
                       </div>
                   </div>
               </div>
+              <div class="content">
+                  <h4 class="mt-5">取消</h4>
+              </div>
               <div class="field">
                   <div class="control">
-                      <button class="button is-info" @click="close" :class="{'is-loading': modaldata.is_loading}">
-                          確定
-                      </button>
-                      <button class="button is-success is-light is-outlined"
-                             @click="update" :class="{'is-loading': modaldata.is_loading}">
-                          <span class="icon"><i class="far fa-save"></i></span>
-                          <span>更新</span>
+                      <button class="button is-danger is-light is-outlined"
+                             :disabled="!['1'].includes(modaldata.status)"
+                          @click="remove" :class="{'is-loading': modaldata.is_loading}">
+                          取消整份申請單
                       </button>
                   </div>
               </div>
           </section>
           <footer class="modal-card-foot">
+              <button class="button is-info" @click="close" :class="{'is-loading': modaldata.is_loading}">
+                  確定
+              </button>
+              <button class="button is-success is-light is-outlined"
+                     @click="update" :class="{'is-loading': modaldata.is_loading}">
+                  <span class="icon"><i class="far fa-save"></i></span>
+                  <span>更新</span>
+              </button>
           </footer>
       </div>
     </div>
@@ -307,9 +315,16 @@
                     this.modaldata = Object.assign({}, item, {show: true, total: 0});
                     document.querySelector('html').classList.toggle('is-clipped');
                 },
+                remove: function() {
+                    if (window.confirm('確定是否刪除？')) {
+                        ++this.is_loading;
+                        axios.post('./my', {casename: 'remove', eid: this.modaldata._id}).then(function(resp) {
+                            window.location.href = './my';
+                        });
+                    }
+                },
                 update: function() {
                     ++this.is_loading;
-                    console.info(this.modaldata);
                     axios.post('./my', {casename: 'update',
                             eid: this.modaldata._id,
                             invoices: this.modaldata.invoices,

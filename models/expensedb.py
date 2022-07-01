@@ -68,6 +68,7 @@ class ExpenseDB(DBBase):
             - ``releveant_code``: The codes are releveant to others.
             - ``create_by``: Create by who in `uid`.
             - ``create_at``: When to created.
+            - ``enable`` (`bool`): enable or not.
 
         Returns:
             Return an base data object in `dict`.
@@ -89,6 +90,7 @@ class ExpenseDB(DBBase):
             'relevant_code': [],
             'create_by': uid,
             'create_at': datetime.today(),
+            'enable': True,
         }
 
     def add(self, data: dict[str, Any]) -> dict[str, Any]:

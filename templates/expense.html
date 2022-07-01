@@ -82,6 +82,10 @@
                               <span class="icon"><i class="fas fa-clipboard-check"></i></span>
                               <span>[[ status[item.status] ]]</span>
                           </span>
+                          <span class="tag is-danger is-clickable" @click="edit(item, index)" v-if="!item.enable">
+                              <span class="icon"><i class="fas fa-ban"></i></span>
+                              <span>已刪除</span>
+                          </span>
                       </td>
                       <td class="is-vcentered">
                           <span class="tag is-dark">[[ budgets[item.request.buid].bid ]]</span>
@@ -254,6 +258,15 @@
                               <li>分行名稱：[[ modaldata.bank.branch ]]</li>
                               <li>戶名：[[ modaldata.bank.name ]]</li>
                           </ul>
+                      </div>
+                      <div class="content">
+                          <h4>申請單狀態</h4>
+                          <div class="select">
+                              <select v-model="modaldata.enable">
+                                  <option :value='true'>可使用</option>
+                                  <option :value='false'>已刪除</option>
+                              </select>
+                          </div>
                       </div>
                   </div>
               </div>
