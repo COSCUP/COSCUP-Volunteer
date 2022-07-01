@@ -61,6 +61,8 @@ def by_project_index(pid):
             # update invoices
             Expense.update_invoices(
                 expense_id=data['data']['_id'], invoices=data['data']['invoices'])
+            Expense.update_enable(
+                expense_id=data['data']['_id'], enable=data['data']['enable'])
             result = Expense.update_status(
                 expense_id=data['data']['_id'], status=data['data']['status'])
 
