@@ -71,10 +71,14 @@
                               <span>[[ status[item.status] ]]</span>
                           </span>
                           <span class="tag is-link is-clickable" @click="edit(item, index)" v-if="item.status == '2'">
+                              <span class="icon"><i class="fas fa-bolt"></i></span>
+                              <span>[[ status[item.status] ]]</span>
+                          </span>
+                          <span class="tag is-primary is-clickable" @click="edit(item, index)" v-if="item.status == '3'">
                               <span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
                               <span>[[ status[item.status] ]]</span>
                           </span>
-                          <span class="tag is-success is-clickable" @click="edit(item, index)" v-if="item.status == '3'">
+                          <span class="tag is-success is-clickable" @click="edit(item, index)" v-if="item.status == '4'">
                               <span class="icon"><i class="fas fa-clipboard-check"></i></span>
                               <span>[[ status[item.status] ]]</span>
                           </span>

@@ -1033,4 +1033,30 @@ def team_expense_my(pid, tid):
 
             return jsonify({'teams': teams, 'items': items, 'budgets': budgets,
                             'users': users, 'status': Expense.status()})
+
+        if data['casename'] == 'update_invoices':
+            invoices = {}
+            status = ''
+            for expense in Expense.get_by_eid(expense_id=data['eid']):
+                status = expense['status']
+                for invoice in expense['invoices']:
+                    invoices[invoice['iv_id']] = invoice
+
+            for invoice in data['invoices']:
+                if invoice['iv_id'] in invoices:
+                    if status in ('1', ):
+                        invoices[invoice['iv_id']
+                                 ]['total'] = invoice['total']
+
+                    if status in ('1', '2', '3'):
+                        invoices[invoice['iv_id']
+                                 ]['status'] = invoice['status'].strip()
+                        invoices[invoice['iv_id']
+                                 ]['name'] = invoice['name'].strip()
+
+            Expense.update_invoices(
+                expense_id=data['eid'], invoices=list(invoices.values()))
+
+            return jsonify({'data': data})
+
     return jsonify({}), 404

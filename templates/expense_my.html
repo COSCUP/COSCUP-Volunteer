@@ -33,10 +33,14 @@
                               <span>[[ status[item.status] ]]</span>
                           </span>
                           <span class="tag is-link is-clickable" @click="edit(item, index)" v-if="item.status == '2'">
+                              <span class="icon"><i class="fas fa-bolt"></i></span>
+                              <span>[[ status[item.status] ]]</span>
+                          </span>
+                          <span class="tag is-primary is-clickable" @click="edit(item, index)" v-if="item.status == '3'">
                               <span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
                               <span>[[ status[item.status] ]]</span>
                           </span>
-                          <span class="tag is-success is-clickable" @click="edit(item, index)" v-if="item.status == '3'">
+                          <span class="tag is-success is-clickable" @click="edit(item, index)" v-if="item.status == '4'">
                               <span class="icon"><i class="fas fa-clipboard-check"></i></span>
                               <span>[[ status[item.status] ]]</span>
                           </span>
@@ -100,7 +104,7 @@
                                               </select>
                                           </span>
                                       </div>
-                                      <div class="filed">
+                                      <div class="field">
                                           <input class="input is-small" type="text" v-model="budgets[modaldata.request['buid'] ].uid" disabled>
                                       </div>
                                   </div>
@@ -145,28 +149,50 @@
                   <div class="field-body">
                       <div class="field">
                           <div class="control">
-                              [[ index+1 ]]. [[ invoice.name ]]
+                              [[ index+1 ]].
                           </div>
                       </div>
                       <div class="field">
                           <div class="control">
-                              <div class="tags has-addons">
-                                  <span class="tag is-info">[[ invoice.currency ]]</span>
-                                  <span class="tag is-success is-light">$[[ invoice.total.toLocaleString('en') ]]</span>
+                              <input class="input" type="text" v-model="invoice.name"
+                                    :disabled="!['1', '2', '3'].includes(modaldata.status)">
+                          </div>
+                      </div>
+                      <div class="field">
+                          <div class="field has-addons">
+                              <div class="control">
+                                  <span class="select">
+                                      <select v-model="invoice.currency" disabled>
+                                          <option>TWD</option>
+                                          <option>USD</option>
+                                      </select>
+                                  </span>
+                              </div>
+                              <div class="control">
+                                  <input class="input" type="number" step="0.01" v-model.number="invoice.total"
+                                  :disabled="!['1'].includes(modaldata.status)">
                               </div>
                           </div>
                       </div>
-                      <div class="field">
+                      <div class="field" :disabled="['4'].includes(modaldata.status)">
                           <div class="control">
-                              <span v-if="invoice.status=='not_send'">還未寄出</span>
-                              <span v-if="invoice.status=='sent'">已寄出</span>
-                              <span v-if="invoice.status=='no_invoice'">無單據</span>
+                              <span class="select">
+                                  <select v-model="invoice.status">
+                                      <option value="not_send">還未寄出</option>
+                                      <option value="sent">已寄出</option>
+                                      <option value="no_invoice">無單據</option>
+                                  </select>
+                              </span>
                           </div>
                       </div>
                       <div class="field">
                           <div class="control">
-                              <span v-if="invoice.received">還未收到</span>
-                              <span v-if="!invoice.received">已收到</span>
+                              <span class="select">
+                                  <select v-model="invoice.received" disabled>
+                                      <option value="false">還未收到</option>
+                                      <option value="false">已收到</option>
+                                  </select>
+                              </span>
                           </div>
                       </div>
                   </div>
@@ -175,6 +201,11 @@
                   <div class="control">
                       <button class="button is-info" @click="close" :class="{'is-loading': modaldata.is_loading}">
                           確定
+                      </button>
+                      <button class="button is-success is-light is-outlined"
+                             @click="update_invoices" :class="{'is-loading': modaldata.is_loading}">
+                          <span class="icon"><i class="far fa-save"></i></span>
+                          <span>更新</span>
                       </button>
                   </div>
               </div>
@@ -217,6 +248,15 @@
                 edit: function(item, index) {
                     this.modaldata = Object.assign({}, item, {show: true, total: 0});
                     document.querySelector('html').classList.toggle('is-clipped');
+                },
+                update_invoices: function() {
+                    ++this.is_loading;
+                    console.info(this.modaldata);
+                    axios.post('./my', {casename: 'update_invoices',
+                            eid: this.modaldata._id,
+                            invoices: this.modaldata.invoices}).then(function(resp) {
+                        window.location.href = './my';
+                    });
                 },
                 load: function() {
                     ++this.is_loading;
