@@ -57,6 +57,9 @@ GNU Affero General Public License version 3 (AGPL-3.0)
 您可能需要先安裝 `libmemcached` 和 `poetry`，才能安裝依賴。
 
     brew install libmemcached  # macOS
+    dnf install libmemcached  # Fedora
+    yum install epel-release && yum install libmemcached.x86_64  # CentOS/Rocky Linux
+    apt-get install libmemcached11 # Debian/Ubuntu
 
 Poetry 的安裝請使用[官方文件](https://python-poetry.org/docs/)建議安裝在全域環境。
 

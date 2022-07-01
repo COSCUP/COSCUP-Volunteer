@@ -56,9 +56,17 @@ If you want development at root system instead of docker containers, please inst
 
         brew install libmemcached
 
-=== "Ubuntu"
+=== "Debian/Ubuntu"
 
-        apt-get install libmemcached-dev
+        apt-get install libmemcached11
+
+=== "Fedora"
+
+        dnf install libmemcached
+
+=== "CentOS/Rocky Linux"
+
+        yum install epel-release && yum install libmemcached.x86_64
 
 ## Development Environment
 
