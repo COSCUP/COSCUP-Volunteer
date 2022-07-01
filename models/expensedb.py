@@ -34,12 +34,13 @@ class ExpenseDB(DBBase):
         ''' Status mapping
 
         Returns:
-            `1`: `已申請`, `2`: `已出款`, `3`: `已完成`.
+            `1`: `已申請`, `2`: `處理中`, `3`: `已出款`, `4`: `已完成`.
 
         '''
         return {'1': '已申請',
-                '2': '已出款',
-                '3': '已完成',
+                '2': '處理中',
+                '3': '已出款',
+                '4': '已完成',
                 }
 
     @staticmethod
@@ -57,7 +58,7 @@ class ExpenseDB(DBBase):
             - ``tid``: Team id.
             - ``request``: This object include the budget data in
                            `buid`, `desc`, `paydate`, `code`.
-            - ``invoices``: List of invoice data, in
+            - ``invoices``: List of invoice data, in `iv_id`,
                             `currency`, `name`, `status`, `total`, `received`.
             - ``bank``: User's bank account info, the data from user's
                         real_profile in settings.
@@ -82,7 +83,7 @@ class ExpenseDB(DBBase):
             'request': {},
             'invoices': [],
             'bank': {},
-            'status': '1',  # 已申請/已出款/已完成
+            'status': '1',  # 已申請/處理中/已出款/已完成
             'note': {'myself': '', 'to_create': ''},
             'code': f"E-{''.join(choices(string.ascii_uppercase+string.digits, k=4))}",
             'relevant_code': [],

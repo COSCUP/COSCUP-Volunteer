@@ -1,4 +1,6 @@
 ''' Expense '''
+import string
+from random import choices
 from typing import Any, Generator
 
 from pymongo.collection import ReturnDocument
@@ -33,6 +35,7 @@ class Expense:
                     - `name`: Account name.
                     - `no`: Account no.
                 - `invoices`: (List of data).
+                    - `iv_id`: Invoice id
                     - `currency`: List of the values in [module.budget.Currency][]
                     - `name`: Invoice name.
                     - `status`: Invoice status. (`not_send`, `sent`, `no_invoice`)
@@ -76,6 +79,7 @@ class Expense:
 
             save['invoices'].append(
                 {
+                    'iv_id': f"IV-{''.join(choices(string.ascii_uppercase+string.digits, k=4))}",
                     'currency': invoice['currency'],
                     'name': invoice['name'],
                     'status': invoice['status'],
@@ -110,6 +114,20 @@ class Expense:
             yield raw
 
     @staticmethod
+    def get_by_eid(expense_id: str) -> Generator[dict[str, Any], None, None]:
+        ''' Get one expense data
+
+        Args:
+            expense_id (str): Expense id.
+
+        Yields:
+            Return the expenses data in `expense_id`.
+
+        '''
+        for raw in ExpenseDB().find({'_id': expense_id}):
+            yield raw
+
+    @staticmethod
     def update_invoices(expense_id: str, invoices: list[dict[str, Any]]) -> dict[str, Any]:
         ''' Only update invoices
 
@@ -118,6 +136,7 @@ class Expense:
             invoices (list): List of invoice datas.
                 These fields are required:
 
+                - `iv_id`: Invoice id
                 - `currency`: List of the values in [module.budget.Currency][]
                 - `name`: Invoice name.
                 - `status`: Invoice status. (`not_send`, `sent`, `no_invoice`)
@@ -134,7 +153,8 @@ class Expense:
         _invoices = []
         for invoice in invoices:
             _invoices.append(
-                {'currency': invoice['currency'].strip(),
+                {'iv_id': invoice['iv_id'].strip(),
+                 'currency': invoice['currency'].strip(),
                  'name': invoice['name'].strip(),
                  'status': invoice['status'].strip(),
                  'total': invoice['total'],
