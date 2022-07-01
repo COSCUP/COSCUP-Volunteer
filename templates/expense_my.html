@@ -187,10 +187,10 @@
                       </div>
                       <div class="field">
                           <div class="control">
-                              <span class="select">
+                              <span class="select" :class="{'is-success': invoice.received, 'is-danger': !invoice.received}">
                                   <select v-model="invoice.received" disabled>
                                       <option value="false">還未收到</option>
-                                      <option value="false">已收到</option>
+                                      <option value="true">已收到</option>
                                   </select>
                               </span>
                           </div>
