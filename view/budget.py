@@ -1,7 +1,6 @@
 ''' Budget '''
 import csv
 import io
-from typing import cast
 
 from flask import Blueprint, g, jsonify, redirect, render_template, request
 
@@ -29,7 +28,7 @@ def batch(pid):
 
     if request.method == 'POST':
         if request.is_json:
-            data = cast(dict, request.get_json())
+            data = request.get_json()
 
             if data and data.get('casename') == 'get':
                 teams = [
@@ -48,13 +47,18 @@ def batch(pid):
             dedup_result = []
             dup_bids = []
 
-            # Conditions
-            #
-            # ``item`` will be defined in the following loop.
-            has_bid_in_budget = lambda bid: Budget.get_by_bid(pid=pid, bid=bid)
-            has_added = lambda item: item['action'] == 'add' and has_bid_in_budget(item['bid'])
-            did_update_nonexisted_entry = lambda item: \
-                item['action'] == 'update' and not has_bid_in_budget(item['bid'])
+            # Pylint unnecessary-lambda-assignment / C3001
+            # Lambda expression assigned to a variable.
+            # Define a function using the "def" keyword instead.
+            def has_bid_in_budget(
+                bid): return Budget.get_by_bid(pid=pid, bid=bid)
+
+            def has_added(item): return item['action'] == 'add' and has_bid_in_budget(
+                item['bid'])
+
+            def did_update_nonexisted_entry(item): return \
+                item['action'] == 'update' and not has_bid_in_budget(
+                    item['bid'])
 
             for item in result:
                 if has_added(item) or did_update_nonexisted_entry(item):
@@ -100,7 +104,7 @@ def by_project_index(pid):
         return render_template('./budget.html', project=project, is_admin=is_admin)
 
     if request.method == 'POST':
-        data = cast(dict, request.get_json())
+        data = request.get_json()
 
         if data['casename'] == 'get':
             teams = []
@@ -129,6 +133,9 @@ def by_project_index(pid):
                 items.append(item)
 
             return jsonify({'teams': teams, 'default_budget': default_budget, 'items': items})
+
+        if data['casename'] == 'check_bid':
+            return jsonify({'existed': bool(Budget.get_by_bid(pid=pid, bid=data['bid']))})
 
         if data['casename'] == 'add':
             item = Budget.add(

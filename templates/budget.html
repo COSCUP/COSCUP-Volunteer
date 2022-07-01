@@ -63,7 +63,7 @@
                   </tr>
                   <tr v-for="item, index in items" :class="{'is-delete': item.enabled === 'false'}">
                       <td>
-                          [[ item.bid ]]
+                          <a class="is-link" @click="edit(item, index)">[[ item.bid ]]</a>
                       </td>
                       <td>
                           <span class="tag is-success is-light">[[ item.code ]]</span>
@@ -92,9 +92,10 @@
               <div class="field">
                   <label class="label">編號</label>
                   <div class="control">
-                      <input class="input" type="text" v-model.trim="modaldata.bid" required>
+                      <input class="input" type="text"
+                             :class="{'is-danger': bid_is_exised}" v-model.trim.lazy="modaldata.bid" required>
                   </div>
-                  <p class="help is-info">預算表上的流水號</p>
+                  <p class="help is-info">預算表上的流水號。<span v-if="bid_is_exised" class="has-text-danger">重複的預算編號！</span></p>
               </div>
               <div class="field">
                   <div class="field-body">
@@ -206,9 +207,22 @@
                 items: [],
                 modaldata: {show: false},
                 default_modaldata: {show: false, is_loading: 0},
+                bid_is_exised: false
             },
             mounted: function() {
                 this.load();
+            },
+            watch: {
+                'modaldata.bid': function(bid) {
+                    let $this = this;
+                    if (bid.length > 0) {
+                        axios.post('./'+this.pid, {casename: 'check_bid', bid: bid}).then(function(resp) {
+                            $this.bid_is_exised = resp.data.existed;
+                        });
+                    } else {
+                        $this.bid_is_exised = false;
+                    }
+                }
             },
             methods: {
                 create_budget: function() {
