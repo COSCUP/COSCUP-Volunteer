@@ -174,10 +174,10 @@
                               </div>
                           </div>
                       </div>
-                      <div class="field" :disabled="['4'].includes(modaldata.status)">
+                      <div class="field">
                           <div class="control">
                               <span class="select">
-                                  <select v-model="invoice.status">
+                                  <select v-model="invoice.status" :disabled="['4'].includes(modaldata.status)">
                                       <option value="not_send">還未寄出</option>
                                       <option value="sent">已寄出</option>
                                       <option value="no_invoice">無單據</option>
@@ -197,13 +197,71 @@
                       </div>
                   </div>
               </div>
+              <div class="content">
+                  <h4 class="mt-5">其他</h4>
+              </div>
+              <div class="field" v-if="modaldata.request != undefined">
+                  <label class="label">期望出款時間</label>
+                  <div class="control">
+                      <input class="input" type="date" v-model="modaldata.request.paydate">
+                  </div>
+              </div>
+              <div class="field" v-if="modaldata.request != undefined">
+                  <label class="label">其他補充說明</label>
+                  <div class="control">
+                      <textarea class="textarea" type="text" v-model.trim="modaldata.request.desc"></textarea>
+                  </div>
+              </div>
+              <div class="content">
+                  <h4 class="mt-5">設定撥款資訊</h4>
+              </div>
+              <div class="field" v-if="modaldata.bank != undefined">
+                  <div class="field-body">
+                      <div class="field">
+                          <label class="label">銀行代碼</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="modaldata.bank.code" required
+                              :disabled="['2', '3', '4'].includes(modaldata.status)">
+                          </div>
+                          <p class="help is-success">銀行代碼</p>
+                      </div>
+                      <div class="field">
+                          <label class="label">銀行帳號</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="modaldata.bank.no" required
+                              :disabled="['2', '3', '4'].includes(modaldata.status)">
+                          </div>
+                          <p class="help is-success">銀行帳號</p>
+                      </div>
+                  </div>
+              </div>
+              <div class="field" v-if="modaldata.bank != undefined">
+                  <div class="field-body">
+                      <div class="field">
+                          <label class="label">分行名稱</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="modaldata.bank.branch" required
+                              :disabled="['2', '3', '4'].includes(modaldata.status)">
+                          </div>
+                          <p class="help is-success">例：新莊分行，也可以<a target="_blank" href="https://www.fisc.com.tw/tc/download/twd.txt">查詢</a>這張表。</p>
+                      </div>
+                      <div class="field">
+                          <label class="label">戶名</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="modaldata.bank.name" required
+                              :disabled="['2', '3', '4'].includes(modaldata.status)">
+                          </div>
+                          <p class="help is-success">帳戶名稱，通常是本名為戶名</p>
+                      </div>
+                  </div>
+              </div>
               <div class="field">
                   <div class="control">
                       <button class="button is-info" @click="close" :class="{'is-loading': modaldata.is_loading}">
                           確定
                       </button>
                       <button class="button is-success is-light is-outlined"
-                             @click="update_invoices" :class="{'is-loading': modaldata.is_loading}">
+                             @click="update" :class="{'is-loading': modaldata.is_loading}">
                           <span class="icon"><i class="far fa-save"></i></span>
                           <span>更新</span>
                       </button>
@@ -249,12 +307,15 @@
                     this.modaldata = Object.assign({}, item, {show: true, total: 0});
                     document.querySelector('html').classList.toggle('is-clipped');
                 },
-                update_invoices: function() {
+                update: function() {
                     ++this.is_loading;
                     console.info(this.modaldata);
-                    axios.post('./my', {casename: 'update_invoices',
+                    axios.post('./my', {casename: 'update',
                             eid: this.modaldata._id,
-                            invoices: this.modaldata.invoices}).then(function(resp) {
+                            invoices: this.modaldata.invoices,
+                            bank: this.modaldata.bank,
+                            req: this.modaldata.request,
+                        }).then(function(resp) {
                         window.location.href = './my';
                     });
                 },

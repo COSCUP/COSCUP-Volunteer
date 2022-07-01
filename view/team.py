@@ -1034,7 +1034,7 @@ def team_expense_my(pid, tid):
             return jsonify({'teams': teams, 'items': items, 'budgets': budgets,
                             'users': users, 'status': Expense.status()})
 
-        if data['casename'] == 'update_invoices':
+        if data['casename'] == 'update':
             invoices = {}
             status = ''
             for expense in Expense.get_by_eid(expense_id=data['eid']):
@@ -1056,6 +1056,13 @@ def team_expense_my(pid, tid):
 
             Expense.update_invoices(
                 expense_id=data['eid'], invoices=list(invoices.values()))
+
+            if status in ('1', ):
+                Expense.update_bank(expense_id=data['eid'], bank=data['bank'])
+
+            if status in ('1', '2', '3'):
+                Expense.update_request(
+                    expense_id=data['eid'], rdata=data['req'])
 
             return jsonify({'data': data})
 
