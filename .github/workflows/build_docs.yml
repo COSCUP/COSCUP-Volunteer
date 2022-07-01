@@ -6,9 +6,9 @@ on:
       - master
       - 'dev_docs'
     paths:
-      - 'models/*'
-      - 'module/*'
-      - 'docs_dev/*'
+      - 'models/**'
+      - 'module/**'
+      - 'docs_dev/**'
       - '.github/workflows/build_docs.yml'
   workflow_dispatch:
 
