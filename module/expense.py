@@ -186,6 +186,49 @@ class Expense:
         )
 
     @staticmethod
+    def update_bank(expense_id: str, bank: dict[str, Any]) -> dict[str, Any]:
+        ''' Update bank info
+
+        Args:
+            expense_id (str): The expense id is the unique `_id`.
+            bank (dict): The user's bank info.
+
+        Returns:
+            Return the updated data.
+
+        '''
+        data = {}
+        for key in ('branch', 'code', 'name', 'no'):
+            data[key] = bank[key].strip()
+
+        return ExpenseDB().find_one_and_update(
+            {'_id': expense_id},
+            {'$set': {'bank': data}},
+            return_document=ReturnDocument.AFTER,
+        )
+
+    @staticmethod
+    def update_request(expense_id: str, rdata: dict[str, Any]) -> dict[str, Any]:
+        '''  update partially
+
+        Args:
+            expense_id (str): The expense id is the unique `_id`.
+            rdata (dict): The request data partially.
+
+        Returns:
+            Return the updated data.
+
+        '''
+        return ExpenseDB().find_one_and_update(
+            {'_id': expense_id},
+            {'$set': {
+                'request.desc': rdata['desc'].strip(),
+                'request.paydate': rdata['paydate'].strip(),
+            }},
+            return_document=ReturnDocument.AFTER,
+        )
+
+    @staticmethod
     def get_by_create_by(pid: str, create_by: str) -> Cursor[dict[str, Any]]:
         ''' Get by create_by
 
