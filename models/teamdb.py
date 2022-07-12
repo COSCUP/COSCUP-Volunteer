@@ -3,6 +3,7 @@ from time import time
 from typing import Any, Optional
 
 from pymongo.collection import ReturnDocument
+from pymongo.results import DeleteResult
 
 from models.base import DBBase
 
@@ -91,6 +92,16 @@ class TeamDB(DBBase):
             {'$set': data},
             upsert=True,
             return_document=ReturnDocument.AFTER,
+        )
+
+    def delete(self) -> DeleteResult:
+        ''' Delete this team from database
+
+        Returns:
+            Return ``DeleteResult``.
+        '''
+        return self.delete_one(
+            {'pid': self.pid, 'tid': self.tid},
         )
 
     def update_setting(self, data: dict[str, Any]) -> dict[str, Any]:

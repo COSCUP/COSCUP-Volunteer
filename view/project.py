@@ -332,7 +332,7 @@ def project_form_api(pid):
     return jsonify({}), 404
 
 
-@VIEW_PROJECT.route('/<pid>/edit/team/api', methods=('GET', 'POST'))
+@VIEW_PROJECT.route('/<pid>/edit/team/api', methods=('GET', 'POST', 'DELETE'))
 def project_edit_create_team_api(pid):
     ''' Project edit create team API '''
     project = Project.get(pid)
@@ -385,6 +385,16 @@ def project_edit_create_team_api(pid):
             Team.create(
                 pid=pid, tid=data['tid'], name=data['name'], owners=project['owners'])
             return f'{data}'
+
+    if request.method == 'DELETE':
+        tid = request.args.get('tid')
+
+        if not tid:
+            return 'missing “tid” in request payload', 400
+
+        result = Team.delete(pid, tid)
+
+        return ('ok', 200) if result else ('delete failed', 500)
 
     return '', 404
 

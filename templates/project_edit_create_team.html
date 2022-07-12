@@ -8,7 +8,13 @@
             <ul>
             {% for team in teams %}
             <li>
-                {{team.name}} ({{team.tid}}) <a v-on:click="showedit('{{team.tid}}', '{{team.name}}')"><span class="icon"><i class="far fa-edit"></i></span><span>編輯</span></a>
+                {{team.name}} ({{team.tid}})
+                <a v-on:click="showedit('{{team.tid}}', '{{team.name}}')">
+                    <span class="icon"><i class="far fa-edit"></i></span><span>編輯</span>
+                </a>
+                <a v-on:click="showdelete('{{team.tid}}', '{{team.name}}')">
+                    <span class="icon"><i class="far fa-trash-alt"></i></span><span>刪除</span>
+                </a>
             </li>
             {% endfor %}
             <li><a v-on:click="showcreate()"><span class="icon"><i class="far fa-plus-square"></i></span><span>建立</span></a></li>
@@ -109,6 +115,18 @@
                         $project.modalBody.submittype = 'update';
                         $project.fixpage();
                     });
+                },
+                showdelete: function (tid, name) {
+                    const shouldDelete = confirm(`要從資料庫移除 ${name} (${tid}) 嗎？`);
+                    if (!shouldDelete) return;
+
+                    return axios.delete('./team/api', { params: { tid }})
+                        .then((response) => {
+                            location.reload();
+                        })
+                        .catch(() => {
+                            alert(`無法刪除 TID ${tid}。`);
+                        });
                 },
                 showcreate: function() {
                     this.modalTitle = '建立新的組別';

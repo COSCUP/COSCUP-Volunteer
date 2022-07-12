@@ -32,6 +32,21 @@ class Team:
         return teamdb.add(data)
 
     @staticmethod
+    def delete(pid: str, tid: str) -> bool:
+        ''' Delete the specified team from database
+
+        :param str pid: project id
+        :param str tid: team id
+        '''
+        if not tid or not pid:
+            raise Exception('lost required')
+
+        teamdb = TeamDB(pid, tid)
+        result = teamdb.delete()
+
+        return result.deleted_count == 1
+
+    @staticmethod
     def update_chiefs(pid: str, tid: str,
                       add_uids: Optional[list[str]] = None,
                       del_uids: Optional[list[str]] = None) -> None:
