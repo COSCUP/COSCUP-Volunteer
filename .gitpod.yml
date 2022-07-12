@@ -1,0 +1,42 @@
+image: gitpod/workspace-python-3.10
+
+tasks:
+  - name: Install libmemcached
+    before: |
+      sudo install-packages libmemcached-dev
+      gp sync-done libmemcached
+
+  - name: Build COSCUP Web (Base) Image
+    init: |
+      docker build -t coscupweb-base:22.06.13 -f ./Dockerfile-base-dev ./
+      gp sync-done coscup-base
+
+  - name: Install dependencies
+    before: |
+      pip install --no-cache-dir poetry
+      poetry config virtualenvs.path /workspace/.cache/poetry
+    init: |
+      gp sync-await libmemcached
+      poetry install
+
+  - name: Prebuild COSCUP Web (App) Image
+    init: |
+      # https://volunteer.coscup.org/docs/dev/build-base-image/#settingpy
+      cp setting_sample.py setting.py
+      sed -i 's/MONGO_MOCK = True/MONGO_MOCK = False/g' setting.py
+
+      # https://volunteer.coscup.org/docs/dev/build-base-image/#compose-up
+      gp sync-await coscup-base
+      docker compose build
+    command: |
+      docker compose up
+
+vscode:
+  extensions:
+    - "donjayamanne.python-extension-pack"
+    - "ms-azuretools.vscode-docker"
+
+ports:
+  - name: COSCUP Volunteer Instance
+    port: 80
+    onOpen: open-browser

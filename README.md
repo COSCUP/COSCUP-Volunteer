@@ -11,6 +11,14 @@ GNU Affero General Public License version 3 (AGPL-3.0)
 
 目前我們使用 `docker compose` 的方式進行開發，可以使用 `docker compose up` 來建立與啟動必要的服務。完成後可以連到 `http://127.0.0.1:80` 看到首頁！
 
+### Gitpod
+
+您可以使用 Gitpod，使用我們預先配置好的環境，直接在雲端主機上進行開發。使用 Gitpod 就不需要自行編譯 base image、設定 settings.py 和 app image，直接從 [建立使用者帳號](https://volunteer.coscup.org/docs/dev/build-base-image/#create-first-user-account) 開始操作即可。
+
+使用 Gitpod 可以省下很大的環境配置時間，惟您可能需要注意 Gitpod 的 `Remaining hours` 開發時間限制。
+
+[![在 Gitpod 開啟](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/COSCUP/COSCUP-Volunteer)
+
 ### Code Style
 
 - [pylint](https://pypi.org/project/pylint/)
