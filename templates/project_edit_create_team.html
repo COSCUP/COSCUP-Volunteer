@@ -27,14 +27,14 @@
                         <div class="control">
                             <input class="input" type="text" name="name" v-model="modalBody.name">
                         </div>
-                        <p class="help is-success">組別名稱</p>
+                        <p class="help is-success">組別名稱。<b>必填。</b></p>
                     </div>
                     <div class="field">
                         <label class="label">tid</label>
                         <div class="control">
                             <input class="input" type="text" name="tid" v-model="modalBody.tid" v-bind:readonly="modalBody.submittype === 'update'">
                         </div>
-                        <p class="help is-success">組別 id，皆用英文表示</p>
+                        <p class="help is-success">組別 id，皆用英文表示。<b>必填。</b></p>
                     </div>
                     <div class="field">
                         <label class="label">headcount</label>
@@ -118,10 +118,19 @@
                 },
                 gosubmit: function(btn) {
                     btn.target.classList.add('is-loading');
+
                     axios.post('./team/api', this.modalBody).then(function(resp){
                         $project.goback();
                         window.location.href = './team';
-                    });
+                    }).catch(function (error) {
+                        const statusCode = error.response?.status;
+
+                        if (statusCode && statusCode >= 500) {
+                            alert('資料有誤，請檢查資料是否正確。另外 name 和 tid 必須填寫。');
+                        } else {
+                            alert(`請求失敗。伺服器回傳 HTTP ${statusCode} 錯誤。`);
+                        }
+                    }).finally(() => btn.target.classList.remove('is-loading'));
                 },
                 fixpage: function() {
                     this.isActive = true;
