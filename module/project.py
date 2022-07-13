@@ -65,13 +65,13 @@ class Project:
                          `name`, `desc`, `volunteer_certificate_hours`, `calendar`,
                          `mailling_staff`, `mailling_leader`, `shared_drive`,
                          `mattermost_ch_id`, `traffic_fee_doc`, `gitlab_project_id`,
-                         `parking_card`.
+                         `parking_card`, `archived'.
 
         '''
         _data = {}
         for k in ('name', 'desc', 'volunteer_certificate_hours', 'calendar',
                   'mailling_staff', 'mailling_leader', 'shared_drive', 'mattermost_ch_id',
-                  'traffic_fee_doc', 'gitlab_project_id', 'parking_card'):
+                  'traffic_fee_doc', 'gitlab_project_id', 'parking_card', 'archived'):
             if k in data:
                 _data[k] = data[k]
 

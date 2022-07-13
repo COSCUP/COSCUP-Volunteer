@@ -32,6 +32,7 @@ class ProjectDB(DBBase):
         - ``traffic_fee_doc``: The announcement URL of the traffic subsidy document.
         - ``volunteer_certificate_hours``: The hours for volunteers to apply for.
         - ``parking_card``: The options for parking card in form.
+        - ``archived``: Indicate whether the project has been archived.
 
     TODO:
         Need refactor in pydantic.

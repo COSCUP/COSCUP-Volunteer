@@ -349,6 +349,8 @@ def team_join_to(pid, tid):
     ''' Team join to '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
+    archived = project.get('archived', False)
+
     if _redirect:
         return _redirect
 
@@ -359,14 +361,19 @@ def team_join_to(pid, tid):
         is_in_wait = WaitList.is_in_wait(
             pid=team['pid'], tid=team['tid'], uid=g.user['account']['_id'])
 
-        if not is_in_wait and 'public_desc' in team:
+        # Allow user reading the description of the “archived” team.
+        if (not is_in_wait or archived) and 'public_desc' in team:
             team['public_desc'] = re.sub('<a href="javascript:.*"', '<a href="/"',
                                          markdown(html.escape(team['public_desc'])))
 
         return render_template('./team_join_to.html',
-                               project=project, team=team, is_in_wait=is_in_wait)
+                               project=project, team=team,
+                               is_in_wait=is_in_wait, archived=archived)
 
     if request.method == 'POST':
+        if archived:
+            return 'Not opened for signup.', 405
+
         WaitList.join_to(
             pid=pid, tid=tid, uid=g.user['account']['_id'], note=request.form['note'].strip())
         TeamMemberChangedDB().make_record(

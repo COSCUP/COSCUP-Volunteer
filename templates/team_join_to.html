@@ -58,6 +58,7 @@
                       </div>
                       <p class="help is-success">可以留下訊息或是簡介讓組長方便審閱。</p>
                   </div>
+                  {% if not archived %}
                   <div class="field">
                       <div class="control">
                           <button class="button is-link is-fullwidth" type="submit">
@@ -66,6 +67,15 @@
                           </button>
                       </div>
                   </div>
+                  {% else %}
+                  <div>
+                      這個頁面是上一次 COSCUP 活動的紀錄，為過時資訊，僅供參考使用，故不開放加入。
+                      <br>
+                      您或許想要申請本年度的 COSCUP 志工？請回到「
+                      <a href="/project">投出組別申請</a>
+                      」頁面，尋找本年度的 COSCUP 活動。
+                  </div>
+                  {% endif %}
               </form>
               {% endif %}
           </div>

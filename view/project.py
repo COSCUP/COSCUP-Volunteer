@@ -31,6 +31,7 @@ def index():
     for data in datas:
         date = arrow.get(data['action_date'])
         data['action_date_str'] = f"{date.format('YYYY-MM-DD')} ({date.humanize(arrow.now())})"
+        data.setdefault('archived', False)
 
     per = 3
     for i in range(int(math.ceil(len(datas) / float(per)))):
@@ -53,6 +54,8 @@ def project_edit(pid):
         if 'parking_card' in project:
             project['parking_card'] = ', '.join(project['parking_card'])
 
+        project.setdefault('archived', False)
+
         return render_template('./project_edit.html', project=project)
 
     if request.method == 'POST':
@@ -69,6 +72,7 @@ def project_edit(pid):
             'traffic_fee_doc': request.form['traffic_fee_doc'].strip(),
             'gitlab_project_id': request.form['gitlab_project_id'].strip(),
             'parking_card': list(map(str.strip, request.form['parking_card'].strip().split(','))),
+            'archived': bool(request.form.get('archived'))
         }
         Project.update(pid, data)
         return redirect(url_for('project.project_edit', pid=pid, _scheme='https', _external=True))

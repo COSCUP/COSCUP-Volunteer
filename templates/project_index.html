@@ -21,7 +21,11 @@
               <article class="message is-dark">
                   <div class="message-header">
                       <p>
+                          {% if project.archived %}
+                          <span class="icon"><i class="fas fa-lock"></i></span>
+                          {% else %}
                           <span class="icon"><i class="fas fa-project-diagram"></i></span>
+                          {% endif %}
                           <span>{{project.name}}</span>
                       </p>
                   </div>

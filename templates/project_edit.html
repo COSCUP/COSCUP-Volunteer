@@ -83,6 +83,13 @@
                 <p class="help is-success">Project ID，給予邀請加入使用 Issue Board</p>
             </div>
             <div class="field">
+                <label class="checkbox">
+                    <input type="checkbox" name="archived" {{"checked" if project.archived else ""}}>
+                    封存專案
+                </label>
+                <p class="help is-success">讓專案進入唯讀模式，防止其他人送出申請。</p>
+            </div>
+            <div class="field">
                 <div class="control">
                     <button class="button is-primary" type="submit">Update</button>
                     <a class="button" href="/project/{{project._id}}">Cancel</a>
