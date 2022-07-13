@@ -25,7 +25,9 @@ def index() -> Text:
         data = request.get_json()
 
         if data:
-            if 'casename' in data and data['casename'] == 'get':
+            casename = data.get('casename')
+
+            if casename == 'get':
                 accounts = []
                 for user in UsersDB().find():
                     accounts.append(user)
@@ -41,10 +43,17 @@ def index() -> Text:
                     'projects': list(Project.all()),
                 })
 
-            if 'casename' in data and data['casename'] == 'create_project':
+            if casename == 'create_project':
                 usession = USessionDB().find_one({'_id': session['sid']})
                 if usession:
                     project_data = data['project']
+
+                    # Check the data format.
+                    for field in ['pid', 'name', 'action_date']:
+                        # If the data is empty…
+                        if project_data.get(field, "") == "":
+                            return f"{field} should not be empty", 400
+
                     Project.create(pid=project_data['pid'],
                                    name=project_data['name'],
                                    owners=[usession['uid'], ],
