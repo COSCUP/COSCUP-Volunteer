@@ -34,11 +34,12 @@ def expense_create(sender, **kwargs):
 
     for team in TeamDB(pid=None, tid=None).find({'pid': pid, 'tid': 'finance'}):
         uids.update(team['chiefs'])
+        uids.update(team['members'])
 
     uids.update(Project.get(pid=pid)['owners'])
+    uids.add(kwargs['expense']['create_by'])
 
     logger.info(uids)
-    uids = ['6c74e623', ]
 
     users = User.get_info(uids=list(uids))
 
@@ -52,7 +53,6 @@ def expense_create(sender, **kwargs):
 
             resp = mmt.posts(
                 channel_id=channel_info['id'],
-                message=f"""收到 **{users[uid]['profile']['badge_name']}**
-申請費用 - **{budget['name']}**，前往 [管理費用](https://volunteer.coscup.org/expense/{pid})""",
+                message=f"""收到 **{users[kwargs['expense']['create_by']]['profile']['badge_name']}** 申請費用 - **[{kwargs['expense']['code']}] / {budget['name']}**，前往 [管理費用](https://volunteer.coscup.org/expense/{pid})""",
             )
             logger.info(resp.json())
