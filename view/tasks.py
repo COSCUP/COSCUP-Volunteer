@@ -16,7 +16,7 @@ VIEW_TASKS = Blueprint('tasks', __name__, url_prefix='/tasks')
 @VIEW_TASKS.route('/')
 def index():
     ''' Index page '''
-    return redirect(url_for('tasks.project', pid='2020', _scheme='https', _external=True))
+    return redirect(url_for('tasks.project', pid='2022', _scheme='https', _external=True))
 
 
 @VIEW_TASKS.route('/<pid>', methods=('GET', 'POST'))

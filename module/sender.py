@@ -150,7 +150,8 @@ class SenderMailer:
                 source = setting.AWS_SES_FROM
 
             if 'text_body' in content and content['text_body']:
-                self.text_body = content['text_body']
+                self.text_body = SandboxedEnvironment(
+                ).from_string(content['text_body'])
 
             self.awsses = AWSSES(aws_access_key_id=setting.AWS_ID,
                                  aws_secret_access_key=setting.AWS_KEY, source=source)
@@ -171,7 +172,7 @@ class SenderMailer:
             to_addresses=to_list,
             subject=self.subject.render(**data),
             body=self.tpl.render(**data),
-            text_body=self.text_body,
+            text_body=self.text_body.render(**data),
             x_coscup=x_coscup,
             list_unsubscribe=setting.AWS_LIST_UNSUBSCRIBE,
         )
