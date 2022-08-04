@@ -366,7 +366,11 @@
                 },
                 refresh_members_tags: function() {
                     this.members.forEach(function(raw) {
-                        raw.tags = $teamuser.members_tags[raw._id].tags;
+                        if ($teamuser.members_tags[raw._id] != undefined) {
+                            raw.tags = $teamuser.members_tags[raw._id].tags;
+                        } else {
+                            raw.tags = [];
+                        }
                     });
                 },
                 del_tag: function() {
