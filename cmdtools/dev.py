@@ -22,38 +22,46 @@ def main() -> None:
 
 
 @click.command(name='user_add')
-def user_add() -> None:
+@click.option('--count', default=10, help='Default create N users.')
+def user_add(count) -> None:
     ''' Create an dev user '''
-    user_info = {
-        'id': '000000000000000000000',
-        'email': 'volunteer@coscup.org',
-        'verified_email': True,
-        'name': 'Volunteer Dev (testing)',
-        'given_name': 'Volunteer',
-        'family_name': 'Dev',
-        'picture': '',
-        'locale': 'en',
-    }
 
-    # ----- save oauth info ----- #
-    OAuth.add(mail=user_info['email'],
-              data=user_info, token=Token())
+    all_sessions = []
+    for serial_no in range(count):
+        user_info = {
+            'id': f'00000000000000000000{serial_no}',
+            'email': f'volunteer+test_{serial_no}@coscup.org',
+            'verified_email': True,
+            'name': f'Volunteer Dev (testing #{serial_no})',
+            'given_name': f'Volunteer #{serial_no}',
+            'family_name': 'Dev',
+            'picture': '',
+            'locale': 'en',
+        }
 
-    # ----- Check account or create ----- #
-    owner = OAuth.owner(mail=user_info['email'])
-    if owner:
-        user = User(uid=owner).get()
-    else:
-        user = User.create(mail=user_info['email'])
+        # ----- save oauth info ----- #
+        OAuth.add(mail=user_info['email'],
+                  data=user_info, token=Token())
 
-    user_session = USession.make_new(uid=user['_id'], header={})
+        # ----- Check account or create ----- #
+        owner = OAuth.owner(mail=user_info['email'])
+        if owner:
+            user = User(uid=owner).get()
+        else:
+            user = User.create(mail=user_info['email'])
+
+        user_session = USession.make_new(uid=user['_id'], header={})
+
+        all_sessions.append(user_session)
 
     click.echo(click.style('\n[!] Next step', bold=True))
     click.echo(click.style(
-        ' | Please visit these link to setup the cookie/session:', fg='yellow', bold=True))
-    click.echo(click.style(
-        f'   -> http://127.0.0.1/dev/cookie?sid={user_session.inserted_id}', fg='green', bold=True))
-    click.echo('')
+        ' | Please visit one of these links to setup the cookie/session:', fg='yellow', bold=True))
+
+    for user_session in all_sessions:
+        click.echo(click.style(
+            f'   -> http://127.0.0.1/dev/cookie?sid={user_session.inserted_id}', fg='green', bold=True))
+
     click.echo(click.style(
         'Thank you for your contribution!', fg='cyan', bold=True))
     click.echo('')
