@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "coscup-volunteer"
-version = "2022.05.03"
+version = "2022.08.05"
 description = "COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政流程建立。"
 authors = ["COSCUP Volunteer <volunteer@coscup.org>"]
 license = "AGPL-3.0"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 google-api-python-client = "^2.40.0"
 google-auth = "^2.6.0"
 google-auth-httplib2 = "^0.1.0"

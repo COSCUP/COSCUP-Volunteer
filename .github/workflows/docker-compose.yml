@@ -6,7 +6,7 @@ on:
 
 jobs:
   docker:
-    runs-on: ubuntu-20.04
+    runs-on: ['ubuntu-20.04', 'ubuntu-22.04']
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -15,7 +15,7 @@ jobs:
       - name: Rename sample setting file
         run: mv ./setting_sample.py ./setting.py
       - name: Build the base image
-        run: docker build -t coscupweb-base:22.06.13 -f ./Dockerfile-base-dev ./
+        run: docker build -t coscupweb-base:22.08.05 -f ./Dockerfile-base-dev ./
       - name: UP
         run: docker compose up --build --detach
       - name: List images
