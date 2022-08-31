@@ -36,6 +36,7 @@ services:
     networks:
       - backend
     environment:
+      - LD_PRELOAD=/usr/local/lib/libjemalloc.so
       - PYTHONPATH=/app
     command: sh
 
@@ -54,6 +55,8 @@ services:
       - memcached-prod
       - queue_sender
       - secretary_mongo
+    environment:
+      - LD_PRELOAD=/usr/local/lib/libjemalloc.so
     networks:
       - backend
     environment:
@@ -79,6 +82,8 @@ services:
       - "5000"
     deploy:
       replicas: 4
+    environment:
+      - LD_PRELOAD=/usr/local/lib/libjemalloc.so
     networks:
       - backend
     entrypoint: ["poetry", "run", "uwsgi", "./uwsgi.ini"]
