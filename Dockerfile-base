@@ -11,7 +11,7 @@ RUN \
   wget https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2 && \
   tar xvjf jemalloc-5.3.0.tar.bz2 && cd jemalloc-5.3.0 && ./configure && make && make install && \
   cd ../ && rm -rf ./jemalloc* && \
-  curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 - && \
+  curl -sSL https://install.python-poetry.org | python3 - && \
   find $HOME/.poetry/lib/poetry/_vendor/ -mindepth 1 -maxdepth 1 -not -name py3.10 -type d | xargs rm -rf && \
   poetry install --no-dev
 
