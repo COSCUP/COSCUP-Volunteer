@@ -300,7 +300,7 @@ def mail_tasks_star(sender, **kwargs):
     logger.info(uids)
 
     users = User.get_info(uids=uids)
-    for user_info in users.items():
+    for user_info in users.values():
         user = {}
         user['name'] = user_info['profile']['badge_name']
         user['mail'] = user_info['oauth']['email']
