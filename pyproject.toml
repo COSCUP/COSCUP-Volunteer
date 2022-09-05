@@ -18,7 +18,7 @@ blinker = "^1.4"
 boto3 = "^1.21.18"
 celery = "^5"
 phonenumbers = "^8.12.45"
-pydantic = "^1.9.0"
+pydantic = {extras = ["email"], version = "^1.10.1"}
 pylibmc = "^1.6.1"
 pymongo = "^4.0.2"
 requests = "^2.27.1"
