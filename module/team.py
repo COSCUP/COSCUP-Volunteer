@@ -92,7 +92,7 @@ class Team:
         return TeamDB(pid=pid, tid=tid).get()
 
     @staticmethod
-    def participate_in(uid: str, pid: Optional[str] = None) -> Cursor[dict[str, None]]:
+    def participate_in(uid: str, pid: Optional[list[str]] = None) -> Cursor[dict[str, None]]:
         ''' participate in
 
         :param str uid: uid
