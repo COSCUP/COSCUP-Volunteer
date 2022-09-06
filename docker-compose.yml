@@ -29,6 +29,7 @@ services:
       - "secretary_mongo:mongo"
     volumes:
       - $PWD/logs/apps:/app/log
+      - $PWD/scripts:/app/scripts
     depends_on:
       - memcached-prod
       - queue_sender
