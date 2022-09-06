@@ -136,6 +136,10 @@ def profile_real():
             if 'dietary_habit' not in user['profile_real']:
                 user['profile_real']['dietary_habit'] = []
 
+            if 'birthday' in user['profile_real'] and user['profile_real']['birthday']:
+                user['profile_real']['birthday'] = user['profile_real']['birthday'].strftime(
+                    '%Y-%m-%d')
+
             phone_codes = sorted(
                 phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key=lambda x: x[1][0])
 
@@ -179,9 +183,9 @@ def profile_real():
             birthday = post_data['data'].get('birthday', '').strip()
             if birthday:
                 try:
-                    birthday = arrow.get(birthday).format('YYYY-MM-DD')
+                    birthday = arrow.get(birthday).datetime
                 except arrow.parser.ParserError:
-                    birthday = ''
+                    birthday = None
 
             data['birthday'] = birthday
 
