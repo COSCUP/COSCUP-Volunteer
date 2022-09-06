@@ -31,7 +31,9 @@ def project(pid):
 
     is_in_project = False
     if uid:
-        is_in_project = bool(Team.participate_in(uid, pid))
+        for _ in Team.participate_in(uid=uid, pid=[pid, ]):
+            is_in_project = True
+            break
 
     if request.method == 'GET':
         return render_template('./tasks_project.html', project=project_info)
@@ -154,7 +156,11 @@ def add(pid, task_id=None):
     if not uid:
         return jsonify({'info': 'Need login'}), 401
 
-    is_in_project = bool(Team.participate_in(uid, pid))
+    is_in_project = False
+    for _ in Team.participate_in(uid=uid, pid=[pid, ]):
+        is_in_project = True
+        break
+
     if not is_in_project:
         return jsonify({'info': 'Not in project'}), 401
 
