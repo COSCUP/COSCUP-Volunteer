@@ -10,7 +10,8 @@ from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
 
 from celery_task.task_service_sync import service_sync_mattermost_invite
 from models.telegram_db import TelegramDB
-from module.dietary_habit import DietaryHabit
+from module.dietary_habit import (DietaryHabit, DietaryHabitItemsName,
+                                  DietaryHabitItemsValue)
 from module.mattermost_link import MattermostLink
 from module.mc import MC
 from module.skill import (SkillEnum, SkillEnumDesc, StatusEnum, StatusEnumDesc,
@@ -143,10 +144,15 @@ def profile_real():
             phone_codes = sorted(
                 phonenumbers.COUNTRY_CODE_TO_REGION_CODE.items(), key=lambda x: x[1][0])
 
+            dietary_habit_list = []
+            for item in DietaryHabitItemsName:
+                dietary_habit_list.append(
+                    (DietaryHabitItemsValue[item.name].value, item.value))
+
             return jsonify({'profile': user['profile_real'],
                             'phone_codes': phone_codes,
                             'default_code': default_code,
-                            'dietary_habit': list(DietaryHabit.ITEMS.items()),
+                            'dietary_habit': dietary_habit_list,
                             })
 
         if post_data['casename'] == 'update':
