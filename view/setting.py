@@ -10,8 +10,8 @@ from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
 
 from celery_task.task_service_sync import service_sync_mattermost_invite
 from models.telegram_db import TelegramDB
-from module.dietary_habit import (DietaryHabit, DietaryHabitItemsName,
-                                  DietaryHabitItemsValue)
+from module.dietary_habit import (DietaryHabitItemsName,
+                                  DietaryHabitItemsValue, valid_dietary_value)
 from module.mattermost_link import MattermostLink
 from module.mc import MC
 from module.skill import (SkillEnum, SkillEnumDesc, StatusEnum, StatusEnumDesc,
@@ -172,7 +172,7 @@ def profile_real():
                 'phone': phone,
                 'roc_id': post_data['data'].get('roc_id', '').strip(),
                 'company': post_data['data'].get('company', '').strip(),
-                'dietary_habit': DietaryHabit.valid(items_no=post_data['data']['dietary_habit']),
+                'dietary_habit': valid_dietary_value(items_no=post_data['data']['dietary_habit']),
                 'bank': {
                     'code': post_data['data']['bank'].get('code', '').strip(),
                     'no': post_data['data']['bank'].get('no', '').strip(),

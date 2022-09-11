@@ -13,7 +13,7 @@ from celery_task.task_service_sync import service_sync_mattermost_add_channel
 from models.oauth_db import OAuthDB
 from models.teamdb import TeamMemberChangedDB
 from models.users_db import UsersDB
-from module.dietary_habit import DietaryHabit
+from module.dietary_habit import DietaryHabitItemsName, DietaryHabitItemsValue
 from module.form import Form, FormAccommodation, FormTrafficFeeMapping
 from module.mattermost_bot import MattermostTools
 from module.project import Project
@@ -553,7 +553,12 @@ def project_dietary_habit(pid):
 
                 datas.append(data)
 
-            return jsonify({'datas': datas, 'dietary_habit': DietaryHabit.ITEMS})
+            dietary_habit_list = []
+            for item in DietaryHabitItemsName:
+                dietary_habit_list.append(
+                    (DietaryHabitItemsValue[item.name].value, item.value))
+
+            return jsonify({'datas': datas, 'dietary_habit': dietary_habit_list})
 
     return '', 404
 
