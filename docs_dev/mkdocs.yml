@@ -59,6 +59,8 @@ nav:
         - ipinfo: code_reference/module/ipinfo.md
         - mattermost: code_reference/module/mattermost.md
         - telegram_bot: code_reference/module/telegram_bot.md
+    - Structs:
+      - users: code_reference/structs/users.md
 theme:
   name: material
   icon:
