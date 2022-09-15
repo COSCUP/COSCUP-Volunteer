@@ -19,6 +19,7 @@ from module.skill import (SkillEnum, SkillEnumDesc, StatusEnum, StatusEnumDesc,
 from module.users import TobeVolunteer, User
 from module.usession import USession
 from module.waitlist import WaitList
+from structs.users import UserAddress, UserBank, UserProfleReal
 
 VIEW_SETTING = Blueprint('setting', __name__, url_prefix='/setting')
 
@@ -108,37 +109,33 @@ def profile_real():
 
     if request.method == 'POST':
         post_data = request.get_json()
+        struct_user: UserProfleReal
 
         if post_data['casename'] == 'get':
-            default_code = '886'
+            default_code: str = '886'
 
             if 'profile_real' in g.user['account']:
                 user = {'profile_real': g.user['account']['profile_real']}
 
-                try:
-                    phone = phonenumbers.parse(
-                        user['profile_real']['phone'], None)
-                    user['profile_real']['phone'] = phonenumbers.format_number(
-                        phone, phonenumbers.PhoneNumberFormat.NATIONAL)
+                struct_user = UserProfleReal.parse_obj(
+                    g.user['account']['profile_real'])
 
-                    default_code = phone.country_code
+                try:
+                    phone = phonenumbers.parse(struct_user.phone, None)
+                    struct_user.phone = phonenumbers.format_number(
+                        phone, phonenumbers.PhoneNumberFormat.NATIONAL)
+                    default_code = str(
+                        phone.country_code) if phone.country_code else '886'
 
                 except phonenumbers.phonenumberutil.NumberParseException:
                     pass
             else:
-                user = {'profile_real': {}}
+                struct_user = UserProfleReal()
 
-            if 'bank' not in user['profile_real']:
-                user['profile_real']['bank'] = {}
+            user = struct_user.dict()
 
-            if 'address' not in user['profile_real']:
-                user['profile_real']['address'] = {}
-
-            if 'dietary_habit' not in user['profile_real']:
-                user['profile_real']['dietary_habit'] = []
-
-            if 'birthday' in user['profile_real'] and user['profile_real']['birthday']:
-                user['profile_real']['birthday'] = user['profile_real']['birthday'].strftime(
+            if 'birthday' in user and user['birthday']:
+                user['birthday'] = user['birthday'].strftime(
                     '%Y-%m-%d')
 
             phone_codes = sorted(
@@ -149,7 +146,7 @@ def profile_real():
                 dietary_habit_list.append(
                     (DietaryHabitItemsValue[item.name].value, item.value))
 
-            return jsonify({'profile': user['profile_real'],
+            return jsonify({'profile': user,
                             'phone_codes': phone_codes,
                             'default_code': default_code,
                             'dietary_habit': dietary_habit_list,
@@ -167,38 +164,35 @@ def profile_real():
                 except phonenumbers.phonenumberutil.NumberParseException:
                     phone = ''
 
-            data = {
-                'name': post_data['data'].get('name', '').strip(),
-                'phone': phone,
-                'roc_id': post_data['data'].get('roc_id', '').strip(),
-                'company': post_data['data'].get('company', '').strip(),
-                'dietary_habit': valid_dietary_value(items_no=post_data['data']['dietary_habit']),
-                'bank': {
-                    'code': post_data['data']['bank'].get('code', '').strip(),
-                    'no': post_data['data']['bank'].get('no', '').strip(),
-                    'branch': post_data['data']['bank'].get('branch', '').strip(),
-                    'name': post_data['data']['bank'].get('name', '').strip(),
-                },
-                'address': {
-                    'code': post_data['data']['address'].get('code', '').strip(),
-                    'receiver': post_data['data']['address'].get('receiver', '').strip(),
-                    'address': post_data['data']['address'].get('address', '').strip(),
-                }
-            }
+            user_profile_real = UserProfleReal(
+                name=post_data['data'].get('name'),
+                phone=phone,
+                roc_id=post_data['data'].get('roc_id'),
+                company=post_data['data'].get('company')
+            )
 
-            birthday = post_data['data'].get('birthday', '').strip()
-            if birthday:
-                try:
-                    birthday = arrow.get(birthday).datetime
-                except arrow.parser.ParserError:
-                    birthday = None
+            try:
+                birthday = arrow.get(post_data['data'].get(
+                    'birthday', '').strip()).datetime
+            except (AttributeError, arrow.parser.ParserError):
+                birthday = None
 
-            data['birthday'] = birthday
+            user_profile_real.birthday = birthday
 
-            User(uid=g.user['account']['_id']).update_profile_real(data)
+            user_profile_real.dietary_habit = valid_dietary_value(
+                items_no=post_data['data']['dietary_habit'])
+
+            user_profile_real.bank = UserBank.parse_obj(
+                post_data['data']['bank'])
+
+            user_profile_real.address = UserAddress.parse_obj(
+                post_data['data']['address'])
+
+            User(uid=g.user['account']['_id']).update_profile_real(
+                user_profile_real.dict(exclude_none=True))
             MC.get_client().delete(f"sid:{session['sid']}")
 
-            return jsonify(data)
+            return jsonify(user_profile_real.dict(exclude_none=True))
 
     return jsonify({}), 404
 

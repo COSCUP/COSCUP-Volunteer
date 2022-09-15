@@ -1,5 +1,5 @@
 ''' User Structs '''
-from datetime import date
+from datetime import datetime
 from time import time
 from typing import Optional
 
@@ -19,6 +19,15 @@ class UserProfle(BaseModel):
     badge_name: str = Field(..., example='Badge Name')
     intro: str = Field(default='')
 
+    class Config:  # pylint: disable=too-few-public-methods
+        ''' Config
+
+        Attributes:
+            anystr_strip_whitespace: `True`
+
+        '''
+        anystr_strip_whitespace: bool = True
+
 
 class UserBank(BaseModel):
     ''' User Bank info
@@ -35,6 +44,15 @@ class UserBank(BaseModel):
     branch: str = Field(default='')
     name: str = Field(default='')
 
+    class Config:  # pylint: disable=too-few-public-methods
+        ''' Config
+
+        Attributes:
+            anystr_strip_whitespace: `True`
+
+        '''
+        anystr_strip_whitespace: bool = True
+
 
 class UserAddress(BaseModel):
     ''' User Address
@@ -48,6 +66,15 @@ class UserAddress(BaseModel):
     code: str = Field(default='')
     receiver: str = Field(default='')
     address: str = Field(default='')
+
+    class Config:  # pylint: disable=too-few-public-methods
+        ''' Config
+
+        Attributes:
+            anystr_strip_whitespace: `True`
+
+        '''
+        anystr_strip_whitespace: bool = True
 
 
 class UserProfleReal(BaseModel):
@@ -68,18 +95,21 @@ class UserProfleReal(BaseModel):
     phone: str = Field(default='')
     roc_id: str = Field(default='')
     company: str = Field(default='')
-    birthday: Optional[date] = Field(...)
-    bank: Optional[UserBank]
-    address: Optional[UserAddress]
-    dietary_habit: Optional[list[DietaryHabitItemsValue]]
+    birthday: Optional[datetime]
+    bank: Optional[UserBank] = Field(default_factory=UserBank)
+    address: Optional[UserAddress] = Field(default_factory=UserAddress)
+    dietary_habit: Optional[list[DietaryHabitItemsValue]] = Field(
+        default_factory=list)
 
     class Config:  # pylint: disable=too-few-public-methods
         ''' Config
 
         Attributes:
+            anystr_strip_whitespace: `True`
             use_enum_values: `True`
 
         '''
+        anystr_strip_whitespace: bool = True
         use_enum_values: bool = True
 
 
@@ -103,3 +133,12 @@ class User(BaseModel):
     mail: EmailStr = Field(..., description="User's mail")
     profile: Optional[UserProfle]
     profile_real: Optional[UserProfleReal]
+
+    class Config:  # pylint: disable=too-few-public-methods
+        ''' Config
+
+        Attributes:
+            anystr_strip_whitespace: `True`
+
+        '''
+        anystr_strip_whitespace: bool = True

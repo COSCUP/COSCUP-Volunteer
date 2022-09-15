@@ -97,5 +97,6 @@ ADD ./view/user.py ./view/user.py
 ADD ./view/utils.py ./view/utils.py
 
 ADD ./structs/__init__.py ./structs/__init__.py
+ADD ./structs/users.py ./structs/users.py
 
 ADD ./main.py ./main.py
