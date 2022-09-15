@@ -89,6 +89,32 @@ services:
       - backend
     entrypoint: ["poetry", "run", "uwsgi", "./uwsgi.ini"]
 
+  apiapp:
+    image: "volunteer-app:prod"
+    build:
+      context: .
+      dockerfile: ./Dockerfile-app-dev
+    links:
+      - "memcached-prod:memcached"
+      - "queue_sender:rabbitmq"
+      - "secretary_mongo:mongo"
+    volumes:
+      - $PWD/logs/apps:/app/log
+    depends_on:
+      - memcached-prod
+      - queue_sender
+      - secretary_mongo
+    expose:
+      - "8000"
+    deploy:
+      replicas: 4
+    environment:
+      - LD_PRELOAD=/usr/local/lib/libjemalloc.so
+    networks:
+      - backend
+    working_dir: "/app/api"
+    entrypoint: ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0"]
+
   celery_worker:
     image: "volunteer-app:prod"
     build:
