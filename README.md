@@ -34,7 +34,7 @@ GNU Affero General Public License version 3 (AGPL-3.0)
 
 需要 Docker 來建立 Image。
 
-    sh ./build-base.sh && sh ./build-app.sh
+    ./build-base.sh && ./build-app.sh
 
 ### Start
 
