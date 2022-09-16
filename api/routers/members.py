@@ -1,52 +1,28 @@
-''' Main '''
+''' Members '''
 import hashlib
-from typing import Any, Optional
+from typing import Any
 
-from fastapi import FastAPI, status
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi import APIRouter, status
+from fastapi.responses import JSONResponse
 
 from api.apistructs.members import (  # pylint: disable=import-error
     MembersInfo, MembersOut, MembersTeams)
-from api.routers import members  # pylint: disable=import-error
 from module.team import Team  # pylint: disable=import-error
 from module.users import User  # pylint: disable=import-error
 
-app = FastAPI(
-    title='Volunteer API.',
-    description='API services.',
-    version='2022.09.30',
-    root_path="/api",
-    contact={'name': 'Volunteer Team',
-             'url': 'https://volunteer.coscup.org/',
-             'email': 'volunteer@coscup.org',
-             },
-    license_info={'name': 'AGPL-3.0',
-                  'url': 'https://github.com/COSCUP/COSCUP-Volunteer/blob/master/LICENSE.txt',
-                  },
+router = APIRouter(
+    prefix='/members',
+    tags=['members'],
+    responses={status.HTTP_404_NOT_FOUND: {'description': 'Not found'}},
 )
 
-app.include_router(members.router)
 
-
-@app.get('/', tags=['docs', ],
-         summary='API main page.',
-         response_class=RedirectResponse, status_code=302)
-async def index() -> Optional[str]:
-    '''Main page '''
-    return f'{app.root_path}{app.docs_url}'
-
-
-@app.get('/members', tags=['members', ],
-         summary='Get members (deprecated).',
-         responses={status.HTTP_404_NOT_FOUND: {
-             'description': 'Project not found'}},
-         response_model=MembersOut)
-async def members_past(pid: str) -> dict[str, Any]:
-    ''' Get Project's members
-
-        **Warning: will be deprecated.**
-
-    '''
+@router.get('/{pid:str}',
+            responses={status.HTTP_404_NOT_FOUND: {
+                'description': 'Project not found'}},
+            response_model=MembersOut)
+async def members(pid: str) -> dict[str, Any]:
+    ''' Get Project's members '''
     result = MembersOut()
     for team in Team.list_by_pid(pid=pid):
         data = {}
