@@ -105,4 +105,5 @@ ADD ./structs/users.py ./structs/users.py
 ADD ./api/__init__.py ./api/__init__.py
 ADD ./api/main.py ./api/main.py
 
+ADD ./__init__.py ./__init__.py
 ADD ./main.py ./main.py
