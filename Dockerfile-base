@@ -12,9 +12,8 @@ RUN \
   tar xvjf jemalloc-5.3.0.tar.bz2 && cd jemalloc-5.3.0 && ./configure && make && make install && \
   cd ../ && rm -rf ./jemalloc* && \
   curl -sSL https://install.python-poetry.org | python3 - && \
-  poetry install --no-dev
-
-
-# Cleanup
-RUN apk del .build-deps && \
-    rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
+  poetry install --no-dev && \
+  apk del .build-deps && \
+  cd ~/.cache/ && \
+  find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete && \
+  rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
