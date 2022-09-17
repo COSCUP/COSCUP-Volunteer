@@ -8,6 +8,8 @@ RUN apk update \
     && apk add --no-cache openssl \
     && apk add --no-cache bash
 
+COPY logrotate/nginx /etc/logrotate.d/
+
 RUN apk add --no-cache curl
 
 RUN mkdir /volunteer_cache

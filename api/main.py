@@ -2,7 +2,7 @@
 import hashlib
 from typing import Any, Optional
 
-from fastapi import FastAPI, status
+from fastapi import FastAPI, Query, status
 from fastapi.responses import JSONResponse, RedirectResponse
 
 from api.apistructs.members import (  # pylint: disable=import-error
@@ -40,8 +40,11 @@ async def index() -> Optional[str]:
          summary='Get members (deprecated).',
          responses={status.HTTP_404_NOT_FOUND: {
              'description': 'Project not found'}},
-         response_model=MembersOut)
-async def members_past(pid: str) -> dict[str, Any]:
+         response_model=MembersOut,
+         deprecated=True,
+         )
+async def members_past(
+        pid: str = Query(description='Project ID.', example='2022')) -> dict[str, Any]:
     ''' Get Project's members
 
         **Warning: will be deprecated.**

@@ -15,6 +15,7 @@ services:
       - $PWD/nginx/sites:/etc/nginx/sites-available
     depends_on:
       - webapp
+      - apiapp
     networks:
       - backend
 
