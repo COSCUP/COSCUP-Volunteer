@@ -308,3 +308,17 @@ def waitting():
         waitting_lists, key=lambda x: x['_id'], reverse=True)
 
     return render_template('./setting_waitting.html', waitting_lists=waitting_lists)
+
+
+@VIEW_SETTING.route('/api_token', methods=('GET', 'POST'))
+def api_token():
+    ''' API Token'''
+    if request.method == 'GET':
+        return render_template('./setting_api_token.html')
+
+    if request.method == 'POST':
+        data = request.get_json()
+        if data['casename'] == 'get':
+            return jsonify({'temp_account': {'username': 'toomore', 'password': 'pwd'}})
+
+    return jsonify({}), 404

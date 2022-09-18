@@ -1,0 +1,72 @@
+{% extends "setting.html" %}
+{% block head_title_setting %}取得 API Token{% endblock %}
+{% block setting_api_token %}is-active{% endblock %}
+{% block setting_body %}
+<div class="columns">
+    <div id="settingapi" class="column" v-cloak>
+        <div class='content'>
+            <h3>取得 API Token</h3>
+            <p>建立一組臨時的帳號密碼來取得 API Token。</p>
+            <p><button class="button is-info is-outlined" @click="get_token">產生臨時令牌</button>
+            <div class="content" v-if="temp_account.username != null">
+                <h4>臨時帳號</h4>
+                <article class="message is-dark">
+                    <div class="message-body">
+                        <ul>
+                            <li>username: <strong>[[temp_account.username]]</strong></li>
+                            <li>password: <strong>[[temp_account.password]]</strong></li>
+                        </ul>
+                    </div>
+                </article>
+                <details class="mb-1">
+                    <summary class="is-clickable"><span class="icon"><i class="fas fa-terminal"></i>
+
+</span>透過 cURL</summary>
+                    <code>curl -X 'POST' \<br>
+                    &nbsp;&nbsp;'https://volunteer.coscup.org/api/token' \<br>
+                    &nbsp;&nbsp;-H 'accept: application/json' \<br>
+                    &nbsp;&nbsp;-H 'Content-Type: application/x-www-form-urlencoded' \<br>
+&nbsp;&nbsp;-d 'username=[[temp_account.username]]&amp;password=[[temp_account.password]]'</code>
+                </details>
+                <details class="mb-1">
+                    <summary class="is-clickable"><span class="icon"><i class="fas fa-book"></i></span>透過 API Docs 試玩</summary>
+                    <ol>
+                        <li><a href="/api/docs" target="_blank">開啟 API 文件</a></li>
+                        <li>點擊 <span class="has-text-primary">Authorize</span><span class="icon"><i class="fas fa-unlock"></i></span> 按鈕</li>
+                        <li>輸入 username 和 password 送出。</li>
+                        <li>出現有<span class="icon"><i class="fas fa-lock"></i></span>的 API 都可以在文件上使用。</li>
+                    </ol>
+                </details>
+                <details class="mb-1">
+                    <summary class="is-clickable"><span class="icon"><i class="fas fa-mobile-alt"></i>
+
+</span>透過志工服務 App</summary>
+                    <p>Working ...</p>
+                </details>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function() {
+        let $settingapi = new Vue({
+            el: '#settingapi',
+            data: {
+                temp_account: {}
+            },
+            methods: {
+                get_token: function() {
+                    let $this = this;
+                    axios.post('./api_token', {casename: 'get'}).then(function(resp) {
+                        $this.temp_account = resp.data.temp_account;
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}

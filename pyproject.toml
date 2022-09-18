@@ -25,6 +25,7 @@ requests = "^2.27.1"
 uWSGI = "^2.0.20"
 fastapi = "^0.84.0"
 uvicorn = {extras = ["standard"], version = "^0.18.3"}
+python-multipart = "^0.0.5"
 
 [tool.poetry.dev-dependencies]
 mongomock = "^4.0.0"
@@ -83,6 +84,7 @@ warn_untyped_fields = true
 
 [tool.pylint.main]
 extension-pkg-whitelist = "pydantic"
+init-hook='import os, sys; sys.path.append(os.getcwd())'
 
 [tool.pylint."messages control"]
 disable = ["W0223"]

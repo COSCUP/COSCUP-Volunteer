@@ -2,14 +2,15 @@
 import hashlib
 from typing import Any, Optional
 
-from fastapi import FastAPI, Query, status
+from fastapi import Depends, FastAPI, Query, status
 from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import BaseModel, Field
 
-from api.apistructs.members import (  # pylint: disable=import-error
-    MembersInfo, MembersOut, MembersTeams)
-from api.routers import members  # pylint: disable=import-error
-from module.team import Team  # pylint: disable=import-error
-from module.users import User  # pylint: disable=import-error
+from api.apistructs.members import MembersInfo, MembersOut, MembersTeams
+from api.routers import members, user
+from module.team import Team
+from module.users import User
 
 app = FastAPI(
     title='Volunteer API.',
@@ -26,6 +27,13 @@ app = FastAPI(
 )
 
 app.include_router(members.router)
+app.include_router(user.router)
+
+
+class Token(BaseModel):
+    ''' Token '''
+    access_token: str
+    token_type: str = Field(default='bearer')
 
 
 @app.get('/', tags=['docs', ],
@@ -34,6 +42,18 @@ app.include_router(members.router)
 async def index() -> Optional[str]:
     '''Main page '''
     return f'{app.root_path}{app.docs_url}'
+
+
+@app.post('/token', tags=['login', ],
+          response_model=Token)
+async def exchange_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    ''' Exchange access token
+
+    Get your **one-time** use `username`, `password` from volenteer
+    [personal setting](/setting/api_token) page to exchanging the API access token.
+
+    '''
+    return Token(access_token=form_data.username)
 
 
 @app.get('/members', tags=['members', ],
@@ -62,20 +82,20 @@ async def members_past(
             if uid not in chiefs_infos:
                 continue
 
-            user = chiefs_infos[uid]
+            _user = chiefs_infos[uid]
             h_msg = hashlib.md5()
-            h_msg.update(user['oauth']['email'].encode('utf-8'))
+            h_msg.update(_user['oauth']['email'].encode('utf-8'))
             data['chiefs'].append(MembersInfo.parse_obj({
-                'name': user['profile']['badge_name'],
+                'name': _user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
 
         data['members'] = []
-        for user in User.get_info(uids=list(set(team['members']) - set(team['chiefs']))).values():
+        for _user in User.get_info(uids=list(set(team['members']) - set(team['chiefs']))).values():
             h_msg = hashlib.md5()
-            h_msg.update(user['oauth']['email'].encode('utf-8'))
+            h_msg.update(_user['oauth']['email'].encode('utf-8'))
             data['members'].append(MembersInfo.parse_obj({
-                'name': user['profile']['badge_name'],
+                'name': _user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
 
