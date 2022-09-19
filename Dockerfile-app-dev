@@ -12,6 +12,7 @@ ADD ./celery_task/celery_main.py ./celery_task/celery_main.py
 ADD ./celery_task/task*.py ./celery_task/
 
 ADD ./models/__init__.py ./models/__init__.py
+ADD ./models/api_tokendb.py ./models/api_tokendb.py
 ADD ./models/base.py ./models/base.py
 ADD ./models/budgetdb.py ./models/budgetdb.py
 ADD ./models/expensedb.py ./models/expensedb.py
@@ -31,6 +32,7 @@ ADD ./models/usessiondb.py ./models/usessiondb.py
 ADD ./models/waitlistdb.py ./models/waitlistdb.py
 
 ADD ./module/__init__.py ./module/__init__.py
+ADD ./module/api_token.py ./module/api_token.py
 ADD ./module/awsses.py ./module/awsses.py
 ADD ./module/budget.py ./module/budget.py
 ADD ./module/dietary_habit.py ./module/dietary_habit.py

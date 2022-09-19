@@ -10,6 +10,7 @@ from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
 
 from celery_task.task_service_sync import service_sync_mattermost_invite
 from models.telegram_db import TelegramDB
+from module.api_token import APIToken, APITokenTemp
 from module.dietary_habit import (DietaryHabitItemsName,
                                   DietaryHabitItemsValue, valid_dietary_value)
 from module.mattermost_link import MattermostLink
@@ -319,6 +320,12 @@ def api_token():
     if request.method == 'POST':
         data = request.get_json()
         if data['casename'] == 'get':
-            return jsonify({'temp_account': {'username': 'toomore', 'password': 'pwd'}})
+            temp_account = APITokenTemp(uid=g.user['account']['_id'])
+            APIToken.save_temp(data=temp_account)
+
+            return jsonify({'temp_account': {
+                'username': temp_account.username,
+                'password': temp_account.password,
+            }})
 
     return jsonify({}), 404

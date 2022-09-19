@@ -17,4 +17,4 @@ router = APIRouter(
                 'description': 'Project not found'}})
 async def me_info(current_user: dict[str, Any] = Depends(get_current_user)) -> dict[str, Any]:
     ''' Me '''
-    return {'name': 'toomore', 'token': current_user}
+    return {'current_user': current_user}

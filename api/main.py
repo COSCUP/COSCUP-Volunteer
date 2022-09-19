@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 
 from api.apistructs.members import MembersInfo, MembersOut, MembersTeams
 from api.routers import members, user
+from module.api_token import APIToken
 from module.team import Team
 from module.users import User
 
@@ -53,7 +54,14 @@ async def exchange_access_token(form_data: OAuth2PasswordRequestForm = Depends()
     [personal setting](/setting/api_token) page to exchanging the API access token.
 
     '''
-    return Token(access_token=form_data.username)
+    verified_uid = APIToken.verify(
+        username=form_data.username, password=form_data.password)
+
+    if verified_uid is not None:
+        token = APIToken.create_token(uid=verified_uid)
+        return Token(access_token=token)
+
+    return JSONResponse(content={}, status_code=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 @app.get('/members', tags=['members', ],

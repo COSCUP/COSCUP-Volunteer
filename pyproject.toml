@@ -26,6 +26,7 @@ uWSGI = "^2.0.20"
 fastapi = "^0.84.0"
 uvicorn = {extras = ["standard"], version = "^0.18.3"}
 python-multipart = "^0.0.5"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 [tool.poetry.dev-dependencies]
 mongomock = "^4.0.0"

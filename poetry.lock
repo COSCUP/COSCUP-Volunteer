@@ -93,6 +93,18 @@ rsa = ">=3.1.2,<4.8"
 s3transfer = ">=0.6.0,<0.7.0"
 
 [[package]]
+name = "bcrypt"
+version = "4.0.0"
+description = "Modern password hashing for your software and your servers"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+tests = ["pytest (>=3.2.1,!=3.3.0)"]
+typecheck = ["mypy"]
+
+[[package]]
 name = "billiard"
 version = "3.6.4.0"
 description = "Python multiprocessing fork with improvements and bugfixes"
@@ -848,6 +860,23 @@ python-versions = ">=3.6"
 pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
+name = "passlib"
+version = "1.7.4"
+description = "comprehensive password hashing framework supporting over 30 schemes"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+bcrypt = {version = ">=3.1.0", optional = true, markers = "extra == \"bcrypt\""}
+
+[package.extras]
+argon2 = ["argon2-cffi (>=18.2.0)"]
+bcrypt = ["bcrypt (>=3.1.0)"]
+build_docs = ["cloud-sptheme (>=1.10.1)", "sphinx (>=1.6)", "sphinxcontrib-fulltoc (>=1.2.0)"]
+totp = ["cryptography"]
+
+[[package]]
 name = "pathspec"
 version = "0.10.1"
 description = "Utility library for gitignore style pattern matching of file paths."
@@ -1439,7 +1468,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "6cc5a7b3b4894b425d92942b94de94ee0cda5c74627b167ac21ba145642ac7e8"
+content-hash = "e905222d9acbb5ce488445378d59e757f13705c36fb6305a0907a34211e6ed6b"
 
 [metadata.files]
 amqp = [
@@ -1469,6 +1498,20 @@ autopep8 = [
 awscli = [
     {file = "awscli-1.25.76-py3-none-any.whl", hash = "sha256:0e664aa01cbbf9d061c9df2776588fbce96e7ade2e84febe3a11ee6095cda554"},
     {file = "awscli-1.25.76.tar.gz", hash = "sha256:3d2af4cd91065c5c5c15237b410e54c74678682c309bd9dafb6848bff811ebeb"},
+]
+bcrypt = [
+    {file = "bcrypt-4.0.0-cp36-abi3-macosx_10_10_universal2.whl", hash = "sha256:845b1daf4df2dd94d2fdbc9454953ca9dd0e12970a0bfc9f3dcc6faea3fa96e4"},
+    {file = "bcrypt-4.0.0-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_24_aarch64.whl", hash = "sha256:8780e69f9deec9d60f947b169507d2c9816e4f11548f1f7ebee2af38b9b22ae4"},
+    {file = "bcrypt-4.0.0-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1c3334446fac200499e8bc04a530ce3cf0b3d7151e0e4ac5c0dddd3d95e97843"},
+    {file = "bcrypt-4.0.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bfb67f6a6c72dfb0a02f3df51550aa1862708e55128b22543e2b42c74f3620d7"},
+    {file = "bcrypt-4.0.0-cp36-abi3-manylinux_2_24_x86_64.whl", hash = "sha256:7c7dd6c1f05bf89e65261d97ac3a6520f34c2acb369afb57e3ea4449be6ff8fd"},
+    {file = "bcrypt-4.0.0-cp36-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:594780b364fb45f2634c46ec8d3e61c1c0f1811c4f2da60e8eb15594ecbf93ed"},
+    {file = "bcrypt-4.0.0-cp36-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:2d0dd19aad87e4ab882ef1d12df505f4c52b28b69666ce83c528f42c07379227"},
+    {file = "bcrypt-4.0.0-cp36-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:bf413f2a9b0a2950fc750998899013f2e718d20fa4a58b85ca50b6df5ed1bbf9"},
+    {file = "bcrypt-4.0.0-cp36-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:ede0f506554571c8eda80db22b83c139303ec6b595b8f60c4c8157bdd0bdee36"},
+    {file = "bcrypt-4.0.0-cp36-abi3-win32.whl", hash = "sha256:dc6ec3dc19b1c193b2f7cf279d3e32e7caf447532fbcb7af0906fe4398900c33"},
+    {file = "bcrypt-4.0.0-cp36-abi3-win_amd64.whl", hash = "sha256:0b0f0c7141622a31e9734b7f649451147c04ebb5122327ac0bd23744df84be90"},
+    {file = "bcrypt-4.0.0.tar.gz", hash = "sha256:c59c170fc9225faad04dde1ba61d85b413946e8ce2e5f5f5ff30dfd67283f319"},
 ]
 billiard = [
     {file = "billiard-3.6.4.0-py3-none-any.whl", hash = "sha256:87103ea78fa6ab4d5c751c4909bcff74617d985de7fa8b672cf8618afd5a875b"},
@@ -1895,6 +1938,10 @@ oauthlib = [
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
+]
+passlib = [
+    {file = "passlib-1.7.4-py2.py3-none-any.whl", hash = "sha256:aa6bca462b8d8bda89c70b382f0c298a20b5560af6cbfa2dce410c0a2fb669f1"},
+    {file = "passlib-1.7.4.tar.gz", hash = "sha256:defd50f72b65c5402ab2c573830a6978e5f202ad0d984793c8dde2c4152ebe04"},
 ]
 pathspec = [
     {file = "pathspec-0.10.1-py3-none-any.whl", hash = "sha256:46846318467efc4556ccfd27816e004270a9eeeeb4d062ce5e6fc7a87c573f93"},
