@@ -13,5 +13,5 @@ RUN \
   cd ../ && rm -rf ./jemalloc* && \
   curl -sSL https://install.python-poetry.org | python3 - && \
   poetry install --no-dev && \
-  RUN apk del .build-deps && \
+  apk del .build-deps && \
   rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
