@@ -4,6 +4,7 @@ This file is executed to create the index in MongoDB. All models
 with `index()` will be aggregated here.
 
 '''
+from models.api_tokendb import APITokenDB
 from models.budgetdb import BudgetDB
 from models.expensedb import ExpenseDB
 from models.formdb import FormDB
@@ -23,6 +24,7 @@ from models.waitlistdb import WaitListDB
 
 def make_index() -> None:
     ''' Make index for the collection with `index()` '''
+    APITokenDB().index()
     BudgetDB().index()
     ExpenseDB().index()
     FormDB().index()

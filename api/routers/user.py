@@ -1,9 +1,16 @@
 ''' User '''
 from typing import Any
 
+import arrow
 from fastapi import APIRouter, Depends, status
 
+from api.apistructs.users import (ProjectItem, TeamItem, UserMeOut,
+                                  UserMeParticipatedItem,
+                                  UserMeParticipatedOut)
 from api.dependencies import get_current_user
+from module.project import Project
+from module.team import Team
+from module.users import User
 
 router = APIRouter(
     prefix='/user',
@@ -13,8 +20,47 @@ router = APIRouter(
 
 
 @router.get('/me',
+            response_model=UserMeOut,
             responses={status.HTTP_404_NOT_FOUND: {
                 'description': 'Project not found'}})
-async def me_info(current_user: dict[str, Any] = Depends(get_current_user)) -> dict[str, Any]:
-    ''' Me '''
-    return {'current_user': current_user}
+async def me_info(current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeOut:
+    ''' Get myself user info '''
+    user_info = User.get_info(uids=[current_user['uid'], ])[
+        current_user['uid']]
+
+    return UserMeOut(
+        uid=current_user['uid'],
+        badge_name=user_info['profile']['badge_name'],
+        avatar=user_info['oauth']['picture'],
+        intro=user_info['profile']['intro'],
+    )
+
+
+@router.get('/me/participated',
+            response_model=UserMeParticipatedOut,
+            )
+async def me_participated(
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeOut:
+    ''' Get myself participated in lists '''
+    participate_in = UserMeParticipatedOut()
+    for team in Team.participate_in(current_user['uid']):
+        project = Project.get(team['pid'])
+        data = UserMeParticipatedItem(
+            project=ProjectItem(id=project['_id'], name=project['name']),
+            team=TeamItem(id=team['tid'],
+                          name=team['name'], pid=project['_id']),
+            action=arrow.get(project['action_date']).date(),
+        )
+
+        data.title = '???'
+        if current_user['uid'] in team['chiefs']:
+            data.title = 'chief'
+        elif current_user['uid'] in team['members']:
+            data.title = 'member'
+
+        participate_in.datas.append(data)
+
+    participate_in.datas = sorted(
+        participate_in.datas, key=lambda data: data.action, reverse=True)
+
+    return participate_in

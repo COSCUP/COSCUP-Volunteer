@@ -35,7 +35,7 @@ def user_add(count) -> None:
             'name': f'Volunteer Dev (testing #{serial_no})',
             'given_name': f'Volunteer #{serial_no}',
             'family_name': 'Dev',
-            'picture': '',
+            'picture': 'https://volunteer.coscup.org/img/coscup_volunteer_og.png',
             'locale': 'en',
         }
 
