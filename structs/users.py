@@ -39,10 +39,10 @@ class UserBank(BaseModel):
         name: bank account name.
 
     '''
-    code: str = Field(default='')
-    no: str = Field(default='')
-    branch: str = Field(default='')
-    name: str = Field(default='')
+    code: str = Field(default='', description='bank code')
+    no: str = Field(default='', description='bank account numbers')
+    branch: str = Field(default='', description='bank branch name')
+    name: str = Field(default='', description='bank account name')
 
     class Config:  # pylint: disable=too-few-public-methods
         ''' Config

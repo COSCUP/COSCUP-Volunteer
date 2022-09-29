@@ -947,7 +947,7 @@ def team_expense_index(pid, tid):
             bank = User.get_bank(uid=g.user['account']['_id'])
 
             return jsonify({'teams': teams, 'items': items,
-                            'select_team': select_team, 'bank': bank})
+                            'select_team': select_team, 'bank': bank.dict()})
 
         if data['casename'] == 'add_expense':
             # create expense and send notification.

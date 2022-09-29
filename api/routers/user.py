@@ -4,8 +4,8 @@ from typing import Any
 import arrow
 from fastapi import APIRouter, Depends, status
 
-from api.apistructs.users import (ProjectItem, TeamItem, UserMeOut,
-                                  UserMeParticipatedItem,
+from api.apistructs.users import (ProjectItem, TeamItem, UserMeBankOut,
+                                  UserMeOut, UserMeParticipatedItem,
                                   UserMeParticipatedOut)
 from api.dependencies import get_current_user
 from module.project import Project
@@ -40,7 +40,7 @@ async def me_info(current_user: dict[str, Any] = Depends(get_current_user)) -> U
             response_model=UserMeParticipatedOut,
             )
 async def me_participated(
-        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeOut:
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeParticipatedOut:
     ''' Get myself participated in lists '''
     participate_in = UserMeParticipatedOut()
     for team in Team.participate_in(current_user['uid']):
@@ -64,3 +64,10 @@ async def me_participated(
         participate_in.datas, key=lambda data: data.action, reverse=True)
 
     return participate_in
+
+
+@router.get('/me/bank', response_model=UserMeBankOut)
+async def me_bank(
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeBankOut:
+    ''' Get myself participated in lists '''
+    return UserMeBankOut(info=User.get_bank(uid=current_user['uid']))

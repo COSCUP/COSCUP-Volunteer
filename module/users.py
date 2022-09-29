@@ -6,6 +6,7 @@ from pymongo.collection import ReturnDocument
 from models.oauth_db import OAuthDB
 from models.users_db import TobeVolunteerDB, UsersDB
 from module.skill import TobeVolunteerStruct
+from structs.users import UserBank
 
 
 class User:
@@ -165,7 +166,7 @@ class User:
         return users
 
     @staticmethod
-    def get_bank(uid: str) -> dict[str, Any]:
+    def get_bank(uid: str) -> UserBank:
         ''' Get bank info
 
         Args:
@@ -174,16 +175,12 @@ class User:
         Returns:
             Return the data.
 
-        TODO:
-            Need refactor in pydantic.
-
         '''
-        bank = {'code': '', 'no': '', 'branch': '', 'name': ''}
         for user in UsersDB().find({'_id': uid}, {'profile_real.bank': 1}):
             if 'profile_real' in user and 'bank' in user['profile_real']:
-                bank.update(user['profile_real']['bank'])
+                return UserBank.parse_obj(user['profile_real']['bank'])
 
-        return bank
+        return UserBank()
 
     @staticmethod
     def get_address(uid: str) -> dict[str, Any]:

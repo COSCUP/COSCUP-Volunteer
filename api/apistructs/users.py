@@ -3,6 +3,8 @@ from datetime import date
 
 from pydantic import BaseModel, Field, HttpUrl
 
+from structs.users import UserBank
+
 
 class UserMeOut(BaseModel):
     ''' UserMeOut '''
@@ -39,3 +41,8 @@ class UserMeParticipatedOut(BaseModel):
         description='list of data sorted by action date',
         default=[],
     )
+
+
+class UserMeBankOut(BaseModel):
+    ''' UserMeBankOut '''
+    bank: UserBank = Field(description='User bank info')
