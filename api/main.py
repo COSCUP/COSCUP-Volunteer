@@ -13,10 +13,33 @@ from module.api_token import APIToken
 from module.team import Team
 from module.users import User
 
+DOC_DESC = '''The more details about how to use this API, please refer to
+[API Intro](https://volunteer.coscup.org/docs/dev/api/).'''
+
+TAGS_META = [
+    {
+        'name': 'user',
+        'description': 'More about user self info.',
+    },
+    {
+        'name': 'members',
+        'description': 'List all members.'
+    },
+    {
+        'name': 'docs',
+        'description': 'redirect to docs.',
+    },
+    {
+        'name': 'login',
+        'description': 'oauth, login.',
+    }
+]
+
 app = FastAPI(
     title='Volunteer API.',
-    description='API services.',
+    description=DOC_DESC,
     version='2022.09.30',
+    openapi_tags=TAGS_META,
     root_path="/api",
     contact={'name': 'Volunteer Team',
              'url': 'https://volunteer.coscup.org/',
