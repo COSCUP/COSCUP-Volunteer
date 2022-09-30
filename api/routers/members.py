@@ -1,6 +1,5 @@
 ''' Members '''
 import hashlib
-from typing import Any
 
 from fastapi import APIRouter, Path, status
 from fastapi.responses import JSONResponse
@@ -21,7 +20,8 @@ router = APIRouter(
             responses={status.HTTP_404_NOT_FOUND: {
                 'description': 'Project not found'}},
             response_model=MembersOut)
-async def members(pid: str = Path(description='Project ID.', example='2022')) -> dict[str, Any]:
+async def members(
+        pid: str = Path(description='Project ID.', example='2022')) -> MembersOut | JSONResponse:
     ''' Get Project's members '''
     result = MembersOut()
     for team in Team.list_by_pid(pid=pid):

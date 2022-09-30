@@ -1,7 +1,7 @@
 ''' Main '''
 import hashlib
 import logging
-from typing import Any, Optional
+from typing import Optional
 
 from fastapi import Depends, FastAPI, Query, status
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -77,7 +77,8 @@ async def index() -> Optional[str]:
 
 @app.post('/token', tags=['login', ],
           response_model=Token)
-async def exchange_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+async def exchange_access_token(
+        form_data: OAuth2PasswordRequestForm = Depends()) -> Token | JSONResponse:
     ''' Exchange access token
 
     Get your **one-time** use `username`, `password` from volenteer
@@ -102,7 +103,7 @@ async def exchange_access_token(form_data: OAuth2PasswordRequestForm = Depends()
          deprecated=True,
          )
 async def members_past(
-        pid: str = Query(description='Project ID.', example='2022')) -> dict[str, Any]:
+        pid: str = Query(description='Project ID.', example='2022')) -> MembersOut | JSONResponse:
     ''' Get Project's members
 
         **Warning: will be deprecated.**

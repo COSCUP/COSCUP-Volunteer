@@ -31,7 +31,7 @@ jobs:
       - name: Create setting.py
         run: mv setting_sample.py setting.py
       - name: Run mypy
-        run: PYTHONPATH=./ poetry run mypy ./models/ ./module/ ./structs/
+        run: PYTHONPATH=./ poetry run mypy ./models/ ./module/ ./structs/ ./api/
       - name: Run Testing
         run: PYTHONPATH=./ poetry run pytest -vv --cov-report=term-missing --cov ./
       - name: Run Pylint

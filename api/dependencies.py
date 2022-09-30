@@ -7,7 +7,7 @@ from module.api_token import APIToken
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict[str, str]:
     ''' Get current user '''
     verified_uid = APIToken.verify_token(token=token)
 

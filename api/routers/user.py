@@ -45,6 +45,9 @@ async def me_participated(
     participate_in = UserMeParticipatedOut()
     for team in Team.participate_in(current_user['uid']):
         project = Project.get(team['pid'])
+        if project is None:
+            continue
+
         data = UserMeParticipatedItem(
             project=ProjectItem(id=project['_id'], name=project['name']),
             team=TeamItem(id=team['tid'],
