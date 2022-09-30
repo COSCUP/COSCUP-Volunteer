@@ -12,3 +12,11 @@ sh ./start_app.sh
 docker stop -t 1 volunteer-2
 docker rm volunteer-2
 sh ./start_app.sh
+
+docker stop -t 1 volunteer-api-1
+docker rm volunteer-api-1
+sh ./start_api.sh
+
+docker stop -t 1 volunteer-api-2
+docker rm volunteer-api-2
+sh ./start_api.sh
