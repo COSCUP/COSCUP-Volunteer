@@ -70,4 +70,4 @@ async def me_participated(
 async def me_bank(
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeBankOut:
     ''' Get myself participated in lists '''
-    return UserMeBankOut(info=User.get_bank(uid=current_user['uid']))
+    return UserMeBankOut(bank=User.get_bank(uid=current_user['uid']))

@@ -68,7 +68,7 @@ class Team:
                 pid=pid, tid=tid, action={'add': add_uids, 'del': del_uids})
 
     @staticmethod
-    def list_by_pid(pid: str, show_all: bool = False) -> Cursor[dict[str, None]]:
+    def list_by_pid(pid: str, show_all: bool = False) -> Cursor[dict[str, Any]]:
         ''' List all team in project
 
         :param str pid: project id
@@ -92,7 +92,7 @@ class Team:
         return TeamDB(pid=pid, tid=tid).get()
 
     @staticmethod
-    def participate_in(uid: str, pid: Optional[list[str]] = None) -> Cursor[dict[str, None]]:
+    def participate_in(uid: str, pid: Optional[list[str]] = None) -> Cursor[dict[str, Any]]:
         ''' participate in
 
         :param str uid: uid
