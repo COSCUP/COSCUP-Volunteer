@@ -114,5 +114,4 @@ ADD ./api/routers/__init__.py ./api/routers/__init__.py
 ADD ./api/routers/members.py ./api/routers/members.py
 ADD ./api/routers/user.py ./api/routers/user.py
 
-ADD ./__init__.py ./__init__.py
 ADD ./main.py ./main.py

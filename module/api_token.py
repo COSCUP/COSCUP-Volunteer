@@ -4,7 +4,7 @@ from enum import Enum
 from uuid import uuid4
 
 import arrow
-from passlib.context import CryptContext
+from passlib.context import CryptContext  # type: ignore
 from pydantic import BaseModel, Field
 
 from models.api_tokendb import APITokenDB
@@ -65,6 +65,7 @@ class APIToken:  # pylint: disable=too-few-public-methods
         Return: str | None
 
         '''
+        row: dict[str, str]
         for row in APITokenDB().find({
                 'token_type': 'temp',
                 'alive': True,
@@ -112,6 +113,7 @@ class APIToken:  # pylint: disable=too-few-public-methods
         '''
         serial_no, plain_token = token.split('|')
 
+        row: dict[str, str]
         for row in APITokenDB().find({
                 'token_type': 'session',
                 'alive': True,
