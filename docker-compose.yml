@@ -111,9 +111,11 @@ services:
       replicas: 4
     environment:
       - LD_PRELOAD=/usr/local/lib/libjemalloc.so
+      - UVICORN_HOST=0.0.0.0
+      - UVICORN_WORKERS=2
     networks:
       - backend
-    entrypoint: ["poetry", "run", "uvicorn", "api.main:app", "--host", "0.0.0.0"]
+    entrypoint: ["poetry", "run", "uvicorn", "api.main:app"]
 
   celery_worker:
     image: "volunteer-app:prod"

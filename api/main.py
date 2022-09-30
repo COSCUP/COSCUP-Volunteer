@@ -1,5 +1,6 @@
 ''' Main '''
 import hashlib
+import logging
 from typing import Any, Optional
 
 from fastapi import Depends, FastAPI, Query, status
@@ -12,6 +13,12 @@ from api.routers import members, user
 from module.api_token import APIToken
 from module.team import Team
 from module.users import User
+
+logging.basicConfig(
+    filename='./log/api.log',
+    format='%(asctime)s [%(levelname)-5.5s][%(thread)6.6s] [%(module)s:%(funcName)s#%(lineno)d]: %(message)s',  # pylint: disable=line-too-long
+    datefmt='%Y-%m-%d %H:%M:%S',
+    level=logging.DEBUG)
 
 DOC_DESC = '''The more details about how to use this API, please refer to
 [API Intro](https://volunteer.coscup.org/docs/dev/api/).'''

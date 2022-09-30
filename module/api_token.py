@@ -73,6 +73,10 @@ class APIToken:  # pylint: disable=too-few-public-methods
         }):
             hash_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
             if hash_context.verify(password, row['password']):
+                APITokenDB().update_one(
+                    {'token_type': 'temp', 'alive': True, 'username': username},
+                    {'$set': {'alive': False}},
+                )
                 return row['uid']
 
         return None

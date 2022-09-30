@@ -11,6 +11,7 @@ ADD ./celery_task/celery_main.py ./celery_task/celery_main.py
 ADD ./celery_task/task*.py ./celery_task/
 
 ADD ./models/__init__.py ./models/__init__.py
+ADD ./models/api_tokendb.py ./models/api_tokendb.py
 ADD ./models/base.py ./models/base.py
 ADD ./models/budgetdb.py ./models/budgetdb.py
 ADD ./models/expensedb.py ./models/expensedb.py
@@ -30,6 +31,7 @@ ADD ./models/usessiondb.py ./models/usessiondb.py
 ADD ./models/waitlistdb.py ./models/waitlistdb.py
 
 ADD ./module/__init__.py ./module/__init__.py
+ADD ./module/api_token.py ./module/api_token.py
 ADD ./module/awsses.py ./module/awsses.py
 ADD ./module/budget.py ./module/budget.py
 ADD ./module/dietary_habit.py ./module/dietary_habit.py
@@ -99,4 +101,15 @@ ADD ./view/utils.py ./view/utils.py
 ADD ./structs/__init__.py ./structs/__init__.py
 ADD ./structs/users.py ./structs/users.py
 
+ADD ./api/__init__.py ./api/__init__.py
+ADD ./api/main.py ./api/main.py
+ADD ./api/apistructs/__init__.py ./api/apistructs/__init__.py
+ADD ./api/apistructs/members.py ./api/apistructs/members.py
+ADD ./api/apistructs/users.py ./api/apistructs/users.py
+ADD ./api/dependencies.py ./api/dependencies.py
+ADD ./api/routers/__init__.py ./api/routers/__init__.py
+ADD ./api/routers/members.py ./api/routers/members.py
+ADD ./api/routers/user.py ./api/routers/user.py
+
+ADD ./__init__.py ./__init__.py
 ADD ./main.py ./main.py
