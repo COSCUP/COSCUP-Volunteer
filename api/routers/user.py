@@ -50,7 +50,8 @@ async def me_participated(
             continue
 
         data = UserMeParticipatedItem(
-            project=ProjectItem(id=project['_id'], name=project['name']),
+            project=ProjectItem.parse_obj(
+                {'id': project['_id'], 'name': project['name']}),
             team=TeamItem(id=team['tid'],
                           name=team['name'], pid=project['_id']),
             action=arrow.get(project['action_date']).date(),
