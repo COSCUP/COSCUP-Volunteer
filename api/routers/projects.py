@@ -1,9 +1,11 @@
 ''' Projects '''
 from typing import Any
 
+import arrow
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from api.apistructs.projects import ProjectAllOut
+from api.apistructs.projects import (ProjectAllOut, ProjectItemUpdateInput,
+                                     ProjectItemUpdateOutput)
 from api.apistructs.users import ProjectItem
 from api.dependencies import get_current_user
 from module.project import Project
@@ -39,25 +41,30 @@ async def projects_all(current_user: dict[str, Any] = Depends(get_current_user))
     return ProjectAllOut(datas=datas)
 
 
-@router.get('/{pid}',
-            response_model=ProjectItem,
-            responses={
-                status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
-            response_model_exclude_none=True,
-            )
-async def projects_one(
+@router.patch('/{pid}',
+              tags=['owners', ],
+              response_model=ProjectItemUpdateOutput,
+              responses={
+                  status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
+              response_model_exclude_none=True,
+              )
+async def projects_one_update(
         pid: str,
+        update_data: ProjectItemUpdateInput,
         current_user: dict[str, Any] = Depends(get_current_user),
-) -> ProjectItem | dict[str, Any] | None:
-    ''' Get one project '''
+) -> ProjectItemUpdateOutput | None:
+    ''' Update one project. `Owners only` '''
     project = Project.get(pid=pid)
     if not project:
-        raise HTTPException(status_code=404)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    project['id'] = project['_id']
-    result = ProjectItem.parse_obj(project)
+    if 'owners' not in project or current_user['uid'] not in project['owners']:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-    if 'owners' in project and current_user['uid'] in project['owners']:
-        return result
+    data = update_data.dict(exclude_none=True)
+    if 'action_date' in data:
+        data['action_date'] = arrow.get(data['action_date']).int_timestamp
 
-    return result.dict(include={'id', 'name', 'desc'})
+    Project.update(pid=pid, data=data)
+
+    return ProjectItemUpdateOutput.parse_obj(data)

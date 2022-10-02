@@ -43,6 +43,10 @@ TAGS_META = [
     {
         'name': 'login',
         'description': 'oauth, login.',
+    },
+    {
+        'name': 'owners',
+        'description': 'For platform owners.',
     }
 ]
 
