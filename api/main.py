@@ -9,7 +9,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
 
 from api.apistructs.members import MembersInfo, MembersOut, MembersTeams
-from api.routers import members, user
+from api.routers import members, projects, user
 from module.api_token import APIToken
 from module.team import Team
 from module.users import User
@@ -29,6 +29,10 @@ TAGS_META = [
         'description': 'More about user self info.',
     },
     {
+        'name': 'projects',
+        'description': 'List all projects.'
+    },
+    {
         'name': 'members',
         'description': 'List all members.'
     },
@@ -45,7 +49,7 @@ TAGS_META = [
 app = FastAPI(
     title='Volunteer API.',
     description=DOC_DESC,
-    version='2022.09.30',
+    version='2022.10.09',
     openapi_tags=TAGS_META,
     root_path="/api",
     contact={'name': 'Volunteer Team',
@@ -58,6 +62,7 @@ app = FastAPI(
 )
 
 app.include_router(members.router)
+app.include_router(projects.router)
 app.include_router(user.router)
 
 

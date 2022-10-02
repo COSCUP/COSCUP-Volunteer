@@ -38,6 +38,7 @@ async def me_info(current_user: dict[str, Any] = Depends(get_current_user)) -> U
 
 @router.get('/me/participated',
             response_model=UserMeParticipatedOut,
+            response_model_exclude_none=True,
             )
 async def me_participated(
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeParticipatedOut:
