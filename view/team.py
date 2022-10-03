@@ -1,6 +1,5 @@
 ''' Team '''
 # pylint: disable=too-many-lines
-import html
 import json
 import re
 
@@ -132,8 +131,9 @@ def members(pid, tid):
 
                     result_members.append(user)
 
-            result_members = sorted(
-                result_members, key=lambda u: u['profile']['badge_name'].lower())
+            result_members.sort(
+                key=lambda u: u['profile']['badge_name'].lower())
+            result_members.sort(key=lambda u: u['is_chief'], reverse=True)
 
             tags = []
             if 'tag_members' in team and team['tag_members']:

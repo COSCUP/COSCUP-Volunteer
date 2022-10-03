@@ -1,12 +1,33 @@
 ''' API Structs - Teams '''
-from pydantic import BaseModel, Field
+from typing import Any
+
+from pydantic import BaseModel, EmailStr, Field, validator
+
+from api.apistructs.items import UserItem
 
 
-class TeamItem(BaseModel):
-    ''' TeamItem '''
-    pid: str = Field(description='`pid`, project id')
-    id: str = Field(description='`tid`, team id', alias='tid')
+class TeamItemUpdateInput(BaseModel):
+    ''' Update Team item input '''
     name: str = Field(description='team name')
-    chiefs: list[str] | None = Field(description="list of chiefs' uids")
-    members: list[str] | None = Field(description="list of members' uids")
     desc: str | None = Field(description='desc')
+    mailling: EmailStr | None = Field(description='mailing list for team')
+    headcount: int | None = Field(description='the headcount of team')
+
+    @validator('*', pre=True)
+    def skip_empty_str(cls, value: Any) -> Any:  # pylint:disable=no-self-argument
+        ''' skip empty string '''
+        if isinstance(value, str):
+            value = value.strip()
+            if not value:
+                return None
+
+        return value
+
+
+class TeamItemUpdateOutput(TeamItemUpdateInput):
+    ''' Update Team item output '''
+
+
+class TeamAddressBookOutput(BaseModel):
+    ''' Team address book output '''
+    datas: list[UserItem] = Field(description='list of users info')

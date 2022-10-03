@@ -4,11 +4,10 @@ from typing import Any
 import arrow
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from api.apistructs.projects import (ProjectAllOut, ProjectItem,
-                                     ProjectItemUpdateInput,
+from api.apistructs.items import ProjectItem, TeamItem
+from api.apistructs.projects import (ProjectAllOut, ProjectItemUpdateInput,
                                      ProjectItemUpdateOutput,
                                      ProjectTeamsOutput)
-from api.apistructs.teams import TeamItem
 from api.dependencies import get_current_user
 from module.project import Project
 from module.team import Team

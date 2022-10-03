@@ -4,8 +4,7 @@ from typing import Any
 import arrow
 from fastapi import APIRouter, Depends, status
 
-from api.apistructs.projects import ProjectItem
-from api.apistructs.teams import TeamItem
+from api.apistructs.items import ProjectItem, TeamItem
 from api.apistructs.users import (UserMeBankOut, UserMeOut,
                                   UserMeParticipatedItem,
                                   UserMeParticipatedOut)
@@ -54,8 +53,9 @@ async def me_participated(
         data = UserMeParticipatedItem(
             project=ProjectItem.parse_obj(
                 {'id': project['_id'], 'name': project['name']}),
-            team=TeamItem(id=team['tid'],
-                          name=team['name'], pid=project['_id']),
+            team=TeamItem.parse_obj({'id': team['tid'],
+                                     'name': team['name'],
+                                     'pid': project['_id']}),
             action=arrow.get(project['action_date']).date(),
         )
 

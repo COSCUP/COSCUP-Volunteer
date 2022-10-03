@@ -3,8 +3,7 @@ from datetime import date
 
 from pydantic import BaseModel, Field, HttpUrl
 
-from api.apistructs.projects import ProjectItem
-from api.apistructs.teams import TeamItem
+from api.apistructs.items import ProjectItem, TeamItem
 from structs.users import UserBank
 
 

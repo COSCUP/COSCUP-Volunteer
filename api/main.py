@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
 
-from api.routers import members, projects, user
+from api.routers import members, projects, teams, user
 from module.api_token import APIToken
 
 logging.basicConfig(
@@ -27,6 +27,10 @@ TAGS_META = [
     {
         'name': 'projects',
         'description': 'List all projects.'
+    },
+    {
+        'name': 'teams',
+        'description': 'List all teams.'
     },
     {
         'name': 'members',
@@ -63,6 +67,7 @@ app = FastAPI(
 
 app.include_router(members.router)
 app.include_router(projects.router)
+app.include_router(teams.router)
 app.include_router(user.router)
 
 
