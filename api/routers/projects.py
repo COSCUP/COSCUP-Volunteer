@@ -4,11 +4,14 @@ from typing import Any
 import arrow
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from api.apistructs.projects import (ProjectAllOut, ProjectItemUpdateInput,
-                                     ProjectItemUpdateOutput)
-from api.apistructs.users import ProjectItem
+from api.apistructs.projects import (ProjectAllOut, ProjectItem,
+                                     ProjectItemUpdateInput,
+                                     ProjectItemUpdateOutput,
+                                     ProjectTeamsOutput)
+from api.apistructs.teams import TeamItem
 from api.dependencies import get_current_user
 from module.project import Project
+from module.team import Team
 
 router = APIRouter(
     prefix='/projects',
@@ -68,3 +71,22 @@ async def projects_one_update(
     Project.update(pid=pid, data=data)
 
     return ProjectItemUpdateOutput.parse_obj(data)
+
+
+@router.get('/{pid}/teams',
+            response_model=ProjectTeamsOutput,
+            responses={
+                status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
+            response_model_exclude_none=True,
+            )
+async def projects_teams(
+        pid: str,
+        current_user: dict[str, Any] = Depends(  # pylint: disable=unused-argument
+            get_current_user),
+) -> ProjectTeamsOutput | None:
+    ''' Get teams in project '''
+    teams = []
+    for team in Team.list_by_pid(pid=pid):
+        teams.append(TeamItem.parse_obj(team))
+
+    return ProjectTeamsOutput.parse_obj({'teams': teams})

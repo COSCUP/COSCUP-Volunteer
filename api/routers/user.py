@@ -4,8 +4,10 @@ from typing import Any
 import arrow
 from fastapi import APIRouter, Depends, status
 
-from api.apistructs.users import (ProjectItem, TeamItem, UserMeBankOut,
-                                  UserMeOut, UserMeParticipatedItem,
+from api.apistructs.projects import ProjectItem
+from api.apistructs.teams import TeamItem
+from api.apistructs.users import (UserMeBankOut, UserMeOut,
+                                  UserMeParticipatedItem,
                                   UserMeParticipatedOut)
 from api.dependencies import get_current_user
 from module.project import Project
