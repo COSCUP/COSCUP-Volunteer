@@ -1,7 +1,7 @@
 ''' Teams '''
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Path, status
 
 from api.apistructs.items import TeamItem, UserItem
 from api.apistructs.teams import (TeamAddressBookOutput, TeamItemUpdateInput,
@@ -26,8 +26,8 @@ router = APIRouter(
             response_model_exclude_none=True,
             )
 async def teams_one(
-        pid: str,
-        tid: str,
+        pid: str = Path(..., description='project id'),
+        tid: str = Path(..., description='team id'),
         current_user: dict[str, Any] = Depends(  # pylint: disable=unused-argument
             get_current_user)) -> TeamItem | None:
     ''' Get one team info
@@ -51,9 +51,9 @@ async def teams_one(
               response_model_exclude_none=True,
               )
 async def teams_one_update(
-        pid: str,
-        tid: str,
         update_data: TeamItemUpdateInput,
+        pid: str = Path(..., description='project id'),
+        tid: str = Path(..., description='team id'),
         current_user: dict[str, Any] = Depends(get_current_user)) -> TeamItemUpdateOutput:
     ''' Update one team info
 
@@ -89,12 +89,14 @@ async def teams_one_update(
             summary='Get the address book info of team members.',
             response_model=TeamAddressBookOutput,
             responses={
-                status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
+                status.HTTP_404_NOT_FOUND: {'description': 'Project not found'},
+                status.HTTP_401_UNAUTHORIZED: {'description': 'You are not the member.'},
+            },
             response_model_exclude_none=True,
             )
 async def teams_one_address_book(
-        pid: str,
-        tid: str,
+        pid: str = Path(..., description='project id'),
+        tid: str = Path(..., description='team id'),
         current_user: dict[str, Any] = Depends(get_current_user)) -> TeamAddressBookOutput:
     ''' Get the address book of team members
 

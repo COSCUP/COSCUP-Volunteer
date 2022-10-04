@@ -44,6 +44,7 @@ The interactive API docs are provided by [Swagger UI](https://swagger.io/tools/s
 included in [fastAPI](https://fastapi.tiangolo.com/).
 
  - Docs: [https://volunteer.coscup.org/api/docs]()
+ - ... or [Redoc](https://volunteer.coscup.org/api/redoc) style.
 
 ## Getting started
 
@@ -63,9 +64,9 @@ included in [fastAPI](https://fastapi.tiangolo.com/).
 
 ## Deprecated API
 
-!!! info
+!!! Warning
 
-    We only have one api endpoint for `/members` and public to use. The more offcial REST API is under planning.
+    The api endpoint of `/members` is deprecated, using `/members/{pid}` instead.
 
 ### GET /members
 

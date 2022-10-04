@@ -2,7 +2,7 @@
 from typing import Any
 
 import arrow
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Path, status
 
 from api.apistructs.items import ProjectItem, TeamItem
 from api.apistructs.projects import (ProjectAllOut, ProjectItemUpdateInput,
@@ -20,6 +20,7 @@ router = APIRouter(
 
 
 @router.get('',
+            summary='List all projects.',
             response_model=ProjectAllOut,
             responses={
                 status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
@@ -44,18 +45,28 @@ async def projects_all(current_user: dict[str, Any] = Depends(get_current_user))
 
 
 @router.patch('/{pid}',
+              summary='Update one project info. *owners',
               tags=['owners', ],
               response_model=ProjectItemUpdateOutput,
               responses={
-                  status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
+                  status.HTTP_404_NOT_FOUND: {'description': 'Project not found'},
+                  status.HTTP_401_UNAUTHORIZED: {'description': '`owners` permission required'},
+              },
               response_model_exclude_none=True,
               )
 async def projects_one_update(
-        pid: str,
         update_data: ProjectItemUpdateInput,
+        pid: str = Path(..., description='project id'),
         current_user: dict[str, Any] = Depends(get_current_user),
 ) -> ProjectItemUpdateOutput | None:
-    ''' Update one project. `Owners only` '''
+    ''' Update one project info
+
+    Permissions
+    -----------
+    - **owners**
+
+    '''
+
     project = Project.get(pid=pid)
     if not project:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
@@ -73,17 +84,18 @@ async def projects_one_update(
 
 
 @router.get('/{pid}/teams',
+            summary='Lists of teams in project.',
             response_model=ProjectTeamsOutput,
             responses={
                 status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
             response_model_exclude_none=True,
             )
 async def projects_teams(
-        pid: str,
+        pid: str = Path(..., description='project id'),
         current_user: dict[str, Any] = Depends(  # pylint: disable=unused-argument
             get_current_user),
 ) -> ProjectTeamsOutput | None:
-    ''' Get teams in project '''
+    ''' Lists of teams in project '''
     teams = []
     for team in Team.list_by_pid(pid=pid):
         teams.append(TeamItem.parse_obj(team))

@@ -78,7 +78,7 @@ class Token(BaseModel):
 
 
 @app.get('/', tags=['docs', ],
-         summary='API main page.',
+         summary='Redirect to API main page',
          response_class=RedirectResponse, status_code=302)
 async def index() -> Optional[str]:
     '''Main page '''
@@ -86,6 +86,7 @@ async def index() -> Optional[str]:
 
 
 @app.post('/token', tags=['login', ],
+          summary='Exchange access token',
           response_model=Token)
 async def exchange_access_token(
         form_data: OAuth2PasswordRequestForm = Depends()) -> Token | JSONResponse:

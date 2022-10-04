@@ -23,7 +23,8 @@ router = APIRouter(
             deprecated=True,
             )
 async def members_past(
-        pid: str = Query(description='Project ID.', example='2022')) -> MembersOut | JSONResponse:
+        pid: str = Query(description='project id', example='2022'),
+) -> MembersOut | JSONResponse:
     ''' Get Project's members
 
         **Warning: will be deprecated.**
@@ -67,12 +68,18 @@ async def members_past(
 
 
 @router.get('/{pid:str}',
+            summary='Get members for the staff lists on coscup.org',
             responses={status.HTTP_404_NOT_FOUND: {
                 'description': 'Project not found'}},
             response_model=MembersOut)
 async def members(
-        pid: str = Path(description='Project ID.', example='2022')) -> MembersOut | JSONResponse:
-    ''' Get Project's members '''
+        pid: str = Path(description='project id', example='2022'),
+) -> MembersOut | JSONResponse:
+    ''' Get Project's members
+
+        For offcial site of coscup.org to fetch and build
+        the staff lists page.
+    '''
     result = MembersOut()
     for team in Team.list_by_pid(pid=pid):
         data = {}

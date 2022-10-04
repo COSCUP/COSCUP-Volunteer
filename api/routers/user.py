@@ -21,6 +21,7 @@ router = APIRouter(
 
 
 @router.get('/me',
+            summary='Current user info',
             response_model=UserMeOut,
             responses={status.HTTP_404_NOT_FOUND: {
                 'description': 'Project not found'}})
@@ -38,6 +39,7 @@ async def me_info(current_user: dict[str, Any] = Depends(get_current_user)) -> U
 
 
 @router.get('/me/participated',
+            summary='Joined team list',
             response_model=UserMeParticipatedOut,
             response_model_exclude_none=True,
             )
@@ -73,7 +75,9 @@ async def me_participated(
     return participate_in
 
 
-@router.get('/me/bank', response_model=UserMeBankOut)
+@router.get('/me/bank',
+            summary="Current user's bank info",
+            response_model=UserMeBankOut)
 async def me_bank(
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeBankOut:
     ''' Get myself participated in lists '''
