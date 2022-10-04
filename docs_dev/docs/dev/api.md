@@ -44,7 +44,7 @@ The interactive API docs are provided by [Swagger UI](https://swagger.io/tools/s
 included in [fastAPI](https://fastapi.tiangolo.com/).
 
  - Docs: [https://volunteer.coscup.org/api/docs]()
- - ... or [Redoc](https://volunteer.coscup.org/api/redoc) style.
+ - ... or [Redoc](/api/redoc) style.
 
 ## Getting started
 

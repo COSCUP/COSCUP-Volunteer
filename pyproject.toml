@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "coscup-volunteer"
-version = "2022.08.05"
+version = "2022.10.09"
 description = "COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政流程建立。"
 authors = ["COSCUP Volunteer <volunteer@coscup.org>"]
 license = "AGPL-3.0"
@@ -28,7 +28,7 @@ uvicorn = {extras = ["standard"], version = "^0.18.3"}
 python-multipart = "^0.0.5"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 mongomock = "^4.0.0"
 pylint = "^2.13.8"
 autopep8 = "^1.6.0"
