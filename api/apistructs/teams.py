@@ -8,7 +8,7 @@ from api.apistructs.items import UserItem
 
 class TeamItemUpdateInput(BaseModel):
     ''' Update Team item input '''
-    name: str = Field(description='team name')
+    name: str | None = Field(description='team name')
     desc: str | None = Field(description='desc')
     mailling: EmailStr | None = Field(description='mailing list for team')
     headcount: int | None = Field(description='the headcount of team')
