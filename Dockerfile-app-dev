@@ -109,6 +109,7 @@ ADD ./api/apistructs/__init__.py ./api/apistructs/__init__.py
 ADD ./api/apistructs/items.py ./api/apistructs/items.py
 ADD ./api/apistructs/members.py ./api/apistructs/members.py
 ADD ./api/apistructs/projects.py ./api/apistructs/projects.py
+ADD ./api/apistructs/sender.py ./api/apistructs/sender.py
 ADD ./api/apistructs/teams.py ./api/apistructs/teams.py
 ADD ./api/apistructs/users.py ./api/apistructs/users.py
 ADD ./api/dependencies.py ./api/dependencies.py
@@ -116,6 +117,7 @@ ADD ./api/main.py ./api/main.py
 ADD ./api/routers/__init__.py ./api/routers/__init__.py
 ADD ./api/routers/members.py ./api/routers/members.py
 ADD ./api/routers/projects.py ./api/routers/projects.py
+ADD ./api/routers/sender.py ./api/routers/sender.py
 ADD ./api/routers/teams.py ./api/routers/teams.py
 ADD ./api/routers/user.py ./api/routers/user.py
 

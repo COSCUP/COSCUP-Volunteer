@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
 
-from api.routers import members, projects, teams, user
+from api.routers import members, projects, sender, teams, user
 from module.api_token import APIToken
 
 logging.basicConfig(
@@ -67,6 +67,7 @@ app = FastAPI(
 
 app.include_router(members.router)
 app.include_router(projects.router)
+app.include_router(sender.router)
 app.include_router(teams.router)
 app.include_router(user.router)
 

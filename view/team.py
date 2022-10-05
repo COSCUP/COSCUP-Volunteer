@@ -1,5 +1,6 @@
 ''' Team '''
 # pylint: disable=too-many-lines
+import html
 import json
 import re
 
