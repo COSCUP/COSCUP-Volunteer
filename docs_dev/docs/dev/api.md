@@ -57,7 +57,7 @@ included in [fastAPI](https://fastapi.tiangolo.com/).
 
 ### User authorization
 
-1. Get the template exchange username, password from [here](/setting/api_token).
+1. Get the temporary and ont-time-use exchange username, password from [here](/setting/api_token).
 2. Submit a POST request to [/api/token](/api/docs#/login/exchange_access_token_token_post) to get the api token.
 3. Submit the request with a header `Authorization` with a value of `Bearer` plus the api token.
 4. ... or make a try in the [api docs](/api/docs).
