@@ -202,7 +202,7 @@ class SenderReceiverDB(DBBase):
             },
         }
 
-    def remove_past(self, pid: str, cid: str) -> None:
+    def remove_past(self, pid: str, cid: str) -> int:
         ''' Remove past data
 
         Args:
@@ -210,7 +210,7 @@ class SenderReceiverDB(DBBase):
             cid (str): Campaign id, the `id` is from [models.senderdb.SenderCampaignDB][].
 
         '''
-        self.delete_many({'pid': pid, 'cid': cid})
+        return self.delete_many({'pid': pid, 'cid': cid}).deleted_count
 
     def update_data(self, pid: str, cid: str, datas: list[dict[str, Any]]) -> None:
         ''' Update datas

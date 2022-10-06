@@ -258,7 +258,7 @@ class SenderReceiver:
     ''' SenderReceiver object '''
 
     @staticmethod
-    def replace(pid: str, cid: str, datas: list[dict[str, Any]]) -> None:
+    def replace(pid: str, cid: str, datas: list[dict[str, Any]]) -> int:
         ''' Replace
 
         Args:
@@ -302,8 +302,10 @@ class SenderReceiver:
 
         sender_receiver_db.update_data(pid=pid, cid=cid, datas=save_datas)
 
+        return len(save_datas)
+
     @staticmethod
-    def update(pid: str, cid: str, datas: list[dict[str, Any]]) -> None:
+    def update(pid: str, cid: str, datas: list[dict[str, Any]]) -> int:
         ''' Update
 
         Args:
@@ -344,8 +346,10 @@ class SenderReceiver:
 
         SenderReceiverDB().update_data(pid=pid, cid=cid, datas=save_datas)
 
+        return len(save_datas)
+
     @staticmethod
-    def remove(pid: str, cid: str) -> None:
+    def remove(pid: str, cid: str) -> int:
         ''' Update
 
         Args:
@@ -353,7 +357,7 @@ class SenderReceiver:
             cid (str): Campaign id.
 
         '''
-        SenderReceiverDB().remove_past(pid=pid, cid=cid)
+        return SenderReceiverDB().remove_past(pid=pid, cid=cid)
 
     @staticmethod
     def get(pid: str, cid: str) -> tuple[list[str], list[list[str]]]:
