@@ -1,8 +1,9 @@
 ''' Main '''
 import logging
-from typing import Optional
+from time import time
+from typing import Awaitable, Callable, Optional
 
-from fastapi import Depends, FastAPI, status
+from fastapi import Depends, FastAPI, Request, Response, status
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
@@ -76,6 +77,19 @@ class Token(BaseModel):
     ''' Token '''
     access_token: str
     token_type: str = Field(default='bearer')
+
+
+@app.middleware('http')
+async def request_time(
+        request: Request,
+        call_next: Callable[[Request], Awaitable[Response]]) -> Response:
+    ''' Request time '''
+    logging.info(
+        f'request: {request.url.path} | {request.headers}')
+    start = time()
+    response = await call_next(request)
+    response.headers['X-Process-Time'] = str(f'{(time() - start):.05}')
+    return response
 
 
 @app.get('/', tags=['docs', ],
