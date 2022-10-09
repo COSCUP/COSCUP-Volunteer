@@ -139,14 +139,14 @@ services:
     entrypoint: ["poetry", "run", "celery", "-A", "celery_task.celery_main", "worker", "-B", "-l", "info", "-O", "fair", "-c", "4", "--logfile", "./log/log.log"]
 
   memcached-prod:
-    image: "memcached:1.6.15-alpine"
+    image: "memcached:1.6.17-alpine"
     deploy:
       replicas: 1
     networks:
       - backend
 
   queue_sender:
-    image: "rabbitmq:3.8.30-management-alpine"
+    image: "rabbitmq:3.11.0-management-alpine"
     deploy:
       replicas: 1
     depends_on:
@@ -155,14 +155,14 @@ services:
       - backend
 
   secretary_mongo:
-    image: "mongo:5.0.8-focal"
+    image: "mongo:5.0.13-focal"
     deploy:
       replicas: 1
     networks:
       - backend
 
   link_mongo:
-    image: "mongo:5.0.8-focal"
+    image: "mongo:5.0.13-focal"
     deploy:
       replicas: 1
     networks:
