@@ -85,7 +85,7 @@ warn_untyped_fields = true
 
 [tool.pylint.main]
 extension-pkg-whitelist = "pydantic"
-init-hook='import os, sys; sys.path.append(os.getcwd())'
+init-hook="import os, sys; base = os.getcwd(); sys.path.extend([base+'/'+path for path in ('module', 'models', 'view', 'structs', 'cmdtools', 'api')])"
 
 [tool.pylint."messages control"]
 disable = ["W0223"]
