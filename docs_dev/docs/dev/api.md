@@ -43,7 +43,7 @@ in the future will be published here.
 The interactive API docs are provided by [Swagger UI](https://swagger.io/tools/swagger-ui/)
 included in [fastAPI](https://fastapi.tiangolo.com/).
 
- - Docs: [https://volunteer.coscup.org/api/docs]()
+ - Docs: [https://volunteer.coscup.org/api/docs](/api/docs)
  - ... or [Redoc](/api/redoc) style.
 
 ## Getting started
