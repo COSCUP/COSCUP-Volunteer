@@ -537,21 +537,12 @@ def project_dietary_habit(pid):
             user_infos = User.get_info(
                 uids=list(all_users.keys()), need_sensitive=True)
 
-            datas = []
-            for uid, value in all_users.items():
-                user_info = user_infos[uid]
-                data = {
-                    'uid': uid,
-                    'name': user_info['profile']['badge_name'],
-                    'picture': user_info['oauth']['picture'],
-                    'tid': value['tid'],
-                    'dietary_habit': [],
-                }
+            datas = list(User.marshal_dietary_habit(user_infos=user_infos))
+            for data in datas:
+                if data['uid'] not in all_users:
+                    continue
 
-                if 'profile_real' in user_info and 'dietary_habit' in user_info['profile_real']:
-                    data['dietary_habit'] = user_info['profile_real']['dietary_habit']
-
-                datas.append(data)
+                data['tid'] = all_users[data['uid']]['tid']
 
             dietary_habit_list = {}
             for item in DietaryHabitItemsName:

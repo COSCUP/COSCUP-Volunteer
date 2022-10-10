@@ -45,3 +45,10 @@ class ProjectItemUpdateOutput(ProjectItemUpdateInput):
 class ProjectTeamsOutput(BaseModel):
     ''' List of teams in project '''
     teams: list[TeamItem]
+
+
+class ProjectTeamDietaryHabitOutput(BaseModel):
+    ''' List of the statistics of dietary habit '''
+    name: str = Field(description='name of dietary habit')
+    count: int = Field(description='counts')
+    code: str = Field(description='internal code')

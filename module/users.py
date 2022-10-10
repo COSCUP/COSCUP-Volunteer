@@ -246,6 +246,27 @@ class User:
 
         return UsersDB().count_documents(query)
 
+    @staticmethod
+    def marshal_dietary_habit(user_infos: dict[str, Any]) -> Generator[dict[str, Any], None, None]:
+        ''' marshel the dietary_habit from user's data
+
+            Args:
+                user_infos (dict): user datas from [User.get_info][module.users.User.get_info]
+
+        '''
+        for uid, user_info in user_infos.items():
+            data = {
+                'uid': uid,
+                'name': user_info['profile']['badge_name'],
+                'picture': user_info['oauth']['picture'],
+                'dietary_habit': [],
+            }
+
+            if 'profile_real' in user_info and 'dietary_habit' in user_info['profile_real']:
+                data['dietary_habit'] = user_info['profile_real']['dietary_habit']
+
+            yield data
+
 
 class TobeVolunteer:
     ''' TobeVolunteer '''

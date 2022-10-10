@@ -7,10 +7,13 @@ from fastapi import APIRouter, Depends, HTTPException, Path, status
 from api.apistructs.items import ProjectItem, TeamItem
 from api.apistructs.projects import (ProjectAllOut, ProjectItemUpdateInput,
                                      ProjectItemUpdateOutput,
+                                     ProjectTeamDietaryHabitOutput,
                                      ProjectTeamsOutput)
 from api.dependencies import get_current_user
+from module.dietary_habit import DietaryHabitItemsName, DietaryHabitItemsValue
 from module.project import Project
 from module.team import Team
+from module.users import User
 
 router = APIRouter(
     prefix='/projects',
@@ -101,3 +104,47 @@ async def projects_teams(
         teams.append(TeamItem.parse_obj(team))
 
     return ProjectTeamsOutput.parse_obj({'teams': teams})
+
+
+@router.get('/{pid}/teams/dietary_habit',
+            summary='Lists of dietary habit statistics in project.',
+            response_model=list[ProjectTeamDietaryHabitOutput],
+            responses={
+                status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
+            response_model_exclude_none=True,
+            )
+async def projects_teams_dietary_habit(
+        pid: str = Path(..., description='project id'),
+        current_user: dict[str, Any] = Depends(  # pylint: disable=unused-argument
+            get_current_user),
+) -> list[ProjectTeamDietaryHabitOutput] | None:
+    ''' Lists of dietary habit statistics in project '''
+    all_users = {}
+    for team in Team.list_by_pid(pid=pid):
+        for uid in team['chiefs']+team['members']:
+            all_users[uid] = {'tid': team['tid']}
+
+    user_infos = User.get_info(
+        uids=list(all_users.keys()), need_sensitive=True)
+
+    habit_count = {}
+    for data in User.marshal_dietary_habit(user_infos=user_infos):
+        for habit in data['dietary_habit']:
+            if habit not in habit_count:
+                habit_count[habit] = 0
+
+            habit_count[habit] += 1
+
+    dietary_habit_info = {}
+    for item in DietaryHabitItemsValue:
+        dietary_habit_info[item.value] = DietaryHabitItemsName[item.name].value
+
+    datas = []
+    for habit, count in habit_count.items():
+        datas.append(
+            ProjectTeamDietaryHabitOutput.parse_obj({'name': dietary_habit_info[habit],
+                                                     'count': count,
+                                                     'code': habit,
+                                                     }))
+
+    return datas
