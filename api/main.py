@@ -54,7 +54,7 @@ TAGS_META = [
 app = FastAPI(
     title='Volunteer API.',
     description=DOC_DESC,
-    version='2022.10.09',
+    version='2022.10.13',
     openapi_tags=TAGS_META,
     root_path="/api",
     contact={'name': 'Volunteer Team',
@@ -85,7 +85,7 @@ async def request_time(
         call_next: Callable[[Request], Awaitable[Response]]) -> Response:
     ''' Request time '''
     logging.info(
-        f'request: {request.url.path} | {request.headers}')
+        'request: %s | %s', request.url.path, request.headers)
     start = time()
     response = await call_next(request)
     response.headers['X-Process-Time'] = str(f'{(time() - start):.05}')

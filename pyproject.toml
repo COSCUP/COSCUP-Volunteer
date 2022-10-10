@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "coscup-volunteer"
-version = "2022.10.09"
+version = "2022.10.13"
 description = "COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政流程建立。"
 authors = ["COSCUP Volunteer <volunteer@coscup.org>"]
 license = "AGPL-3.0"
@@ -85,7 +85,7 @@ warn_untyped_fields = true
 
 [tool.pylint.main]
 extension-pkg-whitelist = "pydantic"
-init-hook="import os, sys; sys.path.append(os.getcwd())"
+init-hook="import os, sys; sys.path.insert(0, os.getcwd())"
 
 [tool.pylint."messages control"]
 disable = ["W0223"]
