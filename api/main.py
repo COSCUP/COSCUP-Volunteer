@@ -79,6 +79,18 @@ class Token(BaseModel):
     token_type: str = Field(default='bearer')
 
 
+@app.on_event('startup')
+async def startup_event() -> None:
+    ''' On startup event '''
+    logging.info('[API] Startup')
+
+
+@app.on_event('shutdown')
+async def shutdown_event() -> None:
+    ''' On shutdown event '''
+    logging.info('[API] Shutdown')
+
+
 @app.middleware('http')
 async def request_time(
         request: Request,
