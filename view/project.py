@@ -553,10 +553,9 @@ def project_dietary_habit(pid):
 
                 datas.append(data)
 
-            dietary_habit_list = []
+            dietary_habit_list = {}
             for item in DietaryHabitItemsName:
-                dietary_habit_list.append(
-                    (DietaryHabitItemsValue[item.name].value, item.value))
+                dietary_habit_list[DietaryHabitItemsValue[item.name].value] = item.value
 
             return jsonify({'datas': datas, 'dietary_habit': dietary_habit_list})
 
