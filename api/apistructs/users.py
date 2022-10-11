@@ -4,7 +4,7 @@ from datetime import date
 from pydantic import BaseModel, Field, HttpUrl
 
 from api.apistructs.items import ProjectItem, TeamItem
-from structs.users import UserBank
+from structs.users import UserBank, UserProfle
 
 
 class UserMeOut(BaseModel):
@@ -34,3 +34,11 @@ class UserMeParticipatedOut(BaseModel):
 class UserMeBankOut(BaseModel):
     ''' UserMeBankOut '''
     bank: UserBank = Field(description='User bank info')
+
+
+class UserMeProfileInput(UserProfle):
+    ''' UserMeProfileInput '''
+
+
+class UserMeProfileOutput(UserProfle):
+    ''' UserMeProfileOutput '''

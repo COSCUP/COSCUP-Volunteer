@@ -16,8 +16,8 @@ class UserProfle(BaseModel):
         intro: introduction.
 
     '''
-    badge_name: str = Field(..., example='Badge Name')
-    intro: str = Field(default='')
+    badge_name: str = Field(default='', example='Badge Name')
+    intro: str = Field(default='', description='Markdown format')
 
     class Config:  # pylint: disable=too-few-public-methods
         ''' Config

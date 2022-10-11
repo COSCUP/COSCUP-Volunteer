@@ -6,7 +6,7 @@ from pymongo.collection import ReturnDocument
 from models.oauth_db import OAuthDB
 from models.users_db import TobeVolunteerDB, UsersDB
 from module.skill import TobeVolunteerStruct
-from structs.users import UserBank
+from structs.users import UserBank, UserProfle
 
 
 class User:
@@ -55,6 +55,19 @@ class User:
         OAuthDB().setup_owner(mail=user['mail'], uid=user['_id'])
 
         return user
+
+    def get_profile(self) -> UserProfle | None:
+        ''' Get user's profile
+
+        Returns:
+            Return the user profile data.
+
+        '''
+        for data in UsersDB().find({'_id': self.uid}, {'profile': 1}):
+            if 'profile' in data:
+                return UserProfle.parse_obj(data['profile'])
+
+        return None
 
     def update_profile(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' update profile

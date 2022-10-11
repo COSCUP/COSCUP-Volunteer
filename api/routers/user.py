@@ -7,11 +7,13 @@ from fastapi import APIRouter, Depends, status
 from api.apistructs.items import ProjectItem, TeamItem
 from api.apistructs.users import (UserMeBankOut, UserMeOut,
                                   UserMeParticipatedItem,
-                                  UserMeParticipatedOut)
+                                  UserMeParticipatedOut, UserMeProfileInput,
+                                  UserMeProfileOutput)
 from api.dependencies import get_current_user
 from module.project import Project
 from module.team import Team
 from module.users import User
+from structs.users import UserProfle
 
 router = APIRouter(
     prefix='/user',
@@ -82,3 +84,29 @@ async def me_bank(
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeBankOut:
     ''' Get myself participated in lists '''
     return UserMeBankOut(bank=User.get_bank(uid=current_user['uid']))
+
+
+@router.get('/me/profile',
+            summary="Get current's profile",
+            response_model=UserMeProfileOutput)
+async def me_profile(
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeProfileOutput:
+    ''' Get current user's profile and the `intro` in Markdown format '''
+    data = User(uid=current_user['uid']).get_profile()
+    if data:
+        return UserMeProfileOutput.parse_obj(data)
+
+    return UserMeProfileOutput.parse_obj({})
+
+
+@router.put('/me/profile',
+            summary="Update current's profile",
+            response_model=UserMeProfileOutput)
+async def me_profile_update(
+        update_data: UserMeProfileInput,
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeProfileOutput:
+    ''' Update current user's profile and the `intro` in Markdown format '''
+    data = User(uid=current_user['uid']).update_profile(
+        UserProfle.parse_obj(update_data).dict()
+    )
+    return UserMeProfileOutput.parse_obj(data['profile'])

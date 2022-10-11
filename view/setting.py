@@ -20,7 +20,7 @@ from module.skill import (SkillEnum, SkillEnumDesc, StatusEnum, StatusEnumDesc,
 from module.users import TobeVolunteer, User
 from module.usession import USession
 from module.waitlist import WaitList
-from structs.users import UserAddress, UserBank, UserProfleReal
+from structs.users import UserAddress, UserBank, UserProfle, UserProfleReal
 
 VIEW_SETTING = Blueprint('setting', __name__, url_prefix='/setting')
 
@@ -38,7 +38,7 @@ def profile_page() -> Union[Text, Response]:
     if request.method == 'GET':
         user = g.user['account']
         if 'profile' not in user:
-            user['profile'] = {}
+            user['profile'] = UserProfle().dict()
 
         return render_template('./setting_profile.html', user=user)
 
@@ -48,7 +48,7 @@ def profile_page() -> Union[Text, Response]:
         if post_data['casename'] == 'get':
             user = g.user['account']
             if 'profile' not in user:
-                user['profile'] = {}
+                user['profile'] = UserProfle().dict()
 
             profile = {}
             if 'profile' in user:
@@ -85,16 +85,10 @@ def profile_page() -> Union[Text, Response]:
             return jsonify({})
 
         if post_data['casename'] == 'save':
-            data = {}
-            if 'badge_name' in post_data['data'] and post_data['data']['badge_name']:
-                data['badge_name'] = post_data['data']['badge_name'].strip()
-
-            if 'intro' in post_data['data'] and post_data['data']['intro']:
-                data['intro'] = post_data['data']['intro'].strip()
-
-            if data:
-                User(uid=g.user['account']['_id']).update_profile(data)
-                MC.get_client().delete(f"sid:{session['sid']}")
+            User(uid=g.user['account']['_id']).update_profile(
+                UserProfle.parse_obj(post_data['data']).dict()
+            )
+            MC.get_client().delete(f"sid:{session['sid']}")
 
         return jsonify({})
 
