@@ -196,6 +196,25 @@ class User:
         return UserBank()
 
     @staticmethod
+    def update_bank(uid: str, data: UserBank) -> UserBank:
+        ''' Update bank info
+
+        Args:
+            uid (str): User id.
+
+        Returns:
+            Return the data.
+
+        '''
+        result = UsersDB().find_one_and_update(
+            {'_id': uid},
+            {'$set': {'profile_real.bank': data.dict()}},
+            return_document=ReturnDocument.AFTER,
+        )
+
+        return UserBank.parse_obj(result['profile_real']['bank'])
+
+    @staticmethod
     def get_address(uid: str) -> dict[str, Any]:
         ''' Get Address
 

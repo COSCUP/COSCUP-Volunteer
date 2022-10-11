@@ -31,9 +31,12 @@ class UserMeParticipatedOut(BaseModel):
     )
 
 
-class UserMeBankOut(BaseModel):
+class UserMeBankInput(UserBank):
+    ''' UserMeBankInput '''
+
+
+class UserMeBankOut(UserBank):
     ''' UserMeBankOut '''
-    bank: UserBank = Field(description='User bank info')
 
 
 class UserMeProfileInput(UserProfle):

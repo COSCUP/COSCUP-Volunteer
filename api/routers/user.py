@@ -5,7 +5,7 @@ import arrow
 from fastapi import APIRouter, Depends, status
 
 from api.apistructs.items import ProjectItem, TeamItem
-from api.apistructs.users import (UserMeBankOut, UserMeOut,
+from api.apistructs.users import (UserMeBankInput, UserMeBankOut, UserMeOut,
                                   UserMeParticipatedItem,
                                   UserMeParticipatedOut, UserMeProfileInput,
                                   UserMeProfileOutput)
@@ -13,7 +13,7 @@ from api.dependencies import get_current_user
 from module.project import Project
 from module.team import Team
 from module.users import User
-from structs.users import UserProfle
+from structs.users import UserBank, UserProfle
 
 router = APIRouter(
     prefix='/user',
@@ -82,8 +82,21 @@ async def me_participated(
             response_model=UserMeBankOut)
 async def me_bank(
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeBankOut:
-    ''' Get myself participated in lists '''
-    return UserMeBankOut(bank=User.get_bank(uid=current_user['uid']))
+    ''' Get current user's bank info '''
+    return UserMeBankOut.parse_obj(
+        User.get_bank(uid=current_user['uid']))
+
+
+@router.put('/me/bank',
+            summary="Update current user's bank info",
+            response_model=UserMeBankOut)
+async def me_bank_update(
+        update_data: UserMeBankInput,
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeBankOut:
+    ''' Update current user's bank info '''
+    data = User.update_bank(
+        uid=current_user['uid'], data=UserBank.parse_obj(update_data))
+    return UserMeBankOut.parse_obj(data)
 
 
 @router.get('/me/profile',
