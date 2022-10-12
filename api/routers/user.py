@@ -15,12 +15,19 @@ from api.apistructs.users import (UserMeAddressInput, UserMeAddressOutput,
                                   UserMeParticipatedItem,
                                   UserMeParticipatedOut, UserMeProfileInput,
                                   UserMeProfileOutput, UserMeProfileRealInput,
-                                  UserMeProfileRealOutput)
+                                  UserMeProfileRealOutput,
+                                  UserMeToBeVolunteerInput,
+                                  UserMeToBeVolunteerOptionIntItem,
+                                  UserMeToBeVolunteerOptionsOutput,
+                                  UserMeToBeVolunteerOptionStrItem,
+                                  UserMeToBeVolunteerOutput)
 from api.dependencies import get_current_user
 from module.dietary_habit import DietaryHabitItemsName, DietaryHabitItemsValue
 from module.project import Project
+from module.skill import (SkillEnum, SkillEnumDesc, StatusEnum, StatusEnumDesc,
+                          TeamsEnum, TeamsEnumDesc)
 from module.team import Team
-from module.users import User
+from module.users import TobeVolunteer, User
 from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase
 
 router = APIRouter(
@@ -222,4 +229,72 @@ async def me_dietary_habit_update(
         list[DietaryHabitItemsValue], update_data.checked)
     User(uid=current_user['uid']).update_dietary_habit(values=checked)
     result = await me_dietary_habit(current_user=current_user)
+    return result
+
+
+@router.get('/me/to_be_volunteer/options',
+            summary="Get all options of to be volunteer",
+            response_model=UserMeToBeVolunteerOptionsOutput)
+async def me_to_be_volunteer_options(
+        current_user: dict[str, Any] = Depends(  # pylint: disable=unused-argument
+            get_current_user)
+) -> UserMeToBeVolunteerOptionsOutput:
+    ''' Get all options of to be volunteer '''
+    result: dict[str,
+                 list[UserMeToBeVolunteerOptionIntItem | UserMeToBeVolunteerOptionStrItem]] = {
+        'teams': [], 'skills': [], 'status': []}
+    for team in TeamsEnum:
+        result['teams'].append(
+            UserMeToBeVolunteerOptionIntItem.parse_obj({
+                'code': team.name,
+                'value': team.value,
+                'desc': TeamsEnumDesc[team.name].value,
+            })
+        )
+
+    for skill in SkillEnum:
+        result['skills'].append(
+            UserMeToBeVolunteerOptionStrItem.parse_obj({
+                'code': skill.name,
+                'value': skill.value,
+                'desc': SkillEnumDesc[skill.name].value,
+            })
+        )
+
+    for _status in StatusEnum:
+        result['status'].append(
+            UserMeToBeVolunteerOptionIntItem.parse_obj({
+                'code': _status.name,
+                'value': _status.value,
+                'desc': StatusEnumDesc[_status.name].value,
+            })
+        )
+
+    return UserMeToBeVolunteerOptionsOutput.parse_obj(result)
+
+
+@router.get('/me/to_be_volunteer',
+            summary="Get to be volunteer",
+            response_model=UserMeToBeVolunteerOutput)
+async def me_to_be_volunteer(
+        current_user: dict[str, Any] = Depends(get_current_user)
+) -> UserMeToBeVolunteerOutput:
+    ''' Get to be volunteer '''
+    return UserMeToBeVolunteerOutput.parse_obj(
+        {'data': TobeVolunteer.get(uid=current_user['uid'])}
+    )
+
+
+@router.put('/me/to_be_volunteer',
+            summary="Update to be volunteer",
+            response_model=UserMeToBeVolunteerOutput)
+async def me_to_be_volunteer_update(
+        update_data: UserMeToBeVolunteerInput,
+        current_user: dict[str, Any] = Depends(get_current_user)
+) -> UserMeToBeVolunteerOutput:
+    ''' Update to be volunteer '''
+    data = update_data.dict()
+    data['uid'] = current_user['uid']
+    TobeVolunteer.save(data=data)
+    result = await me_to_be_volunteer(current_user=current_user)
     return result

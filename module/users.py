@@ -403,7 +403,7 @@ class TobeVolunteer:
         TobeVolunteerDB().add(data=data)
 
     @staticmethod
-    def get(uid: str) -> dict[str, Any]:
+    def get(uid: str) -> TobeVolunteerStruct:
         ''' get data
 
         Args:
@@ -418,7 +418,7 @@ class TobeVolunteer:
             data.update(item)
             data['uid'] = data['_id']
 
-        return TobeVolunteerStruct.parse_obj(data).dict()
+        return TobeVolunteerStruct.parse_obj(data)
 
     @staticmethod
     def query(query: dict[str, Any]) -> Generator[dict[str, Any], None, None]:

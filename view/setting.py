@@ -75,7 +75,7 @@ def profile_page() -> Union[Text, Response]:
         if post_data['casename'] == 'get_tobe_volunteer':
             data = TobeVolunteer.get(uid=g.user['account']['_id'])
 
-            return jsonify({'tobe_volunteer': data})
+            return jsonify({'tobe_volunteer': data.dict()})
 
         if post_data['casename'] == 'save_tobe_volunteer':
             data = TobeVolunteerStruct.parse_obj(post_data['data']).dict()

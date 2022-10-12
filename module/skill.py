@@ -1,9 +1,8 @@
 ''' skill '''
 # pylint: disable=too-few-public-methods
 from enum import Enum, IntEnum, unique
-from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 @unique
@@ -113,17 +112,20 @@ class TobeVolunteerStruct(BaseModel):
         - `desc`: Description.
 
     '''
-    uid: str = ''
-    ok: bool = False
-    teams: List[TeamsEnum] = []
-    skill: List[SkillEnum] = []
-    hours: int = 0
-    status: Optional[StatusEnum]
-    desc: str = ''
+    uid: str = Field(default='', description='user id')
+    ok: bool = Field(default=False, description='ok to be volunteer')
+    teams: list[TeamsEnum] = Field(
+        default_factory=list, description='list of teams')
+    skill: list[SkillEnum] = Field(
+        default_factory=list, description='list of skills')
+    hours: int = Field(default=0, description='Hours in an week')
+    status: StatusEnum | None = Field(description='status')
+    desc: str = Field(default='', description='more description')
 
     class Config:
         ''' Config '''
-        use_enum_values = True
+        anystr_strip_whitespace: bool = True
+        use_enum_values: bool = True
 
 
 class RecruitQuery(BaseModel):
@@ -135,9 +137,12 @@ class RecruitQuery(BaseModel):
         - `status`: List of [module.skill.StatusEnum][].
 
     '''
-    teams: List[TeamsEnum] = []
-    skill: List[SkillEnum] = []
-    status: List[StatusEnum] = []
+    teams: list[TeamsEnum] = Field(
+        default_factory=list, description='list of teams')
+    skill: list[SkillEnum] = Field(
+        default_factory=list, description='list of skills')
+    status: list[StatusEnum] = Field(
+        default_factory=list, description='list of status')
 
     class Config:
         ''' Config '''
