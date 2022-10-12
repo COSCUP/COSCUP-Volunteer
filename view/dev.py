@@ -1,6 +1,5 @@
-from typing import Text
-
-from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
+''' Dev '''
+from flask import (Blueprint, Response, jsonify, redirect, render_template,
                    request, session, url_for)
 
 from models.users_db import UsersDB
@@ -11,7 +10,7 @@ VIEW_DEV = Blueprint('dev', __name__, url_prefix='/dev')
 
 
 @VIEW_DEV.route('/', methods=('GET', 'POST'))
-def index() -> Text:
+def index() -> Response:
     ''' Index page '''
     if request.method == 'GET':
         if 'tc' not in session:
@@ -42,8 +41,7 @@ def index() -> Text:
                 })
 
             if 'casename' in data and data['casename'] == 'create_project':
-                usession = USessionDB().find_one({'_id': session['sid']})
-                if usession:
+                for usession in USessionDB().find({'_id': session['sid']}):
                     project_data = data['project']
                     Project.create(pid=project_data['pid'],
                                    name=project_data['name'],
@@ -55,7 +53,7 @@ def index() -> Text:
 
 
 @VIEW_DEV.route('/cookie')
-def set_cookie() -> Text:
+def set_cookie() -> Response:
     ''' set cookies '''
     session['sid'] = request.args['sid']
     return redirect(url_for('dev.index'))
