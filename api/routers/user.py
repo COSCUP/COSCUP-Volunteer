@@ -4,15 +4,20 @@ from typing import Any
 import arrow
 import phonenumbers
 from fastapi import APIRouter, Depends, status
+from pydantic import parse_obj_as
 
 from api.apistructs.items import ProjectItem, TeamItem
 from api.apistructs.users import (UserMeAddressInput, UserMeAddressOutput,
-                                  UserMeBankInput, UserMeBankOut, UserMeOut,
+                                  UserMeBankInput, UserMeBankOut,
+                                  UserMeDietaryHabitInput,
+                                  UserMeDietaryHabitItem,
+                                  UserMeDietaryHabitOutput, UserMeOut,
                                   UserMeParticipatedItem,
                                   UserMeParticipatedOut, UserMeProfileInput,
                                   UserMeProfileOutput, UserMeProfileRealInput,
                                   UserMeProfileRealOutput)
 from api.dependencies import get_current_user
+from module.dietary_habit import DietaryHabitItemsName, DietaryHabitItemsValue
 from module.project import Project
 from module.team import Team
 from module.users import User
@@ -183,3 +188,38 @@ async def me_profile_real_update(
         data=data.copy(update=need_update.dict()))
 
     return UserMeProfileRealOutput.parse_obj(saved)
+
+
+@router.get('/me/dietary_habit',
+            summary="Get current's dietary habit",
+            response_model=UserMeDietaryHabitOutput)
+async def me_dietary_habit(
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeDietaryHabitOutput:
+    ''' Get current user's dietary habit items'''
+    saved = User(uid=current_user['uid']).get_dietary_habit()
+
+    datas = []
+    for item in DietaryHabitItemsValue:
+        datas.append(UserMeDietaryHabitItem.parse_obj(
+            {
+                'name': DietaryHabitItemsName[item.name].value,
+                'value': item.value,
+                'checked': item in saved,
+            }
+        ))
+
+    return UserMeDietaryHabitOutput.parse_obj({'data': datas})
+
+
+@router.put('/me/dietary_habit',
+            summary="Update current's dietary habit",
+            response_model=UserMeDietaryHabitOutput)
+async def me_dietary_habit_update(
+        update_data: UserMeDietaryHabitInput,
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeDietaryHabitOutput:
+    ''' Update current user's dietary habit items'''
+    checked = parse_obj_as(
+        list[DietaryHabitItemsValue], update_data.checked)
+    User(uid=current_user['uid']).update_dietary_habit(values=checked)
+    result = await me_dietary_habit(current_user=current_user)
+    return result

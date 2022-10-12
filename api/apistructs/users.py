@@ -61,3 +61,24 @@ class UserMeProfileRealInput(UserProfleRealBase):
 
 class UserMeProfileRealOutput(UserProfleRealBase):
     ''' UserMeProfileRealOutput '''
+
+
+class UserMeDietaryHabitItem(BaseModel):
+    ''' UserMeDietaryHabitItem '''
+    name: str = Field(description='code')
+    value: str = Field(description='in chinese name')
+    checked: bool = Field(default=False, description='user selected')
+
+
+class UserMeDietaryHabitInput(BaseModel):
+    ''' UserMeDietaryHabitInput '''
+    checked: list[str] = Field(
+        description='lists value of `DietaryHabitItemsValue`',
+        example=['0.001', '0.002'],
+    )
+
+
+class UserMeDietaryHabitOutput(BaseModel):
+    ''' UserMeDietaryHabitOutput '''
+    data: list[UserMeDietaryHabitItem] = Field(
+        description='lists of dietary habit items')

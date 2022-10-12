@@ -1,10 +1,12 @@
 ''' users '''
 from typing import Any, Generator, Optional
 
+from pydantic import parse_obj_as
 from pymongo.collection import ReturnDocument
 
 from models.oauth_db import OAuthDB
 from models.users_db import TobeVolunteerDB, UsersDB
+from module.dietary_habit import DietaryHabitItemsValue
 from module.skill import TobeVolunteerStruct
 from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase
 
@@ -140,6 +142,38 @@ class User:
             {'$set': {'profile_real': data}},
             return_document=ReturnDocument.AFTER,
         )
+
+    def get_dietary_habit(self) -> list[DietaryHabitItemsValue]:
+        ''' Get dietary habit
+
+        Returns:
+            Return the dietary habit of user
+
+        '''
+        result: list[DietaryHabitItemsValue] = []
+        for data in UsersDB().find({'_id': self.uid}, {'profile_real.dietary_habit': 1}):
+            if 'profile_real' in data and 'dietary_habit' in data['profile_real']:
+                for die in data['profile_real']['dietary_habit']:
+                    result.append(DietaryHabitItemsValue(die))
+
+        return result
+
+    def update_dietary_habit(self,
+                             values: list[DietaryHabitItemsValue]) -> list[DietaryHabitItemsValue]:
+        ''' Update dietary habit
+
+        Returns:
+            Return the dietary habit of user
+
+        '''
+        saved = UsersDB().find_one_and_update(
+            {'_id': self.uid},
+            {'$set': {'profile_real.dietary_habit': [
+                value.value for value in values]}},
+            return_document=ReturnDocument.AFTER,
+        )
+
+        return parse_obj_as(list[DietaryHabitItemsValue], saved['profile_real']['dietary_habit'])
 
     def property_suspend(self, value: bool = True) -> dict[str, Any]:
         ''' Property suspend
