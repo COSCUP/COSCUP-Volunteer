@@ -77,24 +77,41 @@ class UserAddress(BaseModel):
         anystr_strip_whitespace: bool = True
 
 
-class UserProfleReal(BaseModel):
-    ''' User Profile Real struct
+class UserProfleRealBase(BaseModel):
+    ''' User Profile Real Base struct
 
     Attributes:
         name: name.
         phone: phone numbers.
         roc_id: user national id.
         company: company or school name.
-        birthday: *(optional)* birthday.
-        bank: *(optional)* bank info.
-        address: *(optional)* address info.
-        dietary_habit: *(optional)* dietary habit info.
 
     '''
     name: str = Field(default='')
     phone: str = Field(default='')
     roc_id: str = Field(default='')
     company: str = Field(default='')
+
+    class Config:  # pylint: disable=too-few-public-methods
+        ''' Config
+
+        Attributes:
+            anystr_strip_whitespace: `True`
+
+        '''
+        anystr_strip_whitespace: bool = True
+
+
+class UserProfleReal(UserProfleRealBase):
+    ''' User Profile Real struct
+
+    Attributes:
+        birthday: *(optional)* birthday.
+        bank: *(optional)* bank info.
+        address: *(optional)* address info.
+        dietary_habit: *(optional)* dietary habit info.
+
+    '''
     birthday: Optional[datetime]
     bank: Optional[UserBank] = Field(default_factory=UserBank)
     address: Optional[UserAddress] = Field(default_factory=UserAddress)

@@ -6,7 +6,7 @@ from pymongo.collection import ReturnDocument
 from models.oauth_db import OAuthDB
 from models.users_db import TobeVolunteerDB, UsersDB
 from module.skill import TobeVolunteerStruct
-from structs.users import UserAddress, UserBank, UserProfle
+from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase
 
 
 class User:
@@ -87,6 +87,40 @@ class User:
             {'$set': {'profile': data}},
             return_document=ReturnDocument.AFTER,
         )
+
+    def get_profile_real(self) -> UserProfleRealBase:
+        ''' Get profile real
+
+        Returns:
+            Return the real profile of user
+
+        '''
+        for data in UsersDB().find({'_id': self.uid}, {'profile_real': 1}):
+            if 'profile_real' in data:
+                return UserProfleRealBase.parse_obj(data['profile_real'])
+
+        return UserProfleRealBase()
+
+    def update_profile_real_base(self, data: UserProfleRealBase) -> UserProfleRealBase:
+        ''' update profile real base
+
+        Args:
+            data (UserProfleRealBase): Profile base data.
+
+        Returns:
+            Return the updated data.
+
+        '''
+        return UserProfleRealBase.parse_obj(UsersDB().find_one_and_update(
+            {'_id': self.uid},
+            {'$set': {
+                'profile_real.name': data.name,
+                'profile_real.phone': data.phone,
+                'profile_real.roc_id': data.roc_id,
+                'profile_real.company': data.company,
+            }},
+            return_document=ReturnDocument.AFTER,
+        )['profile_real'])
 
     def update_profile_real(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' update profile

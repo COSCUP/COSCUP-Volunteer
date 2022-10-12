@@ -2,6 +2,7 @@
 from typing import Any
 
 import arrow
+import phonenumbers
 from fastapi import APIRouter, Depends, status
 
 from api.apistructs.items import ProjectItem, TeamItem
@@ -9,12 +10,13 @@ from api.apistructs.users import (UserMeAddressInput, UserMeAddressOutput,
                                   UserMeBankInput, UserMeBankOut, UserMeOut,
                                   UserMeParticipatedItem,
                                   UserMeParticipatedOut, UserMeProfileInput,
-                                  UserMeProfileOutput)
+                                  UserMeProfileOutput, UserMeProfileRealInput,
+                                  UserMeProfileRealOutput)
 from api.dependencies import get_current_user
 from module.project import Project
 from module.team import Team
 from module.users import User
-from structs.users import UserAddress, UserBank, UserProfle
+from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase
 
 router = APIRouter(
     prefix='/user',
@@ -146,3 +148,38 @@ async def me_profile_update(
         UserProfle.parse_obj(update_data).dict()
     )
     return UserMeProfileOutput.parse_obj(data['profile'])
+
+
+@router.get('/me/profile_real',
+            summary="Get current's real profile",
+            response_model=UserMeProfileRealOutput)
+async def me_profile_real(
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeProfileRealOutput:
+    ''' Get current user's real profile '''
+    return UserMeProfileRealOutput.parse_obj(
+        User(uid=current_user['uid']).get_profile_real())
+
+
+@router.put('/me/profile_real',
+            summary="Update current's real profile",
+            response_model=UserMeProfileRealOutput)
+async def me_profile_real_update(
+        update_data: UserMeProfileRealInput,
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeProfileRealOutput:
+    ''' Update current user's real profile '''
+    need_update = UserProfleRealBase.parse_obj(update_data)
+    phone: str = ''
+
+    try:
+        phone = phonenumbers.format_number(
+            phonenumbers.parse(need_update.phone),
+            phonenumbers.PhoneNumberFormat.E164)
+    except phonenumbers.phonenumberutil.NumberParseException:
+        ...
+
+    need_update.phone = phone
+    data = User(uid=current_user['uid']).get_profile_real()
+    saved = User(uid=current_user['uid']).update_profile_real_base(
+        data=data.copy(update=need_update.dict()))
+
+    return UserMeProfileRealOutput.parse_obj(saved)
