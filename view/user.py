@@ -61,7 +61,11 @@ def user_page(uid, nickname=None):
 
     participate_in = []
     for item in Team.participate_in(uid):
-        item['_project'] = Project.get(item['pid'])
+        project = Project.get(item['pid'])
+        if not project:
+            raise Exception('No project')
+
+        item['_project'] = project.dict(by_alias=True)
         item['_title'] = '???'
         if uid in item['chiefs']:
             item['_title'] = 'chief'

@@ -24,7 +24,8 @@ def batch(pid):
         return redirect('/')
 
     if request.method == 'GET':
-        return render_template('./budget_batch.html', project=project, is_admin=is_admin)
+        return render_template('./budget_batch.html',
+                               project=project.dict(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':
         if request.is_json:
@@ -33,7 +34,7 @@ def batch(pid):
             if data and data.get('casename') == 'get':
                 teams = [
                     {'name': team['name'], 'tid': team['tid']}
-                    for team in Team.list_by_pid(pid=project['_id'])
+                    for team in Team.list_by_pid(pid=project.id)
                 ]
 
                 return jsonify({'teams': teams})
@@ -101,14 +102,15 @@ def by_project_index(pid):
         return redirect('/')
 
     if request.method == 'GET':
-        return render_template('./budget.html', project=project, is_admin=is_admin)
+        return render_template('./budget.html',
+                               project=project.dict(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':
         data = request.get_json()
 
         if data['casename'] == 'get':
             teams = []
-            for team in Team.list_by_pid(pid=project['_id']):
+            for team in Team.list_by_pid(pid=project.id):
                 teams.append({'name': team['name'], 'tid': team['tid']})
 
             default_budget = {

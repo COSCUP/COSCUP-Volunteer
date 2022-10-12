@@ -25,7 +25,7 @@ def index(pid, tid):
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
     if not is_admin:
         return redirect('/')
@@ -73,7 +73,7 @@ def campaign(pid, tid, cid):
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
     if not is_admin:
         return redirect('/')
@@ -93,7 +93,7 @@ def campaign_content(pid, tid, cid):
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
     if not is_admin:
         return redirect('/')
@@ -136,7 +136,7 @@ def campaign_receiver(pid, tid, cid):
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
     if not is_admin:
         return redirect('/')
@@ -230,7 +230,7 @@ def campaign_schedule(pid, tid, cid):
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
     if not is_admin:
         return redirect('/')

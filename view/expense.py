@@ -27,7 +27,8 @@ def by_project_index(pid):
         return redirect('/')
 
     if request.method == 'GET':
-        return render_template('./expense.html', project=project, is_admin=is_admin)
+        return render_template('./expense.html',
+                               project=project.dict(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':
         data = request.get_json()

@@ -102,6 +102,7 @@ ADD ./view/user.py ./view/user.py
 ADD ./view/utils.py ./view/utils.py
 
 ADD ./structs/__init__.py ./structs/__init__.py
+ADD ./structs/projects.py ./structs/projects.py
 ADD ./structs/users.py ./structs/users.py
 
 ADD ./api/__init__.py ./api/__init__.py

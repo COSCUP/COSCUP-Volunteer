@@ -37,7 +37,7 @@ def index() -> Response:
                     'sid': session['sid'],
                     'accounts': accounts,
                     'sessions': sessions,
-                    'projects': list(Project.all()),
+                    'projects': [item.dict(by_alias=True) for item in Project.all()],
                 })
 
             if 'casename' in data and data['casename'] == 'create_project':

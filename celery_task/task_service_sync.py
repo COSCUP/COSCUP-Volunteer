@@ -4,6 +4,7 @@ from __future__ import absolute_import, unicode_literals
 
 from time import time
 
+import arrow
 from celery.utils.log import get_task_logger
 
 import setting
@@ -84,7 +85,10 @@ def service_sync_gsuite_memberchange(sender):
             sort=(('create_at', 1), )):
         project = Project.get(raw['pid'])
 
-        if 'mailling_staff' not in project or not project['mailling_staff']:
+        if not project:
+            continue
+
+        if not project.mailling_staff:
             team_member_change_db.find_one_and_update(
                 {'_id': raw['_id']}, {'$set': {'done.gsuite_staff': True}})
             continue
@@ -96,14 +100,14 @@ def service_sync_gsuite_memberchange(sender):
         user = User(uid=raw['uid']).get()
         if raw['case'] == 'add':
             sync_gsuite.add_users_into_group(
-                group=project['mailling_staff'], users=(user['mail'], ))
+                group=project.mailling_staff, users=(user['mail'], ))
             team_member_change_db.find_one_and_update(
                 {'_id': raw['_id']}, {'$set': {'done.gsuite_staff': True}})
 
         elif raw['case'] == 'del':
             if not Team.participate_in(uid=raw['uid'], pid=raw['pid']):
                 sync_gsuite.del_users_from_group(
-                    group=project['mailling_staff'], users=(user['mail'], ))
+                    group=project.mailling_staff, users=(user['mail'], ))
 
             team_member_change_db.find_one_and_update(
                 {'_id': raw['_id']}, {'$set': {'done.gsuite_staff': True}})
@@ -158,13 +162,17 @@ def service_sync_gsuite_team_leader(sender, **kwargs):
     users_info = User.get_info(uids=chiefs)
 
     project = Project.get(pid=kwargs['pid'])
-    sync_gsuite = SyncGSuite(
-        credentialfile=setting.GSUITE_JSON, with_subject=setting.GSUITE_ADMIN)
-    sync_gsuite.add_users_into_group(group=project['mailling_leader'], users=[
-                                     u['oauth']['email'] for u in users_info.values()])
+    if not project:
+        return None
 
-    logger.info('%s %s', project['mailling_leader'], [
-                u['oauth']['email'] for u in users_info.values()])
+    if project.mailling_leader:
+        sync_gsuite = SyncGSuite(
+            credentialfile=setting.GSUITE_JSON, with_subject=setting.GSUITE_ADMIN)
+        sync_gsuite.add_users_into_group(group=project.mailling_leader, users=[
+                                         u['oauth']['email'] for u in users_info.values()])
+
+        logger.info('%s %s', project.mailling_leader, [
+                    u['oauth']['email'] for u in users_info.values()])
 
 
 @app.task(bind=True, name='servicesync.mattermost.invite',
@@ -188,7 +196,10 @@ def service_sync_mattermost_invite(sender, **kwargs):
 def service_sync_mattermost_add_channel(sender, **kwargs):
     ''' Sync mattermost add to channel '''
     project = Project.get(pid=kwargs['pid'])
-    if not ('mattermost_ch_id' in project and project['mattermost_ch_id']):
+    if not project:
+        return
+
+    if not project.mattermost_ch_id:
         return
 
     mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN,
@@ -197,7 +208,7 @@ def service_sync_mattermost_add_channel(sender, **kwargs):
         mid = mmt.find_possible_mid(uid=uid)
         if mid:
             resp = mmt.post_user_to_channel(
-                channel_id=project['mattermost_ch_id'], uid=mid)
+                channel_id=project.mattermost_ch_id, uid=mid)
             logger.info(resp.json())
 
 
@@ -209,9 +220,8 @@ def service_sync_mattermost_projectuserin_channel(sender):
     ''' Sync mattermost project user in channel '''
     pids = {}
     for project in Project.all():
-        if project['action_date'] >= time() and \
-                'mattermost_ch_id' in project and project['mattermost_ch_id']:
-            pids[project['_id']] = project['mattermost_ch_id']
+        if arrow.get(project['action_date']) >= arrow.now() and project.mattermost_ch_id:
+            pids[project.id] = project.mattermost_ch_id
 
     if not pids:
         return

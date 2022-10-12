@@ -36,7 +36,10 @@ def expense_create(sender, **kwargs):
         uids.update(team['chiefs'])
         uids.update(team['members'])
 
-    uids.update(Project.get(pid=pid)['owners'])
+    project = Project.get(pid=pid)
+    if project:
+        uids.update(project.owners)
+
     uids.add(kwargs['expense']['create_by'])
 
     logger.info(uids)

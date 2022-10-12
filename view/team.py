@@ -46,13 +46,13 @@ def index(pid, tid):
     join_able = not (g.user['account']['_id'] in team['members'] or
                      g.user['account']['_id'] in team['chiefs'] or
                      g.user['account']['_id'] in team['owners'] or
-                     g.user['account']['_id'] in project['owners'])
+                     g.user['account']['_id'] in project.owners)
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
-    return render_template('./team_index.html', team=team, project=project,
+    return render_template('./team_index.html', team=team, project=project.dict(by_alias=True),
                            join_able=join_able, is_admin=is_admin, preview_public=preview_public)
 
 
@@ -64,13 +64,13 @@ def calendar(pid, tid):
     if _redirect:
         return _redirect
 
-    if 'calendar' in project and project['calendar']:
+    if project.calendar:
         is_admin = (g.user['account']['_id'] in team['chiefs'] or
                     g.user['account']['_id'] in team['owners'] or
-                    g.user['account']['_id'] in project['owners'])
+                    g.user['account']['_id'] in project.owners)
 
         return render_template('./team_calendar.html',
-                               project=project, team=team, is_admin=is_admin)
+                               project=project.dict(by_alias=True), team=team, is_admin=is_admin)
 
     return redirect(url_for('team.index',
                             pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
@@ -87,11 +87,11 @@ def members(pid, tid):
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
     if request.method == 'GET':
         return render_template('./team_members.html',
-                               project=project, team=team, is_admin=is_admin)
+                               project=project.dict(by_alias=True), team=team, is_admin=is_admin)
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -159,13 +159,14 @@ def team_edit(pid, tid):
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
     if not is_admin:
         return redirect('/')
 
     if request.method == 'GET':
-        return render_template('./team_edit_setting.html', project=project, team=team)
+        return render_template('./team_edit_setting.html',
+                               project=project.dict(by_alias=True), team=team)
 
     if request.method == 'POST':
         data = {
@@ -191,7 +192,7 @@ def team_edit_user(pid, tid):
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
     if not is_admin:
         return redirect('/')
@@ -213,7 +214,8 @@ def team_edit_user(pid, tid):
             user['_mail'] = User(uid=user['uid']).get()['mail']
 
         return render_template('./team_edit_user.html',
-                               project=project, team=team, waitting_list=waitting_list)
+                               project=project.dict(by_alias=True),
+                               team=team, waitting_list=waitting_list)
 
     if request.method == 'POST':
         data = request.json
@@ -300,7 +302,7 @@ def team_edit_user_api(pid, tid):
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
     if not is_admin:
         return redirect('/')
@@ -365,7 +367,7 @@ def team_join_to(pid, tid):
                                          markdown(html.escape(team['public_desc'])))
 
         return render_template('./team_join_to.html',
-                               project=project, team=team, is_in_wait=is_in_wait)
+                               project=project.dict(by_alias=True), team=team, is_in_wait=is_in_wait)
 
     if request.method == 'POST':
         WaitList.join_to(
@@ -422,7 +424,8 @@ def team_form_accommodation(pid, tid):
 
     if request.method == 'GET':
         return render_template('./form_accommodation.html',
-                               project=project, team=team, is_ok_submit=is_ok_submit)
+                               project=project.dict(by_alias=True),
+                               team=team, is_ok_submit=is_ok_submit)
 
     if request.method == 'POST':
         if not is_ok_submit:
@@ -497,7 +500,7 @@ def team_form_traffic_fee(pid, tid):
     user = g.user['account']
     feemapping = FormTrafficFeeMapping.get(pid=pid)
 
-    if 'traffic_fee_doc' in project and project['traffic_fee_doc'] and \
+    if project.traffic_fee_doc and \
             feemapping and 'data' in feemapping and feemapping['data']:
         if 'profile_real' in user and 'bank' in user['profile_real']:
             _short_check = []
@@ -520,8 +523,8 @@ def team_form_traffic_fee(pid, tid):
                 'howto': form_data['data']['howto'],
                 'fee': form_data['data']['fee'],
             })
-        return render_template('./form_traffic_fee.html', project=project, team=team,
-                               data=data, is_ok_submit=is_ok_submit)
+        return render_template('./form_traffic_fee.html', project=project.dict(by_alias=True),
+                               team=team, data=data, is_ok_submit=is_ok_submit)
 
     if request.method == 'POST':
         if is_ok_submit and request.form['fromwhere'] in feemapping['data']:
@@ -575,7 +578,7 @@ def team_form_volunteer_certificate(pid, tid):
             select_value = 'no'
 
         return render_template('./form_volunteer_certificate.html',
-                               project=project, team=team,
+                               project=project.dict(by_alias=True), team=team,
                                is_ok_submit=is_ok_submit, select_value=select_value)
 
     if request.method == 'POST':
@@ -628,7 +631,8 @@ def team_form_appreciation(pid, tid):
                 select_value = form_data['data']['key']
 
         return render_template('./form_appreciation.html',
-                               project=project, team=team, names=names.items(),
+                               project=project.dict(by_alias=True),
+                               team=team, names=names.items(),
                                select_value=select_value)
 
     if request.method == 'POST':
@@ -674,7 +678,8 @@ def team_form_clothes(pid, tid):
         return redirect('/')
 
     if request.method == 'GET':
-        return render_template('./form_clothes.html', project=project, team=team)
+        return render_template('./form_clothes.html',
+                               project=project.dict(by_alias=True), team=team)
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -689,7 +694,7 @@ def team_form_clothes(pid, tid):
                 data = {'data': {'clothes': '',
                                  'htg': htg, 'in_action': in_action}}
 
-            if project['action_date']+86400*10 >= arrow.now().timestamp():
+            if arrow.get(project.action_date).shift(days=10) >= arrow.now():
                 in_action = True
 
             if 'htg' in data['data']:
@@ -725,7 +730,8 @@ def team_form_drink(pid, tid):
         return redirect('/')
 
     if request.method == 'GET':
-        return render_template('./form_drink.html', project=project, team=team)
+        return render_template('./form_drink.html',
+                               project=project.dict(by_alias=True), team=team)
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -762,7 +768,8 @@ def team_form_parking_card(pid, tid):
         return redirect('/')
 
     if request.method == 'GET':
-        return render_template('./form_parking_card.html', project=project, team=team)
+        return render_template('./form_parking_card.html',
+                               project=project.dict(by_alias=True), team=team)
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -771,15 +778,12 @@ def team_form_parking_card(pid, tid):
             data = Form.get_parking_card(
                 pid=team['pid'], uid=g.user['account']['_id'])
 
-            parking_card_options = []
-            if 'parking_card' in project:
-                parking_card_options = project['parking_card']
-
             if not data:
                 return jsonify({'data': {'carno': '', 'dates': []},
-                                'parking_card_options': parking_card_options})
+                                'parking_card_options': []})
 
-            return jsonify({'data': data['data'], 'parking_card_options': parking_card_options})
+            return jsonify({'data': data['data'],
+                            'parking_card_options': []})
 
         if post_data['casename'] == 'post':
             if 'data' in post_data and post_data['data']:
@@ -808,11 +812,11 @@ def team_plan_edit(pid, tid):
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
     if request.method == 'GET':
         return render_template('./team_plan_edit.html',
-                               project=project, team=team, is_admin=is_admin)
+                               project=project.dict(by_alias=True), team=team, is_admin=is_admin)
 
     if request.method == 'POST':  # pylint: disable=too-many-nested-blocks
         data = request.get_json()
@@ -934,7 +938,7 @@ def team_expense_index(pid, tid):
 
         if data['casename'] == 'get':
             teams = []
-            for _team in Team.list_by_pid(pid=project['_id']):
+            for _team in Team.list_by_pid(pid=project.id):
                 teams.append({'name': _team['name'], 'tid': _team['tid']})
 
             select_team = data['select_team']
@@ -953,13 +957,13 @@ def team_expense_index(pid, tid):
         if data['casename'] == 'add_expense':
             # create expense and send notification.
             expense = Expense.process_and_add(
-                pid=project['_id'], tid=team['tid'], uid=g.user['account']['_id'], data=data)
+                pid=project.id, tid=team['tid'], uid=g.user['account']['_id'], data=data)
             expense_create.apply_async(kwargs={'expense': expense})
             return jsonify(data)
 
         if data['casename'] == 'get_has_sent':
             data = Expense.get_has_sent(
-                pid=project['_id'], budget_id=data['buid'])
+                pid=project.id, budget_id=data['buid'])
             return jsonify({'data': list(data)})
 
     return jsonify({}), 404
@@ -979,7 +983,8 @@ def team_expense_lists(pid, tid):
 
     if request.method == 'GET':
         budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
-        return render_template('./expense_lists.html', project=project,
+        return render_template('./expense_lists.html',
+                               project=project.dict(by_alias=True),
                                team=team, budget_menu=budget_admin)
 
     return '', 404
@@ -1000,7 +1005,8 @@ def team_expense_my(pid, tid):
 
     if request.method == 'GET':
         budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
-        return render_template('./expense_my.html', project=project,
+        return render_template('./expense_my.html',
+                               project=project.dict(by_alias=True),
                                team=team, budget_menu=budget_admin)
 
     if request.method == 'POST':
@@ -1008,7 +1014,7 @@ def team_expense_my(pid, tid):
 
         if data['casename'] == 'get':
             teams = []
-            for _team in Team.list_by_pid(pid=project['_id']):
+            for _team in Team.list_by_pid(pid=project.id):
                 teams.append({'name': _team['name'], 'tid': _team['tid']})
 
             buids = set()

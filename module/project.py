@@ -1,10 +1,8 @@
 ''' Project '''
-from typing import Any, Optional
-
-import arrow
-from pymongo.cursor import Cursor
+from typing import Any, Generator
 
 from models.projectdb import ProjectDB
+from structs.projects import ProjectBase
 
 
 class Project:
@@ -23,27 +21,25 @@ class Project:
             Return the added data.
 
         '''
-        projectdb = ProjectDB(pid)
+        new_project = ProjectBase.parse_obj({
+            '_id': pid, 'name': name, 'owners': owners, 'action_date': action_date,
+        })
 
-        data = projectdb.default()
-        data['name'] = name
-        data['owners'].extend(owners)
-        data['action_date'] = arrow.get(action_date).timestamp()
-
-        return projectdb.add(data)
+        return ProjectDB(pid=pid).add(data=new_project.dict(by_alias=True))
 
     @staticmethod
-    def all() -> Cursor[dict[str, Any]]:
+    def all() -> Generator[ProjectBase, None, None]:
         ''' List all project
 
         Returns:
             Return all projects and order by `action_date`(desc).
 
         '''
-        return ProjectDB(pid='').find({}, sort=(('action_date', -1), ))
+        for item in ProjectDB(pid='').find({}, sort=(('action_date', -1), )):
+            yield ProjectBase.parse_obj(item)
 
     @staticmethod
-    def get(pid: str) -> Optional[dict[str, Any]]:
+    def get(pid: str) -> ProjectBase | None:
         ''' Get project info
 
         Args:
@@ -53,7 +49,10 @@ class Project:
             Return the project info.
 
         '''
-        return ProjectDB(pid).find_one({'_id': pid})
+        for item in ProjectDB(pid).find({'_id': pid}):
+            return ProjectBase.parse_obj(item)
+
+        return None
 
     @staticmethod
     def update(pid: str, data: dict[str, Any]) -> None:

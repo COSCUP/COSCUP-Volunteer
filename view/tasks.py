@@ -36,7 +36,7 @@ def project(pid):
             break
 
     if request.method == 'GET':
-        return render_template('./tasks_project.html', project=project_info)
+        return render_template('./tasks_project.html', project=project_info.dict(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -170,7 +170,7 @@ def add(pid, task_id=None):
 
     if request.method == 'GET':
         catelist = Tasks.get_cate(pid=pid)
-        return render_template('./tasks_add.html', project=project_info,
+        return render_template('./tasks_add.html', project=project_info.dict(by_alias=True),
                                catelist=catelist, task_id=task_id)
 
     if request.method == 'POST':

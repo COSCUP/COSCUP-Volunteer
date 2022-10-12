@@ -33,8 +33,7 @@ async def projects_all(current_user: dict[str, Any] = Depends(get_current_user))
     ''' List all projects '''
     datas = []
     for data in Project.all():
-        if 'owners' in data and current_user['uid'] in data['owners']:
-            data['id'] = data['_id']
+        if current_user['uid'] in data.owners:
             datas.append(ProjectItem.parse_obj(data))
         else:
             datas.append(
@@ -74,7 +73,7 @@ async def projects_one_update(
     if not project:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    if 'owners' not in project or current_user['uid'] not in project['owners']:
+    if current_user['uid'] not in project.owners:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     data = update_data.dict(exclude_none=True)

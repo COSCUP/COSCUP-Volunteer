@@ -27,7 +27,10 @@ VIEW_PROJECT = Blueprint('project', __name__, url_prefix='/project')
 def index():
     ''' Index page '''
     projects = []
-    datas = list(Project.all())
+    datas = []
+    for data in Project.all():
+        datas.append(data.dict(by_alias=True))
+
     for data in datas:
         date = arrow.get(data['action_date'])
         data['action_date_str'] = f"{date.format('YYYY-MM-DD')} ({date.humanize(arrow.now())})"
@@ -43,17 +46,11 @@ def index():
 def project_edit(pid):
     ''' Project edit '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project['owners']:
+    if g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'GET':
-        if 'volunteer_certificate_hours' not in project:
-            project['volunteer_certificate_hours'] = 0
-
-        if 'parking_card' in project:
-            project['parking_card'] = ', '.join(project['parking_card'])
-
-        return render_template('./project_edit.html', project=project)
+        return render_template('./project_edit.html', project=project.dict(by_alias=True))
 
     if request.method == 'POST':
         data = {
@@ -80,22 +77,23 @@ def project_edit(pid):
 def project_edit_create_team(pid):
     ''' Project edit create team '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project['owners']:
+    if g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
-    teams = Team.list_by_pid(project['_id'], show_all=True)
-    return render_template('./project_edit_create_team.html', project=project, teams=teams)
+    teams = Team.list_by_pid(project.id, show_all=True)
+    return render_template('./project_edit_create_team.html',
+                           project=project.dict(by_alias=True), teams=teams)
 
 
 @VIEW_PROJECT.route('/<pid>/form', methods=('GET', 'POST'))
 def project_form(pid):
     ''' Project form '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project['owners']:
+    if g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'GET':
-        return render_template('./project_form.html', project=project)
+        return render_template('./project_form.html', project=project.dict(by_alias=True))
 
     return '', 404
 
@@ -105,7 +103,7 @@ def project_form_api(pid):
     ''' Project form API '''
     # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project['owners']:
+    if g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'POST':
@@ -336,7 +334,7 @@ def project_form_api(pid):
 def project_edit_create_team_api(pid):
     ''' Project edit create team API '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project['owners']:
+    if g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'GET':
@@ -383,7 +381,7 @@ def project_edit_create_team_api(pid):
 
         if data['submittype'] == 'create':
             Team.create(
-                pid=pid, tid=data['tid'], name=data['name'], owners=project['owners'])
+                pid=pid, tid=data['tid'], name=data['name'], owners=project.owners)
             return f'{data}'
 
     return '', 404
@@ -397,7 +395,7 @@ def team_page(pid):
     if not project:
         return 'no data', 404
 
-    data = list(Team.list_by_pid(project['_id']))
+    data = list(Team.list_by_pid(project.id))
     uids = []
     for team in data:
         uids.extend(team['chiefs'])
@@ -418,25 +416,25 @@ def team_page(pid):
     for i in range(int(math.ceil(len(data) / float(per)))):
         teams.append(data[per*i:min([per*(i+1), len(data)])])
 
-    editable = g.user['account']['_id'] in project['owners']
+    editable = g.user['account']['_id'] in project.owners
 
     return render_template('./project_teams_index.html',
                            teams=teams,
-                           project=project,
+                           project=project.dict(by_alias=True),
                            editable=editable,
                            total=total,
                            )
 
 
-@ VIEW_PROJECT.route('/<pid>/form_traffic_mapping', methods=('GET', 'POST'))
+@VIEW_PROJECT.route('/<pid>/form_traffic_mapping', methods=('GET', 'POST'))
 def project_form_traffic_mapping(pid):
     ''' Project form traffic mapping '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project['owners']:
+    if g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'GET':
-        return render_template('./project_form_traffic_mapping.html', project=project)
+        return render_template('./project_form_traffic_mapping.html', project=project.dict(by_alias=True))
 
     if request.method == 'POST':
         data = request.get_json()
@@ -458,15 +456,16 @@ def project_form_traffic_mapping(pid):
     return '', 404
 
 
-@ VIEW_PROJECT.route('/<pid>/form/accommodation', methods=('GET', 'POST'))
+@VIEW_PROJECT.route('/<pid>/form/accommodation', methods=('GET', 'POST'))
 def project_form_accommodation(pid):
     ''' Project form accommodation '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project['owners']:
+    if g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'GET':
-        return render_template('./project_form_accommodation.html', project=project)
+        return render_template('./project_form_accommodation.html',
+                               project=project.dict(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -515,15 +514,16 @@ def project_form_accommodation(pid):
     return jsonify({}), 404
 
 
-@ VIEW_PROJECT.route('/<pid>/dietary_habit', methods=('GET', 'POST'))
+@VIEW_PROJECT.route('/<pid>/dietary_habit', methods=('GET', 'POST'))
 def project_dietary_habit(pid):
     ''' Project dietary habit '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project['owners']:
+    if g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'GET':
-        return render_template('./project_dietary_habit.html', project=project)
+        return render_template('./project_dietary_habit.html',
+                               project=project.dict(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -553,15 +553,15 @@ def project_dietary_habit(pid):
     return '', 404
 
 
-@ VIEW_PROJECT.route('/<pid>/contact_book', methods=('GET', 'POST'))
+@VIEW_PROJECT.route('/<pid>/contact_book', methods=('GET', 'POST'))
 def project_contact_book(pid):
     ''' Project contact book '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project['owners']:
+    if g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'GET':
-        return render_template('./project_contact_book.html', project=project)
+        return render_template('./project_contact_book.html', project=project.dict(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()

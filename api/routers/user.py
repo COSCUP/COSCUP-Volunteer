@@ -1,7 +1,6 @@
 ''' User '''
 from typing import Any
 
-import arrow
 import phonenumbers
 from fastapi import APIRouter, Depends, status
 from pydantic import parse_obj_as
@@ -71,11 +70,11 @@ async def me_participated(
 
         data = UserMeParticipatedItem(
             project=ProjectItem.parse_obj(
-                {'id': project['_id'], 'name': project['name']}),
+                {'id': project.id, 'name': project.name}),
             team=TeamItem.parse_obj({'id': team['tid'],
                                      'name': team['name'],
-                                     'pid': project['_id']}),
-            action=arrow.get(project['action_date']).date(),
+                                     'pid': project.id}),
+            action=project.action_date,
         )
 
         data.title = '???'

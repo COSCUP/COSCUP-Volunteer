@@ -19,7 +19,7 @@ def recurit_list(pid, tid):
 
     is_admin = (g.user['account']['_id'] in team['chiefs'] or
                 g.user['account']['_id'] in team['owners'] or
-                g.user['account']['_id'] in project['owners'])
+                g.user['account']['_id'] in project.owners)
 
     if not is_admin:
         return redirect('/')

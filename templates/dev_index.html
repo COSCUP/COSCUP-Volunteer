@@ -75,7 +75,7 @@
                           <tr v-for="project in projects">
                               <td>[[ project._id ]]</td>
                               <td>[[ project.name]]</td>
-                              <td>[[ new Date(project.action_date*1000).toLocaleString() ]]</td>
+                              <td>[[ new Date(project.action_date).toLocaleString() ]]</td>
                               <td>
                                   <a class="button is-link is-light is-outlined is-small"
                                       :href="`/project/${project._id}/edit`">Setting</a>
