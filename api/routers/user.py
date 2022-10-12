@@ -5,7 +5,8 @@ import arrow
 from fastapi import APIRouter, Depends, status
 
 from api.apistructs.items import ProjectItem, TeamItem
-from api.apistructs.users import (UserMeBankInput, UserMeBankOut, UserMeOut,
+from api.apistructs.users import (UserMeAddressInput, UserMeAddressOutput,
+                                  UserMeBankInput, UserMeBankOut, UserMeOut,
                                   UserMeParticipatedItem,
                                   UserMeParticipatedOut, UserMeProfileInput,
                                   UserMeProfileOutput)
@@ -13,7 +14,7 @@ from api.dependencies import get_current_user
 from module.project import Project
 from module.team import Team
 from module.users import User
-from structs.users import UserBank, UserProfle
+from structs.users import UserAddress, UserBank, UserProfle
 
 router = APIRouter(
     prefix='/user',
@@ -97,6 +98,28 @@ async def me_bank_update(
     data = User.update_bank(
         uid=current_user['uid'], data=UserBank.parse_obj(update_data))
     return UserMeBankOut.parse_obj(data)
+
+
+@router.get('/me/address',
+            summary="Current user's address info",
+            response_model=UserMeAddressOutput)
+async def me_address(
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeAddressOutput:
+    ''' Get current user's Address info '''
+    return UserMeAddressOutput.parse_obj(
+        User.get_address(uid=current_user['uid']))
+
+
+@router.put('/me/address',
+            summary="Update current user's address info",
+            response_model=UserMeAddressOutput)
+async def me_address_update(
+        update_data: UserMeAddressInput,
+        current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeAddressOutput:
+    ''' Update current user's address info '''
+    data = User.update_address(
+        uid=current_user['uid'], data=UserAddress.parse_obj(update_data))
+    return UserMeAddressOutput.parse_obj(data)
 
 
 @router.get('/me/profile',

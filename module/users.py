@@ -6,7 +6,7 @@ from pymongo.collection import ReturnDocument
 from models.oauth_db import OAuthDB
 from models.users_db import TobeVolunteerDB, UsersDB
 from module.skill import TobeVolunteerStruct
-from structs.users import UserBank, UserProfle
+from structs.users import UserAddress, UserBank, UserProfle
 
 
 class User:
@@ -234,6 +234,25 @@ class User:
                 address.update(user['profile_real']['address'])
 
         return address
+
+    @staticmethod
+    def update_address(uid: str, data: UserAddress) -> UserAddress:
+        ''' Update address info
+
+        Args:
+            uid (str): User id.
+
+        Returns:
+            Return the data.
+
+        '''
+        result = UsersDB().find_one_and_update(
+            {'_id': uid},
+            {'$set': {'profile_real.address': data.dict()}},
+            return_document=ReturnDocument.AFTER,
+        )
+
+        return UserAddress.parse_obj(result['profile_real']['address'])
 
     @staticmethod
     def get_all_users(include_suspend: bool = False) -> Generator[dict[str, Any], None, None]:

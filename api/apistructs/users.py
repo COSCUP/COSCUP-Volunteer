@@ -4,7 +4,7 @@ from datetime import date
 from pydantic import BaseModel, Field, HttpUrl
 
 from api.apistructs.items import ProjectItem, TeamItem
-from structs.users import UserBank, UserProfle
+from structs.users import UserAddress, UserBank, UserProfle
 
 
 class UserMeOut(BaseModel):
@@ -45,3 +45,11 @@ class UserMeProfileInput(UserProfle):
 
 class UserMeProfileOutput(UserProfle):
     ''' UserMeProfileOutput '''
+
+
+class UserMeAddressInput(UserAddress):
+    ''' UserMeAddressInput '''
+
+
+class UserMeAddressOutput(UserAddress):
+    ''' UserMeAddressOutput '''
