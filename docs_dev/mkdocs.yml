@@ -61,6 +61,7 @@ nav:
         - telegram_bot: code_reference/module/telegram_bot.md
     - Structs:
       - users: code_reference/structs/users.md
+      - projects: code_reference/structs/projects.md
 theme:
   name: material
   icon:

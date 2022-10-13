@@ -1,8 +1,10 @@
 ''' Project '''
 from typing import Any, Generator
 
+from pymongo.collection import ReturnDocument
+
 from models.projectdb import ProjectDB
-from structs.projects import ProjectBase
+from structs.projects import ProjectBase, ProjectBaseUpdate
 
 
 class Project:
@@ -55,33 +57,20 @@ class Project:
         return None
 
     @staticmethod
-    def update(pid: str, data: dict[str, Any]) -> None:
+    def update(pid: str, data: ProjectBaseUpdate) -> ProjectBaseUpdate:
         ''' update data
 
         Args:
             pid (str): Project id.
-            data (dict): The data to update. These fields can be updated:
-                         `name`, `desc`, `volunteer_certificate_hours`, `calendar`,
-                         `mailling_staff`, `mailling_leader`, `shared_drive`,
-                         `mattermost_ch_id`, `traffic_fee_doc`, `gitlab_project_id`,
-                         `parking_card`, `action_date`.
+            data (dict): The data to update.
+                         Can be updated fields refer to [structs.projects.ProjectBaseUpdate][]
 
         '''
-        _data = {}
-        for k in ('name', 'desc', 'volunteer_certificate_hours', 'calendar',
-                  'mailling_staff', 'mailling_leader', 'shared_drive', 'mattermost_ch_id',
-                  'traffic_fee_doc', 'gitlab_project_id', 'parking_card', 'action_date'):
-            if k in data:
-                _data[k] = data[k]
+        _data = data.dict(exclude_none=True)
+        result = ProjectDB(pid).find_one_and_update(
+            {'_id': pid},
+            {'$set': _data},
+            return_document=ReturnDocument.AFTER,
+        )
 
-                if isinstance(_data[k], str):
-                    _data[k] = _data[k].strip()
-
-        if 'volunteer_certificate_hours' in _data:
-            _data['volunteer_certificate_hours'] = int(
-                _data['volunteer_certificate_hours'])
-
-        if 'action_date' in _data:
-            _data['action_date'] = int(_data['action_date'])
-
-        ProjectDB(pid).find_one_and_update({'_id': pid}, {'$set': _data})
+        return ProjectBaseUpdate.parse_obj(result)

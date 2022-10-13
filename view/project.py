@@ -19,6 +19,7 @@ from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.team import Team
 from module.users import User
+from structs.projects import ProjectBaseUpdate
 
 VIEW_PROJECT = Blueprint('project', __name__, url_prefix='/project')
 
@@ -53,21 +54,7 @@ def project_edit(pid):
         return render_template('./project_edit.html', project=project.dict(by_alias=True))
 
     if request.method == 'POST':
-        data = {
-            'desc': request.form['desc'].strip(),
-            'name': request.form['name'].strip(),
-            'volunteer_certificate_hours': max([0,
-                                                int(request.form['volunteer_certificate_hours'])]),
-            'calendar': request.form['calendar'].strip(),
-            'mailling_staff': request.form['mailling_staff'].strip(),
-            'mailling_leader': request.form['mailling_leader'].strip(),
-            'shared_drive': request.form['shared_drive'].strip(),
-            'mattermost_ch_id': request.form['mattermost_ch_id'].strip(),
-            'traffic_fee_doc': request.form['traffic_fee_doc'].strip(),
-            'gitlab_project_id': request.form['gitlab_project_id'].strip(),
-            'parking_card': list(map(str.strip, request.form['parking_card'].strip().split(','))),
-        }
-        Project.update(pid, data)
+        Project.update(pid, ProjectBaseUpdate.parse_obj(request.form))
         return redirect(url_for('project.project_edit', pid=pid, _scheme='https', _external=True))
 
     return '', 404

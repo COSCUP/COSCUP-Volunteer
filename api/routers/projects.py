@@ -1,7 +1,6 @@
 ''' Projects '''
 from typing import Any
 
-import arrow
 from fastapi import APIRouter, Depends, HTTPException, Path, status
 
 from api.apistructs.items import ProjectItem, TeamItem
@@ -14,6 +13,7 @@ from module.dietary_habit import DietaryHabitItemsName, DietaryHabitItemsValue
 from module.project import Project
 from module.team import Team
 from module.users import User
+from structs.projects import ProjectBaseUpdate
 
 router = APIRouter(
     prefix='/projects',
@@ -76,13 +76,10 @@ async def projects_one_update(
     if current_user['uid'] not in project.owners:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-    data = update_data.dict(exclude_none=True)
-    if 'action_date' in data:
-        data['action_date'] = arrow.get(data['action_date']).int_timestamp
+    result = Project.update(pid=pid,
+                            data=ProjectBaseUpdate.parse_obj(update_data))
 
-    Project.update(pid=pid, data=data)
-
-    return ProjectItemUpdateOutput.parse_obj(data)
+    return ProjectItemUpdateOutput.parse_obj(result)
 
 
 @router.get('/{pid}/teams',

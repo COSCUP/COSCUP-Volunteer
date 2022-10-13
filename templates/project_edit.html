@@ -15,14 +15,14 @@
             <div class="field">
                 <label class="label">description</label>
                 <div class="control">
-                    <textarea class="textarea" name="desc" placeholder="Project description ...">{{project.desc}}</textarea>
+                    <textarea class="textarea" name="desc" placeholder="Project description ...">{{project.desc or ''}}</textarea>
                 </div>
                 <p class="help is-success">描述一下活動的簡介</p>
             </div>
             <div class="field">
                 <label class="label">志工時數申請上限</label>
                 <div class="control">
-                    <input class="input" type="number" name="volunteer_certificate_hours" min="0" value="{{project.volunteer_certificate_hours}}">
+                    <input class="input" type="number" name="volunteer_certificate_hours" min="0" value="{{project.volunteer_certificate_hours or 16}}">
                 </div>
                 <p class="help is-success">時數申請上限，顯示在說明處。</p>
             </div>
@@ -36,49 +36,49 @@
             <div class="field">
                 <label class="label">行事曆 ID</label>
                 <div class="control">
-                    <input class="input" type="text" name="calendar" value="{{project.calendar}}">
+                    <input class="input" type="text" name="calendar" value="{{project.calendar or ''}}">
                 </div>
                 <p class="help is-success">類似：ust6glc03eat210i65r1g4m2j4@group.calendar.google.com</p>
             </div>
             <div class="field">
                 <label class="label">Google Shared Drives</label>
                 <div class="control">
-                    <input class="input" type="text" name="shared_drive" value="{{project.shared_drive}}">
+                    <input class="input" type="text" name="shared_drive" value="{{project.shared_drive or ''}}">
                 </div>
                 <p class="help is-success">staff 共享資料夾連結</p>
             </div>
             <div class="field">
                 <label class="label">Mattermost Main Channel ID</label>
                 <div class="control">
-                    <input class="input" type="text" name="mattermost_ch_id" value="{{project.mattermost_ch_id}}">
+                    <input class="input" type="text" name="mattermost_ch_id" value="{{project.mattermost_ch_id or ''}}">
                 </div>
                 <p class="help is-success">本次主要頻道 ID</p>
             </div>
             <div class="field">
                 <label class="label">工作人員 mailling-list</label>
                 <div class="control">
-                    <input class="input" type="text" name="mailling_staff" value="{{project.mailling_staff}}">
+                    <input class="input" type="text" name="mailling_staff" value="{{project.mailling_staff or ''}}">
                 </div>
                 <p class="help is-success">工人專用的信箱，會把工作人員都丟到這裡面去。</p>
             </div>
             <div class="field">
                 <label class="label">組長 mailling-list</label>
                 <div class="control">
-                    <input class="input" type="text" name="mailling_leader" value="{{project.mailling_leader}}">
+                    <input class="input" type="text" name="mailling_leader" value="{{project.mailling_leader or ''}}">
                 </div>
                 <p class="help is-success">組長群用的，也是會把組長丟進去。</p>
             </div>
             <div class="field">
                 <label class="label">交通費補助公告辦法文件</label>
                 <div class="control">
-                    <input class="input" type="text" name="traffic_fee_doc" value="{{project.traffic_fee_doc}}">
+                    <input class="input" type="text" name="traffic_fee_doc" value="{{project.traffic_fee_doc or ''}}">
                 </div>
                 <p class="help is-success">辦法文件的連結網址</p>
             </div>
             <div class="field">
                 <label class="label">GitLab Project ID</label>
                 <div class="control">
-                    <input class="input" type="text" name="gitlab_project_id" value="{{project.gitlab_project_id}}">
+                    <input class="input" type="text" name="gitlab_project_id" value="{{project.gitlab_project_id or ''}}">
                 </div>
                 <p class="help is-success">Project ID，給予邀請加入使用 Issue Board</p>
             </div>
