@@ -27,7 +27,8 @@ class Project:
             '_id': pid, 'name': name, 'owners': owners, 'action_date': action_date,
         })
 
-        return ProjectDB(pid=pid).add(data=new_project.dict(by_alias=True))
+        return ProjectDB(pid=pid).add(
+            data=new_project.dict(by_alias=True, exclude_none=True))
 
     @staticmethod
     def all() -> Generator[ProjectBase, None, None]:

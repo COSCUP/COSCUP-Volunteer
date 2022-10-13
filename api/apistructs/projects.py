@@ -1,5 +1,5 @@
 ''' API Structs - Projects '''
-from datetime import date
+from datetime import date, datetime
 
 import arrow
 from pydantic import BaseModel, EmailStr, Field, HttpUrl, validator
@@ -11,6 +11,27 @@ class ProjectAllOut(BaseModel):
     ''' ProjectAllOut '''
     datas: list[ProjectItem] = Field(
         default=[], description='list of projects')
+
+
+class ProjectCreate(BaseModel):
+    ''' Project create input '''
+    name: str = Field(description='project name')
+    action_date: str = Field(description='Date format in YYYY/MM/DD')
+
+
+class ProjectCreateInput(ProjectCreate):
+    ''' Project create input '''
+    pid: str = Field(description='project id')
+
+
+class ProjectCreateOutput(ProjectCreate):
+    ''' Project create output '''
+    pid: str = Field(description='project id', alias='_id')
+
+    @validator('action_date', pre=True)
+    def convert_action_date(cls, value: datetime) -> str:  # pylint: disable=no-self-argument
+        ''' convert_action_date '''
+        return arrow.get(value).format('YYYY/MM/DD')
 
 
 class ProjectItemUpdateInput(BaseModel):

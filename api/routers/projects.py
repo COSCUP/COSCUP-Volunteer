@@ -4,7 +4,9 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Path, status
 
 from api.apistructs.items import ProjectItem, TeamItem
-from api.apistructs.projects import (ProjectAllOut, ProjectItemUpdateInput,
+from api.apistructs.projects import (ProjectAllOut, ProjectCreateInput,
+                                     ProjectCreateOutput,
+                                     ProjectItemUpdateInput,
                                      ProjectItemUpdateOutput,
                                      ProjectTeamDietaryHabitOutput,
                                      ProjectTeamsOutput)
@@ -13,6 +15,7 @@ from module.dietary_habit import DietaryHabitItemsName, DietaryHabitItemsValue
 from module.project import Project
 from module.team import Team
 from module.users import User
+from setting import API_DEFAULT_OWNERS
 from structs.projects import ProjectBaseUpdate
 
 router = APIRouter(
@@ -44,6 +47,27 @@ async def projects_all(current_user: dict[str, Any] = Depends(get_current_user))
                 }))
 
     return ProjectAllOut(datas=datas)
+
+
+@router.post('',
+             summary='Create a project.',
+             response_model=ProjectCreateOutput,
+             responses={
+                 status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
+             response_model_by_alias=False,
+             response_model_exclude_none=True,
+             )
+async def projects_create(
+        create_date: ProjectCreateInput,
+        current_user: dict[str, Any] = Depends(get_current_user)) -> ProjectCreateOutput:
+    ''' List all projects '''
+    if current_user['uid'] not in API_DEFAULT_OWNERS:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    data = create_date.dict()
+    data['owners'] = API_DEFAULT_OWNERS
+    result = Project.create(**data)
+    return ProjectCreateOutput.parse_obj(result)
 
 
 @router.patch('/{pid}',

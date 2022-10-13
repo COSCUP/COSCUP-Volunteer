@@ -17,12 +17,20 @@ def skip_empty_str(value: Any) -> Any:
     return value
 
 
+def convert_action_date(value: int | date | datetime | str) -> datetime:
+    ''' convert `action_date` to date '''
+    if isinstance(value, (int, date, str)):
+        value = arrow.get(value).datetime
+
+    return value
+
+
 class ProjectBase(BaseModel):
     ''' ProjectBase'''
     id: str = Field(description='`pid`, project id', alias='_id')
     name: str = Field(description='project name')
     owners: list[str] = Field(description='list of owners')
-    action_date: date = Field(description='action date')
+    action_date: datetime = Field(description='action date')
     desc: str | None = Field(description='desc')
     calendar: HttpUrl | None = Field(description='calendar url')
     gitlab_project_id: str | None = Field(description='gitlab project id')
@@ -41,20 +49,14 @@ class ProjectBase(BaseModel):
 
     _validate_skip_empty_str = validator(
         '*', pre=True, allow_reuse=True)(skip_empty_str)
-
-    @validator('action_date')
-    def convert_action_date(cls, value: int | date) -> date:  # pylint: disable=no-self-argument
-        ''' convert `action_date` to date '''
-        if isinstance(value, int):
-            value = arrow.get(value).date()
-
-        return value
+    _validate_convert_action_date = validator(
+        'action_date', pre=True, allow_reuse=True)(convert_action_date)
 
 
 class ProjectBaseUpdate(BaseModel):
     ''' ProjectBaseUpdate '''
     name: str | None = Field(description='project name')
-    action_date: date | None = Field(description='action date')
+    action_date: datetime | None = Field(description='action date')
     desc: str | None = Field(description='desc')
     calendar: HttpUrl | None = Field(description='calendar url')
     gitlab_project_id: str | None = Field(description='gitlab project id')
@@ -73,11 +75,5 @@ class ProjectBaseUpdate(BaseModel):
 
     _validate_skip_empty_str = validator(
         '*', pre=True, allow_reuse=True)(skip_empty_str)
-
-    @validator('action_date')
-    def convert_action_date(cls, value: int | date | datetime) -> datetime:  # pylint: disable=no-self-argument
-        ''' convert `action_date` to date '''
-        if isinstance(value, (int, date)):
-            value = arrow.get(value).datetime
-
-        return value
+    _validate_convert_action_date = validator(
+        'action_date', pre=True, allow_reuse=True)(convert_action_date)

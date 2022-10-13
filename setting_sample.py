@@ -2,6 +2,10 @@
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 6699
 
+# ----- Admin ----- #
+# The uids to creating project via API /project
+API_DEFAULT_OWNERS = ['00000000', ]
+
 # ----- Google OAuth Login ----- #
 # create a project on Google console(GCP)
 # completed 'API & Services' >  'OAuth consent screen'
