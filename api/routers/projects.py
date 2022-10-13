@@ -41,9 +41,9 @@ async def projects_all(current_user: dict[str, Any] = Depends(get_current_user))
         else:
             datas.append(
                 ProjectItem.parse_obj({
-                    'id': data['_id'],
-                    'name': data['name'],
-                    'desc': data['desc'],
+                    'id': data.id,
+                    'name': data.name,
+                    'desc': data.desc,
                 }))
 
     return ProjectAllOut(datas=datas)
