@@ -33,7 +33,7 @@ def batch(pid):
 
             if data and data.get('casename') == 'get':
                 teams = [
-                    {'name': team['name'], 'tid': team['tid']}
+                    {'name': team.name, 'tid': team.id}
                     for team in Team.list_by_pid(pid=project.id)
                 ]
 
@@ -111,7 +111,7 @@ def by_project_index(pid):
         if data['casename'] == 'get':
             teams = []
             for team in Team.list_by_pid(pid=project.id):
-                teams.append({'name': team['name'], 'tid': team['tid']})
+                teams.append({'name': team.name, 'tid': team.id})
 
             default_budget = {
                 'bid': '',

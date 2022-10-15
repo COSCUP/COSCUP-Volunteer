@@ -5,8 +5,8 @@ import logging
 import math
 
 import arrow
-from flask import (Blueprint, g, jsonify, redirect, render_template, request,
-                   url_for)
+from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
+                   request, url_for)
 
 import setting
 from celery_task.task_service_sync import service_sync_mattermost_add_channel
@@ -67,7 +67,10 @@ def project_edit_create_team(pid):
     if g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
-    teams = Team.list_by_pid(project.id, show_all=True)
+    teams = []
+    for team in Team.list_by_pid(project.id, show_all=True):
+        teams.append(team.dict(by_alias=True))
+
     return render_template('./project_edit_create_team.html',
                            project=project.dict(by_alias=True), teams=teams)
 
@@ -213,8 +216,13 @@ def project_form_api(pid):
         elif data['case'] == 'clothes':
             all_users = {}
             for team in Team.list_by_pid(pid=pid):
-                for uid in team['chiefs']+team['members']:
-                    all_users[uid] = {'tid': team['tid']}
+                if team.chiefs:
+                    for uid in team.chiefs:
+                        all_users[uid] = {'tid': team.id}
+
+                if team.members:
+                    for uid in team.members:
+                        all_users[uid] = {'tid': team.id}
 
             user_info = User.get_info(uids=list(all_users.keys()))
 
@@ -281,8 +289,13 @@ def project_form_api(pid):
         elif data['case'] == 'drink':
             all_users = {}
             for team in Team.list_by_pid(pid=pid):
-                for uid in team['chiefs']+team['members']:
-                    all_users[uid] = {'tid': team['tid']}
+                if team.chiefs:
+                    for uid in team.chiefs:
+                        all_users[uid] = {'tid': team.id}
+
+                if team.members:
+                    for uid in team.members:
+                        all_users[uid] = {'tid': team.id}
 
             user_info = User.get_info(uids=list(all_users.keys()))
 
@@ -318,26 +331,29 @@ def project_form_api(pid):
 
 
 @VIEW_PROJECT.route('/<pid>/edit/team/api', methods=('GET', 'POST'))
-def project_edit_create_team_api(pid):
+def project_edit_create_team_api(pid: str) -> Response:
     ''' Project edit create team API '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project.owners:
+    if not project.owners or g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'GET':
-        _team = Team.get(pid, request.args['tid'].strip())
-        team = {}
-        for k in ('name', 'chiefs', 'members', 'owners', 'tid',
-                  'headcount', 'mailling', 'disabled'):
-            if k in _team:
-                team[k] = _team[k]
+        _data = Team.get(pid, request.args['tid'].strip())
+        if _data is not None:
+            _team = _data.dict(by_alias=True)
 
-        if 'headcount' not in team:
-            team['headcount'] = 0
-        else:
-            team['headcount'] = max([0, int(team['headcount'])])
+            team = {}
+            for k in ('name', 'chiefs', 'members', 'owners', 'tid',
+                      'headcount', 'mailling', 'disabled'):
+                if k in _team:
+                    team[k] = _team[k]
 
-        return jsonify(team)
+            if 'headcount' not in team:
+                team['headcount'] = 0
+            else:
+                team['headcount'] = max([0, int(team['headcount'])])
+
+            return jsonify(team)
 
     if request.method == 'POST':
         data = request.json
@@ -382,20 +398,28 @@ def team_page(pid):
     if not project:
         return 'no data', 404
 
-    data = list(Team.list_by_pid(project.id))
+    data = [team.dict(by_alias=True) for team in Team.list_by_pid(project.id)]
     uids = []
     for team in data:
-        uids.extend(team['chiefs'])
+        if team['chiefs']:
+            uids.extend(team['chiefs'])
 
     total = 0
     user_info = User.get_info(uids)
     for team in data:
         team['chiefs_name'] = []
-        for uid in team['chiefs']:
-            team['chiefs_name'].append(
-                f'''<a href="/user/{uid}">{user_info[uid]['profile']['badge_name']}</a>''')
+        if team['chiefs']:
+            for uid in team['chiefs']:
+                team['chiefs_name'].append(
+                    f'''<a href="/user/{uid}">{user_info[uid]['profile']['badge_name']}</a>''')
 
-        team['count'] = len(set(team['chiefs'] + team['members']))
+        team_uids = set()
+        if team['chiefs']:
+            team_uids.update(team['chiefs'])
+        if team['members']:
+            team_uids.update(team['members'])
+
+        team['count'] = len(team_uids)
         total += team['count']
 
     # ----- group for layout ----- #
@@ -460,8 +484,13 @@ def project_form_accommodation(pid):
         if post_data['casename'] == 'get':
             all_users = {}
             for team in Team.list_by_pid(pid=pid):
-                for uid in team['chiefs']+team['members']:
-                    all_users[uid] = {'tid': team['tid']}
+                if team.chiefs:
+                    for uid in team.chiefs:
+                        all_users[uid] = {'tid': team.id}
+
+                if team.members:
+                    for uid in team.members:
+                        all_users[uid] = {'tid': team.id}
 
             raws = []
             for raw in FormAccommodation.get(pid):
@@ -518,8 +547,13 @@ def project_dietary_habit(pid):
         if post_data['casename'] == 'get':
             all_users = {}
             for team in Team.list_by_pid(pid=pid):
-                for uid in team['chiefs']+team['members']:
-                    all_users[uid] = {'tid': team['tid']}
+                if team.chiefs:
+                    for uid in team.chiefs:
+                        all_users[uid] = {'tid': team.id}
+
+                if team.members:
+                    for uid in team.members:
+                        all_users[uid] = {'tid': team.id}
 
             user_infos = User.get_info(
                 uids=list(all_users.keys()), need_sensitive=True)
@@ -556,8 +590,13 @@ def project_contact_book(pid):
         if post_data['casename'] == 'get':
             all_users = {}
             for team in Team.list_by_pid(pid=pid):
-                for uid in team['chiefs']+team['members']:
-                    all_users[uid] = {'tid': team['tid']}
+                if team.chiefs:
+                    for uid in team.chiefs:
+                        all_users[uid] = {'tid': team.id}
+
+                if team.members:
+                    for uid in team.members:
+                        all_users[uid] = {'tid': team.id}
 
             user_infos = User.get_info(
                 uids=list(all_users.keys()), need_sensitive=True)

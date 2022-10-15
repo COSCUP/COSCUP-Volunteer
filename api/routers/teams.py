@@ -10,6 +10,7 @@ from api.dependencies import get_current_user
 from module.mattermost_bot import MattermostTools
 from module.team import Team
 from module.users import User
+from structs.teams import TeamUsers
 
 router = APIRouter(
     prefix='/teams',
@@ -71,14 +72,15 @@ async def teams_one_update(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
+    teamusers = TeamUsers.parse_obj(team)
     include: set[str] | None
-    if current_user['uid'] in team['owners']:
+    if current_user['uid'] in teamusers.owners:
         include = None
 
-    elif current_user['uid'] in team['chiefs']:
+    elif current_user['uid'] in teamusers.chiefs:
         include = {'name', 'desc'}
 
-    if current_user['uid'] in team['owners'] or include is not None:
+    if current_user['uid'] in teamusers.owners or include is not None:
         updated = Team.update_setting(
             pid=pid, tid=tid, data=update_data.dict(include=include))
 
@@ -108,12 +110,13 @@ async def teams_one_address_book(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    if current_user['uid'] not in (team['owners'] + team['chiefs'] + team['members']):
+    teamusers = TeamUsers.parse_obj(team)
+    if current_user['uid'] not in (teamusers.owners + teamusers.chiefs + teamusers.members):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     uids = set()
-    uids.update(team['chiefs'])
-    uids.update(team['members'])
+    uids.update(teamusers.chiefs)
+    uids.update(teamusers.members)
     users_info = User.get_info(uids=list(uids))
 
     datas = []
@@ -128,7 +131,7 @@ async def teams_one_address_book(
             {'id': uid,
              'badge_name': users_info[uid]['profile']['badge_name'],
              'avatar': users_info[uid]['oauth']['picture'],
-             'is_chief': uid in team['chiefs'],
+             'is_chief': uid in teamusers.chiefs,
              'chat': chat,
              }))
 

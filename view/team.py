@@ -19,6 +19,7 @@ from module.mattermost_bot import MattermostTools
 from module.team import Team
 from module.users import User
 from module.waitlist import WaitList
+from structs.teams import TeamUsers
 from view.utils import check_the_team_and_project_are_existed
 
 VIEW_TEAM = Blueprint('team', __name__, url_prefix='/team')
@@ -29,31 +30,34 @@ def index(pid, tid):
     ''' Index page '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
     for k in ('desc', 'public_desc'):
-        if k not in team:
-            team[k] = ''
+        if k not in team.__dict__ or not team.__dict__[k]:
+            team.__dict__[k] = ''
         else:
-            team[k] = re.sub('<a href="javascript:.*"',
-                             '<a href="/"', markdown(html.escape(team[k])))
+            team.__dict__[k] = re.sub('<a href="javascript:.*"',
+                                      '<a href="/"', markdown(html.escape(team.__dict__[k])))
 
     preview_public = False
     if 'preview' in request.args:
         preview_public = True
 
-    join_able = not (g.user['account']['_id'] in team['members'] or
-                     g.user['account']['_id'] in team['chiefs'] or
-                     g.user['account']['_id'] in team['owners'] or
+    teamusers = TeamUsers.parse_obj(team)
+    join_able = not (g.user['account']['_id'] in teamusers.members or
+                     g.user['account']['_id'] in teamusers.chiefs or
+                     g.user['account']['_id'] in teamusers.owners or
                      g.user['account']['_id'] in project.owners)
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or
-                g.user['account']['_id'] in team['owners'] or
+    is_admin = (g.user['account']['_id'] in teamusers.chiefs or
+                g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
 
-    return render_template('./team_index.html', team=team, project=project.dict(by_alias=True),
-                           join_able=join_able, is_admin=is_admin, preview_public=preview_public)
+    return render_template('./team_index.html', team=team.dict(by_alias=True),
+                           project=project.dict(by_alias=True),
+                           join_able=join_able, is_admin=is_admin,
+                           preview_public=preview_public)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/calendar')
@@ -61,19 +65,21 @@ def calendar(pid, tid):
     ''' calendar '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
     if project.calendar:
-        is_admin = (g.user['account']['_id'] in team['chiefs'] or
-                    g.user['account']['_id'] in team['owners'] or
+        teamusers = TeamUsers.parse_obj(team)
+        is_admin = (g.user['account']['_id'] in teamusers.chiefs or
+                    g.user['account']['_id'] in teamusers.owners or
                     g.user['account']['_id'] in project.owners)
 
         return render_template('./team_calendar.html',
-                               project=project.dict(by_alias=True), team=team, is_admin=is_admin)
+                               project=project.dict(by_alias=True),
+                               team=team.dict(by_alias=True), is_admin=is_admin)
 
     return redirect(url_for('team.index',
-                            pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
+                            pid=team.pid, tid=team.id, _scheme='https', _external=True))
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/members', methods=('GET', 'POST'))
@@ -82,16 +88,18 @@ def members(pid, tid):
     # pylint: disable=too-many-locals
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or
-                g.user['account']['_id'] in team['owners'] or
+    teamusers = TeamUsers.parse_obj(team)
+    is_admin = (g.user['account']['_id'] in teamusers.chiefs or
+                g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
 
     if request.method == 'GET':
         return render_template('./team_members.html',
-                               project=project.dict(by_alias=True), team=team, is_admin=is_admin)
+                               project=project.dict(by_alias=True),
+                               team=team.dict(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -100,15 +108,19 @@ def members(pid, tid):
             list_teams = []
             if 'tid' in post_data and post_data['tid'] != tid:
                 team = Team.get(pid=pid, tid=post_data['tid'])
+                if team is None:
+                    raise Exception('Not found')
 
             else:
                 for lteam in Team.list_by_pid(pid=pid):
                     list_teams.append(
-                        {'_id': lteam['tid'], 'name': lteam['name']})
+                        {'_id': lteam.id, 'name': lteam.name})
 
             uids = []
-            uids.extend(team['chiefs'])
-            uids.extend(team['members'])
+            if team.chiefs:
+                uids.extend(team.chiefs)
+            if team.members:
+                uids.extend(team.members)
 
             uids = list(set(uids))
             users_info = User.get_info(uids=uids)
@@ -121,7 +133,7 @@ def members(pid, tid):
                             'oauth': {'picture': users_info[uid]['oauth']['picture']}}
 
                     user['is_chief'] = False
-                    if uid in team['chiefs']:
+                    if team.chiefs and uid in team.chiefs:
                         user['is_chief'] = True
 
                     user['chat'] = {}
@@ -137,11 +149,10 @@ def members(pid, tid):
             result_members.sort(key=lambda u: u['is_chief'], reverse=True)
 
             tags = []
-            if 'tag_members' in team and team['tag_members']:
-                tags = team['tag_members']
+            if team.tag_members:
+                tags = team.tag_members
 
-            members_tags = Team.get_members_tags(
-                pid=team['pid'], tid=team['tid'])
+            members_tags = Team.get_members_tags(pid=team.pid, tid=team.id)
 
         return jsonify({'members': result_members, 'teams': list_teams,
                         'tags': tags, 'members_tags': members_tags})
@@ -154,11 +165,12 @@ def team_edit(pid, tid):
     ''' Team edit '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or
-                g.user['account']['_id'] in team['owners'] or
+    teamusers = TeamUsers.parse_obj(team)
+    is_admin = (g.user['account']['_id'] in teamusers.chiefs or
+                g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
 
     if not is_admin:
@@ -166,7 +178,8 @@ def team_edit(pid, tid):
 
     if request.method == 'GET':
         return render_template('./team_edit_setting.html',
-                               project=project.dict(by_alias=True), team=team)
+                               project=project.dict(by_alias=True),
+                               team=team.dict(by_alias=True))
 
     if request.method == 'POST':
         data = {
@@ -174,9 +187,9 @@ def team_edit(pid, tid):
             'public_desc': request.form['public_desc'].strip(),
             'desc': request.form['desc'].strip(),
         }
-        Team.update_setting(pid=team['pid'], tid=team['tid'], data=data)
+        Team.update_setting(pid=team.pid, tid=team.id, data=data)
         return redirect(url_for('team.team_edit',
-                                pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
+                                pid=team.pid, tid=team.id, _scheme='https', _external=True))
 
     return '', 404
 
@@ -187,11 +200,12 @@ def team_edit_user(pid, tid):
     # pylint: disable=too-many-locals,too-many-return-statements,too-many-branches,too-many-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or
-                g.user['account']['_id'] in team['owners'] or
+    teamusers = TeamUsers.parse_obj(team)
+    is_admin = (g.user['account']['_id'] in teamusers.chiefs or
+                g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
 
     if not is_admin:
@@ -215,7 +229,8 @@ def team_edit_user(pid, tid):
 
         return render_template('./team_edit_user.html',
                                project=project.dict(by_alias=True),
-                               team=team, waitting_list=waitting_list)
+                               team=team.dict(by_alias=True),
+                               waitting_list=waitting_list)
 
     if request.method == 'POST':
         data = request.json
@@ -231,8 +246,9 @@ def team_edit_user(pid, tid):
             return jsonify({'history': history})
         elif data['case'] == 'members':
             result_members = []
-            if team['members'] or team['chiefs']:
-                _all_uids = set(team['chiefs']) | set(team['members'])
+            if team.members or team.chiefs:
+                _all_uids = set(teamusers.members + teamusers.chiefs)
+
                 users_info = User.get_info(list(_all_uids))
                 for uid in _all_uids:
                     result_members.append(users_info[uid])
@@ -257,7 +273,7 @@ def team_edit_user(pid, tid):
 
                 return jsonify({
                     'members': result_members,
-                    'tags': team.get('tag_members', []),
+                    'tags': team.tag_members if team.tag_members else [],
                     'members_tags': Team.get_members_tags(pid=pid, tid=tid),
                 })
 
@@ -267,8 +283,12 @@ def team_edit_user(pid, tid):
             return jsonify({'tag': result})
 
         elif data['case'] == 'update_member_tags':
-            team_tags = [i['id'] for i in team.get('tag_members', [])]
-            team_members = set(team['members'] + team['chiefs'])
+            team_tags = []
+            if team.tag_members:
+                for tag in team.tag_members:
+                    team_tags.append(tag.id)
+
+            team_members = set(teamusers.members + teamusers.chiefs)
 
             tag_datas = {}
             for uid in team_members:
@@ -297,11 +317,12 @@ def team_edit_user_api(pid, tid):
     # pylint: disable=too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or
-                g.user['account']['_id'] in team['owners'] or
+    teamusers = TeamUsers.parse_obj(team)
+    is_admin = (g.user['account']['_id'] in teamusers.chiefs or
+                g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
 
     if not is_admin:
@@ -329,8 +350,8 @@ def team_edit_user_api(pid, tid):
     if request.method == 'POST':
         data = request.json
         if data['result'] == 'approval':
-            all_members = len(team['members']) + len(team['chiefs'])
-            if 'headcount' in team and team['headcount'] and all_members >= team['headcount']:
+            all_members = len(set(teamusers.members + teamusers.chiefs))
+            if team.headcount is not None and all_members >= team.headcount:
                 return jsonify({'status': 'fail', 'message': 'over headcount.'}), 406
 
         wait_info = WaitList.make_result(
@@ -352,22 +373,24 @@ def team_join_to(pid, tid):
     ''' Team join to '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    if g.user['account']['_id'] in team['members'] or g.user['account']['_id'] in team['chiefs']:
+    teamusers = TeamUsers.parse_obj(team)
+    if g.user['account']['_id'] in teamusers.members or g.user['account']['_id'] in teamusers.chiefs:
         return redirect(url_for('team.index', pid=pid, tid=tid))
 
     if request.method == 'GET':
         is_in_wait = WaitList.is_in_wait(
-            pid=team['pid'], tid=team['tid'], uid=g.user['account']['_id'])
+            pid=team.pid, tid=team.id, uid=g.user['account']['_id'])
 
-        if not is_in_wait and 'public_desc' in team:
-            team['public_desc'] = re.sub('<a href="javascript:.*"', '<a href="/"',
-                                         markdown(html.escape(team['public_desc'])))
+        if not is_in_wait and team.public_desc is not None:
+            team.public_desc = re.sub('<a href="javascript:.*"', '<a href="/"',
+                                      markdown(html.escape(team.public_desc)))
 
         return render_template('./team_join_to.html',
-                               project=project.dict(by_alias=True), team=team, is_in_wait=is_in_wait)
+                               project=project.dict(by_alias=True),
+                               team=team.dict(by_alias=True), is_in_wait=is_in_wait)
 
     if request.method == 'POST':
         WaitList.join_to(
@@ -385,11 +408,12 @@ def team_form_api(pid, tid):
     ''' Team form API '''
     team, _, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or _redirect:
         return _redirect
 
-    if not (g.user['account']['_id'] in team['members'] or
-            g.user['account']['_id'] in team['chiefs']):
+    teamusers = TeamUsers.parse_obj(team)
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     if request.method == 'GET':
@@ -407,11 +431,12 @@ def team_form_accommodation(pid, tid):
     # pylint: disable=too-many-locals,too-many-return-statements,too-many-branches
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    if not (g.user['account']['_id'] in team['members'] or
-            g.user['account']['_id'] in team['chiefs']):
+    teamusers = TeamUsers.parse_obj(team)
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     is_ok_submit = False
@@ -425,7 +450,8 @@ def team_form_accommodation(pid, tid):
     if request.method == 'GET':
         return render_template('./form_accommodation.html',
                                project=project.dict(by_alias=True),
-                               team=team, is_ok_submit=is_ok_submit)
+                               team=team.dict(by_alias=True),
+                               is_ok_submit=is_ok_submit)
 
     if request.method == 'POST':
         if not is_ok_submit:
@@ -489,11 +515,12 @@ def team_form_traffic_fee(pid, tid):
     ''' Team form traffic fee '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    if not (g.user['account']['_id'] in team['members'] or
-            g.user['account']['_id'] in team['chiefs']):
+    teamusers = TeamUsers.parse_obj(team)
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     is_ok_submit = False
@@ -523,8 +550,10 @@ def team_form_traffic_fee(pid, tid):
                 'howto': form_data['data']['howto'],
                 'fee': form_data['data']['fee'],
             })
-        return render_template('./form_traffic_fee.html', project=project.dict(by_alias=True),
-                               team=team, data=data, is_ok_submit=is_ok_submit)
+        return render_template('./form_traffic_fee.html',
+                               project=project.dict(by_alias=True),
+                               team=team.dict(by_alias=True),
+                               data=data, is_ok_submit=is_ok_submit)
 
     if request.method == 'POST':
         if is_ok_submit and request.form['fromwhere'] in feemapping['data']:
@@ -537,7 +566,7 @@ def team_form_traffic_fee(pid, tid):
             Form.update_traffic_fee(
                 pid=pid, uid=g.user['account']['_id'], data=data)
             return redirect(url_for('team.team_form_traffic_fee',
-                                    pid=team['pid'], tid=team['tid'],
+                                    pid=team.pid, tid=team.id,
                                     _scheme='https', _external=True))
 
         return '', 406
@@ -550,11 +579,12 @@ def team_form_volunteer_certificate(pid, tid):
     ''' Team form volunteer certificate '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    if not (g.user['account']['_id'] in team['members'] or
-            g.user['account']['_id'] in team['chiefs']):
+    teamusers = TeamUsers.parse_obj(team)
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     is_ok_submit = False
@@ -578,7 +608,8 @@ def team_form_volunteer_certificate(pid, tid):
             select_value = 'no'
 
         return render_template('./form_volunteer_certificate.html',
-                               project=project.dict(by_alias=True), team=team,
+                               project=project.dict(by_alias=True),
+                               team=team.dict(by_alias=True),
                                is_ok_submit=is_ok_submit, select_value=select_value)
 
     if request.method == 'POST':
@@ -587,10 +618,10 @@ def team_form_volunteer_certificate(pid, tid):
 
         data = {'value': request.form['volunteer_certificate'] == 'yes'}
         Form.update_volunteer_certificate(
-            pid=team['pid'], uid=g.user['account']['_id'], data=data)
+            pid=team.pid, uid=g.user['account']['_id'], data=data)
 
         return redirect(url_for('team.team_form_volunteer_certificate',
-                                pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
+                                pid=team.pid, tid=team.id, _scheme='https', _external=True))
 
     return jsonify({}), 404
 
@@ -601,11 +632,12 @@ def team_form_appreciation(pid, tid):
     # pylint: disable=too-many-branches
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    if not (g.user['account']['_id'] in team['members'] or
-            g.user['account']['_id'] in team['chiefs']):
+    teamusers = TeamUsers.parse_obj(team)
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     if request.method == 'GET':
@@ -632,7 +664,7 @@ def team_form_appreciation(pid, tid):
 
         return render_template('./form_appreciation.html',
                                project=project.dict(by_alias=True),
-                               team=team, names=names.items(),
+                               team=team.dict(by_alias=True), names=names.items(),
                                select_value=select_value)
 
     if request.method == 'POST':
@@ -660,7 +692,7 @@ def team_form_appreciation(pid, tid):
             pid=team['pid'], uid=g.user['account']['_id'], data=data)
 
         return redirect(url_for('team.team_form_appreciation',
-                                pid=team['pid'], tid=team['tid'], _scheme='https', _external=True))
+                                pid=team.pid, tid=team.id, _scheme='https', _external=True))
 
     return jsonify({}), 404
 
@@ -670,16 +702,18 @@ def team_form_clothes(pid, tid):
     ''' Team form clothes '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    if not (g.user['account']['_id'] in team['members'] or
-            g.user['account']['_id'] in team['chiefs']):
+    teamusers = TeamUsers.parse_obj(team)
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     if request.method == 'GET':
         return render_template('./form_clothes.html',
-                               project=project.dict(by_alias=True), team=team)
+                               project=project.dict(by_alias=True),
+                               team=team.dict(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -722,22 +756,24 @@ def team_form_drink(pid, tid):
     ''' Team form drink '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    if not (g.user['account']['_id'] in team['members'] or
-            g.user['account']['_id'] in team['chiefs']):
+    teamusers = TeamUsers.parse_obj(team)
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     if request.method == 'GET':
         return render_template('./form_drink.html',
-                               project=project.dict(by_alias=True), team=team)
+                               project=project.dict(by_alias=True),
+                               team=team.dict(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
         if post_data['casename'] == 'get':
             data = Form.get_drink(
-                pid=team['pid'], uid=g.user['account']['_id'])
+                pid=team.pid, uid=g.user['account']['_id'])
             if not data:
                 data = {'data': {'y18': False}}
 
@@ -747,7 +783,7 @@ def team_form_drink(pid, tid):
             if 'y18' in post_data:
                 data = {'y18': bool(post_data['y18'])}
                 Form.update_drink(
-                    pid=team['pid'], uid=g.user['account']['_id'], data=data)
+                    pid=team.pid, uid=g.user['account']['_id'], data=data)
 
         return jsonify({'data': post_data})
 
@@ -760,23 +796,25 @@ def team_form_parking_card(pid, tid):
     # pylint: disable=too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    if not (g.user['account']['_id'] in team['members'] or
-            g.user['account']['_id'] in team['chiefs']):
+    teamusers = TeamUsers.parse_obj(team)
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     if request.method == 'GET':
         return render_template('./form_parking_card.html',
-                               project=project.dict(by_alias=True), team=team)
+                               project=project.dict(by_alias=True),
+                               team=team.dict(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
 
         if post_data['casename'] == 'get':
             data = Form.get_parking_card(
-                pid=team['pid'], uid=g.user['account']['_id'])
+                pid=team.pid, uid=g.user['account']['_id'])
 
             if not data:
                 return jsonify({'data': {'carno': '', 'dates': []},
@@ -807,22 +845,27 @@ def team_plan_edit(pid, tid):
     # pylint: disable=too-many-locals,too-many-return-statements,too-many-branches,too-many-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or
-                g.user['account']['_id'] in team['owners'] or
+    teamusers = TeamUsers.parse_obj(team)
+    is_admin = (g.user['account']['_id'] in teamusers.chiefs or
+                g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
+
+    if not is_admin:
+        return redirect('/')
 
     if request.method == 'GET':
         return render_template('./team_plan_edit.html',
-                               project=project.dict(by_alias=True), team=team, is_admin=is_admin)
+                               project=project.dict(by_alias=True),
+                               team=team.dict(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':  # pylint: disable=too-many-nested-blocks
         data = request.get_json()
         today = arrow.now().format('YYYY-MM-DD')
         default = {'title': '', 'desc': '', 'start': today, 'end': '',
-                   'tid': tid, 'team_name': team['name'], 'start_timestamp': 0}
+                   'tid': tid, 'team_name': team.name, 'start_timestamp': 0}
 
         team_plan_db = TeamPlanDB()
         if 'case' in data and data['case'] == 'get':
@@ -835,16 +878,19 @@ def team_plan_edit(pid, tid):
 
             for raw in plan_data['data']:
                 raw['tid'] = tid
-                raw['team_name'] = team['name']
+                raw['team_name'] = team.name
 
             others = []
             if 'import_others' in data and data['import_others']:
                 for team_plan in team_plan_db.find({'pid': pid, 'tid': {'$nin': [tid, ]}}):
                     team_info = Team.get(pid=pid, tid=team_plan['tid'])
 
+                    if not team_info:
+                        continue
+
                     for raw in team_plan['data']:
                         raw['tid'] = tid
-                        raw['team_name'] = team_info['name']
+                        raw['team_name'] = team_info.name
 
                         others.append(raw)
 
@@ -894,7 +940,7 @@ def team_plan_edit(pid, tid):
 
                 for raw in result['data']:
                     raw['tid'] = tid
-                    raw['team_name'] = team['name']
+                    raw['team_name'] = team.name
                     raw['start_timestamp'] = arrow.get(
                         raw['start']).timestamp()
 
@@ -906,9 +952,12 @@ def team_plan_edit(pid, tid):
                     for team_plan in team_plan_db.find({'pid': pid, 'tid': {'$nin': [tid, ]}}):
                         team_info = Team.get(pid=pid, tid=team_plan['tid'])
 
+                        if not team_info:
+                            continue
+
                         for raw in team_plan['data']:
                             raw['tid'] = tid
-                            raw['team_name'] = team_info['name']
+                            raw['team_name'] = team_info.name
                             raw['start_timestamp'] = arrow.get(
                                 raw['start']).timestamp()
 
@@ -926,11 +975,12 @@ def team_expense_index(pid, tid):
     ''' Team expense index '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    if not (g.user['account']['_id'] in team['members'] or
-            g.user['account']['_id'] in team['chiefs']):
+    teamusers = TeamUsers.parse_obj(team)
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     if request.method == 'POST':
@@ -939,11 +989,11 @@ def team_expense_index(pid, tid):
         if data['casename'] == 'get':
             teams = []
             for _team in Team.list_by_pid(pid=project.id):
-                teams.append({'name': _team['name'], 'tid': _team['tid']})
+                teams.append({'name': _team.name, 'tid': _team.id})
 
             select_team = data['select_team']
             if select_team == '':
-                select_team = team['tid']
+                select_team = team.id
 
             items = []
             for item in Budget.get_by_tid(pid=pid, tid=select_team, only_enable=True):
@@ -957,7 +1007,7 @@ def team_expense_index(pid, tid):
         if data['casename'] == 'add_expense':
             # create expense and send notification.
             expense = Expense.process_and_add(
-                pid=project.id, tid=team['tid'], uid=g.user['account']['_id'], data=data)
+                pid=project.id, tid=team.id, uid=g.user['account']['_id'], data=data)
             expense_create.apply_async(kwargs={'expense': expense})
             return jsonify(data)
 
@@ -974,18 +1024,20 @@ def team_expense_lists(pid, tid):
     ''' Team expense lists '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    if not (g.user['account']['_id'] in team['members'] or
-            g.user['account']['_id'] in team['chiefs']):
+    teamusers = TeamUsers.parse_obj(team)
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     if request.method == 'GET':
         budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
         return render_template('./expense_lists.html',
                                project=project.dict(by_alias=True),
-                               team=team, budget_menu=budget_admin)
+                               team=team.dict(by_alias=True),
+                               budget_menu=budget_admin)
 
     return '', 404
 
@@ -996,18 +1048,20 @@ def team_expense_my(pid, tid):
     # pylint: disable=too-many-locals
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    if not (g.user['account']['_id'] in team['members'] or
-            g.user['account']['_id'] in team['chiefs']):
+    teamusers = TeamUsers.parse_obj(team)
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     if request.method == 'GET':
         budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
         return render_template('./expense_my.html',
                                project=project.dict(by_alias=True),
-                               team=team, budget_menu=budget_admin)
+                               team=team.dict(by_alias=True),
+                               budget_menu=budget_admin)
 
     if request.method == 'POST':
         data = request.get_json()
@@ -1015,7 +1069,7 @@ def team_expense_my(pid, tid):
         if data['casename'] == 'get':
             teams = []
             for _team in Team.list_by_pid(pid=project.id):
-                teams.append({'name': _team['name'], 'tid': _team['tid']})
+                teams.append({'name': _team.name, 'tid': _team.id})
 
             buids = set()
             uids = set()

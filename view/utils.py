@@ -1,11 +1,14 @@
 ''' utils '''
-from flask import redirect
+from flask import Response, redirect
 
 from module.project import Project
 from module.team import Team
+from structs.projects import ProjectBase
+from structs.teams import TeamBase
 
 
-def check_the_team_and_project_are_existed(pid, tid):
+def check_the_team_and_project_are_existed(pid: str, tid: str) -> \
+        tuple[TeamBase | None, ProjectBase | None, Response | None]:
     ''' Base check the team and profect are existed
 
     :param str pid: project id

@@ -1,17 +1,18 @@
 ''' Team '''
-from typing import Any, Optional
+from typing import Any, Generator, Optional
 from uuid import uuid4
 
 from pymongo.cursor import Cursor
 
 from models.teamdb import TeamDB, TeamMemberChangedDB, TeamMemberTagsDB
+from structs.teams import TeamBase, TeamUsers
 
 
 class Team:
     ''' Team module '''
 
     @staticmethod
-    def create(pid: str, tid: str, name: str, owners: list[str]) -> dict[str, Any]:
+    def create(pid: str, tid: str, name: str, owners: list[str]) -> TeamBase:
         ''' Create team
 
         :param str pid: project id
@@ -24,11 +25,8 @@ class Team:
             raise Exception('lost required')
 
         teamdb = TeamDB(pid, tid)
-
-        data = teamdb.default()
-        data['name'] = name
-        data['owners'].extend(owners)
-
+        data = TeamBase.parse_obj(
+            {'pid': pid, 'tid': tid, 'name': name, 'owners': owners})
         return teamdb.add(data)
 
     @staticmethod
@@ -68,21 +66,24 @@ class Team:
                 pid=pid, tid=tid, action={'add': add_uids, 'del': del_uids})
 
     @staticmethod
-    def list_by_pid(pid: str, show_all: bool = False) -> Cursor[dict[str, Any]]:
+    def list_by_pid(pid: str, show_all: bool = False) -> Generator[TeamBase, None, None]:
         ''' List all team in project
 
         :param str pid: project id
 
         '''
         if show_all:
-            return TeamDB('', '').find({'pid': pid})
+            for team in TeamDB('', '').find({'pid': pid}):
+                yield TeamBase.parse_obj(team)
 
-        return TeamDB('', '').find({
-            'pid': pid,
-            '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]})
+        else:
+            for team in TeamDB('', '').find({
+                'pid': pid,
+                    '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]}):
+                yield TeamBase.parse_obj(team)
 
     @staticmethod
-    def get(pid: str, tid: str) -> Optional[dict[str, Any]]:
+    def get(pid: str, tid: str) -> TeamBase | None:
         ''' Get team data
 
         :param str pid: project id
@@ -161,7 +162,8 @@ class Team:
             if not team:
                 raise Exception(f"no team: {tid}")
 
-            users[tid] = team['chiefs'] + team['members']
+            teamusers = TeamUsers.parse_obj(team)
+            users[tid] = teamusers.chiefs + teamusers.members
 
         return users
 

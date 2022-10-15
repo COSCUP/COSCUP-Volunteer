@@ -32,34 +32,43 @@ async def members_past(
     '''
     result = MembersOut()
     for team in Team.list_by_pid(pid=pid):
-        data = {}
-        data['name'] = team['name']
-        data['tid'] = team['tid']
+        if not team.chiefs:
+            continue
 
-        data['chiefs'] = []
-        chiefs_infos = User.get_info(uids=team['chiefs'])
-        for uid in team['chiefs']:
+        data_chiefs: list[MembersInfo] = []
+        chiefs_infos = User.get_info(uids=team.chiefs)
+        for uid in team.chiefs:
             if uid not in chiefs_infos:
                 continue
 
             _user = chiefs_infos[uid]
             h_msg = hashlib.md5()
             h_msg.update(_user['oauth']['email'].encode('utf-8'))
-            data['chiefs'].append(MembersInfo.parse_obj({
+            data_chiefs.append(MembersInfo.parse_obj({
                 'name': _user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
 
-        data['members'] = []
-        for _user in User.get_info(uids=list(set(team['members']) - set(team['chiefs']))).values():
+        data_members: list[MembersInfo] = []
+
+        uids = set()
+        if team.members:
+            uids.update(team.members)
+        if team.chiefs:
+            uids.update(team.chiefs)
+
+        for _user in User.get_info(uids=list(uids)).values():
             h_msg = hashlib.md5()
             h_msg.update(_user['oauth']['email'].encode('utf-8'))
-            data['members'].append(MembersInfo.parse_obj({
+            data_members.append(MembersInfo.parse_obj({
                 'name': _user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
 
-        result.data.append(MembersTeams.parse_obj(data))
+        result.data.append(MembersTeams.parse_obj(
+            {'name': team.name, 'tid': team.id,
+             'chiefs': data_chiefs, 'members': data_members}
+        ))
 
     if result.data:
         return result
@@ -82,34 +91,43 @@ async def members(
     '''
     result = MembersOut()
     for team in Team.list_by_pid(pid=pid):
-        data = {}
-        data['name'] = team['name']
-        data['tid'] = team['tid']
+        if not team.chiefs:
+            continue
 
-        data['chiefs'] = []
-        chiefs_infos = User.get_info(uids=team['chiefs'])
-        for uid in team['chiefs']:
+        data_chiefs: list[MembersInfo] = []
+        chiefs_infos = User.get_info(uids=team.chiefs)
+        for uid in team.chiefs:
             if uid not in chiefs_infos:
                 continue
 
             user = chiefs_infos[uid]
             h_msg = hashlib.md5()
             h_msg.update(user['oauth']['email'].encode('utf-8'))
-            data['chiefs'].append(MembersInfo.parse_obj({
+            data_chiefs.append(MembersInfo.parse_obj({
                 'name': user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
 
-        data['members'] = []
-        for user in User.get_info(uids=list(set(team['members']) - set(team['chiefs']))).values():
+        data_members: list[MembersInfo] = []
+
+        uids = set()
+        if team.members:
+            uids.update(team.members)
+        if team.chiefs:
+            uids.update(team.chiefs)
+
+        for user in User.get_info(uids=list(uids)).values():
             h_msg = hashlib.md5()
             h_msg.update(user['oauth']['email'].encode('utf-8'))
-            data['members'].append(MembersInfo.parse_obj({
+            data_members.append(MembersInfo.parse_obj({
                 'name': user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
 
-        result.data.append(MembersTeams.parse_obj(data))
+        result.data.append(MembersTeams.parse_obj(
+            {'name': team.name, 'tid': team.id,
+             'chiefs': data_chiefs, 'members': data_members}
+        ))
 
     if result.data:
         return result

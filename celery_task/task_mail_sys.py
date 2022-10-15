@@ -66,8 +66,13 @@ def mail_member_waiting(sender):
             sort=(('create_at', 1), )):
         team = Team.get(raw['pid'], raw['tid'])
 
-        uids = []
-        uids.extend(team['chiefs'])
+        if not team:
+            continue
+
+        uids: list[str] = []
+        if team.chiefs:
+            uids.extend(team.chiefs)
+
         uids.append(raw['uid'])
 
         users = User.get_info(uids=uids)
@@ -75,34 +80,35 @@ def mail_member_waiting(sender):
         mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN,
                               base_url=setting.MATTERMOST_BASEURL)
 
-        for uid in team['chiefs']:
-            body = template.render(
-                name=users[uid]['profile']['badge_name'],
-                uid=raw['uid'],
-                apply_name=users[raw['uid']]['profile']['badge_name'],
-                team_name=team['name'], pid=team['pid'], tid=team['tid'], )
+        if team.chiefs:
+            for uid in team.chiefs:
+                body = template.render(
+                    name=users[uid]['profile']['badge_name'],
+                    uid=raw['uid'],
+                    apply_name=users[raw['uid']]['profile']['badge_name'],
+                    team_name=team.name, pid=team.pid, tid=team.id, )
 
-            raw_mail = awsses.raw_mail(
-                to_addresses=(dict(
-                    name=users[uid]['profile']['badge_name'], mail=users[uid]['oauth']['email']), ),
-                subject=f"申請加入通知信 - {users[raw['uid']]['profile']['badge_name']}",
-                body=body,
-            )
-
-            resp = mail_member_send.apply_async(
-                kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
-            logger.info(resp)
-
-            mid = mmt.find_possible_mid(uid=uid)
-            if mid:
-                channel_info = mmt.create_a_direct_message(
-                    users=(mid, setting.MATTERMOST_BOT_ID)).json()
-
-                resp = mmt.posts(
-                    channel_id=channel_info['id'],
-                    message=f"收到 **{users[raw['uid']]['profile']['badge_name']}** 申請加入 **{team['name']}**，前往 [管理組員](https://volunteer.coscup.org/team/{team['pid']}/{team['tid']}/edit_user)",  # pylint: disable=line-too-long
+                raw_mail = awsses.raw_mail(
+                    to_addresses=(dict(
+                        name=users[uid]['profile']['badge_name'], mail=users[uid]['oauth']['email']), ),
+                    subject=f"申請加入通知信 - {users[raw['uid']]['profile']['badge_name']}",
+                    body=body,
                 )
-                logger.info(resp.json())
+
+                resp = mail_member_send.apply_async(
+                    kwargs={'raw_mail': raw_mail.as_string(), 'rid': str(raw['_id'])})
+                logger.info(resp)
+
+                mid = mmt.find_possible_mid(uid=uid)
+                if mid:
+                    channel_info = mmt.create_a_direct_message(
+                        users=(mid, setting.MATTERMOST_BOT_ID)).json()
+
+                    resp = mmt.posts(
+                        channel_id=channel_info['id'],
+                        message=f"收到 **{users[raw['uid']]['profile']['badge_name']}** 申請加入 **{team.name}**，前往 [管理組員](https://volunteer.coscup.org/team/{team.pid}/{team.id}/edit_user)",  # pylint: disable=line-too-long
+                    )
+                    logger.info(resp.json())
 
 
 @app.task(bind=True, name='mail.member.deny',
@@ -123,19 +129,26 @@ def mail_member_deny(sender):
         {'done.mail': {'$exists': False}, 'case': 'deny'},
             sort=(('create_at', 1), )):
         team = Team.get(raw['pid'], raw['tid'])
-        project = Project().get(pid=team['pid'])
+
+        if not team:
+            continue
+
+        project = Project().get(pid=team.pid)
+
+        if not project:
+            continue
 
         user = User.get_info(uids=(raw['uid'], ))[raw['uid']]
         body = template.render(
             name=user['profile']['badge_name'],
-            team_name=team['name'],
-            project_name=project['name'],
-            pid=team['pid'], )
+            team_name=team.name,
+            project_name=project.name,
+            pid=team.pid, )
 
         raw_mail = awsses.raw_mail(
             to_addresses=(
                 dict(name=user['profile']['badge_name'], mail=user['oauth']['email']), ),
-            subject=f"申請加入 {team['name']} 未核准",
+            subject=f"申請加入 {team.name} 未核准",
             body=body,
         )
 
@@ -163,16 +176,19 @@ def mail_member_add(sender):
             sort=(('create_at', 1), )):
         team = Team.get(raw['pid'], raw['tid'])
 
+        if not team:
+            continue
+
         user = User.get_info(uids=(raw['uid'], ))[raw['uid']]
 
         body = template.render(
             name=user['profile']['badge_name'],
-            team_name=team['name'], pid=team['pid'], tid=team['tid'], )
+            team_name=team.name, pid=team.pid, tid=team.id, )
 
         raw_mail = awsses.raw_mail(
             to_addresses=(
                 dict(name=user['profile']['badge_name'], mail=user['oauth']['email']), ),
-            subject=f"申請加入 {team['name']} 核准",
+            subject=f"申請加入 {team.name} 核准",
             body=body,
         )
 
@@ -202,16 +218,19 @@ def mail_member_del(sender):
             sort=(('create_at', 1), )):
         team = Team.get(raw['pid'], raw['tid'])
 
+        if not team:
+            continue
+
         user = User.get_info(uids=(raw['uid'], ))[raw['uid']]
 
         body = template.render(
             name=user['profile']['badge_name'],
-            team_name=team['name'], )
+            team_name=team.name, )
 
         raw_mail = awsses.raw_mail(
             to_addresses=(
                 dict(name=user['profile']['badge_name'], mail=user['oauth']['email']), ),
-            subject=f"您已被移除 {team['name']} 的組員資格！",
+            subject=f"您已被移除 {team.name} 的組員資格！",
             body=body,
         )
 

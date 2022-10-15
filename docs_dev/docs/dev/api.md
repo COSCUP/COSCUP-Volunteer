@@ -22,18 +22,24 @@ in the future will be published here.
     - [ ] Remove all sessions.
 
 === "User"
-     - [ ] User self info
-        - [ ] GET
-        - [ ] POST
+     - [x] User self info
+        - [x] GET
+        - [x] POST: bank, resume, address, dietary habit, real profile
 
 === "Users"
     - [ ] Get users public info
 
 === "Projects"
-    - [ ] List all projects.
+    - [x] List all projects.
+    - [x] Creat a project.
+    - [ ] Update traffic subsidy.
 
 === "Teams"
-    - [ ] List all Teams.
+    - [x] List all Teams.
+    - [ ] Create a new team.
+    - [ ] Add / delete chiefs
+    - [ ] Add / delete members.
+    - [ ] List available forms.
 
 === "Tasks"
     - [ ] List all tasks.

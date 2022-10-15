@@ -10,6 +10,7 @@ from api.apistructs.projects import (ProjectAllOut, ProjectCreateInput,
                                      ProjectItemUpdateOutput,
                                      ProjectTeamDietaryHabitOutput,
                                      ProjectTeamsOutput)
+from api.apistructs.teams import TeamCreateInput, TeamCreateOutput
 from api.dependencies import get_current_user
 from module.dietary_habit import DietaryHabitItemsName, DietaryHabitItemsValue
 from module.project import Project
@@ -126,6 +127,34 @@ async def projects_teams(
     return ProjectTeamsOutput.parse_obj({'teams': teams})
 
 
+@router.post('/{pid}/teams',
+             summary='Create a new team in project.',
+             response_model=TeamCreateOutput,
+             responses={
+                 status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
+             response_model_by_alias=False,
+             response_model_exclude_none=True,
+             )
+async def projects_teams_create(
+        create_date: TeamCreateInput,
+        pid: str = Path(..., description='project id'),
+        current_user: dict[str, Any] = Depends(  # pylint: disable=unused-argument
+            get_current_user),
+) -> TeamCreateOutput | None:
+    ''' Create a new team in project '''
+    project = Project.get(pid=pid)
+    if not project:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    if current_user['uid'] not in project.owners:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    result = Team.create(
+        pid=pid, tid=create_date.id, name=create_date.name, owners=project.owners)
+
+    return TeamCreateOutput.parse_obj(result)
+
+
 @router.get('/{pid}/teams/dietary_habit',
             summary='Lists of dietary habit statistics in project.',
             response_model=list[ProjectTeamDietaryHabitOutput],
@@ -141,8 +170,13 @@ async def projects_teams_dietary_habit(
     ''' Lists of dietary habit statistics in project '''
     all_users = {}
     for team in Team.list_by_pid(pid=pid):
-        for uid in team['chiefs']+team['members']:
-            all_users[uid] = {'tid': team['tid']}
+        if team.chiefs:
+            for uid in team.chiefs:
+                all_users[uid] = {'tid': team.id}
+
+        if team.members:
+            for uid in team.members:
+                all_users[uid] = {'tid': team.id}
 
     user_infos = User.get_info(
         uids=list(all_users.keys()), need_sensitive=True)

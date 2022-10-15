@@ -11,6 +11,7 @@ from api.apistructs.sender import SenderCampaignLists
 from api.dependencies import get_current_user
 from module.sender import SenderCampaign, SenderReceiver
 from module.team import Team
+from structs.teams import TeamUsers
 
 router = APIRouter(
     prefix='/sender',
@@ -36,7 +37,8 @@ async def sender_all(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    if current_user['uid'] not in (team['owners'] + team['chiefs'] + team['members']):
+    teamusers = TeamUsers.parse_obj(team)
+    if current_user['uid'] not in (teamusers.owners + teamusers.chiefs + teamusers.members):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     campaigns = []
@@ -96,7 +98,8 @@ async def sender_upload_receiver_lists_replace(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    if current_user['uid'] not in (team['owners'] + team['chiefs'] + team['members']):
+    teamusers = TeamUsers.parse_obj(team)
+    if current_user['uid'] not in (teamusers.owners + teamusers.chiefs + teamusers.members):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     csv_rows = await sender_upload_receiver(pid=pid, tid=tid, cid=cid,
@@ -125,7 +128,8 @@ async def sender_upload_receiver_lists_update(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    if current_user['uid'] not in (team['owners'] + team['chiefs'] + team['members']):
+    teamusers = TeamUsers.parse_obj(team)
+    if current_user['uid'] not in (teamusers.owners + teamusers.chiefs + teamusers.members):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     csv_rows = await sender_upload_receiver(pid=pid, tid=tid, cid=cid,
@@ -152,7 +156,8 @@ async def sender_upload_receiver_lists_delete(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    if current_user['uid'] not in (team['owners'] + team['chiefs'] + team['members']):
+    teamusers = TeamUsers.parse_obj(team)
+    if current_user['uid'] not in (teamusers.owners + teamusers.chiefs + teamusers.members):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     return UploadReceiverOutput.parse_obj({

@@ -4,6 +4,7 @@ from flask import Blueprint, g, jsonify, redirect, render_template, request
 from module.skill import (RecruitQuery, SkillEnum, SkillEnumDesc, StatusEnum,
                           StatusEnumDesc, TeamsEnum, TeamsEnumDesc)
 from module.users import TobeVolunteer, User
+from structs.teams import TeamUsers
 from view.utils import check_the_team_and_project_are_existed
 
 VIEW_RECRUIT = Blueprint('recruit', __name__, url_prefix='/recruit')
@@ -14,11 +15,12 @@ def recurit_list(pid, tid):
     ''' List page '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if _redirect:
+    if team is None or project is None or _redirect:
         return _redirect
 
-    is_admin = (g.user['account']['_id'] in team['chiefs'] or
-                g.user['account']['_id'] in team['owners'] or
+    teamusers = TeamUsers.parse_obj(team)
+    is_admin = (g.user['account']['_id'] in teamusers.chiefs or
+                g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
 
     if not is_admin:
@@ -26,7 +28,8 @@ def recurit_list(pid, tid):
 
     if request.method == 'GET':
         return render_template('./recruit_list.html',
-                               project=project, team=team, is_admin=is_admin)
+                               project=project.dict(by_alias=True),
+                               team=team.dict(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':
         post_data = request.get_json()

@@ -122,20 +122,22 @@ def service_sync_gsuite_team_members(sender, **kwargs):
     if 'to_team' in kwargs:
         to_team = Team.get(pid=kwargs['to_team'][0], tid=kwargs['to_team'][1])
 
-        if 'mailling' not in to_team or not to_team['mailling']:
+        if not to_team.mailling:
             return
 
-        mailling = to_team['mailling']
+        mailling = to_team.mailling
 
     else:
-        if 'mailling' not in team or not team['mailling']:
+        if not team.mailling:
             return
 
-        mailling = team['mailling']
+        mailling = team.mailling
 
     uids = []
-    uids.extend(team['chiefs'])
-    uids.extend(team['members'])
+    if team.chiefs:
+        uids.extend(team['chiefs'])
+    if team.members:
+        uids.extend(team['members'])
 
     users_info = User.get_info(uids=uids)
 
@@ -231,8 +233,10 @@ def service_sync_mattermost_projectuserin_channel(sender):
     for pid, value in pids.items():
         uids = set()
         for team in Team.list_by_pid(pid=pid):
-            uids.update(team['chiefs'])
-            uids.update(team['members'])
+            if team.chiefs:
+                uids.update(team.chiefs)
+            if team.members:
+                uids.update(team.members)
 
         for uid in uids:
             mid = mmt.find_possible_mid(uid=uid)
@@ -258,23 +262,30 @@ def service_sync_mattermost_users_position(sender, **kwargs):
     for pid in pids:
         users = {}
         for team in Team.list_by_pid(pid=pid):
-            team_name = team['name'].split('-')[0].strip()
+            team_name = team.name.split('-')[0].strip()
 
-            for chief in team['chiefs']:
-                if chief not in users:
-                    users[chief] = []
+            if team.chiefs:
+                for chief in team.chiefs:
+                    if chief not in users:
+                        users[chief] = []
 
-                if team['tid'] == 'coordinator':
-                    users[chief].append('🌟總召')
+                    if team.tid == 'coordinator':
+                        users[chief].append('🌟總召')
+                    else:
+                        users[chief].append(f'⭐️組長@{team_name}')
+
+            if team.members:
+                if team.chiefs:
+                    members = list(set(team.members) - set(team.chiefs))
+
                 else:
-                    users[chief].append(f'⭐️組長@{team_name}')
+                    members = team.members
 
-            team['members'] = set(team['members']) - set(team['chiefs'])
-            for member in team['members']:
-                if member not in users:
-                    users[member] = []
+                for member in members:
+                    if member not in users:
+                        users[member] = []
 
-                users[member].append(f'{team_name}(組員)')
+                    users[member].append(f'{team_name}(組員)')
 
         mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN,
                               base_url=setting.MATTERMOST_BASEURL)

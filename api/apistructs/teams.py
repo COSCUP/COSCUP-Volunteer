@@ -31,3 +31,17 @@ class TeamItemUpdateOutput(TeamItemUpdateInput):
 class TeamAddressBookOutput(BaseModel):
     ''' Team address book output '''
     datas: list[UserItem] = Field(description='list of users info')
+
+
+class TeamCreateInput(BaseModel):
+    ''' Team create input '''
+    id: str = Field(description='team id')
+    name: str = Field(description='team name')
+
+    class Config:  # pylint: disable=too-few-public-methods
+        ''' Config '''
+        anystr_strip_whitespace = True
+
+
+class TeamCreateOutput(TeamCreateInput):
+    ''' TeamCreateOutput '''

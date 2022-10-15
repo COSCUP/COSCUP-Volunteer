@@ -5,6 +5,7 @@ from typing import Any, Optional
 from pymongo.collection import ReturnDocument
 
 from models.base import DBBase
+from structs.teams import TeamBase
 
 
 class TeamDB(DBBase):
@@ -76,22 +77,22 @@ class TeamDB(DBBase):
         self.make_create_at(result)
         return result
 
-    def add(self, data: dict[str, Any]) -> dict[str, Any]:
+    def add(self, data: TeamBase) -> TeamBase:
         ''' Add data
 
         Args:
-            data (dict): The data to inserted / updated.
+            data (TeamBase): The data to inserted / updated.
 
         Returns:
             Return the inserted / updated data.
 
         '''
-        return self.find_one_and_update(
+        return TeamBase.parse_obj(self.find_one_and_update(
             {'pid': self.pid, 'tid': self.tid},
-            {'$set': data},
+            {'$set': data.dict(exclude_none=True)},
             upsert=True,
             return_document=ReturnDocument.AFTER,
-        )
+        ))
 
     def update_setting(self, data: dict[str, Any]) -> dict[str, Any]:
         ''' update setting
@@ -130,14 +131,17 @@ class TeamDB(DBBase):
                 {'pid': self.pid, 'tid': self.tid},
                 {'$pullAll': {field: del_uids}})
 
-    def get(self) -> Optional[dict[str, Any]]:
+    def get(self) -> TeamBase | None:
         ''' Get data
 
         Returns:
             Return the team info in `pid`, `tid`.
 
         '''
-        return self.find_one({'pid': self.pid, 'tid': self.tid})
+        for team in self.find({'pid': self.pid, 'tid': self.tid}):
+            return TeamBase.parse_obj(team)
+
+        return None
 
     def add_tag_member(self, tag_data: dict[str, str]) -> None:
         ''' Add tag member
