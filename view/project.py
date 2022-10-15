@@ -348,7 +348,7 @@ def project_edit_create_team_api(pid: str) -> Response:
                 if k in _team:
                     team[k] = _team[k]
 
-            if 'headcount' not in team:
+            if 'headcount' not in team or team['headcount'] is None:
                 team['headcount'] = 0
             else:
                 team['headcount'] = max([0, int(team['headcount'])])

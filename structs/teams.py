@@ -1,7 +1,7 @@
 ''' Teams Structs '''
 from datetime import datetime
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, validator
 
 
 class TagMembers(BaseModel):
@@ -40,3 +40,11 @@ class TeamUsers(BaseModel):
                               description="list of chiefs' uids")
     members: list[str] = Field(
         default_factory=list, description="list of members' uids")
+
+    @validator('*', pre=True)
+    def process_none(cls, value: list[str] | None) -> list[str]:  # pylint: disable=no-self-argument
+        ''' process none '''
+        if value is None:
+            return []
+
+        return value
