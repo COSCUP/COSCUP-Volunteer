@@ -13,7 +13,7 @@ class ProjectItem(BaseModel):
     desc: str | None = Field(description='desc')
     action_date: date | None = Field(description='action date')
     owners: list[str] | None = Field(description='list of owners')
-    calendar: HttpUrl | None = Field(description='calendar url')
+    calendar: str | None = Field(description='calendar url')
     gitlab_project_id: str | None = Field(description='gitlab project id')
     mailling_leader: EmailStr | None = Field(
         description='mailing list of leader')

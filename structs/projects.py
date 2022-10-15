@@ -32,7 +32,7 @@ class ProjectBase(BaseModel):
     owners: list[str] = Field(description='list of owners')
     action_date: datetime = Field(description='action date')
     desc: str | None = Field(description='desc')
-    calendar: HttpUrl | None = Field(description='calendar url')
+    calendar: str | None = Field(description='calendar url')
     gitlab_project_id: str | None = Field(description='gitlab project id')
     mailling_leader: EmailStr | None = Field(
         description='mailing list of leader')
@@ -58,7 +58,7 @@ class ProjectBaseUpdate(BaseModel):
     name: str | None = Field(description='project name')
     action_date: datetime | None = Field(description='action date')
     desc: str | None = Field(description='desc')
-    calendar: HttpUrl | None = Field(description='calendar url')
+    calendar: str | None = Field(description='calendar url')
     gitlab_project_id: str | None = Field(description='gitlab project id')
     mailling_leader: EmailStr | None = Field(
         description='mailing list of leader')
