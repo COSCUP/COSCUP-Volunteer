@@ -25,12 +25,12 @@ VIEW_PROJECT = Blueprint('project', __name__, url_prefix='/project')
 
 
 @VIEW_PROJECT.route('/')
-def index():
+def index() -> str:
     ''' Index page '''
     projects = []
     datas = []
-    for data in Project.all():
-        datas.append(data.dict(by_alias=True))
+    for project in Project.all():
+        datas.append(project.dict(by_alias=True))
 
     for data in datas:
         date = arrow.get(data['action_date'])
@@ -44,13 +44,13 @@ def index():
 
 
 @VIEW_PROJECT.route('/<pid>/edit', methods=('GET', 'POST'))
-def project_edit(pid):
+def project_edit(pid: str) -> str | Response:
     ''' Project edit '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project.owners:
+    if project and g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
-    if request.method == 'GET':
+    if project and request.method == 'GET':
         return render_template('./project_edit.html', project=project.dict(by_alias=True))
 
     if request.method == 'POST':
@@ -61,47 +61,50 @@ def project_edit(pid):
 
 
 @VIEW_PROJECT.route('/<pid>/edit/team', methods=('GET', 'POST'))
-def project_edit_create_team(pid):
+def project_edit_create_team(pid: str) -> str | Response:
     ''' Project edit create team '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project.owners:
+    if project and g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
-    teams = []
-    for team in Team.list_by_pid(project.id, show_all=True):
-        teams.append(team.dict(by_alias=True))
+    if project:
+        teams = []
+        for team in Team.list_by_pid(project.id, show_all=True):
+            teams.append(team.dict(by_alias=True))
 
-    return render_template('./project_edit_create_team.html',
-                           project=project.dict(by_alias=True), teams=teams)
+        return render_template('./project_edit_create_team.html',
+                               project=project.dict(by_alias=True), teams=teams)
+
+    return '', 404
 
 
 @VIEW_PROJECT.route('/<pid>/form', methods=('GET', 'POST'))
-def project_form(pid):
+def project_form(pid: str) -> str | Response:
     ''' Project form '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project.owners:
+    if project and g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
-    if request.method == 'GET':
+    if project and request.method == 'GET':
         return render_template('./project_form.html', project=project.dict(by_alias=True))
 
     return '', 404
 
 
 @VIEW_PROJECT.route('/<pid>/form/api', methods=('GET', 'POST'))
-def project_form_api(pid):
+def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-locals
     ''' Project form API '''
     # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project.owners:
+    if project and g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'POST':
         data = request.get_json()
-        if 'case' not in data:
+        if data and 'case' not in data:
             return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
-        if data['case'] == 'volunteer_certificate':
+        if data and data['case'] == 'volunteer_certificate':
             fieldnames = ('uid', 'picture', 'value', 'name',
                           'roc_id', 'birthday', 'company')
             with io.StringIO() as str_io:
@@ -110,8 +113,13 @@ def project_form_api(pid):
 
                 for raw in Form.all_volunteer_certificate(pid):
                     user_info = UsersDB().find_one({'_id': raw['uid']})
+                    if not user_info:
+                        continue
+
                     oauth = OAuthDB().find_one(
                         {'owner': raw['uid']}, {'data.picture': 1})
+                    if not oauth:
+                        continue
 
                     data = {
                         'uid': raw['uid'],
@@ -126,12 +134,12 @@ def project_form_api(pid):
                     csv_writer.writerow(data)
 
                 result = []
-                for raw in csv.reader(io.StringIO(str_io.getvalue())):
-                    result.append(raw)
+                for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
+                    result.append(raw_read)
 
                 return jsonify({'result': result})
 
-        elif data['case'] == 'traffic_fee':
+        if data and data['case'] == 'traffic_fee':
             fieldnames = ('uid', 'picture', 'name', 'apply',
                           'fee', 'fromwhere', 'howto')
             with io.StringIO() as str_io:
@@ -140,6 +148,8 @@ def project_form_api(pid):
 
                 for raw in Form.all_traffic_fee(pid):
                     user_info = User.get_info(uids=[raw['uid'], ])[raw['uid']]
+                    if not user_info:
+                        continue
 
                     data = {
                         'uid': raw['uid'],
@@ -154,19 +164,22 @@ def project_form_api(pid):
                     csv_writer.writerow(data)
 
                 result = []
-                for raw in csv.reader(io.StringIO(str_io.getvalue())):
-                    result.append(raw)
+                for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
+                    result.append(raw_read)
 
                 return jsonify({'result': result})
 
-        elif data['case'] == 'accommodation':
-            fieldnames = ('uid', 'picture', 'name', 'key', 'status')
+        if data and data['case'] == 'accommodation':
+            fieldnames_acc = ('uid', 'picture', 'name', 'key', 'status')
             with io.StringIO() as str_io:
-                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
+                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames_acc)
                 csv_writer.writeheader()
 
                 for raw in Form.all_accommodation(pid):
                     user_info = User.get_info(uids=[raw['uid'], ])[raw['uid']]
+
+                    if not user_info:
+                        continue
 
                     data = {
                         'uid': raw['uid'],
@@ -178,17 +191,17 @@ def project_form_api(pid):
 
                     csv_writer.writerow(data)
 
-                result = []
-                for raw in csv.reader(io.StringIO(str_io.getvalue())):
-                    result.append(raw)
+                result_str = []
+                for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
+                    result_str.append(raw)
 
                 return jsonify({'result': result})
 
-        elif data['case'] == 'appreciation':
-            fieldnames = ('uid', 'picture', 'name',
-                          'available', 'key', 'value')
+        if data and data['case'] == 'appreciation':
+            fieldnames_app = ('uid', 'picture', 'name',
+                              'available', 'key', 'value')
             with io.StringIO() as str_io:
-                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
+                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames_app)
                 csv_writer.writeheader()
 
                 for raw in Form.all_appreciation(pid):
@@ -196,6 +209,9 @@ def project_form_api(pid):
                         continue
 
                     user_info = User.get_info(uids=[raw['uid'], ])[raw['uid']]
+
+                    if not user_info:
+                        continue
 
                     data = {
                         'uid': raw['uid'],
@@ -207,13 +223,13 @@ def project_form_api(pid):
                     }
                     csv_writer.writerow(data)
 
-                result = []
-                for raw in csv.reader(io.StringIO(str_io.getvalue())):
-                    result.append(raw)
+                result_str = []
+                for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
+                    result_str.append(raw)
 
                 return jsonify({'result': result})
 
-        elif data['case'] == 'clothes':
+        if data and data['case'] == 'clothes':
             all_users = {}
             for team in Team.list_by_pid(pid=pid):
                 if team.chiefs:
@@ -254,15 +270,16 @@ def project_form_api(pid):
                     csv_writer.writerow(data)
 
                 result = []
-                for raw in csv.reader(io.StringIO(str_io.getvalue())):
-                    result.append(raw)
+                for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
+                    result.append(raw_read)
 
                 return jsonify({'result': result})
 
-        elif data['case'] == 'parking_card':
-            fieldnames = ('uid', 'picture', 'name', 'carno', 'dates')
+        if data and data['case'] == 'parking_card':
+            fieldnames_parking = ('uid', 'picture', 'name', 'carno', 'dates')
             with io.StringIO() as str_io:
-                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
+                csv_writer = csv.DictWriter(
+                    str_io, fieldnames=fieldnames_parking)
                 csv_writer.writeheader()
 
                 for raw in Form.all_parking_card(pid):
@@ -270,6 +287,9 @@ def project_form_api(pid):
                         continue
 
                     user_info = User.get_info(uids=[raw['uid'], ])[raw['uid']]
+
+                    if not user_info:
+                        continue
 
                     data = {
                         'uid': raw['uid'],
@@ -281,12 +301,12 @@ def project_form_api(pid):
                     csv_writer.writerow(data)
 
                 result = []
-                for raw in csv.reader(io.StringIO(str_io.getvalue())):
-                    result.append(raw)
+                for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
+                    result.append(raw_read)
 
                 return jsonify({'result': result})
 
-        elif data['case'] == 'drink':
+        if data and data['case'] == 'drink':
             all_users = {}
             for team in Team.list_by_pid(pid=pid):
                 if team.chiefs:
@@ -299,9 +319,11 @@ def project_form_api(pid):
 
             user_info = User.get_info(uids=list(all_users.keys()))
 
-            fieldnames = ('uid', 'picture', 'name', '_has_data', 'tid', 'y18')
+            fieldnames_drink = ('uid', 'picture', 'name',
+                                '_has_data', 'tid', 'y18')
             with io.StringIO() as str_io:
-                csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
+                csv_writer = csv.DictWriter(
+                    str_io, fieldnames=fieldnames_drink)
                 csv_writer.writeheader()
 
                 for raw in Form.all_drink(pid):
@@ -322,8 +344,8 @@ def project_form_api(pid):
                     csv_writer.writerow(data)
 
                 result = []
-                for raw in csv.reader(io.StringIO(str_io.getvalue())):
-                    result.append(raw)
+                for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
+                    result.append(raw_read)
 
                 return jsonify({'result': result})
 
@@ -334,7 +356,7 @@ def project_form_api(pid):
 def project_edit_create_team_api(pid: str) -> Response:
     ''' Project edit create team API '''
     project = Project.get(pid)
-    if not project.owners or g.user['account']['_id'] not in project.owners:
+    if not project or not project.owners or g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if request.method == 'GET':
@@ -357,7 +379,7 @@ def project_edit_create_team_api(pid: str) -> Response:
 
     if request.method == 'POST':
         data = request.json
-        if data['submittype'] == 'update':
+        if data and data['submittype'] == 'update':
             chiefs = data['chiefs']
             members = data['members']
             if isinstance(data['chiefs'], str):
@@ -370,11 +392,11 @@ def project_edit_create_team_api(pid: str) -> Response:
 
             new_members = set(chiefs + members)
             old_members = set(Team.get_users(
-                pid=pid, tids=(data['tid'], ))[data['tid']])
+                pid=pid, tids=[data['tid'], ])[data['tid']])
 
             TeamMemberChangedDB().make_record(pid=pid, tid=data['tid'],
-                                              action={'add': new_members-old_members,
-                                                      'del': old_members-new_members})
+                                              action={'add': list(new_members-old_members),
+                                                      'del': list(old_members-new_members)})
 
             Team.update_setting(pid=pid, tid=data['tid'], data=data)
             service_sync_mattermost_add_channel.apply_async(
@@ -382,7 +404,7 @@ def project_edit_create_team_api(pid: str) -> Response:
 
             return f'{data}'
 
-        if data['submittype'] == 'create':
+        if data and data['submittype'] == 'create':
             Team.create(
                 pid=pid, tid=data['tid'], name=data['name'], owners=project.owners)
             return f'{data}'
@@ -391,7 +413,7 @@ def project_edit_create_team_api(pid: str) -> Response:
 
 
 @VIEW_PROJECT.route('/<pid>/')
-def team_page(pid):
+def team_page(pid: str) -> str | Response:
     ''' Team page '''
     teams = []
     project = Project.get(pid)
@@ -438,24 +460,25 @@ def team_page(pid):
 
 
 @VIEW_PROJECT.route('/<pid>/form_traffic_mapping', methods=('GET', 'POST'))
-def project_form_traffic_mapping(pid):
+def project_form_traffic_mapping(pid: str) -> str | Response:
     ''' Project form traffic mapping '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project.owners:
+    if project and g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
-    if request.method == 'GET':
-        return render_template('./project_form_traffic_mapping.html', project=project.dict(by_alias=True))
+    if project and request.method == 'GET':
+        return render_template('./project_form_traffic_mapping.html',
+                               project=project.dict(by_alias=True))
 
     if request.method == 'POST':
         data = request.get_json()
-        if 'casename' in data and data['casename'] == 'init':
+        if data and 'casename' in data and data['casename'] == 'init':
             return jsonify({
                 'base': {'loaction': '', 'fee': 0},
                 'data': (FormTrafficFeeMapping.get(pid=pid) or {}).get('data', []),
             })
 
-        if 'casename' in data and data['casename'] == 'save':
+        if data and 'casename' in data and data['casename'] == 'save':
             feemapping = {}
             for raw in data['data']:
                 if raw['location'].strip():
@@ -468,20 +491,20 @@ def project_form_traffic_mapping(pid):
 
 
 @VIEW_PROJECT.route('/<pid>/form/accommodation', methods=('GET', 'POST'))
-def project_form_accommodation(pid):
+def project_form_accommodation(pid: str) -> str | Response:  # pylint: disable=too-many-branches
     ''' Project form accommodation '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project.owners:
+    if project and g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
-    if request.method == 'GET':
+    if project and request.method == 'GET':
         return render_template('./project_form_accommodation.html',
                                project=project.dict(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
 
-        if post_data['casename'] == 'get':
+        if post_data and post_data['casename'] == 'get':
             all_users = {}
             for team in Team.list_by_pid(pid=pid):
                 if team.chiefs:
@@ -518,7 +541,7 @@ def project_form_accommodation(pid):
 
             return jsonify({'datas': datas})
 
-        if post_data['casename'] == 'update':
+        if post_data and post_data['casename'] == 'update':
             for data in post_data['datas']:
                 logging.info('uid: %s, room: %s',
                              data['uid'].strip(), data['room'].strip())
@@ -531,20 +554,20 @@ def project_form_accommodation(pid):
 
 
 @VIEW_PROJECT.route('/<pid>/dietary_habit', methods=('GET', 'POST'))
-def project_dietary_habit(pid):
+def project_dietary_habit(pid: str) -> str | Response:
     ''' Project dietary habit '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project.owners:
+    if project and g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
-    if request.method == 'GET':
+    if project and request.method == 'GET':
         return render_template('./project_dietary_habit.html',
                                project=project.dict(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
 
-        if post_data['casename'] == 'get':
+        if post_data and post_data['casename'] == 'get':
             all_users = {}
             for team in Team.list_by_pid(pid=pid):
                 if team.chiefs:
@@ -575,19 +598,19 @@ def project_dietary_habit(pid):
 
 
 @VIEW_PROJECT.route('/<pid>/contact_book', methods=('GET', 'POST'))
-def project_contact_book(pid):
+def project_contact_book(pid: str) -> str | Response:
     ''' Project contact book '''
     project = Project.get(pid)
-    if g.user['account']['_id'] not in project.owners:
+    if project and g.user['account']['_id'] not in project.owners:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
-    if request.method == 'GET':
+    if project and request.method == 'GET':
         return render_template('./project_contact_book.html', project=project.dict(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
 
-        if post_data['casename'] == 'get':
+        if post_data and post_data['casename'] == 'get':
             all_users = {}
             for team in Team.list_by_pid(pid=pid):
                 if team.chiefs:

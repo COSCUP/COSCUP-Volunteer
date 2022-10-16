@@ -2,7 +2,7 @@
 import logging
 
 import arrow
-from flask import Blueprint, g, redirect, request, url_for
+from flask import Blueprint, Response, g, redirect, request, url_for
 
 import setting
 from models.telegram_db import TelegramDB
@@ -13,12 +13,12 @@ VIEW_TELEGRAM = Blueprint('telegram', __name__, url_prefix='/telegram')
 
 
 @VIEW_TELEGRAM.route('/r', methods=('POST', ))
-def receive():
+def receive() -> Response:
     ''' receive '''
     data = request.get_json()
     logging.info('[telegram] %s', data)
 
-    if TelegramBot.is_command_start_linkme(data):
+    if data and TelegramBot.is_command_start_linkme(data):
         uuid_data = TelegramBot.gen_uuid(chat_id=data['message']['from']['id'])
         TelegramBot.temp_fetch_user_data(data=data)
 
@@ -38,7 +38,7 @@ def receive():
 
 
 @VIEW_TELEGRAM.route('/verify/<tg_uuid>', methods=('GET', 'POST'))
-def link_telegram_verify(tg_uuid):
+def link_telegram_verify(tg_uuid: str) -> Response:
     ''' Link Telegram verify '''
     if request.method == 'GET':
         mem_cache = MC.get_client()

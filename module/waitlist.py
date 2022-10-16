@@ -1,5 +1,5 @@
 ''' WaitList '''
-from typing import Any, Generator, Literal, Optional, Union
+from typing import Any, Generator, Literal, Optional
 
 from pymongo.cursor import Cursor
 
@@ -41,7 +41,7 @@ class WaitList:
 
     @staticmethod
     def list_by_team(pid: str, tid: str, uid: Optional[str] = None) -> \
-            Union[Optional[dict[str, Any]], Cursor[dict[str, Any]]]:
+            Generator[dict[str, Any], None, None] | None:
         ''' List team waiting user
 
         Args:

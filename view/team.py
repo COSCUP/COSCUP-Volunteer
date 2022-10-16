@@ -3,12 +3,14 @@
 import html
 import json
 import re
+from typing import Any, Callable
 
 import arrow
 import phonenumbers
-from flask import (Blueprint, g, jsonify, redirect, render_template, request,
-                   url_for)
+from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
+                   request, url_for)
 from markdown import markdown
+from pydantic import BaseModel, Field
 
 from celery_task.task_expense import expense_create
 from models.teamdb import TeamMemberChangedDB, TeamPlanDB
@@ -26,7 +28,7 @@ VIEW_TEAM = Blueprint('team', __name__, url_prefix='/team')
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/')
-def index(pid, tid):
+def index(pid: str, tid: str) -> str | Response:
     ''' Index page '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -61,7 +63,7 @@ def index(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/calendar')
-def calendar(pid, tid):
+def calendar(pid: str, tid: str) -> str | Response:
     ''' calendar '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -82,8 +84,17 @@ def calendar(pid, tid):
                             pid=team.pid, tid=team.id, _scheme='https', _external=True))
 
 
+class UserInfoBase(BaseModel):
+    ''' UserInfoBase '''
+    id: str = Field(alias='_id')
+    profile: dict[str, str]
+    oauth: dict[str, str]
+    is_chief: bool = Field(default=False)
+    chat: dict[str, str] | None = Field(default_factory=dict)
+
+
 @VIEW_TEAM.route('/<pid>/<tid>/members', methods=('GET', 'POST'))
-def members(pid, tid):
+def members(pid: str, tid: str) -> str | Response:  # pylint: disable=too-many-branches
     ''' members '''
     # pylint: disable=too-many-locals
     team, project, _redirect = check_the_team_and_project_are_existed(
@@ -104,7 +115,7 @@ def members(pid, tid):
     if request.method == 'POST':
         post_data = request.get_json()
 
-        if post_data['casename'] == 'get':
+        if post_data and post_data['casename'] == 'get':
             list_teams = []
             if 'tid' in post_data and post_data['tid'] != tid:
                 team = Team.get(pid=pid, tid=post_data['tid'])
@@ -128,25 +139,28 @@ def members(pid, tid):
             result_members = []
             for uid in uids:
                 if uid in users_info:
-                    user = {'_id': uid,
-                            'profile': {'badge_name': users_info[uid]['profile']['badge_name']},
-                            'oauth': {'picture': users_info[uid]['oauth']['picture']}}
+                    user = UserInfoBase.parse_obj(
+                        {'_id': uid,
+                         'profile': {'badge_name': users_info[uid]['profile']['badge_name']},
+                         'oauth': {'picture': users_info[uid]['oauth']['picture']}})
 
-                    user['is_chief'] = False
                     if team.chiefs and uid in team.chiefs:
-                        user['is_chief'] = True
+                        user.is_chief = True
 
-                    user['chat'] = {}
                     mid = MattermostTools.find_possible_mid(uid=uid)
                     if mid:
-                        user['chat'] = {
+                        user.chat = {
                             'mid': mid, 'name': MattermostTools.find_user_name(mid=mid)}
 
-                    result_members.append(user)
+                    result_members.append(user.dict(by_alias=True))
 
-            result_members.sort(
-                key=lambda u: u['profile']['badge_name'].lower())
-            result_members.sort(key=lambda u: u['is_chief'], reverse=True)
+            call_func_bg: Callable[[dict[str, Any], ],
+                                   Any] = lambda u: u['profile']['badge_name'].lower()
+            result_members.sort(key=call_func_bg)
+
+            call_func_chief: Callable[[
+                dict[str, Any], ], Any] = lambda u: u['is_chief']
+            result_members.sort(key=call_func_chief, reverse=True)
 
             tags = []
             if team.tag_members:
@@ -161,7 +175,7 @@ def members(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit', methods=('GET', 'POST'))
-def team_edit(pid, tid):
+def team_edit(pid: str, tid: str) -> str | Response:
     ''' Team edit '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -195,7 +209,7 @@ def team_edit(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit_user', methods=('GET', 'POST'))
-def team_edit_user(pid, tid):
+def team_edit_user(pid: str, tid: str) -> str | Response:
     ''' Team edit user '''
     # pylint: disable=too-many-locals,too-many-return-statements,too-many-branches,too-many-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
@@ -212,7 +226,13 @@ def team_edit_user(pid, tid):
         return redirect('/')
 
     if request.method == 'GET':
-        waitting_list = list(WaitList.list_by_team(pid=pid, tid=tid))
+        waitting_list: list[dict[str, Any]] = []
+        waiting_data = WaitList.list_by_team(pid=pid, tid=tid)
+
+        if waiting_data is not None:
+            for waiting in waiting_data:
+                waitting_list.append(waiting)
+
         uids = [u['uid'] for u in waitting_list]
         users_info = User.get_info(uids)
 
@@ -225,26 +245,28 @@ def team_edit_user(pid, tid):
 
                 user['_history'].append(wait_info)
 
-            user['_mail'] = User(uid=user['uid']).get()['mail']
+            user_data = User(uid=user['uid']).get()
+            if user_data:
+                user['_mail'] = user_data['mail']
 
         return render_template('./team_edit_user.html',
                                project=project.dict(by_alias=True),
                                team=team.dict(by_alias=True),
                                waitting_list=waitting_list)
 
-    if request.method == 'POST':
+    if request.method == 'POST':  # pylint: disable=too-many-return-statements, too-many-nested-blocks
         data = request.json
 
-        if data['case'] == 'deluser':
+        if data and data['case'] == 'deluser':
             Team.update_members(pid=pid, tid=tid, del_uids=[data['uid'], ])
-        elif data['case'] == 'history':
+        elif data and data['case'] == 'history':
             history = []
             for raw in WaitList.find_history_in_team(uid=data['uid'], pid=pid, tid=tid):
                 raw['_id'] = str(raw['_id'])
                 history.append(raw)
 
             return jsonify({'history': history})
-        elif data['case'] == 'members':
+        elif data and data['case'] == 'members':
             result_members = []
             if team.members or team.chiefs:
                 _all_uids = set(teamusers.members + teamusers.chiefs)
@@ -264,12 +286,16 @@ def team_edit_user(pid, tid):
                     if 'phone' in user['profile_real'] and user['profile_real']['phone']:
                         phone = phonenumbers.parse(
                             user['profile_real']['phone'])
-                        user['phone']['country_code'] = phonenumbers.COUNTRY_CODE_TO_REGION_CODE[phone.country_code][0]  # pylint: disable=line-too-long
+                        if phone.country_code:
+                            user['phone']['country_code'] = \
+                                phonenumbers.COUNTRY_CODE_TO_REGION_CODE[
+                                    phone.country_code][0]
                         user['phone']['phone'] = phonenumbers.format_number(
                             phone, phonenumbers.PhoneNumberFormat.NATIONAL)
 
-                result_members = sorted(
-                    result_members, key=lambda u: u['profile']['badge_name'])
+                call_func_bg: Callable[[dict[str, Any], ],
+                                       Any] = lambda u: u['profile']['badge_name'].lower()
+                result_members = sorted(result_members, key=call_func_bg)
 
                 return jsonify({
                     'members': result_members,
@@ -277,12 +303,12 @@ def team_edit_user(pid, tid):
                     'members_tags': Team.get_members_tags(pid=pid, tid=tid),
                 })
 
-        elif data['case'] == 'add_tag':
+        elif data and data['case'] == 'add_tag':
             result = Team.add_tag_member(
                 pid=pid, tid=tid, tag_name=data['tag_name'])
             return jsonify({'tag': result})
 
-        elif data['case'] == 'update_member_tags':
+        elif data and data['case'] == 'update_member_tags':
             team_tags = []
             if team.tag_members:
                 for tag in team.tag_members:
@@ -301,7 +327,7 @@ def team_edit_user(pid, tid):
 
             return jsonify({'data': tag_datas})
 
-        elif data['case'] == 'del_tag':
+        elif data and data['case'] == 'del_tag':
             Team.del_tag(pid=pid, tid=tid, tag_id=data['tag']['id'])
 
             return jsonify({})
@@ -312,7 +338,7 @@ def team_edit_user(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit_user/api', methods=('GET', 'POST'))
-def team_edit_user_api(pid, tid):
+def team_edit_user_api(pid: str, tid: str) -> Response:  # pylint: disable=too-many-branches
     ''' Team edit user API '''
     # pylint: disable=too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
@@ -330,25 +356,32 @@ def team_edit_user_api(pid, tid):
 
     if request.method == 'GET':
         user = User(uid=request.args['uid']).get()
-        user_waitting = WaitList.list_by_team(
-            pid=pid, tid=tid, uid=user['_id'])
-        if not user_waitting:
-            return jsonify({})
+        if user is not None:
+            user_waitting_data = WaitList.list_by_team(
+                pid=pid, tid=tid, uid=user['_id'])
+            if not user_waitting_data:
+                return jsonify({})
 
-        users_info = User.get_info([user['_id'], ])
+            for user_waitting in user_waitting_data:
+                users_info = User.get_info([user['_id'], ])
+                if users_info:
+                    user_data = {
+                        'badge_name': users_info[user['_id']]['profile']['badge_name'],
+                        'picture': users_info[user['_id']]['oauth']['picture'],
+                        'uid': user['_id'],
+                        'note': user_waitting['note'],
+                        'wid': f"{user_waitting['_id']}",
+                    }
 
-        user_data = {
-            'badge_name': users_info[user['_id']]['profile']['badge_name'],
-            'picture': users_info[user['_id']]['oauth']['picture'],
-            'uid': user['_id'],
-            'note': user_waitting['note'],
-            'wid': f"{user_waitting['_id']}",
-        }
+                    return jsonify(user_data)
 
-        return jsonify(user_data)
+        return jsonify({})
 
     if request.method == 'POST':
         data = request.json
+        if not data:
+            return jsonify({}), 404
+
         if data['result'] == 'approval':
             all_members = len(set(teamusers.members + teamusers.chiefs))
             if team.headcount is not None and all_members >= team.headcount:
@@ -361,7 +394,7 @@ def team_edit_user_api(pid, tid):
                 Team.update_members(pid=pid, tid=tid, add_uids=[data['uid'], ])
             elif wait_info['result'] == 'deny':
                 TeamMemberChangedDB().make_record(
-                    pid=pid, tid=tid, action={'deny': (data['uid'], )})
+                    pid=pid, tid=tid, action={'deny': [data['uid'], ]})
 
         return jsonify({'status': 'ok'})
 
@@ -369,7 +402,7 @@ def team_edit_user_api(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/join_to', methods=('GET', 'POST'))
-def team_join_to(pid, tid):
+def team_join_to(pid: str, tid: str) -> str | Response:
     ''' Team join to '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -377,7 +410,8 @@ def team_join_to(pid, tid):
         return _redirect
 
     teamusers = TeamUsers.parse_obj(team)
-    if g.user['account']['_id'] in teamusers.members or g.user['account']['_id'] in teamusers.chiefs:
+    if g.user['account']['_id'] in teamusers.members or \
+            g.user['account']['_id'] in teamusers.chiefs:
         return redirect(url_for('team.index', pid=pid, tid=tid))
 
     if request.method == 'GET':
@@ -396,7 +430,7 @@ def team_join_to(pid, tid):
         WaitList.join_to(
             pid=pid, tid=tid, uid=g.user['account']['_id'], note=request.form['note'].strip())
         TeamMemberChangedDB().make_record(
-            pid=pid, tid=tid, action={'waiting': (g.user['account']['_id'], )})
+            pid=pid, tid=tid, action={'waiting': [g.user['account']['_id'], ]})
 
         return redirect(f'/team/{pid}/{tid}/join_to')
 
@@ -404,7 +438,7 @@ def team_join_to(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/api', methods=('GET', 'POST'))
-def team_form_api(pid, tid):
+def team_form_api(pid: str, tid: str) -> Response:
     ''' Team form API '''
     team, _, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -418,7 +452,9 @@ def team_form_api(pid, tid):
 
     if request.method == 'GET':
         if request.args['case'] == 'traffic_fee':
-            return jsonify({'locations': list(FormTrafficFeeMapping.get(pid=pid)['data'].items())})
+            data = FormTrafficFeeMapping.get(pid=pid)
+            if data is not None:
+                return jsonify({'locations': list(data['data'].items())})
 
         return jsonify(request.args)
 
@@ -426,7 +462,7 @@ def team_form_api(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/accommodation', methods=('GET', 'POST'))
-def team_form_accommodation(pid, tid):
+def team_form_accommodation(pid: str, tid: str) -> str | Response:
     ''' Team form accommodation '''
     # pylint: disable=too-many-locals,too-many-return-statements,too-many-branches
     team, project, _redirect = check_the_team_and_project_are_existed(
@@ -459,7 +495,7 @@ def team_form_accommodation(pid, tid):
 
         post_data = request.get_json()
 
-        if post_data['casename'] == 'get':
+        if post_data and post_data['casename'] == 'get':
             raw = {'selected': 'no'}
             room = {}
 
@@ -488,7 +524,7 @@ def team_form_accommodation(pid, tid):
 
             return jsonify({'data': raw, 'room': room})
 
-        if post_data['casename'] == 'update':
+        if post_data and post_data['casename'] == 'update':
             if post_data['selected'] not in ('no', 'yes', 'yes-longtraffic'):
                 return '', 406
 
@@ -502,7 +538,7 @@ def team_form_accommodation(pid, tid):
 
             return jsonify({'data': {'selected': post_data['selected']}})
 
-        if post_data['casename'] == 'makechange':
+        if post_data and post_data['casename'] == 'makechange':
             msg = FormAccommodation.make_exchange(
                 pid=pid, uid=g.user['account']['_id'], exkey=post_data['key'].strip())
             return jsonify({'data': post_data, 'msg': msg})
@@ -510,8 +546,16 @@ def team_form_accommodation(pid, tid):
     return jsonify({})
 
 
+class FeeMapping(BaseModel):
+    ''' FeeMapping '''
+    fee: int
+    howto: str
+    apply: str
+    fromwhere: str
+
+
 @VIEW_TEAM.route('/<pid>/<tid>/form/traffic_fee', methods=('GET', 'POST'))
-def team_form_traffic_fee(pid, tid):
+def team_form_traffic_fee(pid: str, tid: str) -> str | Response:
     ''' Team form traffic fee '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -556,15 +600,15 @@ def team_form_traffic_fee(pid, tid):
                                data=data, is_ok_submit=is_ok_submit)
 
     if request.method == 'POST':
-        if is_ok_submit and request.form['fromwhere'] in feemapping['data']:
-            data = {
+        if is_ok_submit and feemapping and request.form['fromwhere'] in feemapping['data']:
+            fee_data: FeeMapping = FeeMapping.parse_obj({
                 'fee': int(request.form['fee']),
                 'howto': request.form['howto'].strip(),
                 'apply': request.form['apply'].strip() == 'yes',
                 'fromwhere': request.form['fromwhere'],
-            }
+            })
             Form.update_traffic_fee(
-                pid=pid, uid=g.user['account']['_id'], data=data)
+                pid=pid, uid=g.user['account']['_id'], data=fee_data.dict())
             return redirect(url_for('team.team_form_traffic_fee',
                                     pid=team.pid, tid=team.id,
                                     _scheme='https', _external=True))
@@ -575,7 +619,7 @@ def team_form_traffic_fee(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/volunteer_certificate', methods=('GET', 'POST'))
-def team_form_volunteer_certificate(pid, tid):
+def team_form_volunteer_certificate(pid: str, tid: str) -> str | Response:
     ''' Team form volunteer certificate '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -626,8 +670,15 @@ def team_form_volunteer_certificate(pid, tid):
     return jsonify({}), 404
 
 
+class AppreciationData(BaseModel):
+    ''' AppreciationData '''
+    available: bool = Field(default=False)
+    key: str = Field(default='')
+    value: str = Field(default='')
+
+
 @VIEW_TEAM.route('/<pid>/<tid>/form/appreciation', methods=('GET', 'POST'))
-def team_form_appreciation(pid, tid):
+def team_form_appreciation(pid: str, tid: str) -> str | Response:
     ''' Team form appreciation '''
     # pylint: disable=too-many-branches
     team, project, _redirect = check_the_team_and_project_are_existed(
@@ -672,7 +723,7 @@ def team_form_appreciation(pid, tid):
             return '', 406
 
         if request.form['appreciation'] == 'no':
-            data = {'available': False}
+            app_data = AppreciationData()
 
         else:
             if request.form['appreciation'] == 'oauth':
@@ -682,14 +733,14 @@ def team_form_appreciation(pid, tid):
             elif request.form['appreciation'] == 'real_name':
                 name = g.user['account']['profile_real']['name']
 
-            data = {
+            app_data = AppreciationData.parse_obj({
                 'available': True,
                 'key': request.form['appreciation'],
                 'value': name,
-            }
+            })
 
         Form().update_appreciation(
-            pid=team['pid'], uid=g.user['account']['_id'], data=data)
+            pid=team.pid, uid=g.user['account']['_id'], data=app_data.dict())
 
         return redirect(url_for('team.team_form_appreciation',
                                 pid=team.pid, tid=team.id, _scheme='https', _external=True))
@@ -698,7 +749,7 @@ def team_form_appreciation(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/clothes', methods=('GET', 'POST'))
-def team_form_clothes(pid, tid):
+def team_form_clothes(pid: str, tid: str) -> str | Response:
     ''' Team form clothes '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -718,9 +769,9 @@ def team_form_clothes(pid, tid):
     if request.method == 'POST':
         post_data = request.get_json()
 
-        if post_data['casename'] == 'get':
+        if post_data and post_data['casename'] == 'get':
             data = Form.get_clothes(
-                pid=team['pid'], uid=g.user['account']['_id'])
+                pid=team.pid, uid=g.user['account']['_id'])
 
             in_action = False
             htg = ''
@@ -740,9 +791,9 @@ def team_form_clothes(pid, tid):
                 'in_action': in_action,
             })
 
-        if post_data['casename'] == 'post':
+        if post_data and post_data['casename'] == 'post':
             if 'clothes' in post_data and post_data['clothes']:
-                Form.update_clothes(pid=team['pid'], uid=g.user['account']['_id'],
+                Form.update_clothes(pid=team.pid, uid=g.user['account']['_id'],
                                     data={'clothes': post_data['clothes'],
                                           'htg': post_data['htg'],
                                           })
@@ -752,7 +803,7 @@ def team_form_clothes(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/drink', methods=('GET', 'POST'))
-def team_form_drink(pid, tid):
+def team_form_drink(pid: str, tid: str) -> str | Response:
     ''' Team form drink '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -771,7 +822,7 @@ def team_form_drink(pid, tid):
 
     if request.method == 'POST':
         post_data = request.get_json()
-        if post_data['casename'] == 'get':
+        if post_data and post_data['casename'] == 'get':
             data = Form.get_drink(
                 pid=team.pid, uid=g.user['account']['_id'])
             if not data:
@@ -779,7 +830,7 @@ def team_form_drink(pid, tid):
 
             return jsonify({'data': data['data']})
 
-        if post_data['casename'] == 'post':
+        if post_data and post_data['casename'] == 'post':
             if 'y18' in post_data:
                 data = {'y18': bool(post_data['y18'])}
                 Form.update_drink(
@@ -791,7 +842,7 @@ def team_form_drink(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/parking_card', methods=('GET', 'POST'))
-def team_form_parking_card(pid, tid):
+def team_form_parking_card(pid: str, tid: str) -> str | Response:
     ''' Team form parking card '''
     # pylint: disable=too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
@@ -812,7 +863,7 @@ def team_form_parking_card(pid, tid):
     if request.method == 'POST':
         post_data = request.get_json()
 
-        if post_data['casename'] == 'get':
+        if post_data and post_data['casename'] == 'get':
             data = Form.get_parking_card(
                 pid=team.pid, uid=g.user['account']['_id'])
 
@@ -823,7 +874,7 @@ def team_form_parking_card(pid, tid):
             return jsonify({'data': data['data'],
                             'parking_card_options': []})
 
-        if post_data['casename'] == 'post':
+        if post_data and post_data['casename'] == 'post':
             if 'data' in post_data and post_data['data']:
                 carno = post_data['data']['carno'].strip().upper()
                 if not carno:
@@ -831,7 +882,7 @@ def team_form_parking_card(pid, tid):
 
                 dates = post_data['data']['dates']
 
-                Form.update_parking_card(pid=team['pid'], uid=g.user['account']['_id'],
+                Form.update_parking_card(pid=team.pid, uid=g.user['account']['_id'],
                                          data={'carno': carno, 'dates': dates})
 
                 return jsonify({})
@@ -840,7 +891,7 @@ def team_form_parking_card(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/plan/edit', methods=('GET', 'POST'))
-def team_plan_edit(pid, tid):
+def team_plan_edit(pid: str, tid: str) -> str | Response:
     ''' Team plan edit '''
     # pylint: disable=too-many-locals,too-many-return-statements,too-many-branches,too-many-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
@@ -863,6 +914,9 @@ def team_plan_edit(pid, tid):
 
     if request.method == 'POST':  # pylint: disable=too-many-nested-blocks
         data = request.get_json()
+        if not data:
+            return jsonify({}), 404
+
         today = arrow.now().format('YYYY-MM-DD')
         default = {'title': '', 'desc': '', 'start': today, 'end': '',
                    'tid': tid, 'team_name': team.name, 'start_timestamp': 0}
@@ -901,9 +955,8 @@ def team_plan_edit(pid, tid):
             if not data['import_others']:
                 query['tid'] = tid
 
-            dates = {}
-            team_plan = list(team_plan_db.find(query))
-            for raw in team_plan:
+            dates: dict[str, list[dict[str, str]]] = {}
+            for raw in team_plan_db.find(query):
                 for plan in raw['data']:
                     if not plan['end']:
                         if plan['start'] not in dates:
@@ -971,7 +1024,7 @@ def team_plan_edit(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/expense/', methods=('GET', 'POST'))
-def team_expense_index(pid, tid):
+def team_expense_index(pid: str, tid: str) -> Response:
     ''' Team expense index '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -986,7 +1039,7 @@ def team_expense_index(pid, tid):
     if request.method == 'POST':
         data = request.get_json()
 
-        if data['casename'] == 'get':
+        if data and data['casename'] == 'get':
             teams = []
             for _team in Team.list_by_pid(pid=project.id):
                 teams.append({'name': _team.name, 'tid': _team.id})
@@ -1004,14 +1057,14 @@ def team_expense_index(pid, tid):
             return jsonify({'teams': teams, 'items': items,
                             'select_team': select_team, 'bank': bank.dict()})
 
-        if data['casename'] == 'add_expense':
+        if data and data['casename'] == 'add_expense':
             # create expense and send notification.
             expense = Expense.process_and_add(
                 pid=project.id, tid=team.id, uid=g.user['account']['_id'], data=data)
             expense_create.apply_async(kwargs={'expense': expense})
             return jsonify(data)
 
-        if data['casename'] == 'get_has_sent':
+        if data and data['casename'] == 'get_has_sent':
             data = Expense.get_has_sent(
                 pid=project.id, budget_id=data['buid'])
             return jsonify({'data': list(data)})
@@ -1020,7 +1073,7 @@ def team_expense_index(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/expense/lists', methods=('GET', 'POST'))
-def team_expense_lists(pid, tid):
+def team_expense_lists(pid: str, tid: str) -> str | Response:
     ''' Team expense lists '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -1043,7 +1096,7 @@ def team_expense_lists(pid, tid):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/expense/my', methods=('GET', 'POST'))
-def team_expense_my(pid, tid):
+def team_expense_my(pid: str, tid: str) -> str | Response:  # pylint: disable=too-many-branches,too-many-return-statements
     ''' Team expense my '''
     # pylint: disable=too-many-locals
     team, project, _redirect = check_the_team_and_project_are_existed(
@@ -1066,7 +1119,7 @@ def team_expense_my(pid, tid):
     if request.method == 'POST':
         data = request.get_json()
 
-        if data['casename'] == 'get':
+        if data and data['casename'] == 'get':
             teams = []
             for _team in Team.list_by_pid(pid=project.id):
                 teams.append({'name': _team.name, 'tid': _team.id})
@@ -1095,7 +1148,7 @@ def team_expense_my(pid, tid):
             return jsonify({'teams': teams, 'items': items, 'budgets': budgets,
                             'users': users, 'status': Expense.status()})
 
-        if data['casename'] == 'update':
+        if data and data['casename'] == 'update':
             invoices = {}
             status = ''
             for expense in Expense.get_by_eid(expense_id=data['eid']):
@@ -1127,7 +1180,7 @@ def team_expense_my(pid, tid):
 
             return jsonify({'data': data})
 
-        if data['casename'] == 'remove':
+        if data and data['casename'] == 'remove':
             status = ''
             for expense in Expense.get_by_eid(expense_id=data['eid']):
                 status = expense['status']

@@ -1,5 +1,6 @@
 ''' recruit.py '''
-from flask import Blueprint, g, jsonify, redirect, render_template, request
+from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
+                   request)
 
 from module.skill import (RecruitQuery, SkillEnum, SkillEnumDesc, StatusEnum,
                           StatusEnumDesc, TeamsEnum, TeamsEnumDesc)
@@ -11,7 +12,7 @@ VIEW_RECRUIT = Blueprint('recruit', __name__, url_prefix='/recruit')
 
 
 @VIEW_RECRUIT.route('/<pid>/<tid>/list', methods=('GET', 'POST'))
-def recurit_list(pid, tid):
+def recurit_list(pid: str, tid: str) -> Response:
     ''' List page '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -34,7 +35,7 @@ def recurit_list(pid, tid):
     if request.method == 'POST':
         post_data = request.get_json()
 
-        if post_data['casename'] == 'get':
+        if post_data and post_data['casename'] == 'get':
             return jsonify({
                 'team_enum': {key: item.value for key, item in TeamsEnum.__members__.items()},
                 'team_enum_desc': {key: item.value for key, item in
@@ -48,7 +49,7 @@ def recurit_list(pid, tid):
                                      StatusEnumDesc.__members__.items()},
             })
 
-        if post_data['casename'] == 'query':
+        if post_data and post_data['casename'] == 'query':
             query = RecruitQuery.parse_obj(post_data['query']).dict()
             data = list(TobeVolunteer.query(query))
 

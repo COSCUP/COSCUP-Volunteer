@@ -1,9 +1,8 @@
 ''' WaitListDB '''
-from typing import Any, Literal, Optional, Union
+from typing import Any, Generator, Literal, Optional
 
 from bson.objectid import ObjectId
 from pymongo.collection import ReturnDocument
-from pymongo.cursor import Cursor
 
 from models.base import DBBase
 
@@ -61,7 +60,7 @@ class WaitListDB(DBBase):
             'pid': pid, 'tid': tid, 'uid': uid, 'result': {'$exists': False}})
 
     def list_by(self, pid: str, tid: Optional[str] = None, uid: Optional[str] = None,
-                _all: bool = False) -> Union[Optional[dict[str, Any]], Cursor[dict[str, Any]]]:
+                _all: bool = False) -> Generator[dict[str, Any], None, None] | None:
         ''' List by
 
         Args:
@@ -86,9 +85,12 @@ class WaitListDB(DBBase):
             query['result'] = {'$exists': False}
 
         if 'uid' in query:
-            return self.find_one(query)
-
-        return self.find(query)
+            data = self.find_one(query)
+            if data:
+                yield data
+        else:
+            for data in self.find(query):
+                yield data
 
     def make_result(self, _id: str, pid: str, uid: str,
                     result: Literal['approval', 'deny']) -> Optional[dict[str, Any]]:

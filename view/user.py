@@ -1,10 +1,11 @@
 ''' User '''
 import html
 import re
+from typing import Any, Callable
 from urllib.parse import quote_plus
 
 import arrow
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint, Response, redirect, render_template, url_for
 from markdown import markdown
 
 from module.gsuite import GSuite
@@ -18,14 +19,14 @@ VIEW_USER = Blueprint('user', __name__, url_prefix='/user')
 
 
 @VIEW_USER.route('/')
-def index():
+def index() -> str:
     ''' Index '''
     return 'user'
 
 
 @VIEW_USER.route('/<uid>/<nickname>')
 @VIEW_USER.route('/<uid>')
-def user_page(uid, nickname=None):
+def user_page(uid: str, nickname: str | None = None) -> Response | str:  # pylint: disable=too-many-branches
     ''' User page '''
     user = User(uid=uid).get()
 
@@ -33,6 +34,9 @@ def user_page(uid, nickname=None):
         return '', 200
 
     oauth = OAuth(user['mail']).get()
+
+    if not oauth:
+        return '', 404
 
     if 'data' in oauth and 'picture' in oauth['data']:
         oauth['data']['picture'] = GSuite.size_picture(
@@ -77,8 +81,9 @@ def user_page(uid, nickname=None):
 
         participate_in.append(item)
 
-    participate_in = sorted(
-        participate_in, key=lambda p: p['_project']['action_date'], reverse=True)
+    call_func: Callable[[dict[str, Any], ],
+                        Any] = lambda p: p['_project']['action_date']
+    participate_in.sort(key=call_func, reverse=True)
 
     mattermost_data = {}
     mid = MattermostTools.find_possible_mid(uid=uid)

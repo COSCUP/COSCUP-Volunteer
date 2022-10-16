@@ -15,7 +15,7 @@ VIEW_EXPENSE = Blueprint('expense', __name__, url_prefix='/expense')
 
 
 @VIEW_EXPENSE.route('/<pid>', methods=('GET', 'POST'))
-def by_project_index(pid):
+def by_project_index(pid: str) -> str | Response:
     ''' Project index '''
     project = Project.get(pid)
 
@@ -33,7 +33,7 @@ def by_project_index(pid):
     if request.method == 'POST':
         data = request.get_json()
 
-        if data['casename'] == 'get':
+        if data and data['casename'] == 'get':
             datas = list(Expense.get_all_by_pid(pid=pid))
 
             buids = set()
@@ -58,7 +58,7 @@ def by_project_index(pid):
             return jsonify({'datas': datas, 'budgets': budgets, 'users': users,
                             'status': Expense.status()})
 
-        if data['casename'] == 'update':
+        if data and data['casename'] == 'update':
             # update invoices
             Expense.update_invoices(
                 expense_id=data['data']['_id'], invoices=data['data']['invoices'])
@@ -73,7 +73,7 @@ def by_project_index(pid):
 
 
 @VIEW_EXPENSE.route('/<pid>/dl', methods=('GET', 'POST'))
-def by_project_dl(pid):
+def by_project_dl(pid: str) -> Response:
     ''' Project download '''
     project = Project.get(pid)
 

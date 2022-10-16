@@ -1,8 +1,10 @@
 ''' Budget '''
 import csv
 import io
+from typing import Any
 
-from flask import Blueprint, g, jsonify, redirect, render_template, request
+from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
+                   request)
 
 from module.budget import Budget
 from module.project import Project
@@ -12,7 +14,7 @@ VIEW_BUDGET = Blueprint('budget', __name__, url_prefix='/budget')
 
 
 @VIEW_BUDGET.route('/batch/<pid>', methods=('GET', 'POST'))
-def batch(pid):
+def batch(pid: str) -> str | Response:  # pylint: disable=too-many-branches
     ''' batch upload '''
     project = Project.get(pid)
 
@@ -51,15 +53,16 @@ def batch(pid):
             # Pylint unnecessary-lambda-assignment / C3001
             # Lambda expression assigned to a variable.
             # Define a function using the "def" keyword instead.
-            def has_bid_in_budget(
-                bid): return Budget.get_by_bid(pid=pid, bid=bid)
+            def has_bid_in_budget(bid: str) -> dict[str, Any] | None:
+                return Budget.get_by_bid(pid=pid, bid=bid)
 
-            def has_added(item): return item['action'] == 'add' and has_bid_in_budget(
-                item['bid'])
+            def has_added(item: dict[str, Any]) -> bool:
+                return bool(item['action'] == 'add' and has_bid_in_budget(item['bid']))
 
-            def did_update_nonexisted_entry(item): return \
-                item['action'] == 'update' and not has_bid_in_budget(
-                    item['bid'])
+            def did_update_nonexisted_entry(item: dict[str, Any]) -> bool:
+                return \
+                    item['action'] == 'update' and not has_bid_in_budget(
+                        item['bid'])
 
             for item in result:
                 if has_added(item) or did_update_nonexisted_entry(item):
@@ -89,7 +92,7 @@ def batch(pid):
 
 
 @VIEW_BUDGET.route('/<pid>', methods=('GET', 'POST'))
-def by_project_index(pid):
+def by_project_index(pid: str) -> str | Response:
     ''' index '''
     # pylint: disable=too-many-return-statements,too-many-branches
     project = Project.get(pid)
@@ -108,7 +111,7 @@ def by_project_index(pid):
     if request.method == 'POST':
         data = request.get_json()
 
-        if data['casename'] == 'get':
+        if data and data['casename'] == 'get':
             teams = []
             for team in Team.list_by_pid(pid=project.id):
                 teams.append({'name': team.name, 'tid': team.id})
@@ -136,15 +139,15 @@ def by_project_index(pid):
 
             return jsonify({'teams': teams, 'default_budget': default_budget, 'items': items})
 
-        if data['casename'] == 'check_bid':
+        if data and data['casename'] == 'check_bid':
             return jsonify({'existed': bool(Budget.get_by_bid(pid=pid, bid=data['bid']))})
 
-        if data['casename'] == 'add':
+        if data and data['casename'] == 'add':
             item = Budget.add(
                 pid=pid, tid=data['data']['tid'], data=data['data'])
             return jsonify({'data': item})
 
-        if data['casename'] == 'edit':
+        if data and data['casename'] == 'edit':
             if data['data']['enabled'] == 'true':
                 data['data']['enabled'] = True
             else:

@@ -58,7 +58,7 @@ class DietaryHabitItemsValue(Enum):
     E000 = '4.000'
 
 
-def valid_dietary_value(items_no: list[str]) -> list[str]:
+def valid_dietary_value(items_no: list[str]) -> list[DietaryHabitItemsValue]:
     ''' valid dietary data
 
     Args:
@@ -69,11 +69,10 @@ def valid_dietary_value(items_no: list[str]) -> list[str]:
         Return the only valid datas.
 
     '''
-    result = []
+    result: list[DietaryHabitItemsValue] = []
     for num in items_no:
         try:
-            DietaryHabitItemsValue(num)
-            result.append(num)
+            result.append(DietaryHabitItemsValue(num))
         except ValueError:
             pass
 

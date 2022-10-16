@@ -222,7 +222,7 @@ def service_sync_mattermost_projectuserin_channel(sender):
     ''' Sync mattermost project user in channel '''
     pids = {}
     for project in Project.all():
-        if arrow.get(project['action_date']) >= arrow.now() and project.mattermost_ch_id:
+        if arrow.get(project.action_date) >= arrow.now() and project.mattermost_ch_id:
             pids[project.id] = project.mattermost_ch_id
 
     if not pids:

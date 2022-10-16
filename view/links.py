@@ -1,5 +1,5 @@
 ''' Links '''
-from flask import Blueprint, request
+from flask import Blueprint, Response, request
 
 from module.mattermost_link import MattermostLink
 
@@ -7,13 +7,13 @@ VIEW_LINKS = Blueprint('links', __name__, url_prefix='/links')
 
 
 @VIEW_LINKS.route('/')
-def index():
+def index() -> str:
     ''' Index page '''
     return 'hi'
 
 
 @VIEW_LINKS.route('/chat', methods=('POST', ))
-def link_chat():
+def link_chat() -> Response:
     ''' Link to chat '''
     if request.method == 'POST':
         if MattermostLink.verify_save(request.form):

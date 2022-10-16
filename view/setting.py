@@ -1,7 +1,7 @@
 ''' setting '''
 import json
 import math
-from typing import Text, Union
+from typing import Any, Callable
 
 import arrow
 import phonenumbers
@@ -26,13 +26,13 @@ VIEW_SETTING = Blueprint('setting', __name__, url_prefix='/setting')
 
 
 @VIEW_SETTING.route('/')
-def index() -> Text:
+def index() -> str:
     ''' Index page '''
     return render_template('./setting_index.html')
 
 
 @VIEW_SETTING.route('/profile', methods=('GET', 'POST'))
-def profile_page() -> Union[Text, Response]:
+def profile_page() -> str | Response:
     ''' profile '''
     # pylint: disable=too-many-branches
     if request.method == 'GET':
@@ -45,7 +45,7 @@ def profile_page() -> Union[Text, Response]:
     if request.method == 'POST':
         post_data = request.get_json()
 
-        if post_data['casename'] == 'get':
+        if post_data and post_data['casename'] == 'get':
             user = g.user['account']
             if 'profile' not in user:
                 user['profile'] = UserProfle().dict()
@@ -72,19 +72,19 @@ def profile_page() -> Union[Text, Response]:
                                      StatusEnumDesc.__members__.items()},
             })
 
-        if post_data['casename'] == 'get_tobe_volunteer':
+        if post_data and post_data['casename'] == 'get_tobe_volunteer':
             data = TobeVolunteer.get(uid=g.user['account']['_id'])
 
             return jsonify({'tobe_volunteer': data.dict()})
 
-        if post_data['casename'] == 'save_tobe_volunteer':
-            data = TobeVolunteerStruct.parse_obj(post_data['data']).dict()
-            data['uid'] = g.user['account']['_id']
-            TobeVolunteer.save(data=data)
+        if post_data and post_data['casename'] == 'save_tobe_volunteer':
+            save_data = TobeVolunteerStruct.parse_obj(post_data['data']).dict()
+            save_data['uid'] = g.user['account']['_id']
+            TobeVolunteer.save(data=save_data)
 
             return jsonify({})
 
-        if post_data['casename'] == 'save':
+        if post_data and post_data['casename'] == 'save':
             User(uid=g.user['account']['_id']).update_profile(
                 UserProfle.parse_obj(post_data['data']).dict()
             )
@@ -96,7 +96,7 @@ def profile_page() -> Union[Text, Response]:
 
 
 @VIEW_SETTING.route('/profile_real', methods=('GET', 'POST'))
-def profile_real():
+def profile_real() -> str | Response:
     ''' Profile real '''
     # pylint: disable=too-many-branches
     if request.method == 'GET':
@@ -106,7 +106,7 @@ def profile_real():
         post_data = request.get_json()
         struct_user: UserProfleReal
 
-        if post_data['casename'] == 'get':
+        if post_data and post_data['casename'] == 'get':
             default_code: str = '886'
 
             if 'profile_real' in g.user['account']:
@@ -147,21 +147,21 @@ def profile_real():
                             'dietary_habit': dietary_habit_list,
                             })
 
-        if post_data['casename'] == 'update':
-            phone = ''
+        if post_data and post_data['casename'] == 'update':
+            phone_str = ''
             if 'phone' in post_data['data'] and post_data['data']['phone'] and \
                     'phone_code' in post_data['data'] and post_data['data']['phone_code']:
                 try:
-                    phone = phonenumbers.parse(
+                    phone_number = phonenumbers.parse(
                         f"+{post_data['data']['phone_code']} {post_data['data']['phone']}")
-                    phone = phonenumbers.format_number(
-                        phone, phonenumbers.PhoneNumberFormat.E164)
+                    phone_str = phonenumbers.format_number(
+                        phone_number, phonenumbers.PhoneNumberFormat.E164)
                 except phonenumbers.phonenumberutil.NumberParseException:
-                    phone = ''
+                    phone_str = ''
 
             user_profile_real = UserProfleReal(
                 name=post_data['data'].get('name'),
-                phone=phone,
+                phone=phone_str,
                 roc_id=post_data['data'].get('roc_id'),
                 company=post_data['data'].get('company')
             )
@@ -193,7 +193,7 @@ def profile_real():
 
 
 @VIEW_SETTING.route('/link/chat', methods=('GET', 'POST'))
-def link_chat():
+def link_chat() -> str | Response:
     ''' Link to chat '''
     if request.method == 'GET':
         mml = MattermostLink(uid=g.user['account']['_id'])
@@ -201,7 +201,7 @@ def link_chat():
 
     if request.method == 'POST':
         data = request.get_json()
-        if 'casename' in data:
+        if data and 'casename' in data:
             if data['casename'] == 'invite':
                 service_sync_mattermost_invite.apply_async(
                     kwargs={'uids': (g.user['account']['_id'], )})
@@ -214,7 +214,7 @@ def link_chat():
 
 
 @VIEW_SETTING.route('/link/telegram', methods=('GET', 'POST'))
-def link_telegram():
+def link_telegram() -> str | Response:
     ''' Link to Telegram '''
     if request.method == 'GET':
         telegram_data = []
@@ -227,7 +227,7 @@ def link_telegram():
 
     if request.method == 'POST':
         data = request.get_json()
-        if 'casename' in data and data['casename'] == 'del_account':
+        if data and 'casename' in data and data['casename'] == 'del_account':
             TelegramDB().delete_many({'uid': g.user['account']['_id']})
 
         return jsonify({})
@@ -236,7 +236,7 @@ def link_telegram():
 
 
 @VIEW_SETTING.route('/security', methods=('GET', 'POST'))
-def security():
+def security() -> str | Response:
     ''' security '''
     if request.method == 'GET':
         _now = arrow.now()
@@ -273,15 +273,15 @@ def security():
 
     if request.method == 'POST':
         data = request.get_json()
-        USession.make_dead(sid=data['sid'], uid=g.user['account']['_id'])
-
-        return jsonify(data)
+        if data:
+            USession.make_dead(sid=data['sid'], uid=g.user['account']['_id'])
+            return jsonify(data)
 
     return jsonify({}), 404
 
 
 @VIEW_SETTING.route('/waitting')
-def waitting():
+def waitting() -> str:
     ''' waiting, the `waitting` is typo '''
     waitting_lists = []
 
@@ -299,21 +299,23 @@ def waitting():
 
         waitting_lists.append(raw)
 
+    call_func_id: Callable[[
+        dict[str, Any], ], Any] = lambda x: x['_id']
     waitting_lists = sorted(
-        waitting_lists, key=lambda x: x['_id'], reverse=True)
+        waitting_lists, key=call_func_id, reverse=True)
 
     return render_template('./setting_waitting.html', waitting_lists=waitting_lists)
 
 
 @VIEW_SETTING.route('/api_token', methods=('GET', 'POST'))
-def api_token():
+def api_token() -> str | Response:
     ''' API Token'''
     if request.method == 'GET':
         return render_template('./setting_api_token.html')
 
     if request.method == 'POST':
         data = request.get_json()
-        if data['casename'] == 'get':
+        if data and data['casename'] == 'get':
             temp_account = APITokenTemp(uid=g.user['account']['_id'])
             APIToken.save_temp(data=temp_account)
 
