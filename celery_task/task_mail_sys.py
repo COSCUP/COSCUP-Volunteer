@@ -2,6 +2,8 @@
 # pylint: disable=unused-argument
 from __future__ import absolute_import, unicode_literals
 
+from typing import Any
+
 from bson.objectid import ObjectId
 from celery.utils.log import get_task_logger
 from jinja2 import Environment, FileSystemLoader
@@ -25,7 +27,7 @@ logger = get_task_logger(__name__)
 @app.task(bind=True, name='mail.sys.test',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.sys.test', exchange='COSCUP-SECRETARY')
-def mail_sys_test(sender, **kwargs):
+def mail_sys_test(sender: Any, **kwargs: str) -> None:
     ''' mail sys test '''
     logger.info('!!! [%s]', kwargs)
     raise Exception('Test in error and send mail.')
@@ -34,7 +36,7 @@ def mail_sys_test(sender, **kwargs):
 @app.task(bind=True, name='mail.sys.weberror',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.sys.weberror', exchange='COSCUP-SECRETARY')
-def mail_sys_weberror(sender, **kwargs):
+def mail_sys_weberror(sender: Any, **kwargs: str) -> None:
     ''' mail sys weberror '''
     ses = AWSSES(setting.AWS_ID, setting.AWS_KEY, setting.AWS_SES_FROM)
 
@@ -50,7 +52,7 @@ def mail_sys_weberror(sender, **kwargs):
 @app.task(bind=True, name='mail.member.waiting',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.waiting', exchange='COSCUP-SECRETARY')
-def mail_member_waiting(sender):
+def mail_member_waiting(sender: Any) -> None:
     ''' mail member waiting '''
     template = Environment(loader=FileSystemLoader(
         './templates/mail')).get_template('./base_member_waiting.html')
@@ -90,7 +92,8 @@ def mail_member_waiting(sender):
 
                 raw_mail = awsses.raw_mail(
                     to_addresses=(dict(
-                        name=users[uid]['profile']['badge_name'], mail=users[uid]['oauth']['email']), ),
+                        name=users[uid]['profile']['badge_name'],
+                        mail=users[uid]['oauth']['email']), ),
                     subject=f"申請加入通知信 - {users[raw['uid']]['profile']['badge_name']}",
                     body=body,
                 )
@@ -114,7 +117,7 @@ def mail_member_waiting(sender):
 @app.task(bind=True, name='mail.member.deny',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.deny', exchange='COSCUP-SECRETARY')
-def mail_member_deny(sender):
+def mail_member_deny(sender: Any) -> None:
     ''' mail member deny '''
     tplenv = Environment(loader=FileSystemLoader('./templates/mail'))
     template = tplenv.get_template('./base_member_deny.html')
@@ -138,7 +141,7 @@ def mail_member_deny(sender):
         if not project:
             continue
 
-        user = User.get_info(uids=(raw['uid'], ))[raw['uid']]
+        user = User.get_info(uids=[raw['uid'], ])[raw['uid']]
         body = template.render(
             name=user['profile']['badge_name'],
             team_name=team.name,
@@ -160,7 +163,7 @@ def mail_member_deny(sender):
 @app.task(bind=True, name='mail.member.add',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.add', exchange='COSCUP-SECRETARY')
-def mail_member_add(sender):
+def mail_member_add(sender: Any) -> None:
     ''' mail member add '''
     tplenv = Environment(loader=FileSystemLoader('./templates/mail'))
     template = tplenv.get_template('./base_member_add.html')
@@ -179,7 +182,7 @@ def mail_member_add(sender):
         if not team:
             continue
 
-        user = User.get_info(uids=(raw['uid'], ))[raw['uid']]
+        user = User.get_info(uids=[raw['uid'], ])[raw['uid']]
 
         body = template.render(
             name=user['profile']['badge_name'],
@@ -202,7 +205,7 @@ def mail_member_add(sender):
 @app.task(bind=True, name='mail.member.del',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.del', exchange='COSCUP-SECRETARY')
-def mail_member_del(sender):
+def mail_member_del(sender: Any) -> None:
     ''' mail member del '''
     tplenv = Environment(loader=FileSystemLoader('./templates/mail'))
     template = tplenv.get_template('./base_member_del.html')
@@ -221,7 +224,7 @@ def mail_member_del(sender):
         if not team:
             continue
 
-        user = User.get_info(uids=(raw['uid'], ))[raw['uid']]
+        user = User.get_info(uids=[raw['uid'], ])[raw['uid']]
 
         body = template.render(
             name=user['profile']['badge_name'],
@@ -242,7 +245,7 @@ def mail_member_del(sender):
 @app.task(bind=True, name='mail.member.welcome',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.welcom', exchange='COSCUP-SECRETARY')
-def mail_member_welcome(sender):
+def mail_member_welcome(sender: Any) -> None:
     ''' mail member welcome '''
     tplenv = Environment(loader=FileSystemLoader('./templates/mail'))
     template = tplenv.get_template('./welcome.html')
@@ -285,7 +288,7 @@ def mail_member_welcome(sender):
 @app.task(bind=True, name='mail.member.send',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.member.send', exchange='COSCUP-SECRETARY')
-def mail_member_send(sender, **kwargs):
+def mail_member_send(sender: Any, **kwargs: str) -> None:
     ''' mail member send '''
     team_member_change_db = TeamMemberChangedDB()
     awsses = AWSSES(
@@ -305,7 +308,7 @@ def mail_member_send(sender, **kwargs):
 @app.task(bind=True, name='mail.tasks.star',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.tasks.star', exchange='COSCUP-SECRETARY')
-def mail_tasks_star(sender, **kwargs):
+def mail_tasks_star(sender: Any, **kwargs: str) -> None:
     ''' mail tasks star '''
     pid = kwargs['pid']
     task_id = kwargs['task_id']
@@ -330,7 +333,7 @@ def mail_tasks_star(sender, **kwargs):
 @app.task(bind=True, name='mail.tasks.star.one',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.mail.tasks.star.one', exchange='COSCUP-SECRETARY')
-def mail_tasks_star_one(sender, **kwargs):
+def mail_tasks_star_one(sender: Any, **kwargs: dict[str, Any]) -> None:
     ''' mail tasks star one '''
     logger.info(kwargs)
 

@@ -24,7 +24,7 @@ class TeamDB(DBBase):
 
     '''
 
-    def __init__(self, pid: str, tid: str) -> None:
+    def __init__(self, pid: str | None, tid: str | None) -> None:
         super().__init__('team')
         self.pid = pid
         self.tid = tid
@@ -64,7 +64,7 @@ class TeamDB(DBBase):
             Need refactor in pydantic.
 
         '''
-        result = {
+        result: dict[str, str | list[str] | None] = {
             'pid': self.pid,
             'tid': self.tid,
             'name': '',

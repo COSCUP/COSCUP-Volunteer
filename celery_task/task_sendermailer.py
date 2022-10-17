@@ -2,6 +2,8 @@
 # pylint: disable=unused-argument
 from __future__ import absolute_import, unicode_literals
 
+from typing import Any
+
 from celery.utils.log import get_task_logger
 from markdown import markdown
 
@@ -15,7 +17,7 @@ logger = get_task_logger(__name__)
 @app.task(bind=True, name='sender.mailer.start',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.sender.mailer.start', exchange='COSCUP-SECRETARY')
-def sender_mailer_start(sender, **kwargs):
+def sender_mailer_start(sender: Any, **kwargs: dict[str, Any]) -> None:
     '''campaign_data, team, uids, layout'''
     campaign_data = kwargs['campaign_data']
     team_name = kwargs['team_name']
@@ -32,14 +34,15 @@ def sender_mailer_start(sender, **kwargs):
 @app.task(bind=True, name='sender.mailer.start.one',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.sender.mailer.start.one', exchange='COSCUP-SECRETARY')
-def sender_mailer_start_one(sender, **kwargs):
+def sender_mailer_start_one(sender: Any, **kwargs: dict[str, Any]) -> None:
     '''sender mailer start one '''
     campaign_data = kwargs['campaign_data']
     team_name = kwargs['team_name']
     user_data = kwargs['user_data']
-    layout = kwargs['layout']
+    layout: str = str(kwargs['layout'])
     source = kwargs['source']
 
+    sender_template: type
     if layout == '1':
         sender_template = SenderMailerVolunteer
     elif layout == '2':

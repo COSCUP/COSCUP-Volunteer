@@ -2,6 +2,8 @@
 # pylint: disable=unused-argument
 from __future__ import absolute_import, unicode_literals
 
+from typing import Any
+
 from celery.utils.log import get_task_logger
 
 import setting
@@ -18,7 +20,7 @@ logger = get_task_logger(__name__)
 @app.task(bind=True, name='expense.create',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=2,
           routing_key='cs.expense.create', exchange='COSCUP-SECRETARY')
-def expense_create(sender, **kwargs):
+def expense_create(sender: Any, **kwargs: dict[str, Any]) -> None:  # pylint: disable=too-many-locals
     ''' Expense create '''
     pid = kwargs['expense']['pid']
     buid = kwargs['expense']['request']['buid']
@@ -53,9 +55,12 @@ def expense_create(sender, **kwargs):
         if mid:
             channel_info = mmt.create_a_direct_message(
                 users=(mid, setting.MATTERMOST_BOT_ID)).json()
+            message = f"收到 **{users[kwargs['expense']['create_by']]['profile']['badge_name']}**" +\
+                f"申請費用 - **[{kwargs['expense']['code']}] / {budget['name']}**" +\
+                f"，前往 [管理費用](https://volunteer.coscup.org/expense/{pid})"
 
             resp = mmt.posts(
                 channel_id=channel_info['id'],
-                message=f"""收到 **{users[kwargs['expense']['create_by']]['profile']['badge_name']}** 申請費用 - **[{kwargs['expense']['code']}] / {budget['name']}**，前往 [管理費用](https://volunteer.coscup.org/expense/{pid})""",
+                message=message,
             )
             logger.info(resp.json())

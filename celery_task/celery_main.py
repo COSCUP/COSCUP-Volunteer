@@ -1,6 +1,8 @@
 ''' Celery '''
 from __future__ import absolute_import, unicode_literals
 
+from typing import Any
+
 from celery import Celery
 from celery.schedules import crontab
 from celery.signals import task_failure
@@ -168,7 +170,7 @@ app.conf.beat_schedule = {
 
 
 @task_failure.connect
-def on_failure(**kwargs):
+def on_failure(**kwargs: dict[str, Any]) -> None:
     ''' on failure '''
     ses = AWSSES(setting.AWS_ID, setting.AWS_KEY, setting.AWS_SES_FROM)
     raw_mail = ses.raw_mail(

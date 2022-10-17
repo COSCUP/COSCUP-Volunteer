@@ -5,13 +5,14 @@ import logging
 import os
 import traceback
 from pathlib import Path
+from typing import Any, Callable
 from urllib.parse import parse_qs, urlparse
 
 import arrow
 import google_auth_oauthlib.flow
 from apiclient import discovery
-from flask import (Flask, g, got_request_exception, redirect, render_template,
-                   request, session, url_for)
+from flask import (Flask, Response, g, got_request_exception, redirect,
+                   render_template, request, session, url_for)
 from markdown import markdown
 
 import setting
@@ -86,7 +87,7 @@ if Path('/app/view/dev.py').exists():
 
 
 @app.before_request
-def need_login():
+def need_login() -> Response | None:
     ''' need_login '''
     # pylint: disable=too-many-return-statements
     logging.info('[X-SSL-SESSION-ID: %s] [X-REAL-IP: %s] [USER-AGENT: %s] [SESSION: %s]',
@@ -108,6 +109,9 @@ def need_login():
             session_data = USession.get(session['sid'])
             if session_data:
                 user_data = User(uid=session_data['uid']).get()
+                if not user_data:
+                    return None
+
                 if 'property' in user_data and 'suspend' in user_data['property'] and \
                         user_data['property']['suspend']:
                     session.pop('sid', None)
@@ -117,13 +121,20 @@ def need_login():
                 g.user['account'] = User(uid=session_data['uid']).get()
 
                 if g.user['account']:
-                    g.user['data'] = OAuth(
-                        mail=g.user['account']['mail']).get()['data']
+                    oauth = OAuth(
+                        mail=g.user['account']['mail']).get()
+
+                    if not oauth:
+                        return None
+
+                    call_func_pid: Callable[[
+                        dict[str, Any], ], Any] = lambda x: x['pid']
+                    g.user['data'] = oauth['data']
                     g.user['participate_in'] = sorted([
                         {'pid': team['pid'], 'tid': team['tid'],
                             'name': team['name']}
                         for team in Team.participate_in(
-                            uid=session_data['uid'])], key=lambda x: x['pid'], reverse=True)
+                            uid=session_data['uid'])], key=call_func_pid, reverse=True)
 
                     mem_cahce.set(f"sid:{session['sid']}", g.user, 600)
             else:
@@ -153,7 +164,7 @@ def need_login():
 
 
 @app.after_request
-def no_store(response):
+def no_store(response: Response) -> Response:
     ''' return no-store '''
     if 'sid' in session and session['sid']:
         response.headers['Cache-Control'] = 'no-store'
@@ -162,7 +173,7 @@ def no_store(response):
 
 
 @app.route('/')
-def index():
+def index() -> str:
     ''' index '''
     if 'user' not in g:
         return render_template('index.html')
@@ -187,7 +198,7 @@ def index():
 
 
 @app.route('/oauth2callback')
-def oauth2callback():
+def oauth2callback() -> Response:
     ''' oauth2callback '''
     if 'r' in request.args and request.args['r'].startswith('/'):
         session['r'] = request.args['r']
@@ -235,6 +246,9 @@ def oauth2callback():
             user = User.create(mail=user_info['email'])
             MailLetterDB().create(uid=user['_id'])
 
+        if not user:
+            return redirect(url_for('index', _scheme='https', _external=True))
+
         user_session = USession.make_new(
             uid=user['_id'], header=dict(request.headers))
         session['sid'] = user_session.inserted_id
@@ -253,7 +267,7 @@ def oauth2callback():
 
 
 @app.route('/logout')
-def oauth2logout():
+def oauth2logout() -> Response:
     ''' Logout
 
         **GET** ``/logout``
@@ -269,7 +283,7 @@ def oauth2logout():
 
 
 @app.route('/privacy')
-def privacy():
+def privacy() -> str:
     ''' privacy '''
     mem_cahce = MC.get_client()
     content = mem_cahce.get('page:privacy')
@@ -282,28 +296,28 @@ def privacy():
 
 
 @app.route('/bug-report')
-def bug_report():
+def bug_report() -> str:
     ''' bug_report '''
     return render_template('./bug_report.html')
 
 
 @app.route('/robots.txt')
-def robots():
+def robots() -> str:
     ''' robots '''
     return '''User-agent: *
 Allow: /'''
 
 
 @app.route('/exception')
-def exception_func():
+def exception_func() -> str:
     ''' exception_func '''
     try:
-        1/0
+        return str(1/0)
     except Exception as error:
         raise Exception('Error: [{error}]') from error
 
 
-def error_exception(sender, exception, **extra):
+def error_exception(sender: Any, exception: Any, **extra: Any) -> None:
     ''' error_exception '''
     logging.info('sender: %s, exception: %s, extra: %s',
                  sender, exception, extra)

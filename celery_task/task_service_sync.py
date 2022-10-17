@@ -2,7 +2,8 @@
 # pylint: disable=unused-argument
 from __future__ import absolute_import, unicode_literals
 
-from time import time
+from datetime import datetime
+from typing import Any
 
 import arrow
 from celery.utils.log import get_task_logger
@@ -23,7 +24,7 @@ logger = get_task_logger(__name__)
 @app.task(bind=True, name='servicesync.mattermost.users',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.servicesync.mattermost.users', exchange='COSCUP-SECRETARY')
-def service_sync_mattermost_users(sender, **kwargs):
+def service_sync_mattermost_users(sender: Any, **kwargs: str) -> None:
     ''' Sync mattermost users '''
     mmb = MattermostBot(token=setting.MATTERMOST_BOT_TOKEN,
                         base_url=setting.MATTERMOST_BASEURL)
@@ -47,7 +48,7 @@ def service_sync_mattermost_users(sender, **kwargs):
 @app.task(bind=True, name='servicesync.gsuite.memberchange',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.servicesync.gsuite.memberchange', exchange='COSCUP-SECRETARY')
-def service_sync_gsuite_memberchange(sender):
+def service_sync_gsuite_memberchange(sender: Any) -> None:  # pylint: disable=too-many-branches
     ''' Sync gsuite member change '''
     team_member_change_db = TeamMemberChangedDB()
     sync_gsuite = None
@@ -56,8 +57,10 @@ def service_sync_gsuite_memberchange(sender):
             'case': {'$in': ('add', 'del')}},
             sort=(('create_at', 1), )):
         team = Team.get(raw['pid'], raw['tid'])
+        if not team:
+            continue
 
-        if 'mailling' not in team or not team['mailling']:
+        if not team.mailling:
             team_member_change_db.find_one_and_update(
                 {'_id': raw['_id']}, {'$set': {'done.gsuite_team': True}})
             continue
@@ -67,15 +70,18 @@ def service_sync_gsuite_memberchange(sender):
                 credentialfile=setting.GSUITE_JSON, with_subject=setting.GSUITE_ADMIN)
 
         user = User(uid=raw['uid']).get()
+        if not user:
+            continue
+
         if raw['case'] == 'add':
             sync_gsuite.add_users_into_group(
-                group=team['mailling'], users=(user['mail'], ))
+                group=team.mailling, users=[user['mail'], ])
             team_member_change_db.find_one_and_update(
                 {'_id': raw['_id']}, {'$set': {'done.gsuite_team': True}})
 
         elif raw['case'] == 'del':
             sync_gsuite.del_users_from_group(
-                group=team['mailling'], users=(user['mail'], ))
+                group=team.mailling, users=[user['mail'], ])
             team_member_change_db.find_one_and_update(
                 {'_id': raw['_id']}, {'$set': {'done.gsuite_team': True}})
 
@@ -98,16 +104,19 @@ def service_sync_gsuite_memberchange(sender):
                 credentialfile=setting.GSUITE_JSON, with_subject=setting.GSUITE_ADMIN)
 
         user = User(uid=raw['uid']).get()
+        if not user:
+            continue
+
         if raw['case'] == 'add':
             sync_gsuite.add_users_into_group(
-                group=project.mailling_staff, users=(user['mail'], ))
+                group=project.mailling_staff, users=[user['mail'], ])
             team_member_change_db.find_one_and_update(
                 {'_id': raw['_id']}, {'$set': {'done.gsuite_staff': True}})
 
         elif raw['case'] == 'del':
             if not Team.participate_in(uid=raw['uid'], pid=raw['pid']):
                 sync_gsuite.del_users_from_group(
-                    group=project.mailling_staff, users=(user['mail'], ))
+                    group=project.mailling_staff, users=[user['mail'], ])
 
             team_member_change_db.find_one_and_update(
                 {'_id': raw['_id']}, {'$set': {'done.gsuite_staff': True}})
@@ -116,13 +125,16 @@ def service_sync_gsuite_memberchange(sender):
 @app.task(bind=True, name='servicesync.gsuite.team_members',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.servicesync.gsuite.team_members', exchange='COSCUP-SECRETARY')
-def service_sync_gsuite_team_members(sender, **kwargs):
+def service_sync_gsuite_team_members(sender: Any, **kwargs: str) -> None:
     ''' Sync gsuite team members '''
     team = Team.get(pid=kwargs['pid'], tid=kwargs['tid'])
+    if not team:
+        return
+
     if 'to_team' in kwargs:
         to_team = Team.get(pid=kwargs['to_team'][0], tid=kwargs['to_team'][1])
 
-        if not to_team.mailling:
+        if not to_team or not to_team.mailling:
             return
 
         mailling = to_team.mailling
@@ -135,9 +147,9 @@ def service_sync_gsuite_team_members(sender, **kwargs):
 
     uids = []
     if team.chiefs:
-        uids.extend(team['chiefs'])
+        uids.extend(team.chiefs)
     if team.members:
-        uids.extend(team['members'])
+        uids.extend(team.members)
 
     users_info = User.get_info(uids=uids)
 
@@ -153,7 +165,7 @@ def service_sync_gsuite_team_members(sender, **kwargs):
 @app.task(bind=True, name='servicesync.gsuite.team_leader',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.servicesync.gsuite.team_leader', exchange='COSCUP-SECRETARY')
-def service_sync_gsuite_team_leader(sender, **kwargs):
+def service_sync_gsuite_team_leader(sender: Any, **kwargs: str) -> None:
     ''' Sync gsuite team leader '''
     chiefs = []
 
@@ -165,7 +177,7 @@ def service_sync_gsuite_team_leader(sender, **kwargs):
 
     project = Project.get(pid=kwargs['pid'])
     if not project:
-        return None
+        return
 
     if project.mailling_leader:
         sync_gsuite = SyncGSuite(
@@ -180,7 +192,7 @@ def service_sync_gsuite_team_leader(sender, **kwargs):
 @app.task(bind=True, name='servicesync.mattermost.invite',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.servicesync.mattermost.invite', exchange='COSCUP-SECRETARY')
-def service_sync_mattermost_invite(sender, **kwargs):
+def service_sync_mattermost_invite(sender: Any, **kwargs: list[str]) -> None:
     ''' Sync mattermost invite '''
     mmb = MattermostBot(token=setting.MATTERMOST_BOT_TOKEN,
                         base_url=setting.MATTERMOST_BASEURL)
@@ -195,9 +207,9 @@ def service_sync_mattermost_invite(sender, **kwargs):
 @app.task(bind=True, name='servicesync.mattermost.add.channel',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.servicesync.mattermost.add.channel', exchange='COSCUP-SECRETARY')
-def service_sync_mattermost_add_channel(sender, **kwargs):
+def service_sync_mattermost_add_channel(sender: Any, **kwargs: str | list[str]) -> None:
     ''' Sync mattermost add to channel '''
-    project = Project.get(pid=kwargs['pid'])
+    project = Project.get(pid=str(kwargs['pid']))
     if not project:
         return
 
@@ -218,7 +230,7 @@ def service_sync_mattermost_add_channel(sender, **kwargs):
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=2,
           routing_key='cs.servicesync.mattermost.projectuserin.channel',
           exchange='COSCUP-SECRETARY')
-def service_sync_mattermost_projectuserin_channel(sender):
+def service_sync_mattermost_projectuserin_channel(sender: Any) -> None:
     ''' Sync mattermost project user in channel '''
     pids = {}
     for project in Project.all():
@@ -248,19 +260,19 @@ def service_sync_mattermost_projectuserin_channel(sender):
 @app.task(bind=True, name='servicesync.mattermost.users.position',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=2,
           routing_key='cs.servicesync.mattermost.users.position', exchange='COSCUP-SECRETARY')
-def service_sync_mattermost_users_position(sender, **kwargs):
+def service_sync_mattermost_users_position(sender: Any) -> None:
     ''' Sync mattermost users position '''
     # pylint: disable=too-many-locals,too-many-branches
     pids = []
     for project in Project.all():
-        if project['action_date'] >= time():
-            pids.append(project['_id'])
+        if project.action_date >= datetime.now():
+            pids.append(project.id)
 
     if not pids:
         return
 
     for pid in pids:
-        users = {}
+        users: dict[str, list[str]] = {}
         for team in Team.list_by_pid(pid=pid):
             team_name = team.name.split('-')[0].strip()
 
@@ -269,7 +281,7 @@ def service_sync_mattermost_users_position(sender, **kwargs):
                     if chief not in users:
                         users[chief] = []
 
-                    if team.tid == 'coordinator':
+                    if team.id == 'coordinator':
                         users[chief].append('🌟總召')
                     else:
                         users[chief].append(f'⭐️組長@{team_name}')

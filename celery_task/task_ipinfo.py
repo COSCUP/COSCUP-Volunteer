@@ -2,6 +2,8 @@
 # pylint: disable=unused-argument
 from __future__ import absolute_import, unicode_literals
 
+from typing import Any
+
 from celery.utils.log import get_task_logger
 
 import setting
@@ -15,7 +17,7 @@ logger = get_task_logger(__name__)
 @app.task(bind=True, name='ipinfo.update.usession',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.ipinfo.update.usession', exchange='COSCUP-SECRETARY')
-def ipinfo_update_usession(sender):
+def ipinfo_update_usession(sender: Any) -> None:
     ''' IPInfo update usession '''
     for user in USession.get_no_ipinfo():
         ipinfo_update_usession_one.apply_async(
@@ -25,7 +27,7 @@ def ipinfo_update_usession(sender):
 @app.task(bind=True, name='ipinfo.update.usession.one',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.ipinfo.update.usession.one', exchange='COSCUP-SECRETARY')
-def ipinfo_update_usession_one(sender, **kwargs):
+def ipinfo_update_usession_one(sender: Any, **kwargs: str) -> None:
     ''' update session ipinfo '''
     logger.info(kwargs)
 
@@ -36,7 +38,7 @@ def ipinfo_update_usession_one(sender, **kwargs):
 @app.task(bind=True, name='session.daily.clean',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.session.daily.clean', exchange='COSCUP-SECRETARY')
-def session_daily_clean(sender):
+def session_daily_clean(sender: Any) -> None:
     ''' Daily clean session '''
     clean = USession.clean()
     logger.info('matched: %s, modified: %s, raw_result: %s',

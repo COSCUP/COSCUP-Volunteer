@@ -353,7 +353,7 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
 
 
 @VIEW_PROJECT.route('/<pid>/edit/team/api', methods=('GET', 'POST'))
-def project_edit_create_team_api(pid: str) -> Response:
+def project_edit_create_team_api(pid: str) -> Response:  # pylint: disable=too-many-branches
     ''' Project edit create team API '''
     project = Project.get(pid)
     if not project or not project.owners or g.user['account']['_id'] not in project.owners:
@@ -389,6 +389,12 @@ def project_edit_create_team_api(pid: str) -> Response:
             if isinstance(data['members'], str):
                 members = [_uid.strip()
                            for _uid in data['members'].split(',') if _uid.strip()]
+
+            if chiefs is None:
+                chiefs = []
+
+            if members is None:
+                members = []
 
             new_members = set(chiefs + members)
             old_members = set(Team.get_users(
