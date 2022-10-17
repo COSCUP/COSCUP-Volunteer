@@ -49,7 +49,7 @@ def link_telegram_verify(tg_uuid: str) -> Response:
         user_data = mem_cache.get(f"tgu:{data['chat_id']}")
         if data and user_data:
             save_data = {'uid': g.user['account']
-                         ['_id'], 'added': arrow.now().datetime}
+                         ['_id'], 'added': arrow.now().naive}
             save_data.update(user_data)
             TelegramDB().add(save_data)
 

@@ -168,7 +168,7 @@ def profile_real() -> str | Response:
 
             try:
                 birthday = arrow.get(post_data['data'].get(
-                    'birthday', '').strip()).datetime
+                    'birthday', '').strip()).naive
             except (AttributeError, arrow.parser.ParserError):
                 birthday = None
 

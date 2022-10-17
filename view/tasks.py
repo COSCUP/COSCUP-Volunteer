@@ -185,13 +185,13 @@ def add(pid: str, task_id: str | None = None) -> str | Response:
         if post_data and post_data['casename'] == 'add':
             data = post_data['data']
             starttime = arrow.get(f"{data['date']} {data['starttime']}",
-                                  tzinfo='Asia/Taipei').datetime
+                                  tzinfo='Asia/Taipei').naive
             endtime = None
             task_id = None
 
             if 'endtime' in data and data['endtime']:
                 endtime = arrow.get(f"{data['date']} {data['endtime']}",
-                                    tzinfo='Asia/Taipei').datetime
+                                    tzinfo='Asia/Taipei').naive
 
             if 'task_id' in post_data:
                 task_id = post_data['task_id']

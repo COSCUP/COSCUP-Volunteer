@@ -70,7 +70,7 @@ class APIToken:  # pylint: disable=too-few-public-methods
                 'token_type': 'temp',
                 'alive': True,
                 'username': username,
-                'create_at': {'$gte': arrow.now().shift(minutes=-5).datetime},
+                'create_at': {'$gte': arrow.now().shift(minutes=-5).naive},
         }):
             hash_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
             if hash_context.verify(password, row['password']):

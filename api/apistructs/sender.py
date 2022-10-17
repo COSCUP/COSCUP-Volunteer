@@ -21,7 +21,7 @@ class Creater(BaseModel):
     @validator('at', pre=True)
     def convert_to_datetime(cls, value: int | float) -> datetime:  # pylint: disable=no-self-argument
         ''' convert to datetime '''
-        return arrow.get(value).datetime
+        return arrow.get(value).naive
 
 
 class TeamTagsItem(BaseModel):
