@@ -1,5 +1,5 @@
 ''' Project Structs '''
-from datetime import date, datetime
+from datetime import datetime
 from typing import Any
 
 import arrow
