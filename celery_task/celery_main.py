@@ -170,7 +170,7 @@ app.conf.beat_schedule = {
 
 
 @task_failure.connect
-def on_failure(**kwargs: dict[str, Any]) -> None:
+def on_failure(**kwargs: Any) -> None:
     ''' on failure '''
     ses = AWSSES(setting.AWS_ID, setting.AWS_KEY, setting.AWS_SES_FROM)
     raw_mail = ses.raw_mail(

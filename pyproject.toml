@@ -81,6 +81,19 @@ strict_equality = true
 # --strict end
 plugins = ["pydantic.mypy"]
 
+[[tool.mypy.overrides]]
+module = [
+    'celery.*',
+    'kombu',
+    'google_auth_oauthlib.*',
+    'apiclient'
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = 'celery_task.*'
+disallow_untyped_decorators = false
+
 [tool.pydantic-mypy]
 init_forbid_extra = true
 init_typed = true
