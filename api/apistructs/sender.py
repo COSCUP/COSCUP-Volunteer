@@ -19,7 +19,7 @@ class Creater(BaseModel):
     at: datetime = Field(description='created at in timestamp')
 
     @validator('at', pre=True)
-    def convert_to_datetime(cls, value: int | float) -> datetime:  # pylint: disable=no-self-argument
+    def convert_to_datetime(cls, value: int | float | datetime) -> datetime:  # pylint: disable=no-self-argument
         ''' convert to datetime '''
         return arrow.get(value).naive
 

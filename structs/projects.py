@@ -17,12 +17,9 @@ def skip_empty_str(value: Any) -> Any:
     return value
 
 
-def convert_action_date(value: int | date | datetime | str) -> datetime:
+def convert_action_date(value: Any) -> datetime:
     ''' convert `action_date` to date '''
-    if isinstance(value, (int, date, str)):
-        value = arrow.get(value).datetime
-
-    return value
+    return arrow.get(value).naive
 
 
 class ProjectBase(BaseModel):

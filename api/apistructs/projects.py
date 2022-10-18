@@ -58,7 +58,7 @@ class ProjectItemUpdateOutput(ProjectItemUpdateInput):
     ''' Update project item output '''
 
     @validator('action_date', pre=True)
-    def convert_action_date(cls, value: str | int) -> date:  # pylint:disable=no-self-argument
+    def convert_action_date(cls, value: str | int | float) -> date:  # pylint:disable=no-self-argument
         ''' convert action_date to date '''
         return arrow.get(value).date()
 
