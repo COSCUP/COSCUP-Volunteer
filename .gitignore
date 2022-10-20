@@ -1,8 +1,9 @@
-setting.py
+.venv
 .ycm_extra_conf.py
 __pycache__
 client_secret.json
 docs_dev/site/
 log
 log_docker_celery
+setting.py
 venv

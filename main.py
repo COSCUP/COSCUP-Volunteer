@@ -11,9 +11,11 @@ from urllib.parse import parse_qs, urlparse
 import arrow
 import google_auth_oauthlib.flow
 from apiclient import discovery
-from flask import (Flask, Response, g, got_request_exception, redirect,
-                   render_template, request, session, url_for)
+from flask import (Flask, g, got_request_exception, redirect, render_template,
+                   request, session, url_for)
+from flask.wrappers import Response
 from markdown import markdown
+from werkzeug.wrappers import Response as ResponseBase
 
 import setting
 from celery_task.task_mail_sys import mail_sys_weberror
@@ -87,7 +89,7 @@ if Path('/app/view/dev.py').exists():
 
 
 @app.before_request
-def need_login() -> Response | None:
+def need_login() -> ResponseBase | None:
     ''' need_login '''
     # pylint: disable=too-many-return-statements
     logging.info('[X-SSL-SESSION-ID: %s] [X-REAL-IP: %s] [USER-AGENT: %s] [SESSION: %s]',
@@ -198,7 +200,7 @@ def index() -> str:
 
 
 @app.route('/oauth2callback')
-def oauth2callback() -> Response:
+def oauth2callback() -> ResponseBase:
     ''' oauth2callback '''
     if 'r' in request.args and request.args['r'].startswith('/'):
         session['r'] = request.args['r']
@@ -267,7 +269,7 @@ def oauth2callback() -> Response:
 
 
 @app.route('/logout')
-def oauth2logout() -> Response:
+def oauth2logout() -> ResponseBase:
     ''' Logout
 
         **GET** ``/logout``
