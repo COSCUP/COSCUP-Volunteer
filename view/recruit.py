@@ -1,6 +1,7 @@
 ''' recruit.py '''
-from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
+from flask import (Blueprint, g, jsonify, redirect, render_template,
                    request)
+from werkzeug.wrappers import Response as ResponseBase
 
 from module.skill import (RecruitQuery, SkillEnum, SkillEnumDesc, StatusEnum,
                           StatusEnumDesc, TeamsEnum, TeamsEnumDesc)
@@ -12,12 +13,16 @@ VIEW_RECRUIT = Blueprint('recruit', __name__, url_prefix='/recruit')
 
 
 @VIEW_RECRUIT.route('/<pid>/<tid>/list', methods=('GET', 'POST'))
-def recurit_list(pid: str, tid: str) -> Response:
+def recurit_list(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-many-return-statements
     ''' List page '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or

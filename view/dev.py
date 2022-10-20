@@ -1,6 +1,7 @@
 ''' Dev '''
-from flask import (Blueprint, Response, jsonify, redirect, render_template,
-                   request, session, url_for)
+from flask import (Blueprint, jsonify, redirect, render_template, request,
+                   session, url_for)
+from werkzeug.wrappers import Response as ResponseBase
 
 from models.users_db import UsersDB
 from models.usessiondb import USessionDB
@@ -10,7 +11,7 @@ VIEW_DEV = Blueprint('dev', __name__, url_prefix='/dev')
 
 
 @VIEW_DEV.route('/', methods=('GET', 'POST'))
-def index() -> Response:
+def index() -> str | ResponseBase:
     ''' Index page '''
     if request.method == 'GET':
         if 'tc' not in session:
@@ -53,7 +54,7 @@ def index() -> Response:
 
 
 @VIEW_DEV.route('/cookie')
-def set_cookie() -> Response:
+def set_cookie() -> ResponseBase:
     ''' set cookies '''
     session['sid'] = request.args['sid']
     return redirect(url_for('dev.index'))

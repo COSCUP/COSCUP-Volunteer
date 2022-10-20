@@ -112,7 +112,7 @@ class UserProfleReal(UserProfleRealBase):
         dietary_habit: *(optional)* dietary habit info.
 
     '''
-    birthday: Optional[datetime]
+    birthday: Optional[datetime] = Field(default=None)
     bank: Optional[UserBank] = Field(default_factory=UserBank)
     address: Optional[UserAddress] = Field(default_factory=UserAddress)
     dietary_habit: Optional[list[DietaryHabitItemsValue]] = Field(

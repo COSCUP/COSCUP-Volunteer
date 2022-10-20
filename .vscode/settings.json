@@ -1,0 +1,12 @@
+{
+    "python.analysis.typeCheckingMode": "basic",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyArgs": [
+        "--strict",
+        "--load-plugins", "pydantic.mypy"
+    ],
+    "python.formatting.provider": "autopep8",
+    "python.poetryPath": "/Users/toomore/Library/Caches/pypoetry/virtualenvs/coscup-volunteer-lGjngVtO-py3.10"
+}

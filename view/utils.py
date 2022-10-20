@@ -1,5 +1,6 @@
 ''' utils '''
-from flask import Response, redirect
+from flask import redirect
+from werkzeug.wrappers import Response as ResponseBase
 
 from module.project import Project
 from module.team import Team
@@ -8,7 +9,7 @@ from structs.teams import TeamBase
 
 
 def check_the_team_and_project_are_existed(pid: str, tid: str) -> \
-        tuple[TeamBase | None, ProjectBase | None, Response | None]:
+        tuple[TeamBase, ProjectBase, None] | tuple[None, None, ResponseBase]:
     ''' Base check the team and profect are existed
 
     :param str pid: project id

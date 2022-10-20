@@ -30,7 +30,7 @@ class APITokenBase(BaseModel):
 
 class APITokenTemp(APITokenBase):
     ''' API Temp Token '''
-    token_type: APITokenType = Field(APITokenType.TEMP)
+    token_type: APITokenType = Field(default=APITokenType.TEMP)
     username: str = Field(description='login username',
                           default_factory=lambda: uuid4().hex)
     password: str = Field(description='login password',
@@ -39,7 +39,7 @@ class APITokenTemp(APITokenBase):
 
 class APITokenSession(APITokenBase):
     ''' API Session Token '''
-    token_type: APITokenType = Field(APITokenType.SESSION)
+    token_type: APITokenType = Field(default=APITokenType.SESSION)
     token: str = Field(default_factory=lambda: uuid4().hex)
     serial_no: str = Field(default_factory=lambda: f'{uuid4().node:08x}')
 

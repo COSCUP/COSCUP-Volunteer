@@ -3,8 +3,9 @@ import csv
 import io
 from datetime import datetime
 
-from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
-                   request)
+from flask import Blueprint, g, jsonify, redirect, render_template, request
+from flask.wrappers import Response
+from werkzeug.wrappers import Response as ResponseBase
 
 from module.budget import Budget
 from module.expense import Expense
@@ -15,7 +16,7 @@ VIEW_EXPENSE = Blueprint('expense', __name__, url_prefix='/expense')
 
 
 @VIEW_EXPENSE.route('/<pid>', methods=('GET', 'POST'))
-def by_project_index(pid: str) -> str | Response:
+def by_project_index(pid: str) -> str | ResponseBase:
     ''' Project index '''
     project = Project.get(pid)
 
@@ -69,11 +70,11 @@ def by_project_index(pid: str) -> str | Response:
 
             return jsonify({'result': result})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_EXPENSE.route('/<pid>/dl', methods=('GET', 'POST'))
-def by_project_dl(pid: str) -> Response:
+def by_project_dl(pid: str) -> str | ResponseBase:
     ''' Project download '''
     project = Project.get(pid)
 
@@ -88,7 +89,7 @@ def by_project_dl(pid: str) -> Response:
         raws = Expense.dl_format(pid=pid)
 
         if not raws:
-            return '', 204
+            return Response('', status=204)
 
         with io.StringIO() as files:
             csv_writer = csv.DictWriter(files, fieldnames=list(
@@ -105,4 +106,4 @@ def by_project_dl(pid: str) -> Response:
                          'x-filename': filename,
                          })
 
-    return '', 204
+    return Response('', status=204)

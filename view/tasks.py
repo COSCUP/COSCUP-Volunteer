@@ -2,8 +2,10 @@
 from typing import Any
 
 import arrow
-from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
-                   request, url_for)
+from flask import (Blueprint, g, jsonify, redirect, render_template, request,
+                   url_for)
+from flask.wrappers import Response
+from werkzeug.wrappers import Response as ResponseBase
 
 from celery_task.task_mail_sys import mail_tasks_star
 from module.mattermost_bot import MattermostTools
@@ -16,20 +18,20 @@ VIEW_TASKS = Blueprint('tasks', __name__, url_prefix='/tasks')
 
 
 @VIEW_TASKS.route('/')
-def index() -> Response:
+def index() -> ResponseBase:
     ''' Index page '''
     return redirect(url_for('tasks.project', pid='2022', _scheme='https', _external=True))
 
 
 @VIEW_TASKS.route('/<pid>', methods=('GET', 'POST'))
-def project(pid: str) -> str | Response:
+def project(pid: str) -> str | ResponseBase:
     ''' Project '''
     # pylint: disable=too-many-locals,too-many-return-statements,too-many-branches,too-many-statements
     uid = g.get('user', {}).get('account', {}).get('_id')
 
     project_info = Project.get(pid=pid)
     if not project_info:
-        return '404', 404
+        return Response('404', status=404)
 
     is_in_project = False
     if uid:
@@ -70,7 +72,7 @@ def project(pid: str) -> str | Response:
 
         if post_data and post_data['casename'] == 'star':
             if not uid:
-                return jsonify({'info': 'Need login'}), 401
+                return jsonify({'info': 'Need login'}, status=401)
 
             result = TasksStar.toggle(pid=pid, uid=uid)
 
@@ -78,7 +80,7 @@ def project(pid: str) -> str | Response:
 
         if post_data and post_data['casename'] == 'join':
             if not uid:
-                return jsonify({'info': 'Need login'}), 401
+                return jsonify({'info': 'Need login'}, status=401)
 
             data = Tasks.join(pid=pid, task_id=post_data['task_id'], uid=uid)
             page_args(data=data, uid=uid)
@@ -87,7 +89,7 @@ def project(pid: str) -> str | Response:
 
         if post_data and post_data['casename'] == 'cancel':
             if not uid:
-                return jsonify({'info': 'Need login'}), 401
+                return jsonify({'info': 'Need login'}, status=401)
 
             data = Tasks.cancel(pid=pid, task_id=post_data['task_id'], uid=uid)
             page_args(data=data, uid=uid)
@@ -96,10 +98,10 @@ def project(pid: str) -> str | Response:
 
         if post_data and post_data['casename'] == 'cancel_user':
             if not uid:
-                return jsonify({'info': 'Need login'}), 401
+                return jsonify({'info': 'Need login'}, status=401)
 
             if not is_in_project:
-                return jsonify({'info': 'Need as staff'}), 401
+                return jsonify({'info': 'Need as staff'}, status=401)
 
             data = Tasks.cancel(
                 pid=pid, task_id=post_data['task_id'], uid=post_data['uid'])
@@ -110,13 +112,13 @@ def project(pid: str) -> str | Response:
         if post_data and post_data['casename'] == 'peoples':
             task_data = Tasks.get_with_pid(pid=pid, _id=post_data['task_id'])
             if not task_data:
-                return jsonify({}), 404
+                return jsonify({}, status=404)
 
             users_info = Tasks.get_peoples_info(
                 pid=pid, task_id=post_data['task_id'])
 
             if not users_info:
-                return jsonify({}), 404
+                return jsonify({}, status=404)
 
             creator = {}
             if task_data:
@@ -150,17 +152,17 @@ def project(pid: str) -> str | Response:
 
             return jsonify({'peoples': peoples, 'creator': creator})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_TASKS.route('/<pid>/add', methods=('GET', 'POST'))
 @VIEW_TASKS.route('/<pid>/edit/<task_id>', methods=('GET', 'POST'))
-def add(pid: str, task_id: str | None = None) -> str | Response:
+def add(pid: str, task_id: str | None = None) -> str | ResponseBase:
     ''' Add '''
     # pylint: disable=too-many-return-statements,too-many-branches
     uid = g.get('user', {}).get('account', {}).get('_id')
     if not uid:
-        return jsonify({'info': 'Need login'}), 401
+        return jsonify({'info': 'Need login'}, status=401)
 
     is_in_project = False
     for _ in Team.participate_in(uid=uid, pid=[pid, ]):
@@ -168,11 +170,11 @@ def add(pid: str, task_id: str | None = None) -> str | Response:
         break
 
     if not is_in_project:
-        return jsonify({'info': 'Not in project'}), 401
+        return jsonify({'info': 'Not in project'}, status=401)
 
     project_info = Project.get(pid=pid)
     if not project_info:
-        return '404', 404
+        return Response('404', status=404)
 
     if request.method == 'GET':
         catelist = Tasks.get_cate(pid=pid)
@@ -218,7 +220,7 @@ def add(pid: str, task_id: str | None = None) -> str | Response:
         if post_data and post_data['casename'] == 'del':
             data = Tasks.get_with_pid(pid=pid, _id=post_data['task_id'])
             if not data:
-                return jsonify({}), 404
+                return jsonify({}, status=404)
 
             if data['created_by'] == g.user['account']['_id']:
                 Tasks.delete(pid=pid, _id=data['_id'])
@@ -226,7 +228,7 @@ def add(pid: str, task_id: str | None = None) -> str | Response:
         if task_id and post_data and post_data['casename'] == 'get':
             data = Tasks.get_with_pid(pid=pid, _id=task_id)
             if not data:
-                return jsonify({}), 404
+                return jsonify({}, status=404)
 
             starttime_task = arrow.get(data['starttime']).to('Asia/Taipei')
             data['date'] = starttime_task.format('YYYY-MM-DD')
@@ -246,11 +248,11 @@ def add(pid: str, task_id: str | None = None) -> str | Response:
 
 
 @VIEW_TASKS.route('/<pid>/r/<task_id>', methods=('GET', 'POST'))
-def read(pid: str, task_id: str) -> str | Response:
+def read(pid: str, task_id: str) -> str | ResponseBase:
     ''' Read '''
     project_info = Project.get(pid=pid)
     if not project_info:
-        return '404', 404
+        return Response('404', status=404)
 
     task = Tasks.get_with_pid(pid=pid, _id=task_id)
     if not task:
@@ -277,7 +279,7 @@ def read(pid: str, task_id: str) -> str | Response:
 
     if request.method == 'POST':
         if not uid:
-            return jsonify({'info': 'Need login'}), 401
+            return jsonify({'info': 'Need login'}, status=401)
 
         post_data = request.get_json()
         if post_data and post_data['casename'] == 'join':

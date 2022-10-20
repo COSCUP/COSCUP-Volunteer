@@ -5,8 +5,10 @@ from typing import Any, Callable
 
 import arrow
 import phonenumbers
-from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
-                   request, session, url_for)
+from flask import (Blueprint, g, jsonify, redirect, render_template, request,
+                   session, url_for)
+from flask.wrappers import Response
+from werkzeug.wrappers import Response as ResponseBase
 
 from celery_task.task_service_sync import service_sync_mattermost_invite
 from models.telegram_db import TelegramDB
@@ -32,7 +34,7 @@ def index() -> str:
 
 
 @VIEW_SETTING.route('/profile', methods=('GET', 'POST'))
-def profile_page() -> str | Response:
+def profile_page() -> str | ResponseBase:
     ''' profile '''
     # pylint: disable=too-many-branches
     if request.method == 'GET':
@@ -92,11 +94,11 @@ def profile_page() -> str | Response:
 
         return jsonify({})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_SETTING.route('/profile_real', methods=('GET', 'POST'))
-def profile_real() -> str | Response:
+def profile_real() -> str | ResponseBase:
     ''' Profile real '''
     # pylint: disable=too-many-branches
     if request.method == 'GET':
@@ -189,11 +191,11 @@ def profile_real() -> str | Response:
 
             return jsonify(user_profile_real.dict(exclude_none=True))
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_SETTING.route('/link/chat', methods=('GET', 'POST'))
-def link_chat() -> str | Response:
+def link_chat() -> str | ResponseBase:
     ''' Link to chat '''
     if request.method == 'GET':
         mml = MattermostLink(uid=g.user['account']['_id'])
@@ -210,11 +212,11 @@ def link_chat() -> str | Response:
             MattermostLink.reset(uid=g.user['account']['_id'])
             return redirect(url_for('setting.link_chat', _scheme='https', _external=True))
 
-    return '', 404
+    return Response('', status=404)
 
 
 @VIEW_SETTING.route('/link/telegram', methods=('GET', 'POST'))
-def link_telegram() -> str | Response:
+def link_telegram() -> str | ResponseBase:
     ''' Link to Telegram '''
     if request.method == 'GET':
         telegram_data = []
@@ -232,11 +234,11 @@ def link_telegram() -> str | Response:
 
         return jsonify({})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_SETTING.route('/security', methods=('GET', 'POST'))
-def security() -> str | Response:
+def security() -> str | ResponseBase:
     ''' security '''
     if request.method == 'GET':
         _now = arrow.now()
@@ -277,7 +279,7 @@ def security() -> str | Response:
             USession.make_dead(sid=data['sid'], uid=g.user['account']['_id'])
             return jsonify(data)
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_SETTING.route('/waitting')
@@ -324,4 +326,4 @@ def api_token() -> str | Response:
                 'password': temp_account.password,
             }})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)

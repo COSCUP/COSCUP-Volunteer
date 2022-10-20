@@ -1,6 +1,8 @@
 ''' OAuth '''
 from typing import Any, Optional
 
+from google.oauth2.credentials import Credentials  # type: ignore
+
 from models.oauth_db import OAuthDB
 
 
@@ -26,7 +28,7 @@ class OAuth:
 
     @staticmethod
     def add(mail: str, data: Optional[dict[str, Any]] = None,
-            token: Optional[dict[str, Any]] = None) -> None:
+            token: Optional[Credentials] = None) -> None:
         ''' add data, token
 
         Args:
@@ -39,11 +41,11 @@ class OAuth:
         if any((data, token)):
             oauth_db = OAuthDB()
 
-        if data is not None:
-            oauth_db.add_data(mail, data)
+            if data is not None:
+                oauth_db.add_data(mail=mail, data=data)
 
-        if token is not None:
-            oauth_db.add_token(mail, token)
+            if token is not None:
+                oauth_db.add_token(mail=mail, credentials=token)
 
     @staticmethod
     def owner(mail: str) -> Optional[str]:

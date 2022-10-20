@@ -1,5 +1,7 @@
 ''' Links '''
-from flask import Blueprint, Response, request
+from flask import Blueprint, request
+from flask.wrappers import Response
+from werkzeug.wrappers import Response as ResponseBase
 
 from module.mattermost_link import MattermostLink
 
@@ -13,12 +15,12 @@ def index() -> str:
 
 
 @VIEW_LINKS.route('/chat', methods=('POST', ))
-def link_chat() -> Response:
+def link_chat() -> ResponseBase:
     ''' Link to chat '''
     if request.method == 'POST':
         if MattermostLink.verify_save(request.form):
-            return '認證成功 / Completed'
+            return Response('認證成功 / Completed')
 
-        return '認證失敗 / Fail'
+        return Response('認證失敗 / Fail')
 
-    return '', 404
+    return Response('', status=404)

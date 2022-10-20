@@ -60,7 +60,7 @@ class WaitListDB(DBBase):
             'pid': pid, 'tid': tid, 'uid': uid, 'result': {'$exists': False}})
 
     def list_by(self, pid: str, tid: Optional[str] = None, uid: Optional[str] = None,
-                _all: bool = False) -> Generator[dict[str, Any], None, None] | None:
+                _all: bool = False) -> Generator[dict[str, Any], None, None]:
         ''' List by
 
         Args:

@@ -7,10 +7,12 @@ from typing import Any, Callable
 
 import arrow
 import phonenumbers
-from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
-                   request, url_for)
+from flask import (Blueprint, g, jsonify, redirect, render_template, request,
+                   url_for)
+from flask.wrappers import Response
 from markdown import markdown
 from pydantic import BaseModel, Field
+from werkzeug.wrappers import Response as ResponseBase
 
 from celery_task.task_expense import expense_create
 from models.teamdb import TeamMemberChangedDB, TeamPlanDB
@@ -28,12 +30,15 @@ VIEW_TEAM = Blueprint('team', __name__, url_prefix='/team')
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/')
-def index(pid: str, tid: str) -> str | Response:
+def index(pid: str, tid: str) -> str | ResponseBase:
     ''' Index page '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     for k in ('desc', 'public_desc'):
         if k not in team.__dict__ or not team.__dict__[k]:
@@ -63,12 +68,15 @@ def index(pid: str, tid: str) -> str | Response:
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/calendar')
-def calendar(pid: str, tid: str) -> str | Response:
+def calendar(pid: str, tid: str) -> str | ResponseBase:
     ''' calendar '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     if project.calendar:
         teamusers = TeamUsers.parse_obj(team)
@@ -94,13 +102,16 @@ class UserInfoBase(BaseModel):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/members', methods=('GET', 'POST'))
-def members(pid: str, tid: str) -> str | Response:  # pylint: disable=too-many-branches
+def members(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-many-branches
     ''' members '''
     # pylint: disable=too-many-locals
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
@@ -168,19 +179,22 @@ def members(pid: str, tid: str) -> str | Response:  # pylint: disable=too-many-b
 
             members_tags = Team.get_members_tags(pid=team.pid, tid=team.id)
 
-        return jsonify({'members': result_members, 'teams': list_teams,
-                        'tags': tags, 'members_tags': members_tags})
+            return jsonify({'members': result_members, 'teams': list_teams,
+                            'tags': tags, 'members_tags': members_tags})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit', methods=('GET', 'POST'))
-def team_edit(pid: str, tid: str) -> str | Response:
+def team_edit(pid: str, tid: str) -> str | ResponseBase:
     ''' Team edit '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
@@ -205,17 +219,20 @@ def team_edit(pid: str, tid: str) -> str | Response:
         return redirect(url_for('team.team_edit',
                                 pid=team.pid, tid=team.id, _scheme='https', _external=True))
 
-    return '', 404
+    return Response('', status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit_user', methods=('GET', 'POST'))
-def team_edit_user(pid: str, tid: str) -> str | Response:
+def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
     ''' Team edit user '''
     # pylint: disable=too-many-locals,too-many-return-statements,too-many-branches,too-many-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
@@ -338,13 +355,16 @@ def team_edit_user(pid: str, tid: str) -> str | Response:
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit_user/api', methods=('GET', 'POST'))
-def team_edit_user_api(pid: str, tid: str) -> Response:  # pylint: disable=too-many-branches
+def team_edit_user_api(pid: str, tid: str) -> ResponseBase:  # pylint: disable=too-many-branches
     ''' Team edit user API '''
     # pylint: disable=too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
@@ -380,12 +400,15 @@ def team_edit_user_api(pid: str, tid: str) -> Response:  # pylint: disable=too-m
     if request.method == 'POST':
         data = request.json
         if not data:
-            return jsonify({}), 404
+            return jsonify({}, status=404)
 
         if data['result'] == 'approval':
             all_members = len(set(teamusers.members + teamusers.chiefs))
             if team.headcount is not None and all_members >= team.headcount:
-                return jsonify({'status': 'fail', 'message': 'over headcount.'}), 406
+                return jsonify({
+                    'status': 'fail',
+                    'message': 'over headcount.'},
+                    status=406)
 
         wait_info = WaitList.make_result(
             wid=data['wid'], pid=pid, uid=data['uid'], result=data['result'])
@@ -398,16 +421,19 @@ def team_edit_user_api(pid: str, tid: str) -> Response:  # pylint: disable=too-m
 
         return jsonify({'status': 'ok'})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/join_to', methods=('GET', 'POST'))
-def team_join_to(pid: str, tid: str) -> str | Response:
+def team_join_to(pid: str, tid: str) -> str | ResponseBase:
     ''' Team join to '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if g.user['account']['_id'] in teamusers.members or \
@@ -434,16 +460,19 @@ def team_join_to(pid: str, tid: str) -> str | Response:
 
         return redirect(f'/team/{pid}/{tid}/join_to')
 
-    return '', 404
+    return Response('', status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/api', methods=('GET', 'POST'))
-def team_form_api(pid: str, tid: str) -> Response:
+def team_form_api(pid: str, tid: str) -> ResponseBase:
     ''' Team form API '''
     team, _, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if not (g.user['account']['_id'] in teamusers.members or
@@ -458,17 +487,20 @@ def team_form_api(pid: str, tid: str) -> Response:
 
         return jsonify(request.args)
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/accommodation', methods=('GET', 'POST'))
-def team_form_accommodation(pid: str, tid: str) -> str | Response:
+def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
     ''' Team form accommodation '''
     # pylint: disable=too-many-locals,too-many-return-statements,too-many-branches
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if not (g.user['account']['_id'] in teamusers.members or
@@ -491,7 +523,7 @@ def team_form_accommodation(pid: str, tid: str) -> str | Response:
 
     if request.method == 'POST':
         if not is_ok_submit:
-            return '', 406
+            return Response('', status=406)
 
         post_data = request.get_json()
 
@@ -526,7 +558,7 @@ def team_form_accommodation(pid: str, tid: str) -> str | Response:
 
         if post_data and post_data['casename'] == 'update':
             if post_data['selected'] not in ('no', 'yes', 'yes-longtraffic'):
-                return '', 406
+                return Response('', status=406)
 
             data = {
                 'status': post_data['selected'] in ('yes', 'yes-longtraffic'),
@@ -555,12 +587,16 @@ class FeeMapping(BaseModel):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/traffic_fee', methods=('GET', 'POST'))
-def team_form_traffic_fee(pid: str, tid: str) -> str | Response:
+def team_form_traffic_fee(pid: str, tid: str) -> str | ResponseBase:
     ''' Team form traffic fee '''
+    # pylint: disable=too-many-branches,too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if not (g.user['account']['_id'] in teamusers.members or
@@ -613,18 +649,22 @@ def team_form_traffic_fee(pid: str, tid: str) -> str | Response:
                                     pid=team.pid, tid=team.id,
                                     _scheme='https', _external=True))
 
-        return '', 406
+        return Response('', status=406)
 
-    return '', 404
+    return Response('', status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/volunteer_certificate', methods=('GET', 'POST'))
-def team_form_volunteer_certificate(pid: str, tid: str) -> str | Response:
+def team_form_volunteer_certificate(pid: str, tid: str) -> str | ResponseBase:
     ''' Team form volunteer certificate '''
+    # pylint: disable=too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if not (g.user['account']['_id'] in teamusers.members or
@@ -658,7 +698,7 @@ def team_form_volunteer_certificate(pid: str, tid: str) -> str | Response:
 
     if request.method == 'POST':
         if not is_ok_submit:
-            return '', 406
+            return Response('', status=406)
 
         data = {'value': request.form['volunteer_certificate'] == 'yes'}
         Form.update_volunteer_certificate(
@@ -667,7 +707,7 @@ def team_form_volunteer_certificate(pid: str, tid: str) -> str | Response:
         return redirect(url_for('team.team_form_volunteer_certificate',
                                 pid=team.pid, tid=team.id, _scheme='https', _external=True))
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 class AppreciationData(BaseModel):
@@ -678,13 +718,16 @@ class AppreciationData(BaseModel):
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/appreciation', methods=('GET', 'POST'))
-def team_form_appreciation(pid: str, tid: str) -> str | Response:
+def team_form_appreciation(pid: str, tid: str) -> str | ResponseBase:
     ''' Team form appreciation '''
-    # pylint: disable=too-many-branches
+    # pylint: disable=too-many-branches,too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if not (g.user['account']['_id'] in teamusers.members or
@@ -720,7 +763,7 @@ def team_form_appreciation(pid: str, tid: str) -> str | Response:
 
     if request.method == 'POST':
         if request.form['appreciation'] not in ('oauth', 'badge_name', 'real_name', 'no'):
-            return '', 406
+            return Response('', status=406)
 
         if request.form['appreciation'] == 'no':
             app_data = AppreciationData()
@@ -732,6 +775,8 @@ def team_form_appreciation(pid: str, tid: str) -> str | Response:
                 name = g.user['account']['profile']['badge_name']
             elif request.form['appreciation'] == 'real_name':
                 name = g.user['account']['profile_real']['name']
+            else:
+                raise Exception("Can not find the `name`.")
 
             app_data = AppreciationData.parse_obj({
                 'available': True,
@@ -745,16 +790,20 @@ def team_form_appreciation(pid: str, tid: str) -> str | Response:
         return redirect(url_for('team.team_form_appreciation',
                                 pid=team.pid, tid=team.id, _scheme='https', _external=True))
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/clothes', methods=('GET', 'POST'))
-def team_form_clothes(pid: str, tid: str) -> str | Response:
+def team_form_clothes(pid: str, tid: str) -> str | ResponseBase:
     ''' Team form clothes '''
+    # pylint: disable=too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if not (g.user['account']['_id'] in teamusers.members or
@@ -803,12 +852,16 @@ def team_form_clothes(pid: str, tid: str) -> str | Response:
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/drink', methods=('GET', 'POST'))
-def team_form_drink(pid: str, tid: str) -> str | Response:
+def team_form_drink(pid: str, tid: str) -> str | ResponseBase:
     ''' Team form drink '''
+    # pylint: disable=too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if not (g.user['account']['_id'] in teamusers.members or
@@ -838,17 +891,20 @@ def team_form_drink(pid: str, tid: str) -> str | Response:
 
         return jsonify({'data': post_data})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/parking_card', methods=('GET', 'POST'))
-def team_form_parking_card(pid: str, tid: str) -> str | Response:
+def team_form_parking_card(pid: str, tid: str) -> str | ResponseBase:
     ''' Team form parking card '''
     # pylint: disable=too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if not (g.user['account']['_id'] in teamusers.members or
@@ -887,17 +943,20 @@ def team_form_parking_card(pid: str, tid: str) -> str | Response:
 
                 return jsonify({})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/plan/edit', methods=('GET', 'POST'))
-def team_plan_edit(pid: str, tid: str) -> str | Response:
+def team_plan_edit(pid: str, tid: str) -> str | ResponseBase:
     ''' Team plan edit '''
     # pylint: disable=too-many-locals,too-many-return-statements,too-many-branches,too-many-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
@@ -915,7 +974,7 @@ def team_plan_edit(pid: str, tid: str) -> str | Response:
     if request.method == 'POST':  # pylint: disable=too-many-nested-blocks
         data = request.get_json()
         if not data:
-            return jsonify({}), 404
+            return jsonify({}, status=404)
 
         today = arrow.now().format('YYYY-MM-DD')
         default = {'title': '', 'desc': '', 'start': today, 'end': '',
@@ -1020,16 +1079,20 @@ def team_plan_edit(pid: str, tid: str) -> str | Response:
 
         return jsonify({'data': [], 'default': default})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/expense/', methods=('GET', 'POST'))
-def team_expense_index(pid: str, tid: str) -> Response:
+def team_expense_index(pid: str, tid: str) -> ResponseBase:
     ''' Team expense index '''
+    # pylint: disable=too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if not (g.user['account']['_id'] in teamusers.members or
@@ -1069,16 +1132,19 @@ def team_expense_index(pid: str, tid: str) -> Response:
                 pid=project.id, budget_id=data['buid'])
             return jsonify({'data': list(data)})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/expense/lists', methods=('GET', 'POST'))
-def team_expense_lists(pid: str, tid: str) -> str | Response:
+def team_expense_lists(pid: str, tid: str) -> str | ResponseBase:
     ''' Team expense lists '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if not (g.user['account']['_id'] in teamusers.members or
@@ -1092,17 +1158,20 @@ def team_expense_lists(pid: str, tid: str) -> str | Response:
                                team=team.dict(by_alias=True),
                                budget_menu=budget_admin)
 
-    return '', 404
+    return Response('', status=404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/expense/my', methods=('GET', 'POST'))
-def team_expense_my(pid: str, tid: str) -> str | Response:  # pylint: disable=too-many-branches,too-many-return-statements
+def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
     ''' Team expense my '''
-    # pylint: disable=too-many-locals
+    # pylint: disable=too-many-locals,too-many-branches,too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     if not (g.user['account']['_id'] in teamusers.members or
@@ -1190,4 +1259,4 @@ def team_expense_my(pid: str, tid: str) -> str | Response:  # pylint: disable=to
 
             return jsonify({})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)

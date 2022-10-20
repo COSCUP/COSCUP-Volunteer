@@ -4,8 +4,8 @@ import io
 import random
 
 import arrow
-from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
-                   request)
+from flask import Blueprint, g, jsonify, redirect, render_template, request
+from werkzeug.wrappers import Response as ResponseBase
 
 from celery_task.task_sendermailer import sender_mailer_start
 from module.sender import SenderCampaign, SenderLogs, SenderReceiver
@@ -18,12 +18,15 @@ VIEW_SENDER = Blueprint('sender', __name__, url_prefix='/sender')
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/', methods=('GET', 'POST'))
-def index(pid: str, tid: str) -> str | Response:
+def index(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-many-return-statements
     ''' Index page '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
@@ -67,12 +70,15 @@ def index(pid: str, tid: str) -> str | Response:
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/', methods=('GET', 'POST'))
-def campaign(pid: str, tid: str, cid: str) -> str | Response:
+def campaign(pid: str, tid: str, cid: str) -> str | ResponseBase:
     ''' campaign '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
@@ -89,12 +95,15 @@ def campaign(pid: str, tid: str, cid: str) -> str | Response:
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/content', methods=('GET', 'POST'))
-def campaign_content(pid: str, tid: str, cid: str) -> Response:
+def campaign_content(pid: str, tid: str, cid: str) -> str | ResponseBase:  # pylint: disable=too-many-return-statements
     ''' Campaign content '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
@@ -131,17 +140,20 @@ def campaign_content(pid: str, tid: str, cid: str) -> Response:
             )
             return jsonify({'mail': resp['mail']})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/receiver', methods=('GET', 'POST'))
-def campaign_receiver(pid: str, tid: str, cid: str) -> str | Response:
+def campaign_receiver(pid: str, tid: str, cid: str) -> str | ResponseBase:
     ''' campaign receiver '''
     # pylint: disable=too-many-branches,too-many-locals,too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
@@ -225,17 +237,20 @@ def campaign_receiver(pid: str, tid: str, cid: str) -> str | Response:
                             'uploadtype': request.form['uploadtype'],
                             })
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/schedule', methods=('GET', 'POST'))
-def campaign_schedule(pid: str, tid: str, cid: str) -> str | Response:
+def campaign_schedule(pid: str, tid: str, cid: str) -> str | ResponseBase:
     ''' campaign schedule '''
     # pylint: disable=too-many-locals,too-many-branches,too-many-statements,too-many-return-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
-    if team is None or project is None or _redirect:
+    if _redirect:
         return _redirect
+
+    if not team or not project:
+        return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
@@ -322,7 +337,7 @@ def campaign_schedule(pid: str, tid: str, cid: str) -> str | Response:
 
             fields_user, raws_user = SenderReceiver.get_from_user(
                 pid=team.pid, tids=campaign_data['receiver']['teams'])
-            if raws:
+            if raws_user:
                 user_datas.append(
                     dict(zip(fields_user, random.choice(raws_user))))
 
@@ -375,4 +390,4 @@ def campaign_schedule(pid: str, tid: str, cid: str) -> str | Response:
 
             return jsonify(data)
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)

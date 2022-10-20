@@ -3,8 +3,8 @@ import csv
 import io
 from typing import Any
 
-from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
-                   request)
+from flask import Blueprint, g, jsonify, redirect, render_template, request
+from werkzeug.wrappers import Response as ResponseBase
 
 from module.budget import Budget
 from module.project import Project
@@ -14,7 +14,7 @@ VIEW_BUDGET = Blueprint('budget', __name__, url_prefix='/budget')
 
 
 @VIEW_BUDGET.route('/batch/<pid>', methods=('GET', 'POST'))
-def batch(pid: str) -> str | Response:  # pylint: disable=too-many-branches
+def batch(pid: str) -> str | ResponseBase:  # pylint: disable=too-many-branches
     ''' batch upload '''
     project = Project.get(pid)
 
@@ -92,7 +92,7 @@ def batch(pid: str) -> str | Response:  # pylint: disable=too-many-branches
 
 
 @VIEW_BUDGET.route('/<pid>', methods=('GET', 'POST'))
-def by_project_index(pid: str) -> str | Response:
+def by_project_index(pid: str) -> str | ResponseBase:
     ''' index '''
     # pylint: disable=too-many-return-statements,too-many-branches
     project = Project.get(pid)

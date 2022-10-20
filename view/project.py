@@ -3,10 +3,14 @@ import csv
 import io
 import logging
 import math
+from typing import Mapping, Literal, Any
 
 import arrow
-from flask import (Blueprint, Response, g, jsonify, redirect, render_template,
+from flask import (Blueprint, g, jsonify, redirect, render_template,
                    request, url_for)
+
+from flask.wrappers import Response
+from werkzeug.wrappers import Response as ResponseBase
 
 import setting
 from celery_task.task_service_sync import service_sync_mattermost_add_channel
@@ -44,7 +48,7 @@ def index() -> str:
 
 
 @VIEW_PROJECT.route('/<pid>/edit', methods=('GET', 'POST'))
-def project_edit(pid: str) -> str | Response:
+def project_edit(pid: str) -> str | ResponseBase:
     ''' Project edit '''
     project = Project.get(pid)
     if project and g.user['account']['_id'] not in project.owners:
@@ -57,11 +61,11 @@ def project_edit(pid: str) -> str | Response:
         Project.update(pid, ProjectBaseUpdate.parse_obj(request.form))
         return redirect(url_for('project.project_edit', pid=pid, _scheme='https', _external=True))
 
-    return '', 404
+    return Response('', status=404)
 
 
 @VIEW_PROJECT.route('/<pid>/edit/team', methods=('GET', 'POST'))
-def project_edit_create_team(pid: str) -> str | Response:
+def project_edit_create_team(pid: str) -> str | ResponseBase:
     ''' Project edit create team '''
     project = Project.get(pid)
     if project and g.user['account']['_id'] not in project.owners:
@@ -75,11 +79,11 @@ def project_edit_create_team(pid: str) -> str | Response:
         return render_template('./project_edit_create_team.html',
                                project=project.dict(by_alias=True), teams=teams)
 
-    return '', 404
+    return Response('', status=404)
 
 
 @VIEW_PROJECT.route('/<pid>/form', methods=('GET', 'POST'))
-def project_form(pid: str) -> str | Response:
+def project_form(pid: str) -> str | ResponseBase:
     ''' Project form '''
     project = Project.get(pid)
     if project and g.user['account']['_id'] not in project.owners:
@@ -88,11 +92,11 @@ def project_form(pid: str) -> str | Response:
     if project and request.method == 'GET':
         return render_template('./project_form.html', project=project.dict(by_alias=True))
 
-    return '', 404
+    return Response('', status=404)
 
 
 @VIEW_PROJECT.route('/<pid>/form/api', methods=('GET', 'POST'))
-def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-locals
+def project_form_api(pid: str) -> str | ResponseBase:  # pylint: disable=too-many-locals
     ''' Project form API '''
     # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
     project = Project.get(pid)
@@ -111,6 +115,9 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                 csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
                 csv_writer.writeheader()
 
+                row_data: Mapping[Literal['uid', 'picture', 'value',
+                                          'name', 'roc_id', 'birthday',
+                                          'company'], str] | Mapping[str, Any]
                 for raw in Form.all_volunteer_certificate(pid):
                     user_info = UsersDB().find_one({'_id': raw['uid']})
                     if not user_info:
@@ -121,7 +128,7 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                     if not oauth:
                         continue
 
-                    data = {
+                    row_data = {
                         'uid': raw['uid'],
                         'picture': oauth['data']['picture'],
                         'value': raw['data']['value'],
@@ -131,7 +138,7 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                         'company': user_info['profile_real']['company'],
                     }
 
-                    csv_writer.writerow(data)
+                    csv_writer.writerow(row_data)
 
                 result = []
                 for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
@@ -146,12 +153,15 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                 csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
                 csv_writer.writeheader()
 
+                row_data_traffic: Mapping[Literal['uid', 'picture', 'name',
+                                          'apply', 'fee', 'fromwhere', 'howto'],
+                                          str] | Mapping[str, Any]
                 for raw in Form.all_traffic_fee(pid):
                     user_info = User.get_info(uids=[raw['uid'], ])[raw['uid']]
                     if not user_info:
                         continue
 
-                    data = {
+                    row_data_traffic = {
                         'uid': raw['uid'],
                         'picture': user_info['oauth']['picture'],
                         'name': user_info['profile']['badge_name'],
@@ -161,7 +171,7 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                         'howto': raw['data']['howto'],
                     }
 
-                    csv_writer.writerow(data)
+                    csv_writer.writerow(row_data_traffic)
 
                 result = []
                 for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
@@ -175,13 +185,16 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                 csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames_acc)
                 csv_writer.writeheader()
 
+                row_data_acc: Mapping[Literal['uid',
+                                              'picture', 'name', 'key',
+                                              'status'], str] | Mapping[str, Any]
                 for raw in Form.all_accommodation(pid):
                     user_info = User.get_info(uids=[raw['uid'], ])[raw['uid']]
 
                     if not user_info:
                         continue
 
-                    data = {
+                    row_data_acc = {
                         'uid': raw['uid'],
                         'picture': user_info['oauth']['picture'],
                         'name': user_info['profile']['badge_name'],
@@ -189,11 +202,11 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                         'status': raw['data']['status'],
                     }
 
-                    csv_writer.writerow(data)
+                    csv_writer.writerow(row_data_acc)
 
-                result_str = []
+                result = []
                 for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
-                    result_str.append(raw)
+                    result.append(raw_read)
 
                 return jsonify({'result': result})
 
@@ -204,6 +217,9 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                 csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames_app)
                 csv_writer.writeheader()
 
+                row_data_app: Mapping[Literal['uid', 'picture',
+                                              'name', 'available',
+                                              'key', 'value'], str] | Mapping[str, Any]
                 for raw in Form.all_appreciation(pid):
                     if not raw['data']['available']:
                         continue
@@ -213,7 +229,7 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                     if not user_info:
                         continue
 
-                    data = {
+                    row_data_app = {
                         'uid': raw['uid'],
                         'picture': user_info['oauth']['picture'],
                         'name': user_info['profile']['badge_name'],
@@ -221,13 +237,13 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                         'key': raw['data']['key'],
                         'value': raw['data']['value'],
                     }
-                    csv_writer.writerow(data)
+                    csv_writer.writerow(row_data_app)
 
                 result_str = []
                 for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
-                    result_str.append(raw)
+                    result_str.append(raw_read)
 
-                return jsonify({'result': result})
+                return jsonify({'result': result_str})
 
         if data and data['case'] == 'clothes':
             all_users = {}
@@ -248,6 +264,9 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                 csv_writer = csv.DictWriter(str_io, fieldnames=fieldnames)
                 csv_writer.writeheader()
 
+                row_data_clothes: Mapping[Literal['uid', 'picture',
+                                                  'name', '_has_data',
+                                                  'tid', 'clothes', 'htg'], str] | Mapping[str, Any]
                 for raw in Form.all_clothes(pid):
                     if raw['uid'] not in all_users:
                         continue
@@ -258,7 +277,7 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                         all_users[raw['uid']]['htg'] = raw['data']['htg']
 
                 for uid, value in all_users.items():
-                    data = {
+                    row_data_clothes = {
                         'uid': uid,
                         'picture': user_info[uid]['oauth']['picture'],
                         'name': user_info[uid]['profile']['badge_name'],
@@ -267,7 +286,7 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                         'clothes': value.get('clothes'),
                         'htg': value.get('htg'),
                     }
-                    csv_writer.writerow(data)
+                    csv_writer.writerow(row_data_clothes)
 
                 result = []
                 for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
@@ -282,6 +301,9 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                     str_io, fieldnames=fieldnames_parking)
                 csv_writer.writeheader()
 
+                row_data_parking: Mapping[Literal['uid', 'picture',
+                                                  'name', 'carno',
+                                                  'dates'], str] | Mapping[str, Any]
                 for raw in Form.all_parking_card(pid):
                     if not raw['data']['dates']:
                         continue
@@ -291,14 +313,14 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                     if not user_info:
                         continue
 
-                    data = {
+                    row_data_parking = {
                         'uid': raw['uid'],
                         'picture': user_info['oauth']['picture'],
                         'name': user_info['profile']['badge_name'],
                         'carno': raw['data']['carno'],
                         'dates': ', '.join(raw['data']['dates']),
                     }
-                    csv_writer.writerow(data)
+                    csv_writer.writerow(row_data_parking)
 
                 result = []
                 for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
@@ -326,6 +348,8 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                     str_io, fieldnames=fieldnames_drink)
                 csv_writer.writeheader()
 
+                row_data_drink: Mapping[Literal['uid', 'picture', 'name',
+                                                '_has_data', 'tid', 'y18'], str] | Mapping[str, Any]
                 for raw in Form.all_drink(pid):
                     if raw['uid'] not in all_users:
                         continue
@@ -333,7 +357,7 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                     all_users[raw['uid']]['y18'] = raw['data']['y18']
 
                 for uid, value in all_users.items():
-                    data = {
+                    row_data_drink = {
                         'uid': uid,
                         'picture': user_info[uid]['oauth']['picture'],
                         'name': user_info[uid]['profile']['badge_name'],
@@ -341,7 +365,7 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
                         'tid': value['tid'],
                         'y18': value.get('y18'),
                     }
-                    csv_writer.writerow(data)
+                    csv_writer.writerow(row_data_drink)
 
                 result = []
                 for raw_read in csv.reader(io.StringIO(str_io.getvalue())):
@@ -349,11 +373,11 @@ def project_form_api(pid: str) -> str | Response:  # pylint: disable=too-many-lo
 
                 return jsonify({'result': result})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_PROJECT.route('/<pid>/edit/team/api', methods=('GET', 'POST'))
-def project_edit_create_team_api(pid: str) -> Response:  # pylint: disable=too-many-branches
+def project_edit_create_team_api(pid: str) -> ResponseBase:  # pylint: disable=too-many-branches
     ''' Project edit create team API '''
     project = Project.get(pid)
     if not project or not project.owners or g.user['account']['_id'] not in project.owners:
@@ -408,23 +432,23 @@ def project_edit_create_team_api(pid: str) -> Response:  # pylint: disable=too-m
             service_sync_mattermost_add_channel.apply_async(
                 kwargs={'pid': pid, 'uids': list(new_members)})
 
-            return f'{data}'
+            return Response(f'{data}')
 
         if data and data['submittype'] == 'create':
             Team.create(
                 pid=pid, tid=data['tid'], name=data['name'], owners=project.owners)
-            return f'{data}'
+            return Response(f'{data}')
 
-    return '', 404
+    return Response('', status=404)
 
 
 @VIEW_PROJECT.route('/<pid>/')
-def team_page(pid: str) -> str | Response:
+def team_page(pid: str) -> str | ResponseBase:
     ''' Team page '''
     teams = []
     project = Project.get(pid)
     if not project:
-        return 'no data', 404
+        return Response('no data', status=404)
 
     data = [team.dict(by_alias=True) for team in Team.list_by_pid(project.id)]
     uids = []
@@ -466,7 +490,7 @@ def team_page(pid: str) -> str | Response:
 
 
 @VIEW_PROJECT.route('/<pid>/form_traffic_mapping', methods=('GET', 'POST'))
-def project_form_traffic_mapping(pid: str) -> str | Response:
+def project_form_traffic_mapping(pid: str) -> str | ResponseBase:
     ''' Project form traffic mapping '''
     project = Project.get(pid)
     if project and g.user['account']['_id'] not in project.owners:
@@ -493,11 +517,11 @@ def project_form_traffic_mapping(pid: str) -> str | Response:
             result = FormTrafficFeeMapping.save(pid=pid, data=feemapping)
             return jsonify({'data': result['data']})
 
-    return '', 404
+    return Response('', status=404)
 
 
 @VIEW_PROJECT.route('/<pid>/form/accommodation', methods=('GET', 'POST'))
-def project_form_accommodation(pid: str) -> str | Response:  # pylint: disable=too-many-branches
+def project_form_accommodation(pid: str) -> str | ResponseBase:  # pylint: disable=too-many-branches
     ''' Project form accommodation '''
     project = Project.get(pid)
     if project and g.user['account']['_id'] not in project.owners:
@@ -556,11 +580,11 @@ def project_form_accommodation(pid: str) -> str | Response:  # pylint: disable=t
 
             return jsonify({})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)
 
 
 @VIEW_PROJECT.route('/<pid>/dietary_habit', methods=('GET', 'POST'))
-def project_dietary_habit(pid: str) -> str | Response:
+def project_dietary_habit(pid: str) -> str | ResponseBase:
     ''' Project dietary habit '''
     project = Project.get(pid)
     if project and g.user['account']['_id'] not in project.owners:
@@ -600,11 +624,11 @@ def project_dietary_habit(pid: str) -> str | Response:
 
             return jsonify({'datas': datas, 'dietary_habit': dietary_habit_list})
 
-    return '', 404
+    return Response('', status=404)
 
 
 @VIEW_PROJECT.route('/<pid>/contact_book', methods=('GET', 'POST'))
-def project_contact_book(pid: str) -> str | Response:
+def project_contact_book(pid: str) -> str | ResponseBase:
     ''' Project contact book '''
     project = Project.get(pid)
     if project and g.user['account']['_id'] not in project.owners:
@@ -652,4 +676,4 @@ def project_contact_book(pid: str) -> str | Response:
 
             return jsonify({'datas': datas})
 
-    return jsonify({}), 404
+    return jsonify({}, status=404)

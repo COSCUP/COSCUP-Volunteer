@@ -1,8 +1,9 @@
 ''' API '''
 import hashlib
 
-from flask import Blueprint, Response, jsonify, request
+from flask import Blueprint, jsonify, request
 from pydantic import BaseModel, Field
+from werkzeug.wrappers import Response as ResponseBase
 
 from module.team import Team
 from module.users import User
@@ -32,7 +33,7 @@ class ProjectMembersOutput(BaseModel):
 
 
 @VIEW_API.route('/members')
-def project_members() -> Response:
+def project_members() -> ResponseBase:
     ''' List all members '''
     pid = request.args['pid']
 
