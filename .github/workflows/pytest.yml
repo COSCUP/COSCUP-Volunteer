@@ -31,8 +31,8 @@ jobs:
       - name: Create setting.py
         run: mv setting_sample.py setting.py
       - name: Run mypy
-        run: PYTHONPATH=./ poetry run mypy ./models/ ./module/ ./structs/ ./api/ ./celery_task/ ./main.py
+        run: PYTHONPATH=./ poetry run mypy ./view/ ./module/ ./models/ ./celery_task/ ./structs/ ./api/ ./main.py
       - name: Run Testing
         run: PYTHONPATH=./ poetry run pytest -vv --cov-report=term-missing --cov ./
       - name: Run Pylint
-        run: PYTHONPATH=./ poetry run pylint ./module/ ./structs/
+        run: PYTHONPATH=./ poetry run pylint --disable=R0801 ./view/ ./module/ ./models/ ./celery_task/ ./structs/ ./api/ ./main.py
