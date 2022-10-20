@@ -8,5 +8,8 @@
         "--load-plugins", "pydantic.mypy"
     ],
     "python.formatting.provider": "autopep8",
-    "python.poetryPath": "/Users/toomore/Library/Caches/pypoetry/virtualenvs/coscup-volunteer-lGjngVtO-py3.10"
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "git.alwaysSignOff": true,
+    "python.testing.cwd": "${workspaceFolder}"
 }
