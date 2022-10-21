@@ -80,7 +80,7 @@ We use the [docker compose](https://docs.docker.com/compose/) (not `docker-compo
 
 Build the base images first. (**Notice: In this way, you no need to sign in to Docker Desktop account.**)
 
-    docker build -t coscupweb-base:22.10.17 -f ./Dockerfile-base-dev ./
+    docker build -t coscupweb-base:22.10.27 -f ./Dockerfile-base-dev ./
 
 Setup the `setting.py`
 
