@@ -5,6 +5,7 @@ import arrow
 from pydantic import BaseModel, EmailStr, Field, HttpUrl, validator
 
 from api.apistructs.items import ProjectItem, TeamItem
+from structs.projects import ProjectTrafficLocationFeeItem
 
 
 class ProjectAllOut(BaseModel):
@@ -73,3 +74,15 @@ class ProjectTeamDietaryHabitOutput(BaseModel):
     name: str = Field(description='name of dietary habit')
     count: int = Field(description='counts')
     code: str = Field(description='internal code')
+
+
+class ProjectSettingTrafficSubsidyOutput(BaseModel):
+    ''' List of the traffic subsidy '''
+    datas: list[ProjectTrafficLocationFeeItem] = Field(
+        default_factory=list, description='list of datas')
+
+
+class ProjectSettingTrafficSubsidyInput(BaseModel):
+    ''' List of the traffic subsidy input '''
+    datas: list[ProjectTrafficLocationFeeItem] = Field(
+        description='list of datas')

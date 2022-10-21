@@ -8,11 +8,14 @@ from api.apistructs.projects import (ProjectAllOut, ProjectCreateInput,
                                      ProjectCreateOutput,
                                      ProjectItemUpdateInput,
                                      ProjectItemUpdateOutput,
+                                     ProjectSettingTrafficSubsidyInput,
+                                     ProjectSettingTrafficSubsidyOutput,
                                      ProjectTeamDietaryHabitOutput,
                                      ProjectTeamsOutput)
 from api.apistructs.teams import TeamCreateInput, TeamCreateOutput
 from api.dependencies import get_current_user
 from module.dietary_habit import DietaryHabitItemsName, DietaryHabitItemsValue
+from module.form import FormTrafficFeeMapping
 from module.project import Project
 from module.team import Team
 from module.users import User
@@ -202,3 +205,69 @@ async def projects_teams_dietary_habit(
                                                      }))
 
     return datas
+
+
+@router.get('/{pid}/setting/traffic_subsidy',
+            summary='Get traffic subsidy lists. *owners',
+            tags=['owners', ],
+            response_model=ProjectSettingTrafficSubsidyOutput,
+            responses={
+                status.HTTP_404_NOT_FOUND: {'description': 'Project not found'},
+                status.HTTP_401_UNAUTHORIZED: {'description': '`owners` permission required'},
+            },
+            )
+async def projects_traffic(
+        pid: str = Path(..., description='project id'),
+        current_user: dict[str, Any] = Depends(get_current_user),
+) -> ProjectSettingTrafficSubsidyOutput:
+    ''' Get traffic subsidy lists
+
+    Permissions
+    -----------
+    - **owners**
+
+    '''
+
+    project = Project.get(pid=pid)
+    if not project:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    if current_user['uid'] not in project.owners:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    return ProjectSettingTrafficSubsidyOutput.parse_obj({
+        'datas': FormTrafficFeeMapping.get(pid=pid)})
+
+
+@router.put('/{pid}/setting/traffic_subsidy',
+            summary='Update traffic subsidy lists (replace) *owners',
+            tags=['owners', ],
+            response_model=ProjectSettingTrafficSubsidyOutput,
+            responses={
+                status.HTTP_404_NOT_FOUND: {'description': 'Project not found'},
+                status.HTTP_401_UNAUTHORIZED: {'description': '`owners` permission required'},
+            },
+            )
+async def projects_traffic_update(
+        update_data: ProjectSettingTrafficSubsidyInput,
+        pid: str = Path(..., description='project id'),
+        current_user: dict[str, Any] = Depends(get_current_user),
+) -> ProjectSettingTrafficSubsidyOutput:
+    ''' Update traffic subsidy lists (replace)
+
+    Permissions
+    -----------
+    - **owners**
+
+    '''
+
+    project = Project.get(pid=pid)
+    if not project:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    if current_user['uid'] not in project.owners:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    result = FormTrafficFeeMapping.save(pid=pid, datas=update_data.datas)
+
+    return ProjectSettingTrafficSubsidyOutput.parse_obj({'datas': result})
