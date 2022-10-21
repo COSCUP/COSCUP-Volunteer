@@ -61,7 +61,7 @@ omit = ["setting_sample.py", "setting.py", "tests/*"]
 
 # https://githb.com/PyCQA/isort/wiki/isort-Settings
 [tool.isort]
-virtual_env = "./venv"
+virtual_env = "./.venv"
 
 [tool.mypy]
 # --strict
