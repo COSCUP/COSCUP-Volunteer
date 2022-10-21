@@ -483,7 +483,7 @@ def team_form_api(pid: str, tid: str) -> ResponseBase:
         if request.args['case'] == 'traffic_fee':
             data = FormTrafficFeeMapping.get(pid=pid)
             if data is not None:
-                return jsonify({'locations': list(data['data'].items())})
+                return jsonify({'locations': [(item.location, item.fee) for item in data]})
 
         return jsonify(request.args)
 
@@ -607,8 +607,7 @@ def team_form_traffic_fee(pid: str, tid: str) -> str | ResponseBase:
     user = g.user['account']
     feemapping = FormTrafficFeeMapping.get(pid=pid)
 
-    if project.traffic_fee_doc and \
-            feemapping and 'data' in feemapping and feemapping['data']:
+    if project.traffic_fee_doc and feemapping:
         if 'profile_real' in user and 'bank' in user['profile_real']:
             _short_check = []
             for k in ('name', 'branch', 'no', 'code'):
@@ -636,7 +635,8 @@ def team_form_traffic_fee(pid: str, tid: str) -> str | ResponseBase:
                                data=data, is_ok_submit=is_ok_submit)
 
     if request.method == 'POST':
-        if is_ok_submit and feemapping and request.form['fromwhere'] in feemapping['data']:
+        if is_ok_submit and feemapping and \
+                request.form['fromwhere'] in [item.location for item in feemapping]:
             fee_data: FeeMapping = FeeMapping.parse_obj({
                 'fee': int(request.form['fee']),
                 'howto': request.form['howto'].strip(),

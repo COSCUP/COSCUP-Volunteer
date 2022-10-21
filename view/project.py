@@ -3,12 +3,11 @@ import csv
 import io
 import logging
 import math
-from typing import Mapping, Literal, Any
+from typing import Any, Literal, Mapping
 
 import arrow
-from flask import (Blueprint, g, jsonify, redirect, render_template,
-                   request, url_for)
-
+from flask import (Blueprint, g, jsonify, redirect, render_template, request,
+                   url_for)
 from flask.wrappers import Response
 from werkzeug.wrappers import Response as ResponseBase
 
@@ -23,7 +22,7 @@ from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.team import Team
 from module.users import User
-from structs.projects import ProjectBaseUpdate
+from structs.projects import ProjectBaseUpdate, ProjectTrafficLocationFeeItem
 
 VIEW_PROJECT = Blueprint('project', __name__, url_prefix='/project')
 
@@ -504,18 +503,23 @@ def project_form_traffic_mapping(pid: str) -> str | ResponseBase:
         data = request.get_json()
         if data and 'casename' in data and data['casename'] == 'init':
             return jsonify({
-                'base': {'loaction': '', 'fee': 0},
-                'data': (FormTrafficFeeMapping.get(pid=pid) or {}).get('data', []),
+                'base': ProjectTrafficLocationFeeItem().dict(),
+                'data': {item.location: item.fee for item in FormTrafficFeeMapping.get(pid=pid)},
             })
 
         if data and 'casename' in data and data['casename'] == 'save':
-            feemapping = {}
+            feemapping = []
             for raw in data['data']:
                 if raw['location'].strip():
-                    feemapping[raw['location'].strip()] = raw['fee']
+                    feemapping.append(
+                        ProjectTrafficLocationFeeItem.parse_obj(raw))
 
-            result = FormTrafficFeeMapping.save(pid=pid, data=feemapping)
-            return jsonify({'data': result['data']})
+            saved = FormTrafficFeeMapping.save(pid=pid, datas=feemapping)
+            result = {}
+            for item in saved:
+                result[item.location] = item.fee
+
+            return jsonify({'data': result})
 
     return Response('', status=404)
 

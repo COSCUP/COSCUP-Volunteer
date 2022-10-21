@@ -74,3 +74,20 @@ class ProjectBaseUpdate(BaseModel):
         '*', pre=True, allow_reuse=True)(skip_empty_str)
     _validate_convert_action_date = validator(
         'action_date', pre=True, allow_reuse=True)(convert_action_date)
+
+
+class ProjectTrafficLocationFeeItem(BaseModel):
+    ''' ProjectTrafficLocationFeeItem '''
+    location: str = Field(default='', description='location')
+    fee: int = Field(default=0, description='fee in TWD', gt=0)
+
+    class Config:
+        ''' Config '''
+        # pylint: disable=too-few-public-methods
+        anystr_strip_whitespace = True
+
+
+class ProjectTrafficLocationFee(BaseModel):
+    ''' ProjectTrafficLocationFee '''
+    data: list[ProjectTrafficLocationFeeItem] = Field(
+        description='list of data')

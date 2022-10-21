@@ -8,6 +8,7 @@ from pymongo.collection import ReturnDocument
 
 from models.formdb import FormDB, FormTrafficFeeMappingDB
 from module.users import User
+from structs.projects import ProjectTrafficLocationFeeItem
 
 
 class Form:  # pylint: disable=too-many-public-methods
@@ -368,7 +369,8 @@ class FormTrafficFeeMapping:
     ''' FormTrafficFeeMapping object '''
 
     @staticmethod
-    def save(pid: str, data: dict[str, Any]) -> dict[str, Any]:
+    def save(pid: str, datas: list[ProjectTrafficLocationFeeItem]) -> list[
+            ProjectTrafficLocationFeeItem]:
         ''' Save mapping data
 
         :param str pid: pid
@@ -376,20 +378,26 @@ class FormTrafficFeeMapping:
 
         Args:
             pid (str): Project id.
-            data (dict): location/fee mapping datas.
+            datas (list): location/fee mapping datas.
 
         Returns:
             Return the saved data.
 
         '''
         _data = {}
-        for location in data:
-            _data[location.strip()] = int(data[location])
+        for item in datas:
+            _data[item.location] = item.fee
 
-        return FormTrafficFeeMappingDB().save(pid=pid, data=_data)
+        result = []
+        saved = FormTrafficFeeMappingDB().save(pid=pid, data=_data)
+        for location, fee in saved['data'].items():
+            result.append(ProjectTrafficLocationFeeItem.parse_obj({
+                'location': location, 'fee': fee}))
+
+        return result
 
     @staticmethod
-    def get(pid: str) -> Optional[dict[str, Any]]:
+    def get(pid: str) -> list[ProjectTrafficLocationFeeItem]:
         ''' Get
 
         :param str pid: pid
@@ -401,7 +409,15 @@ class FormTrafficFeeMapping:
             The data or `None`.
 
         '''
-        return FormTrafficFeeMappingDB().find_one({'_id': pid})
+        result = []
+        datas = FormTrafficFeeMappingDB().find_one({'_id': pid})
+        if datas and 'data' in datas:
+            for location, fee in datas['data'].items():
+                result.append(ProjectTrafficLocationFeeItem.parse_obj({
+                    'location': location,
+                    'fee': fee,
+                }))
+        return result
 
 
 class FormAccommodation:
