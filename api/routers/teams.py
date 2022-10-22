@@ -1,11 +1,12 @@
 ''' Teams '''
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Path, status
+from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
 
 from api.apistructs.items import TeamItem, UserItem
 from api.apistructs.teams import (TeamAddressBookOutput, TeamItemUpdateInput,
-                                  TeamItemUpdateOutput)
+                                  TeamItemUpdateOutput, TeamUpdateMembers,
+                                  TeamUpdateMembersOutput)
 from api.dependencies import get_current_user
 from module.mattermost_bot import MattermostTools
 from module.team import Team
@@ -138,3 +139,115 @@ async def teams_one_address_book(
         datas.sort(key=lambda data: data.is_chief or False, reverse=True)
 
     return TeamAddressBookOutput.parse_obj({'datas': datas})
+
+
+@router.patch('/{pid}/{tid}/chiefs',
+              summary='Add users into team as chiefs *owners, *members',
+              response_model=TeamUpdateMembersOutput,
+              responses={
+                  status.HTTP_401_UNAUTHORIZED: {'description': 'You are not the member.'},
+                  status.HTTP_404_NOT_FOUND: {'description': 'Project not found'},
+                  status.HTTP_409_CONFLICT: {'description': 'Update fail.'},
+              },
+              response_model_exclude_none=True,
+              )
+@router.delete('/{pid}/{tid}/chiefs',
+               summary='Remove users from team as chiefs *owners, *members',
+               response_model=TeamUpdateMembersOutput,
+               responses={
+                   status.HTTP_401_UNAUTHORIZED: {'description': 'You are not the member.'},
+                   status.HTTP_404_NOT_FOUND: {'description': 'Project not found'},
+                   status.HTTP_409_CONFLICT: {'description': 'Update fail.'},
+               },
+               response_model_exclude_none=True,
+               )
+async def teams_chiefs_update(
+        update_data: TeamUpdateMembers,
+        request: Request,
+        pid: str = Path(..., description='project id'),
+        tid: str = Path(..., description='team id'),
+        current_user: dict[str, Any] = Depends(get_current_user)) -> TeamUpdateMembersOutput:
+    ''' Update team's chiefs
+
+    - **pid**: project id
+    - **tid**: team id
+
+    Permissions
+    -----------
+    - **owners**
+    - **chiefs**
+
+    '''
+    team = Team.get(pid=pid, tid=tid)
+    if not team:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    teamusers = TeamUsers.parse_obj(team)
+    if current_user['uid'] not in (teamusers.owners + teamusers.chiefs):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    if request.method == 'PATCH':
+        Team.update_chiefs(pid=pid, tid=tid, add_uids=update_data.uids)
+        return TeamUpdateMembersOutput(status=True)
+
+    if request.method == 'DELETE':
+        Team.update_chiefs(pid=pid, tid=tid, del_uids=update_data.uids)
+        return TeamUpdateMembersOutput(status=True)
+
+    raise HTTPException(status_code=status.HTTP_409_CONFLICT)
+
+
+@router.patch('/{pid}/{tid}/members',
+              summary='Add users into team as members *owners, *members',
+              response_model=TeamUpdateMembersOutput,
+              responses={
+                  status.HTTP_401_UNAUTHORIZED: {'description': 'You are not the member.'},
+                  status.HTTP_404_NOT_FOUND: {'description': 'Project not found'},
+                  status.HTTP_409_CONFLICT: {'description': 'Update fail.'},
+              },
+              response_model_exclude_none=True,
+              )
+@router.delete('/{pid}/{tid}/members',
+               summary='Remove users from team as members *owners, *members',
+               response_model=TeamUpdateMembersOutput,
+               responses={
+                   status.HTTP_401_UNAUTHORIZED: {'description': 'You are not the member.'},
+                   status.HTTP_404_NOT_FOUND: {'description': 'Project not found'},
+                   status.HTTP_409_CONFLICT: {'description': 'Update fail.'},
+               },
+               response_model_exclude_none=True,
+               )
+async def teams_members_update(
+        update_data: TeamUpdateMembers,
+        request: Request,
+        pid: str = Path(..., description='project id'),
+        tid: str = Path(..., description='team id'),
+        current_user: dict[str, Any] = Depends(get_current_user)) -> TeamUpdateMembersOutput:
+    ''' Update team's members
+
+    - **pid**: project id
+    - **tid**: team id
+
+    Permissions
+    -----------
+    - **owners**
+    - **chiefs**
+
+    '''
+    team = Team.get(pid=pid, tid=tid)
+    if not team:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    teamusers = TeamUsers.parse_obj(team)
+    if current_user['uid'] not in (teamusers.owners + teamusers.chiefs):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    if request.method == 'PATCH':
+        Team.update_members(pid=pid, tid=tid, add_uids=update_data.uids)
+        return TeamUpdateMembersOutput(status=True)
+
+    if request.method == 'DELETE':
+        Team.update_members(pid=pid, tid=tid, del_uids=update_data.uids)
+        return TeamUpdateMembersOutput(status=True)
+
+    raise HTTPException(status_code=status.HTTP_409_CONFLICT)
