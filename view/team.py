@@ -7,8 +7,8 @@ from typing import Any, Callable
 
 import arrow
 import phonenumbers
-from flask import (Blueprint, g, jsonify, redirect, render_template, request,
-                   url_for)
+from flask import (Blueprint, g, jsonify, make_response, redirect,
+                   render_template, request, url_for)
 from flask.wrappers import Response
 from markdown import markdown
 from pydantic import BaseModel, Field
@@ -182,7 +182,7 @@ def members(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-ma
             return jsonify({'members': result_members, 'teams': list_teams,
                             'tags': tags, 'members_tags': members_tags})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit', methods=('GET', 'POST'))
@@ -400,7 +400,7 @@ def team_edit_user_api(pid: str, tid: str) -> ResponseBase:  # pylint: disable=t
     if request.method == 'POST':
         data = request.json
         if not data:
-            return jsonify({}, status=404)
+            return make_response({}, 404)
 
         if data['result'] == 'approval':
             all_members = len(set(teamusers.members + teamusers.chiefs))
@@ -421,7 +421,7 @@ def team_edit_user_api(pid: str, tid: str) -> ResponseBase:  # pylint: disable=t
 
         return jsonify({'status': 'ok'})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/join_to', methods=('GET', 'POST'))
@@ -487,7 +487,7 @@ def team_form_api(pid: str, tid: str) -> ResponseBase:
 
         return jsonify(request.args)
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/accommodation', methods=('GET', 'POST'))
@@ -707,7 +707,7 @@ def team_form_volunteer_certificate(pid: str, tid: str) -> str | ResponseBase:
         return redirect(url_for('team.team_form_volunteer_certificate',
                                 pid=team.pid, tid=team.id, _scheme='https', _external=True))
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 class AppreciationData(BaseModel):
@@ -790,7 +790,7 @@ def team_form_appreciation(pid: str, tid: str) -> str | ResponseBase:
         return redirect(url_for('team.team_form_appreciation',
                                 pid=team.pid, tid=team.id, _scheme='https', _external=True))
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/clothes', methods=('GET', 'POST'))
@@ -891,7 +891,7 @@ def team_form_drink(pid: str, tid: str) -> str | ResponseBase:
 
         return jsonify({'data': post_data})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/form/parking_card', methods=('GET', 'POST'))
@@ -943,7 +943,7 @@ def team_form_parking_card(pid: str, tid: str) -> str | ResponseBase:
 
                 return jsonify({})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/plan/edit', methods=('GET', 'POST'))
@@ -974,7 +974,7 @@ def team_plan_edit(pid: str, tid: str) -> str | ResponseBase:
     if request.method == 'POST':  # pylint: disable=too-many-nested-blocks
         data = request.get_json()
         if not data:
-            return jsonify({}, status=404)
+            return make_response({}, 404)
 
         today = arrow.now().format('YYYY-MM-DD')
         default = {'title': '', 'desc': '', 'start': today, 'end': '',
@@ -1079,7 +1079,7 @@ def team_plan_edit(pid: str, tid: str) -> str | ResponseBase:
 
         return jsonify({'data': [], 'default': default})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/expense/', methods=('GET', 'POST'))
@@ -1132,7 +1132,7 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
                 pid=project.id, budget_id=data['buid'])
             return jsonify({'data': list(data)})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/expense/lists', methods=('GET', 'POST'))
@@ -1259,4 +1259,4 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
 
             return jsonify({})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)

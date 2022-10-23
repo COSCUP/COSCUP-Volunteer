@@ -2,8 +2,8 @@
 from typing import Any
 
 import arrow
-from flask import (Blueprint, g, jsonify, redirect, render_template, request,
-                   url_for)
+from flask import (Blueprint, g, jsonify, make_response, redirect,
+                   render_template, request, url_for)
 from flask.wrappers import Response
 from werkzeug.wrappers import Response as ResponseBase
 
@@ -73,7 +73,7 @@ def project(pid: str) -> str | ResponseBase:
 
         if post_data and post_data['casename'] == 'star':
             if not uid:
-                return jsonify({'info': 'Need login'}, status=401)
+                return make_response({'info': 'Need login'}, 401)
 
             result = TasksStar.toggle(pid=pid, uid=uid)
 
@@ -81,7 +81,7 @@ def project(pid: str) -> str | ResponseBase:
 
         if post_data and post_data['casename'] == 'join':
             if not uid:
-                return jsonify({'info': 'Need login'}, status=401)
+                return make_response({'info': 'Need login'}, 401)
 
             data = Tasks.join(pid=pid, task_id=post_data['task_id'], uid=uid)
             page_args(data=data, uid=uid)
@@ -90,7 +90,7 @@ def project(pid: str) -> str | ResponseBase:
 
         if post_data and post_data['casename'] == 'cancel':
             if not uid:
-                return jsonify({'info': 'Need login'}, status=401)
+                return make_response({'info': 'Need login'}, 401)
 
             data = Tasks.cancel(pid=pid, task_id=post_data['task_id'], uid=uid)
             page_args(data=data, uid=uid)
@@ -99,10 +99,10 @@ def project(pid: str) -> str | ResponseBase:
 
         if post_data and post_data['casename'] == 'cancel_user':
             if not uid:
-                return jsonify({'info': 'Need login'}, status=401)
+                return make_response({'info': 'Need login'}, 401)
 
             if not is_in_project:
-                return jsonify({'info': 'Need as staff'}, status=401)
+                return make_response({'info': 'Need as staff'}, 401)
 
             data = Tasks.cancel(
                 pid=pid, task_id=post_data['task_id'], uid=post_data['uid'])
@@ -113,13 +113,13 @@ def project(pid: str) -> str | ResponseBase:
         if post_data and post_data['casename'] == 'peoples':
             task_data = Tasks.get_with_pid(pid=pid, _id=post_data['task_id'])
             if not task_data:
-                return jsonify({}, status=404)
+                return make_response({}, 404)
 
             users_info = Tasks.get_peoples_info(
                 pid=pid, task_id=post_data['task_id'])
 
             if not users_info:
-                return jsonify(response={}, status=404)
+                return make_response({}, 404)
 
             creator = {}
             if task_data:
@@ -153,7 +153,7 @@ def project(pid: str) -> str | ResponseBase:
 
             return jsonify({'peoples': peoples, 'creator': creator})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_TASKS.route('/<pid>/add', methods=('GET', 'POST'))
@@ -163,7 +163,7 @@ def add(pid: str, task_id: str | None = None) -> str | ResponseBase:
     # pylint: disable=too-many-return-statements,too-many-branches
     uid = g.get('user', {}).get('account', {}).get('_id')
     if not uid:
-        return jsonify({'info': 'Need login'}, status=401)
+        return make_response({'info': 'Need login'}, 401)
 
     is_in_project = False
     for _ in Team.participate_in(uid=uid, pid=[pid, ]):
@@ -171,7 +171,7 @@ def add(pid: str, task_id: str | None = None) -> str | ResponseBase:
         break
 
     if not is_in_project:
-        return jsonify({'info': 'Not in project'}, status=401)
+        return make_response({'info': 'Not in project'}, 401)
 
     project_info = Project.get(pid=pid)
     if not project_info:
@@ -213,7 +213,7 @@ def add(pid: str, task_id: str | None = None) -> str | ResponseBase:
         if post_data and post_data['casename'] == 'del':
             data = Tasks.get_with_pid(pid=pid, _id=post_data['task_id'])
             if not data:
-                return jsonify({}, status=404)
+                return make_response({}, 404)
 
             if data['created_by'] == g.user['account']['_id']:
                 Tasks.delete(pid=pid, _id=data['_id'])
@@ -221,7 +221,7 @@ def add(pid: str, task_id: str | None = None) -> str | ResponseBase:
         if task_id and post_data and post_data['casename'] == 'get':
             data = Tasks.get_with_pid(pid=pid, _id=task_id)
             if not data:
-                return jsonify({}, status=404)
+                return make_response({}, 404)
 
             starttime_task = arrow.get(data['starttime']).to('Asia/Taipei')
             data['date'] = starttime_task.format('YYYY-MM-DD')
@@ -272,7 +272,7 @@ def read(pid: str, task_id: str) -> str | ResponseBase:
 
     if request.method == 'POST':
         if not uid:
-            return jsonify({'info': 'Need login'}, status=401)
+            return make_response({'info': 'Need login'}, 401)
 
         post_data = request.get_json()
         if post_data and post_data['casename'] == 'join':

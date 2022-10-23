@@ -6,8 +6,8 @@ import math
 from typing import Any, Literal, Mapping
 
 import arrow
-from flask import (Blueprint, g, jsonify, redirect, render_template, request,
-                   url_for)
+from flask import (Blueprint, g, jsonify, make_response, redirect,
+                   render_template, request, url_for)
 from flask.wrappers import Response
 from werkzeug.wrappers import Response as ResponseBase
 
@@ -372,7 +372,7 @@ def project_form_api(pid: str) -> str | ResponseBase:  # pylint: disable=too-man
 
                 return jsonify({'result': result})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_PROJECT.route('/<pid>/edit/team/api', methods=('GET', 'POST'))
@@ -584,7 +584,7 @@ def project_form_accommodation(pid: str) -> str | ResponseBase:  # pylint: disab
 
             return jsonify({})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_PROJECT.route('/<pid>/dietary_habit', methods=('GET', 'POST'))
@@ -680,4 +680,4 @@ def project_contact_book(pid: str) -> str | ResponseBase:
 
             return jsonify({'datas': datas})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
