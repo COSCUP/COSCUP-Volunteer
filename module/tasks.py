@@ -1,5 +1,4 @@
 ''' Task '''
-from datetime import datetime
 from typing import Any, Generator, Optional
 
 from pymongo.collection import ReturnDocument
@@ -13,8 +12,7 @@ class Tasks:
     ''' Tasks class '''
 
     @classmethod
-    def add(cls, pid: str, body: dict[str, Any],
-            endtime: Optional[datetime] = None, task_id: Optional[str] = None) -> dict[str, Any]:
+    def add(cls, pid: str, body: dict[str, Any]) -> dict[str, Any]:
         ''' add new task
 
         Args:
@@ -27,17 +25,12 @@ class Tasks:
                 - `limit`: `int` User limit.
                 - `starttime`: Start time in ISO8601.
 
-            endtime (datetime): End time in ISO8601.
             task_id (str): Task id
 
         '''
-        data = TasksDB.new(pid=pid, body=body, endtime=endtime)
+        data = body
 
-        if task_id is not None:
-            if not cls.get_with_pid(pid=pid, _id=task_id):
-                raise Exception(f'No task_id: {task_id}')
-
-            data['_id'] = task_id
+        if cls.get_with_pid(pid=pid, _id=data['_id']):
             data.pop('people', None)
             data.pop('created_by', None)
             data.pop('created_at', None)

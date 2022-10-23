@@ -13,6 +13,7 @@ from module.project import Project
 from module.tasks import Tasks, TasksStar
 from module.team import Team
 from module.users import User
+from structs.tasks import TaskItem
 
 VIEW_TASKS = Blueprint('tasks', __name__, url_prefix='/tasks')
 
@@ -118,7 +119,7 @@ def project(pid: str) -> str | ResponseBase:
                 pid=pid, task_id=post_data['task_id'])
 
             if not users_info:
-                return jsonify({}, status=404)
+                return jsonify(response={}, status=404)
 
             creator = {}
             if task_data:
@@ -186,32 +187,24 @@ def add(pid: str, task_id: str | None = None) -> str | ResponseBase:
 
         if post_data and post_data['casename'] == 'add':
             data = post_data['data']
-            starttime = arrow.get(f"{data['date']} {data['starttime']}",
-                                  tzinfo='Asia/Taipei').naive
-            endtime = None
-            task_id = None
+            task_item = TaskItem(pid=pid, created_by=uid, desc=data['desc'])
+            task_item.title = data['title']
+            task_item.cate = data['cate']
+            task_item.limit = data['limit']
 
+            task_item.starttime = arrow.get(f"{data['date']} {data['starttime']}",
+                                            tzinfo='Asia/Taipei').naive
             if 'endtime' in data and data['endtime']:
-                endtime = arrow.get(f"{data['date']} {data['endtime']}",
-                                    tzinfo='Asia/Taipei').naive
+                task_item.endtime = arrow.get(f"{data['date']} {data['endtime']}",
+                                              tzinfo='Asia/Taipei').naive
 
-            if 'task_id' in post_data:
-                task_id = post_data['task_id']
-
-            send_star = False
-            if 'task_id' in post_data and not post_data['task_id']:
-                send_star = True
+            if 'task_id' in post_data and post_data['task_id']:
+                task_item.id = post_data['task_id']
 
             raw = Tasks.add(pid=pid,
-                            body={'title': data['title'].strip(),
-                                  'cate': data['cate'].strip(),
-                                  'desc': data['desc'],
-                                  'limit': max((1, int(data['limit']))),
-                                  'starttime': starttime,
-                                  'created_by': uid},
-                            endtime=endtime, task_id=task_id)
+                            body=task_item.dict(by_alias=True))
 
-            if send_star:
+            if 'task_id' in post_data and not post_data['task_id']:
                 mail_tasks_star.apply_async(
                     kwargs={'pid': pid, 'task_id': raw['_id']})
 
