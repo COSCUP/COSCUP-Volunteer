@@ -10,6 +10,12 @@
     "python.formatting.provider": "autopep8",
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "-vv",
+        "--cov-report=term-missing",
+        "--cov"
+    ],
     "git.alwaysSignOff": true,
-    "python.testing.cwd": "${workspaceFolder}"
+    "python.testing.cwd": "${workspaceFolder}",
+    "python.envFile": "${workspaceFolder}/.env"
 }
