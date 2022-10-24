@@ -28,12 +28,14 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.local
-          key: poetry-local
+          key: poetry-local-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: poetry-local-
       - name: Cache Poetry cache
         uses: actions/cache@v3
         with:
           path: ~/.cache
-          key: poetry-cache
+          key: poetry-cache-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: poetry-cache-
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
         with:
