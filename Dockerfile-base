@@ -1,4 +1,4 @@
-FROM alpine:3.16.2
+FROM 3.11.0-alpine3.16
 
 WORKDIR /app
 ADD pyproject.toml poetry.lock ./
