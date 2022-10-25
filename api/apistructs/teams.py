@@ -59,3 +59,9 @@ class TeamUpdateMembers(BaseModel):
 class TeamUpdateMembersOutput(BaseModel):
     ''' TeamUpdateMembersOutput '''
     status: bool = Field(default=False, description='output status')
+
+
+class TeamGetVolunteersOutput(BaseModel):
+    ''' TeamGetVolunteersOutput '''
+    datas: list[UserItem] = Field(
+        default_factory=list, description='list of users')
