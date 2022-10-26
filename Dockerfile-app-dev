@@ -103,6 +103,7 @@ ADD ./view/utils.py ./view/utils.py
 
 ADD ./structs/__init__.py ./structs/__init__.py
 ADD ./structs/projects.py ./structs/projects.py
+ADD ./structs/tasks.py ./structs/tasks.py
 ADD ./structs/teams.py ./structs/teams.py
 ADD ./structs/users.py ./structs/users.py
 

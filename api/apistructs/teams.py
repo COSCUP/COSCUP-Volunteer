@@ -45,3 +45,23 @@ class TeamCreateInput(BaseModel):
 
 class TeamCreateOutput(TeamCreateInput):
     ''' TeamCreateOutput '''
+
+
+class TeamUpdateMembers(BaseModel):
+    ''' TeamUpdateMembers '''
+    uids: list[str] = Field(description='uids')
+
+    class Config:  # pylint: disable=too-few-public-methods
+        ''' Config '''
+        anystr_strip_whitespace = True
+
+
+class TeamUpdateMembersOutput(BaseModel):
+    ''' TeamUpdateMembersOutput '''
+    status: bool = Field(default=False, description='output status')
+
+
+class TeamGetVolunteersOutput(BaseModel):
+    ''' TeamGetVolunteersOutput '''
+    datas: list[UserItem] = Field(
+        default_factory=list, description='list of users')

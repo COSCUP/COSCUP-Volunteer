@@ -5,8 +5,8 @@ from typing import Any, Callable
 
 import arrow
 import phonenumbers
-from flask import (Blueprint, g, jsonify, redirect, render_template, request,
-                   session, url_for)
+from flask import (Blueprint, g, jsonify, make_response, redirect,
+                   render_template, request, session, url_for)
 from flask.wrappers import Response
 from werkzeug.wrappers import Response as ResponseBase
 
@@ -94,7 +94,7 @@ def profile_page() -> str | ResponseBase:
 
         return jsonify({})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_SETTING.route('/profile_real', methods=('GET', 'POST'))
@@ -191,7 +191,7 @@ def profile_real() -> str | ResponseBase:
 
             return jsonify(user_profile_real.dict(exclude_none=True))
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_SETTING.route('/link/chat', methods=('GET', 'POST'))
@@ -234,7 +234,7 @@ def link_telegram() -> str | ResponseBase:
 
         return jsonify({})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_SETTING.route('/security', methods=('GET', 'POST'))
@@ -279,7 +279,7 @@ def security() -> str | ResponseBase:
             USession.make_dead(sid=data['sid'], uid=g.user['account']['_id'])
             return jsonify(data)
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_SETTING.route('/waitting')
@@ -326,4 +326,4 @@ def api_token() -> str | Response:
                 'password': temp_account.password,
             }})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)

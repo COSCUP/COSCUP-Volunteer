@@ -3,7 +3,8 @@ import csv
 import io
 from datetime import datetime
 
-from flask import Blueprint, g, jsonify, redirect, render_template, request
+from flask import (Blueprint, g, jsonify, make_response, redirect,
+                   render_template, request)
 from flask.wrappers import Response
 from werkzeug.wrappers import Response as ResponseBase
 
@@ -70,7 +71,7 @@ def by_project_index(pid: str) -> str | ResponseBase:
 
             return jsonify({'result': result})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_EXPENSE.route('/<pid>/dl', methods=('GET', 'POST'))

@@ -4,7 +4,8 @@ import io
 import random
 
 import arrow
-from flask import Blueprint, g, jsonify, redirect, render_template, request
+from flask import (Blueprint, g, jsonify, make_response, redirect,
+                   render_template, request)
 from werkzeug.wrappers import Response as ResponseBase
 
 from celery_task.task_sendermailer import sender_mailer_start
@@ -140,7 +141,7 @@ def campaign_content(pid: str, tid: str, cid: str) -> str | ResponseBase:  # pyl
             )
             return jsonify({'mail': resp['mail']})
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/receiver', methods=('GET', 'POST'))
@@ -237,7 +238,7 @@ def campaign_receiver(pid: str, tid: str, cid: str) -> str | ResponseBase:
                             'uploadtype': request.form['uploadtype'],
                             })
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/schedule', methods=('GET', 'POST'))
@@ -390,4 +391,4 @@ def campaign_schedule(pid: str, tid: str, cid: str) -> str | ResponseBase:
 
             return jsonify(data)
 
-    return jsonify({}, status=404)
+    return make_response({}, 404)

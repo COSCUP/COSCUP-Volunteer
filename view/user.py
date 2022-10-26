@@ -5,8 +5,10 @@ from typing import Any, Callable
 from urllib.parse import quote_plus
 
 import arrow
-from flask import Blueprint, Response, redirect, render_template, url_for
+from flask import Blueprint, redirect, render_template, url_for
+from flask.wrappers import Response
 from markdown import markdown
+from werkzeug.wrappers import Response as ResponseBase
 
 from module.gsuite import GSuite
 from module.mattermost_bot import MattermostTools
@@ -26,17 +28,17 @@ def index() -> str:
 
 @VIEW_USER.route('/<uid>/<nickname>')
 @VIEW_USER.route('/<uid>')
-def user_page(uid: str, nickname: str | None = None) -> Response | str:  # pylint: disable=too-many-branches
+def user_page(uid: str, nickname: str | None = None) -> ResponseBase | str:  # pylint: disable=too-many-branches
     ''' User page '''
     user = User(uid=uid).get()
 
     if not user:
-        return '', 200
+        return Response('', status=200)
 
     oauth = OAuth(user['mail']).get()
 
     if not oauth:
-        return '', 404
+        return Response('', status=404)
 
     if 'data' in oauth and 'picture' in oauth['data']:
         oauth['data']['picture'] = GSuite.size_picture(

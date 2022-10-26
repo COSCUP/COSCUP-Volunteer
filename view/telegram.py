@@ -2,7 +2,9 @@
 import logging
 
 import arrow
-from flask import Blueprint, Response, g, redirect, request, url_for
+from flask import Blueprint, g, redirect, request, url_for
+from flask.wrappers import Response
+from werkzeug.wrappers import Response as ResponseBase
 
 import setting
 from models.telegram_db import TelegramDB
@@ -13,7 +15,7 @@ VIEW_TELEGRAM = Blueprint('telegram', __name__, url_prefix='/telegram')
 
 
 @VIEW_TELEGRAM.route('/r', methods=('POST', ))
-def receive() -> Response:
+def receive() -> ResponseBase:
     ''' receive '''
     data = request.get_json()
     logging.info('[telegram] %s', data)
@@ -34,17 +36,17 @@ def receive() -> Response:
 
         logging.info('[Telegram][Send] %s', resp.json())
 
-    return '', 200
+    return Response('', status=200)
 
 
 @VIEW_TELEGRAM.route('/verify/<tg_uuid>', methods=('GET', 'POST'))
-def link_telegram_verify(tg_uuid: str) -> Response:
+def link_telegram_verify(tg_uuid: str) -> ResponseBase:
     ''' Link Telegram verify '''
     if request.method == 'GET':
         mem_cache = MC.get_client()
         data = mem_cache.get(f'tg:{tg_uuid}')
         if not data:
-            return 'Expired. `/linkme` again', 406
+            return Response('Expired. `/linkme` again', status=406)
 
         user_data = mem_cache.get(f"tgu:{data['chat_id']}")
         if data and user_data:
@@ -65,6 +67,6 @@ def link_telegram_verify(tg_uuid: str) -> Response:
 
             return redirect(url_for('setting.link_telegram', _scheme='https', _external=True))
 
-        return 'Expired. `/linkme` again', 406
+        return Response('Expired. `/linkme` again', status=406)
 
-    return '', 404
+    return Response('', status=404)
