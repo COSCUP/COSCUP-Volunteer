@@ -16,8 +16,8 @@ jobs:
   build:
     strategy:
       matrix:
-        os: ['ubuntu-20.04', 'ubuntu-22.04']
-        python-version: ['3.10', '3.11']
+        os: ['ubuntu-22.04']
+        python-version: ['3.10']
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -32,19 +32,19 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./.venv
-          key: poetry-venv-${{ hashFiles('**/poetry.lock') }}
+          key: poetry-venv-${{ matrix.python-version }}${{ hashFiles('**/poetry.lock') }}
           restore-keys: poetry-venv-
       - name: Cache Poetry local
         uses: actions/cache@v3
         with:
           path: ~/.local
-          key: poetry-local-${{ hashFiles('**/poetry.lock') }}
+          key: poetry-local-${{ matrix.python-version }}${{ hashFiles('**/poetry.lock') }}
           restore-keys: poetry-local-
       - name: Cache Poetry cache
         uses: actions/cache@v3
         with:
           path: ~/.cache
-          key: poetry-cache-${{ hashFiles('**/poetry.lock') }}
+          key: poetry-cache-${{ matrix.python-version }}${{ hashFiles('**/poetry.lock') }}
           restore-keys: poetry-cache-
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
