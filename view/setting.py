@@ -310,7 +310,7 @@ def waitting() -> str:
 
 
 @VIEW_SETTING.route('/api_token', methods=('GET', 'POST'))
-def api_token() -> str | Response:
+def api_token() -> str | ResponseBase:
     ''' API Token'''
     if request.method == 'GET':
         return render_template('./setting_api_token.html')
@@ -325,5 +325,14 @@ def api_token() -> str | Response:
                 'username': temp_account.username,
                 'password': temp_account.password,
             }})
+
+    return make_response({}, 404)
+
+
+@VIEW_SETTING.route('/waitting')
+def mails() -> str | ResponseBase:
+    ''' about mails '''
+    if request.method == 'GET':
+        return render_template('./setting_mails.html')
 
     return make_response({}, 404)

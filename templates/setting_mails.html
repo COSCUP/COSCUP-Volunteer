@@ -1,0 +1,35 @@
+{% extends "setting.html" %}
+{% block head_title_setting %}郵件通知{% endblock %}
+{% block setting_mails %}is-active{% endblock %}
+{% block setting_body %}
+<div class="columns">
+    <div id="stmails" class="column" v-cloak>
+        <div class='content'>
+            <h3>歡迎信</h3>
+            <p></p>
+            <button class="button is-info is-outlined is-light" @click="resend_welcome">重新寄送歡迎信</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function() {
+        let $stmails = new Vue({
+            el: '#stmails',
+            data: {
+                data: ''
+            },
+            methods: {
+                resend_welcome: function() {
+                    axios.post('./mails', {casename: 'resend_welcome'}).then(function(resp) {
+                        window.alert('已寄出');
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}
