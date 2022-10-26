@@ -36,12 +36,12 @@ jobs:
       - name: Cache Poetry local
         uses: actions/cache@v3
         with:
-          path: ~/.local
+          path: ~/.local/share/pypoetry
           key: poetry-local-${{ matrix.python-version }}${{ hashFiles('**/poetry.lock') }}
       - name: Cache Poetry cache
         uses: actions/cache@v3
         with:
-          path: ~/.cache
+          path: ~/.cache/pypoetry
           key: poetry-cache-${{ matrix.python-version }}${{ hashFiles('**/poetry.lock') }}
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
