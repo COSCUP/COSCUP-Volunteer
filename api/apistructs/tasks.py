@@ -3,6 +3,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
+from api.apistructs.items import UserItem
 from structs.tasks import TaskItem
 
 
@@ -49,3 +50,22 @@ class TaskUpdateInput(BaseModel):
     class Config:  # pylint: disable=too-few-public-methods
         ''' Config '''
         anystr_strip_whitespace = True
+
+
+class TaskAttendeeInput(BaseModel):
+    ''' TaskAttendeeInput '''
+    uids: list[str] = Field(description='uids')
+
+    class Config:  # pylint: disable=too-few-public-methods
+        ''' Config '''
+        anystr_strip_whitespace = True
+
+
+class TaskGetAttendeeOutput(BaseModel):
+    ''' TaskAttendeeInput '''
+    datas: list[UserItem] = Field(description='list of attendee')
+
+
+class TaskMeJoinOutput(BaseModel):
+    ''' TaskMeJoinOutput '''
+    is_joined: bool = Field(default=False, description='joined or not')
