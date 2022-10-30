@@ -329,7 +329,7 @@ def api_token() -> str | ResponseBase:
     return make_response({}, 404)
 
 
-@VIEW_SETTING.route('/waitting')
+@VIEW_SETTING.route('/mails')
 def mails() -> str | ResponseBase:
     ''' about mails '''
     if request.method == 'GET':
