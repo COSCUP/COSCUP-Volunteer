@@ -4,7 +4,7 @@
 
 ### Installation
 
-We use the [docker compose](https://docs.docker.com/compose/) (not docker-compose) to run the project in containers, please pre-install [Docker Engine](https://docs.docker.com/engine/) or [Docker Desktop](https://docs.docker.com/get-docker/) before getting started.
+We use the [docker compose](https://docs.docker.com/compose/) (not **docker-compose**) to run the project in containers, please pre-install [Docker Engine](https://docs.docker.com/engine/) or [Docker Desktop](https://docs.docker.com/get-docker/) before getting started.
 
 ### Build the base image
 
@@ -72,10 +72,5 @@ Open browser visit to:
 
 !!! info
 
-    This command will create an user account and register an session, so you need to feed the cookie for your browser.
-
-### Dev page
-
-Visit the dev page to setup.
-
-    http://127.0.0.1:80/dev/
+    This command will create 10 user accounts and the register sessions, so you
+    need to feed the cookie for your browser.

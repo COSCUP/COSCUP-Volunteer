@@ -11,6 +11,7 @@ nav:
   - Developers:
     - Developer Beginner: dev/beginners.md
     - Build Base Image: dev/build-base-image.md
+    - Dev Page: dev/dev-page.md
     - Contributing:
       - Contributing on Github: dev/contribute-on-github.md
       - Developer Certificate of Origin (DCO): dev/dco.md
