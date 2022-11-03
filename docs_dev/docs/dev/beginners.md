@@ -44,7 +44,7 @@ The codebase is compliant in [PEP8](https://peps.python.org/pep-0008/) and [typi
 
 Please install [Poetry](https://python-poetry.org/) for dependency management and packaging in Python. And [not recommended](https://python-poetry.org/docs/) install in `pip`.
 
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
+    curl -sSL https://install.python-poetry.org | python3 -
 
 After the poetry is installed, you could run `poetry install` to install the packages at local.
 

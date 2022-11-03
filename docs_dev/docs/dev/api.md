@@ -36,13 +36,13 @@ in the future will be published here.
 
 === "Teams"
     - [x] List all Teams.
-    - [ ] Create a new team.
-    - [ ] Add / delete chiefs
-    - [ ] Add / delete members.
+    - [x] Create a new team.
+    - [x] Add / delete chiefs
+    - [x] Add / delete members.
     - [ ] List available forms.
 
 === "Tasks"
-    - [ ] List all tasks.
+    - [x] List all tasks.
 
 ## API Docs
 

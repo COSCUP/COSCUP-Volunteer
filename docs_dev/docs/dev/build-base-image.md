@@ -60,13 +60,22 @@ To create a user for dev.
 
     docker compose run --rm cmdapp dev user_add
 
+<figure markdown>
+  <a href="https://s3.toomore.net/coscup/volunteer/docs_add_users.png">
+    <img alt="docs_add_users"
+         src="https://s3.toomore.net/coscup/volunteer/docs_add_users.png"
+         style="border: 1px #ececec solid; border-radius: 0.4rem;"
+    >
+  </a>
+</figure>
+
 If succeed, the command will display the message like below:
 
     [!] Next step
-     | Please visit these link to setup the cookie/session:
+     | Please visit one of these links to setup the cookie/session:
         -> http://127.0.0.1/dev/cookie?sid={sid}
 
-Open browser visit to:
+Open browser visit one of those links to:
 
     http://127.0.0.1/dev/cookie?sid={sid}
 
