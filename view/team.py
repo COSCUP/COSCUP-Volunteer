@@ -7,7 +7,7 @@ from typing import Any, Callable
 
 import arrow
 import phonenumbers
-from flask import (Blueprint, g, jsonify, make_response, redirect,
+from flask import (Blueprint, escape, g, jsonify, make_response, redirect,
                    render_template, request, url_for)
 from flask.wrappers import Response
 from markdown import markdown
@@ -554,15 +554,17 @@ def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
             if post_data['selected'] not in ('no', 'yes', 'yes-longtraffic'):
                 return Response('', status=406)
 
+            selected = escape(post_data['selected'])
+
             data = {
-                'status': post_data['selected'] in ('yes', 'yes-longtraffic'),
-                'key': post_data['selected'],
+                'status': selected in ('yes', 'yes-longtraffic'),
+                'key': selected,
             }
 
             Form.update_accommodation(
                 pid=pid, uid=g.user['account']['_id'], data=data)
 
-            return jsonify({'data': {'selected': post_data['selected']}})
+            return jsonify({'data': {'selected': selected}})
 
         if post_data and post_data['casename'] == 'makechange':
             msg = FormAccommodation.make_exchange(
@@ -1102,7 +1104,7 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
                 teams.append({'name': _team.name, 'tid': _team.id})
 
             if data['select_team'] in [_team['tid'] for _team in teams]:
-                select_team = data['select_team']
+                select_team = escape(data['select_team'])
             else:
                 select_team = team.id
 
