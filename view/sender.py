@@ -1,5 +1,6 @@
 ''' Sneder '''
 import csv
+import html
 import io
 import random
 
@@ -222,7 +223,7 @@ def campaign_receiver(pid: str, tid: str, cid: str) -> str | ResponseBase:
             SenderReceiver.remove(pid=team.pid, cid=cid)
 
             return jsonify({'file': [],
-                            'uploadtype': f"[{request.form['uploadtype']}]",
+                            'uploadtype': f"{html.escape(request.form['uploadtype'])}",
                             })
 
         if request.files and 'file' in request.files:
@@ -235,7 +236,7 @@ def campaign_receiver(pid: str, tid: str, cid: str) -> str | ResponseBase:
                 SenderReceiver.update(pid=team.pid, cid=cid, datas=csv_file)
 
             return jsonify({'file': csv_file,
-                            'uploadtype': f"[{request.form['uploadtype']}]",
+                            'uploadtype': f"{html.escape(request.form['uploadtype'])}",
                             })
 
     return make_response({}, 404)
@@ -330,7 +331,7 @@ def campaign_schedule(pid: str, tid: str, cid: str) -> str | ResponseBase:
                 'campaign_data': campaign_data, 'team_name': team.name, 'source': source,
                 'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
 
-            return jsonify({'data': data})
+            return jsonify({})
 
         if campaign_data and data and 'casename' in data and data['casename'] == 'sendtest':
             # layout, campaign_data, team, uids
@@ -389,6 +390,6 @@ def campaign_schedule(pid: str, tid: str, cid: str) -> str | ResponseBase:
                 'campaign_data': campaign_data, 'team_name': team.name, 'source': source,
                 'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
 
-            return jsonify({'data': data})
+            return jsonify({})
 
     return make_response({}, 404)

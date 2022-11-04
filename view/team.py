@@ -551,10 +551,10 @@ def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
             return jsonify({'data': raw, 'room': room})
 
         if post_data and post_data['casename'] == 'update':
-            if post_data['selected'] not in ('no', 'yes', 'yes-longtraffic'):
-                return Response('', status=406)
-
             selected = html.escape(post_data['selected'])
+
+            if selected not in ('no', 'yes', 'yes-longtraffic'):
+                return Response('', status=406)
 
             data = {
                 'status': selected in ('yes', 'yes-longtraffic'),
@@ -1103,9 +1103,8 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
             for _team in Team.list_by_pid(pid=project.id):
                 teams.append({'name': _team.name, 'tid': _team.id})
 
-            if data['select_team'] in [_team['tid'] for _team in teams]:
-                select_team = html.escape(data['select_team'])
-            else:
+            select_team = html.escape(data['select_team'])
+            if data['select_team'] not in [_team['tid'] for _team in teams]:
                 select_team = team.id
 
             items = []
@@ -1115,7 +1114,7 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
             bank = User.get_bank(uid=g.user['account']['_id'])
 
             return jsonify({'teams': teams, 'items': items,
-                            'select_team': select_team, 'bank': bank.dict()})
+                            'select_team': html.escape(select_team), 'bank': bank.dict()})
 
         if data and data['casename'] == 'add_expense':
             # create expense and send notification.
