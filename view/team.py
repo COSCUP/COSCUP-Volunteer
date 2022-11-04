@@ -347,10 +347,6 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
         elif data and data['case'] == 'del_tag':
             Team.del_tag(pid=pid, tid=tid, tag_id=data['tag']['id'])
 
-            return jsonify({})
-
-        return jsonify(data)
-
     return jsonify({})
 
 
@@ -571,7 +567,7 @@ def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
         if post_data and post_data['casename'] == 'makechange':
             msg = FormAccommodation.make_exchange(
                 pid=pid, uid=g.user['account']['_id'], exkey=post_data['key'].strip())
-            return jsonify({'data': post_data, 'msg': msg})
+            return jsonify({'msg': msg})
 
     return jsonify({})
 
@@ -1105,8 +1101,9 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
             for _team in Team.list_by_pid(pid=project.id):
                 teams.append({'name': _team.name, 'tid': _team.id})
 
-            select_team = data['select_team']
-            if select_team == '':
+            if data['select_team'] in [_team['tid'] for _team in teams]:
+                select_team = data['select_team']
+            else:
                 select_team = team.id
 
             items = []
@@ -1123,7 +1120,7 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
             expense = Expense.process_and_add(
                 pid=project.id, tid=team.id, uid=g.user['account']['_id'], data=data)
             expense_create.apply_async(kwargs={'expense': expense})
-            return jsonify(data)
+            return jsonify({})
 
         if data and data['casename'] == 'get_has_sent':
             data = Expense.get_has_sent(
@@ -1245,7 +1242,7 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
                 Expense.update_request(
                     expense_id=data['eid'], rdata=data['req'])
 
-            return jsonify({'data': data})
+            return jsonify({})
 
         if data and data['casename'] == 'remove':
             status = ''
