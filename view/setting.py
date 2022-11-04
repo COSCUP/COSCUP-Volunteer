@@ -207,7 +207,7 @@ def link_chat() -> str | ResponseBase:
             if data['casename'] == 'invite':
                 service_sync_mattermost_invite.apply_async(
                     kwargs={'uids': (g.user['account']['_id'], )})
-                return jsonify(data)
+                return jsonify({'data': data})
         else:
             MattermostLink.reset(uid=g.user['account']['_id'])
             return redirect(url_for('setting.link_chat', _scheme='https', _external=True))
@@ -277,7 +277,7 @@ def security() -> str | ResponseBase:
         data = request.get_json()
         if data:
             USession.make_dead(sid=data['sid'], uid=g.user['account']['_id'])
-            return jsonify(data)
+            return jsonify({'data': data})
 
     return make_response({}, 404)
 

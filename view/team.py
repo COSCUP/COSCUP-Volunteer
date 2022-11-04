@@ -458,7 +458,7 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:
         TeamMemberChangedDB().make_record(
             pid=pid, tid=tid, action={'waiting': [g.user['account']['_id'], ]})
 
-        return redirect(f'/team/{pid}/{tid}/join_to')
+        return redirect(f'/team/{team.pid}/{team.id}/join_to')
 
     return Response('', status=404)
 
@@ -484,8 +484,6 @@ def team_form_api(pid: str, tid: str) -> ResponseBase:
             data = FormTrafficFeeMapping.get(pid=pid)
             if data is not None:
                 return jsonify({'locations': [(item.location, item.fee) for item in data]})
-
-        return jsonify(request.args)
 
     return make_response({}, 404)
 
@@ -889,7 +887,7 @@ def team_form_drink(pid: str, tid: str) -> str | ResponseBase:
                 Form.update_drink(
                     pid=team.pid, uid=g.user['account']['_id'], data=data)
 
-        return jsonify({'data': post_data})
+        return jsonify({})
 
     return make_response({}, 404)
 
@@ -978,7 +976,7 @@ def team_plan_edit(pid: str, tid: str) -> str | ResponseBase:
 
         today = arrow.now().format('YYYY-MM-DD')
         default = {'title': '', 'desc': '', 'start': today, 'end': '',
-                   'tid': tid, 'team_name': team.name, 'start_timestamp': 0}
+                   'tid': team.id, 'team_name': team.name, 'start_timestamp': 0}
 
         team_plan_db = TeamPlanDB()
         if 'case' in data and data['case'] == 'get':
