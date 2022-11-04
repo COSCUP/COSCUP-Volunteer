@@ -7,7 +7,7 @@ from typing import Any, Callable
 
 import arrow
 import phonenumbers
-from flask import (Blueprint, escape, g, jsonify, make_response, redirect,
+from flask import (Blueprint, g, jsonify, make_response, redirect,
                    render_template, request, url_for)
 from flask.wrappers import Response
 from markdown import markdown
@@ -554,7 +554,7 @@ def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
             if post_data['selected'] not in ('no', 'yes', 'yes-longtraffic'):
                 return Response('', status=406)
 
-            selected = escape(post_data['selected'])
+            selected = html.escape(post_data['selected'])
 
             data = {
                 'status': selected in ('yes', 'yes-longtraffic'),
@@ -1104,7 +1104,7 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
                 teams.append({'name': _team.name, 'tid': _team.id})
 
             if data['select_team'] in [_team['tid'] for _team in teams]:
-                select_team = escape(data['select_team'])
+                select_team = html.escape(data['select_team'])
             else:
                 select_team = team.id
 
