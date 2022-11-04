@@ -1103,8 +1103,9 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
             for _team in Team.list_by_pid(pid=project.id):
                 teams.append({'name': _team.name, 'tid': _team.id})
 
-            select_team = html.escape(data['select_team'])
-            if data['select_team'] not in [_team['tid'] for _team in teams]:
+            if html.escape(data['select_team']) in [_team['tid'] for _team in teams]:
+                select_team = html.escape(data['select_team'])
+            else:
                 select_team = team.id
 
             items = []
@@ -1114,7 +1115,7 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
             bank = User.get_bank(uid=g.user['account']['_id'])
 
             return jsonify({'teams': teams, 'items': items,
-                            'select_team': html.escape(select_team), 'bank': bank.dict()})
+                            'select_team': select_team, 'bank': bank.dict()})
 
         if data and data['casename'] == 'add_expense':
             # create expense and send notification.
