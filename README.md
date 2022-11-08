@@ -7,10 +7,6 @@ COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政
 
 GNU Affero General Public License version 3 (AGPL-3.0)
 
-## For Developer
-
-目前我們使用 `docker compose` 的方式進行開發，可以使用 `docker compose up` 來建立與啟動必要的服務。完成後可以連到 `http://127.0.0.1:80` 看到首頁！
-
 ### Code Style
 
 - [pylint](https://pypi.org/project/pylint/)
@@ -26,94 +22,7 @@ GNU Affero General Public License version 3 (AGPL-3.0)
 ### 目前開發重點
 
 - [ ] 提升 testing cases 的涵蓋率
-- [ ] 開發帳號與資料預建立
-
-## For Production
-
-### Build Image
-
-需要 Docker 來建立 Image。
-
-    sh ./build-base.sh && sh ./build-app.sh
-
-### Start
-
-啟動服務，使用到 MongoDB、RabbitMQ
-
-    sh ./start_mongo.sh && sh ./start_rabbitmq.sh && sh ./start_celery.sh
-
-啟動 web app
-
-    sh ./start_app.sh
-
-如果有修正後的重啟，可以直接執行
-
-    sh ./restart_app.sh
-
-## Local Development
-
-### 安裝依賴
-
-您可能需要先安裝 `libmemcached` 和 `poetry`，才能安裝依賴。
-
-    brew install libmemcached  # macOS
-    dnf install libmemcached  # Fedora
-    yum install epel-release && yum install libmemcached.x86_64  # CentOS/Rocky Linux
-    apt-get install libmemcached11 # Debian/Ubuntu
-
-Poetry 的安裝請使用[官方文件](https://python-poetry.org/docs/)建議安裝在全域環境。
-
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
-
-### 設定 VS Code
-
-找到 poetry 建立的 virtual environment：
-
-    poetry env list --full-path
-
-然後 <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>，輸入 `Python: Select Interpreter`，
-選擇 `輸入直譯器路徑`，填入路徑即可。
-
-### Build from Docker Compose
-
-We use the [docker compose](https://docs.docker.com/compose/) (not `docker-compose`) to run the project in containers, please pre-install [Docker Engine](https://docs.docker.com/engine/) or [Docker Desktop](https://docs.docker.com/get-docker/) before getting started.
-
-Build the base images first. (**Notice: In this way, you no need to sign in to Docker Desktop account.**)
-
-    docker build -t coscupweb-base:22.10.27 -f ./Dockerfile-base-dev ./
-
-Setup the `setting.py`
-
-    cp setting_sample.py setting.py
-
-Edit the `setting.py`, make `MONGO_MOCK` to be `False`.
-
-Build the rest of app images
-
-    docker compose build --no-cache
-
-Or directly execute `up` to build and run ...
-
-    docker compose up --build
-
-Wait an amount until all services are available, open browser and visit to:
-
-    http://127.0.0.1:80/
-
-**Notice: Because of the cookie with secure attributes (`__Host-`) at local in `127.0.0.1` is not allowed for Chrome and Safari ([1056543](https://bugs.chromium.org/p/chromium/issues/detail?id=1056543), [1263426](https://bugs.chromium.org/p/chromium/issues/detail?id=1263426)), the following steps are works only in [Firefox](https://www.mozilla.org/firefox/).**
-
-To create a user for dev
-
-    docker compose run --rm cmdapp dev user_add
-
-This command will create an user account and register an session, so you need to feed the cookie for your browser.
-
-    http://127.0.0.1/dev/cookie?sid={sid}
-
-Visit the dev page to setup.
-
-    http://127.0.0.1:80/dev/
-
+- [x] 開發帳號與資料預建立
 
 ## 如何貢獻專案 How to contribute?
 
