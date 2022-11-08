@@ -347,10 +347,6 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
         elif data and data['case'] == 'del_tag':
             Team.del_tag(pid=pid, tid=tid, tag_id=data['tag']['id'])
 
-            return jsonify({})
-
-        return jsonify(data)
-
     return jsonify({})
 
 
@@ -458,7 +454,7 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:
         TeamMemberChangedDB().make_record(
             pid=pid, tid=tid, action={'waiting': [g.user['account']['_id'], ]})
 
-        return redirect(f'/team/{pid}/{tid}/join_to')
+        return redirect(f'/team/{team.pid}/{team.id}/join_to')
 
     return Response('', status=404)
 
@@ -484,8 +480,6 @@ def team_form_api(pid: str, tid: str) -> ResponseBase:
             data = FormTrafficFeeMapping.get(pid=pid)
             if data is not None:
                 return jsonify({'locations': [(item.location, item.fee) for item in data]})
-
-        return jsonify(request.args)
 
     return make_response({}, 404)
 
@@ -557,23 +551,25 @@ def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
             return jsonify({'data': raw, 'room': room})
 
         if post_data and post_data['casename'] == 'update':
-            if post_data['selected'] not in ('no', 'yes', 'yes-longtraffic'):
+            selected = html.escape(post_data['selected'])
+
+            if selected not in ('no', 'yes', 'yes-longtraffic'):
                 return Response('', status=406)
 
             data = {
-                'status': post_data['selected'] in ('yes', 'yes-longtraffic'),
-                'key': post_data['selected'],
+                'status': selected in ('yes', 'yes-longtraffic'),
+                'key': selected,
             }
 
             Form.update_accommodation(
                 pid=pid, uid=g.user['account']['_id'], data=data)
 
-            return jsonify({'data': {'selected': post_data['selected']}})
+            return jsonify({'data': {'selected': selected}})
 
         if post_data and post_data['casename'] == 'makechange':
             msg = FormAccommodation.make_exchange(
                 pid=pid, uid=g.user['account']['_id'], exkey=post_data['key'].strip())
-            return jsonify({'data': post_data, 'msg': msg})
+            return jsonify({'msg': msg})
 
     return jsonify({})
 
@@ -889,7 +885,7 @@ def team_form_drink(pid: str, tid: str) -> str | ResponseBase:
                 Form.update_drink(
                     pid=team.pid, uid=g.user['account']['_id'], data=data)
 
-        return jsonify({'data': post_data})
+        return jsonify({})
 
     return make_response({}, 404)
 
@@ -978,7 +974,7 @@ def team_plan_edit(pid: str, tid: str) -> str | ResponseBase:
 
         today = arrow.now().format('YYYY-MM-DD')
         default = {'title': '', 'desc': '', 'start': today, 'end': '',
-                   'tid': tid, 'team_name': team.name, 'start_timestamp': 0}
+                   'tid': team.id, 'team_name': team.name, 'start_timestamp': 0}
 
         team_plan_db = TeamPlanDB()
         if 'case' in data and data['case'] == 'get':
@@ -1107,8 +1103,9 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
             for _team in Team.list_by_pid(pid=project.id):
                 teams.append({'name': _team.name, 'tid': _team.id})
 
-            select_team = data['select_team']
-            if select_team == '':
+            if html.escape(data['select_team']) in [_team['tid'] for _team in teams]:
+                select_team = html.escape(data['select_team'])
+            else:
                 select_team = team.id
 
             items = []
@@ -1125,7 +1122,7 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
             expense = Expense.process_and_add(
                 pid=project.id, tid=team.id, uid=g.user['account']['_id'], data=data)
             expense_create.apply_async(kwargs={'expense': expense})
-            return jsonify(data)
+            return jsonify({})
 
         if data and data['casename'] == 'get_has_sent':
             data = Expense.get_has_sent(
@@ -1247,7 +1244,7 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
                 Expense.update_request(
                     expense_id=data['eid'], rdata=data['req'])
 
-            return jsonify({'data': data})
+            return jsonify({})
 
         if data and data['casename'] == 'remove':
             status = ''

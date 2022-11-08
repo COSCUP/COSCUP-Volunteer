@@ -3,6 +3,7 @@
 import hashlib
 import logging
 import os
+import re
 import traceback
 from pathlib import Path
 from typing import Any, Callable
@@ -91,7 +92,7 @@ if Path('/app/view/dev.py').exists():
 @app.before_request
 def need_login() -> ResponseBase | None:
     ''' need_login '''
-    # pylint: disable=too-many-return-statements
+    # pylint: disable=too-many-return-statements,too-many-branches
     logging.info('[X-SSL-SESSION-ID: %s] [X-REAL-IP: %s] [USER-AGENT: %s] [SESSION: %s]',
                  request.headers.get('X-SSL-SESSION-ID'),
                  request.headers.get('X-REAL-IP'),
@@ -99,7 +100,8 @@ def need_login() -> ResponseBase | None:
                  session, )
 
     if request.path.startswith('/user') and request.path[-1] == '/':
-        return redirect(request.path[:-1])
+        for uid in re.finditer('[a-z0-9]{8}', request.path):
+            return redirect(f'/user/{uid.group()}')
 
     if 'sid' in session and session['sid']:
         mem_cahce = MC.get_client()
