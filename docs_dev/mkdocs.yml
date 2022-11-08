@@ -11,6 +11,7 @@ nav:
   - Developers:
     - Developer Beginner: dev/beginners.md
     - Build Base Image: dev/build-base-image.md
+    - Dev Page: dev/dev-page.md
     - Contributing:
       - Contributing on Github: dev/contribute-on-github.md
       - Developer Certificate of Origin (DCO): dev/dco.md
@@ -19,6 +20,9 @@ nav:
   - Security: security.md
   - Code Reference:
     - Overview: code_reference/overview.md
+    - Main: code_reference/main.md
+    - View: code_reference/view.md
+    - Celery Task: code_reference/celery_task.md
     - Models:
       - base: code_reference/models/base.md
       - budgetdb: code_reference/models/budgetdb.md
@@ -60,8 +64,10 @@ nav:
         - mattermost: code_reference/module/mattermost.md
         - telegram_bot: code_reference/module/telegram_bot.md
     - Structs:
-      - users: code_reference/structs/users.md
       - projects: code_reference/structs/projects.md
+      - tasks: code_reference/structs/tasks.md
+      - teams: code_reference/structs/teams.md
+      - users: code_reference/structs/users.md
 theme:
   name: material
   icon:
@@ -117,6 +123,7 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
+      use_pygments: true
   - pymdownx.inlinehilite
   - pymdownx.keys
   - pymdownx.snippets

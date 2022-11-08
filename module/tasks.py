@@ -25,8 +25,6 @@ class Tasks:
                 - `limit`: `int` User limit.
                 - `starttime`: Start time in ISO8601.
 
-            task_id (str): Task id
-
         '''
         data = body
 

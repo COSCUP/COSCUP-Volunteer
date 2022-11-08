@@ -4,7 +4,7 @@
 
 ### Installation
 
-We use the [docker compose](https://docs.docker.com/compose/) (not docker-compose) to run the project in containers, please pre-install [Docker Engine](https://docs.docker.com/engine/) or [Docker Desktop](https://docs.docker.com/get-docker/) before getting started.
+We use the [docker compose](https://docs.docker.com/compose/) (not **docker-compose**) to run the project in containers, please pre-install [Docker Engine](https://docs.docker.com/engine/) or [Docker Desktop](https://docs.docker.com/get-docker/) before getting started.
 
 ### Build the base image
 
@@ -60,22 +60,26 @@ To create a user for dev.
 
     docker compose run --rm cmdapp dev user_add
 
+<figure markdown>
+  <a href="https://s3.toomore.net/coscup/volunteer/docs_add_users.png">
+    <img alt="docs_add_users"
+         src="https://s3.toomore.net/coscup/volunteer/docs_add_users.png"
+         style="border: 1px #ececec solid; border-radius: 0.4rem;"
+    >
+  </a>
+</figure>
+
 If succeed, the command will display the message like below:
 
     [!] Next step
-     | Please visit these link to setup the cookie/session:
+     | Please visit one of these links to setup the cookie/session:
         -> http://127.0.0.1/dev/cookie?sid={sid}
 
-Open browser visit to:
+Open browser visit one of those links to:
 
     http://127.0.0.1/dev/cookie?sid={sid}
 
 !!! info
 
-    This command will create an user account and register an session, so you need to feed the cookie for your browser.
-
-### Dev page
-
-Visit the dev page to setup.
-
-    http://127.0.0.1:80/dev/
+    This command will create 10 user accounts and the register sessions, so you
+    need to feed the cookie for your browser.

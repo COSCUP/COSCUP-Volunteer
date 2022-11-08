@@ -6,13 +6,13 @@ Fork the project from gihub and make [pull requests] to the origin repository.
 
 ## Github
 
-### Sign commits or tags
+### Sign and sign-off all commits or tags
 
-We prefer your commits or tags are signed.
+We prefer your commits or tags are **signed**. And also **[sign-off](/dev/how-to-signoff)** your commits.
 
 !!! tip
 
-    Please read [this docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification) to learn about how to sign your commits and tags.
+    Please read [this docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification) to learn about how to **sign** your commits and tags.
 
 ## Repository
 
@@ -44,13 +44,13 @@ The codebase is compliant in [PEP8](https://peps.python.org/pep-0008/) and [typi
 
 Please install [Poetry](https://python-poetry.org/) for dependency management and packaging in Python. And [not recommended](https://python-poetry.org/docs/) install in `pip`.
 
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
+    curl -sSL https://install.python-poetry.org | python3 -
 
 After the poetry is installed, you could run `poetry install` to install the packages at local.
 
 ### libmemcached (optional)
 
-If you want development at root system instead of docker containers, please install this dependency for `memcached`.
+If you want development at **root system** instead of **docker containers**, please install this dependency for `memcached`.
 
 === "macOS"
 
@@ -78,6 +78,11 @@ Shell within the virtual environment.
 
     poetry shell
 
+!!! note
+
+    The `virtualenvs.in-project` of poetry configuration has been set to `true`.
+    The folder named `.venv` is in the root directory of the project.
+
 ### Setting up IDE
 
 Setting up your IDE for `pylint` and `autopep8`. Find out the poetry env full path.
@@ -88,12 +93,4 @@ Setting up your IDE for `pylint` and `autopep8`. Find out the poetry env full pa
     Setup the `Python: Select Interpreter` ++cmd+shift+p++, and input the poetry's env full path.
 
 === "vim"
-    Create a file `.pylintrc` and with those contents. And replace the `{PUT-POETRY-ENV-FULL-PATH-HERE}` with the value of `poetry env list --full-path`.
-
-    ``` yaml
-    [MASTER]
-    extension-pkg-whitelist=pydantic
-    disable=W0223
-    init-hook='import os, sys; sys.path.append(os.getcwd()); sys.path.append("{PUT-POETRY-ENV-FULL-PATH-HERE}")'
-    generated-members=setting,googleapiclient.discovery.*,pymongo
-    ```
+    `vim` will auto read the `pyproject.toml` file, so there is nothing changed here.
