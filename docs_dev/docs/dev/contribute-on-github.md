@@ -17,8 +17,8 @@
     ```
 
 ## Create a pull request
-- Submit Pull Request to `master` branch.
-- Before submitting your Pull Request, merge master to your branch and fix any conflicts.
+- Submit Pull Request to `main` branch.
+- Before submitting your Pull Request, merge `main` to your branch and fix any conflicts.
 - The codebase is follow the [Google Style Guide for Python](https://google.github.io/styleguide/pyguide.html).
 - The docstring style please follow this section of
   [3.8 Comments and Docstrings](https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings),

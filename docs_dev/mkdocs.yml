@@ -1,7 +1,7 @@
 site_name: COSCUP Volunteer Docs
 repo_url: https://github.com/COSCUP/COSCUP-Volunteer
 repo_name: COSCUP/COSCUP-Volunteer
-edit_uri: https://github.com/COSCUP/COSCUP-Volunteer/blob/master/docs_dev/docs/
+edit_uri: https://github.com/COSCUP/COSCUP-Volunteer/blob/main/docs_dev/docs/
 copyright: "CC BY 4.0 2022 COSCUP Volunteer"
 nav:
   - Home: index.md

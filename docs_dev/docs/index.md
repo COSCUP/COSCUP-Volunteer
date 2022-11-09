@@ -20,4 +20,4 @@ Base Info  |                                                                    
 ----------:| ----------------------------------------------------------------------------------------------------------------------- |
 URL        | [https://volunteer.coscup.org/](https://volunteer.coscup.org/)                                                          |
 Repository | [https://github.com/COSCUP/COSCUP-Volunteer](https://github.com/COSCUP/COSCUP-Volunteer)                                |
-License    | [GNU Affero General Public License v3.0 (AGPL-3.0)](https://github.com/COSCUP/COSCUP-Volunteer/blob/master/LICENSE.txt) |
+License    | [GNU Affero General Public License v3.0 (AGPL-3.0)](https://github.com/COSCUP/COSCUP-Volunteer/blob/main/LICENSE.txt) |

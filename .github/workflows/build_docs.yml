@@ -3,7 +3,7 @@ name: BuildDocs
 on:
   push:
     branches:
-      - master
+      - 'main'
       - 'dev_docs'
     paths:
       - 'models/**'
