@@ -3,6 +3,11 @@
 This doc is about how to contribute to the Volunteer platform. We hope you
 step by step to figure out what we are doing or have been done here.
 
+
+!!! Info "有中文版了！"
+
+    :white_check_mark: **正體中文**請參考[這裡](zh_TW/)開始閱讀。
+
 ## About
 
 The COSCUP Volunteer is hosted by Secretary Team<small>（行政組）</small>.

@@ -1,6 +1,6 @@
 # Security
 
-If you find an bug or issue from **COSCUP-Volunteer**, please raise the issue at [here](https://github.com/COSCUP/COSCUP-Volunteer/issues).
+If you find any bugs or issues from **COSCUP-Volunteer**, please raise the issue [here](https://github.com/COSCUP/COSCUP-Volunteer/issues).
 
 ## Encrypted
 

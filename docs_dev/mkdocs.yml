@@ -18,6 +18,9 @@ nav:
       - How to sign-off commits: dev/how-to-signoff.md
     - API: dev/api.md
   - Security: security.md
+  - About Secretary Team:
+    - Overview: secretary_team/overview.md
+    - Recruit: secretary_team/recruit.md
   - Code Reference:
     - Overview: code_reference/overview.md
     - Main: code_reference/main.md
@@ -89,17 +92,42 @@ theme:
         name: Switch to light mode
   language: en
   font:
-    text: Roboto
-    code: Courier Prime
+    text: "Roboto"
+    code: "Courier Prime"
   features:
     - content.code.annotate
-    - navigation.tabs
     - navigation.top
+    - search.suggest
 extra:
   analytics:
     provider: google
     property: UA-156956691-1
 plugins:
+  - i18n:
+      default_language: en
+      default_language_only: false
+      docs_structure: suffix
+      languages:
+        default:
+          name: "Default (en-US)"
+          buile: true
+        en:
+          name: "English (en-US)"
+          build: true
+        zh_TW:
+          name: "臺灣正體 (zh-TW)"
+          build: true
+      nav_translations:
+        zh_TW:
+          Home: "首頁"
+          Overview: "摘要"
+          Introduction: "介紹"
+          Developers: "開發者"
+          Developer Beginner: "初次開發"
+          Contributing: "貢獻"
+          Security: "資安通報"
+          "About Secretary Team": "關於行政組"
+          Recruit: "招募"
   - search
   - mkdocstrings:
       handlers:
@@ -125,6 +153,7 @@ markdown_extensions:
       anchor_linenums: true
       use_pygments: true
   - pymdownx.inlinehilite
+  - pymdownx.mark
   - pymdownx.keys
   - pymdownx.snippets
   - pymdownx.superfences
@@ -132,7 +161,11 @@ markdown_extensions:
       alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
+  - abbr
   - admonition
   - attr_list
   - md_in_html
   - tables
+  - toc:
+      permalink: true
+  - def_list

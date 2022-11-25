@@ -1,18 +1,22 @@
-# Developer Beginner
+# 初次開發
 
-Fork the project from github and make [pull requests] to the origin repository.
+請從 Github 上分叉（fork）專案並透過[拉取請求]（Pull Requests）的方式貢獻回專案。
 
-[pull requests]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests
+[拉取請求]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests
 
 ## Github
 
-### Sign and sign-off all commits or tags
+### 簽名（sign-off）與簽章（sign）你的提交或標籤
 
 We prefer your commits or tags are **signed**. And also **[sign-off](/dev/how-to-signoff)** your commits.
 
-!!! tip
+我們希望你的提交與標籤都有**簽章**，並且**簽名**你的提交。
 
-    Please read [this docs](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification) to learn about how to **sign** your commits and tags.
+!!! tip "提示"
+
+    請參閱[這篇文章]關於如何使用簽章你的提交與標籤。
+
+    [這篇文章]: https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification
 
 ## Repository
 
