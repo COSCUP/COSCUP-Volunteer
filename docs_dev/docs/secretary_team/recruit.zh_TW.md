@@ -4,6 +4,13 @@
 
 行政組目前組內分類為三個任務組別：**庶務組**、**開發組**、**招募組**。==理想編制人數（不包含組長）應為 15 人。==
 
+<figure markdown>
+  <a href="https://s3.toomore.net/coscup/volunteer/docs_secretary_team.svg">
+    <img alt="coscup_volunteer_infra" src="https://s3.toomore.net/coscup/volunteer/docs_secretary_team.svg">
+  </a>
+  <figcaption>All services, <small><a href="https://s3.toomore.net/coscup/volunteer/docs_secretary_team.svg">[original]</a></small></figcaption>
+</figure>
+
 ## :material-format-list-text: 各組工作項目
 
 ### 庶務組
@@ -52,11 +59,11 @@
 3. 與組長預約線上會議（需開視訊）或現場（可以請你喝咖啡）聊天時間：來信預約並附上志工平台上的個人介紹頁面
 4. 請等候通知！
 
-!!! tip
+??? tip "自我介紹的範本"
 
     自我介紹的範本可以參考這裡。
 
-!!! info "組長聯絡方式"
+??? info "組長聯絡方式"
 
     - :fontawesome-regular-id-badge:`Toomore Chiang <toomore@coscup.org>`
 
