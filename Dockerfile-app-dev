@@ -1,4 +1,4 @@
-FROM coscupweb-base:22.11.10
+FROM coscupweb-base:22.11.27
 
 #ADD ./client_secret.json ./client_secret.json
 ADD ./cmdtools ./cmdtools
