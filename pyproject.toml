@@ -47,6 +47,7 @@ black = "^22.3.0"
 [tool.poetry.group.dev.dependencies]
 lxml = "^4.9.1"
 mkdocs-static-i18n = "^0.50"
+mkdocs-git-revision-date-localized-plugin = "^1.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

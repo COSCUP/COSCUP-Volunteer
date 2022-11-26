@@ -108,9 +108,6 @@ plugins:
       default_language_only: false
       docs_structure: suffix
       languages:
-        default:
-          name: "Default (en-US)"
-          buile: true
         en:
           name: "English (en-US)"
           build: true
@@ -129,6 +126,7 @@ plugins:
           "About Secretary Team": "關於行政組"
           Recruit: "招募"
   - search
+  - git-revision-date-localized
   - mkdocstrings:
       handlers:
         python:
