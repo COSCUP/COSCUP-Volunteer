@@ -1,8 +1,17 @@
-# 關於行政組
+---
+title: 行政組簡介與招募
+summary: 介紹行政組主要的工作任務內容與 2023 招募對象與辦法
+description: 介紹行政組主要的工作任務內容與 2023 招募對象與辦法
+---
+# 行政組簡介與招募
 
 行政組早期為總召秘書組，主要處理總召交辦事項。由於業務項目逐年趨近明確與規律，調整成獨立一組成為常態編制。
 
-行政組目前組內分類為三個任務組別：**庶務組**、**開發組**、**招募組**。==理想編制人數（不包含組長）應為 15 人。==
+行政組目前組內分類為三個任務組別：**庶務組**、**開發組**、**招募組**。
+
+!!! question ""
+
+    理想編制人數（不包含組長）應為 ==15== 人。
 
 <figure markdown>
   <a href="https://s3.toomore.net/coscup/volunteer/docs_secretary_team.svg">
@@ -21,7 +30,9 @@
 - 宴會籌備：前夜派對、慶功宴。
 - 會眾服務：親子遊樂園或工作坊、療癒市集（按摩小棧、冥想正念、紅酒瑜伽）。
 
-==:fontawesome-solid-user-plus: 預計招募人數：９人==
+!!! question ""
+
+    :fontawesome-solid-user-plus: 預計招募人數： ==９== 人
 
 ### 開發組
 
@@ -30,27 +41,61 @@
 - 平台管理：志工服務平台、志工任務規劃、親子遊樂園或工作坊與療癒市集報名預約系統、電子報訂閱系統。
 - 項目協助：財務請款系統、發送大會電子報訊息通知（訂閱戶、平台志工、社群聯絡人、贊助商窗口）。
 
-==:fontawesome-solid-user-plus: 預計招募人數：３人==
+!!! question ""
+
+    :fontawesome-solid-user-plus: 預計招募人數： ==３== 人
 
 ### 招募組
 
 協助訂定招募流程、研討會社群攤位擺攤活動（與攤位組合作）、改善志工平台招募或組員遴選流程。
 目前招募組近兩年無合適人選協助，急需要你的熱情與貢獻！
 
-==:fontawesome-solid-user-plus: 預計招募人數：３人==
+!!! question ""
+
+    :fontawesome-solid-user-plus: 預計招募人數： ==３== 人
+
+## :material-information-outline: 其他參考訊息
+
+### 籌備時程
+
+COSCUP 通常會在每一年的農曆年後開始籌備，大會活動日會以：**七月底或八月初的某週六與週日來選定**（約在每年的 `W30`、`W31`），行政組會需要在與大會一同啟動。
+
+### 會議規則與工作事項管理
+
+離大會活動一個月**前**、每兩週於週四晚上開會。離大會活動一個月**內**、每週四晚上開會，每次會議時間為一個小時。
+
+!!! note ""
+
+    大會會議時間（理論上）會在週三晚上。
+
+行政組主要使用 [Trello](https://trello.com/b/CBc8kC1H) 作為任務管理平台，運作的流程為：
+
+1. 開會前需更新任務卡片進度。
+2. 開會中建立與認領任務卡片。
+3. 開會後依放入該週預計完成之任務卡片、開始執行任務。
+
+### 團隊溝通方式
+
+籌備期間主要是以 [Mattermost](https://chat.coscup.org/) 為主，線上案會議會使用 Google Meet。Telegram 為輔助使用工具。郵件群組為：[secretary@coscup.org](mailto:secretary@coscup.org)。
+
+!!! note ""
+
+    [Mattermost] 是一套開放原始碼線上聊天服務，目前採用自架的方式使用，主要取代 Slack 免費版功能限制的問題。
+    [Mattermost]: https://zh.wikipedia.org/wiki/Mattermost
 
 ## :material-chat-question: 我適合加入嗎？
 
 只要你有熱情想要和我們一起辦活動就可以了！接下來找你有興趣的任務參與，行政組內的小組可以橫向移動參與是沒問題的！
 
 如果你是第一次參與社群，也歡迎找組長聊聊！
+
 ### 志工福利
 
 交通費補助、住宿申請、志工時數證明、慶功宴、大會相關的紀念品。
 
 ### 志工義務
 
-參與志工主要貢獻你的熱情與專業，我們很願意你來嘗試你的努力並實現成果。我們沒有打卡制，在每次開會時如果不能出席，提前告知即可，前往不可無聲消失。
+參與志工主要貢獻熱情與專業，我們很願意你來嘗試你的想法並實現它。我們沒有打卡制，在每次開會時如果不能出席，提前告知即可，**千萬不可無聲消失**。
 
 ## :fontawesome-solid-user-check: 如何申請加入
 
@@ -61,33 +106,22 @@
 
 ??? tip "自我介紹的範本"
 
-    自我介紹的範本可以參考這裡。
+    1. 到[個人頁面]編輯，可使用 [Markdown] 的語法排版。（語法[參考](https://markdown.tw/)）
+    2. 編寫內容請包含：**自我介紹**、**技能**、**年度期待**。（參考：[範例一](https://volunteer.coscup.org/user/e161787f)、[範例二](https://volunteer.coscup.org/user/2b17b7b8)、[範例三](https://volunteer.coscup.org/user/6c74e623)）
+    3. 編輯完後將個人介紹頁面網址附入來信預約時間。
+
+    [個人頁面]: https://volunteer.coscup.org/setting/profile
+    [Markdown]: https://zh.wikipedia.org/wiki/Markdown
 
 ??? info "組長聯絡方式"
 
     - :fontawesome-regular-id-badge:`Toomore Chiang <toomore@coscup.org>`
 
-## :material-information-outline: 其他參考訊息
-
-### 籌備時程
-
-COSCUP 通常會在每一年的農曆年後開始籌備，大會活動日會以：七月底或八月初的某週六與週日來選定（約在每年的 `W30`、`W31`），行政組會需要在與大會一同啟動。
-
-### 會議規則與工作事項管理
-
-離大會活動一個月前、每兩週於週四晚上開會，離大會活動一個內、每週四晚上開會，每次會議時間為一個小時。
-
-!!! tip
-
-    大會會議時間（理論上）會在週三晚上。
-
-行政組主要使用 [Trello](https://trello.com/b/CBc8kC1H) 作為任務管理平台，➀開會前需更新任務卡片進度。➁開會中建立與認領任務卡片。➂開會後依放入該週預計完成之任務卡片、開始執行任務。
-
-### 團隊溝通方式
-
-籌備期間主要是以 [Mattermost](https://chat.coscup.org/) 為主，線上案會議會使用 Google Meet。Telegram 為輔助使用工具。郵件群組為：[secretary@coscup.org](mailto:secretary@coscup.org)。
+---
 
 ## 關鍵字解說 Glossary
+
+針對上述提到的工作事項作稍微詳細的說明。
 
 ### 活動場地責任險
 

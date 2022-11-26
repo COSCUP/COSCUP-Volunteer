@@ -1,4 +1,5 @@
 site_name: COSCUP Volunteer Docs
+site_url: https://volunteer.coscup.org/docs/
 repo_url: https://github.com/COSCUP/COSCUP-Volunteer
 repo_name: COSCUP/COSCUP-Volunteer
 edit_uri: https://github.com/COSCUP/COSCUP-Volunteer/blob/main/docs_dev/docs/
@@ -17,60 +18,60 @@ nav:
       - Developer Certificate of Origin (DCO): dev/dco.md
       - How to sign-off commits: dev/how-to-signoff.md
     - API: dev/api.md
+    - Code Reference:
+      - Overview: code_reference/overview.md
+      - Main: code_reference/main.md
+      - View: code_reference/view.md
+      - Celery Task: code_reference/celery_task.md
+      - Models:
+        - base: code_reference/models/base.md
+        - budgetdb: code_reference/models/budgetdb.md
+        - expensedb: code_reference/models/expensedb.md
+        - formdb: code_reference/models/formdb.md
+        - index: code_reference/models/index.md
+        - mailletterdb: code_reference/models/mailletterdb.md
+        - mattermost_link_db: code_reference/models/mattermost_link_db.md
+        - mattermostdb: code_reference/models/mattermostdb.md
+        - oauth_db: code_reference/models/oauth_db.md
+        - projectdb: code_reference/models/projectdb.md
+        - senderdb: code_reference/models/senderdb.md
+        - tasksdb: code_reference/models/tasksdb.md
+        - teamdb: code_reference/models/teamdb.md
+        - telegram_db: code_reference/models/telegram_db.md
+        - users_db: code_reference/models/users_db.md
+        - usessiondb: code_reference/models/usessiondb.md
+        - waitlistdb: code_reference/models/waitlistdb.md
+      - Module:
+        - awsses: code_reference/module/awsses.md
+        - budget: code_reference/module/budget.md
+        - dietary_habit: code_reference/module/dietary_habit.md
+        - expense: code_reference/module/expense.md
+        - form: code_reference/module/form.md
+        - mc: code_reference/module/mc.md
+        - oauth: code_reference/module/oauth.md
+        - project: code_reference/module/project.md
+        - sender: code_reference/module/sender.md
+        - service_sync: code_reference/module/service_sync.md
+        - skill: code_reference/module/skill.md
+        - tasks: code_reference/module/tasks.md
+        - users: code_reference/module/users.md
+        - usession: code_reference/module/usession.md
+        - waitlist: code_reference/module/waitlist.md
+        - Third Party API:
+          - gitlab_api: code_reference/module/gitlab_api.md
+          - gsuite: code_reference/module/gsuite.md
+          - ipinfo: code_reference/module/ipinfo.md
+          - mattermost: code_reference/module/mattermost.md
+          - telegram_bot: code_reference/module/telegram_bot.md
+      - Structs:
+        - projects: code_reference/structs/projects.md
+        - tasks: code_reference/structs/tasks.md
+        - teams: code_reference/structs/teams.md
+        - users: code_reference/structs/users.md
   - Security: security.md
   - About Secretary Team:
     - Overview: secretary_team/overview.md
     - Recruit: secretary_team/recruit.md
-  - Code Reference:
-    - Overview: code_reference/overview.md
-    - Main: code_reference/main.md
-    - View: code_reference/view.md
-    - Celery Task: code_reference/celery_task.md
-    - Models:
-      - base: code_reference/models/base.md
-      - budgetdb: code_reference/models/budgetdb.md
-      - expensedb: code_reference/models/expensedb.md
-      - formdb: code_reference/models/formdb.md
-      - index: code_reference/models/index.md
-      - mailletterdb: code_reference/models/mailletterdb.md
-      - mattermost_link_db: code_reference/models/mattermost_link_db.md
-      - mattermostdb: code_reference/models/mattermostdb.md
-      - oauth_db: code_reference/models/oauth_db.md
-      - projectdb: code_reference/models/projectdb.md
-      - senderdb: code_reference/models/senderdb.md
-      - tasksdb: code_reference/models/tasksdb.md
-      - teamdb: code_reference/models/teamdb.md
-      - telegram_db: code_reference/models/telegram_db.md
-      - users_db: code_reference/models/users_db.md
-      - usessiondb: code_reference/models/usessiondb.md
-      - waitlistdb: code_reference/models/waitlistdb.md
-    - Module:
-      - awsses: code_reference/module/awsses.md
-      - budget: code_reference/module/budget.md
-      - dietary_habit: code_reference/module/dietary_habit.md
-      - expense: code_reference/module/expense.md
-      - form: code_reference/module/form.md
-      - mc: code_reference/module/mc.md
-      - oauth: code_reference/module/oauth.md
-      - project: code_reference/module/project.md
-      - sender: code_reference/module/sender.md
-      - service_sync: code_reference/module/service_sync.md
-      - skill: code_reference/module/skill.md
-      - tasks: code_reference/module/tasks.md
-      - users: code_reference/module/users.md
-      - usession: code_reference/module/usession.md
-      - waitlist: code_reference/module/waitlist.md
-      - Third Party API:
-        - gitlab_api: code_reference/module/gitlab_api.md
-        - gsuite: code_reference/module/gsuite.md
-        - ipinfo: code_reference/module/ipinfo.md
-        - mattermost: code_reference/module/mattermost.md
-        - telegram_bot: code_reference/module/telegram_bot.md
-    - Structs:
-      - projects: code_reference/structs/projects.md
-      - tasks: code_reference/structs/tasks.md
-      - teams: code_reference/structs/teams.md
-      - users: code_reference/structs/users.md
 theme:
   name: material
   icon:
@@ -126,6 +127,8 @@ plugins:
           "About Secretary Team": "關於行政組"
           Recruit: "招募"
   - search
+  - social:
+      cards_font: Noto Sans TC
   - git-revision-date-localized
   - mkdocstrings:
       handlers:
