@@ -1,5 +1,7 @@
 site_name: COSCUP Volunteer Docs
 site_url: https://volunteer.coscup.org/docs/
+site_description: "Documentation for users, developers, and team members"
+site_author: "COSCUP Secretary Team / 行政組"
 repo_url: https://github.com/COSCUP/COSCUP-Volunteer
 repo_name: COSCUP/COSCUP-Volunteer
 edit_uri: https://github.com/COSCUP/COSCUP-Volunteer/blob/main/docs_dev/docs/
