@@ -181,7 +181,7 @@ def campaign_receiver(pid: str, tid: str, cid: str) -> str | ResponseBase:
 
                 team_w_tags = []
                 if team.tag_members:
-                    team_w_tags = team.tag_members
+                    team_w_tags = [t_m.dict() for t_m in team.tag_members]
 
                 sender_receiver = SenderReceiver.get(pid=team.pid, cid=cid)
 

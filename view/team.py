@@ -175,7 +175,7 @@ def members(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-ma
 
             tags = []
             if team.tag_members:
-                tags = team.tag_members
+                tags = [t_m.dict() for t_m in team.tag_members]
 
             members_tags = Team.get_members_tags(pid=team.pid, tid=team.id)
 
@@ -316,7 +316,7 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
 
                 return jsonify({
                     'members': result_members,
-                    'tags': team.tag_members if team.tag_members else [],
+                    'tags': [t_m.dict() for t_m in team.tag_members] if team.tag_members else [],
                     'members_tags': Team.get_members_tags(pid=pid, tid=tid),
                 })
 
