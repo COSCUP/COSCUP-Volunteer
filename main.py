@@ -73,6 +73,7 @@ NO_NEED_LOGIN_PATH = {
     '/links/chat',
     '/privacy',
     '/coc',
+    '/security_guard',
     '/bug-report',
     '/robots.txt',
     '/api/members',
@@ -293,7 +294,7 @@ def privacy() -> str:
     mem_cahce = MC.get_client()
     content = mem_cahce.get('page:privacy')
     if not content:
-        with open('./privacy.md', 'r', encoding='UTF-8') as files:
+        with open('./templates/privacy.md', 'r', encoding='UTF-8') as files:
             content = markdown(files.read())
             mem_cahce.set('page:privacy', content, 3600)
 
@@ -307,7 +308,7 @@ def coc() -> ResponseBase | str:
         mem_cahce = MC.get_client()
         content = mem_cahce.get('page:coc')
         if not content:
-            with open('./coc.md', 'r', encoding='UTF-8') as files:
+            with open('./templates/coc.md', 'r', encoding='UTF-8') as files:
                 content = markdown(files.read())
                 mem_cahce.set('page:coc', content, 3600)
 
@@ -317,6 +318,25 @@ def coc() -> ResponseBase | str:
         ...
 
     return redirect('/coc')
+
+
+@app.route('/security_guard', methods=('GET', 'POST'))
+def security_guard() -> ResponseBase | str:
+    ''' Security Guard '''
+    if request.method == 'GET':
+        mem_cahce = MC.get_client()
+        content = mem_cahce.get('page:security_g')
+        if not content:
+            with open('./templates/security_guard.md', 'r', encoding='UTF-8') as files:
+                content = markdown(files.read())
+                mem_cahce.set('page:security_g', content, 3600)
+
+        return render_template('./security_guard.html', content=content)
+
+    if request.method == 'POST':
+        ...
+
+    return redirect('/security_guard')
 
 
 @app.route('/bug-report')
