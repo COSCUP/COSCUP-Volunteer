@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block head_title %} - COSCUP 社群守則 Code of Conduct{% endblock %}
+{% block og_title %}COSCUP 社群守則 Code of Conduct {% endblock %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+      社群守則 Code of Conduct
+    </h1>
+    <p class="subtitle">請尊重所有人。 Be respectful of other people.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter">
+                <div class="content">
+                    {{content|safe}}
+                </div>
+                <div class="content">
+                  <form method="POST">
+                    <button type="submit" class="button is-link is-medium is-fullwidth">
+                      已閱讀完守則
+                    </button>
+                  </form>
+                </div>
+            </div>
+        </div>
+  </div>
+</section>
+{% endblock %}

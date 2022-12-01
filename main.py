@@ -72,6 +72,7 @@ NO_NEED_LOGIN_PATH = {
     '/logout',
     '/links/chat',
     '/privacy',
+    '/coc',
     '/bug-report',
     '/robots.txt',
     '/api/members',
@@ -297,6 +298,25 @@ def privacy() -> str:
             mem_cahce.set('page:privacy', content, 3600)
 
     return render_template('./privacy.html', content=content)
+
+
+@app.route('/coc', methods=('GET', 'POST'))
+def coc() -> ResponseBase | str:
+    ''' coc '''
+    if request.method == 'GET':
+        mem_cahce = MC.get_client()
+        content = mem_cahce.get('page:coc')
+        if not content:
+            with open('./coc.md', 'r', encoding='UTF-8') as files:
+                content = markdown(files.read())
+                mem_cahce.set('page:coc', content, 3600)
+
+        return render_template('./coc.html', content=content)
+
+    if request.method == 'POST':
+        ...
+
+    return redirect('/coc')
 
 
 @app.route('/bug-report')
