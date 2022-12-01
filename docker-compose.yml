@@ -59,10 +59,9 @@ services:
       - secretary_mongo
     environment:
       - LD_PRELOAD=/usr/local/lib/libjemalloc.so
+      - PYTHONPATH=/app
     networks:
       - backend
-    environment:
-      - PYTHONPATH=/app
     entrypoint: ["poetry", "run", "python3", "cmdtools/main.py"]
 
   webapp:
