@@ -2,14 +2,16 @@
 from typing import Any, Generator, Optional
 
 import arrow
-from pydantic import parse_obj_as
+from pydantic import BaseModel, Field, parse_obj_as
 from pymongo.collection import ReturnDocument
 
 from models.oauth_db import OAuthDB
-from models.users_db import TobeVolunteerDB, UsersDB, PolicySignedDB
+from models.users_db import PolicySignedDB, TobeVolunteerDB, UsersDB
 from module.dietary_habit import DietaryHabitItemsValue
 from module.skill import TobeVolunteerStruct
-from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase, PolicyType
+from structs.users import PolicyType
+from structs.users import User as UserStruct
+from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase
 
 
 class User:
@@ -481,3 +483,47 @@ class PolicySigned:
             'type': _type.value, 'uid': uid, 'sign_at': {'$gte': sign_at}
         }, {'_id': 0}):
             yield raw
+
+
+class AccountPass(BaseModel):
+    ''' Account Pass '''
+    uid: str = Field(description='user id')
+    is_profile: bool = Field(default=False, description='Profile is ok.')
+    is_coc: bool = Field(default=False, description='COC read is ok.')
+    is_security_guard: bool = Field(
+        default=False, description='Security guard read is ok.')
+
+    def __init__(self, **data: Any):  # pylint: disable=no-self-argument
+        ''' load user data '''
+        super().__init__(**data)
+        self.check_profile()
+        self.check_signed_policy()
+
+    def check_profile(self, at_least: int = 200) -> None:
+        ''' Check profile is ok
+
+        Args:
+            at_least (int): at least words
+
+        '''
+        user_data = UserStruct.parse_obj(User(uid=self.uid).get())
+        if user_data is None:
+            return None
+
+        if user_data.profile is not None and user_data.profile.intro:
+            if len(user_data.profile.intro.strip()) > at_least and \
+                    all((key in user_data.profile.intro for key in ('技能', '年度期待'))):
+                self.is_profile = True
+
+        return None
+
+    def check_signed_policy(self) -> None:
+        ''' check the policy signed '''
+        print(PolicyType.COC)
+        for _ in PolicySigned.is_recently_signed(uid=self.uid, _type=PolicyType.COC):
+            self.is_coc = True
+            break
+
+        for _ in PolicySigned.is_recently_signed(uid=self.uid, _type=PolicyType.SECURITY_GUARD):
+            self.is_security_guard = True
+            break

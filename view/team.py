@@ -8,7 +8,7 @@ from typing import Any, Callable
 import arrow
 import phonenumbers
 from flask import (Blueprint, g, jsonify, make_response, redirect,
-                   render_template, request, url_for)
+                   render_template, request, url_for, flash)
 from flask.wrappers import Response
 from markdown import markdown
 from pydantic import BaseModel, Field
@@ -21,7 +21,7 @@ from module.expense import Expense
 from module.form import Form, FormAccommodation, FormTrafficFeeMapping
 from module.mattermost_bot import MattermostTools
 from module.team import Team
-from module.users import User
+from module.users import User, AccountPass
 from module.waitlist import WaitList
 from structs.teams import TeamUsers
 from view.utils import check_the_team_and_project_are_existed
@@ -421,7 +421,7 @@ def team_edit_user_api(pid: str, tid: str) -> ResponseBase:  # pylint: disable=t
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/join_to', methods=('GET', 'POST'))
-def team_join_to(pid: str, tid: str) -> str | ResponseBase:
+def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-many-return-statements
     ''' Team join to '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
@@ -436,6 +436,21 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:
             g.user['account']['_id'] in teamusers.chiefs:
         return redirect(url_for('team.index', pid=pid, tid=tid))
 
+    user_pass = AccountPass(uid=g.user['account']['_id'])
+
+    if not user_pass.is_profile:
+        flash('''請完成「<a href="/setting/profile">我的簡介</a>」，
+        編寫內容請包含：<strong>自我介紹</strong>、<strong>技能</strong>、<strong>年度期待</strong>
+        （參考：<a href="/user/e161787f">範例一</a>、
+        <a href="/user/2b17b7b8">範例二</a>、<a href="/user/6c74e623">範例三</a>）。
+        可使用 Markdown 的語法排版（<a href="https://markdown.tw/">語法參考</a>）。''')
+
+    if not user_pass.is_coc:
+        flash('請先閱讀「<a href="/coc">社群守則</a>」。')
+
+    if not user_pass.is_security_guard:
+        flash('請先閱讀「<a href="/security_guard">資料保護原則 </a>」。')
+
     if request.method == 'GET':
         is_in_wait = WaitList.is_in_wait(
             pid=team.pid, tid=team.id, uid=g.user['account']['_id'])
@@ -449,6 +464,9 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:
                                team=team.dict(by_alias=True), is_in_wait=is_in_wait)
 
     if request.method == 'POST':
+        if not all((user_pass.is_profile, user_pass.is_coc, user_pass.is_security_guard)):
+            return redirect(f'/team/{team.pid}/{team.id}/join_to')
+
         WaitList.join_to(
             pid=pid, tid=tid, uid=g.user['account']['_id'], note=request.form['note'].strip())
         TeamMemberChangedDB().make_record(

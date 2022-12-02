@@ -12,8 +12,8 @@ from urllib.parse import parse_qs, urlparse
 import arrow
 import google_auth_oauthlib.flow
 from apiclient import discovery
-from flask import (Flask, g, got_request_exception, redirect, render_template,
-                   request, session, url_for)
+from flask import (Flask, flash, g, got_request_exception, make_response,
+                   redirect, render_template, request, session, url_for)
 from flask.wrappers import Response
 from markdown import markdown
 from werkzeug.wrappers import Response as ResponseBase
@@ -25,8 +25,9 @@ from module.mattermost_bot import MattermostTools
 from module.mc import MC
 from module.oauth import OAuth
 from module.team import Team
-from module.users import User
+from module.users import PolicySigned, User
 from module.usession import USession
+from structs.users import PolicyType
 from view.api import VIEW_API
 from view.budget import VIEW_BUDGET
 from view.expense import VIEW_EXPENSE
@@ -242,7 +243,7 @@ def oauth2callback() -> ResponseBase:
 
         # ----- save oauth info ----- #
         OAuth.add(mail=user_info['email'],
-                  data=user_info, token=flow.credentials)
+                  data=user_info, token=flow.credentials)  # type: ignore
 
         # ----- Check account or create ----- #
         owner = OAuth.owner(mail=user_info['email'])
@@ -315,7 +316,13 @@ def coc() -> ResponseBase | str:
         return render_template('./coc.html', content=content)
 
     if request.method == 'POST':
-        ...
+        if not g.user:
+            return make_response({}, 404)
+
+        PolicySigned.sign(
+            uid=g.user['account']['_id'], _type=PolicyType.COC)
+
+        flash('已簽署完成！')
 
     return redirect('/coc')
 
@@ -334,7 +341,13 @@ def security_guard() -> ResponseBase | str:
         return render_template('./security_guard.html', content=content)
 
     if request.method == 'POST':
-        ...
+        if not g.user:
+            return make_response({}, 404)
+
+        PolicySigned.sign(
+            uid=g.user['account']['_id'], _type=PolicyType.SECURITY_GUARD)
+
+        flash('已簽署完成！')
 
     return redirect('/security_guard')
 

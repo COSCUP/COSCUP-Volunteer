@@ -39,6 +39,27 @@
                                   </div>
                               </div>
                           </article>
+                          {% with messages = get_flashed_messages() %}
+                          {% if messages %}
+                          <article class="message is-danger">
+                              <div class="message-header">
+                                  <p>
+                                      <span class="icon has-text-white"><i class="fas fa-info-circle"></i></span>
+                                      <span>請先完成以下事項</span>
+                                  </p>
+                              </div>
+                              <div class="message-body">
+                                  <div class="content">
+                                    <ol>
+                                        {% for msg in messages %}
+                                        <li>{{ msg|safe }}</li>
+                                        {% endfor %}
+                                    </ol>
+                                  </div>
+                              </div>
+                          </article>
+                          {% endif %}
+                          {% endwith %}
                           <p>感謝申請加入 <strong>{{project.name}} / {{team.name}}</strong>，提出申請後敬請稍等組長們的審核。<p>
                           <p>可以<strong>再</strong>針對以下問題來給組長判斷加入的依據：</p>
                           <p>
