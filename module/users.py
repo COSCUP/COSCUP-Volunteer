@@ -461,7 +461,7 @@ class PolicySigned:
 
         Args:
             uid (str): user name
-            _type (PolcyType): Policy type
+            _type (PolicyType): Policy type
 
         '''
         PolicySignedDB().save(uid=uid, _type=_type)
@@ -473,7 +473,7 @@ class PolicySigned:
 
         Args:
             uid (str): user name
-            _type (PolcyType): Policy type
+            _type (PolicyType): Policy type
             days (int): last days
 
         '''

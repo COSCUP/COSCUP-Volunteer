@@ -169,7 +169,14 @@ class PolicyType(str, Enum):
 
 
 class PolicySigned(BaseModel):
-    ''' Policy Signed struct '''
+    ''' Policy Signed struct
+
+    Attributes:
+        uid: user id.
+        type: type of [PolicyType](PolicyType).
+        sign_at: datetime.
+
+    '''
     uid: str = Field(description='user id')
     type: PolicyType = Field(description='Policy type')
     sign_at: datetime = Field(
