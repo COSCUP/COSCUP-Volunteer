@@ -4,8 +4,10 @@ from typing import Any
 from uuid import uuid4
 
 from pymongo.collection import ReturnDocument
+from pymongo.results import InsertOneResult
 
 from models.base import DBBase
+from structs.users import PolicyType, PolicySigned
 
 
 class UsersDB(DBBase):  # pylint: disable=abstract-method
@@ -83,3 +85,29 @@ class TobeVolunteerDB(DBBase):  # pylint: disable=abstract-method
             upsert=True,
             return_document=ReturnDocument.AFTER,
         )
+
+
+class PolicySignedDB(DBBase):
+    ''' PolicySigned Collection '''
+
+    def __init__(self) -> None:
+        super().__init__('policy_signed')
+
+    def index(self) -> None:
+        ''' To make collection's index
+
+        Indexs:
+            - `type`, `sign_at`
+
+        '''
+        self.create_index([('type', 1), ('sign_at', -1), ])
+
+    def save(self, uid: str, _type: PolicyType) -> InsertOneResult:
+        ''' Save the signed data
+
+        Args:
+            uid (str): user id
+            _type (PolicyType): Ploicy type
+
+        '''
+        return self.insert_one(PolicySigned(uid=uid, type=_type).dict())

@@ -1,4 +1,5 @@
 ''' User Structs '''
+from enum import Enum
 from datetime import datetime
 from time import time
 from typing import Optional
@@ -159,3 +160,21 @@ class User(BaseModel):
 
         '''
         anystr_strip_whitespace: bool = True
+
+
+class PolicyType(str, Enum):
+    ''' Policy Type '''
+    COC = 'coc'
+    SECURITY_GUARD = 'security_guard'
+
+
+class PolicySigned(BaseModel):
+    ''' Policy Signed struct '''
+    uid: str = Field(description='user id')
+    type: PolicyType = Field(description='Policy type')
+    sign_at: datetime = Field(
+        description='The policy signed at', default_factory=datetime.now)
+
+    class Config:  # pylint: disable=too-few-public-methods
+        ''' Config'''
+        use_enum_values = True

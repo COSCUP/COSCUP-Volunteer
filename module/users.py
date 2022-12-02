@@ -1,14 +1,15 @@
 ''' users '''
 from typing import Any, Generator, Optional
 
+import arrow
 from pydantic import parse_obj_as
 from pymongo.collection import ReturnDocument
 
 from models.oauth_db import OAuthDB
-from models.users_db import TobeVolunteerDB, UsersDB
+from models.users_db import TobeVolunteerDB, UsersDB, PolicySignedDB
 from module.dietary_habit import DietaryHabitItemsValue
 from module.skill import TobeVolunteerStruct
-from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase
+from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase, PolicyType
 
 
 class User:
@@ -447,4 +448,36 @@ class TobeVolunteer:
             _query['$or'] = _or
 
         for raw in TobeVolunteerDB().find(_query):
+            yield raw
+
+
+class PolicySigned:
+    ''' Policy Signed '''
+    @staticmethod
+    def sign(uid: str, _type: PolicyType) -> None:
+        ''' make sign for policy
+
+        Args:
+            uid (str): user name
+            _type (PolcyType): Policy type
+
+        '''
+        PolicySignedDB().save(uid=uid, _type=_type)
+
+    @staticmethod
+    def is_recently_signed(uid: str, _type: PolicyType, days: int = 90) -> \
+            Generator[dict[str, Any], None, None]:
+        ''' is recently signed
+
+        Args:
+            uid (str): user name
+            _type (PolcyType): Policy type
+            days (int): last days
+
+        '''
+        sign_at = arrow.now().shift(days=days*-1).naive
+
+        for raw in PolicySignedDB().find({
+            'type': _type.value, 'uid': uid, 'sign_at': {'$gte': sign_at}
+        }, {'_id': 0}):
             yield raw

@@ -17,7 +17,7 @@ from models.senderdb import SenderReceiverDB
 from models.teamdb import (TeamDB, TeamMemberChangedDB, TeamMemberTagsDB,
                            TeamPlanDB)
 from models.telegram_db import TelegramDB
-from models.users_db import UsersDB
+from models.users_db import UsersDB, PolicySignedDB
 from models.usessiondb import USessionDB
 from models.waitlistdb import WaitListDB
 
@@ -32,6 +32,7 @@ def make_index() -> None:
     MattermostLinkDB().index()
     MattermostUsersDB().index()
     OAuthDB().index()
+    PolicySignedDB().index()
     ProjectDB(pid='').index()
     SenderReceiverDB().index()
     TeamDB(pid='', tid='').index()
