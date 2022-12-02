@@ -243,7 +243,7 @@ def oauth2callback() -> ResponseBase:
 
         # ----- save oauth info ----- #
         OAuth.add(mail=user_info['email'],
-                  data=user_info, token=flow.credentials)  # type: ignore
+                  data=user_info, token=flow.credentials)
 
         # ----- Check account or create ----- #
         owner = OAuth.owner(mail=user_info['email'])
