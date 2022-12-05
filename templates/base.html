@@ -41,29 +41,24 @@
     </div>
     <div class="navbar-menu" id="navMenu" v-bind:class="{'is-active': navtoggle}">
       <div class="navbar-start">
-          {% if g.user and g.user.data %}
-          <a class="navbar-item has-text-weight-medium" href="/project/2022/">
-              <span class="icon"><i class="far fa-bookmark"></i></span>
-              <span>COSCUP 2022</span>
-          </a>
-          <a class="navbar-item has-text-weight-medium" href="/project/2023/">
-              <span class="icon"><i class="far fa-bookmark"></i></span>
-              <span>COSCUP 2023</span>
-          </a>
-          {% else %}
           <a class="navbar-item has-text-weight-medium" href="/tasks/2022">
               <span class="icon"><i class="fas fa-pizza-slice"></i></span>
               <span>2022 解任務！</span>
           </a>
+          {% if g.user and g.user.data %}
           <a class="navbar-item has-text-weight-medium" href="/tasks/2023">
               <span class="icon"><i class="fas fa-pizza-slice"></i></span>
               <span>2023 解任務！</span>
           </a>
+          <a class="navbar-item has-text-weight-medium" href="/project/2022/">
+              <span class="icon"><i class="far fa-bookmark"></i></span>
+              <span>COSCUP 2022</span>
+          </a>
+          {% endif %}
           <a class="navbar-item has-text-weight-medium" href="/project/2023/">
               <span class="icon"><i class="far fa-bookmark"></i></span>
               <span>COSCUP 2023</span>
           </a>
-          {% endif %}
           {% if g.user and g.user.data %}
           {% if g.user['participate_in'] %}
           <div class="navbar-item has-dropdown is-hoverable">

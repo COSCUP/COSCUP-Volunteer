@@ -1,16 +1,41 @@
 {% extends "base.html" %}
 {% block head_title %} - 志工服務系統{% endblock %}
+{% block style %}
+<style>
+  .tophero {
+      background-position: center;
+      background-repeat:  no-repeat;
+      background-size:  cover;
+      background-image: url('https://volunteer.coscup.org/img/index_52304259196_3fed79054a_o_1600_390.png');
+  }
+  .tophero .title,
+  .tophero .subtitle {
+      text-shadow: 1px 1px 2px #000;
+      color: #fff !important;
+  }
+</style>
+{%endblock%}
 {% block body %}
-<section class="section">
-  <div class="container">
-    <h1 class="title">
+<section class="hero is-medium tophero">
+    <div class="hero-body">
+      <p class="title">
         Volunteering COSCUP
-    </h1>
-    <p class="subtitle">COSCUP 志工第一站</p>
-  </div>
+      </p>
+      <p class="subtitle">COSCUP 志工第一站</p>
+    </div>
 </section>
 <section class="section">
   <div class="container">
+      <div class="columns">
+          <div class="column">
+            <div class="has-text-centered">
+                <a href="/project/2023" class="button is-large is-info is-outlined is-light">
+                    <span class="icon"><i class="far fa-check-circle"></i></span>
+                    <span>加入志工夥伴</span>
+                </a>
+            </div>
+          </div>
+      </div>
       <div class="columns">
           <div class="column">
               <article class="message is-info">
