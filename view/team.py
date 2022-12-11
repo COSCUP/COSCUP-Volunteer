@@ -438,6 +438,9 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
 
     user_pass = AccountPass(uid=g.user['account']['_id'])
 
+    if user_pass.is_edu_account:
+        flash('請勿使用學校帳號註冊！')
+
     if not user_pass.is_profile:
         flash('''請完成「<a href="/setting/profile">我的簡介</a>」，
         編寫內容請包含：<strong>自我介紹</strong>、<strong>技能</strong>、<strong>年度期待</strong>

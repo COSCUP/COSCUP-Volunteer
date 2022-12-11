@@ -8,11 +8,11 @@ from pymongo.collection import ReturnDocument
 from models.oauth_db import OAuthDB
 from models.users_db import PolicySignedDB, TobeVolunteerDB, UsersDB
 from module.dietary_habit import DietaryHabitItemsValue
+from module.mattermost_bot import MattermostTools
 from module.skill import TobeVolunteerStruct
 from structs.users import PolicyType
 from structs.users import User as UserStruct
 from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase
-from module.mattermost_bot import MattermostTools
 
 
 class User:
@@ -493,6 +493,7 @@ class AccountPass(BaseModel):
     is_coc: bool = Field(default=False, description='COC read is ok.')
     is_security_guard: bool = Field(
         default=False, description='Security guard read is ok.')
+    is_edu_account: bool = Field(default=False, description="edu account mail")
     has_chat: bool = Field(default=False, description="chat account is ready")
 
     def __init__(self, **data: Any):  # pylint: disable=no-self-argument
@@ -512,6 +513,9 @@ class AccountPass(BaseModel):
         user_data = UserStruct.parse_obj(User(uid=self.uid).get())
         if user_data is None:
             return None
+
+        if user_data.mail.endswith('edu.tw'):
+            self.is_edu_account = True
 
         if user_data.profile is not None and user_data.profile.intro:
             if len(user_data.profile.intro.strip()) > at_least and \
