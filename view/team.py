@@ -451,6 +451,10 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
     if not user_pass.is_security_guard:
         flash('請先閱讀「<a href="/security_guard">資料保護原則 </a>」。')
 
+    if not user_pass.has_chat:
+        flash(
+            '請先建立 Mattermost 帳號，前往「<a href="/setting/link/chat">連結 chat.coscup.org 帳號</a>」。')
+
     if request.method == 'GET':
         is_in_wait = WaitList.is_in_wait(
             pid=team.pid, tid=team.id, uid=g.user['account']['_id'])

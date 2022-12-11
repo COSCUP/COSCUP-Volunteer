@@ -12,6 +12,7 @@ from module.skill import TobeVolunteerStruct
 from structs.users import PolicyType
 from structs.users import User as UserStruct
 from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase
+from module.mattermost_bot import MattermostTools
 
 
 class User:
@@ -492,12 +493,14 @@ class AccountPass(BaseModel):
     is_coc: bool = Field(default=False, description='COC read is ok.')
     is_security_guard: bool = Field(
         default=False, description='Security guard read is ok.')
+    has_chat: bool = Field(default=False, description="chat account is ready")
 
     def __init__(self, **data: Any):  # pylint: disable=no-self-argument
         ''' load user data '''
         super().__init__(**data)
         self.check_profile()
         self.check_signed_policy()
+        self.check_has_chat_account()
 
     def check_profile(self, at_least: int = 200) -> None:
         ''' Check profile is ok
@@ -527,3 +530,8 @@ class AccountPass(BaseModel):
         for _ in PolicySigned.is_recently_signed(uid=self.uid, _type=PolicyType.SECURITY_GUARD):
             self.is_security_guard = True
             break
+
+    def check_has_chat_account(self) -> None:
+        ''' check has chat account '''
+        if MattermostTools.find_possible_mid(uid=self.uid):
+            self.has_chat = True

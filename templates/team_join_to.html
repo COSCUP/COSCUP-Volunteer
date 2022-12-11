@@ -39,7 +39,7 @@
                                   </div>
                               </div>
                           </article>
-                          {% with messages = get_flashed_messages() %}
+                          {% set messages = get_flashed_messages() %}
                           {% if messages %}
                           <article class="message is-danger">
                               <div class="message-header">
@@ -59,7 +59,6 @@
                               </div>
                           </article>
                           {% endif %}
-                          {% endwith %}
                           <p>感謝申請加入 <strong>{{project.name}} / {{team.name}}</strong>，提出申請後敬請稍等組長們的審核。<p>
                           <p>可以<strong>再</strong>針對以下問題來給組長判斷加入的依據：</p>
                           <p>
@@ -75,13 +74,13 @@
                   <div class="field">
                       <label class="label">給組長的訊息</label>
                       <div class="control">
-                          <textarea class="textarea" name="note"></textarea>
+                          <textarea class="textarea" name="note"{%if messages %} disabled{%endif%}></textarea>
                       </div>
                       <p class="help is-success">可以留下訊息或是簡介讓組長方便審閱。</p>
                   </div>
                   <div class="field">
                       <div class="control">
-                          <button class="button is-link is-fullwidth" type="submit">
+                          <button class="button is-link is-fullwidth" type="submit"{%if messages %} disabled{%endif%}>
                               <span class="icon"><i class="far fa-hand-point-right"></i></span>
                               <span>申請加入 {{project.name}} / {{team.name}}</span>
                           </button>
