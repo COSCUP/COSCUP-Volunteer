@@ -400,11 +400,16 @@ def team_edit_user_api(pid: str, tid: str) -> ResponseBase:  # pylint: disable=t
 
         if data['result'] == 'approval':
             all_members = len(set(teamusers.members + teamusers.chiefs))
-            if team.headcount is not None and all_members >= team.headcount:
-                return jsonify({
-                    'status': 'fail',
-                    'message': 'over headcount.'},
-                    status=406)
+            if team.headcount is not None and \
+                    team.headcount > 0 and all_members >= team.headcount:
+
+                return Response(
+                    response=json.dumps({
+                        'status': 'fail',
+                        'message': 'over headcount.'}),
+                    status=406,
+                    mimetype='application/json',
+                )
 
         wait_info = WaitList.make_result(
             wid=data['wid'], pid=pid, uid=data['uid'], result=data['result'])
