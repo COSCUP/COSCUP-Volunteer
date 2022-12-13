@@ -426,7 +426,7 @@ def team_edit_user_api(pid: str, tid: str) -> ResponseBase:  # pylint: disable=t
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/join_to', methods=('GET', 'POST'))
-def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-many-return-statements
+def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-many-return-statements,too-many-branches
     ''' Team join to '''
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
