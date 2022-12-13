@@ -71,6 +71,9 @@ nav:
         - teams: code_reference/structs/teams.md
         - users: code_reference/structs/users.md
   - Security: security.md
+  - About COSCUP:
+    - Team Leader Handbook: about_coscup/team_leader_handbook.md
+    - Team Member Handbook: about_coscup/team_member_handbook.md
   - About Secretary Team:
     - Overview: secretary_team/overview.md
     - Recruit: secretary_team/recruit.md
@@ -128,6 +131,9 @@ plugins:
           Security: "資安通報"
           "About Secretary Team": "關於行政組"
           Recruit: "招募"
+          "About COSCUP": "關於 COSCUP"
+          "Team Leader Handbook": "組長手冊"
+          "Team Member Handbook": "組員手冊"
   - search
   - social:
       cards_font: Noto Sans TC
