@@ -479,6 +479,10 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
         if not all((user_pass.is_profile, user_pass.is_coc, user_pass.is_security_guard)):
             return redirect(f'/team/{team.pid}/{team.id}/join_to')
 
+        if len(request.form['note'].strip()) < 100:
+            flash('請完整敘述內容。勿留空白！')
+            return redirect(f'/team/{team.pid}/{team.id}/join_to')
+
         WaitList.join_to(
             pid=pid, tid=tid, uid=g.user['account']['_id'], note=request.form['note'].strip())
         TeamMemberChangedDB().make_record(
