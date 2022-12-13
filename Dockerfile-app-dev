@@ -60,8 +60,7 @@ ADD ./templates/base.html ./templates/base.html
 ADD ./templates/budget.html ./templates/budget.html
 ADD ./templates/budget_batch.html ./templates/budget_batch.html
 ADD ./templates/bug_report.html ./templates/bug_report.html
-ADD ./templates/coc.html ./templates/coc.html
-ADD ./templates/coc.md ./templates/coc.md
+ADD ./templates/coc* ./templates/
 ADD ./templates/dev*.html ./templates/
 ADD ./templates/expense.html ./templates/expense.html
 ADD ./templates/expense_lists.html ./templates/expense_lists.html
@@ -76,12 +75,10 @@ ADD ./templates/mail/coscup_base.html ./templates/mail/coscup_base.html
 ADD ./templates/mail/sender_base.html ./templates/mail/sender_base.html
 ADD ./templates/mail/tasks_star.html ./templates/mail/tasks_star.html
 ADD ./templates/mail/welcome.html ./templates/mail/welcome.html
-ADD ./templates/privacy.html ./templates/privacy.html
-ADD ./templates/privacy.md ./templates/privacy.md
+ADD ./templates/privacy* ./templates/
 ADD ./templates/project*.html ./templates/
 ADD ./templates/recruit_list.html ./templates/recruit_list.html
-ADD ./templates/security_guard.html ./templates/security_guard.html
-ADD ./templates/security_guard.md ./templates/security_guard.md
+ADD ./templates/security_guard* ./templates/
 ADD ./templates/sender*.html ./templates/
 ADD ./templates/setting*.html ./templates/
 ADD ./templates/tasks*.html ./templates/
