@@ -6,29 +6,31 @@ ADD ./cmdtools ./cmdtools
 ADD ./setting.py ./setting.py
 ADD ./uwsgi.ini ./uwsgi.ini
 
-ADD ./celery_task/__init__.py ./celery_task/__init__.py
-ADD ./celery_task/celery_main.py ./celery_task/celery_main.py
-ADD ./celery_task/task*.py ./celery_task/
+ADD ./celery_task/__init__.py
+    ./celery_task/celery_main.py
+	./celery_task/task*.py
+	./celery_task/
 
-ADD ./models/__init__.py ./models/__init__.py
-ADD ./models/api_tokendb.py ./models/api_tokendb.py
-ADD ./models/base.py ./models/base.py
-ADD ./models/budgetdb.py ./models/budgetdb.py
-ADD ./models/expensedb.py ./models/expensedb.py
-ADD ./models/formdb.py ./models/formdb.py
-ADD ./models/index.py ./models/index.py
-ADD ./models/mailletterdb.py ./models/mailletterdb.py
-ADD ./models/mattermost_link_db.py ./models/mattermost_link_db.py
-ADD ./models/mattermostdb.py ./models/mattermostdb.py
-ADD ./models/oauth_db.py ./models/oauth_db.py
-ADD ./models/projectdb.py ./models/projectdb.py
-ADD ./models/senderdb.py ./models/senderdb.py
-ADD ./models/tasksdb.py ./models/tasksdb.py
-ADD ./models/teamdb.py ./models/teamdb.py
-ADD ./models/telegram_db.py ./models/telegram_db.py
-ADD ./models/users_db.py ./models/users_db.py
-ADD ./models/usessiondb.py ./models/usessiondb.py
-ADD ./models/waitlistdb.py ./models/waitlistdb.py
+ADD ./models/__init__.py
+    ./models/api_tokendb.py
+    ./models/base.py
+    ./models/budgetdb.py
+    ./models/expensedb.py
+    ./models/formdb.py
+    ./models/index.py
+    ./models/mailletterdb.py
+    ./models/mattermost_link_db.py
+    ./models/mattermostdb.py
+    ./models/oauth_db.py
+    ./models/projectdb.py
+    ./models/senderdb.py
+    ./models/tasksdb.py
+    ./models/teamdb.py
+    ./models/telegram_db.py
+    ./models/users_db.py
+    ./models/usessiondb.py
+    ./models/waitlistdb.py
+    ./models/
 
 ADD ./module/__init__.py ./module/__init__.py
 ADD ./module/api_token.py ./module/api_token.py
