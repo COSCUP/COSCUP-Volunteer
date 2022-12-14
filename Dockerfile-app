@@ -1,11 +1,11 @@
 FROM coscupweb-base:22.11.27
 
-ADD ./client_secret.json ./client_secret.json
-ADD ./cmdtools ./cmdtools
-ADD ./secretary-e00794553a7d.json ./secretary-e00794553a7d.json
-ADD ./setting.py ./setting.py
-ADD ./uwsgi.ini ./uwsgi.ini
-ADD ./main.py ./main.py
+ADD ./client_secret.json \
+    ./secretary-e00794553a7d.json \
+    ./setting.py \
+    ./uwsgi.ini \
+    ./main.py \
+    ./
 
 ADD ./celery_task/__init__.py \
     ./celery_task/celery_main.py \
@@ -73,11 +73,6 @@ ADD ./templates/base.html \
     ./templates/guide_index.html \
     ./templates/index.html \
     ./templates/index_guide.html \
-    ./templates/mail/base*.html \
-    ./templates/mail/coscup_base.html \
-    ./templates/mail/sender_base.html \
-    ./templates/mail/tasks_star.html \
-    ./templates/mail/welcome.html \
     ./templates/privacy* \
     ./templates/project*.html \
     ./templates/recruit_list.html \
@@ -88,6 +83,13 @@ ADD ./templates/base.html \
     ./templates/team*.html \
     ./templates/user.html \
     ./templates/
+
+ADD ./templates/mail/base*.html \
+    ./templates/mail/coscup_base.html \
+    ./templates/mail/sender_base.html \
+    ./templates/mail/tasks_star.html \
+    ./templates/mail/welcome.html \
+    ./templates/mail/
 
 ADD ./view/__init__.py \
     ./view/api.py \
