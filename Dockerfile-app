@@ -1,127 +1,133 @@
 FROM coscupweb-base:22.11.27
 
 ADD ./client_secret.json ./client_secret.json
+ADD ./cmdtools ./cmdtools
 ADD ./secretary-e00794553a7d.json ./secretary-e00794553a7d.json
 ADD ./setting.py ./setting.py
 ADD ./uwsgi.ini ./uwsgi.ini
-
-ADD ./celery_task/__init__.py ./celery_task/__init__.py
-ADD ./celery_task/celery_main.py ./celery_task/celery_main.py
-ADD ./celery_task/task*.py ./celery_task/
-
-ADD ./models/__init__.py ./models/__init__.py
-ADD ./models/api_tokendb.py ./models/api_tokendb.py
-ADD ./models/base.py ./models/base.py
-ADD ./models/budgetdb.py ./models/budgetdb.py
-ADD ./models/expensedb.py ./models/expensedb.py
-ADD ./models/formdb.py ./models/formdb.py
-ADD ./models/index.py ./models/index.py
-ADD ./models/mailletterdb.py ./models/mailletterdb.py
-ADD ./models/mattermost_link_db.py ./models/mattermost_link_db.py
-ADD ./models/mattermostdb.py ./models/mattermostdb.py
-ADD ./models/oauth_db.py ./models/oauth_db.py
-ADD ./models/projectdb.py ./models/projectdb.py
-ADD ./models/senderdb.py ./models/senderdb.py
-ADD ./models/tasksdb.py ./models/tasksdb.py
-ADD ./models/teamdb.py ./models/teamdb.py
-ADD ./models/telegram_db.py ./models/telegram_db.py
-ADD ./models/users_db.py ./models/users_db.py
-ADD ./models/usessiondb.py ./models/usessiondb.py
-ADD ./models/waitlistdb.py ./models/waitlistdb.py
-
-ADD ./module/__init__.py ./module/__init__.py
-ADD ./module/api_token.py ./module/api_token.py
-ADD ./module/awsses.py ./module/awsses.py
-ADD ./module/budget.py ./module/budget.py
-ADD ./module/dietary_habit.py ./module/dietary_habit.py
-ADD ./module/expense.py ./module/expense.py
-ADD ./module/form.py ./module/form.py
-ADD ./module/gitlab_api.py ./module/gitlab_api.py
-ADD ./module/gsuite.py ./module/gsuite.py
-ADD ./module/ipinfo.py ./module/ipinfo.py
-ADD ./module/mattermost_bot.py ./module/mattermost_bot.py
-ADD ./module/mattermost_link.py ./module/mattermost_link.py
-ADD ./module/mc.py ./module/mc.py
-ADD ./module/oauth.py ./module/oauth.py
-ADD ./module/project.py ./module/project.py
-ADD ./module/project_working.py ./module/project_working.py
-ADD ./module/sender.py ./module/sender.py
-ADD ./module/service_sync.py ./module/service_sync.py
-ADD ./module/skill.py ./module/skill.py
-ADD ./module/tasks.py ./module/tasks.py
-ADD ./module/team.py ./module/team.py
-ADD ./module/telegram_bot.py ./module/telegram_bot.py
-ADD ./module/users.py ./module/users.py
-ADD ./module/usession.py ./module/usession.py
-ADD ./module/waitlist.py ./module/waitlist.py
-
-ADD ./templates/base.html ./templates/base.html
-ADD ./templates/budget.html ./templates/budget.html
-ADD ./templates/budget_batch.html ./templates/budget_batch.html
-ADD ./templates/bug_report.html ./templates/bug_report.html
-ADD ./templates/coc* ./templates/
-ADD ./templates/expense.html ./templates/expense.html
-ADD ./templates/expense_lists.html ./templates/expense_lists.html
-ADD ./templates/expense_menu.html ./templates/expense_menu.html
-ADD ./templates/expense_my.html ./templates/expense_my.html
-ADD ./templates/form*.html ./templates/
-ADD ./templates/guide_index.html ./templates/guide_index.html
-ADD ./templates/index.html ./templates/index.html
-ADD ./templates/index_guide.html ./templates/index_guide.html
-ADD ./templates/mail/base*.html ./templates/mail/
-ADD ./templates/mail/coscup_base.html ./templates/mail/coscup_base.html
-ADD ./templates/mail/sender_base.html ./templates/mail/sender_base.html
-ADD ./templates/mail/tasks_star.html ./templates/mail/tasks_star.html
-ADD ./templates/mail/welcome.html ./templates/mail/welcome.html
-ADD ./templates/privacy* ./templates/
-ADD ./templates/project*.html ./templates/
-ADD ./templates/recruit_list.html ./templates/recruit_list.html
-ADD ./templates/security_guard* ./templates/
-ADD ./templates/sender*.html ./templates/
-ADD ./templates/setting*.html ./templates/
-ADD ./templates/tasks*.html ./templates/
-ADD ./templates/team*.html ./templates/
-ADD ./templates/user.html ./templates/user.html
-
-ADD ./view/__init__.py ./view/__init__.py
-ADD ./view/api.py ./view/api.py
-ADD ./view/budget.py ./view/budget.py
-ADD ./view/expense.py ./view/expense.py
-ADD ./view/guide.py ./view/guide.py
-ADD ./view/links.py ./view/links.py
-ADD ./view/project.py ./view/project.py
-ADD ./view/recruit.py ./view/recruit.py
-ADD ./view/sender.py ./view/sender.py
-ADD ./view/setting.py ./view/setting.py
-ADD ./view/tasks.py ./view/tasks.py
-ADD ./view/team.py ./view/team.py
-ADD ./view/telegram.py ./view/telegram.py
-ADD ./view/user.py ./view/user.py
-ADD ./view/utils.py ./view/utils.py
-
-ADD ./structs/__init__.py ./structs/__init__.py
-ADD ./structs/projects.py ./structs/projects.py
-ADD ./structs/tasks.py ./structs/tasks.py
-ADD ./structs/teams.py ./structs/teams.py
-ADD ./structs/users.py ./structs/users.py
-
-ADD ./api/__init__.py ./api/__init__.py
-ADD ./api/apistructs/__init__.py ./api/apistructs/__init__.py
-ADD ./api/apistructs/items.py ./api/apistructs/items.py
-ADD ./api/apistructs/members.py ./api/apistructs/members.py
-ADD ./api/apistructs/projects.py ./api/apistructs/projects.py
-ADD ./api/apistructs/sender.py ./api/apistructs/sender.py
-ADD ./api/apistructs/tasks.py ./api/apistructs/tasks.py
-ADD ./api/apistructs/teams.py ./api/apistructs/teams.py
-ADD ./api/apistructs/users.py ./api/apistructs/users.py
-ADD ./api/dependencies.py ./api/dependencies.py
-ADD ./api/main.py ./api/main.py
-ADD ./api/routers/__init__.py ./api/routers/__init__.py
-ADD ./api/routers/members.py ./api/routers/members.py
-ADD ./api/routers/projects.py ./api/routers/projects.py
-ADD ./api/routers/sender.py ./api/routers/sender.py
-ADD ./api/routers/tasks.py ./api/routers/tasks.py
-ADD ./api/routers/teams.py ./api/routers/teams.py
-ADD ./api/routers/user.py ./api/routers/user.py
-
 ADD ./main.py ./main.py
+
+ADD ./celery_task/__init__.py \
+    ./celery_task/celery_main.py \
+	./celery_task/task*.py \
+	./celery_task/
+
+ADD ./models/__init__.py \
+    ./models/api_tokendb.py \
+    ./models/base.py \
+    ./models/budgetdb.py \
+    ./models/expensedb.py \
+    ./models/formdb.py \
+    ./models/index.py \
+    ./models/mailletterdb.py \
+    ./models/mattermost_link_db.py \
+    ./models/mattermostdb.py \
+    ./models/oauth_db.py \
+    ./models/projectdb.py \
+    ./models/senderdb.py \
+    ./models/tasksdb.py \
+    ./models/teamdb.py \
+    ./models/telegram_db.py \
+    ./models/users_db.py \
+    ./models/usessiondb.py \
+    ./models/waitlistdb.py \
+    ./models/
+
+ADD ./module/__init__.py \
+    ./module/api_token.py \
+    ./module/awsses.py \
+    ./module/budget.py \
+    ./module/dietary_habit.py \
+    ./module/expense.py \
+    ./module/form.py \
+    ./module/gitlab_api.py \
+    ./module/gsuite.py \
+    ./module/ipinfo.py \
+    ./module/mattermost_bot.py \
+    ./module/mattermost_link.py \
+    ./module/mc.py \
+    ./module/oauth.py \
+    ./module/project.py \
+    ./module/project_working.py \
+    ./module/sender.py \
+    ./module/service_sync.py \
+    ./module/skill.py \
+    ./module/tasks.py \
+    ./module/team.py \
+    ./module/telegram_bot.py \
+    ./module/users.py \
+    ./module/usession.py \
+    ./module/waitlist.py \
+    ./module/
+
+ADD ./templates/base.html \
+    ./templates/budget.html \
+    ./templates/budget_batch.html \
+    ./templates/bug_report.html \
+    ./templates/coc* \
+    ./templates/expense.html \
+    ./templates/expense_lists.html \
+    ./templates/expense_menu.html \
+    ./templates/expense_my.html \
+    ./templates/form*.html \
+    ./templates/guide_index.html \
+    ./templates/index.html \
+    ./templates/index_guide.html \
+    ./templates/mail/base*.html \
+    ./templates/mail/coscup_base.html \
+    ./templates/mail/sender_base.html \
+    ./templates/mail/tasks_star.html \
+    ./templates/mail/welcome.html \
+    ./templates/privacy* \
+    ./templates/project*.html \
+    ./templates/recruit_list.html \
+    ./templates/security_guard* \
+    ./templates/sender*.html \
+    ./templates/setting*.html \
+    ./templates/tasks*.html \
+    ./templates/team*.html \
+    ./templates/user.html \
+    ./templates/
+
+ADD ./view/__init__.py \
+    ./view/api.py \
+    ./view/budget.py \
+    ./view/expense.py \
+    ./view/guide.py \
+    ./view/links.py \
+    ./view/project.py \
+    ./view/recruit.py \
+    ./view/sender.py \
+    ./view/setting.py \
+    ./view/tasks.py \
+    ./view/team.py \
+    ./view/telegram.py \
+    ./view/user.py \
+    ./view/utils.py \
+    ./view/
+
+ADD ./structs/__init__.py \
+    ./structs/projects.py \
+    ./structs/tasks.py \
+    ./structs/teams.py \
+    ./structs/users.py \
+    ./structs/
+
+ADD ./api/apistructs/__init__.py \
+    ./api/apistructs/items.py \
+    ./api/apistructs/members.py \
+    ./api/apistructs/projects.py \
+    ./api/apistructs/sender.py \
+    ./api/apistructs/tasks.py \
+    ./api/apistructs/teams.py \
+    ./api/apistructs/users.py \
+    ./api/apistructs/
+
+ADD ./api/routers/__init__.py \
+    ./api/routers/members.py \
+    ./api/routers/projects.py \
+    ./api/routers/sender.py \
+    ./api/routers/tasks.py \
+    ./api/routers/teams.py \
+    ./api/routers/user.py \
+    ./api/routers/
