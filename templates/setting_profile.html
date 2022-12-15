@@ -27,6 +27,7 @@
             </div>
             <hr>
             <h2>招募資訊</h2>
+            <form @submit.prevent="save_tobe_volunteer">
             <div class="field">
                 <label class="label">將我放入可招募人才庫</label>
                 <div class="control">
@@ -75,7 +76,8 @@
                         <button class="button is-static">大約</button>
                     </div>
                     <div class="control">
-                        <input class="input" type="number" v-model.number="bev.hours">
+                        <input class="input" type="number" min="0"
+                        v-model.number="bev.hours" required>
                     </div>
                     <div class="control">
                         <button class="button is-static">小時/週</button>
@@ -102,10 +104,13 @@
             </div>
             <div class="field">
                 <div class="control">
-                    <button class="button is-info is-light is-outlined"
-                        :class="{'is-loading': is_loading}" @click="save_tobe_volunteer">更新 招募資訊</button>
+                    <button
+                        type="submit"
+                        class="button is-info is-light is-outlined"
+                        :class="{'is-loading': is_loading}">更新 招募資訊</button>
                 </div>
             </div>
+            </form>
         </div>
     </div>
     <div class="column is-two-fifths">

@@ -100,7 +100,7 @@ Mattermost 頻道不會關，都隨時歡迎提出想法討論！
 
 #### OSCVPass 開源貢獻者快速通關
 
-如有相關可證明的貢獻，可申請 [OSCVPass](https://ocf.tw/p/oscvpass/) 享有一年相關研討會快速通關證。
+如有相關可證明的[貢獻](https://oscvpass.ocf.tw/)，可申請 [OSCVPass](https://ocf.tw/p/oscvpass/) 享有一年相關研討會快速通關證。
 
 ### 持續參與社群
 
