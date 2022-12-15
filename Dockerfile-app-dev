@@ -1,10 +1,11 @@
 FROM coscupweb-base:22.12.18
 
-ADD ./cmdtools \
-    ./setting.py \
+ADD ./setting.py \
     ./uwsgi.ini \
     ./main.py \
     ./
+
+ADD ./cmdtools/*.py ./cmdtools/
 
 ADD ./celery_task/__init__.py \
     ./celery_task/celery_main.py \
