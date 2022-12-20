@@ -77,6 +77,9 @@ nav:
   - About Secretary Team:
     - Overview: secretary_team/overview.md
     - Recruit: secretary_team/recruit.md
+    - Tasks:
+      - "List of Tasks": secretary_team/tasks/overview.md
+      - "Accounting System": secretary_team/tasks/accounting_system.md
 theme:
   name: material
   icon:
@@ -134,6 +137,9 @@ plugins:
           "About COSCUP": "關於 COSCUP"
           "Team Leader Handbook": "組長手冊"
           "Team Member Handbook": "組員手冊"
+          "Tasks": "任務規劃執行"
+          "List of Tasks": "任務列表"
+          "Accounting System": "財務會計系統"
   - search
   - social:
       cards_font: Noto Sans TC
