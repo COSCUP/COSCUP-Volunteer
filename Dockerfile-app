@@ -115,6 +115,11 @@ ADD ./structs/__init__.py \
     ./structs/users.py \
     ./structs/
 
+ADD ./api/__init__.py \
+    ./api/dependencies.py \
+    ./api/main.py \
+    ./api/
+
 ADD ./api/apistructs/__init__.py \
     ./api/apistructs/items.py \
     ./api/apistructs/members.py \
