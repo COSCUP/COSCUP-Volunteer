@@ -80,6 +80,7 @@ nav:
     - Tasks:
       - "List of Tasks": secretary_team/tasks/overview.md
       - "Accounting System": secretary_team/tasks/accounting_system.md
+      - "Enhance Recruitment": secretary_team/tasks/enhance_recruitment.md
 theme:
   name: material
   icon:
@@ -140,6 +141,7 @@ plugins:
           "Tasks": "任務規劃執行"
           "List of Tasks": "任務列表"
           "Accounting System": "財務會計系統"
+          "Enhance Recruitment": "招募流程增進計畫"
   - search
   - social:
       cards_font: Noto Sans TC
@@ -179,8 +181,9 @@ markdown_extensions:
   - abbr
   - admonition
   - attr_list
+  - def_list
+  - footnotes
   - md_in_html
   - tables
   - toc:
       permalink: true
-  - def_list
