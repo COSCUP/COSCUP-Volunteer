@@ -122,7 +122,7 @@ def need_login() -> ResponseBase | None:
                 if 'property' in user_data and 'suspend' in user_data['property'] and \
                         user_data['property']['suspend']:
                     session.pop('sid', None)
-                    return redirect(url_for('index', _scheme='https', _external=True))
+                    return redirect('/docs/error_note/e001/')
 
                 g.user = {}  # pylint: disable=assigning-non-slot
                 g.user['account'] = User(uid=session_data['uid']).get()
