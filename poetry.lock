@@ -70,21 +70,22 @@ wrapt = ">=1.11,<2"
 
 [[package]]
 name = "attrs"
-version = "22.1.0"
+version = "22.2.0"
 description = "Classes Without Boilerplate"
 category = "dev"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=3.6"
 files = [
-    {file = "attrs-22.1.0-py2.py3-none-any.whl", hash = "sha256:86efa402f67bf2df34f51a335487cf46b1ec130d02b8d39fd248abfd30da551c"},
-    {file = "attrs-22.1.0.tar.gz", hash = "sha256:29adc2665447e5191d0e7c568fde78b21f9672d344281d0c6e1ab085429b22b6"},
+    {file = "attrs-22.2.0-py3-none-any.whl", hash = "sha256:29e95c7f6778868dbd49170f98f8818f78f3dc5e0e37c0b1f474e3561b240836"},
+    {file = "attrs-22.2.0.tar.gz", hash = "sha256:c9227bfc2f01993c03f68db37d1d15c9690188323c067c641f1a35ca58185f99"},
 ]
 
 [package.extras]
-dev = ["cloudpickle", "coverage[toml] (>=5.0.2)", "furo", "hypothesis", "mypy (>=0.900,!=0.940)", "pre-commit", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "sphinx", "sphinx-notfound-page", "zope.interface"]
-docs = ["furo", "sphinx", "sphinx-notfound-page", "zope.interface"]
-tests = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy (>=0.900,!=0.940)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "zope.interface"]
-tests-no-zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy (>=0.900,!=0.940)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins"]
+cov = ["attrs[tests]", "coverage-enable-subprocess", "coverage[toml] (>=5.3)"]
+dev = ["attrs[docs,tests]"]
+docs = ["furo", "myst-parser", "sphinx", "sphinx-notfound-page", "sphinxcontrib-towncrier", "towncrier", "zope.interface"]
+tests = ["attrs[tests-no-zope]", "zope.interface"]
+tests-no-zope = ["cloudpickle", "cloudpickle", "hypothesis", "hypothesis", "mypy (>=0.971,<0.990)", "mypy (>=0.971,<0.990)", "pympler", "pympler", "pytest (>=4.3.0)", "pytest (>=4.3.0)", "pytest-mypy-plugins", "pytest-mypy-plugins", "pytest-xdist[psutil]", "pytest-xdist[psutil]"]
 
 [[package]]
 name = "autopep8"
@@ -104,18 +105,18 @@ tomli = {version = "*", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "awscli"
-version = "1.27.33"
+version = "1.27.35"
 description = "Universal Command Line Environment for AWS."
 category = "dev"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "awscli-1.27.33-py3-none-any.whl", hash = "sha256:b116d5307cf45d945c1015f3bd5188b9625227786f453b7f2d728c85abf35196"},
-    {file = "awscli-1.27.33.tar.gz", hash = "sha256:a9b0ec21733b6111e05779639a822f51d9267719045f4e9e5721dcca1a8635fd"},
+    {file = "awscli-1.27.35-py3-none-any.whl", hash = "sha256:9a1fa8e5a462f16da835d1f0aad8469b4077266cc95ca764c053089161c2a0e4"},
+    {file = "awscli-1.27.35.tar.gz", hash = "sha256:d055c07b3d8490b8bbd4f602d50a94c2b432a35a7790f5abda28cb3a9437f345"},
 ]
 
 [package.dependencies]
-botocore = "1.29.33"
+botocore = "1.29.35"
 colorama = ">=0.2.5,<0.4.5"
 docutils = ">=0.10,<0.17"
 PyYAML = ">=3.10,<5.5"
@@ -233,18 +234,18 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.26.33"
+version = "1.26.35"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.26.33-py3-none-any.whl", hash = "sha256:6aa2cc82008f0ec0b9534bafb8355957397f0ea05954a67af93c0c27abee9bd7"},
-    {file = "boto3-1.26.33.tar.gz", hash = "sha256:722dccba749ee34ead7d8f52899ae270958959c509631338f2ca5e777fab3875"},
+    {file = "boto3-1.26.35-py3-none-any.whl", hash = "sha256:f786a12eb036bbe6f473a351182275fd5c43c4e9c523cb8ec9b1946b18830d0d"},
+    {file = "boto3-1.26.35.tar.gz", hash = "sha256:282c9aa0af39fc3f0fac9c91e05f43145ff3d5fee29189b5343490131555981a"},
 ]
 
 [package.dependencies]
-botocore = ">=1.29.33,<1.30.0"
+botocore = ">=1.29.35,<1.30.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -253,14 +254,14 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.29.33"
+version = "1.29.35"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.29.33-py3-none-any.whl", hash = "sha256:22b6659d7c8002844db5bf8bda400d0219e8bde5722d810a47d93fea0daf3dfe"},
-    {file = "botocore-1.29.33.tar.gz", hash = "sha256:303f8c3ba40b11563b0b6740af8c053d3ed187a4824e495a652ccdb593dd612e"},
+    {file = "botocore-1.29.35-py3-none-any.whl", hash = "sha256:fc329d2772284dcffdf947023de589eaf72a4eb4737505114b1c0f3a1063b3b6"},
+    {file = "botocore-1.29.35.tar.gz", hash = "sha256:ca673347f46f03fb5f1e56326adc9c696daba860838dffbe85e9bb16a8c54d67"},
 ]
 
 [package.dependencies]
@@ -952,14 +953,14 @@ grpc = ["grpcio (>=1.44.0,<2.0.0dev)"]
 
 [[package]]
 name = "griffe"
-version = "0.25.0"
+version = "0.25.1"
 description = "Signatures for entire Python programs. Extract the structure, the frame, the skeleton of your project, to generate API documentation or find breaking changes in your API."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "griffe-0.25.0-py3-none-any.whl", hash = "sha256:57527250e06c0fac5381c5ccc9695b6c46a3af51928d99364bf2e5fd9aabf37d"},
-    {file = "griffe-0.25.0.tar.gz", hash = "sha256:35d412d2235330a05c755f906458c70ee8a4eec85bc3de20f1fd79d0a501dc38"},
+    {file = "griffe-0.25.1-py3-none-any.whl", hash = "sha256:a2d6cef8129579438c3e71401a5fb035ffea5afa8f8e27d946dbb9e136b90b1a"},
+    {file = "griffe-0.25.1.tar.gz", hash = "sha256:d79365aa6f5050a24b47fca4b351fbdd446f0fe7924c9e55ae908bfacc91bfcf"},
 ]
 
 [package.dependencies]
@@ -1095,14 +1096,14 @@ files = [
 
 [[package]]
 name = "isort"
-version = "5.11.3"
+version = "5.11.4"
 description = "A Python utility / library to sort Python imports."
 category = "dev"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "isort-5.11.3-py3-none-any.whl", hash = "sha256:83155ffa936239d986b0f190347a3f2285f42a9b9e1725c89d865b27dd0627e5"},
-    {file = "isort-5.11.3.tar.gz", hash = "sha256:a8ca25fbfad0f7d5d8447a4314837298d9f6b23aed8618584c894574f626b64b"},
+    {file = "isort-5.11.4-py3-none-any.whl", hash = "sha256:c033fd0edb91000a7f09527fe5c75321878f98322a77ddcc81adbd83724afb7b"},
+    {file = "isort-5.11.4.tar.gz", hash = "sha256:6db30c5ded9815d813932c04c2f85a360bcdd35fed496f4d8f35495ef0a261b6"},
 ]
 
 [package.extras]
@@ -1678,14 +1679,14 @@ files = [
 
 [[package]]
 name = "phonenumbers"
-version = "8.13.2"
+version = "8.13.3"
 description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "phonenumbers-8.13.2-py2.py3-none-any.whl", hash = "sha256:884b26f775205261f4dc861371dce217c1661a4942fb3ec3624e290fb51869bf"},
-    {file = "phonenumbers-8.13.2.tar.gz", hash = "sha256:0179f688d48c0e7e161eb7b9d86d587940af1f5174f97c1fdfd893c599c0d94a"},
+    {file = "phonenumbers-8.13.3-py2.py3-none-any.whl", hash = "sha256:14f5a639eb47548595bb2baeff7bb63b32c95a4f79eed4dc7529afa2a65002d1"},
+    {file = "phonenumbers-8.13.3.tar.gz", hash = "sha256:7d0c45c154013970b78b86f4188e0e00a8e77d6bebef7c81efdc038db876eeba"},
 ]
 
 [[package]]
@@ -2504,14 +2505,14 @@ files = [
 
 [[package]]
 name = "types-requests"
-version = "2.28.11.5"
+version = "2.28.11.7"
 description = "Typing stubs for requests"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-requests-2.28.11.5.tar.gz", hash = "sha256:a7df37cc6fb6187a84097da951f8e21d335448aa2501a6b0a39cbd1d7ca9ee2a"},
-    {file = "types_requests-2.28.11.5-py3-none-any.whl", hash = "sha256:091d4a5a33c1b4f20d8b1b952aa8fa27a6e767c44c3cf65e56580df0b05fd8a9"},
+    {file = "types-requests-2.28.11.7.tar.gz", hash = "sha256:0ae38633734990d019b80f5463dfa164ebd3581998ac8435f526da6fe4d598c3"},
+    {file = "types_requests-2.28.11.7-py3-none-any.whl", hash = "sha256:b6a2fca8109f4fdba33052f11ed86102bddb2338519e1827387137fefc66a98b"},
 ]
 
 [package.dependencies]
