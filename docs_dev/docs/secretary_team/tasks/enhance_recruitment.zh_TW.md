@@ -6,6 +6,13 @@
 
 ## 預計的規劃
 
+<figure markdown>
+  <a href="https://s3.toomore.net/coscup/volunteer/docs_tasks_enhance_recruitment.svg">
+    <img alt="coscup_volunteer_infra" src="https://s3.toomore.net/coscup/volunteer/docs_tasks_enhance_recruitment.svg">
+  </a>
+  <figcaption><small><a href="https://s3.toomore.net/coscup/volunteer/docs_tasks_enhance_recruitment.svg">[original]</a></small></figcaption>
+</figure>
+
 ### 第一階段
 
 由於行政組**招募小組**[^1]初建立，第一階段會針對 2023 的**組長**進行面談並宣導召募新成員時要注意的項目。

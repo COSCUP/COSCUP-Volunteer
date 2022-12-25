@@ -91,6 +91,10 @@ description: 給予組員在活動籌備期間的行政指引手冊
 
 平台同時提供 [API](https://api.mattermost.com/) 或 [bot](https://docs.mattermost.com/integrations/cloud-bot-accounts.html) 機制可串連開發，有興趣的可自行研究！
 
+!!! Info "補發邀請函"
+
+    若在首次登錄時未完成帳號開通或是邀請函過期，可以到[這裡](https://volunteer.coscup.org/setting/link/chat)重新取得登入邀請函。
+
 ### 大會行事曆
 
 各項活動的安排公開資訊，可[自行訂閱](https://calendar.google.com/calendar/embed?src=c_a376ec8beb6ef0ab3acb5fe3213880dfcbba50ce89107532aacbfdda71c6e294%40group.calendar.google.com&ctz=Asia%2FTaipei)。
@@ -130,6 +134,15 @@ Mattermost 頻道不會關，都隨時歡迎提出想法討論！
 
 COSCUP 結束後，也希望多多起身參與平日的社群小聚，不知道哪裡有活動可以參與，可以參考或訂閱 [Taiwan Open Source 行事曆](https://calendar.google.com/calendar/embed?src=p09uh8cg4uvt2ij4obf45cltsk%40group.calendar.google.com&ctz=Asia%2FTaipei)。
 
-!!! note "關於行事曆"
+!!! info "關於行事曆"
 
     **Taiwan Open Source** 台灣開源社群行事曆目前由[開放文化基金會](https://ocf.tw/)協助建立，如果需要刊登活動，可以參考[說明](https://www.facebook.com/www.ocf.tw/posts/pfbid0V1EpCFJQB3W8WzCPy2kd5U5oe31iM8dbw9vUBbPBtVsuhzKxqHFh966fP4kaFbCyl)與[申請表單](https://forms.gle/J52atxyfXHy3mhed9)。
+
+#### 研討會 / 年會
+
+- [COSCUP](https:/coscup.org/) 開源人年會
+- [SITCON](https://sitcon.org/) 學生計算機年會
+- [HITCON](https://hitcon.org/) 台灣駭客年會
+- [PyCon Taiwan](https://tw.pycon.org/) Python 年會
+- [JCConf Taiwan](https://jcconf.tw/) Java 研討會
+- [MOPCON](https://mopcon.org/) 行動科技年會

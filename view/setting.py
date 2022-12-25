@@ -11,6 +11,7 @@ from flask.wrappers import Response
 from werkzeug.wrappers import Response as ResponseBase
 
 from celery_task.task_service_sync import service_sync_mattermost_invite
+from celery_task.task_mail_sys import mail_member_welcome_send
 from models.telegram_db import TelegramDB
 from module.api_token import APIToken, APITokenTemp
 from module.dietary_habit import (DietaryHabitItemsName,
@@ -329,10 +330,16 @@ def api_token() -> str | ResponseBase:
     return make_response({}, 404)
 
 
-@VIEW_SETTING.route('/mails')
+@VIEW_SETTING.route('/mails', methods=('GET', 'POST'))
 def mails() -> str | ResponseBase:
     ''' about mails '''
     if request.method == 'GET':
         return render_template('./setting_mails.html')
+
+    if request.method == 'POST':
+        mail_member_welcome_send.apply_async(kwargs={
+            'uids': [g.user['account']['_id'], ]})
+
+        return jsonify({})
 
     return make_response({}, 404)
