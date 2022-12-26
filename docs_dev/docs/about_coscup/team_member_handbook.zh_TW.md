@@ -21,7 +21,7 @@ description: 給予組員在活動籌備期間的行政指引手冊
 
 提出問題時，請先釐清問題的核心為何？如果有可能，可以**附帶一或二個解決辦法**當備案，提供給組長或是任務成員可快速決策。
 
-!!! note "討論事情的習慣"
+???+ tip "討論事情的習慣"
 
     - 夥伴是謙虛的、團隊是歡樂的、做事是熱血的，請維持這樣的氣氛。
     - 雖然是熱血的，但也是專業的，發言前最好先作好功課，言之有據。
@@ -72,16 +72,18 @@ description: 給予組員在活動籌備期間的行政指引手冊
 
 成為志工後，大會提供各項服務只要符合資格都可申請。
 
-1. 工作人員住宿：外縣市或活動當日因任務需求需早到會場，可提出申請。
-2. 交通費補助：在活動期間內因往返活動場地的交通費用，每年補助項目金額會再另行公告。
-3. 志工服務時數：可開立活動二日的時數證明，需提供活動心得供大會備查。
-4. 費用請款：針對已核定的預算申請費用，可在平台上建立費用申請單。（請參考[請款流程](https://github.com/COSCUP/COSCUP-Volunteer/wiki/%E9%A0%90%E7%AE%97%E3%80%81%E7%B6%93%E8%B2%BB%E7%94%B3%E8%AB%8B%E6%B5%81%E7%A8%8B)）
+??? info "可申請項目提醒"
+
+    針對以下項目提出申請說明，若有其他疑問，可直接詢問行政組。
+
+    1. 工作人員住宿：外縣市或活動當日因任務需求需早到會場，可提出申請。
+    2. 交通費補助：在活動期間內因往返活動場地的交通費用，每年補助項目金額會再另行公告。
+    3. 志工服務時數：可開立活動二日的時數證明，需提供活動心得或訪談供大會備查。
+    4. 費用請款：針對已核定的預算申請費用，可在平台上建立費用申請單。（請參考[請款流程](https://github.com/COSCUP/COSCUP-Volunteer/wiki/%E9%A0%90%E7%AE%97%E3%80%81%E7%B6%93%E8%B2%BB%E7%94%B3%E8%AB%8B%E6%B5%81%E7%A8%8B)）
 
 ## 工具
 
-!!! info ""
-
-    目前大會無統一規定使用特定工具作為**任務追蹤**或是**管理系統**，依各組自行決定即可。
+目前大會無統一規定使用特定工具作為**任務追蹤**或是**管理系統**，依各組自行決定即可。
 
 ### Mattermost / COSCUP Chat
 
@@ -91,15 +93,13 @@ description: 給予組員在活動籌備期間的行政指引手冊
 
 平台同時提供 [API](https://api.mattermost.com/) 或 [bot](https://docs.mattermost.com/integrations/cloud-bot-accounts.html) 機制可串連開發，有興趣的可自行研究！
 
-!!! Info "補發邀請函"
+??? Info "補發邀請函"
 
     若在首次登錄時未完成帳號開通或是邀請函過期，可以到[這裡](https://volunteer.coscup.org/setting/link/chat)重新取得登入邀請函。
 
 ### 大會行事曆
 
-各項活動的安排公開資訊，可[自行訂閱](https://calendar.google.com/calendar/embed?src=c_a376ec8beb6ef0ab3acb5fe3213880dfcbba50ce89107532aacbfdda71c6e294%40group.calendar.google.com&ctz=Asia%2FTaipei)。
-
-目前編輯權限為各組組長，可因任務需求向**行政組**提出編輯權限申請。
+各項活動的安排公開資訊，可[自行訂閱](https://calendar.google.com/calendar/embed?src=c_a376ec8beb6ef0ab3acb5fe3213880dfcbba50ce89107532aacbfdda71c6e294%40group.calendar.google.com&ctz=Asia%2FTaipei)。目前編輯權限為各組組長，可因任務需求向**行政組**提出編輯權限申請。
 
 ### 文件 / 雲端硬碟 / HackMD
 
@@ -122,7 +122,7 @@ Mattermost 頻道不會關，都隨時歡迎提出想法討論！
 
 協助擺攤組在各大研討會擺攤宣傳 COSCUP 與開源精神！詳細資訊可以詢問**擺攤組**。
 
-!!! note
+!!! info "擺攤紀錄"
 
     2022 有在 HITCON, SITCON, MOPCON, GDG Taipei 擺過攤位。
 
