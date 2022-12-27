@@ -1,6 +1,6 @@
 site_name: COSCUP Volunteer Docs
 site_url: https://volunteer.coscup.org/docs/
-site_description: "Documentation for users, developers, and team members"
+site_description: "使用者、開發者與志工夥伴的文件說明 Documentation for users, developers, and team members"
 site_author: "COSCUP Secretary Team / 行政組"
 repo_url: https://github.com/COSCUP/COSCUP-Volunteer
 repo_name: COSCUP/COSCUP-Volunteer
@@ -87,6 +87,7 @@ theme:
   name: material
   icon:
     repo: fontawesome/brands/github
+  custom_dir: overrides
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -105,7 +106,7 @@ theme:
   language: en
   font:
     text: "Roboto"
-    code: "Courier Prime"
+    code: "Noto Sans Mono"
   features:
     - content.code.annotate
     - navigation.top

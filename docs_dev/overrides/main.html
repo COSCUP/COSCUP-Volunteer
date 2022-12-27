@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block site_meta %}
+  {{ super() }}
+  <meta name="theme-color" content="#4051b5">
+{% endblock %}
+
+{% block fonts %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Mono:400,400i,700,700i&display=fallback">
+<style>
+@font-face{font-family:"jf-openhuninn-1.1";src:url('https://volunteer.coscup.org/doc/jf-openhuninn-1.1.ttf');}
+:root{--md-text-font:"jf-openhuninn-1.1";--md-code-font:"Noto Sans Mono"}
+</style>
+{% endblock %}
