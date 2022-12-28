@@ -23,7 +23,7 @@
                   <a class="button is-success is-light" href="/team/{{team.pid}}/{{team.tid}}">確定</a>
               </div>
               {% else %}
-              <form method="POST">
+              <form method="POST" id="jointo">
                   <div class="field">
                       <div class="content">
                           <article class="message is-info">
@@ -80,7 +80,7 @@
                   </div>
                   <div class="field">
                       <div class="control">
-                          <button class="button is-link is-fullwidth" type="submit">
+                          <button class="button is-link is-fullwidth" type="submit" :disabled="!is_ok">
                               <span class="icon"><i class="far fa-hand-point-right"></i></span>
                               <span>申請加入 {{project.name}} / {{team.name}}</span>
                           </button>
@@ -94,3 +94,34 @@
 </section>
 {% endblock %}
 
+{% if not is_in_wait %}
+{% block js %}
+<script src="/js/axios.min.js"></script>
+<script>
+    (function () {
+        let $jointo = new Vue({
+            el: '#jointo',
+            data: {
+                note: '',
+                is_ok: false
+            },
+            watch: {
+                'note': function(intro) {
+                    this.cal_intro_length(intro);
+                }
+            },
+            methods: {
+                cal_intro_length: function(intro) {
+                    if ((intro != '') && intro.length < 100) {
+                        this.is_ok = false;
+                    } else {
+                        this.is_ok = true;
+                    }
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+    })();
+</script>
+{% endblock %}
+{% endif %}

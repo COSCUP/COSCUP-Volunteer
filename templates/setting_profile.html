@@ -18,7 +18,13 @@
                 <div class="control">
                     <textarea class="textarea" name="intro" placeholder="自我介紹 ..." v-model.trim="profile.intro"></textarea>
                 </div>
-                <p class="help is-success">可使用 markdown 語法</p>
+                <p class="help is-success">可使用 markdown 語法。
+                    <span class="has-text-danger"
+                         v-if="profile.intro != undefined"
+                         :class="{'is-hidden': is_ok}">請再多描述一點，已有 [[ profile.intro.length ]] 字。</span>
+                    <span class="has-text-primary"
+                         :class="{'is-hidden': !is_ok}">酷！</span>
+                </p>
             </div>
             <div class="field">
                 <div class="control">
@@ -131,6 +137,7 @@
     </div>
 </div>
 {% endblock %}
+
 {% block js %}
 <script src="/js/axios.min.js"></script>
 <script>
@@ -146,10 +153,16 @@
                 skill_enum_desc: {},
                 status_enum: {},
                 status_enum_desc: {},
+                is_ok: false,
                 is_loading: 0
             },
             mounted: function() {
                 this.load();
+            },
+            watch: {
+                'profile.intro': function(intro) {
+                    this.cal_intro_length(intro);
+                }
             },
             methods: {
                 load: function() {
@@ -171,6 +184,13 @@
                         $this.bev = resp.data.tobe_volunteer;
                         --$this.is_loading;
                     });
+                },
+                cal_intro_length: function(intro) {
+                    if ((intro != '') && intro.length < 200) {
+                        this.is_ok = false;
+                    } else {
+                        this.is_ok = true;
+                    }
                 },
                 save_tobe_volunteer: function() {
                     ++this.is_loading;

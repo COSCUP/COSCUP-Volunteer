@@ -479,8 +479,14 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
         if not all((user_pass.is_profile, user_pass.is_coc, user_pass.is_security_guard)):
             return redirect(f'/team/{team.pid}/{team.id}/join_to')
 
+        note: str = request.form['note'].strip()
+
+        if len(note) < 100:
+            flash('請重新整理此頁面後再次填寫申請加入。')
+            return redirect(f'/team/{team.pid}/{team.id}/join_to')
+
         WaitList.join_to(
-            pid=pid, tid=tid, uid=g.user['account']['_id'], note=request.form['note'].strip())
+            pid=pid, tid=tid, uid=g.user['account']['_id'], note=note)
         TeamMemberChangedDB().make_record(
             pid=pid, tid=tid, action={'waiting': [g.user['account']['_id'], ]})
 
