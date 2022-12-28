@@ -1,17 +1,32 @@
 {% extends "base.html" %}
 
 {% block site_meta %}
-  {{ super() }}
-  <meta name="theme-color" content="#4051b5">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+{% if page.meta and page.meta.description %}
+  <meta name="description" content="{{ page.meta.description }}">
+{% elif config.site_description %}
+  <meta name="description" content="{{ config.site_description }}">
+{% endif %}
+{% if page.meta and page.meta.author %}
+  <meta name="author" content="{{ page.meta.author }}">
+{% elif config.site_author %}
+  <meta name="author" content="{{ config.site_author }}">
+{% endif %}
+{% if page.canonical_url %}
+  <link rel="canonical" href="{{ page.canonical_url }}">
+{% endif %}
+<link rel="icon" href="{{ config.theme.favicon | url }}">
+<meta name="generator" content="mkdocs-{{ mkdocs_version }}, mkdocs-material-8.5.11">
+<meta name="theme-color" content="#4051b5">
 {% endblock %}
 
 {% block fonts %}
 {% if i18n_page_locale == 'zh_TW'%}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Mono:400,400i,700,700i&display=fallback">
-<style>
-@font-face{font-family:"jf-openhuninn-1.1";src:url('https://volunteer.coscup.org/doc/jf-openhuninn-1.1.ttf');}
-:root{--md-text-font:"jf-openhuninn-1.1";--md-code-font:"Noto Sans Mono"}
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>:root{--md-text-font:"Noto Sans TC";--md-code-font:"Noto Sans Mono"}</style>
 {% else %}
 {{ super() }}
 {% endif %}
