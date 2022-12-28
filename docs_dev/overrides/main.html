@@ -25,8 +25,17 @@
 {% if i18n_page_locale == 'zh_TW'%}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
-<style>:root{--md-text-font:"Noto Sans TC";--md-code-font:"Noto Sans Mono"}</style>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&Noto+Sans+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+@font-face{
+  font-family:"jf-openhuninn-1.1";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://volunteer.coscup.org/doc/jf-openhuninn-1.1.ttf');
+}
+:root{--md-text-font:"Ubuntu","jf-openhuninn-1.1";--md-code-font:"Noto Sans Mono"}
+</style>
 {% else %}
 {{ super() }}
 {% endif %}
