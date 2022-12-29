@@ -123,20 +123,23 @@ COSCUP 通常會在每一年的農曆年後開始籌備，大會活動日會以�
 ??? tip "自我介紹的範本"
 
     1. 到[個人頁面]編輯，可使用 [Markdown] 的語法排版。（語法[參考](https://markdown.tw/)）
-    2. 編寫內容請包含：**自我介紹**、**技能**、**年度期待**。（參考：[範例一](https://volunteer.coscup.org/user/e161787f)、[範例二](https://volunteer.coscup.org/user/2b17b7b8)、[範例三](https://volunteer.coscup.org/user/6c74e623)）
+    2. 編寫內容請包含：**自我介紹**、**技能**、**年度期待**。（參考：[範例一]、[範例二]、[範例三]）
     3. 編輯完後將個人介紹頁面網址附入來信預約時間。
 
     [個人頁面]: https://volunteer.coscup.org/setting/profile
     [Markdown]: https://zh.wikipedia.org/wiki/Markdown
+    [範例一]: https://volunteer.coscup.org/user/e161787f
+    [範例二]: https://volunteer.coscup.org/user/2b17b7b8
+    [範例三]: https://volunteer.coscup.org/user/6c74e623
 
-??? info "組長聯絡方式"
+    ??? info "組長聯絡方式"
 
-    - :fontawesome-regular-id-badge: `Toomore Chiang <toomore@coscup.org>`
-    - :fontawesome-solid-location-dot: 地點以台北市為主。
+        - :fontawesome-regular-id-badge: `Toomore Chiang <toomore@coscup.org>`
+        - :fontawesome-solid-location-dot: 地點以台北市為主。
 
-!!! warning ""
+    !!! warning ""
 
-    :warning: 請勿使用學生帳號或是公司帳號註冊志工平台，可能會因為**畢業**或是**離職**造成帳號無法使用。
+        :warning: 請勿使用學生帳號或是公司帳號註冊志工平台，可能會因為**畢業**或是**離職**造成帳號無法使用。
 
 ---
 
