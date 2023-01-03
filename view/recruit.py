@@ -64,6 +64,7 @@ def recurit_list(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
             for raw_user in User.get_suspend_uids(uids=[user['uid'] for user in data]):
                 suspend_uids[raw_user['_id']] = None
 
+            result = []
             for member in data:
                 if member['uid'] in suspend_uids:
                     continue
@@ -72,6 +73,8 @@ def recurit_list(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
                     'profile': {'badge_name': users_info[member['uid']]['profile']['badge_name']},
                     'oauth': {'picture': users_info[member['uid']]['oauth']['picture']}})
 
-            return jsonify({'members': data})
+                result.append(member)
+
+            return jsonify({'members': result})
 
     return jsonify({})
