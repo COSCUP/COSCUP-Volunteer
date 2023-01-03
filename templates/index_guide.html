@@ -103,24 +103,26 @@
                   <div class="message-header">
                       <p>
                           <span class="icon"><i class="far fa-comments"></i></span>
-                          <span>Mattermost</span>
+                          <span>Mattermost / COSCUP Chat</span>
                       </p>
                   </div>
                   <div class="message-body">
-                      <p>2020 起 COSCUP 改用 Mattermost 取代 Slack，可以前往平台加入，或是透過忘記密碼的方式取回帳號使用！</p>
                       {% if check['mattermost'] %}
+                      <p style="margin-bottom:3px;">大會使用 Mattermost 取代 Slack 為活動期間的聯絡工具。平台有提供網頁版、桌面版與行動裝置版，請選擇合適的平台<a href="https://mattermost.com/apps/" target="_blank"></a>下載</a>。</p>
+                      <p>每屆會有一個公開頻道，而各組或因任務需求可隨意建立頻道或群組聊天。</p>
                       <div class="buttons is-right" style="margin-top: 15px;">
-                          <a class="button is-warning is-light" href="https://chat.coscup.org/" target="_blank">
-                              <span class="icon is-small"><i class="fas fa-sign-in-alt"></i></span>
-                              <span>取回帳號使用</span>
+                          <a class="button is-primary is-light is-outlined" href="https://chat.coscup.org/" target="_blank">
+                              <span class="icon is-small"><i class="far fa-comments"></i></span>
+                              <span>來聊天吧！</span>
                           </a>
                       </div>
                       {% else %}
+                      <p>大會使用 Mattermost 取代 Slack 為活動期間的聯絡工具。若在首次登錄時<strong>未完成帳號開通</strong>或是<strong>邀請函過期</strong>，請重新取得登入邀請函。</p>
                       <div class="buttons is-right" style="margin-top: 15px;">
                           <a class="button is-warning is-light"
-                              href="https://chat.coscup.org/signup_user_complete/?id=obxpktmw1jgrbxdgz3n34cfezh" target="_blank">
-                              <span class="icon is-small"><i class="fas fa-sign-in-alt"></i></span>
-                              <span>申請加入</span>
+                              href="/setting/link/chat">
+                              <span class="icon is-small"><i class="far fa-envelope"></i></span>
+                              <span>取得邀請函</span>
                           </a>
                       </div>
                       {% endif %}
