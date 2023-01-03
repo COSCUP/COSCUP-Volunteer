@@ -327,6 +327,23 @@ class User:
         return UserAddress.parse_obj(result['profile_real']['address'])
 
     @staticmethod
+    def get_suspend_uids(uids: list[str]) -> Generator[dict[str, Any], None, None]:
+        ''' Get suspend user's uids
+
+        Args:
+            uids (list): List of `uid`.
+
+        Yields:
+            Return all user's uids
+
+        '''
+        for row in UsersDB().find({
+            '_id': {'$in': uids},
+            'property.suspend': True,
+        }, {'_id': 1}):
+            yield row
+
+    @staticmethod
     def get_all_users(include_suspend: bool = False) -> Generator[dict[str, Any], None, None]:
         ''' Get all users
 

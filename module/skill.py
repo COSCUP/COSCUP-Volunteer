@@ -19,6 +19,7 @@ class TeamsEnum(IntEnum):
     FIELD = 9
     STREAMING = 10
     DOCUMENTARY = 11
+    BOOTH = 12
 
 
 @unique
@@ -30,11 +31,12 @@ class TeamsEnumDesc(str, Enum):
     MARKETING = '行銷'
     SPONSOR = '贊助'
     IT = '資訊'
-    PHOTO = '攝影'
+    PHOTO = '攝影（已合併到紀錄）'
     FINANCE = '財務'
     FIELD = '場務'
     STREAMING = '製播'
     DOCUMENTARY = '紀錄'
+    BOOTH = '擺攤'
 
 
 @unique

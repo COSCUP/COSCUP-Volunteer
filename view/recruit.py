@@ -60,7 +60,14 @@ def recurit_list(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
 
             users_info = User.get_info(uids=[user['uid'] for user in data])
 
+            suspend_uids: dict[str, None] = {}
+            for raw_user in User.get_suspend_uids(uids=[user['uid'] for user in data]):
+                suspend_uids[raw_user['_id']] = None
+
             for member in data:
+                if member['uid'] in suspend_uids:
+                    continue
+
                 member.update({
                     'profile': {'badge_name': users_info[member['uid']]['profile']['badge_name']},
                     'oauth': {'picture': users_info[member['uid']]['oauth']['picture']}})
