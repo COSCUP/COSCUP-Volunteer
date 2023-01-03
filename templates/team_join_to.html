@@ -23,7 +23,7 @@
                   <a class="button is-success is-light" href="/team/{{team.pid}}/{{team.tid}}">確定</a>
               </div>
               {% else %}
-              <form method="POST" id="jointo">
+              <form method="POST">
                   <div class="field">
                       <div class="content">
                           <article class="message is-info">
@@ -74,12 +74,10 @@
                   <div class="field">
                       <label class="label">提交資訊</label>
                       <div class="control">
-                          <textarea class="textarea"
-                                    v-model="note"
-                                    name="note"{%if messages %} disabled{%endif%}></textarea>
+                          <textarea class="textarea" minlength="100" name="note" required></textarea>
                       </div>
                       <p class="help is-warning">
-                        請完整敘述內容。勿留空白或隨意提交資訊！<strong>或是提交字數不足，請再多寫一點。</strong>
+                        請完整敘述內容。勿留空白或隨意提交資訊！<strong>提交字數若不足，請再多寫一點。</strong>
                     </p>
                   </div>
                   <div class="field">
@@ -97,35 +95,3 @@
   </div>
 </section>
 {% endblock %}
-
-{% if not is_in_wait %}
-{% block js %}
-<script src="/js/axios.min.js"></script>
-<script>
-    (function () {
-        let $jointo = new Vue({
-            el: '#jointo',
-            data: {
-                note: '',
-                is_ok: false
-            },
-            watch: {
-                'note': function(intro) {
-                    this.cal_intro_length(intro);
-                }
-            },
-            methods: {
-                cal_intro_length: function(intro) {
-                    if ((intro != '') && intro.length < 100) {
-                        this.is_ok = false;
-                    } else {
-                        this.is_ok = true;
-                    }
-                }
-            },
-            delimiters: ['[[', ']]']
-        });
-    })();
-</script>
-{% endblock %}
-{% endif %}
