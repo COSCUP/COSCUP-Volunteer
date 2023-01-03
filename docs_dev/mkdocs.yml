@@ -111,10 +111,18 @@ theme:
     - content.code.annotate
     - navigation.top
     - search.suggest
+    - navigation.footer
+    - content.action.view
+    - content.action.edit
 extra:
   analytics:
     provider: google
     property: UA-156956691-1
+  social:
+    - icon: material/home
+      link: htts://volunteer.coscup.org/
+    - icon: fontawesome/brands/github
+      link: https://github.com/COSCUP/COSCUP-Volunteer
 plugins:
   - i18n:
       default_language: en

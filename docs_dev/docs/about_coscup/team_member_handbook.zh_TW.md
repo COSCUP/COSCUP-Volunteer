@@ -2,7 +2,6 @@
 title: COSCUP 組員手冊
 summary: 給予組員在活動籌備期間的行政指引手冊
 description: 給予組員在活動籌備期間的行政指引手冊
-ᴴₒᴴₒᴴₒ: true
 ---
 
 # 組員手冊
