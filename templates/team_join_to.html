@@ -74,15 +74,15 @@
                   <div class="field">
                       <label class="label">提交資訊</label>
                       <div class="control">
-                          <textarea class="textarea" minlength="100" name="note" required></textarea>
+                          <textarea class="textarea" minlength="100" name="note"{% if messages %}disabled{%else%}required{% endif %}></textarea>
                       </div>
                       <p class="help is-warning">
                         請完整敘述內容。勿留空白或隨意提交資訊！<strong>提交字數若不足，請再多寫一點。</strong>
-                    </p>
+                      </p>
                   </div>
                   <div class="field">
                       <div class="control">
-                          <button class="button is-link is-fullwidth" type="submit" :disabled="!is_ok">
+                          <button class="button is-link is-fullwidth" type="submit"{% if messages %}disabled{% endif %}>
                               <span class="icon"><i class="far fa-hand-point-right"></i></span>
                               <span>申請加入 {{project.name}} / {{team.name}}</span>
                           </button>
