@@ -7,23 +7,6 @@ COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政
 
 GNU Affero General Public License version 3 (AGPL-3.0)
 
-### Code Style
-
-- [pylint](https://pypi.org/project/pylint/)
-- [autopep8](https://pypi.org/project/autopep8/)
-- [pytest](https://pypi.org/project/pytest/)
-- [pytest-cov](https://pypi.org/project/pytest-cov/)
-
-### 已知問題
-
-- [ ] 登入認證目前還不能使用，還在處理開發時的臨時帳號登入方式。開發時會使用　`Dockerfile-app-dev` 來建立 images。
-- [ ] 目前還沒有開發時的測試資料。
-
-### 目前開發重點
-
-- [ ] 提升 testing cases 的涵蓋率
-- [x] 開發帳號與資料預建立
-
 ## 如何貢獻專案 How to contribute?
 
 The more details about how to contribute, please learn more

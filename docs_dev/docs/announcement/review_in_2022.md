@@ -1,0 +1,1 @@
+This page is now only in `zh-TW`, please refer to [here](/docs/zh_TW/announcement/review_in_2022/).

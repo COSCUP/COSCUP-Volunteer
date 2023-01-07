@@ -83,6 +83,8 @@ nav:
       - "List of Tasks": secretary_team/tasks/overview.md
       - "Accounting System": secretary_team/tasks/accounting_system.md
       - "Enhance Recruitment": secretary_team/tasks/enhance_recruitment.md
+  - Announcement:
+    - Review in 2022: announcement/review_in_2022.md
 theme:
   name: material
   icon:
@@ -154,6 +156,8 @@ plugins:
           "Accounting System": "財務會計系統"
           "Enhance Recruitment": "招募流程增進計畫"
           "Error Note": "錯誤訊息"
+          "Announcement": "訊息發佈"
+          "Review in 2022": "2022 回顧"
   - search
   - social:
       cards_font: Noto Sans TC
