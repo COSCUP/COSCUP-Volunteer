@@ -119,7 +119,7 @@ theme:
 extra:
   analytics:
     provider: google
-    property: UA-156956691-1
+    property: G-6B98ZDG12C
   social:
     - icon: material/home
       link: htts://volunteer.coscup.org/
