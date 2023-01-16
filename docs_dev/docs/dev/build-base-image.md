@@ -50,6 +50,15 @@ Wait an amount until all services are available, open browser and visit to:
     [Issue 1056543]: https://bugs.chromium.org/p/chromium/issues/detail?id=1056543
     [Issue 1263426]: https://bugs.chromium.org/p/chromium/issues/detail?id=1263426
 
+    Or you could **temporarily** comment on the codes of the flask session settings in `./main.py`.
+
+    ``` python title="main.py"
+    # comment them all
+    app.config['SESSION_COOKIE_NAME'] = '__Host-vl'
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    app.config['SESSION_COOKIE_SECURE'] = True
+    ```
+
 !!! tip
 
     For more information about the Compose file, see the [Compose file reference](https://docs.docker.com/compose/compose-file/).

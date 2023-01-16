@@ -28,11 +28,11 @@ Click [Fork](https://github.com/COSCUP/COSCUP-Volunteer/fork) button on the top-
 
 The codebase is compliant in [PEP8](https://peps.python.org/pep-0008/) and [typing hint](https://docs.python.org/3/library/typing.html) ([PEP484](https://peps.python.org/pep-0483/)).
 
- - pylint
- - autopep8
- - pytest
- - pytest-cov
- - mypy
+- pylint
+- autopep8
+- pytest
+- pytest-cov
+- mypy
 
 !!! note
 

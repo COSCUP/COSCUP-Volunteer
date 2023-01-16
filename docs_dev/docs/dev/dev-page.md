@@ -15,7 +15,7 @@ Visit the dev page to setup.
 
 Before going to the following steps, you need to assign the uid as the owner in the `setting.py`.
 
-``` python
+``` python title="setting.py"
 API_DEFAULT_OWNERS = ['00000000', ]  # replace `00000000` to your uid.
 ```
 
@@ -87,3 +87,7 @@ Click `編輯` after the team list. Typing the user id (`uid`) into the fields o
     >
   </a>
 </figure>
+
+!!! note
+
+    If you are developing the features of **Finance** modules, please create a team named "finance"(`tid`) in the project and put your testing `uid` into chiefs field.
