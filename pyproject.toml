@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "coscup-volunteer"
-version = "2023.01.03"
+version = "2023.01.18"
 description = "COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政流程建立。"
 authors = ["COSCUP Volunteer <volunteer@coscup.org>"]
 license = "AGPL-3.0"
@@ -23,7 +23,7 @@ pylibmc = "^1.6.1"
 pymongo = "^4.0.2"
 requests = "^2.27.1"
 uWSGI = "^2.0.20"
-fastapi = "^0.88.0"
+fastapi = "^0.89.0"
 uvicorn = {extras = ["standard"], version = "^0.20.0"}
 python-multipart = "^0.0.5"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}

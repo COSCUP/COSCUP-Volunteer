@@ -10,7 +10,7 @@ We use the [docker compose](https://docs.docker.com/compose/) (not **docker-comp
 
 Build the base image for local development.
 
-    docker build -t coscupweb-base:23.01.03 -f ./Dockerfile-base-dev ./
+    docker build -t coscupweb-base:23.01.18 -f ./Dockerfile-base-dev ./
 
 !!! note
 
@@ -45,7 +45,7 @@ Wait an amount until all services are available, open browser and visit to:
 
 !!! warning
 
-    Because of the cookie with secure attributes (`__Host-`) at local in `127.0.0.1` is not allowed for Chrome and Safari ([Issue 1056543], [Issue 1263426]), the following steps are works only in [Firefox](https://www.mozilla.org/firefox/).
+    Because of the cookie with secure attributes (`__Host-`) at local in `127.0.0.1` is not allowed for **Chrome** and **Safari** ([Issue 1056543], [Issue 1263426]), the following steps are works only in [Firefox](https://www.mozilla.org/firefox/).
 
     [Issue 1056543]: https://bugs.chromium.org/p/chromium/issues/detail?id=1056543
     [Issue 1263426]: https://bugs.chromium.org/p/chromium/issues/detail?id=1263426
