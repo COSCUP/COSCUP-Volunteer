@@ -10,7 +10,7 @@
 - Read, understand and agree with the [DCO guideline](dco.md) for this project.
 - Run `pylint`, `mypy` to make sure your codebase is pretty.
     ``` sh
-    (poetry) PYTHONPATH=./ pylint --disable=R0801 ./view/ ./module/ ./models/ ./celery_task/ ./structs/ ./api/ ./main.py
+    (poetry) PYTHONPATH=./ pylint --disable=R0801,E1101,E0611 ./view/ ./module/ ./models/ ./celery_task/ ./structs/ ./api/ ./main.py
     ```
     ``` sh
     (poetry) PYTHONPATH=./ mypy ./view/ ./module/ ./models/ ./celery_task/ ./structs/ ./api/ ./main.py

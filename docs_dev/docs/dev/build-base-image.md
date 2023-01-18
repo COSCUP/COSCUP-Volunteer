@@ -6,6 +6,10 @@
 
 We use the [docker compose](https://docs.docker.com/compose/) (not **docker-compose**) to run the project in containers, please pre-install [Docker Engine](https://docs.docker.com/engine/) or [Docker Desktop](https://docs.docker.com/get-docker/) before getting started.
 
+!!! tip "Docker performance on macOS"
+
+    If you are using docker on macOS, please choose `VirtioFS` as the file sharing implementation. ([why](https://www.paolomainardi.com/posts/docker-performance-macos/))
+
 ### Build the base image
 
 Build the base image for local development.
