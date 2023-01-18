@@ -92,6 +92,7 @@ description: 在活動籌備期間給予組長行政指引的手冊
     - 紀錄組 [documentary@coscup.org](mailto:documentary@coscup.org)
     - 財務組 [accounting@coscup.org](mailto:accounting@coscup.org)
     - 場物組 [service@coscup.org](mailto:service@coscup.org)
+    - 製播組 [streaming@coscup.org](mailto:streaming@coscup.org)
 
 ## 問題回報
 
