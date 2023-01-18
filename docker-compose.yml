@@ -138,14 +138,14 @@ services:
     entrypoint: ["poetry", "run", "celery", "-A", "celery_task.celery_main", "worker", "-B", "-l", "info", "-O", "fair", "-c", "4", "--logfile", "./log/log.log"]
 
   memcached-prod:
-    image: "memcached:1.6.17-alpine"
+    image: "memcached:1.6.18-alpine"
     deploy:
       replicas: 1
     networks:
       - backend
 
   queue_sender:
-    image: "rabbitmq:3.11.5-management-alpine"
+    image: "rabbitmq:3.11.7-management-alpine"
     deploy:
       replicas: 1
     depends_on:
