@@ -6,6 +6,7 @@ from werkzeug.wrappers import Response as ResponseBase
 from models.users_db import UsersDB
 from models.usessiondb import USessionDB
 from module.project import Project
+from module.users import User
 
 VIEW_DEV = Blueprint('dev', __name__, url_prefix='/dev')
 
@@ -49,6 +50,10 @@ def index() -> str | ResponseBase:
                                    owners=[usession['uid'], ],
                                    action_date=project_data['action_date'],
                                    )
+
+            if 'casename' in data and data['casename'] == 'make_suspend':
+                user_obj = User(uid=data['uid'])
+                user_obj.property_suspend(value=not user_obj.has_suspended())
 
     return jsonify({})
 

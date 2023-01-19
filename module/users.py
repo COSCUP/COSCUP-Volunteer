@@ -195,6 +195,23 @@ class User:
             return_document=ReturnDocument.AFTER,
         )
 
+    def has_suspended(self) -> bool:
+        ''' user has been suspended or not
+
+        Returns:
+            Return the user has been suspended or not.
+
+        '''
+        user_data = self.get()
+        if not user_data:
+            raise Exception('No account.')
+
+        if 'property' in user_data and 'suspend' in user_data['property'] and \
+                user_data['property']['suspend']:
+            return True
+
+        return False
+
     @staticmethod
     def get_info(uids: list[str], need_sensitive: bool = False) -> dict[str, Any]:
         ''' Get user info

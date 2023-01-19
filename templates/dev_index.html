@@ -22,13 +22,19 @@
                               <th>ID</th>
                               <th>Email</th>
                               <th>Create At</th>
+                              <th>Suspend</th>
                           </tr>
                       </thead>
                       <tbody>
                           <tr v-for="account in accounts">
                               <td>[[ account._id ]]</td>
-                              <td>[[ account.mail ]]</td>
+                              <td>[[ account.mail ]]<br>[[ account.property ]]</td>
                               <td>[[ new Date(account.created_at*1000).toLocaleString() ]]</td>
+                              <td>
+                                <a class="button is-danger is-small is-light is-outlined"
+                                  @click="make_suspend(account._id)"
+                                >Suspend</a>
+                              </td>
                           </tr>
                       </tbody>
                   </table>
@@ -48,13 +54,15 @@
                               <td>[[ session.uid ]]</td>
                               <td>
                                   [[ session._id ]]<br>
-                                  [[ session.alive ]] [[ new Date(session.created_at*1000).toLocaleString() ]]
+                                  <span class="tag is-success" v-if="session.alive">alive</span>
+                                  <span class="tag is-dark" v-if="!session.alive">expired</span>
+                                  [[ new Date(session.created_at*1000).toLocaleString() ]]<br>
                               </td>
                               <td style="vertical-align:middle;">
                                   <a class="button is-link is-small is-light is-outlined"
                                       v-if="sid != session._id"
                                       :href="'./cookie?sid='+session._id">Switch</a>
-                                  <span class="tag is-success" v-if="sid == session._id">Current</span>
+                                <span class="tag is-success" v-if="sid == session._id">Current</span>
                               </td>
                           </tr>
                       </tbody>
@@ -145,6 +153,12 @@
                 create_project: function() {
                     let $this = this;
                     axios.post('./', {casename: 'create_project', project: this.project}).then(function(resp) {
+                        window.location.href = '/dev/';
+                    });
+                },
+                make_suspend: function(uid) {
+                    let $this = this;
+                    axios.post('./', {casename: 'make_suspend', uid: uid}).then(function(resp) {
                         window.location.href = '/dev/';
                     });
                 },

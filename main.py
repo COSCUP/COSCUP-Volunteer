@@ -1,9 +1,9 @@
 ''' main '''
 # pylint: disable=no-member
-import hashlib
 import logging
 import os
 import re
+import secrets
 import traceback
 from pathlib import Path
 from typing import Any, Callable
@@ -115,12 +115,19 @@ def need_login() -> ResponseBase | None:
         else:
             session_data = USession.get(session['sid'])
             if session_data:
-                user_data = User(uid=session_data['uid']).get()
-                if not user_data:
-                    return None
+                has_suspended: bool | None = mem_cahce.get(
+                    f"suspend:{session_data['uid']}")
+                if has_suspended is None:
+                    has_suspended = User(session_data['uid']).has_suspended()
 
-                if 'property' in user_data and 'suspend' in user_data['property'] and \
-                        user_data['property']['suspend']:
+                    if has_suspended:
+                        mem_cahce.set(
+                            f"suspend:{session_data['uid']}", True, 300)
+                    else:
+                        mem_cahce.set(
+                            f"suspend:{session_data['uid']}", False, 300)
+
+                if has_suspended:
                     session.pop('sid', None)
                     return redirect('/docs/error_note/e001/')
 
@@ -224,7 +231,7 @@ def oauth2callback() -> ResponseBase:
         authorization_url, state = flow.authorization_url(
             access_type='offline',
             include_granted_scopes='true',
-            state=hashlib.sha256(os.urandom(2048)).hexdigest(),
+            state=secrets.token_urlsafe(64),
         )
 
         session['state'] = state

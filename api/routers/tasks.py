@@ -245,14 +245,12 @@ async def tasks_user_join(
             )
 @router.patch('/{pid}/{task_id}/attendee/list',
               summary='Add users to the task (update)',
-              status_code=status.HTTP_204_NO_CONTENT,
               responses={
                   status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
               response_model_exclude_none=True,
               )
 @router.delete('/{pid}/{task_id}/attendee/list',
                summary='Remove users from the task (remove)',
-               status_code=status.HTTP_204_NO_CONTENT,
                responses={
                    status.HTTP_404_NOT_FOUND: {'description': 'Project not found'}},
                response_model_exclude_none=True,

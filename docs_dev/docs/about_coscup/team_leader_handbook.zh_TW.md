@@ -37,6 +37,7 @@ description: 在活動籌備期間給予組長行政指引的手冊
 
     - 請記得作**會議記錄**，或是會議結論紀錄，為**未來傳承**著想。
     - 今年可以嘗試轉變建立**公開會議**討論並使用[大會行事曆](https://calendar.google.com/calendar/embed?src=c_a376ec8beb6ef0ab3acb5fe3213880dfcbba50ce89107532aacbfdda71c6e294%40group.calendar.google.com&ctz=Asia%2FTaipe)提供線上會議。
+    - 若有超過３人與１小時以上的會議建立需求，可以尋求**行政組**協助建立會議。
 
 ## 志工服務平台
 
