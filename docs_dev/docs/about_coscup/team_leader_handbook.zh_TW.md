@@ -54,6 +54,13 @@ description: 在活動籌備期間給予組長行政指引的手冊
 2023 年開始，欲加入的組員需完成**個人簡介**、**社群守則**與**資料保護原則**的簽署才可以申請加入。
 在「**設定**」、「**組員**」的頁面可以管理組員。
 
+<figure markdown>
+  <a href="https://volunteer.coscup.org/doc/docs_users_login.svg">
+    <img alt="coscup_volunteer_users_login" src="https://volunteer.coscup.org/doc/docs_users_login.svg">
+  </a>
+  <figcaption>組員登錄的完整流程 <small><a href="https://volunteer.coscup.org/doc/docs_users_login.svg">[original]</a></small></figcaption>
+</figure>
+
 !!! info "招募作業"
 
     - 各組目前無統一的招募規範，可自行發揮，但請多花點時間瞭解欲加入的組員，如無人力可處理組員招募作業，可請求**行政組**協助招募面談。

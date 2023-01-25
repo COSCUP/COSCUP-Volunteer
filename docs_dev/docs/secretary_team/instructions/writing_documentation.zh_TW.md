@@ -16,4 +16,11 @@
 
 ## 撰寫與歸檔
 
+<figure markdown>
+  <a href="https://volunteer.coscup.org/doc/docs_writing_documentation_1.svg">
+    <img alt="coscup_volunteer_writing_documentation_1" src="https://volunteer.coscup.org/doc/docs_writing_documentation_1.svg">
+  </a>
+  <figcaption>文件整理歸檔的流程</figcaption>
+</figure>
+
 文件撰寫可以先到大會共用 [Google Drive](https://drive.google.com/drive/folders/1U2qvoGZln3l2TJQHefGwNQ35E3TOd4X9) 建立，在活動結束後或再安排**文件歸檔手作日**將其轉成 Markdown 格式歸檔到行政組在 [COSCUP Volunteer Docs](https://volunteer.coscup.org/docs/zh_TW/secretary_team/overview/) 中。

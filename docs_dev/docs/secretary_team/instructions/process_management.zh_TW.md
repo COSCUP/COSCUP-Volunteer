@@ -11,19 +11,18 @@ description: 在籌備期間行政組如何管理任務說明
 
 使用看板的方式不是要提高生產力，主要是讓**工作任務可視化**、讓團隊透過卡片的移動來了解一項工作事項的處理過程，並在處理的程序中發現有無可能改善的流程。
 
-<figure markdown>
-  <a href="https://volunteer.coscup.org/doc/docs_trello.png">
-    <img alt="Using Trello" style="border-radius:.4rem;border:.1rem solid aliceblue;"
-         loading="lazy"
-         src="https://volunteer.coscup.org/doc/docs_trello.png">
-  </a>
-</figure>
-
 !!! note
 
     詳細的介紹可以參考 Asana 對 [Kanban 的介紹](https://asana.com/zh-tw/resources/what-is-kanban)（雖然我們是用 Trello XD）
 
 ## 看板欄位
+
+<figure markdown>
+  <a href="https://volunteer.coscup.org/doc/docs_process_management_1.svg">
+    <img alt="coscup_volunteer_process_management_1" src="https://volunteer.coscup.org/doc/docs_process_management_1.svg">
+  </a>
+  <figcaption>Kanban 欄位與任務卡片</figcaption>
+</figure>
 
 看板欄位依序為：Backlog、Todo、Doing、Review、Done。
 
@@ -34,6 +33,14 @@ description: 在籌備期間行政組如何管理任務說明
 5. Done：在週會上確認無誤後移到這個欄位表示完成。
 
 ## Trello
+
+<figure markdown>
+  <a href="https://volunteer.coscup.org/doc/docs_trello.png">
+    <img alt="Using Trello" style="border-radius:.4rem;border:.1rem solid aliceblue;"
+         loading="lazy"
+         src="https://volunteer.coscup.org/doc/docs_trello.png">
+  </a>
+</figure>
 
 可使用 Web 或是 App 的方式操作。
 

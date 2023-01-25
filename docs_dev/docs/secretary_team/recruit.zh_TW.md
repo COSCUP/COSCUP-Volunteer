@@ -319,7 +319,7 @@ COSCUP 通常會在每一年的農曆年後開始籌備，大會活動日會以�
 
 ??? Info "相關說明"
 
-    - 請款[流程圖](https://raw.githubusercontent.com/wiki/COSCUP/COSCUP-Volunteer/images/wiki_expense_flow_on_volunteer.svg)。
+    - 請款[流程圖](https://volunteer.coscup.org/doc/wiki_expense_flow_on_volunteer.svg)。
     - [預算、經費申請流程](https://github.com/COSCUP/COSCUP-Volunteer/wiki/%E9%A0%90%E7%AE%97%E3%80%81%E7%B6%93%E8%B2%BB%E7%94%B3%E8%AB%8B%E6%B5%81%E7%A8%8B)。
 
 ??? Note "2023 預期目標"
