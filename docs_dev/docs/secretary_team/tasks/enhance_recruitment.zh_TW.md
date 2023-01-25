@@ -7,10 +7,10 @@
 ## 預計的規劃
 
 <figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/docs_tasks_enhance_recruitment.svg">
-    <img alt="coscup_volunteer_infra" src="https://s3.toomore.net/coscup/volunteer/docs_tasks_enhance_recruitment.svg">
+  <a href="https://volunteer.coscup.org/doc/docs_tasks_enhance_recruitment.svg">
+    <img alt="coscup_volunteer_infra" src="https://volunteer.coscup.org/doc/docs_tasks_enhance_recruitment.svg">
   </a>
-  <figcaption><small><a href="https://s3.toomore.net/coscup/volunteer/docs_tasks_enhance_recruitment.svg">[original]</a></small></figcaption>
+  <figcaption><small><a href="https://volunteer.coscup.org/doc/docs_tasks_enhance_recruitment.svg">[original]</a></small></figcaption>
 </figure>
 
 ### 第一階段

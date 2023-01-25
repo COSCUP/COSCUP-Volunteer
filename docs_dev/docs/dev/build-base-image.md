@@ -74,9 +74,9 @@ To create a user for dev.
     docker compose run --rm cmdapp dev user_add
 
 <figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/docs_add_users.png">
+  <a href="https://volunteer.coscup.org/doc/docs_add_users.png">
     <img alt="docs_add_users"
-         src="https://s3.toomore.net/coscup/volunteer/docs_add_users.png"
+         src="https://volunteer.coscup.org/doc/docs_add_users.png"
          style="border: 1px #ececec solid; border-radius: 0.4rem;"
     >
   </a>

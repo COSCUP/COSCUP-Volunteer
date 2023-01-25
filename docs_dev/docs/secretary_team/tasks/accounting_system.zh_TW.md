@@ -5,10 +5,10 @@ COSCUP 目前是以**試算表**建立預算，在志工平台財務會計系統
 ## 規劃流程圖
 
 <figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/docs_tasks_accounting_system.svg">
-    <img alt="coscup_volunteer_infra" src="https://s3.toomore.net/coscup/volunteer/docs_tasks_accounting_system.svg">
+  <a href="https://volunteer.coscup.org/doc/docs_tasks_accounting_system.svg">
+    <img alt="coscup_volunteer_infra" src="https://volunteer.coscup.org/doc/docs_tasks_accounting_system.svg">
   </a>
-  <figcaption><small><a href="https://s3.toomore.net/coscup/volunteer/docs_tasks_accounting_system.svg">[original]</a></small></figcaption>
+  <figcaption><small><a href="https://volunteer.coscup.org/doc/docs_tasks_accounting_system.svg">[original]</a></small></figcaption>
 </figure>
 
 ## 流程解說

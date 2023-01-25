@@ -6,10 +6,10 @@ The new REST API is now under planning and heavy development. Any update or anno
 in the future will be published here.
 
 <figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_api_flow.svg">
-    <img alt="coscup_volunteer_api_flow" src="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_api_flow.svg">
+  <a href="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_api_flow.svg">
+    <img alt="coscup_volunteer_api_flow" src="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_api_flow.svg">
   </a>
-  <figcaption>Authorization flow, <small><a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_api_flow.svg">[original]</a></small></figcaption>
+  <figcaption>Authorization flow, <small><a href="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_api_flow.svg">[original]</a></small></figcaption>
 </figure>
 
  - [API Docs](#api-docs)

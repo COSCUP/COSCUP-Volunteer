@@ -15,10 +15,10 @@ description: 介紹行政組主要的工作任務內容與 2023 招募對象與�
 行政組目前組內分類為三個任務組別：**庶務組**、**開發組**、**招募組**。
 
 <figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/docs_secretary_team.svg">
-    <img alt="coscup_volunteer_infra" src="https://s3.toomore.net/coscup/volunteer/docs_secretary_team.svg">
+  <a href="https://volunteer.coscup.org/doc/docs_secretary_team.svg">
+    <img alt="coscup_volunteer_infra" src="https://volunteer.coscup.org/doc/docs_secretary_team.svg">
   </a>
-  <figcaption>All services, <small><a href="https://s3.toomore.net/coscup/volunteer/docs_secretary_team.svg">[original]</a></small></figcaption>
+  <figcaption>All services, <small><a href="https://volunteer.coscup.org/doc/docs_secretary_team.svg">[original]</a></small></figcaption>
 </figure>
 
 !!! question ""

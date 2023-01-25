@@ -2,18 +2,18 @@
 
 If you want to start contributing to the project, here is the path you can take step by step to arrive.
 
-1. [What service is in the COSCUP Volunteer?](#what-service-is-in-the-coscup-volunteer)
-2. [How to make COSCUP Volunteer?](#how-to-make-coscup-volunteer)
-3. [Roadmap](#roadmap)
-4. [How to contribute?](#how-to-contribute)
+- [Introduction](#introduction)
+  - [What Service is in the COSCUP Volunteer?](#what-service-is-in-the-coscup-volunteer)
+  - [How to Make COSCUP Volunteer?](#how-to-make-coscup-volunteer)
+  - [Roadmap](#roadmap)
 
 ## What Service is in the COSCUP Volunteer?
 
 <figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_services.svg">
-    <img alt="coscup_volunteer_infra" src="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_services.svg">
+  <a href="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_services.svg">
+    <img alt="coscup_volunteer_infra" src="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_services.svg">
   </a>
-  <figcaption>Services, <small><a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_services.svg">[original]</a></small></figcaption>
+  <figcaption>Services, <small><a href="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_services.svg">[original]</a></small></figcaption>
 </figure>
 
 Those services have been implemented in the volunteer platform. Those services are
@@ -22,10 +22,10 @@ served by the **Secretary Team<small>（行政組）</small>** in the COSCUP.
 ## How to Make COSCUP Volunteer?
 
 <figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_infra.svg">
-    <img alt="coscup_volunteer_infra" src="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_infra.svg">
+  <a href="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_infra.svg">
+    <img alt="coscup_volunteer_infra" src="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_infra.svg">
   </a>
-  <figcaption>Infrastructure, <small><a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_infra.svg">[original]</a></small></figcaption>
+  <figcaption>Infrastructure, <small><a href="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_infra.svg">[original]</a></small></figcaption>
 </figure>
 
 This figure is the whole picture about the infrastructure of the volunteer platform on the production.
@@ -39,8 +39,8 @@ the connections from requests and to responses.
 ## Roadmap
 
 <figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_roadmap.svg">
-    <img alt="coscup_volunteer_roadmap" src="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_roadmap.svg">
+  <a href="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_roadmap.svg">
+    <img alt="coscup_volunteer_roadmap" src="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_roadmap.svg">
   </a>
-  <figcaption>Roadmap, <small><a href="https://s3.toomore.net/coscup/volunteer/wiki_coscup_volunteer_roadmap.svg">[original]</a></small></figcaption>
+  <figcaption>Roadmap, <small><a href="https://volunteer.coscup.org/doc/wiki_coscup_volunteer_roadmap.svg">[original]</a></small></figcaption>
 </figure>

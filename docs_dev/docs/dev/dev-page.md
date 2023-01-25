@@ -24,9 +24,9 @@ API_DEFAULT_OWNERS = ['00000000', ]  # replace `00000000` to your uid.
 Default will create 10 accounts for developing.
 
 <figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/docs_dev_account_lists.png">
+  <a href="https://volunteer.coscup.org/doc/docs_dev_account_lists.png">
     <img alt="docs_dev_account_lists"
-         src="https://s3.toomore.net/coscup/volunteer/docs_dev_account_lists.png"
+         src="https://volunteer.coscup.org/doc/docs_dev_account_lists.png"
          style="border: 1px #ececec solid; border-radius: 0.4rem;"
     >
   </a>
@@ -43,9 +43,9 @@ You need to create the first project for you to develop. Please click
 the `To create a project` to toggle the creating form.
 
 <figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/docs_create_project.png">
+  <a href="https://volunteer.coscup.org/doc/docs_create_project.png">
     <img alt="docs_create_project"
-         src="https://s3.toomore.net/coscup/volunteer/docs_create_project.png"
+         src="https://volunteer.coscup.org/doc/docs_create_project.png"
          style="border: 1px #ececec solid; border-radius: 0.4rem;"
     >
   </a>
@@ -80,9 +80,9 @@ Click `編輯組別`, and click `建立` to toggle the dialog box. The example c
 Click `編輯` after the team list. Typing the user id (`uid`) into the fields of `chiefs`, `members`.
 
 <figure markdown>
-  <a href="https://s3.toomore.net/coscup/volunteer/docs_edit_team_setting.png">
+  <a href="https://volunteer.coscup.org/doc/docs_edit_team_setting.png">
     <img alt="docs_edit_team_setting"
-         src="https://s3.toomore.net/coscup/volunteer/docs_edit_team_setting.png"
+         src="https://volunteer.coscup.org/doc/docs_edit_team_setting.png"
          style="border: 1px #ececec solid; border-radius: 0.4rem;"
     >
   </a>
