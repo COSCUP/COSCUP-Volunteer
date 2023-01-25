@@ -10,7 +10,7 @@ step by step to figure out what we are doing or have been done here.
 
 ## About
 
-The COSCUP Volunteer is hosted by Secretary Team<small>（行政組）</small>.
+The COSCUP Volunteer is hosted by [Secretary Team](secretary_team/overview.md) <small>（行政組）</small>.
 This platform allows internal volunteers to join the team they are
 interested in, apply for some required forms, integrate with Mattermost and
 Telegram accounts and to start accumulating volunteer work.

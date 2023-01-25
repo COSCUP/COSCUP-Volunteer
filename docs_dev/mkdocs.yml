@@ -79,6 +79,11 @@ nav:
   - About Secretary Team:
     - Overview: secretary_team/overview.md
     - Recruit: secretary_team/recruit.md
+    - Instructions:
+      - Overview: secretary_team/instructions/overview.md
+      - "Scope of Team": secretary_team/instructions/scope_of_team.md
+      - "Process Management": secretary_team/instructions/process_management.md
+      - "Writing Documentation": secretary_team/instructions/writing_documentation.md
     - Tasks:
       - "List of Tasks": secretary_team/tasks/overview.md
       - "Accounting System": secretary_team/tasks/accounting_system.md
@@ -158,6 +163,10 @@ plugins:
           "Error Note": "錯誤訊息"
           "Announcement": "訊息發佈"
           "Review in 2022": "2022 回顧"
+          "Instructions": "使用手冊"
+          "Scope of Team": "組任務範圍"
+          "Process Management": "任務流程方式"
+          "Writing Documentation": "文件紀錄"
   - search
   - social:
       cards_font: Noto Sans TC

@@ -1,0 +1,1 @@
+This page is now only in `zh-TW`, please refer to [here](writing_documentation.zh_TW.md).
