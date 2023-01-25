@@ -417,7 +417,7 @@
                     document.querySelector('html').classList.remove('is-clipped');
                 },
                 detail: function(data) {
-                    if (typeof ga === 'function') {
+                    if (typeof gtag === 'function') {
                         gtag('event', 'show', {
                             event_category: data._id+' '+data.title,
                             event_label: 'is_in_project:'+this.is_in_project+'|is_star:'+this.is_star+'|_joined:'+data._joined+'|_login:'+data._login,
@@ -463,7 +463,7 @@
 
                 },
                 star: function($e) {
-                    if (typeof ga === 'function') {
+                    if (typeof gtag === 'function') {
                         gtag('event', 'star', {
                             event_category: this.is_star+' -> '+!this.is_star,
                             event_label: 'is_in_project:'+this.is_in_project+'|is_star:'+this.is_star,
@@ -559,7 +559,7 @@
                     });
                 },
                 golink: function(data, $e) {
-                    if (typeof ga === 'function') {
+                    if (typeof gtag === 'function') {
                         $e.preventDefault();
 
                         let $a = $e.target;

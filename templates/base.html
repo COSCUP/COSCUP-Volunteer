@@ -276,10 +276,9 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     {% if g.user and g.user.data %}
-    gtag('config', 'G-6B98ZDG12C', {'user_id': '{{ g.user.account._id }}'});
-    {% else %}
-    gtag('config', 'G-6B98ZDG12C');
+    gtag('set', {'user_id': '{{ g.user.account._id }}'});
     {% endif %}
+    gtag('config', 'G-6B98ZDG12C');
   </script>
   <script src="/js/vue.min.js"></script>
   <script>

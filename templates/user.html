@@ -59,4 +59,12 @@
   </div>
 </section>
 {% endblock %}
-
+{% block js %}
+<script>
+    gtag('event', 'view_item', {
+            currency: "TWD",
+            value: 1,
+            items: [{item_id: '{{user._id}}'}],
+        });
+</script>
+{% endblock %}
