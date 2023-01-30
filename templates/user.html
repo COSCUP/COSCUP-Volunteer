@@ -53,9 +53,9 @@
                     <li>
                         {{p._project.name}} <strong>{{p.name}}</strong>
                         <small>
-                            {% if p.title == 'chief' %}
+                            {% if p._title == 'chief' %}
                             <span class="tag is-warning is-light">{{p._title}}</span> {{p._action_date}}
-                            {% elif p.title == 'member' %}
+                            {% elif p._title == 'member' %}
                             <span class="tag is-success is-light">{{p._title}}</span> {{p._action_date}}
                             {% else %}
                             <span class="tag is-light">{{p._title}}</span> {{p._action_date}}
