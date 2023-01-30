@@ -44,16 +44,30 @@
                   <h2>Intro</h2>
                   <hr>
                   {{intro|safe}}
-                  {% if participate_in %}
-                  <h2>Participate In</h2>
-                  <hr>
-                  <ul>
-                      {% for p in participate_in %}
-                      <li>{{p._project.name}} {{p.name}}<small>（{{p._title}}, {{p._action_date}}）</small></li>
-                      {% endfor %}
-                  </ul>
-                  {% endif %}
               </div>
+            <div class="content box">
+                <h2>參與履歷 <span class="tag is-info is-light">系統產生</span></h2>
+                {% if participate_in %}
+                <ul>
+                    {% for p in participate_in %}
+                    <li>
+                        {{p._project.name}} <strong>{{p.name}}</strong>
+                        <small>
+                            {% if p.title == 'chief' %}
+                            <span class="tag is-warning is-light">{{p._title}}</span> {{p._action_date}}
+                            {% elif p.title == 'member' %}
+                            <span class="tag is-success is-light">{{p._title}}</span> {{p._action_date}}
+                            {% else %}
+                            <span class="tag is-light">{{p._title}}</span> {{p._action_date}}
+                            {% endif %}
+                        </small>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>目前無參與過 COSCUP 志工團隊。</p>
+                {% endif %}
+            </div>
           </div>
       </div>
   </div>
