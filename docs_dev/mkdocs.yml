@@ -5,7 +5,7 @@ site_author: "COSCUP Secretary Team / 行政組"
 repo_url: https://github.com/COSCUP/COSCUP-Volunteer
 repo_name: COSCUP/COSCUP-Volunteer
 edit_uri: https://github.com/COSCUP/COSCUP-Volunteer/blob/main/docs_dev/docs/
-copyright: "CC BY 4.0 2022 COSCUP Volunteer"
+copyright: "CC BY 4.0 2022-2023 COSCUP Volunteer"
 nav:
   - Home: index.md
   - Introduction:
@@ -127,9 +127,11 @@ extra:
     property: G-6B98ZDG12C
   social:
     - icon: material/home
-      link: htts://volunteer.coscup.org/
+      link: https://volunteer.coscup.org/
     - icon: fontawesome/brands/github
       link: https://github.com/COSCUP/COSCUP-Volunteer
+    - icon: fontawesome/solid/users-rectangle
+      link: https://volunteer.coscup.org/docs/zh_TW/secretary_team/overview/
 plugins:
   - i18n:
       default_language: en
