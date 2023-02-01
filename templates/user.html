@@ -40,13 +40,23 @@
               </div>
           </div>
           <div class="column">
-              <div class="content">
-                  <h2>Intro</h2>
-                  <hr>
-                  {{intro|safe}}
-              </div>
+            {% if intro %}
             <div class="content box">
-                <h2>參與履歷 <span class="tag is-info is-light">系統產生</span></h2>
+                {% if g.user['account']['_id'] == user._id %}
+                <h2>Intro <sup>
+                  <small><a href="/setting/">
+                    <span class="icon"><i class="fas fa-edit"></i></span>
+                  </a></small>
+                </sup></h2>
+                {% else %}
+                <h2>Intro</h2>
+                {% endif %}
+                <hr>
+                {{intro|safe}}
+            </div>
+            {% endif %}
+            <div class="content box">
+                <h2>參與履歷<sup><span class="tag is-info is-light">系統產生</span></sup></h2>
                 {% if participate_in %}
                 <ul>
                     {% for p in participate_in %}
