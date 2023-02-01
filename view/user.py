@@ -44,7 +44,8 @@ def user_page(uid: str, nickname: str | None = None) -> ResponseBase | str:  # p
         oauth['data']['picture'] = GSuite.size_picture(
             oauth['data']['picture'])
 
-    if 'profile' in user and 'badge_name' in user['profile']:
+    if 'profile' in user and 'badge_name' in user['profile'] and \
+            user['profile']['badge_name']:
         _nickname = user['profile']['badge_name']
     else:
         _nickname = oauth['data']['name']

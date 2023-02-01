@@ -259,6 +259,9 @@ class User:
                     'intro': '',
                 }
 
+            if users[user['_id']]['profile']['badge_name'].strip() == '':
+                users[user['_id']]['profile']['badge_name'] = oauth_data['data']['name']
+
             if 'profile_real' not in user:
                 users[user['_id']]['profile_real'] = {
                     'phone': '',
