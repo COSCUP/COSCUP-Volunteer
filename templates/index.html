@@ -43,7 +43,7 @@
       <div class="columns">
           <div class="column">
             <div class="has-text-centered">
-                <a href="/project/2023" class="button is-large is-info is-outlined is-light">
+                <a href="/project/2023" class="button is-large is-info is-outlined is-light is-rounded">
                     <span class="icon"><i class="far fa-check-circle"></i></span>
                     <span>加入志工夥伴</span>
                 </a>
@@ -85,13 +85,17 @@
           </div>
       </div>
     -->
+    </div>
+</section>
+<section class="section" style="background-color:#FBFBFD;">
+  <div class="container">
     <div class="columns">
-        <div class="column is-three-fifths is-offset-one-fifth">
+        <div class="column">
             <div class="box">
                 <div class="content">
                     <h2>關於志工組別</h2>
                     <p>目前 COSCUP 志工組別大致上可分為以下組別：</p>
-                    <ul>
+                    <ul class="randlist">
                         <li>議程組：國際議程、大人物邀約、開源社群協調。</li>
                         <li>財務組：贊助商入款、費用出款、結算報告、協助建置大會財務系統。</li>
                         <li>行銷組：小啄導航員、主視覺設計、紀念品製作。</li>
@@ -105,6 +109,8 @@
                     </ul>
                 </div>
             </div>
+        </div>
+        <div class="column">
             <div class="box">
                 <div class="content">
                     <h2>COSCUP 是什麼？</h2>
@@ -117,7 +123,7 @@
                         COSCUP 是 Conference for Open Source Coders, Users, Promoters 的縮寫，是由台灣開放原始碼社群一起推動的年度研討會。
                     </p>
                     <p>
-                        以大拜拜的研討會致力促進開源社群發展，每年七月底或八月初於台灣舉辦。在過往十數年的歷史裡，每年不同的籌辦成員碰撞出不同的火花，讓 COSCUP 常保活力十足，繼續為開源社群服務。
+                        以大拜拜的研討會致力促進開源社群發展，每年七月底或八月初於台灣舉辦。在過往十幾年的歷史裡，每年不同的籌辦成員碰撞出不同的火花，讓 COSCUP 常保活力十足，繼續為開源社群服務。
                     </p>
                     <p>我們會這樣介紹 COSCUP：</p>
                     <ul>
@@ -129,13 +135,28 @@
                         <li>大約會有 1500 - 2000 人來參與的研討會。</li>
                     </ul>
                     <p>登錄成為 COSCUP 志工，每屆活動開始時，就有機會一起參與籌備。來這裡發揮你的專長與熱情，一起籌辦年度大型研討會活動，來這裡實驗、實現你的想法與規劃！</p>
+                    <div class="has-text-right">
+                        <a href="https://coscup.org/"
+                           target="_blank"
+                           class="button is-small is-light is-info is-outlined is-rounded">
+                            前往 COSCUP 官網
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="has-text-centered">
-                <a href="/project/2023" class="button is-large is-info is-outlined is-light">
-                    <span class="icon"><i class="far fa-check-circle"></i></span>
-                    <span>加入志工夥伴</span>
-                </a>
+        </div>
+        <div class="column">
+            <div class="box">
+                <div class="content">
+                    <h2>COSCUP2023 開始招募！</h2>
+                    <p>2023 招募開始了！快點前往找到感興趣的組別提出申請！</p>
+                    <div class="has-text-right">
+                        <a href="/project/2023" class="button is-small is-info is-outlined is-light is-rounded">
+                            <span class="icon"><i class="far fa-check-circle"></i></span>
+                            <span>加入志工夥伴</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -145,5 +166,19 @@
 {% block js %}
 <script>
     gtag('event', 'conversion', {'send_to': 'AW-11007060379/BrfoCObe34IYEJvTyYAp'});
+    (function() {
+        let li = [];
+        document.querySelectorAll('.randlist li').forEach(item => {
+            li.push(item.outerHTML);
+        });
+        let len = li.length;
+        let content = document.getElementsByClassName('randlist')[0];
+        content.innerHTML= "";
+        for(i=0;i<len;i++){
+            let random = Math.floor(Math.random()*(li.length));
+            content.innerHTML += (li[random]);
+            li.splice(random, 1);
+        };
+    })();
 </script>
 {% endblock %}
