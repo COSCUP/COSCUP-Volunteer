@@ -79,6 +79,7 @@ NO_NEED_LOGIN_PATH = {
     '/robots.txt',
     '/api/members',
     '/telegram/r',
+    '/sitemap.txt',
 }
 
 
@@ -366,10 +367,34 @@ def bug_report() -> str:
 
 
 @app.route('/robots.txt')
-def robots() -> str:
+def robots() -> ResponseBase:
     ''' robots '''
-    return '''User-agent: *
-Allow: /'''
+    resp = make_response('User-agent: *\r\nAllow: /', 200)
+    resp.mimetype = 'text/plain'
+    return resp
+
+
+@app.route('/sitemap.txt')
+def sitemap() -> ResponseBase:
+    ''' sitemap '''
+    result: list[str] = []
+    for path in (
+        '/',
+        '/.well-known/security.txt',
+        '/api',
+        '/bug-report',
+        '/coc',
+        '/doc/security.txt',
+        '/docs/sitemap.xml',
+        '/privacy',
+        '/robots.txt',
+        '/security_guard',
+    ):
+        result.append(f'https://volunteer.coscup.org{path}')
+
+    resp = make_response('\r\n'.join(result), 200)
+    resp.mimetype = 'text/plain'
+    return resp
 
 
 @app.route('/exception')
