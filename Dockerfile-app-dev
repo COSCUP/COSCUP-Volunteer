@@ -140,3 +140,12 @@ ADD ./api/routers/__init__.py \
     ./api/routers/teams.py \
     ./api/routers/user.py \
     ./api/routers/
+
+ADD ./docs_dev/ ./docs_dev/
+
+RUN apk add git
+RUN git config --global user.email "volunteer@coscup.org"
+RUN git config --global user.name "COSCUP Volunteer"
+RUN git init
+RUN git add .
+RUN git commit -m 'init'

@@ -96,3 +96,13 @@ Open browser visit one of those links to:
 
     This command will create 10 user accounts and the register sessions, so you
     need to feed the cookie for your browser.
+
+### Docs in docker
+
+After starting up `docker compose`, the `docs` of container will build all of
+the documents into a volume and directly attach to the nginx container as
+a static website.
+
+Open browser and visit to:
+
+    http://127.0.0.1/docs/
