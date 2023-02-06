@@ -181,11 +181,17 @@ services:
       - secretary_mongo
     networks:
       - backend
+    volumes:
+      - rabbitdata:/var/lib/rabbitmq
 
   secretary_mongo:
     image: "mongo:6.0.3-focal"
     deploy:
       replicas: 1
+    volumes:
+      - mongodata:/data
+      - mongodb:/data/db
+      - mongoconfig:/data/configdb
     networks:
       - backend
 
@@ -193,9 +199,18 @@ services:
     image: "mongo:6.0.3-focal"
     deploy:
       replicas: 1
+    volumes:
+      - linkmongodb:/data/db
+      - linkmongoconfig:/data/configdb
     networks:
       - backend
     entrypoint: ["mongosh", "secretary_mongo:27017"]
 
 volumes:
   docs-site: {}
+  mongodata: {}
+  mongodb: {}
+  mongoconfig: {}
+  linkmongodb: {}
+  linkmongoconfig: {}
+  rabbitdata: {}
