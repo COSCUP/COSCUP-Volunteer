@@ -79,6 +79,7 @@ nav:
   - About Secretary Team:
     - Overview: secretary_team/overview.md
     - Recruit: secretary_team/recruit.md
+    - Roadmap: secretary_team/roadmap.md
     - Instructions:
       - Overview: secretary_team/instructions/overview.md
       - "Scope of Team": secretary_team/instructions/scope_of_team.md
@@ -169,6 +170,7 @@ plugins:
           "Scope of Team": "組任務範圍"
           "Process Management": "任務流程方式"
           "Writing Documentation": "文件紀錄"
+          "Roadmap": "路線圖"
   - search
   - social:
       cards_font: Noto Sans TC
