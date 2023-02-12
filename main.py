@@ -381,7 +381,8 @@ def sitemap() -> ResponseBase:
     for path in (
         '/',
         '/.well-known/security.txt',
-        '/api',
+        '/api/docs',
+        '/api/redoc',
         '/bug-report',
         '/coc',
         '/doc/security.txt',
