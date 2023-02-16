@@ -18,7 +18,7 @@ jobs:
       - name: Rename sample setting file
         run: mv ./setting_sample.py ./setting.py
       - name: Build the base image
-        run: docker build -t coscupweb-base:23.01.18 -f ./Dockerfile-base-dev ./
+        run: docker build -t coscupweb-base:23.02.18 -f ./Dockerfile-base-dev ./
       - name: UP
         run: docker compose up --build --detach
       - name: List images
