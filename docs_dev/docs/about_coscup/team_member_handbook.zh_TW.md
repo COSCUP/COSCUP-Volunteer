@@ -57,6 +57,10 @@ description: 給予組員在活動籌備期間的行政指引手冊
 
 各組會議由各組組長決定，如因跨組任務，可自行招集相關人員討論。如遇難以決定事項，可請求**總召組**列席參與。
 
+!!! info "2023 大會會議"
+
+    2023 籌備期間的**同步會議**可以參考[行事曆](https://calendar.google.com/calendar/embed?src=c_a376ec8beb6ef0ab3acb5fe3213880dfcbba50ce89107532aacbfdda71c6e294@group.calendar.google.com&ctz=Asia%2FTaipei)，每一場的會議可以參閱這份[會議記錄](https://hackmd.io/@coscup/coscup-2023-meeting)。
+
 ## 志工服務平台
 
 在你加入志工過程中，所使用的[平台](https://volunteer.coscup.org/)是 COSCUP 在管理志工的服務，你可以在平台上申請各式的志工福利或是累積自己的志工歷程。
