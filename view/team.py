@@ -991,12 +991,13 @@ def team_plan_edit(pid: str, tid: str) -> str | ResponseBase:
         return redirect('/')
 
     teamusers = TeamUsers.parse_obj(team)
-    is_admin = (g.user['account']['_id'] in teamusers.chiefs or
-                g.user['account']['_id'] in teamusers.owners or
-                g.user['account']['_id'] in project.owners)
-
-    if not is_admin:
+    if not (g.user['account']['_id'] in teamusers.members or
+            g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
+
+    is_admin: bool = (g.user['account']['_id'] in teamusers.chiefs or
+                      g.user['account']['_id'] in teamusers.owners or
+                      g.user['account']['_id'] in project.owners)
 
     if request.method == 'GET':
         return render_template('./team_plan_edit.html',
