@@ -39,7 +39,6 @@ services:
     networks:
       - backend
     environment:
-      - LD_PRELOAD=/usr/local/lib/libjemalloc.so
       - PYTHONPATH=/app
     command: sh
 
@@ -59,7 +58,6 @@ services:
       - queue_sender
       - secretary_mongo
     environment:
-      - LD_PRELOAD=/usr/local/lib/libjemalloc.so
       - PYTHONPATH=/app
     networks:
       - backend
@@ -84,8 +82,6 @@ services:
       - "5000"
     deploy:
       replicas: 1
-    environment:
-      - LD_PRELOAD=/usr/local/lib/libjemalloc.so
     networks:
       - backend
     entrypoint: ["poetry", "run", "uwsgi", "./uwsgi.ini"]
@@ -110,7 +106,6 @@ services:
     deploy:
       replicas: 1
     environment:
-      - LD_PRELOAD=/usr/local/lib/libjemalloc.so
       - UVICORN_HOST=0.0.0.0
       - UVICORN_WORKERS=2
     networks:
@@ -132,7 +127,6 @@ services:
       - queue_sender
       - secretary_mongo
     environment:
-      - LD_PRELOAD=/usr/local/lib/libjemalloc.so
       - C_FORCE_ROOT=true
     networks:
       - backend
