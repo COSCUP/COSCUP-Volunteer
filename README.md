@@ -1,5 +1,7 @@
 # COSCUP Volunteer
 
+[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/6869/badge)](https://bestpractices.coreinfrastructure.org/projects/6869)
+
 COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政流程建立。
 [https://volunteer.coscup.org/](https://volunteer.coscup.org/)
 
