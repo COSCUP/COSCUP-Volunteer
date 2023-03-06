@@ -268,7 +268,8 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
 
         return render_template('./team_edit_user.html',
                                project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True),
+                               team=team.dict(
+                                   by_alias=True, exclude_none=True),
                                waitting_list=waitting_list)
 
     if request.method == 'POST':  # pylint: disable=too-many-return-statements, too-many-nested-blocks
