@@ -21,10 +21,7 @@ services:
       - backend
 
   workerapp:
-    image: "volunteer-app:prod"
-    build:
-      context: .
-      dockerfile: ./Dockerfile-app-dev
+    image: "coscupweb-base:23.02.18"
     links:
       - "memcached-prod:memcached"
       - "queue_sender:rabbitmq"
@@ -32,6 +29,18 @@ services:
     volumes:
       - $PWD/logs/apps:/app/log
       - $PWD/scripts:/app/scripts
+      - $PWD/main.py:/app/main.py
+      - $PWD/uwsgi.ini:/app/uwsgi.ini
+      - $PWD/setting.py:/app/setting.py
+      - $PWD/cmdtools:/app/cmdtools
+      - $PWD/celery_task:/app/celery_task
+      - $PWD/models:/app/models
+      - $PWD/module:/app/module
+      - $PWD/templates:/app/templates
+      - $PWD/view:/app/view
+      - $PWD/structs:/app/structs
+      - $PWD/api:/app/api
+      - $PWD/docs_dev:/app/docs_dev
     depends_on:
       - memcached-prod
       - queue_sender
@@ -43,16 +52,25 @@ services:
     command: sh
 
   cmdapp:
-    image: "volunteer-app:prod"
-    build:
-      context: .
-      dockerfile: ./Dockerfile-app-dev
+    image: "coscupweb-base:23.02.18"
     links:
       - "memcached-prod:memcached"
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
     volumes:
       - $PWD/logs/apps:/app/log
+      - $PWD/main.py:/app/main.py
+      - $PWD/uwsgi.ini:/app/uwsgi.ini
+      - $PWD/setting.py:/app/setting.py
+      - $PWD/cmdtools:/app/cmdtools
+      - $PWD/celery_task:/app/celery_task
+      - $PWD/models:/app/models
+      - $PWD/module:/app/module
+      - $PWD/templates:/app/templates
+      - $PWD/view:/app/view
+      - $PWD/structs:/app/structs
+      - $PWD/api:/app/api
+      - $PWD/docs_dev:/app/docs_dev
     depends_on:
       - memcached-prod
       - queue_sender
@@ -64,16 +82,27 @@ services:
     entrypoint: ["poetry", "run", "python3", "cmdtools/main.py"]
 
   webapp:
-    image: "volunteer-app:prod"
-    build:
-      context: .
-      dockerfile: ./Dockerfile-app-dev
+    image: "coscupweb-base:23.02.18"
     links:
       - "memcached-prod:memcached"
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
+    ports:
+      - "5000:5000"
     volumes:
       - $PWD/logs/apps:/app/log
+      - $PWD/main.py:/app/main.py
+      - $PWD/uwsgi.ini:/app/uwsgi.ini
+      - $PWD/setting.py:/app/setting.py
+      - $PWD/cmdtools:/app/cmdtools
+      - $PWD/celery_task:/app/celery_task
+      - $PWD/models:/app/models
+      - $PWD/module:/app/module
+      - $PWD/templates:/app/templates
+      - $PWD/view:/app/view
+      - $PWD/structs:/app/structs
+      - $PWD/api:/app/api
+      - $PWD/docs_dev:/app/docs_dev
     depends_on:
       - memcached-prod
       - queue_sender
@@ -84,19 +113,28 @@ services:
       replicas: 1
     networks:
       - backend
-    entrypoint: ["poetry", "run", "uwsgi", "./uwsgi.ini"]
+    entrypoint: ["poetry", "run", "flask", "--app", "main:app", "run", "--host", "0.0.0.0", "--debug"]
 
   apiapp:
-    image: "volunteer-app:prod"
-    build:
-      context: .
-      dockerfile: ./Dockerfile-app-dev
+    image: "coscupweb-base:23.02.18"
     links:
       - "memcached-prod:memcached"
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
     volumes:
       - $PWD/logs/apps:/app/log
+      - $PWD/main.py:/app/main.py
+      - $PWD/uwsgi.ini:/app/uwsgi.ini
+      - $PWD/setting.py:/app/setting.py
+      - $PWD/cmdtools:/app/cmdtools
+      - $PWD/celery_task:/app/celery_task
+      - $PWD/models:/app/models
+      - $PWD/module:/app/module
+      - $PWD/templates:/app/templates
+      - $PWD/view:/app/view
+      - $PWD/structs:/app/structs
+      - $PWD/api:/app/api
+      - $PWD/docs_dev:/app/docs_dev
     depends_on:
       - memcached-prod
       - queue_sender
@@ -110,18 +148,27 @@ services:
       - UVICORN_WORKERS=2
     networks:
       - backend
-    entrypoint: ["poetry", "run", "uvicorn", "api.main:app"]
+    entrypoint: ["poetry", "run", "uvicorn", "api.main:app", "--reload"]
 
   celery_worker:
-    image: "volunteer-app:prod"
-    build:
-      context: .
-      dockerfile: ./Dockerfile-app-dev
+    image: "coscupweb-base:23.02.18"
     links:
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
     volumes:
       - $PWD/logs/workers:/app/log
+      - $PWD/main.py:/app/main.py
+      - $PWD/uwsgi.ini:/app/uwsgi.ini
+      - $PWD/setting.py:/app/setting.py
+      - $PWD/cmdtools:/app/cmdtools
+      - $PWD/celery_task:/app/celery_task
+      - $PWD/models:/app/models
+      - $PWD/module:/app/module
+      - $PWD/templates:/app/templates
+      - $PWD/view:/app/view
+      - $PWD/structs:/app/structs
+      - $PWD/api:/app/api
+      - $PWD/docs_dev:/app/docs_dev
     depends_on:
       - memcached-prod
       - queue_sender
@@ -133,16 +180,25 @@ services:
     entrypoint: ["poetry", "run", "celery", "-A", "celery_task.celery_main", "worker", "-B", "-l", "info", "-O", "fair", "-c", "4", "--logfile", "./log/log.log"]
 
   docs:
-    image: "volunteer-app:prod"
-    build:
-      context: .
-      dockerfile: ./Dockerfile-app-dev
+    image: "coscupweb-base:23.02.18"
     links:
       - "memcached-prod:memcached"
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
     volumes:
       - $PWD/logs/apps:/app/log
+      - $PWD/main.py:/app/main.py
+      - $PWD/uwsgi.ini:/app/uwsgi.ini
+      - $PWD/setting.py:/app/setting.py
+      - $PWD/cmdtools:/app/cmdtools
+      - $PWD/celery_task:/app/celery_task
+      - $PWD/models:/app/models
+      - $PWD/module:/app/module
+      - $PWD/templates:/app/templates
+      - $PWD/view:/app/view
+      - $PWD/structs:/app/structs
+      - $PWD/api:/app/api
+      - $PWD/docs_dev:/app/docs_dev
     depends_on:
       - memcached-prod
       - queue_sender
