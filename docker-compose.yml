@@ -13,7 +13,7 @@ services:
     volumes:
       - $PWD/logs/nginx:/var/log/nginx
       - $PWD/nginx/sites:/etc/nginx/sites-available
-      - docs-site:/var/www/docs_site/docs/
+      - $PWD/docs_dev/site:/var/www/docs_site/docs/
     depends_on:
       - webapp
       - apiapp
@@ -211,10 +211,8 @@ services:
       - PYTHONPATH=../
     networks:
       - backend
-    volumes:
-      - docs-site:/app/docs_dev/site
     working_dir: /app/docs_dev
-    entrypoint: ["poetry", "run", "mkdocs", "build"]
+    entrypoint: ["./entrypoint.sh", "poetry", "run", "mkdocs", "build"]
 
   memcached-prod:
     image: "memcached:1.6.18-alpine"
