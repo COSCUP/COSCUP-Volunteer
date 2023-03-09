@@ -67,6 +67,10 @@ app.register_blueprint(VIEW_TEAM)
 app.register_blueprint(VIEW_TELEGRAM)
 app.register_blueprint(VIEW_USER)
 
+# Enable TEMPLATES_AUTO_RELOAD with Debug mode enabled
+if app.debug:
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+
 NO_NEED_LOGIN_PATH = {
     '/',
     '/oauth2callback',
