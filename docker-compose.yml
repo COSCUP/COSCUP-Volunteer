@@ -27,7 +27,7 @@ services:
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
     volumes:
-      - $PWD/logs/apps:/app/log
+      - $PWD/logs/apps:/var/log/apps
       - $PWD/scripts:/app/scripts
       - $PWD/main.py:/app/main.py
       - $PWD/uwsgi.ini:/app/uwsgi.ini
@@ -58,7 +58,7 @@ services:
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
     volumes:
-      - $PWD/logs/apps:/app/log
+      - $PWD/logs/apps:/var/log/apps
       - $PWD/main.py:/app/main.py
       - $PWD/uwsgi.ini:/app/uwsgi.ini
       - $PWD/setting.py:/app/setting.py
@@ -90,7 +90,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - $PWD/logs/apps:/app/log
+      - $PWD/logs/apps:/var/log/apps
       - $PWD/main.py:/app/main.py
       - $PWD/uwsgi.ini:/app/uwsgi.ini
       - $PWD/setting.py:/app/setting.py
@@ -122,7 +122,7 @@ services:
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
     volumes:
-      - $PWD/logs/apps:/app/log
+      - $PWD/logs/apps:/var/log/apps
       - $PWD/main.py:/app/main.py
       - $PWD/uwsgi.ini:/app/uwsgi.ini
       - $PWD/setting.py:/app/setting.py
@@ -156,7 +156,7 @@ services:
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
     volumes:
-      - $PWD/logs/workers:/app/log
+      - $PWD/logs/workers:/var/log/workers
       - $PWD/main.py:/app/main.py
       - $PWD/uwsgi.ini:/app/uwsgi.ini
       - $PWD/setting.py:/app/setting.py
@@ -186,7 +186,7 @@ services:
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
     volumes:
-      - $PWD/logs/apps:/app/log
+      - $PWD/logs/apps:/var/log/apps
       - $PWD/main.py:/app/main.py
       - $PWD/uwsgi.ini:/app/uwsgi.ini
       - $PWD/setting.py:/app/setting.py
