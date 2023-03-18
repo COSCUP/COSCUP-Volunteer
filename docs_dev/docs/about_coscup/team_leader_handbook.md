@@ -25,7 +25,7 @@ During the event, various documents and records will be created and shared using
     ??? info "Task tracking"
 
         - Currently, there is no unified requirement for using a specific tool for task tracking or management system in the conference. Each team can decide on their own.
-        - Some groups are known to use Trello for task assignment.
+        - Some teams are known to use Trello for task assignment.
 
 ## Meeting
 
@@ -41,11 +41,11 @@ Each team meeting is determined by the team leader. If there are cross-team task
 
 ## Volunteer
 
-Secretary team will help set up your group, and you can find it in the list of all groups for this year's conference.
+Secretary team will help set up your team, and you can find it in the list of all teams for this year's conference.
 
 ### Recruitment and Introduction
 
-First, please create a brief introduction and recruitment information for your group, which can be edited in the "Settings" section on the left-hand side of the group page. There are two text fields available for editing, one for recruitment messages to **non-members** and one for internal group information after volunteers have **joined**.
+First, please create a brief introduction and recruitment information for your team, which can be edited in the "Settings" section on the left-hand side of the team page. There are two text fields available for editing, one for recruitment messages to **non-members** and one for internal team information after volunteers have **joined**.
 
 Both text fields support [Markdown](https://zh.wikipedia.org/zh-tw/Markdown) syntax.
 
@@ -62,7 +62,7 @@ Starting from 2023, those who want to join the team need to complete their **per
 
 !!! info "Recruitment"
 
-    - Each group currently does not have a unified recruitment standard, and is free to develop their own approach. However, please take the time to understand potential members. If there is not enough manpower to handle recruitment, you can ask for assistance from the **Secretary team** to conduct interviews.
+    - Each team currently does not have a unified recruitment standard, and is free to develop their own approach. However, please take the time to understand potential members. If there is not enough manpower to handle recruitment, you can ask for assistance from the **Secretary team** to conduct interviews.
 
     ??? warning "Unable to join"
 
@@ -75,19 +75,19 @@ Starting from 2023, those who want to join the team need to complete their **per
 
 ### Volunteer Talent Pool
 
-On the left side of the group page, there is a page called "**Volunteer Talent Pool**", where you can select volunteer partners who have provided their skill sets on the platform. The group leader needs to proactively contact and explain the task to the volunteer partner, and then ask the volunteer partner to apply to join your group.
+On the left side of the team page, there is a page called "**Volunteer Talent Pool**", where you can select volunteer partners who have provided their skill sets on the platform. The team leader needs to proactively contact and explain the task to the volunteer partner, and then ask the volunteer partner to apply to join your team.
 
 ### Withdraw from
 
-Members can choose to withdraw from the group due to **personal reasons** or **contributions that fall short of expectations**. They can directly withdraw from the group on the **Volunteer Platform**.
+Members can choose to withdraw from the team due to **personal reasons** or **contributions that fall short of expectations**. They can directly withdraw from the team on the **Volunteer Platform**.
 
 !!! info "Automation"
 
-    After a member exits the team, their access to the Google Drive and the team mailing group will also be removed from.
+    After a member exits the team, their access to the Google Drive and the team mailing team will also be removed from.
 
-### Mailing Group of Team
+### Mailing team of Team
 
-If there is a group email, you can see "the mailling-list of the group" at the bottom of the group page. If you need to apply for other dedicated email or mailing group, please contact the secretary team for assistance to create.
+If there is a group email, you can see "the mailling-list of the team" at the bottom of the team page. If you need to apply for other dedicated email or mailing group, please contact the secretary team for assistance to create.
 
 ??? note "Team Mailing List"
 
@@ -103,7 +103,7 @@ If there is a group email, you can see "the mailling-list of the group" at the b
 
 ## Issue Reporting
 
-1. If you encounter an emergency situation, please report it in the **Leader Group** in Mattermost first.
+1. If you encounter an emergency situation, please report it in the **Team Leader Channel** in Mattermost first.
 2. The following teams can handle violations of the [Code of Conduct](https://volunteer.coscup.org/coc): General Affairs Team, Administrative Team, and Program Team.
 
 ## Team Member Handbook

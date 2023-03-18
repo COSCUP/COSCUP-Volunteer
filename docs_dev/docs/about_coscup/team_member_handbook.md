@@ -86,13 +86,13 @@ Once you become a volunteer, the conference provides various services that can b
 
 ## Tools
 
-There is currently no unified tool designated by the conference for task tracking or management system. Each group may decide on their own.
+There is currently no unified tool designated by the conference for task tracking or management system. Each team may decide on their own.
 
 ### Mattermost / COSCUP Chat
 
 The conference uses [Mattermost](https://chat.coscup.org/) as the communication tool during the event instead of Slack. The platform provides web, desktop, and mobile versions, please choose the appropriate platform to [download](https://mattermost.com/apps/).
 
-There will be a [public channel](https://chat.coscup.org/coscup/channels/coscup-2023) for each session, and each group can create channels or group chats as needed.
+There will be a [public channel](https://chat.coscup.org/coscup/channels/coscup-2023) for each session, and each team can create channels or team chats as needed.
 
 The platform also provides [APIs](https://api.mattermost.com/) or [bot](https://docs.mattermost.com/integrations/cloud-bot-accounts.html) mechanisms for integration and development, which interested parties can explore on their own!
 
@@ -102,7 +102,7 @@ The platform also provides [APIs](https://api.mattermost.com/) or [bot](https://
 
 ### Conference Schedule
 
-The schedule of all events is publicly available and can be [subscribed to](https://calendar.google.com/calendar/embed?src=c_a376ec8beb6ef0ab3acb5fe3213880dfcbba50ce89107532aacbfdda71c6e294%40group.calendar.google.com&ctz=Asia%2FTaipei). Currently, editing permissions are granted to each group leader and requests for editing permissions can be made to the Secretary team based on task needs.
+The schedule of all events is publicly available and can be [subscribed to](https://calendar.google.com/calendar/embed?src=c_a376ec8beb6ef0ab3acb5fe3213880dfcbba50ce89107532aacbfdda71c6e294%40group.calendar.google.com&ctz=Asia%2FTaipei). Currently, editing permissions are granted to each team leader and requests for editing permissions can be made to the Secretary team based on task needs.
 
 ### Documents / Cloud Drive / HackMD
 
