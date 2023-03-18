@@ -43,7 +43,7 @@ from view.telegram import VIEW_TELEGRAM
 from view.user import VIEW_USER
 
 logging.basicConfig(
-    filename='./log/log.log',
+    filename='/var/log/apps/log.log',
     format='%(asctime)s [%(levelname)-5.5s][%(thread)6.6s] [%(module)s:%(funcName)s#%(lineno)d]: %(message)s',  # pylint: disable=line-too-long
     datefmt='%Y-%m-%d %H:%M:%S',
     level=logging.DEBUG)
@@ -66,6 +66,10 @@ app.register_blueprint(VIEW_TASKS)
 app.register_blueprint(VIEW_TEAM)
 app.register_blueprint(VIEW_TELEGRAM)
 app.register_blueprint(VIEW_USER)
+
+# Enable TEMPLATES_AUTO_RELOAD with Debug mode enabled
+if app.debug:
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 NO_NEED_LOGIN_PATH = {
     '/',

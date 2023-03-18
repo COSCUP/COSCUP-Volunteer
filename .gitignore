@@ -3,6 +3,7 @@
 __pycache__
 client_secret.json
 docs_dev/site/
+docs_dev/.cache
 log
 log_docker_celery
 setting.py
