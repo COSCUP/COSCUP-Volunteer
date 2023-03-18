@@ -5,7 +5,7 @@ docker run -d --restart='always' \
            --link memcached-prod:memcached \
            --log-opt max-size=64m \
            --log-opt max-file=1 \
-           -v $(pwd)/log:/app/log \
+           -v $(pwd)/log:/var/log/apps \
            -p 127.0.0.1:6677:8000 \
            -e LD_PRELOAD=/usr/local/lib/libjemalloc.so \
            -e UVICORN_HOST=0.0.0.0 \
@@ -19,7 +19,7 @@ docker run -d --restart='always' \
            --link memcached-prod:memcached \
            --log-opt max-size=64m \
            --log-opt max-file=1 \
-           -v $(pwd)/log:/app/log \
+           -v $(pwd)/log:/var/log/apps \
            -p 127.0.0.1:6676:8000 \
            -e LD_PRELOAD=/usr/local/lib/libjemalloc.so \
            -e UVICORN_HOST=0.0.0.0 \

@@ -12,7 +12,7 @@ from api.routers import members, projects, sender, tasks, teams, user
 from module.api_token import APIToken
 
 logging.basicConfig(
-    filename='/var/log/apps/log.log',
+    filename='/var/log/apps/api.log',
     format='%(asctime)s [%(levelname)-5.5s][%(thread)6.6s] [%(module)s:%(funcName)s#%(lineno)d]: %(message)s',  # pylint: disable=line-too-long
     datefmt='%Y-%m-%d %H:%M:%S',
     level=logging.DEBUG)
