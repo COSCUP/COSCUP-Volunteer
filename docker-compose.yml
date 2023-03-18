@@ -172,7 +172,7 @@ services:
       - C_FORCE_ROOT=true
     networks:
       - backend
-    entrypoint: ["poetry", "run", "celery", "-A", "celery_task.celery_main", "worker", "-B", "-l", "info", "-O", "fair", "-c", "4", "--logfile", "./log/log.log"]
+    entrypoint: ["poetry", "run", "celery", "-A", "celery_task.celery_main", "worker", "-B", "-l", "info", "-O", "fair", "-c", "4", "--logfile", "/var/log/workers/log.log"]
 
   docs:
     image: "coscupweb-base:23.02.18"
