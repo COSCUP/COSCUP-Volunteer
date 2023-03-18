@@ -101,8 +101,6 @@ services:
       - $PWD/templates:/app/templates
       - $PWD/view:/app/view
       - $PWD/structs:/app/structs
-      - $PWD/api:/app/api
-      - $PWD/docs_dev:/app/docs_dev
     depends_on:
       - memcached-prod
       - queue_sender
@@ -134,7 +132,6 @@ services:
       - $PWD/view:/app/view
       - $PWD/structs:/app/structs
       - $PWD/api:/app/api
-      - $PWD/docs_dev:/app/docs_dev
     depends_on:
       - memcached-prod
       - queue_sender
@@ -167,8 +164,6 @@ services:
       - $PWD/templates:/app/templates
       - $PWD/view:/app/view
       - $PWD/structs:/app/structs
-      - $PWD/api:/app/api
-      - $PWD/docs_dev:/app/docs_dev
     depends_on:
       - memcached-prod
       - queue_sender
@@ -255,7 +250,6 @@ services:
     entrypoint: ["mongosh", "secretary_mongo:27017"]
 
 volumes:
-  docs-site: {}
   mongodata: {}
   mongodb: {}
   mongoconfig: {}
