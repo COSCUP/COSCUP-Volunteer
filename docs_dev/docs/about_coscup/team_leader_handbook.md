@@ -54,10 +54,10 @@ Both text fields support [Markdown](https://zh.wikipedia.org/zh-tw/Markdown) syn
 Starting from 2023, those who want to join the team need to complete their **personal profile**, sign the **community code of conduct** and **data protection principles** before applying for membership. You can manage members in the **Settings** and **Members** page.
 
 <figure markdown>
-  <a href="https://volunteer.coscup.org/doc/docs_users_login.svg">
-    <img alt="coscup_volunteer_users_login" src="https://volunteer.coscup.org/doc/docs_users_login.svg">
+  <a href="https://volunteer.coscup.org/doc/docs_users_login.en-us.svg">
+    <img alt="coscup_volunteer_users_login" src="https://volunteer.coscup.org/doc/docs_users_login.en-us.svg">
   </a>
-  <figcaption>Full process of member registration <small><a href="https://volunteer.coscup.org/doc/docs_users_login.svg">[original]</a></small></figcaption>
+  <figcaption>Full process of member registration <small><a href="https://volunteer.coscup.org/doc/docs_users_login.en-us.svg">[original]</a></small></figcaption>
 </figure>
 
 !!! info "Recruitment"
