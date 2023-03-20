@@ -49,7 +49,7 @@ lxml = "^4.9.1"
 mkdocs-static-i18n = "^0.53"
 mkdocs-git-revision-date-localized-plugin = "^1.1.0"
 pillow = "^9.3.0"
-cairosvg = "^2.5.2"
+cairosvg = "^2.7.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
