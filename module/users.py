@@ -563,7 +563,6 @@ class AccountPass(BaseModel):
 
     def check_signed_policy(self) -> None:
         ''' check the policy signed '''
-        print(PolicyType.COC)
         for _ in PolicySigned.is_recently_signed(uid=self.uid, _type=PolicyType.COC):
             self.is_coc = True
             break
