@@ -282,54 +282,65 @@ class Expense:
 
         The fields datas:
 
-            - `request.id`: `expense._id`.
-            - `request.pid`: `expense.pid`.
-            - `request.tid`: `expense.tid`.
-            - `request.enable`: `expense.enable`.
-            - `note.user`: `expense.note.myself`.
-            - `note.finance`: `expense.note.to_create`.
-            - `budget._id`: `expense.request.buid`.
-            - `budget.bid`: (no data).
-            - `request.desc`: `expense.request.desc`.
-            - `request.paydate`: `expense.request.paydate`.
-            - `request.status`: `expense.status`.
-            - `request.status_text`: `ExpenseDB.status()[expense['status']]`.
-            - `request.create_at`: `expense.create_at`.
-            - `request.create_by`: `expense.create_by`.
+            - `組別`: `expense.tid`.
+            - `申請單狀態`: `expense.enable`.
+            - `編號`: `budget.bid`.
+            - `預算項目`: `budget.name`.
+            - `預算貨幣`: `budget.currency`.
+            - `預算金額`: `budget.total`.
+            - `會計科目`: ` `.
+            - `請款狀態`: `ExpenseDB.status()[expense['status']]`.
+            - `申請時間`: `expense.create_at`.
+            - `分行名稱`: `expense.bank.branch`.
+            - `分行代碼`: `expense.bank.code`.
+            - `帳戶名稱`: `expense.bank.name`.
+            - `帳號`: `expense.bank.no`.
+            - `單據名稱`: `expense.invoice.name`.
+            - `單據貨幣`: `expense.invoice.currency`.
+            - `單據金額`: `expense.invoice.total`.
+            - `單據是否收到`: `expense.invoice.received`.
+
+        TODO:
+            Get `會計科目` from db
 
         '''
         raws = []
         for expense in Expense.get_all_by_pid(pid=pid):
+            if expense['enable'] is False:
+                continue
+
             base = {
-                'request.id': expense['_id'],
-                'request.pid': expense['pid'],
-                'request.tid': expense['tid'],
-                'request.enable': expense['enable'],
-                'note.user': expense['note']['myself'],
-                'note.finance': expense['note']['to_create'],
-                'budget._id': expense['request']['buid'],
-                'budget.bid': '',
-                'request.desc': expense['request']['desc'],
-                'request.paydate': expense['request']['paydate'],
-                'request.status': expense['status'],
-                'request.status_text': ExpenseDB.status()[expense['status']],
-                'request.create_at': expense['create_at'],
-                'request.create_by': expense['create_by'],
+                '組別': expense['tid'],
+                '申請單狀態': expense['enable'],
+                '編號': '',
+                '預算項目': '',
+                '預算貨幣': '',
+                '預算金額': '',
+                '會計科目': '',
+                '請款狀態': ExpenseDB.status()[expense['status']],
+                '申請時間': expense['create_at'],
+                '分行名稱': expense['bank']['branch'],
+                '分行代碼': expense['bank']['code'],
+                '帳戶名稱': expense['bank']['name'],
+                '帳號': expense['bank']['no'],
             }
 
             for budget in BudgetDB().find({'_id': expense['request']['buid']}):
-                base['budget.bid'] = budget['bid']
-
-            for key in expense['bank']:
-                base[f'bank.{key}'] = expense['bank'][key]
+                base['編號'] = budget['bid']
+                base['預算項目'] = budget['name']
+                base['預算貨幣'] = budget['currency']
+                base['預算金額'] = budget['total']
 
             for invoice in expense['invoices']:
                 data = {}
                 data.update(base)
-                invoice_data = {}
 
-                for key in invoice:
-                    invoice_data[f'invoice.{key}'] = invoice[key]
+                invoice_data = {
+                    '單據名稱': invoice['name'],
+                    '單據貨幣': invoice['currency'],
+                    '單據金額': invoice['total'],
+                    '單據是否收到': invoice['received'],
+                }
 
                 data.update(invoice_data)
                 raws.append(data)
