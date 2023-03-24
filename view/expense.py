@@ -101,7 +101,7 @@ def by_project_dl(pid: str) -> str | ResponseBase:
             filename = f"coscup_expense_{pid}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
 
             return Response(
-                files.getvalue(),
+                files.getvalue().encode(encoding="utf-8-sig"),
                 mimetype='text/csv',
                 headers={'Content-disposition': f'attachment; filename={filename}',
                          'x-filename': filename,
