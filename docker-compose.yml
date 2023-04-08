@@ -228,7 +228,7 @@ services:
       - rabbitdata:/var/lib/rabbitmq
 
   secretary_mongo:
-    image: "mongo:6.0.5-focal"
+    image: "mongo:6.0.5-jammy"
     deploy:
       replicas: 1
     volumes:
@@ -239,7 +239,7 @@ services:
       - backend
 
   link_mongo:
-    image: "mongo:6.0.5-focal"
+    image: "mongo:6.0.5-jammy"
     deploy:
       replicas: 1
     volumes:
