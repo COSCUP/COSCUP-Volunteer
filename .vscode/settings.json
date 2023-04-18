@@ -7,7 +7,7 @@
         "--strict",
         "--load-plugins", "pydantic.mypy"
     ],
-    "python.formatting.provider": "autopep8",
+    "python.formatting.provider": "none",
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "python.testing.pytestArgs": [
@@ -17,5 +17,8 @@
     ],
     "git.alwaysSignOff": true,
     "python.testing.cwd": "${workspaceFolder}",
-    "python.envFile": "${workspaceFolder}/.env"
+    "python.envFile": "${workspaceFolder}/.env",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    }
 }

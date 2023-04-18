@@ -28,8 +28,8 @@
                     <hr>
                     <p>申請者 Mail：<span class="tag is-info is-light"><a href="mailto:{{u._mail}}">{{u._mail}}</a></span></p>
                     {% if '_history' in u %}
-                    <p>申請歷程：</p>
                     <div class="field is-grouped is-grouped-multiline">
+                        <p>申請歷程：</p>
                         {% for h in u['_history']%}
                         <div class="control">
                             <div class="tags has-addons">
@@ -45,6 +45,13 @@
                         </div>
                         {% endfor %}
                     </div>
+                    {% endif %}
+                    {% if u.uid in apply_review_results %}
+                    {% for raw in apply_review_results[u.uid]['messages'] %}
+                    <div class="notification is-info is-light">
+                        {{ raw['content'] | safe }}
+                    </div>
+                    {% endfor %}
                     {% endif %}
                 </div>
                 <nav class="level is-mobile">

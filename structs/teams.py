@@ -48,3 +48,18 @@ class TeamUsers(BaseModel):
             return []
 
         return value
+
+
+class TeamApplyReviewMessage(BaseModel):
+    ''' Team apply review message '''
+    role: str
+    content: str
+
+
+class TeamApplyReview(BaseModel):
+    ''' Team apply review '''
+    pid: str = Field(description='`pid`, project id')
+    tid: str = Field(description='`tid`, team id')
+    uid: str = Field(description='`uid`, user id')
+    messages: list[TeamApplyReviewMessage] = Field(
+        description='list results', default_factory=list)

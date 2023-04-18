@@ -27,6 +27,7 @@ fastapi = "^0.95.0"
 uvicorn = {extras = ["standard"], version = "^0.21.0"}
 python-multipart = "^0.0.6"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+toldwords = "^0.4.0"
 
 [tool.poetry.dev-dependencies]
 mongomock = "^4.0.0"
@@ -87,15 +88,14 @@ plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
 module = [
+    'apiclient',
     'celery.*',
-    'kombu',
+    'celery_task.*',
     'google_auth_oauthlib.*',
-    'apiclient'
+    'kombu',
+    'toldwords.*',
 ]
 ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = 'celery_task.*'
 disallow_untyped_decorators = false
 
 [tool.pydantic-mypy]

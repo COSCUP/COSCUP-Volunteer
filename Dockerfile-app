@@ -14,6 +14,7 @@ ADD ./celery_task/__init__.py \
 
 ADD ./models/__init__.py \
     ./models/api_tokendb.py \
+    ./models/applyreviewdb.py \
     ./models/base.py \
     ./models/budgetdb.py \
     ./models/expensedb.py \
@@ -35,6 +36,7 @@ ADD ./models/__init__.py \
 
 ADD ./module/__init__.py \
     ./module/api_token.py \
+    ./module/applyreview.py \
     ./module/awsses.py \
     ./module/budget.py \
     ./module/dietary_habit.py \

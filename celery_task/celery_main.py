@@ -15,6 +15,7 @@ app = Celery(
     main='celery_task',
     broker=f'amqp://{setting.RABBITMQ}',
     include=(
+        'celery_task.task_applyreview',
         'celery_task.task_expense',
         'celery_task.task_ipinfo',
         'celery_task.task_mail_sys',
@@ -25,6 +26,8 @@ app = Celery(
 
 app.conf.task_queues = (
     Queue('celery', Exchange('celery', type='direct'), routing_key='celery'),
+    Queue('CS_applyreview', Exchange('COSCUP-SECRETARY',
+          type='topic'), routing_key='cs.applyreview.#'),
     Queue('CS_expense', Exchange('COSCUP-SECRETARY',
           type='topic'), routing_key='cs.expense.#'),
     Queue('CS_ipinfo', Exchange('COSCUP-SECRETARY',

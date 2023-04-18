@@ -2623,6 +2623,23 @@ doc = ["sphinx", "sphinx_rtd_theme"]
 test = ["flake8", "isort", "pytest"]
 
 [[package]]
+name = "toldwords"
+version = "0.4.0"
+description = "Using ChatGPT to make keywords for the papers from COSCUP."
+category = "main"
+optional = false
+python-versions = ">=3.9,<4.0"
+files = [
+    {file = "toldwords-0.4.0-py3-none-any.whl", hash = "sha256:a1fdd418bef534f19ebb47148d214d050593015cdacc99b169b71b2c939ee8d0"},
+    {file = "toldwords-0.4.0.tar.gz", hash = "sha256:fa796404a9015c82957262dca15b823157b201ac5a2d7dbd62da2af26825ecce"},
+]
+
+[package.dependencies]
+certifi = ">=2022.12.7,<2023.0.0"
+pydantic = ">=1.10.6,<2.0.0"
+requests = ">=2.28.2,<3.0.0"
+
+[[package]]
 name = "tomlkit"
 version = "0.11.7"
 description = "Style preserving TOML library"
@@ -3093,4 +3110,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ab117047b46585b129d2cdd200e49b4dba18ea8cbbbd1c46457a7ee06e7cfc91"
+content-hash = "ca489b0fae535f56eea38fcded2e26cbdd409d81130bf9f3c83ad58a22ed42c7"

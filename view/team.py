@@ -4,16 +4,18 @@ import html
 import json
 import re
 from typing import Any, Callable
+from random import choice
 
 import arrow
 import phonenumbers
-from flask import (Blueprint, g, jsonify, make_response, redirect,
-                   render_template, request, url_for, flash)
+from flask import (Blueprint, flash, g, jsonify, make_response, redirect,
+                   render_template, request, url_for)
 from flask.wrappers import Response
 from markdown import markdown
 from pydantic import BaseModel, Field
 from werkzeug.wrappers import Response as ResponseBase
 
+from celery_task.task_applyreview import applyreview_submit_one
 from celery_task.task_expense import expense_create
 from models.teamdb import TeamMemberChangedDB, TeamPlanDB
 from module.budget import Budget
@@ -21,7 +23,8 @@ from module.expense import Expense
 from module.form import Form, FormAccommodation, FormTrafficFeeMapping
 from module.mattermost_bot import MattermostTools
 from module.team import Team
-from module.users import User, AccountPass
+from module.applyreview import ApplyReview
+from module.users import AccountPass, User
 from module.waitlist import WaitList
 from structs.teams import TeamUsers
 from view.utils import check_the_team_and_project_are_existed
@@ -253,6 +256,7 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
         uids = [u['uid'] for u in waitting_list]
         users_info = User.get_info(uids)
 
+        waiting_uids: list[str] = []
         for user in waitting_list:
             user['_info'] = users_info[user['uid']]
             user['_history'] = []
@@ -266,11 +270,26 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
             if user_data:
                 user['_mail'] = user_data['mail']
 
+            waiting_uids.append(user['uid'])
+
+        apply_review_results: dict[str, Any] = {}
+        if waiting_uids:
+            apply_review_results = ApplyReview.get(
+                pid=pid, tid=tid, uids=waiting_uids)
+
+            for item in apply_review_results.values():
+                item['messages'] = [choice(item['messages']), ]
+                for raw in item['messages']:
+                    raw['content'] = markdown(
+                        raw['content'].replace('\n\n', '\n'))
+
         return render_template('./team_edit_user.html',
                                project=project.dict(by_alias=True),
                                team=team.dict(
                                    by_alias=True, exclude_none=True),
-                               waitting_list=waitting_list)
+                               waitting_list=waitting_list,
+                               apply_review_results=apply_review_results,
+                               )
 
     if request.method == 'POST':  # pylint: disable=too-many-return-statements, too-many-nested-blocks
         data = request.json
@@ -477,8 +496,8 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
                                team=team.dict(by_alias=True), is_in_wait=is_in_wait)
 
     if request.method == 'POST':
-        if not all((user_pass.is_profile, user_pass.is_coc, user_pass.is_security_guard)):
-            return redirect(f'/team/{team.pid}/{team.id}/join_to')
+        # if not all((user_pass.is_profile, user_pass.is_coc, user_pass.is_security_guard)):
+        #    return redirect(f'/team/{team.pid}/{team.id}/join_to')
 
         note: str = request.form['note'].strip()
 
@@ -490,6 +509,9 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
             pid=pid, tid=tid, uid=g.user['account']['_id'], note=note)
         TeamMemberChangedDB().make_record(
             pid=pid, tid=tid, action={'waiting': [g.user['account']['_id'], ]})
+        applyreview_submit_one.apply_async(kwargs={
+            'pid': pid, 'tid': tid, 'uid': g.user['account']['_id'],
+        })
 
         return redirect(f'/team/{team.pid}/{team.id}/join_to')
 

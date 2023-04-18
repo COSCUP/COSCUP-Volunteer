@@ -72,3 +72,9 @@ GITLAB_TOKEN = '{{GITLAB_TOKEN}}'
 # ----- Telegram ----- #
 TELEGRAM_TOKEN = '{{TELEGRAM_TOKEN}}'
 TELEGRAM_WEBHOOK = 'https://%s/{{WEBHOOK_PATH}}' % DOMAIN
+
+# ----- OpenAI ----- #
+OPENAI_ARGS = {
+    'token': '',
+    'organization': '',
+}
