@@ -1,17 +1,17 @@
-FROM python:3.11.2-alpine3.17
+FROM python:3.11.3-alpine3.17
 
 WORKDIR /app
 ADD pyproject.toml poetry.lock ./
 ENV PATH="/root/.local/bin:${PATH}"
 RUN \
-  apk update && apk upgrade                                   && \
-  apk add --no-cache ca-certificates libmemcached-dev \
-  cairo-dev freetype-dev jpeg-dev libpng-dev zlib-dev && \
-  apk add --no-cache --virtual .build-deps curl cmake zlib-dev   \
-          g++ make gcc musl-dev libffi-dev openssl-dev && \
-  curl -sSL https://install.python-poetry.org | python3 - && \
-  poetry install --with dev && \
-  apk del .build-deps && \
-  cd ~/.cache/ && \
-  find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete && \
-  rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
+        apk update && apk upgrade                                   && \
+        apk add --no-cache ca-certificates libmemcached-dev \
+        cairo-dev freetype-dev jpeg-dev libpng-dev zlib-dev && \
+        apk add --no-cache --virtual .build-deps curl cmake zlib-dev   \
+        g++ make gcc musl-dev libffi-dev openssl-dev && \
+        curl -sSL https://install.python-poetry.org | python3 - && \
+        poetry install --with dev && \
+        apk del .build-deps && \
+        cd ~/.cache/ && \
+        find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete && \
+        rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/*
