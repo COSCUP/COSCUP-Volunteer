@@ -23,8 +23,30 @@
             </div>
             <div class="media-content">
                 <div class="content">
-                    <p><strong>{{u._info.profile.badge_name}}</strong> <small class="tag is-family-monospace">{{u.uid}}</small></p>
+                    <p>
+                        <strong>{{u._info.profile.badge_name}}</strong>
+                        <small class="tag is-family-monospace">{{u.uid}}</small>
+                        <span class="button is-text is-small"
+                              @click="showtags('{{u._info.profile.badge_name}}', '{{u.uid}}', '{{u._info.oauth.picture}}')">
+                              預先標記標籤
+                        </span>
+                        <span class="tags" data-uid="{{u.uid}}">
+                            {% for tag in waiting_uids_tags_name[u.uid] %}
+                            <span class="tag is-info is-light">{{tag}}</span>
+                            {% endfor %}
+                        </span>
+                    </p>
                     <textarea class="textarea">{{u.note}}</textarea>
+                    {% if u.uid in apply_review_results %}
+                    <details>
+                        <summary class="is-clickable">依履歷與自我介紹給予錄取建議</summary>
+                        {% for raw in apply_review_results[u.uid]['messages'] %}
+                        <div class="notification is-info is-light">
+                            {{ raw['content'] | safe }}
+                        </div>
+                        {% endfor %}
+                    </details>
+                    {% endif %}
                     <hr>
                     <p>申請者 Mail：<span class="tag is-info is-light"><a href="mailto:{{u._mail}}">{{u._mail}}</a></span></p>
                     {% if '_history' in u %}
@@ -45,13 +67,6 @@
                         </div>
                         {% endfor %}
                     </div>
-                    {% endif %}
-                    {% if u.uid in apply_review_results %}
-                    {% for raw in apply_review_results[u.uid]['messages'] %}
-                    <div class="notification is-info is-light">
-                        {{ raw['content'] | safe }}
-                    </div>
-                    {% endfor %}
                     {% endif %}
                 </div>
                 <nav class="level is-mobile">
@@ -223,7 +238,8 @@
         </div>
     </div>
 </div>
-        <!-- modal -->
+
+<!-- modal -->
 <div id="teamusermodal" class="modal" v-bind:class="{'is-active': isActive}">
     <div class="modal-background" v-on:click="goback"></div>
     <div class="modal-card">
@@ -262,6 +278,54 @@
         </footer>
     </div>
 </div>
+
+<!-- modal -->
+<div id="tagmodal" class="modal" v-bind:class="{'is-active': isActive}">
+    <div class="modal-background" v-on:click="goback"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">[[modalTitle]]</p>
+            <button class="delete" aria-label="close" v-on:click="goback"></button>
+        </header>
+        <section class="modal-card-body">
+            <article class="media">
+                <div class="media-left">
+                    <figure class="image is-96x96">
+                        <img class="is-rounded" v-bind:src="user.picture">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <div class="content">
+                        <p><strong>[[user.badge_name]]</strong> <small class="tag is-family-monospace">[[user.uid]]</small></p>
+                        <p>[[user.note]]</p>
+                        <pre>[[user.user_tags]]</pre>
+                        <div class="is-vcentered">
+                            <span class="tags">
+                                <span class="tag is-small" v-for="tag in user.tags">
+                                    <label class="checkbox">
+                                        <input type="checkbox" :value="tag.id" v-model="user.user_tags">
+                                        [[ tag.name ]]
+                                    </label>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-info" @click="sendresult">
+                <span class="icon"><i class="fas fa-user-plus"></i></span>
+                <span>更新標籤</span>
+            </button>
+            <button class="button" @click="goback">
+                <span class="icon"><i class="fas fa-user-clock"></i></span>
+                <span>取消</span>
+            </button>
+        </footer>
+    </div>
+</div>
+
 </div>
 {% endblock %}
 {% block js %}
@@ -278,7 +342,7 @@
             methods: {
                 showapprove: function(uid) {
                     this.user = {};
-                    axios.get('./edit_user/api', {params: {uid: uid}}).then(function(resp){
+                    axios.get('./edit_user/api', {params: {casename: 'join', uid: uid}}).then(function(resp){
                         $teamusermodal.modalTitle = '核准加入 ' + resp.data.badge_name;
                         $teamusermodal.user = resp.data;
                     }).then(function(){
@@ -290,9 +354,66 @@
                         btn.classList.add('is-loading');
                     });
 
-                    axios.post('./edit_user/api', {uid: $teamusermodal.user.uid, wid: $teamusermodal.user.wid, result: result}).then(function(resp){
+                    axios.post('./edit_user/api', {casename: 'join', uid: $teamusermodal.user.uid, wid: $teamusermodal.user.wid, result: result}).then(function(resp){
                         $teamusermodal.goback();
                         window.location.href = './edit_user';
+                    });
+                },
+                fixpage: function() {
+                    this.isActive = true;
+                    document.querySelector('html').classList.add('is-clipped');
+                },
+                goback: function() {
+                    document.querySelector('html').classList.remove('is-clipped');
+                    this.isActive = false;
+
+                    this.$el.querySelectorAll('footer button.button').forEach(function(btn){
+                        btn.classList.remove('is-loading');
+                    });
+                }
+            },
+            delimiters: ['[[', ']]']
+        });
+        let $tagmodal = new Vue({
+            el: '#tagmodal',
+            data: {
+                isActive: false,
+                user: {user_tags: []},
+                modalTitle: ''
+            },
+            methods: {
+                showtags: function(name, uid, picture) {
+                    this.user.badge_name = name;
+                    this.user.picture = picture;
+                    this.user.uid = uid;
+
+                    let $this = this;
+
+                    axios.post('./edit_user/api', {casename: 'get_tags', uid: uid}).then(function(resp){
+                        $this.user.tags = resp.data.tags;
+                        $this.user.user_tags = resp.data.user_tags[$this.user.uid];
+                        $this.isActive = true;
+                    });
+                },
+                sendresult: function($e) {
+                    this.$el.querySelectorAll('footer button.button').forEach(function(btn){
+                        btn.classList.add('is-loading');
+                    });
+
+                    let $this = this;
+
+                    let $return = document.querySelector('#waittingTabs [data-uid="'+this.user.uid+'"]');
+
+                    axios.post('./edit_user/api', {casename: 'presave_tags', uid: this.user.uid, tags: this.user.user_tags}).then(function(resp){
+                        $return.innerHTML = '';
+                        $this.user.tags.forEach(function(tag){
+                            if ($this.user.user_tags.includes(tag.id)) {
+                                $return.innerHTML = $return.innerHTML + '<span class="tag is-info is-light">'+tag.name+'</span>';
+                            }
+                        });
+
+                        $this.goback();
+                        $this.user = {user_tags: []};
                     });
                 },
                 fixpage: function() {
@@ -427,6 +548,9 @@
                 },
                 showapprove: function(btn) {
                     $teamusermodal.showapprove(btn.target.dataset.uid);
+                },
+                showtags: function(name, uid, picture) {
+                    $tagmodal.showtags(name, uid, picture);
                 },
                 deluser: function(btn) {
                     let ans = window.confirm('是否刪除 ' + btn.target.dataset.name + '(' + btn.target.dataset.uid + ') ?\r\n\r\n（確定就直接移除組員喔！）');

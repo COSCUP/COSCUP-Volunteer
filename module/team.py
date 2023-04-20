@@ -236,3 +236,16 @@ class Team:
             uids.append(raw['uid'])
 
         return uids
+
+    @staticmethod
+    def get_tags_by_uids(pid: str, tid: str, uids: list[str]) -> dict[str, Any]:
+        ''' Get tags by uids '''
+        datas = {}
+        for raw in TeamMemberTagsDB().find({'pid': pid, 'tid': tid, 'uid': {'$in': uids}}):
+            datas[raw['uid']] = raw['tags']['tags']
+
+        for uid in uids:
+            if uid not in datas:
+                datas[uid] = []
+
+        return datas

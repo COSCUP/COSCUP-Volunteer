@@ -273,6 +273,7 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
             waiting_uids.append(user['uid'])
 
         apply_review_results: dict[str, Any] = {}
+        waiting_uids_tags_name: dict[str, list[str]] = {}
         if waiting_uids:
             apply_review_results = ApplyReview.get(
                 pid=pid, tid=tid, uids=waiting_uids)
@@ -283,11 +284,23 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
                     raw['content'] = markdown(
                         raw['content'].replace('\n\n', '\n'))
 
+            waiting_uids_tags_data = Team.get_tags_by_uids(
+                pid=pid, tid=tid, uids=waiting_uids)
+            mapping_name = {
+                tag.id: tag.name for tag in team.tag_members} if team.tag_members else []
+            for uid, tags_data in waiting_uids_tags_data.items():
+                if uid not in waiting_uids_tags_name:
+                    waiting_uids_tags_name[uid] = []
+
+                for tag in tags_data:
+                    waiting_uids_tags_name[uid].append(mapping_name[tag])
+
         return render_template('./team_edit_user.html',
                                project=project.dict(by_alias=True),
                                team=team.dict(
                                    by_alias=True, exclude_none=True),
                                waitting_list=waitting_list,
+                               waiting_uids_tags_name=waiting_uids_tags_name,
                                apply_review_results=apply_review_results,
                                )
 
@@ -391,25 +404,26 @@ def team_edit_user_api(pid: str, tid: str) -> ResponseBase:  # pylint: disable=t
         return redirect('/')
 
     if request.method == 'GET':
-        user = User(uid=request.args['uid']).get()
-        if user is not None:
-            user_waitting_data = WaitList.list_by_team(
-                pid=pid, tid=tid, uid=user['_id'])
-            if not user_waitting_data:
-                return jsonify({})
+        if request.args['casename'] == 'join':
+            user = User(uid=request.args['uid']).get()
+            if user is not None:
+                user_waitting_data = WaitList.list_by_team(
+                    pid=pid, tid=tid, uid=user['_id'])
+                if not user_waitting_data:
+                    return jsonify({})
 
-            for user_waitting in user_waitting_data:
-                users_info = User.get_info([user['_id'], ])
-                if users_info:
-                    user_data = {
-                        'badge_name': users_info[user['_id']]['profile']['badge_name'],
-                        'picture': users_info[user['_id']]['oauth']['picture'],
-                        'uid': user['_id'],
-                        'note': user_waitting['note'],
-                        'wid': f"{user_waitting['_id']}",
-                    }
+                for user_waitting in user_waitting_data:
+                    users_info = User.get_info([user['_id'], ])
+                    if users_info:
+                        user_data = {
+                            'badge_name': users_info[user['_id']]['profile']['badge_name'],
+                            'picture': users_info[user['_id']]['oauth']['picture'],
+                            'uid': user['_id'],
+                            'note': user_waitting['note'],
+                            'wid': f"{user_waitting['_id']}",
+                        }
 
-                    return jsonify(user_data)
+                        return jsonify(user_data)
 
         return jsonify({})
 
@@ -418,29 +432,52 @@ def team_edit_user_api(pid: str, tid: str) -> ResponseBase:  # pylint: disable=t
         if not data:
             return make_response({}, 404)
 
-        if data['result'] == 'approval':
-            all_members = len(set(teamusers.members + teamusers.chiefs))
-            if team.headcount is not None and \
-                    team.headcount > 0 and all_members >= team.headcount:
+        if data['casename'] == 'join':
+            if data['result'] == 'approval':
+                all_members = len(set(teamusers.members + teamusers.chiefs))
+                if team.headcount is not None and \
+                        team.headcount > 0 and all_members >= team.headcount:
 
-                return Response(
-                    response=json.dumps({
-                        'status': 'fail',
-                        'message': 'over headcount.'}),
-                    status=406,
-                    mimetype='application/json',
-                )
+                    return Response(
+                        response=json.dumps({
+                            'status': 'fail',
+                            'message': 'over headcount.'}),
+                        status=406,
+                        mimetype='application/json',
+                    )
 
-        wait_info = WaitList.make_result(
-            wid=data['wid'], pid=pid, uid=data['uid'], result=data['result'])
-        if wait_info and 'result' in wait_info:
-            if wait_info['result'] == 'approval':
-                Team.update_members(pid=pid, tid=tid, add_uids=[data['uid'], ])
-            elif wait_info['result'] == 'deny':
-                TeamMemberChangedDB().make_record(
-                    pid=pid, tid=tid, action={'deny': [data['uid'], ]})
+            wait_info = WaitList.make_result(
+                wid=data['wid'], pid=pid, uid=data['uid'], result=data['result'])
+            if wait_info and 'result' in wait_info:
+                if wait_info['result'] == 'approval':
+                    Team.update_members(
+                        pid=pid, tid=tid, add_uids=[data['uid'], ])
+                elif wait_info['result'] == 'deny':
+                    TeamMemberChangedDB().make_record(
+                        pid=pid, tid=tid, action={'deny': [data['uid'], ]})
 
-        return jsonify({'status': 'ok'})
+            return jsonify({'status': 'ok'})
+
+        if data['casename'] == 'get_tags':
+            return jsonify({
+                'user_tags': Team.get_tags_by_uids(pid=pid, tid=tid, uids=[data['uid'], ]),
+                'tags': [raw.dict() for raw in team.tag_members] if team.tag_members else [],
+            })
+
+        if data['casename'] == 'presave_tags':
+            team_tags = []
+            if team.tag_members:
+                for tag in team.tag_members:
+                    team_tags.append(tag.id)
+
+            tag_datas: dict[str, dict[str, list[str]]] = {}
+            tag_datas[data['uid']] = {'tags': list(
+                set(team_tags) & set(data['tags'] or []))}
+            if tag_datas:
+                Team.add_tags_to_members(pid=pid, tid=tid, data=tag_datas)
+            return jsonify({
+                'user_tags': data['tags'],
+            })
 
     return make_response({}, 404)
 
