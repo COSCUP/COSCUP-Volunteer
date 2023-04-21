@@ -286,8 +286,8 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
 
             waiting_uids_tags_data = Team.get_tags_by_uids(
                 pid=pid, tid=tid, uids=waiting_uids)
-            mapping_name = {
-                tag.id: tag.name for tag in team.tag_members} if team.tag_members else []
+            mapping_name: dict[str, str] = {
+                tag.id: tag.name for tag in team.tag_members} if team.tag_members else {}
             for uid, tags_data in waiting_uids_tags_data.items():
                 if uid not in waiting_uids_tags_name:
                     waiting_uids_tags_name[uid] = []
@@ -386,7 +386,7 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
 @VIEW_TEAM.route('/<pid>/<tid>/edit_user/api', methods=('GET', 'POST'))
 def team_edit_user_api(pid: str, tid: str) -> ResponseBase:  # pylint: disable=too-many-branches
     ''' Team edit user API '''
-    # pylint: disable=too-many-return-statements
+    # pylint: disable=too-many-return-statements, too-many-locals
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
