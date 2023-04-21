@@ -38,10 +38,10 @@
                     </p>
                     <textarea class="textarea">{{u.note}}</textarea>
                     {% if u.uid in apply_review_results %}
-                    <details>
+                    <details class="mt-3">
                         <summary class="is-clickable">依履歷與自我介紹給予錄取建議</summary>
                         {% for raw in apply_review_results[u.uid]['messages'] %}
-                        <div class="notification is-info is-light">
+                        <div class="notification is-info is-light mt-2">
                             {{ raw['content'] | safe }}
                         </div>
                         {% endfor %}
@@ -297,8 +297,7 @@
                 <div class="media-content">
                     <div class="content">
                         <p><strong>[[user.badge_name]]</strong> <small class="tag is-family-monospace">[[user.uid]]</small></p>
-                        <p>[[user.note]]</p>
-                        <pre>[[user.user_tags]]</pre>
+                        <p>可預先設定標籤在候選組員中。</p>
                         <div class="is-vcentered">
                             <span class="tags">
                                 <span class="tag is-small" v-for="tag in user.tags">

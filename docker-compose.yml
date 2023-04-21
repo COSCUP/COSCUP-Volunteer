@@ -12,6 +12,7 @@ services:
       - "80:80"
     volumes:
       - $PWD/logs/nginx:/var/log/nginx
+      - $PWD/logs/apps:/var/log/apps
       - $PWD/nginx/sites:/etc/nginx/sites-available
       - $PWD/docs_dev/site:/var/www/docs_site/docs/
     depends_on:

@@ -1,7 +1,7 @@
 /var/log/nginx/*.log {
         daily
         missingok
-        rotate 32
+        rotate 3
         compress
         delaycompress
         nodateext
@@ -11,4 +11,15 @@
         postrotate
                 [ -f /var/run/nginx.pid ] && kill -USR1 `cat /var/run/nginx.pid`
         endscript
+}
+
+/var/log/apps/*.log {
+        daily
+        missingok
+        rotate 3
+        compress
+        delaycompress
+        nodateext
+        notifempty
+        create 644 root root
 }
