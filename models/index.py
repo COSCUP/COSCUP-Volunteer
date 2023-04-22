@@ -5,6 +5,7 @@ with `index()` will be aggregated here.
 
 '''
 from models.api_tokendb import APITokenDB
+from models.applyreviewdb import ApplyReviewDB
 from models.budgetdb import BudgetDB
 from models.expensedb import ExpenseDB
 from models.formdb import FormDB
@@ -17,7 +18,7 @@ from models.senderdb import SenderReceiverDB
 from models.teamdb import (TeamDB, TeamMemberChangedDB, TeamMemberTagsDB,
                            TeamPlanDB)
 from models.telegram_db import TelegramDB
-from models.users_db import UsersDB, PolicySignedDB
+from models.users_db import PolicySignedDB, UsersDB
 from models.usessiondb import USessionDB
 from models.waitlistdb import WaitListDB
 
@@ -25,6 +26,7 @@ from models.waitlistdb import WaitListDB
 def make_index() -> None:
     ''' Make index for the collection with `index()` '''
     APITokenDB().index()
+    ApplyReviewDB().index()
     BudgetDB().index()
     ExpenseDB().index()
     FormDB().index()
