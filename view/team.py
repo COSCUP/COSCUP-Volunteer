@@ -533,8 +533,8 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
                                team=team.dict(by_alias=True), is_in_wait=is_in_wait)
 
     if request.method == 'POST':
-        # if not all((user_pass.is_profile, user_pass.is_coc, user_pass.is_security_guard)):
-        #    return redirect(f'/team/{team.pid}/{team.id}/join_to')
+        if not all((user_pass.is_profile, user_pass.is_coc, user_pass.is_security_guard)):
+            return redirect(f'/team/{team.pid}/{team.id}/join_to')
 
         note: str = request.form['note'].strip()
 
