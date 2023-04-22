@@ -36,7 +36,7 @@ The codebase is compliant in [PEP8](https://peps.python.org/pep-0008/) and [typi
 
 !!! note
 
-    We also have github [actions](https://github.com/COSCUP/COSCUP-Volunteer/actions) to verify those quality. The `PEP8` must have to be complied but the typing hint only be defined in `./models`, `./module`.
+    We also have github [actions](https://github.com/COSCUP/COSCUP-Volunteer/actions) to verify those quality. The `PEP8` must have to be complied.
 
 ## Dependency
 

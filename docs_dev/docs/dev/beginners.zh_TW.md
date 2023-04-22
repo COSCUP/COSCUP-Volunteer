@@ -10,7 +10,7 @@
 
 We prefer your commits or tags are **signed**. And also **[sign-off](/dev/how-to-signoff)** your commits.
 
-我們希望你的提交與標籤都有**簽章**，並且**簽名**你的提交。
+我們希望你的提交與標籤都有**簽章**，並且**[簽名](how-to-signoff.zh_TW.md)**你的提交。
 
 !!! tip "提示"
 
@@ -18,19 +18,19 @@ We prefer your commits or tags are **signed**. And also **[sign-off](/dev/how-to
 
     [這篇文章]: https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification
 
-## Repository
+## 倉儲
 
-### Fork
+### 分支
 
-Click [Fork](https://github.com/COSCUP/COSCUP-Volunteer/fork) button on the top-right at the [COSCUP/COSCUP-Volunteer](https://github.com/COSCUP/COSCUP-Volunteer) repo page.
+在 [COSCUP/COSCUP-Volunteer](https://github.com/COSCUP/COSCUP-Volunteer) 存儲庫頁面的右上方點擊 [Fork](https://github.com/COSCUP/COSCUP-Volunteer/fork) 按鈕。
 
-### Clone
+### 克隆
 
-`git clone` from the repo you have forked.
+使用你所 Fork 的存儲庫進行 `git clone`。
 
-## Code style
+## 程式碼風格
 
-The codebase is compliant in [PEP8](https://peps.python.org/pep-0008/) and [typing hint](https://docs.python.org/3/library/typing.html) ([PEP484](https://peps.python.org/pep-0483/)).
+這份程式碼遵從 [PEP8](https://peps.python.org/pep-0008/) 和[類型提示](https://docs.python.org/3/library/typing.html) ([PEP484](https://peps.python.org/pep-0483/)) 的規範。
 
 - pylint
 - autopep8
@@ -40,7 +40,7 @@ The codebase is compliant in [PEP8](https://peps.python.org/pep-0008/) and [typi
 
 !!! note
 
-    We also have github [actions](https://github.com/COSCUP/COSCUP-Volunteer/actions) to verify those quality. The `PEP8` must have to be complied but the typing hint only be defined in `./models`, `./module`.
+    我們也有 GitHub [Actions](https://github.com/COSCUP/COSCUP-Volunteer/actions) 來驗證這些程式碼的品質，PEP8 必須要遵守，
 
 ## Dependency
 
