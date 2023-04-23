@@ -190,9 +190,8 @@
                           <h4>請款狀態</h4>
                           <div class="select">
                               <select v-model="modaldata.status">
-                                  <option :value="val"
-                               v-for="[val, name] in Object.entries(status).sort(function(a,b){if(a[0]>b[0]){return 1;} return -1;})">
-                               [[ name ]]
+                                  <option v-for="status in statusList" :key="status.code" :value="status.code">
+                               [[ status.label ]]
                                   </option>
                               </select>
                           </div>
@@ -293,6 +292,16 @@
             },
             mounted: function() {
                 this.load();
+            },
+            computed: {
+                statusList () {
+                    return Object
+                        .entries(this.status)
+                        .map(([code, label]) => {
+                            return { code, label }
+                        })
+                        .sort((a, b) => a.code - b.code)
+                }
             },
             methods: {
                 create_budget: function() {
