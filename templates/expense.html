@@ -5,6 +5,11 @@
     .is-delete {
       text-decoration: line-through;
     }
+    .button.is-filter {
+        background: white;
+        border-color: #888;
+        color: #888;
+    }
 </style>
 {% endblock %}
 {% block body %}
@@ -20,6 +25,16 @@
   <div id="expense" class="container" v-cloak>
       <div class="columns">
           <div class="column">
+            <div class="buttons">
+                <expense-status-label
+                    v-for="status in statusList"
+                    :key="status.code"
+                    role="button"
+                    :class="get_status_filter_class(status)"
+                    :status-code="status.code"
+                    @click="filter_by_status(status)"
+                ></expense-status-label>
+            </div>
           </div>
           <div class="column">
               <div class="field is-grouped is-grouped-right">
@@ -56,20 +71,28 @@
                   </tr>
               </thead>
               <tbody>
-                  <tr v-if="items.length == 0">
-                      <td colspan="8" class="has-text-centered">
-                          <span class="icon"><i class="fas fa-info-circle"></i></span>
-                          <span>目前沒有項目</span>
+                  <tr v-if="visibleItems.length == 0">
+                      <td colspan="9" class="has-text-centered">
+                          <div class="message is-warning">
+                            <div class="message-body">
+                                <div class="is-flex is-align-items-center">
+                                    <span class="icon"><i class="fas fa-info-circle"></i></span>
+                                    目前沒有
+                                    <expense-status-label :show-icon="false" :status-code="filter.statusCode" class="is-inline"></expense-status-label>
+                                    的項目
+                                </div>
+                            </div>
+                          </div>
                       </td>
                   </tr>
-                  <tr v-for="item, index in items" :class="{'is-delete': item.enabled === false}">
+                  <tr v-for="item, index in visibleItems" :class="{'is-delete': item.enabled === false}">
                       <td class="is-vcentered">
                           <p><span class="tag is-link is-light">[[ item.code ]]</span></p>
 
                           <p class="is-size-7">[[ new Date(item.create_at).toLocaleString() ]]</p>
                       </td>
                       <td class="is-vcentered">
-                          <expense-status-label class="tag is-clickable" @click.native="edit(item, index)" :item="item"></expense-status-label>
+                          <expense-status-label class="tag is-clickable" @click="edit(item, index)" :item="item"></expense-status-label>
                       </td>
                       <td class="is-vcentered">
                           <span class="tag is-dark">[[ budgets[item.request.buid].bid ]]</span>
@@ -278,17 +301,22 @@
     (function () {
         let $expense = new Vue({
             el: '#expense',
-            data: {
-                pid: '{{ project._id }}',
-                teams: [],
-                modaldata: {show: false},
-                default_modaldata: {show: false, is_loading: 0},
+            data () {
+                return {
+                    pid: '{{ project._id }}',
+                    teams: [],
+                    modaldata: {show: false},
+                    default_modaldata: {show: false, is_loading: 0},
 
-                items: [],
-                budgets: {},
-                users: {},
-                status: {},
-                is_loading: 0
+                    items: [],
+                    budgets: {},
+                    users: {},
+                    status: {},
+                    is_loading: 0,
+                    filter: {
+                        statusCode: '1'
+                    }
+                }
             },
             mounted: function() {
                 this.load();
@@ -301,9 +329,22 @@
                             return { code, label }
                         })
                         .sort((a, b) => a.code - b.code)
+                },
+                visibleItems () {
+                    return this.items.filter(item => item.status === this.filter.statusCode)
                 }
             },
             methods: {
+                get_status_filter_class (status) {
+                    const ret = ['button', 'is-filter']
+                    if (this.filter.statusCode === status.code) {
+                        ret.push('is-active')
+                    }
+                    return ret
+                },
+                filter_by_status (status) {
+                    this.filter.statusCode = status.code
+                },
                 create_budget: function() {
                     this.modaldata.show = true;
                     document.querySelector('html').classList.toggle('is-clipped');
@@ -325,16 +366,16 @@
                     this.modaldata = Object.assign({}, item, {is_edit: true, _index: index});
                     this.create_budget();
                 },
-                load: function() {
+                async load () {
                     ++this.is_loading;
-                    axios.post('./'+this.pid, {casename: 'get'}).then(function(resp) {
-                        $expense.items = resp.data.datas;
-                        $expense.budgets = resp.data.budgets;
-                        $expense.users = resp.data.users;
-                        $expense.status = resp.data.status;
+                    const resp = await axios.post('./'+this.pid, {casename: 'get'})
 
-                        --$expense.is_loading;
-                    });
+                    this.items = resp.data.datas;
+                    this.budgets = resp.data.budgets;
+                    this.users = resp.data.users;
+                    this.status = resp.data.status;
+
+                    --this.is_loading;
                 }
             },
             delimiters: ['[[', ']]']

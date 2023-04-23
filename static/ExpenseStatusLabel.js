@@ -1,7 +1,7 @@
 (function () {
     const tpl = `
-        <div :class="labelClass" :role="role">
-            <span class="icon"><i :class="iconClass"></i></span>
+        <div :class="labelClass" :role="role" @click="$emit('click')">
+            <span v-if="showIcon" class="icon"><i :class="iconClass"></i></span>
             <span>{{ labelMeta.label }}</span>
         </div>`
     const statusMetaMap = {
@@ -18,13 +18,23 @@
     }
     Vue.component('expense-status-label', {
       props: {
+        statusCode: {
+            type: Number,
+            default: 0
+        },
         item: {
             type: Object,
-            required: true
+            validator (item) {
+                return 'status' in item
+            }
         },
         role: {
             type: String,
             default: ''
+        },
+        showIcon: {
+            type: Boolean,
+            default: true
         }
       },
       computed: {
@@ -35,7 +45,7 @@
             return ['fas', `fa-${this.labelMeta.icon}`]
         },
         labelMeta () {
-            const statusCode = this.item.status
+            const statusCode = this.statusCode || this.item.status
             if (statusCode in statusMetaMap) {
                 return statusMetaMap[statusCode]
             } else if (!this.item.enable) {
