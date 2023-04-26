@@ -42,10 +42,8 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
           installer-parallel: true
-      - name: Check packages
-        run: poetry update -v --dry-run
       - name: Install dependencies
-        run: poetry update -v
+        run: poetry install -v
       - name: Show packages
         run: poetry show --tree
       - name: Create setting.py
