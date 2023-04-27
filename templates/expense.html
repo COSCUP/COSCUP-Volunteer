@@ -376,7 +376,7 @@
                 <div class="field">
                     <div class="control">
                         <button class="button is-link" :class="{'is-loading': is_creating_dispense}" @click="create_dispense">
-                            更新
+                            建立出款單
                         </button>
                         <button class="button is-warning" @click="close_dispense_modal" :class="{'is-loading': is_creating_dispense}">取消</button>
                     </div>
@@ -531,10 +531,24 @@
                 close_dispense_modal () {
                     this.is_editing_dispense_date = false
                 },
-                create_dispense () {
+                async create_dispense () {
                     // TODO: create API
                     this.is_creating_dispense = true
-                    this.$buefy.snackbar.open('出款單建立完畢')
+                    const payload = {
+                        expense_ids: this.selected_expense.map(exp => exp._id),
+                        dispense_at: dayjs(this.dispense_date).format('YYYY-MM-DD')
+                    }
+                    let resp
+                    try {
+                        resp = await axios.post('/dispense/'+this.pid, {casename: 'add', data: payload})
+                        this.$buefy.snackbar.open('出款單建立完畢')
+                    } catch (err) {
+                        this.$buefy.snackbar.open({
+                            message: err.toString(),
+                            type: 'is-error'
+                        })
+                        return
+                    }
                     this.is_dispense_creation_visible = false
                     this.is_creating_dispense = false
                     this.load()
