@@ -27,7 +27,7 @@
           <div class="column">
             <div class="buttons">
                 <expense-status-label
-                    v-for="status in statusList"
+                    v-for="status in status_list"
                     :key="status.code"
                     role="button"
                     :class="get_status_filter_class(status)"
@@ -55,18 +55,18 @@
               </div>
           </div>
       </div>
-      <div class="block" v-if="isDispenseCreationVisible">
-          <div class="notification" :class="{'is-warning': invalidDispenseReason, 'is-primary': !invalidDispenseReason}">
+      <div class="block" v-if="is_dispense_creation_visible">
+          <div class="notification" :class="{'is-warning': invalid_dispense_reason, 'is-primary': !invalid_dispense_reason}">
               <div class="is-flex is-justify-content-space-between is-align-items-center">
-                  <p v-if="invalidDispenseReason">[[invalidDispenseReason]]</p>
+                  <p v-if="invalid_dispense_reason">[[invalid_dispense_reason]]</p>
                   <div class="is-flex is-align-items-center" v-else>
                       選擇了 [[selected_expense.length]] 筆申請單，共計
-                      <span class="tags has-addons ml-1" v-for="invoice in costOfSelectedExpense">
+                      <span class="tags has-addons ml-1" v-for="invoice in cost_of_selected_expense">
                           <span class="tag is-info">[[ invoice.currency ]]</span>
                           <span class="tag is-success is-light">$[[ invoice.total.toLocaleString('en') ]]</span>
                       </span>
                   </div>
-                  <button class="button" :disabled="!!invalidDispenseReason">製作出款單</button>
+                  <button class="button" :disabled="!!invalid_dispense_reason">製作出款單</button>
               </div>
           </div>
       </div>
@@ -74,11 +74,11 @@
           <table class="table is-fullwidth">
               <thead>
                   <tr>
-                      <th v-if="isInReviewStatus">
+                      <th v-if="is_in_review_status">
                         <label class="checkbox">
                           <input
                             type="checkbox"
-                            :checked="isAllExpenseSelected"
+                            :checked="is_all_expense_selected"
                             @input="toggle_all_expense"
                           >
                         </label>
@@ -95,7 +95,7 @@
                   </tr>
               </thead>
               <tbody>
-                  <tr v-if="visibleItems.length == 0">
+                  <tr v-if="visible_items.length == 0">
                       <td colspan="9" class="has-text-centered">
                           <div class="message is-warning">
                             <div class="message-body">
@@ -110,10 +110,10 @@
                       </td>
                   </tr>
                   <tr
-                    v-for="item, index in visibleItems" 
+                    v-for="item, index in visible_items" 
                     :class="{'is-delete': item.enabled === false, 'is-selected': is_expense_selected(item)}"
                   >
-                      <td class="is-vcentered" v-if="isInReviewStatus">
+                      <td class="is-vcentered" v-if="is_in_review_status">
                         <label class="checkbox">
                           <input
                             type="checkbox"
@@ -249,7 +249,7 @@
                           <h4>請款狀態</h4>
                           <div class="select">
                               <select v-model="modaldata.status">
-                                  <option v-for="status in statusList" :key="status.code" :value="status.code">
+                                  <option v-for="status in status_list" :key="status.code" :value="status.code">
                                [[ status.label ]]
                                   </option>
                               </select>
@@ -360,11 +360,11 @@
                 this.load();
             },
             computed: {
-                isInReviewStatus () {
-                    return this.filter.statusCode === this.statusLabelMap.審核中
+                is_in_review_status () {
+                    return this.filter.statusCode === this.status_label_map.審核中
                 },
-                invalidDispenseReason () {
-                    if (!this.isDispenseCreationVisible) {
+                invalid_dispense_reason () {
+                    if (!this.is_dispense_creation_visible) {
                         return ''
                     }
 
@@ -382,14 +382,14 @@
 
                     return ''
                 },
-                isDispenseCreationVisible () {
+                is_dispense_creation_visible () {
                     return this.selected_expense.length > 0
                 },
-                isAllExpenseSelected () {
-                    // selected_expense will be reset every time when visibleItems changed
-                    return this.visibleItems.length === this.selected_expense.length
+                is_all_expense_selected () {
+                    // selected_expense will be reset every time when visible_items changed
+                    return this.visible_items.length === this.selected_expense.length
                 },
-                costOfSelectedExpense () {
+                cost_of_selected_expense () {
                     const totalCost = this.selected_expense.reduce((cost, expense) => {
                         expense.invoices.forEach(({ currency, total }) => {
                             if (!cost[currency]) {
@@ -404,7 +404,7 @@
                         return { currency, total }
                     })
                 },
-                statusList () {
+                status_list () {
                     return Object
                         .entries(this.status)
                         .map(([code, label]) => {
@@ -412,7 +412,7 @@
                         })
                         .sort((a, b) => a.code - b.code)
                 },
-                statusLabelMap () {
+                status_label_map () {
                     return Object
                         .entries(this.status)
                         .reduce((map, [code, label]) => {
@@ -420,12 +420,12 @@
                             return map
                         }, {})
                 },
-                visibleItems () {
+                visible_items () {
                     return this.items.filter(item => item.status === this.filter.statusCode)
                 }
             },
             watch: {
-                visibleItems () {
+                visible_items () {
                     this.reset_page_state()
                 }
             },
@@ -442,10 +442,10 @@
                     }
                 },
                 toggle_all_expense () {
-                    if (this.isAllExpenseSelected) {
+                    if (this.is_all_expense_selected) {
                         this.selected_expense = []
                     } else {
-                        this.selected_expense = this.visibleItems.slice()
+                        this.selected_expense = this.visible_items.slice()
                     }
                 },
                 reset_page_state () {
