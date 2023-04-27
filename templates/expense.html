@@ -55,10 +55,34 @@
               </div>
           </div>
       </div>
-      <div class="column">
+      <div class="block" v-if="isDispenseCreationVisible">
+          <div class="notification" :class="{'is-warning': invalidDispenseReason, 'is-primary': !invalidDispenseReason}">
+              <div class="is-flex is-justify-content-space-between is-align-items-center">
+                  <p v-if="invalidDispenseReason">[[invalidDispenseReason]]</p>
+                  <div class="is-flex is-align-items-center" v-else>
+                      選擇了 [[selected_expense.length]] 筆申請單，共計
+                      <span class="tags has-addons ml-1" v-for="invoice in costOfSelectedExpense">
+                          <span class="tag is-info">[[ invoice.currency ]]</span>
+                          <span class="tag is-success is-light">$[[ invoice.total.toLocaleString('en') ]]</span>
+                      </span>
+                  </div>
+                  <button class="button" :disabled="!!invalidDispenseReason">製作出款單</button>
+              </div>
+          </div>
+      </div>
+      <div class="block">
           <table class="table is-fullwidth">
               <thead>
                   <tr>
+                      <th v-if="isInReviewStatus">
+                        <label class="checkbox">
+                          <input
+                            type="checkbox"
+                            :checked="isAllExpenseSelected"
+                            @input="toggle_all_expense"
+                          >
+                        </label>
+                      </th>
                       <th>申請單號</th>
                       <th>狀態</th>
                       <th>預算編號</th>
@@ -85,7 +109,19 @@
                           </div>
                       </td>
                   </tr>
-                  <tr v-for="item, index in visibleItems" :class="{'is-delete': item.enabled === false}">
+                  <tr
+                    v-for="item, index in visibleItems" 
+                    :class="{'is-delete': item.enabled === false, 'is-selected': is_expense_selected(item)}"
+                  >
+                      <td class="is-vcentered" v-if="isInReviewStatus">
+                        <label class="checkbox">
+                          <input
+                            type="checkbox"
+                            :checked="is_expense_selected(item)"
+                            @input="toggle_expense(item)"
+                          >
+                        </label>
+                      </td>
                       <td class="is-vcentered">
                           <p><span class="tag is-link is-light">[[ item.code ]]</span></p>
 
@@ -315,13 +351,59 @@
                     is_loading: 0,
                     filter: {
                         statusCode: '1'
-                    }
+                    },
+                    // for 審核中 filter
+                    selected_expense: []
                 }
             },
             mounted: function() {
                 this.load();
             },
             computed: {
+                isInReviewStatus () {
+                    return this.filter.statusCode === this.statusLabelMap.審核中
+                },
+                invalidDispenseReason () {
+                    if (!this.isDispenseCreationVisible) {
+                        return ''
+                    }
+
+                    // only one bank account
+                    const bank_accounts = new Set()
+                    this.selected_expense.forEach(({ bank }) => {
+                        const unique_bank_str = `${bank.code}-${bank.no}`
+                        bank_accounts.add(unique_bank_str)
+                    })
+
+                    if (bank_accounts.size > 1) {
+                        const bank_str = [...bank_accounts].join('、')
+                        return `申請單中包含了 ${bank_accounts.size} 組銀行帳號： ${bank_str}，無法合併至一張出款單。請調整申請單內容，或取消選取不同帳戶的申請單。`
+                    }
+
+                    return ''
+                },
+                isDispenseCreationVisible () {
+                    return this.selected_expense.length > 0
+                },
+                isAllExpenseSelected () {
+                    // selected_expense will be reset every time when visibleItems changed
+                    return this.visibleItems.length === this.selected_expense.length
+                },
+                costOfSelectedExpense () {
+                    const totalCost = this.selected_expense.reduce((cost, expense) => {
+                        expense.invoices.forEach(({ currency, total }) => {
+                            if (!cost[currency]) {
+                                cost[currency] = 0
+                            }
+                            cost[currency] += total
+                        })
+                        return cost
+                    }, {})
+
+                    return Object.entries(totalCost).map(([currency, total]) => {
+                        return { currency, total }
+                    })
+                },
                 statusList () {
                     return Object
                         .entries(this.status)
@@ -330,11 +412,45 @@
                         })
                         .sort((a, b) => a.code - b.code)
                 },
+                statusLabelMap () {
+                    return Object
+                        .entries(this.status)
+                        .reduce((map, [code, label]) => {
+                            map[label] = code
+                            return map
+                        }, {})
+                },
                 visibleItems () {
                     return this.items.filter(item => item.status === this.filter.statusCode)
                 }
             },
+            watch: {
+                visibleItems () {
+                    this.reset_page_state()
+                }
+            },
             methods: {
+                is_expense_selected (expense) {
+                    return this.selected_expense.indexOf(expense) >= 0
+                },
+                toggle_expense (expense) {
+                    const index = this.selected_expense.indexOf(expense)
+                    if (index >= 0) {
+                        this.selected_expense.splice(index, 1)
+                    } else {
+                        this.selected_expense.push(expense)
+                    }
+                },
+                toggle_all_expense () {
+                    if (this.isAllExpenseSelected) {
+                        this.selected_expense = []
+                    } else {
+                        this.selected_expense = this.visibleItems.slice()
+                    }
+                },
+                reset_page_state () {
+                    this.selected_expense = []
+                },
                 get_status_filter_class (status) {
                     const ret = ['button', 'is-filter']
                     if (this.filter.statusCode === status.code) {
@@ -369,6 +485,7 @@
                 async load () {
                     ++this.is_loading;
                     const resp = await axios.post('./'+this.pid, {casename: 'get'})
+                    axios.post('/dispense/'+this.pid, {casename: 'get'})
 
                     this.items = resp.data.datas;
                     this.budgets = resp.data.budgets;
