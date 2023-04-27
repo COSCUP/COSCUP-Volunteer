@@ -5,6 +5,11 @@
     .is-delete {
       text-decoration: line-through;
     }
+    .button.is-filter {
+        background: white;
+        border-color: #888;
+        color: #888;
+    }
 </style>
 {% endblock %}
 {% block body %}
@@ -18,8 +23,20 @@
 </section>
 <section class="section">
   <div id="expense" class="container" v-cloak>
-      <div class="column">
-          <div class="content">
+      <div class="columns">
+          <div class="column">
+            <div class="buttons">
+                <expense-status-label
+                    v-for="status in statusList"
+                    :key="status.code"
+                    role="button"
+                    :class="get_status_filter_class(status)"
+                    :status-code="status.code"
+                    @click="filter_by_status(status)"
+                ></expense-status-label>
+            </div>
+          </div>
+          <div class="column">
               <div class="field is-grouped is-grouped-right">
                   <div class="buttons">
                       <button class="button is-loading" v-if="is_loading > 0"></button>
@@ -54,42 +71,28 @@
                   </tr>
               </thead>
               <tbody>
-                  <tr v-if="items.length == 0">
-                      <td colspan="8" class="has-text-centered">
-                          <span class="icon"><i class="fas fa-info-circle"></i></span>
-                          <span>目前沒有項目</span>
+                  <tr v-if="visibleItems.length == 0">
+                      <td colspan="9" class="has-text-centered">
+                          <div class="message is-warning">
+                            <div class="message-body">
+                                <div class="is-flex is-align-items-center">
+                                    <span class="icon"><i class="fas fa-info-circle"></i></span>
+                                    目前沒有
+                                    <expense-status-label :show-icon="false" :status-code="filter.statusCode" class="is-inline"></expense-status-label>
+                                    的項目
+                                </div>
+                            </div>
+                          </div>
                       </td>
                   </tr>
-                  <tr v-for="item, index in items" :class="{'is-delete': item.enabled === false}">
+                  <tr v-for="item, index in visibleItems" :class="{'is-delete': item.enabled === false}">
                       <td class="is-vcentered">
                           <p><span class="tag is-link is-light">[[ item.code ]]</span></p>
+
                           <p class="is-size-7">[[ new Date(item.create_at).toLocaleString() ]]</p>
                       </td>
                       <td class="is-vcentered">
-                          <span class="tag is-warning is-clickable" @click="edit(item, index)" v-if="item.status == '1'">
-                              <span class="icon"><i class="far fa-hand-paper"></i></span>
-                              <span>[[ status[item.status] ]]</span>
-                          </span>
-                          <span class="tag is-link is-clickable" @click="edit(item, index)" v-if="item.status == '2'">
-                              <span class="icon"><i class="fas fa-bolt"></i></span>
-                              <span>[[ status[item.status] ]]</span>
-                          </span>
-                          <span class="tag is-primary is-clickable" @click="edit(item, index)" v-if="item.status == '3'">
-                              <span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
-                              <span>[[ status[item.status] ]]</span>
-                          </span>
-                          <span class="tag is-success is-light is-clickable" @click="edit(item, index)" v-if="item.status == '4'">
-                              <span class="icon"><i class="fas fa-stamp"></i></span>
-                              <span>[[ status[item.status] ]]</span>
-                          </span>
-                          <span class="tag is-success is-clickable" @click="edit(item, index)" v-if="item.status == '5'">
-                              <span class="icon"><i class="fas fa-clipboard-check"></i></span>
-                              <span>[[ status[item.status] ]]</span>
-                          </span>
-                          <span class="tag is-danger is-clickable" @click="edit(item, index)" v-if="!item.enable">
-                              <span class="icon"><i class="fas fa-ban"></i></span>
-                              <span>已刪除</span>
-                          </span>
+                          <expense-status-label class="tag is-clickable" @click="edit(item, index)" :item="item"></expense-status-label>
                       </td>
                       <td class="is-vcentered">
                           <span class="tag is-dark">[[ budgets[item.request.buid].bid ]]</span>
@@ -210,9 +213,8 @@
                           <h4>請款狀態</h4>
                           <div class="select">
                               <select v-model="modaldata.status">
-                                  <option :value="val"
-                               v-for="[val, name] in Object.entries(status).sort(function(a,b){if(a[0]>b[0]){return 1;} return -1;})">
-                               [[ name ]]
+                                  <option v-for="status in statusList" :key="status.code" :value="status.code">
+                               [[ status.label ]]
                                   </option>
                               </select>
                           </div>
@@ -294,26 +296,55 @@
 {% endblock %}
 {% block js %}
 <script src="/js/axios.min.js"></script>
+<script src="{{ url_for('static', filename='ExpenseStatusLabel.js') }}"></script>
 <script>
     (function () {
         let $expense = new Vue({
             el: '#expense',
-            data: {
-                pid: '{{ project._id }}',
-                teams: [],
-                modaldata: {show: false},
-                default_modaldata: {show: false, is_loading: 0},
+            data () {
+                return {
+                    pid: '{{ project._id }}',
+                    teams: [],
+                    modaldata: {show: false},
+                    default_modaldata: {show: false, is_loading: 0},
 
-                items: [],
-                budgets: {},
-                users: {},
-                status: {},
-                is_loading: 0
+                    items: [],
+                    budgets: {},
+                    users: {},
+                    status: {},
+                    is_loading: 0,
+                    filter: {
+                        statusCode: '1'
+                    }
+                }
             },
             mounted: function() {
                 this.load();
             },
+            computed: {
+                statusList () {
+                    return Object
+                        .entries(this.status)
+                        .map(([code, label]) => {
+                            return { code, label }
+                        })
+                        .sort((a, b) => a.code - b.code)
+                },
+                visibleItems () {
+                    return this.items.filter(item => item.status === this.filter.statusCode)
+                }
+            },
             methods: {
+                get_status_filter_class (status) {
+                    const ret = ['button', 'is-filter']
+                    if (this.filter.statusCode === status.code) {
+                        ret.push('is-active')
+                    }
+                    return ret
+                },
+                filter_by_status (status) {
+                    this.filter.statusCode = status.code
+                },
                 create_budget: function() {
                     this.modaldata.show = true;
                     document.querySelector('html').classList.toggle('is-clipped');
@@ -335,16 +366,16 @@
                     this.modaldata = Object.assign({}, item, {is_edit: true, _index: index});
                     this.create_budget();
                 },
-                load: function() {
+                async load () {
                     ++this.is_loading;
-                    axios.post('./'+this.pid, {casename: 'get'}).then(function(resp) {
-                        $expense.items = resp.data.datas;
-                        $expense.budgets = resp.data.budgets;
-                        $expense.users = resp.data.users;
-                        $expense.status = resp.data.status;
+                    const resp = await axios.post('./'+this.pid, {casename: 'get'})
 
-                        --$expense.is_loading;
-                    });
+                    this.items = resp.data.datas;
+                    this.budgets = resp.data.budgets;
+                    this.users = resp.data.users;
+                    this.status = resp.data.status;
+
+                    --this.is_loading;
                 }
             },
             delimiters: ['[[', ']]']

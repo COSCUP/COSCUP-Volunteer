@@ -100,6 +100,7 @@ services:
       - $PWD/module:/app/module
       - $PWD/templates:/app/templates
       - $PWD/view:/app/view
+      - $PWD/static:/app/static
       - $PWD/structs:/app/structs
     depends_on:
       - memcached-prod

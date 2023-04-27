@@ -85,6 +85,9 @@ ADD ./templates/base.html \
     ./templates/user.html \
     ./templates/
 
+ADD ./static/ExpenseStatusLabel.js \
+    ./static/
+
 ADD ./templates/mail/base*.html \
     ./templates/mail/coscup_base.html \
     ./templates/mail/sender_base.html \
