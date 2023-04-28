@@ -90,6 +90,7 @@ ADD ./templates/base.html \
 
 ADD ./static/ExpenseStatusLabel.js \
     ./static/ExpenseTable.js \
+    ./static/ExpenseEditor.js \
     ./static/buefy.min.js \
     ./static/buefy.min.css \
     ./static/dayjs.min.js \

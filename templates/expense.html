@@ -42,7 +42,7 @@
           <div class="column">
               <div class="field is-grouped is-grouped-right">
                   <div class="buttons">
-                      <button class="button is-loading" v-if="is_loading > 0"></button>
+                      <button class="button is-loading" v-if="is_loading"></button>
                       <a class="button" :href="'/budget/'+pid">
                           <span class="icon"><i class="fas fa-funnel-dollar"></i></span>
                           <span>預算表 [[pid]]</span>
@@ -117,170 +117,22 @@
             :expenses="visible_items"
             :is-selectable="is_in_review_status"
             :is-editable="true"
+            :is-loading="is_loading"
             :budgets="budgets"
             :users="users"
             :selected-expense.sync="selected_expense"
-            @edit="edit"
+            @edit="start_edit_expense"
           ></expense-table>
       </div>
-    <!-- expense modal -->
-    <div class="modal" :class="{'is-active': modaldata.show}" v-if="modaldata.request != undefined">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-          <header class="modal-card-head">
-              <p class="modal-card-title">申請項目 - [[ budgets[modaldata.request.buid].name ]] </p>
-              <button class="delete" aria-label="close" @click="close"></button>
-          </header>
-          <section class="modal-card-body">
-              <div class="content">
-                  <div class="content">
-                      <h4>預算表資訊</h4>
-                      <table class="table is-bordered is-narrow is-striped">
-                          <thead>
-                              <tr>
-                                  <th>項目</th>
-                                  <th>名稱</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr>
-                                  <td>預算表編號</td>
-                                  <td><span class="tag is-dark">[[ budgets[modaldata.request.buid].bid ]]</span></td>
-                              </tr>
-                              <!--
-                              <tr>
-                                  <td>組別 / 預算建立者</td>
-                                  <td>
-                                      <div class="field-body">
-                                          <div class="field">
-                                              <span class="select is-small">
-                                                  <select v-model="modaldata.tid" disabled>
-                                                      <option v-for="team in teams" :value="team.tid">[[ team.name ]]</option>
-                                                  </select>
-                                              </span>
-                                          </div>
-                                          <div class="filed">
-                                              <input class="input is-small" type="text" v-model="modaldata.uid" disabled>
-                                          </div>
-                                      </div>
-                                  </td>
-                              </tr>
-                              -->
-                              <tr>
-                                  <td>預算名稱</td>
-                                  <td>[[ budgets[modaldata.request.buid].name ]]</td>
-                              </tr>
-                              <tr>
-                                  <td>預算總金額</td>
-                                  <td><span class="tag">[[ budgets[modaldata.request.buid].currency ]]</span>
-                                      <span>$[[ budgets[modaldata.request.buid].total.toLocaleString('en') ]]</span></td>
-                              </tr>
-                              <tr>
-                                  <td>預計支出時間</td>
-                                  <td>[[ budgets[modaldata.request.buid].paydate ]]</td>
-                              </tr>
-                              <tr>
-                                  <td>說明</td>
-                                  <td>[[ budgets[modaldata.request.buid].desc ]]</td>
-                              </tr>
-                              <tr>
-                                  <td>估算方式</td>
-                                  <td>[[ budgets[modaldata.request.buid].estimate ]]</td>
-                              </tr>
-                              <tr>
-                                  <td>唯一編號</td>
-                                  <td><span class="tag">[[ modaldata.code ]]</span></td>
-                              </tr>
-                          </tbody>
-                      </table>
-                      <div class="content" v-if="modaldata.relevant_code.length > 0">
-                          <h4>與其他申請單有關聯</h4>
-                          <div class="tags">
-                              <span class="tag is-link is-light" v-for="relevant in modaldata.relevant_code">[[ relevant ]]</span>
-                          </div>
-                      </div>
-                      <div class="content">
-                          <h4>請款狀態</h4>
-                          <div class="select">
-                              <select v-model="modaldata.status">
-                                  <option v-for="status in status_list" :key="status.code" :value="status.code">
-                               [[ status.label ]]
-                                  </option>
-                              </select>
-                          </div>
-                      </div>
-                      <div class="content">
-                          <h4>請款說明</h4>
-                          <p v-if="modaldata.request != undefined">
-                              [[ modaldata.request.desc ]]
-                          </p>
-                      </div>
-                      <div class="content">
-                          <h4>單據</h4>
-                          <table class="table is-narrow is-hoverable">
-                              <thead>
-                                  <tr>
-                                      <th>名稱</th>
-                                      <th class="has-text-right">金額</th>
-                                      <th>狀態</th>
-                                      <th class="has-text-centered">已確認收到</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  <tr v-for="invoice in modaldata.invoices">
-                                      <td>[[ invoice.name ]]</td>
-                                      <td class="has-text-right is-family-monospace">
-                                          [[ invoice.currency ]] $[[ invoice.total.toLocaleString('en') ]]
-                                      </td>
-                                      <td>
-                                          <span v-if="invoice.status === 'not_send'" class="tag is-warning">還未寄出</span>
-                                          <span v-if="invoice.status === 'sent'" class="tag is-success is-light">已寄出</span>
-                                          <span v-if="invoice.status === 'no_invoice'" class="tag is-info is-light">無單據</span>
-                                      </td>
-                                      <td class="has-text-centered">
-                                          <label class="checkbox">
-                                              <input type="checkbox" v-model="invoice.received">
-                                          </label>
-                                      </td>
-                                  </tr>
-                              </tbody>
-                          </table>
-                      </div>
-                      <div class="content" v-if="modaldata.bank">
-                          <h4>匯款資訊</h4>
-                          <ul>
-                              <li>銀行代碼：<span class="is-family-monospace">[[ modaldata.bank.code ]]</span></li>
-                              <li>銀行帳號：<span class="is-family-monospace">[[ modaldata.bank.no ]]</span></li>
-                              <li>分行名稱：[[ modaldata.bank.branch ]]</li>
-                              <li>戶名：[[ modaldata.bank.name ]]</li>
-                          </ul>
-                      </div>
-                      <div class="content">
-                          <h4>申請單狀態</h4>
-                          <div class="select">
-                              <select v-model="modaldata.enable">
-                                  <option :value='true'>可使用</option>
-                                  <option :value='false'>已刪除</option>
-                              </select>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <form @submit.prevent="to_update">
-                  <div class="field">
-                      <div class="control">
-                          <button class="button is-link" type="submit" :class="{'is-loading': modaldata.is_loading}">
-                              更新
-                          </button>
-                          <button class="button is-warning" @click="close" :class="{'is-loading': modaldata.is_loading}">取消</button>
-                      </div>
-                  </div>
-              </form>
-          </section>
-          <footer class="modal-card-foot">
-          </footer>
-      </div>
-    </div> <!-- end of expense modal -->
+    <expense-editor
+      :pid="pid"
+      :expense="expense_to_edit"
+      :budgets="budgets"
+      :users="users"
+      :teams="teams"
+      :status-list="status_list"
+      @update="load"
+    ></expense-editor>
     <b-modal class="dispense-modal" v-model="is_editing_dispense_date" v-if="selected_expense.length">
         <div class="modal-card">
             <div class="modal-card-head">
@@ -343,6 +195,7 @@
 <script src="{{ url_for('static', filename='dayjs.min.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseStatusLabel.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseTable.js') }}"></script>
+<script src="{{ url_for('static', filename='ExpenseEditor.js') }}"></script>
 <script>
     (function () {
         Vue.prototype.$buefy.config.setOptions({
@@ -360,7 +213,7 @@
                     budgets: {},
                     users: {},
                     status: {},
-                    is_loading: 0,
+                    is_loading: false,
                     filter: {
                         statusCode: '1'
                     },
@@ -368,8 +221,7 @@
                     selected_expense: [],
 
                     // for expense modal
-                    modaldata: {show: false},
-                    default_modaldata: {show: false, is_loading: 0},
+                    expense_to_edit: null,
 
                     // for 審核中 modal
                     is_editing_dispense_date: false,
@@ -490,7 +342,6 @@
                     this.is_editing_dispense_date = false
                 },
                 async create_dispense () {
-                    // TODO: create API
                     this.is_creating_dispense = true
                     const payload = {
                         expense_ids: this.selected_expense.map(exp => exp._id),
@@ -511,9 +362,6 @@
                     this.is_creating_dispense = false
                     this.load()
                 },
-                // reset_page_state () {
-                //     this.selected_expense = []
-                // },
                 get_status_filter_class (status) {
                     const ret = ['button', 'is-filter']
                     if (this.filter.statusCode === status.code) {
@@ -524,29 +372,11 @@
                 filter_by_status (status) {
                     this.filter.statusCode = status.code
                 },
-                create_budget: function() {
-                    this.modaldata.show = true;
-                    document.querySelector('html').classList.toggle('is-clipped');
-                },
-                to_update: function() {
-                    ++this.modaldata.is_loading;
-
-                    axios.post('./'+this.pid, {casename: 'update', data: this.modaldata}).then((resp) => {
-                        this.load()
-                        --$expense.modaldata.is_loading;
-                        $expense.close();
-                    });
-                },
-                close: function() {
-                    this.modaldata = Object.assign({}, this.default_modaldata);
-                    document.querySelector('html').classList.toggle('is-clipped');
-                },
-                edit: function(item) {
-                    this.modaldata = Object.assign({}, item, {is_edit: true});
-                    this.create_budget();
+                start_edit_expense (expense) {
+                    this.expense_to_edit = expense
                 },
                 async load () {
-                    ++this.is_loading;
+                    this.is_loading = true;
                     const resp = await axios.post('./'+this.pid, {casename: 'get'})
                     const dispenseResp = await axios.post('/dispense/'+this.pid, {casename: 'get'})
 
@@ -556,7 +386,7 @@
                     this.users = resp.data.users;
                     this.status = resp.data.status;
 
-                    --this.is_loading;
+                    this.is_loading = false;
                 }
             },
             delimiters: ['[[', ']]']
