@@ -63,7 +63,7 @@
               <div class="is-flex is-justify-content-space-between is-align-items-center">
                   <p v-if="invalid_dispense_reason">[[invalid_dispense_reason]]</p>
                   <div class="is-flex is-align-items-center" v-else>
-                      選擇了 [[selected_expense.length]] 筆申請單，共計
+                      選擇了 [[selected_expenses.length]] 筆申請單，共計
                       <span class="tags has-addons ml-1" v-for="invoice in cost_of_selected_expense">
                           <span class="tag is-info">[[ invoice.currency ]]</span>
                           <span class="tag is-success is-light">$[[ invoice.total.toLocaleString() ]]</span>
@@ -120,7 +120,7 @@
             :is-loading="is_loading"
             :budgets="budgets"
             :users="users"
-            :selected-expense.sync="selected_expense"
+            :selected-expense.sync="selected_expenses"
             @edit="start_edit_expense"
           ></expense-table>
       </div>
@@ -133,59 +133,16 @@
       :status-list="status_list"
       @update="load"
     ></expense-editor>
-    <b-modal class="dispense-modal" v-model="is_editing_dispense_date" v-if="selected_expense.length">
-        <div class="modal-card">
-            <div class="modal-card-head">
-                <p class="modal-card-title">建立一張出款單</p>
-            </div>
-            <div class="modal-card-body">
-                <div class="content">
-                    <div class="block">
-                        <h4>設定出款單資訊</h4>
-                        <b-field label="預計出款日期">
-                            <b-datepicker v-model="dispense_date"></b-datepicker>
-                        </b-field>
-                    </div>
-                    <div class="block">
-                        <h4>確認選取的申請單</h4>
-                        <ol type="1">
-                            <li v-for="expense in selected_expense" :key="expense._id">
-                                <div class="is-flex is-align-items-center">
-                                    <span class="mr-1">[[ users[expense.create_by].profile.badge_name ]] 申請的</span>
-                                    <span class="tag is-dark mr-1">[[ budgets[expense.request.buid].bid ]]</span>
-                                    <span class="mr-2">[[ budgets[expense.request.buid].name ]]，金額為</span>
-                                    <div class="tags has-addons mr-1 mb-0" v-for="invoice in expense.invoices">
-                                        <span class="tag is-info">[[ invoice.currency ]]</span>
-                                        <span class="tag is-success is-light">$[[ invoice.total.toLocaleString() ]]</span>
-                                    </div>
-                                    <span>，期望出款時間為 [[expense.request.paydate]] </span>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="block">
-                        <h4>確認匯款資訊</h4>
-                        <ul>
-                            <li>銀行代碼：<span class="is-family-monospace">[[ bank_of_selected_expense.code ]]</span></li>
-                            <li>銀行帳號：<span class="is-family-monospace">[[ bank_of_selected_expense.no ]]</span></li>
-                            <li>分行名稱：[[ bank_of_selected_expense.branch ]]</li>
-                            <li>戶名：[[ bank_of_selected_expense.name ]]</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-card-foot">
-                <div class="field">
-                    <div class="control">
-                        <button class="button is-link" :class="{'is-loading': is_creating_dispense}" @click="create_dispense">
-                            建立出款單
-                        </button>
-                        <button class="button is-warning" @click="close_dispense_modal" :class="{'is-loading': is_creating_dispense}">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </b-modal>
+    <dispense-editor
+      :pid="pid"
+      :all-expenses="items"
+      :dispense="dispense_to_create"
+      :budgets="budgets"
+      :users="users"
+      :status-list="status_list"
+      :is-create="true"
+      @update="load"
+    ></dispense-editor>
   </div>
 </section>
 {% endblock %}
@@ -196,6 +153,7 @@
 <script src="{{ url_for('static', filename='ExpenseStatusLabel.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseTable.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseEditor.js') }}"></script>
+<script src="{{ url_for('static', filename='DispenseEditor.js') }}"></script>
 <script>
     (function () {
         Vue.prototype.$buefy.config.setOptions({
@@ -218,15 +176,13 @@
                         statusCode: '1'
                     },
                     // for 審核中 filter
-                    selected_expense: [],
+                    selected_expenses: [],
 
                     // for expense modal
                     expense_to_edit: null,
 
                     // for 審核中 modal
-                    is_editing_dispense_date: false,
-                    dispense_date: null,
-                    is_creating_dispense: false
+                    dispense_to_create: null
                 }
             },
             computed: {
@@ -273,7 +229,7 @@
 
                     // only one bank account
                     const bank_accounts = new Set()
-                    this.selected_expense.forEach(({ bank }) => {
+                    this.selected_expenses.forEach(({ bank }) => {
                         const unique_bank_str = `${bank.code}-${bank.no}`
                         bank_accounts.add(unique_bank_str)
                     })
@@ -286,10 +242,10 @@
                     return ''
                 },
                 is_dispense_creation_visible () {
-                    return this.selected_expense.length > 0
+                    return this.selected_expenses.length > 0
                 },
                 cost_of_selected_expense () {
-                    const totalCost = this.selected_expense.reduce((cost, expense) => {
+                    const totalCost = this.selected_expenses.reduce((cost, expense) => {
                         expense.invoices.forEach(({ currency, total }) => {
                             if (!cost[currency]) {
                                 cost[currency] = 0
@@ -302,12 +258,6 @@
                     return Object.entries(totalCost).map(([currency, total]) => {
                         return { currency, total }
                     })
-                },
-                bank_of_selected_expense () {
-                    if (this.selected_expense.length) {
-                        return this.selected_expense[0].bank
-                    }
-                    return null
                 },
                 status_list () {
                     return Object
@@ -334,33 +284,11 @@
             },
             methods: {
                 start_preparing_dispense () {
-                    // default dispense 10 days later
-                    this.dispense_date = dayjs().add(10, 'days').toDate()
-                    this.is_editing_dispense_date = true
-                },
-                close_dispense_modal () {
-                    this.is_editing_dispense_date = false
-                },
-                async create_dispense () {
-                    this.is_creating_dispense = true
-                    const payload = {
-                        expense_ids: this.selected_expense.map(exp => exp._id),
-                        dispense_at: dayjs(this.dispense_date).format('YYYY-MM-DD')
+                    this.dispense_to_create = {
+                        expense_ids: this.selected_expenses.map(exp => exp._id),
+                        // default dispense 10 days later
+                        dispense_at: dayjs().add(10, 'days').format('YYYY-MM-DD')
                     }
-                    let resp
-                    try {
-                        resp = await axios.post('/dispense/'+this.pid, {casename: 'add', data: payload})
-                        this.$buefy.snackbar.open('出款單建立完畢')
-                    } catch (err) {
-                        this.$buefy.snackbar.open({
-                            message: err.toString(),
-                            type: 'is-error'
-                        })
-                        return
-                    }
-                    this.is_dispense_creation_visible = false
-                    this.is_creating_dispense = false
-                    this.load()
                 },
                 get_status_filter_class (status) {
                     const ret = ['button', 'is-filter']
