@@ -19,7 +19,12 @@ class ApplyReviewDB(DBBase):
         self.create_index([('pid', 1), ('tid', 1)])
 
     def save(self, data: TeamApplyReview) -> None:
-        ''' Save data '''
+        ''' Save data
+
+        Args:
+            data (TeamApplyReview): the struct of [structs.teams.TeamApplyReview][].
+
+        '''
 
         self.find_one_and_update(
             {'pid': data.pid, 'tid': data.tid, 'uid': data.uid},

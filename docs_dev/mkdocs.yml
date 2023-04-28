@@ -26,6 +26,7 @@ nav:
       - View: code_reference/view.md
       - Celery Task: code_reference/celery_task.md
       - Models:
+        - applyreviewdb: code_reference/models/applyreviewdb.md
         - base: code_reference/models/base.md
         - budgetdb: code_reference/models/budgetdb.md
         - expensedb: code_reference/models/expensedb.md
@@ -44,6 +45,7 @@ nav:
         - usessiondb: code_reference/models/usessiondb.md
         - waitlistdb: code_reference/models/waitlistdb.md
       - Module:
+        - applyreview: code_reference/module/applyreview.md
         - awsses: code_reference/module/awsses.md
         - budget: code_reference/module/budget.md
         - dietary_habit: code_reference/module/dietary_habit.md

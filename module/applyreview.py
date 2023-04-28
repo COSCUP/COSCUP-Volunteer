@@ -10,7 +10,15 @@ from structs.teams import TeamApplyReview, TeamApplyReviewMessage
 
 
 def review_template(tid: str) -> str:
-    ''' review template '''
+    ''' review template
+
+    Args:
+        tid (str): Team id
+
+    Returns:
+        Template content
+
+    '''
     if tid in ('field', ):
         return """
 以下是他的自我介紹：\"\"\"%(intro)s\"\"\"
@@ -47,7 +55,17 @@ class ApplyReview:
         self.openai_api = OpenAIAPI(**setting.OPENAI_ARGS)
 
     def submit_review(self, pid: str, tid: str, uid: str) -> RespCompletions:
-        ''' Submit review to OpenAI '''
+        ''' Submit review to OpenAI
+
+        Args:
+            pid (str): Porject id
+            tid (str): Team id
+            uid (str): User id
+
+        Returns:
+            The struct of [toldwords.openai.RespCompletions][]
+
+        '''
         note: str = ''
         for raw in WaitList.get_note(pid=pid, tid=tid, uid=uid):
             note = raw['note']
@@ -68,7 +86,15 @@ class ApplyReview:
 
     @staticmethod
     def save_resp_view(pid: str, tid: str, uid: str, resp: RespCompletions) -> None:
-        ''' Save resp view '''
+        ''' Save resp view
+
+        Args:
+            pid (str): Porject id
+            tid (str): Team id
+            uid (str): User id
+            resp (toldwords.openai.RespCompletions): OpenAI API response
+
+        '''
         data = TeamApplyReview(pid=pid, tid=tid, uid=uid)
         for choice in resp.choices:
             data.messages.append(
@@ -79,7 +105,17 @@ class ApplyReview:
 
     @staticmethod
     def get(pid: str, tid: str, uids: list[str]) -> dict[str, Any]:
-        ''' Get review result '''
+        ''' Get review result
+
+        Args:
+            pid (str): Porject id
+            tid (str): Team id
+            uids (list): list of user ids
+
+        Returns:
+            The same struct with [structs.teams.TeamApplyReview][]
+
+        '''
         result: dict[str, Any] = {}
         for raw in ApplyReviewDB().find({
                 'pid': pid, 'tid': tid, 'uid': {'$in': uids}}):
