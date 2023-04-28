@@ -89,6 +89,7 @@ ADD ./templates/base.html \
     ./templates/
 
 ADD ./static/ExpenseStatusLabel.js \
+    ./static/ExpenseTable.js \
     ./static/buefy.min.js \
     ./static/buefy.min.css \
     ./static/dayjs.min.js \

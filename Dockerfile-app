@@ -95,6 +95,7 @@ ADD ./templates/mail/base*.html \
     ./templates/mail/
 
 ADD ./static/ExpenseStatusLabel.js \
+    ./static/ExpenseTable.js \
     ./static/buefy.min.js \
     ./static/buefy.min.css \
     ./static/dayjs.min.js \

@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block head_title %} 預算申請列表{% endblock %}
 {% block style %}
-<link rel="stylesheet" href="{{ url_for('static', filename='buefy.min.css') }}">
 <style>
     .is-delete {
       text-decoration: line-through;
@@ -74,104 +73,55 @@
               </div>
           </div>
       </div>
-      <div class="block">
-          <table class="table is-fullwidth">
-              <thead>
-                  <tr>
-                      <th v-if="is_in_review_status">
-                        <label class="checkbox">
-                          <input
-                            type="checkbox"
-                            :checked="is_all_expense_selected"
-                            @input="toggle_all_expense"
-                          >
-                        </label>
-                      </th>
-                      <th>申請單號</th>
-                      <th>狀態</th>
-                      <th>預算編號</th>
-                      <th>預算唯一編號</th>
-                      <th>部門</th>
-                      <th></th>
-                      <th>申請人</th>
-                      <th>金額</th>
-                      <th>期望出款時間</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr v-if="visible_items.length == 0">
-                      <td colspan="9" class="has-text-centered">
-                          <div class="message is-warning">
-                            <div class="message-body">
-                                <div class="is-flex is-align-items-center">
-                                    <span class="icon"><i class="fas fa-info-circle"></i></span>
-                                    目前沒有
-                                    <expense-status-label :show-icon="false" :status-code="filter.statusCode" class="is-inline"></expense-status-label>
-                                    的項目
-                                </div>
+      <div class="block" v-if="should_show_dispense">
+        <div class="box content" v-for="dispense in visible_rich_dispense" :key="dispense._id">
+            <div class="block">
+                <h4>總金額</h4>
+                <div class="is-flex is-align-items-center">
+                    <div class="tags has-addons" v-for="invoice in dispense.invoice_sum" :key="invoice.currency">
+                        <span class="tag is-info">[[ invoice.currency ]]</span>
+                        <span class="tag is-success is-light">$[[ invoice.total.toLocaleString() ]]</span>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <h4>申請單列表</h4>
+                <ol type="1">
+                    <li v-for="expense in dispense.expenses" :key="expense._id">
+                        <div class="is-flex is-align-items-center">
+                            <span class="mr-1">[[ users[expense.create_by].profile.badge_name ]] 申請的</span>
+                            <span class="tag is-dark mr-1">[[ budgets[expense.request.buid].bid ]]</span>
+                            <span class="mr-2">[[ budgets[expense.request.buid].name ]]，金額為</span>
+                            <div class="tags has-addons mr-1 mb-0" v-for="invoice in expense.invoices">
+                                <span class="tag is-info">[[ invoice.currency ]]</span>
+                                <span class="tag is-success is-light">$[[ invoice.total.toLocaleString() ]]</span>
                             </div>
-                          </div>
-                      </td>
-                  </tr>
-                  <tr
-                    v-for="item, index in visible_items" 
-                    :class="{'is-delete': item.enabled === false, 'is-selected': is_expense_selected(item)}"
-                  >
-                      <td class="is-vcentered" v-if="is_in_review_status">
-                        <label class="checkbox">
-                          <input
-                            type="checkbox"
-                            :checked="is_expense_selected(item)"
-                            @input="toggle_expense(item)"
-                          >
-                        </label>
-                      </td>
-                      <td class="is-vcentered">
-                          <p><span class="tag is-link is-light">[[ item.code ]]</span></p>
-
-                          <p class="is-size-7">[[ new Date(item.create_at).toLocaleString() ]]</p>
-                      </td>
-                      <td class="is-vcentered">
-                          <expense-status-label class="tag is-clickable" @click="edit(item, index)" :item="item"></expense-status-label>
-                      </td>
-                      <td class="is-vcentered">
-                          <span class="tag is-dark">[[ budgets[item.request.buid].bid ]]</span>
-                          <span><a @click="edit(item, index)">[[ budgets[item.request.buid].name ]]</a></span>
-                      </td>
-                      <td class="is-vcentered">
-                          <span class="tag is-success is-light">[[ item.request.code ]]</span>
-                      </td>
-                      <td class="is-vcentered">[[ item.tid ]]</td>
-                      <td class="is-vcentered">
-                          <a :href="'/user/'+ item.create_by">
-                              <figure class="image is-32x32"><img class="is-rounded" :src="users[item.create_by].oauth['picture']"></figure>
-                          </a>
-                      </td>
-                      <td class="is-vcentered">
-                          <a :href="'/user/'+ item.create_by">
-                              [[ users[item.create_by].profile.badge_name ]]
-                          </a>
-                      </td>
-                      <td class="is-vcentered">
-                          <div class="field is-grouped is-grouped-multiline">
-                              <div class="control">
-                                  <div class="tags has-addons">
-                                      <span class="tag is-dark"><span class="icon"><i class="fas fa-file-invoice-dollar"></i></span></span>
-                                      <span class="tag is-link is-light">[[ item.invoices.length ]]</span>
-                                  </div>
-                              </div>
-                              <div class="control" v-for="invoice in item.invoices">
-                                  <div class="tags has-addons">
-                                      <span class="tag is-info">[[ invoice.currency ]]</span>
-                                      <span class="tag is-success is-light">$[[ invoice.total.toLocaleString('en') ]]</span>
-                                  </div>
-                              </div>
-                          </div>
-                      </td>
-                      <td class="is-vcentered">[[ item.request.paydate ]]</td>
-                  </tr>
-              </tbody>
-          </table>
+                            <span>，期望出款時間為 [[expense.request.paydate]] </span>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            <div class="block">
+                <h4>匯款資訊</h4>
+                <ul>
+                    <li>銀行代碼：<span class="is-family-monospace">[[ dispense.bank.code ]]</span></li>
+                    <li>銀行帳號：<span class="is-family-monospace">[[ dispense.bank.no ]]</span></li>
+                    <li>分行名稱：[[ dispense.bank.branch ]]</li>
+                    <li>戶名：[[ dispense.bank.name ]]</li>
+                </ul>
+            </div>
+        </div>
+      </div>
+      <div class="block" v-else>
+          <expense-table
+            :expenses="visible_items"
+            :is-selectable="is_in_review_status"
+            :is-editable="true"
+            :budgets="budgets"
+            :users="users"
+            :selected-expense.sync="selected_expense"
+            @edit="edit"
+          ></expense-table>
       </div>
     <!-- expense modal -->
     <div class="modal" :class="{'is-active': modaldata.show}" v-if="modaldata.request != undefined">
@@ -332,11 +282,11 @@
       </div>
     </div> <!-- end of expense modal -->
     <b-modal class="dispense-modal" v-model="is_editing_dispense_date" v-if="selected_expense.length">
-        <div class="card">
+        <div class="modal-card">
             <div class="modal-card-head">
-                <div class="card-header-title">建立一張出款單</div>
+                <p class="modal-card-title">建立一張出款單</p>
             </div>
-            <div class="card-content">
+            <div class="modal-card-body">
                 <div class="content">
                     <div class="block">
                         <h4>設定出款單資訊</h4>
@@ -392,6 +342,7 @@
 <script src="{{ url_for('static', filename='buefy.min.js') }}"></script>
 <script src="{{ url_for('static', filename='dayjs.min.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseStatusLabel.js') }}"></script>
+<script src="{{ url_for('static', filename='ExpenseTable.js') }}"></script>
 <script>
     (function () {
         Vue.prototype.$buefy.config.setOptions({
@@ -405,6 +356,7 @@
                     teams: [],
 
                     items: [],
+                    dispenses: [],
                     budgets: {},
                     users: {},
                     status: {},
@@ -426,6 +378,39 @@
                 }
             },
             computed: {
+                should_show_dispense () {
+                    const dispense_view = [
+                        this.status_label_map.出款中,
+                        this.status_label_map.已出款,
+                        this.status_label_map.已完成
+                    ]
+                    return dispense_view.includes(this.filter.statusCode )
+                },
+                rich_dispenses () {
+                    return this.dispenses.map((dispense) => {
+                        const ret = { ...dispense }
+                        ret.expenses = dispense.expense_ids.map((id) => {
+                            return this.items.find(item => item._id === id)
+                        })
+                        const invoices = ret.expenses.reduce((sum, expense) => {
+                            expense.invoices.forEach(({ currency, total }) => {
+                                if (!sum[currency]) {
+                                    sum[currency] = 0
+                                }
+                                sum[currency] += total
+                            })
+                            return sum
+                        }, {})
+                        ret.invoice_sum = Object.entries(invoices).map(([currency, total]) => {
+                            return { currency, total }
+                        })
+                        ret.bank = ret.expenses[0].bank
+                        return ret
+                    })
+                },
+                visible_rich_dispense () {
+                    return this.rich_dispenses.filter(dispense => dispense.status === this.filter.statusCode)
+                },
                 is_in_review_status () {
                     return this.filter.statusCode === this.status_label_map.審核中
                 },
@@ -450,10 +435,6 @@
                 },
                 is_dispense_creation_visible () {
                     return this.selected_expense.length > 0
-                },
-                is_all_expense_selected () {
-                    // selected_expense will be reset every time when visible_items changed
-                    return this.visible_items.length === this.selected_expense.length
                 },
                 cost_of_selected_expense () {
                     const totalCost = this.selected_expense.reduce((cost, expense) => {
@@ -496,33 +477,10 @@
                     return this.items.filter(item => item.status === this.filter.statusCode)
                 }
             },
-            watch: {
-                visible_items () {
-                    this.reset_page_state()
-                }
-            },
             mounted: function() {
                 this.load();
             },
             methods: {
-                is_expense_selected (expense) {
-                    return this.selected_expense.indexOf(expense) >= 0
-                },
-                toggle_expense (expense) {
-                    const index = this.selected_expense.indexOf(expense)
-                    if (index >= 0) {
-                        this.selected_expense.splice(index, 1)
-                    } else {
-                        this.selected_expense.push(expense)
-                    }
-                },
-                toggle_all_expense () {
-                    if (this.is_all_expense_selected) {
-                        this.selected_expense = []
-                    } else {
-                        this.selected_expense = this.visible_items.slice()
-                    }
-                },
                 start_preparing_dispense () {
                     // default dispense 10 days later
                     this.dispense_date = dayjs().add(10, 'days').toDate()
@@ -553,9 +511,9 @@
                     this.is_creating_dispense = false
                     this.load()
                 },
-                reset_page_state () {
-                    this.selected_expense = []
-                },
+                // reset_page_state () {
+                //     this.selected_expense = []
+                // },
                 get_status_filter_class (status) {
                     const ret = ['button', 'is-filter']
                     if (this.filter.statusCode === status.code) {
@@ -573,8 +531,8 @@
                 to_update: function() {
                     ++this.modaldata.is_loading;
 
-                    axios.post('./'+this.pid, {casename: 'update', data: this.modaldata}).then(function(resp) {
-                        $expense.items[$expense.modaldata._index] = Object.assign({}, resp.data.result);
+                    axios.post('./'+this.pid, {casename: 'update', data: this.modaldata}).then((resp) => {
+                        this.load()
                         --$expense.modaldata.is_loading;
                         $expense.close();
                     });
@@ -583,16 +541,17 @@
                     this.modaldata = Object.assign({}, this.default_modaldata);
                     document.querySelector('html').classList.toggle('is-clipped');
                 },
-                edit: function(item, index) {
-                    this.modaldata = Object.assign({}, item, {is_edit: true, _index: index});
+                edit: function(item) {
+                    this.modaldata = Object.assign({}, item, {is_edit: true});
                     this.create_budget();
                 },
                 async load () {
                     ++this.is_loading;
                     const resp = await axios.post('./'+this.pid, {casename: 'get'})
-                    axios.post('/dispense/'+this.pid, {casename: 'get'})
+                    const dispenseResp = await axios.post('/dispense/'+this.pid, {casename: 'get'})
 
                     this.items = resp.data.datas;
+                    this.dispenses = dispenseResp.data.datas
                     this.budgets = resp.data.budgets;
                     this.users = resp.data.users;
                     this.status = resp.data.status;
