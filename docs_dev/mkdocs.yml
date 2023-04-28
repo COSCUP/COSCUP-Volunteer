@@ -89,6 +89,7 @@ nav:
       - "List of Tasks": secretary_team/tasks/overview.md
       - "Accounting System": secretary_team/tasks/accounting_system.md
       - "Enhance Recruitment": secretary_team/tasks/enhance_recruitment.md
+      - "Community Volunteers Plan": secretary_team/tasks/community_volunteers_plan.md
   - Announcement:
     - Review in 2022: announcement/review_in_2022.md
 theme:
@@ -171,6 +172,7 @@ plugins:
           "Process Management": "任務流程方式"
           "Writing Documentation": "文件紀錄"
           "Roadmap": "路線圖"
+          "Community Volunteers Plan": "社群志工參與計畫"
   - search
   - social:
       cards_font: Noto Sans TC
