@@ -1,5 +1,5 @@
 (function () {
-    const tpl = `
+    const tpl = /* html */`
         <div :class="labelClass" :role="role" @click="$emit('click')">
             <span v-if="showIcon" class="icon"><i :class="iconClass"></i></span>
             <span>{{ labelMeta.label }}</span>

@@ -1,5 +1,5 @@
 (function () {
-    const tpl = `
+    const tpl = /* html */`
 <div class="expense-table">
     <div class="notification is-primary" v-if="is_table_empty">
         <span v-if="isLoading"> 申請單讀取中 </span>

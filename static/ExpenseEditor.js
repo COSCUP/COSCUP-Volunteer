@@ -1,5 +1,5 @@
 (function () {
-    const tpl = `
+    const tpl = /* html */`
 <div class="expense-editor">
     <b-modal
         v-if="local_expense && local_expense.request"
@@ -159,7 +159,7 @@
           <footer class="modal-card-foot">
           </footer>
       </div>
-    </div>
+    </b-modal>
 </div>
 `
     Vue.component('expense-editor', {

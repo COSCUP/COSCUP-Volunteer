@@ -130,7 +130,6 @@
                     this.local_dispense = { ...item }
                     this.is_modal_opened = true
                 }
-                console.warn('reset', item)
             },
             close () {
                 this.is_modal_opened = false
