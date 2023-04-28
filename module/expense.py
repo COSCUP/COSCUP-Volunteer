@@ -110,7 +110,7 @@ class Expense:
             Return the expenses data in `pid`.
 
         '''
-        for raw in ExpenseDB().find({'pid': pid}):
+        for raw in ExpenseDB().find({'pid': pid}, sort=(('create_at', -1), )):
             yield raw
 
     @staticmethod
