@@ -11,20 +11,20 @@ class Dispense:
     ''' Dispense class '''
 
     @staticmethod
-    def create(pid: str, expense_ids: list[str], dispense_at: str) -> dict[str, Any]:
+    def create(pid: str, expense_ids: list[str], dispense_date: str) -> dict[str, Any]:
         '''
         Create dispense and correlate to ExpenseDB
 
         Args:
             pid (str): Project id
-            expense_ids (list[str]): List of expense collection id in this 
+            expense_ids (list[str]): List of expense collection id in this
                 dispense, readonly once created
 
         Returns:
             The created dispense object
         '''
         dispense_data = DispenseDB.new(pid, expense_ids)
-        dispense_data['dispense_at'] = datetime.fromisoformat(dispense_at)
+        dispense_data['dispense_date'] = dispense_date
         dispense = DispenseDB().add(data = dispense_data)
 
         for expense_id in expense_ids:
@@ -38,7 +38,6 @@ class Dispense:
                 },
                 return_document=ReturnDocument.AFTER,
             )
-
 
         return dispense
 
@@ -69,7 +68,7 @@ class Dispense:
     @staticmethod
     def update_dispense_date(dispense_id: str, dispense_date: datetime) -> dict[str, Any]: 
         '''
-        Only update dispense_at
+        Only update dispense_date
 
         Args:
             dispense_id (str): _id in DispenseDB
@@ -80,7 +79,7 @@ class Dispense:
         '''
         return DispenseDB().find_one_and_update(
             {'_id': dispense_id},
-            {'$set': {'dispense_at': dispense_date}},
+            {'$set': {'dispense_date': dispense_date}},
             return_document=ReturnDocument.AFTER,
         )
 

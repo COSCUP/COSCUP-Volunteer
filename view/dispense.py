@@ -35,7 +35,7 @@ def by_project_index(pid: str) -> str | ResponseBase:
             dispense = Dispense.create(
                 pid=project.id,
                 expense_ids=data['data']['expense_ids'],
-                dispense_at=data['data']['dispense_at']
+                dispense_date=data['data']['dispense_date']
             )
             return jsonify({'result': dispense})
 

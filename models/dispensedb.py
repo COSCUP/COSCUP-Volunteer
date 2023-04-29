@@ -41,7 +41,7 @@ class DispenseDB(DBBase):
             - ``status``: The mappings from [`ExpenseDB.status`][models.expensedb.ExpenseDB.status].
             - ``create_at``: When to create.
             - ``update_at``: Last update time.
-            - ``dispense_at``: Estimate time to dispense.
+            - ``dispense_date``: Estimate date to dispense.
             - ``enable`` (`bool`): enable or not.
 
         Returns:
@@ -55,7 +55,7 @@ class DispenseDB(DBBase):
             'status': '3', # 出款中
             'create_at': datetime.today(),
             'update_at': datetime.today(),
-            'dispense_at': '',
+            'dispense_date': '',
             'enable': True,
         }
 
