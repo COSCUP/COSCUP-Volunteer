@@ -11,7 +11,7 @@
                     <div class="block">
                         <h4>設定出款單資訊</h4>
                         <b-field label="預計出款日期">
-                            <b-input type="date" v-model="local_dispense.dispense_at">
+                            <b-input type="date" v-model="local_dispense.dispense_date">
                         </b-field>
                     </div>
                     <div class="block">
@@ -22,10 +22,7 @@
                                     <span class="mr-1">{{ users[expense.create_by].profile.badge_name }} 申請的</span>
                                     <span class="tag is-dark mr-1">{{ budgets[expense.request.buid].bid }}</span>
                                     <span class="mr-2">{{ budgets[expense.request.buid].name }}，金額為</span>
-                                    <div class="tags has-addons mr-1 mb-0" v-for="invoice in expense.invoices">
-                                        <span class="tag is-info">{{ invoice.currency }}</span>
-                                        <span class="tag is-success is-light">\${{ invoice.total.toLocaleString() }}</span>
-                                    </div>
+                                    <invoice-list class="mr-1 mb-0" :invoices="expense.invoices" />
                                     <span>，期望出款時間為 {{expense.request.paydate}} </span>
                                 </div>
                             </li>
@@ -69,7 +66,7 @@
                 type: Object,
                 required: true,
                 validator (val) {
-                    return 'expense_ids' in val && 'dispense_at' in val
+                    return 'expense_ids' in val && 'dispense_date' in val
                 }
             },
             budgets: {
@@ -140,7 +137,7 @@
                 this.is_creating_dispense = true
                 const payload = {
                     expense_ids: this.local_dispense.expense_ids,
-                    dispense_at: this.local_dispense.dispense_at
+                    dispense_date: this.local_dispense.dispense_date
                 }
                 let resp
                 try {

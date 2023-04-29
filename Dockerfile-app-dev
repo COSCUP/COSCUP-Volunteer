@@ -92,6 +92,10 @@ ADD ./static/ExpenseStatusLabel.js \
     ./static/ExpenseTable.js \
     ./static/ExpenseEditor.js \
     ./static/DispenseEditor.js \
+    ./static/DispenseTable.js \
+    ./static/InvoiceList.js \
+    ./static/UserBadge.js \
+    ./static/expense-component.css \
     ./static/buefy.min.js \
     ./static/buefy.min.css \
     ./static/dayjs.min.js \

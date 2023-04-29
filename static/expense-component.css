@@ -1,0 +1,10 @@
+/* dispense table */
+.b-table.is-fullwidth table {
+    width: 100%;
+}
+.dispense-table table tr td {
+    vertical-align: middle;
+}
+.dispense-table table tr.detail > td {
+    padding: 0;
+}

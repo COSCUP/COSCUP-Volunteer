@@ -13,6 +13,7 @@
 </style>
 {% endblock %}
 {% block body %}
+<link href="{{ url_for('static', filename='expense-component.css') }}" rel="stylesheet">
 <section class="hero is-info is-small">
   <div class="hero-body">
     <h1 class="title">
@@ -71,43 +72,14 @@
           </div>
       </div>
       <div class="block" v-if="should_show_dispense">
-        <div class="box content" v-for="dispense in visible_rich_dispense" :key="dispense._id">
-            <div class="block">
-                <h4>總金額</h4>
-                <div class="is-flex is-align-items-center">
-                    <div class="tags has-addons" v-for="invoice in dispense.invoice_sum" :key="invoice.currency">
-                        <span class="tag is-info">[[ invoice.currency ]]</span>
-                        <span class="tag is-success is-light">$[[ invoice.total.toLocaleString() ]]</span>
-                    </div>
-                </div>
-            </div>
-            <div class="block">
-                <h4>申請單列表</h4>
-                <ol type="1">
-                    <li v-for="expense in dispense.expenses" :key="expense._id">
-                        <div class="is-flex is-align-items-center">
-                            <span class="mr-1">[[ users[expense.create_by].profile.badge_name ]] 申請的</span>
-                            <span class="tag is-dark mr-1">[[ budgets[expense.request.buid].bid ]]</span>
-                            <span class="mr-2">[[ budgets[expense.request.buid].name ]]，金額為</span>
-                            <div class="tags has-addons mr-1 mb-0" v-for="invoice in expense.invoices">
-                                <span class="tag is-info">[[ invoice.currency ]]</span>
-                                <span class="tag is-success is-light">$[[ invoice.total.toLocaleString() ]]</span>
-                            </div>
-                            <span>，期望出款時間為 [[expense.request.paydate]] </span>
-                        </div>
-                    </li>
-                </ol>
-            </div>
-            <div class="block">
-                <h4>匯款資訊</h4>
-                <ul>
-                    <li>銀行代碼：<span class="is-family-monospace">[[ dispense.bank.code ]]</span></li>
-                    <li>銀行帳號：<span class="is-family-monospace">[[ dispense.bank.no ]]</span></li>
-                    <li>分行名稱：[[ dispense.bank.branch ]]</li>
-                    <li>戶名：[[ dispense.bank.name ]]</li>
-                </ul>
-            </div>
-        </div>
+        <dispense-table
+            :pid="pid"
+            :all-expenses="items"
+            :dispenses="visible_dispenses"
+            :budgets="budgets"
+            :users="users"
+            :status-list="status_list"
+        ></dispense-table>
       </div>
       <div class="block" v-else>
           <expense-table
@@ -147,10 +119,13 @@
 <script src="/js/axios.min.js"></script>
 <script src="{{ url_for('static', filename='buefy.min.js') }}"></script>
 <script src="{{ url_for('static', filename='dayjs.min.js') }}"></script>
+<script src="{{ url_for('static', filename='InvoiceList.js') }}"></script>
+<script src="{{ url_for('static', filename='UserBadge.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseStatusLabel.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseTable.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseEditor.js') }}"></script>
 <script src="{{ url_for('static', filename='DispenseEditor.js') }}"></script>
+<script src="{{ url_for('static', filename='DispenseTable.js') }}"></script>
 <script>
     (function () {
         Vue.prototype.$buefy.config.setOptions({
@@ -195,31 +170,31 @@
                 visible_dispenses () {
                     return this.dispenses.filter(dispense => dispense.status === this.filter.status_code)
                 },
-                rich_dispenses () {
-                    return this.dispenses.map((dispense) => {
-                        const ret = { ...dispense }
-                        ret.expenses = dispense.expense_ids.map((id) => {
-                            return this.items.find(item => item._id === id)
-                        })
-                        const invoices = ret.expenses.reduce((sum, expense) => {
-                            expense.invoices.forEach(({ currency, total }) => {
-                                if (!sum[currency]) {
-                                    sum[currency] = 0
-                                }
-                                sum[currency] += total
-                            })
-                            return sum
-                        }, {})
-                        ret.invoice_sum = Object.entries(invoices).map(([currency, total]) => {
-                            return { currency, total }
-                        })
-                        ret.bank = ret.expenses[0].bank
-                        return ret
-                    })
-                },
-                visible_rich_dispense () {
-                    return this.rich_dispenses.filter(dispense => dispense.status === this.filter.status_code)
-                },
+                // rich_dispenses () {
+                //     return this.dispenses.map((dispense) => {
+                //         const ret = { ...dispense }
+                //         ret.expenses = dispense.expense_ids.map((id) => {
+                //             return this.items.find(item => item._id === id)
+                //         })
+                //         const invoices = ret.expenses.reduce((sum, expense) => {
+                //             expense.invoices.forEach(({ currency, total }) => {
+                //                 if (!sum[currency]) {
+                //                     sum[currency] = 0
+                //                 }
+                //                 sum[currency] += total
+                //             })
+                //             return sum
+                //         }, {})
+                //         ret.invoice_sum = Object.entries(invoices).map(([currency, total]) => {
+                //             return { currency, total }
+                //         })
+                //         ret.bank = ret.expenses[0].bank
+                //         return ret
+                //     })
+                // },
+                // visible_rich_dispense () {
+                //     return this.rich_dispenses.filter(dispense => dispense.status === this.filter.status_code)
+                // },
                 is_in_review_status () {
                     return this.filter.status_code === this.status_label_map.審核中
                 },

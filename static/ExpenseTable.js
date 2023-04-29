@@ -22,7 +22,6 @@
                 <th>預算編號</th>
                 <th>預算唯一編號</th>
                 <th>部門</th>
-                <th></th>
                 <th>申請人</th>
                 <th>金額</th>
                 <th>期望出款時間</th>
@@ -60,14 +59,7 @@
                 </td>
                 <td class="is-vcentered">{{ item.tid }}</td>
                 <td class="is-vcentered">
-                    <a :href="'/user/'+ item.create_by">
-                        <figure class="image is-32x32"><img class="is-rounded" :src="users[item.create_by].oauth['picture']"></figure>
-                    </a>
-                </td>
-                <td class="is-vcentered">
-                    <a :href="'/user/'+ item.create_by">
-                        {{ users[item.create_by].profile.badge_name }}
-                    </a>
+                    <user-badge :id="item.create_by" :users="users" />
                 </td>
                 <td class="is-vcentered">
                     <div class="field is-grouped is-grouped-multiline">
@@ -77,12 +69,7 @@
                                 <span class="tag is-link is-light">{{ item.invoices.length }}</span>
                             </div>
                         </div>
-                        <div class="control" v-for="invoice in item.invoices">
-                            <div class="tags has-addons">
-                                <span class="tag is-info">{{ invoice.currency }}</span>
-                                <span class="tag is-success is-light">\${{ invoice.total.toLocaleString('en') }}</span>
-                            </div>
-                        </div>
+                        <invoice-list class="control" :invoices="item.invoices" />
                     </div>
                 </td>
                 <td class="is-vcentered">{{ item.request.paydate }}</td>
