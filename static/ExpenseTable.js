@@ -1,11 +1,7 @@
 (function () {
     const tpl = /* html */`
 <div class="expense-table">
-    <div class="notification is-primary" v-if="is_table_empty">
-        <span v-if="isLoading"> 申請單讀取中 </span>
-        <span v-else> 這類申請單被吃光光了 😐 </span>
-    </div>
-    <table class="table is-fullwidth" v-else>
+    <table class="table is-fullwidth">
         <thead>
             <tr>
                 <th v-if="isSelectable">
@@ -25,6 +21,7 @@
                 <th>申請人</th>
                 <th>金額</th>
                 <th>期望出款時間</th>
+                <th />
             </tr>
         </thead>
         <tbody>
@@ -73,6 +70,9 @@
                     </div>
                 </td>
                 <td class="is-vcentered">{{ item.request.paydate }}</td>
+                <td>
+                    <b-button @click="edit(item)">編輯申請單</b-button>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -121,9 +121,6 @@
             is_all_expense_selected () {
                 // local_selected_expense will be reset every time when expenses changed
                 return this.expenses.length === this.local_selected_expense.length
-            },
-            is_table_empty () {
-                return this.isLoading || !this.expenses.length
             }
         },
         watch: {
