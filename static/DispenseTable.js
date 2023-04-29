@@ -5,7 +5,7 @@
         <b-table-column field="status" label="狀態" v-slot="props">
             <expense-status-label class="tag" :status-code="props.row.status"></expense-status-label>
         </b-table-column>
-        <b-table-column field="dispense_date" label="出帳日期" v-slot="props">
+        <b-table-column field="dispense_date" label="（預計）出款日期" v-slot="props">
             {{props.row.dispense_date}}
         </b-table-column>
         <b-table-column field="invoice_sum" label="總計金額" v-slot="props">
@@ -23,6 +23,9 @@
                 <user-badge v-for="id in unique_items(props.row.expenses, 'create_by')" :users="users" :id="id" />
             </div>
         </b-table-column>
+        <b-table-column label="" v-slot="props" width="3rem">
+            <b-button @click="start_edit_dispense(props.row)">編輯出款單</b-button>
+        </b-table-column>
         <template #detail="props">
             <expense-table
                 class="notification"
@@ -32,9 +35,18 @@
             ></expense-table>
         </template>
     </b-table>
+    <dispense-editor
+      :pid="pid"
+      :all-expenses="allExpenses"
+      :dispense="dispense_to_edit"
+      :budgets="budgets"
+      :users="users"
+      :status-list="statusList"
+      @update="$emit('update')"
+      @close="dispense_to_edit = null"
+    ></dispense-editor>
 </div>
 `
-// 人、狀態、預算清單、金額、匯款資訊、預計出帳日期
 
     Vue.component('dispense-table', {
         template: tpl,
@@ -66,6 +78,7 @@
         },
         data () {
             return {
+                dispense_to_edit: null
             }
         },
         computed: {
@@ -102,6 +115,9 @@
                     return unique
                 }, new Set())
                 return [...unique_items]
+            },
+            start_edit_dispense (dispense) {
+                this.dispense_to_edit = dispense
             }
         }
     })
