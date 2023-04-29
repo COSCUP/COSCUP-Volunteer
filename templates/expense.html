@@ -170,7 +170,7 @@
                     status: {},
                     is_loading: false,
                     filter: {
-                        statusCode: '1'
+                        status_code: '1'
                     },
                     // for 審核中 filter
                     selected_expenses: [],
@@ -189,7 +189,11 @@
                         this.status_label_map.已出款,
                         this.status_label_map.已完成
                     ]
-                    return dispense_view.includes(this.filter.statusCode )
+                    return dispense_view.includes(this.filter.status_code) && this.visible_dispenses.length
+                        
+                },
+                visible_dispenses () {
+                    return this.dispenses.filter(dispense => dispense.status === this.filter.status_code)
                 },
                 rich_dispenses () {
                     return this.dispenses.map((dispense) => {
@@ -214,10 +218,10 @@
                     })
                 },
                 visible_rich_dispense () {
-                    return this.rich_dispenses.filter(dispense => dispense.status === this.filter.statusCode)
+                    return this.rich_dispenses.filter(dispense => dispense.status === this.filter.status_code)
                 },
                 is_in_review_status () {
-                    return this.filter.statusCode === this.status_label_map.審核中
+                    return this.filter.status_code === this.status_label_map.審核中
                 },
                 invalid_dispense_reason () {
                     if (!this.is_dispense_creation_visible) {
@@ -273,7 +277,7 @@
                         }, {})
                 },
                 visible_items () {
-                    return this.items.filter(item => item.status === this.filter.statusCode)
+                    return this.items.filter(item => item.status === this.filter.status_code)
                 }
             },
             mounted: function() {
@@ -289,13 +293,13 @@
                 },
                 get_status_filter_class (status) {
                     const ret = ['button', 'is-filter']
-                    if (this.filter.statusCode === status.code) {
+                    if (this.filter.status_code === status.code) {
                         ret.push('is-active')
                     }
                     return ret
                 },
                 filter_by_status (status) {
-                    this.filter.statusCode = status.code
+                    this.filter.status_code = status.code
                 },
                 start_edit_expense (expense) {
                     this.expense_to_edit = expense
