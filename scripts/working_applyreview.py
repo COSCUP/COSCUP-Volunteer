@@ -1,7 +1,7 @@
 ''' Wording Apply Review '''
 from module.applyreview import ApplyReview
 from module.team import Team
-from module.waitlist import WaitList
+from models.waitlistdb import WaitListDB
 from celery_task.task_applyreview import applyreview_submit_one
 
 
@@ -13,17 +13,23 @@ def run_process_one(pid: str, tid: str, uid: str):
 
 def run_process(pid: str):
     ''' Run '''
+    total = 0
     for team in Team.list_by_pid(pid=pid):
-        waiting_data = WaitList.list_by_team(pid=pid, tid=team.id)
+        waiting_data = WaitListDB().list_by(pid=pid, tid=team.id, _all=True)
+        print(team.id)
         if waiting_data is None:
             break
 
         for user in waiting_data:
+            total += 1
+            print(team.id, user['uid'])
             applyreview_submit_one.apply_async(kwargs={
                 'pid': pid, 'tid': team.id, 'uid': user['uid'],
             })
 
+    print(total)
+
 
 if __name__ == '__main__':
-    # run_process('2023')
+    run_process('2023')
     pass
