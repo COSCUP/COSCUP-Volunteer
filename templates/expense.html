@@ -263,7 +263,7 @@
                     this.dispense_to_create = {
                         expense_ids: this.selected_expenses.map(exp => exp._id),
                         // default dispense 10 days later
-                        dispense_at: dayjs().add(10, 'days').format('YYYY-MM-DD')
+                        dispense_date: dayjs().add(10, 'days').format('YYYY-MM-DD')
                     }
                 },
                 get_status_filter_class (status) {
