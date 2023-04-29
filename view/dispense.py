@@ -40,13 +40,7 @@ def by_project_index(pid: str) -> str | ResponseBase:
             return jsonify({'result': dispense})
 
         if data and data['casename'] == 'update':
-            # to do: support edit dispense
-            Expense.update_invoices(
-                expense_id=data['data']['_id'], invoices=data['data']['invoices'])
-            Expense.update_enable(
-                expense_id=data['data']['_id'], enable=data['data']['enable'])
-            result = Expense.update_status(
-                expense_id=data['data']['_id'], status=data['data']['status'])
+            result = Dispense.update(data['data']['_id'], data['data'])
 
             return jsonify({'result': result})
 
