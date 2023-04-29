@@ -105,8 +105,6 @@
                 })
             }
         },
-        watch: {
-        },
         methods: {
             unique_items (item_list, key) {
                 const unique_items = item_list.reduce((unique, item) => {
