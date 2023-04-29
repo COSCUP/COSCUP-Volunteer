@@ -56,6 +56,7 @@
                                 <b-radio
                                     v-model="local_dispense.enable"
                                     name="enable"
+                                    :disabled="!can_change_enable"
                                     :native-value="true"
                                 >
                                     可使用
@@ -63,13 +64,21 @@
                                 <b-radio
                                     v-model="local_dispense.enable"
                                     name="enable"
+                                    :disabled="!can_change_enable"
                                     :native-value="false"
                                 >
                                     刪除
                                 </b-radio>
                             </b-field>
-
-                        </b-field>
+                            <b-notification
+                                type="is-warning"
+                                has-icon
+                                icon-size="is-small"
+                                :active="!local_dispense.enable"
+                                :closable="false"
+                            >
+                                將出款單設為<strong>刪除</strong>後，它的所有申請單，都會退回「審核中」，而且無法復原
+                            </b-notification>
                         </template>
                     </div>
                 </div>
@@ -161,6 +170,9 @@
             },
             can_be_deleted () {
                 return this.dispense.enable
+            },
+            can_change_enable () {
+                return this.dispense.enable
             }
         },
         watch: {
@@ -181,7 +193,7 @@
                 this.$emit('close')
             },
             async create_or_update_dispense () {
-                if (!this.is_local_dispense_dirty) {
+                if (!this.is_local_dispense_dirty && !this.isCreate) {
                     this.close()
                     return
                 }

@@ -40,7 +40,6 @@ class DispenseDB(DBBase):
             - ``expense_ids``: List of expense id.
             - ``status``: The mappings from [`ExpenseDB.status`][models.expensedb.ExpenseDB.status].
             - ``create_at``: When to create.
-            - ``update_at``: Last update time.
             - ``dispense_date``: Estimate date to dispense.
             - ``enable`` (`bool`): enable or not.
 
@@ -54,7 +53,6 @@ class DispenseDB(DBBase):
             'expense_ids': expense_ids,
             'status': '3', # 出款中
             'create_at': datetime.today(),
-            'update_at': datetime.today(),
             'dispense_date': '',
             'enable': True,
         }
