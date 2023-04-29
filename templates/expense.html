@@ -10,11 +10,11 @@
         border-color: #888;
         color: #888;
     }
-    .disabled-dispense.content {
+    .disabled-table.content {
         margin-top: 2rem;
     }
 
-    .disabled-dispense.content .table {
+    .disabled-table.content .table {
         opacity: 0.75;
         color: #999;
     }
@@ -64,6 +64,12 @@
               </div>
           </div>
       </div>
+      <div class="block" v-if="is_table_empty">
+        <div class="notification is-primary">
+            <span v-if="is_loading"> 申請單/出款單讀取中 </span>
+            <span v-else> 這類申請單/出款單被吃光光了 😐 </span>
+        </div>
+      </div>
       <div class="block" v-if="is_dispense_creation_visible">
           <div class="notification" :class="{'is-warning': invalid_dispense_reason, 'is-primary': !invalid_dispense_reason}">
               <div class="is-flex is-justify-content-space-between is-align-items-center">
@@ -90,7 +96,7 @@
             :status-list="status_list"
             @update="load"
         ></dispense-table>
-        <div class="content disabled-dispense" v-if="disabled_dispenses.length">
+        <div class="content disabled-table" v-if="disabled_dispenses.length">
             <h3>已刪除的出款單</h3>
             <dispense-table
                 :pid="pid"
@@ -105,7 +111,8 @@
       </div>
       <div class="block" v-else>
           <expense-table
-            :expenses="visible_items"
+            v-if="enabled_expenses.length"
+            :expenses="enabled_expenses"
             :is-selectable="is_in_review_status"
             :is-editable="true"
             :is-loading="is_loading"
@@ -114,6 +121,19 @@
             :selected-expense.sync="selected_expenses"
             @edit="start_edit_expense"
           ></expense-table>
+          <div class="content disabled-table" v-if="disabled_expenses.length">
+            <h3>已刪除的出款單</h3>
+            <expense-table
+              :expenses="disabled_expenses"
+              :is-selectable="is_in_review_status"
+              :is-editable="true"
+              :is-loading="is_loading"
+              :budgets="budgets"
+              :users="users"
+              :selected-expense.sync="selected_expenses"
+              @edit="start_edit_expense"
+            ></expense-table>
+          </div>
       </div>
     <expense-editor
       :pid="pid"
@@ -123,6 +143,7 @@
       :teams="teams"
       :status-list="status_list"
       @update="load"
+      @close="expense_to_edit = null"
     ></expense-editor>
     <dispense-editor
       :pid="pid"
@@ -254,8 +275,17 @@
                             return map
                         }, {})
                 },
-                visible_items () {
+                visible_expenses () {
                     return this.items.filter(item => item.status === this.filter.status_code)
+                },
+                enabled_expenses () {
+                    return this.visible_expenses.filter(item => item.enable)
+                },
+                disabled_expenses () {
+                    return this.visible_expenses.filter(item => !item.enable)
+                },
+                is_table_empty () {
+                    return this.is_loading || (!this.visible_expenses.length && !this.visible_dispenses.length)
                 }
             },
             mounted: function() {
