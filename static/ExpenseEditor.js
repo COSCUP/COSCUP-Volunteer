@@ -82,7 +82,7 @@
                           <h4>請款狀態</h4>
                           <div class="select">
                               <select v-model="local_expense.status">
-                                  <option v-for="status in statusList" :key="status.code" :value="status.code">
+                                  <option v-for="status in expense_status_list" :key="status.code" :value="status.code">
                                {{ status.label }}
                                   </option>
                               </select>
@@ -162,6 +162,7 @@
     </b-modal>
 </div>
 `
+    const AVAILABLE_EXPENSE_STATUS = ['已申請', '審核中', '已出款']
     Vue.component('expense-editor', {
         template: tpl,
         props: {
@@ -197,6 +198,9 @@
             }
         },
         computed: {
+            expense_status_list () {
+                return this.statusList.filter(status => AVAILABLE_EXPENSE_STATUS.includes(status.label))
+            },
         },
         watch: {
             expense (new_val) {
