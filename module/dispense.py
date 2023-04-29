@@ -1,6 +1,5 @@
 ''' Dispense '''
 from typing import Any, Generator
-from datetime import datetime
 
 from pymongo.collection import ReturnDocument
 
