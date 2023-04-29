@@ -66,7 +66,7 @@ class Dispense:
             yield raw
 
     @staticmethod
-    def update(dispense_id: str, data: dict[str, Any]) -> dict[str, Any]:
+    def update(dispense_id: str, data: dict[str, Any]) -> dict[str, Any] | int:
         '''
         Only update dispense_date
 
@@ -83,8 +83,22 @@ class Dispense:
             if allowed_key in data:
                 to_set[allowed_key] = data[allowed_key]
 
-        return DispenseDB().find_one_and_update(
+        if to_set['enable']:
+            return 403
+
+        resp = DispenseDB().find_one_and_update(
             {'_id': dispense_id},
             {'$set': to_set},
             return_document=ReturnDocument.AFTER,
         )
+
+        if 'enable' in to_set and not to_set['enable']:
+            # restore expense
+            for exp_id in resp['expense_ids']:
+                ExpenseDB().find_one_and_update(
+                    {'_id': exp_id},
+                    {'$set': {'status': '2'}}, # back to 審核中
+                    return_document=ReturnDocument.AFTER,
+                )
+
+        return resp

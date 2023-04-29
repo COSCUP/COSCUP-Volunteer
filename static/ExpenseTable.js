@@ -21,7 +21,7 @@
                 <th>申請人</th>
                 <th>金額</th>
                 <th>期望出款時間</th>
-                <th />
+                <th v-if="isEditable" />
             </tr>
         </thead>
         <tbody>
@@ -70,7 +70,7 @@
                     </div>
                 </td>
                 <td class="is-vcentered">{{ item.request.paydate }}</td>
-                <td>
+                <td v-if="isEditable">
                     <b-button @click="edit(item)">編輯申請單</b-button>
                 </td>
             </tr>
