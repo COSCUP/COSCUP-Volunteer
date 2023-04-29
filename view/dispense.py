@@ -1,5 +1,5 @@
 '''Dispense'''
-
+from typing import Any
 from flask import (Blueprint, g, jsonify, make_response, redirect, request, Response)
 from werkzeug.wrappers import Response as ResponseBase
 
@@ -11,7 +11,7 @@ from module.project import Project
 VIEW_DISPENSE = Blueprint('dispense', __name__, url_prefix='/dispense')
 
 @VIEW_DISPENSE.route('/<pid>', methods=('POST',))
-def by_project_index(pid: str) -> str | ResponseBase:
+def by_project_index(pid: str) -> str | ResponseBase | Response:
     ''' Project index '''
     project = Project.get(pid)
 
@@ -40,13 +40,15 @@ def by_project_index(pid: str) -> str | ResponseBase:
             return jsonify({'result': dispense})
 
         if data and data['casename'] == 'update':
-            result = Dispense.update(data['data']['_id'], data['data'])
-            ret = result
-
-            if isinstance(result, int):
-                ret = Response('Invalid parameter', result)
-            else:
-                ret = jsonify({'result': result})            
-            return ret
+            return handle_update(data)
 
     return make_response({}, 404)
+
+def handle_update (data: dict[str, Any]) -> Response:
+    ''' handle update to avoid too many return error '''
+    result = Dispense.update(data['data']['_id'], data['data'])
+
+    if isinstance(result, int):
+        return Response('Invalid parameter', result)
+
+    return jsonify({'result': result})
