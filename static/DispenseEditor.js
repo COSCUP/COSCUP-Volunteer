@@ -56,16 +56,16 @@
                                 <b-radio
                                     v-model="local_dispense.enable"
                                     name="enable"
-                                    :native-value="false"
+                                    :native-value="true"
                                 >
-                                    刪除
+                                    可使用
                                 </b-radio>
                                 <b-radio
                                     v-model="local_dispense.enable"
                                     name="enable"
-                                    :native-value="true"
+                                    :native-value="false"
                                 >
-                                    可使用
+                                    刪除
                                 </b-radio>
                             </b-field>
                         </b-field>
