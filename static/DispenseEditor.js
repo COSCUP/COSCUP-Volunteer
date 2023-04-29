@@ -68,6 +68,7 @@
                                     刪除
                                 </b-radio>
                             </b-field>
+
                         </b-field>
                         </template>
                     </div>
@@ -197,8 +198,6 @@
                     Object.entries(this.local_dispense).forEach(([key, value]) => {
                         if (this.dispense[key] !== value) {
                             payload[key] = value
-                        } else {
-                            console.log('not changed', key, value, this.dispense[key])
                         }
                     })
                 }
