@@ -68,7 +68,6 @@ ADD ./templates/base.html \
     ./templates/bug_report.html \
     ./templates/coc* \
     ./templates/expense.html \
-    ./templates/dispense.html \
     ./templates/expense_lists.html \
     ./templates/expense_menu.html \
     ./templates/expense_my.html \
