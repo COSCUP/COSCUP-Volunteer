@@ -66,7 +66,7 @@ class Dispense:
             yield raw
 
     @staticmethod
-    def update_dispense_date(dispense_id: str, dispense_date: datetime) -> dict[str, Any]: 
+    def update_dispense_date(dispense_id: str, dispense_date: datetime) -> dict[str, Any]:
         '''
         Only update dispense_date
 
