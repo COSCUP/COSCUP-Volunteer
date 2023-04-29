@@ -41,10 +41,12 @@ def by_project_index(pid: str) -> str | ResponseBase:
 
         if data and data['casename'] == 'update':
             result = Dispense.update(data['data']['_id'], data['data'])
+            ret = result
 
             if isinstance(result, int):
-                return Response('Invalid parameter', result)
-
-            return jsonify({'result': result})
+                ret = Response('Invalid parameter', result)
+            else:
+                ret = jsonify({'result': result})            
+            return ret
 
     return make_response({}, 404)
