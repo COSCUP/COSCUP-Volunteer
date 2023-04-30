@@ -110,6 +110,7 @@ ADD ./templates/mail/base*.html \
 ADD ./view/__init__.py \
     ./view/api.py \
     ./view/budget.py \
+    ./view/dev.py \
     ./view/expense.py \
     ./view/dispense.py \
     ./view/guide.py \
