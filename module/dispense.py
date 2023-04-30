@@ -78,7 +78,7 @@ class Dispense:
             Return the updated data
         '''
         to_set = {}
-        for allowed_key in ['status', 'dispense_date', 'enable']:
+        for allowed_key in ('status', 'dispense_date', 'enable'):
             if allowed_key in data:
                 to_set[allowed_key] = data[allowed_key]
 

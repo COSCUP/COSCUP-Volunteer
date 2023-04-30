@@ -11,7 +11,7 @@ from module.project import Project
 VIEW_DISPENSE = Blueprint('dispense', __name__, url_prefix='/dispense')
 
 @VIEW_DISPENSE.route('/<pid>', methods=('POST',))
-def by_project_index(pid: str) -> str | ResponseBase | Response:
+def by_project_index(pid: str) -> str | ResponseBase:
     ''' Project index '''
     project = Project.get(pid)
 
@@ -44,7 +44,7 @@ def by_project_index(pid: str) -> str | ResponseBase | Response:
 
     return make_response({}, 404)
 
-def handle_update (data: dict[str, Any]) -> Response:
+def handle_update (data: dict[str, Any]) -> ResponseBase:
     ''' handle update to avoid too many return error '''
     result = Dispense.update(data['data']['_id'], data['data'])
 
