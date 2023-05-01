@@ -175,6 +175,8 @@ plugins:
           "Writing Documentation": "文件紀錄"
           "Roadmap": "路線圖"
           "Community Volunteers Plan": "社群志工參與計畫"
+          "Build Base Image": "建立基本映像檔"
+          "Dev Page": "開發設定頁面"
   - search
   - social:
       cards_font: Noto Sans TC

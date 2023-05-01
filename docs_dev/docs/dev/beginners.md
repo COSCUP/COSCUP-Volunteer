@@ -85,10 +85,6 @@ Shell within the virtual environment.
 
 ### Setting up IDE
 
-Setting up your IDE for `pylint` and `autopep8`. Find out the poetry env full path.
-
-    poetry env list --full-path
-
 === "VS Code"
     Setup the `Python: Select Interpreter` ++cmd+shift+p++, and input the poetry's env full path.
 

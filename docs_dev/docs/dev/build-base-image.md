@@ -99,7 +99,7 @@ Open browser visit one of those links to:
 
 ### Docs in docker
 
-After starting up `docker compose`, the `docs` of container will build all of
+After starting up `docker compose up`, the `docs` of container will build all of
 the documents into a volume and directly attach to the nginx container as
 a static website.
 

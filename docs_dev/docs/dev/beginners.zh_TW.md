@@ -1,3 +1,8 @@
+---
+title: 初次開發
+summary: 如何設定基本開發環境
+description: 如何設定基本開發環境
+---
 # 初次開發
 
 請從 Github 上分叉（fork）專案並透過[拉取請求]（Pull Requests）的方式貢獻回專案。
@@ -7,8 +12,6 @@
 ## Github
 
 ### 簽名（sign-off）與簽章（sign）你的提交或標籤
-
-We prefer your commits or tags are **signed**. And also **[sign-off](/dev/how-to-signoff)** your commits.
 
 我們希望你的提交與標籤都有**簽章**，並且**[簽名](how-to-signoff.zh_TW.md)**你的提交。
 
@@ -42,19 +45,19 @@ We prefer your commits or tags are **signed**. And also **[sign-off](/dev/how-to
 
     我們也有 GitHub [Actions](https://github.com/COSCUP/COSCUP-Volunteer/actions) 來驗證這些程式碼的品質，PEP8 必須要遵守，
 
-## Dependency
+## 開發環境相依
 
 ### Poetry
 
-Please install [Poetry](https://python-poetry.org/) for dependency management and packaging in Python. And [not recommended](https://python-poetry.org/docs/) install in `pip`.
+請安裝 [Poetry](https://python-poetry.org/) 作為 Python 套件管理工具。並[不建議](https://python-poetry.org/docs/)透過 `pip` 來安裝 Poetry。
 
     curl -sSL https://install.python-poetry.org | python3 -
 
-After the poetry is installed, you could run `poetry install` to install the packages at local.
+當安裝好 Poetry 之後，可以使用 `poetry install` 在本地端安裝專案所需的套件。
 
-### libmemcached (optional)
+### libmemcached (選擇性)
 
-If you want development at **root system** instead of **docker containers**, please install this dependency for `memcached`.
+如果你想要在**本地端系統**開發而不是透過 **docker** 與**容器**的方式開發，請安裝 `memcached` 相關套件。
 
 === "macOS"
 
@@ -72,26 +75,21 @@ If you want development at **root system** instead of **docker containers**, ple
 
         yum install epel-release && yum install libmemcached.x86_64
 
-## Development Environment
+## 開發環境
 
-Install the packages.
+安裝套件
 
     poetry install
 
-Shell within the virtual environment.
+啟動開發環境
 
     poetry shell
 
 !!! note
 
-    The `virtualenvs.in-project` of poetry configuration has been set to `true`.
-    The folder named `.venv` is in the root directory of the project.
+    由於 Poetry 設定檔 `virtualenvs.in-project` 設定為 `true`，因此 `.venv` 會建立在專案的根目錄中。
 
-### Setting up IDE
-
-Setting up your IDE for `pylint` and `autopep8`. Find out the poetry env full path.
-
-    poetry env list --full-path
+### 設定 IDE
 
 === "VS Code"
     Setup the `Python: Select Interpreter` ++cmd+shift+p++, and input the poetry's env full path.
