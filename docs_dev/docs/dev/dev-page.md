@@ -91,3 +91,7 @@ Click `編輯` after the team list. Typing the user id (`uid`) into the fields o
 !!! note
 
     If you are developing the features of **Finance** modules, please create a team named "finance"(`tid`) in the project and put your testing `uid` into chiefs field.
+
+## More tips
+
+Get more tips from our developer teams in the Secretary Team could be found [here](https://hackmd.io/ejN7azuSQMym8p5SZEKJQw) (thanks to [@ddio](https://github.com/ddio)).

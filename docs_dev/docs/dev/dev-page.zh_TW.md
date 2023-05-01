@@ -92,3 +92,7 @@ API_DEFAULT_OWNERS = ['00000000', ]  # replace `00000000` to your uid.
 !!! note
 
     如果你正在開發財務相關的功能，請建立一個組 `tid` 為 `finance` 與設定一個組長的 `uid` 於組中。
+
+## 開發小抄
+
+如要取得更多開發小抄內容，可以參考這份來自行政組開發小組[整理的內容](https://hackmd.io/ejN7azuSQMym8p5SZEKJQw)。（感謝 [@ddio](https://github.com/ddio)）。
