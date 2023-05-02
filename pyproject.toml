@@ -11,7 +11,7 @@ google-api-python-client = "^2.40.0"
 google-auth = "^2.6.0"
 google-auth-httplib2 = "^0.1.0"
 google-auth-oauthlib = "^1"
-Flask = "2.2.3"
+Flask = "^2.3"
 Markdown = "^3.3.7"
 arrow = "^1.2.2"
 blinker = "^1.4"
@@ -24,7 +24,7 @@ pymongo = "^4.0.2"
 requests = "^2.27.1"
 uWSGI = "^2.0.20"
 fastapi = "^0.95.0"
-uvicorn = {extras = ["standard"], version = "^0.21.0"}
+uvicorn = {extras = ["standard"], version = "^0.22.0"}
 python-multipart = "^0.0.6"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 toldwords = "^0.5.0"
