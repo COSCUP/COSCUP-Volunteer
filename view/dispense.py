@@ -1,6 +1,6 @@
 '''Dispense'''
-
-from flask import (Blueprint, g, jsonify, make_response, redirect, request)
+from typing import Any
+from flask import (Blueprint, g, jsonify, make_response, redirect, request, Response)
 from werkzeug.wrappers import Response as ResponseBase
 
 from module.budget import Budget
@@ -40,14 +40,15 @@ def by_project_index(pid: str) -> str | ResponseBase:
             return jsonify({'result': dispense})
 
         if data and data['casename'] == 'update':
-            # to do: support edit dispense
-            Expense.update_invoices(
-                expense_id=data['data']['_id'], invoices=data['data']['invoices'])
-            Expense.update_enable(
-                expense_id=data['data']['_id'], enable=data['data']['enable'])
-            result = Expense.update_status(
-                expense_id=data['data']['_id'], status=data['data']['status'])
-
-            return jsonify({'result': result})
+            return handle_update(data)
 
     return make_response({}, 404)
+
+def handle_update (data: dict[str, Any]) -> ResponseBase:
+    ''' handle update to avoid too many return error '''
+    result = Dispense.update(data['data']['_id'], data['data'])
+
+    if isinstance(result, int):
+        return Response('Invalid parameter', result)
+
+    return jsonify({'result': result})

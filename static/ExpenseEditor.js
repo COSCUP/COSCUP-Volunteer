@@ -4,6 +4,7 @@
     <b-modal
         v-if="local_expense && local_expense.request"
         v-model="is_modal_opened"
+        @close="close"
     >
       <div class="modal-card">
           <header class="modal-card-head">
@@ -82,11 +83,14 @@
                           <h4>請款狀態</h4>
                           <div class="select">
                               <select v-model="local_expense.status">
-                                  <option v-for="status in statusList" :key="status.code" :value="status.code">
-                               {{ status.label }}
+                                  <option v-for="status in expense_status_list" :key="status.code" :value="status.code">
+                                    {{ status.label }}
                                   </option>
                               </select>
                           </div>
+                          <b-field label="預計出款日期" v-show="should_create_dispense">
+                            <b-input type="date" v-model="dispense_date">
+                          </b-field>
                       </div>
                       <div class="content">
                           <h4>請款說明</h4>
@@ -149,7 +153,7 @@
                   <div class="field">
                       <div class="control">
                           <button class="button is-link" type="submit" :class="{'is-loading': local_expense.is_loading}">
-                              更新
+                              {{cta_label}}
                           </button>
                           <button class="button is-warning" @click="close" :class="{'is-loading': local_expense.is_loading}">取消</button>
                       </div>
@@ -162,6 +166,7 @@
     </b-modal>
 </div>
 `
+    const AVAILABLE_EXPENSE_STATUS = ['已申請', '審核中', '出款中']
     Vue.component('expense-editor', {
         template: tpl,
         props: {
@@ -193,10 +198,23 @@
         data () {
             return {
                 local_expense: null,
+                dispense_date: '',
                 is_modal_opened: false
             }
         },
         computed: {
+            expense_status_list () {
+                return this.statusList.filter(status => AVAILABLE_EXPENSE_STATUS.includes(status.label))
+            },
+            should_create_dispense () {
+                return this.local_expense.status === '3' // 出款中
+            },
+            cta_label () {
+                if (this.should_create_dispense) {
+                    return '更新，並建立出款單'
+                }
+                return '更新'
+            }
         },
         watch: {
             expense (new_val) {
@@ -206,14 +224,24 @@
         methods: {
             reset_editor (item) {
                 this.local_expense = Object.assign({}, item, {is_edit: true});
+                // default set dispense after 10 days
+                this.dispense_date = dayjs().add(10, 'days').format('YYYY-MM-DD')
                 this.is_modal_opened = true
             },
             close () {
                 this.is_modal_opened = false
                 this.local_expense = null
+                this.$emit('close')
             },
             async to_update () {
                 await axios.post('./'+this.pid, {casename: 'update', data: this.local_expense})
+                if (this.should_create_dispense) {
+                    const payload = {
+                        expense_ids: [this.local_expense._id],
+                        dispense_date: this.dispense_date
+                    }
+                    await axios.post('/dispense/'+this.pid, {casename: 'add', data: payload})
+                }
                 this.$emit('update')
                 this.close()
             }

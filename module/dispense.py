@@ -1,6 +1,5 @@
 ''' Dispense '''
 from typing import Any, Generator
-from datetime import datetime
 
 from pymongo.collection import ReturnDocument
 
@@ -66,55 +65,39 @@ class Dispense:
             yield raw
 
     @staticmethod
-    def update_dispense_date(dispense_id: str, dispense_date: datetime) -> dict[str, Any]:
+    def update(dispense_id: str, data: dict[str, Any]) -> dict[str, Any] | int:
         '''
         Only update dispense_date
 
         Args:
             dispense_id (str): _id in DispenseDB
-            dispense_date (datetime): date of dispense
+            data (dict[str, Any]): data to be applied, only status, enable,
+                and dispense_date are writable
 
         Returns:
             Return the updated data
         '''
-        return DispenseDB().find_one_and_update(
+        to_set = {}
+        for allowed_key in ('status', 'dispense_date', 'enable'):
+            if allowed_key in data:
+                to_set[allowed_key] = data[allowed_key]
+
+        if to_set['enable']:
+            return 403
+
+        resp = DispenseDB().find_one_and_update(
             {'_id': dispense_id},
-            {'$set': {'dispense_date': dispense_date}},
+            {'$set': to_set},
             return_document=ReturnDocument.AFTER,
         )
 
-    @staticmethod
-    def update_status(dispense_id: str, status: str) -> dict[str, Any]:
-        ''' update status
+        if 'enable' in to_set and not to_set['enable']:
+            # restore expense
+            for exp_id in resp['expense_ids']:
+                ExpenseDB().find_one_and_update(
+                    {'_id': exp_id},
+                    {'$set': {'status': '2'}}, # back to 審核中
+                    return_document=ReturnDocument.AFTER,
+                )
 
-        Args:
-            dispense_id (str): The dispense id is the unique `_id`.
-            status (str): The key in [module.expense.Expense.status][].
-
-        Returns:
-            Return the updated data.
-
-        '''
-        return DispenseDB().find_one_and_update(
-            {'_id': dispense_id},
-            {'$set': {'status': status.strip()}},
-            return_document=ReturnDocument.AFTER,
-        )
-
-    @staticmethod
-    def update_enable(dispense_id: str, enable: bool) -> dict[str, Any]:
-        ''' update enable
-
-        Args:
-            expense_id (str): The expense id is the unique `_id`.
-            enable (bool): update the enable.
-
-        Returns:
-            Return the updated data.
-
-        '''
-        return DispenseDB().find_one_and_update(
-            {'_id': dispense_id},
-            {'$set': {'enable': bool(enable)}},
-            return_document=ReturnDocument.AFTER,
-        )
+        return resp
