@@ -31,6 +31,7 @@ from structs.users import PolicyType
 from view.api import VIEW_API
 from view.budget import VIEW_BUDGET
 from view.expense import VIEW_EXPENSE
+from view.dispense import VIEW_DISPENSE
 from view.guide import VIEW_GUIDE
 from view.links import VIEW_LINKS
 from view.project import VIEW_PROJECT
@@ -56,6 +57,7 @@ app.secret_key = setting.SECRET_KEY
 app.register_blueprint(VIEW_API)
 app.register_blueprint(VIEW_BUDGET)
 app.register_blueprint(VIEW_EXPENSE)
+app.register_blueprint(VIEW_DISPENSE)
 app.register_blueprint(VIEW_GUIDE)
 app.register_blueprint(VIEW_LINKS)
 app.register_blueprint(VIEW_PROJECT)

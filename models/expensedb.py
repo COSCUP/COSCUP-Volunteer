@@ -57,6 +57,7 @@ class ExpenseDB(DBBase):
             - ``_id``: Unique expense id.
             - ``pid``: Project id.
             - ``tid``: Team id.
+            - ``dispense_id``: Reference to expense DB, if any
             - ``request``: This object include the budget data in
                            `buid`, `desc`, `paydate`, `code`.
             - ``invoices``: List of invoice data, in `iv_id`,
@@ -82,6 +83,7 @@ class ExpenseDB(DBBase):
             '_id': f'{uuid4().node:x}',
             'pid': pid,
             'tid': tid,
+            'dispense_id': '',
             'request': {},
             'invoices': [],
             'bank': {},

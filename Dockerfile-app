@@ -18,6 +18,7 @@ ADD ./models/__init__.py \
     ./models/base.py \
     ./models/budgetdb.py \
     ./models/expensedb.py \
+    ./models/dispensedb.py \
     ./models/formdb.py \
     ./models/index.py \
     ./models/mailletterdb.py \
@@ -41,6 +42,7 @@ ADD ./module/__init__.py \
     ./module/budget.py \
     ./module/dietary_habit.py \
     ./module/expense.py \
+    ./module/dispense.py \
     ./module/form.py \
     ./module/gitlab_api.py \
     ./module/gsuite.py \
@@ -96,10 +98,24 @@ ADD ./templates/mail/base*.html \
     ./templates/mail/welcome.html \
     ./templates/mail/
 
+ADD ./static/ExpenseStatusLabel.js \
+    ./static/ExpenseTable.js \
+    ./static/ExpenseEditor.js \
+    ./static/DispenseEditor.js \
+    ./static/DispenseTable.js \
+    ./static/InvoiceList.js \
+    ./static/UserBadge.js \
+    ./static/expense-component.css \
+    ./static/buefy.min.js \
+    ./static/buefy.min.css \
+    ./static/dayjs.min.js \
+    ./static/
+
 ADD ./view/__init__.py \
     ./view/api.py \
     ./view/budget.py \
     ./view/expense.py \
+    ./view/dispense.py \
     ./view/guide.py \
     ./view/links.py \
     ./view/project.py \

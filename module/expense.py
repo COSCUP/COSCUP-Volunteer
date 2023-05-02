@@ -9,9 +9,9 @@ from pymongo.cursor import Cursor
 from models.budgetdb import BudgetDB
 from models.expensedb import ExpenseDB
 
-
 class Expense:
     ''' Expense class '''
+
     @staticmethod
     def process_and_add(pid: str, tid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Process data from web
