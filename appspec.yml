@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /volunteer
+hooks:
+  AfterInstall:
+    - location: deploy_scripts/after_install.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: deploy_scripts/application_start.sh
+      timeout: 300
+      runas: root
+  ApplicationStop:
+    - location: deploy_scripts/application_stop.sh
+      timeout: 300
+      runas: root
