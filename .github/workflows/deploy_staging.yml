@@ -1,9 +1,9 @@
-name: Deploy Staging
+name: DeployStaging
 
 on:
   push:
     branches:
-      - 'statging'
+      - 'staging'
 
 permissions:
   id-token: write
