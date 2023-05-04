@@ -1,5 +1,9 @@
 #!/bin/sh
 
+set -e
+
+cd /volunteer
+
 # Copy settings
 cp /home/ubuntu/setting.py /volunteer/setting.py
 
