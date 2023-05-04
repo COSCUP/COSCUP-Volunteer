@@ -1,0 +1,36 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - 'statging'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ACTION_ROLE }}
+          aws-region: ap-northeast-1
+
+      - name: Deploy to EC2
+        env:
+          APP_NAME: ${{ secrets.APP_NAME }}
+          GROUP_NAME: ${{ secrets.GROUP_NAME }}
+        run: |
+          aws deploy create-deployment \
+          --application-name $APP_NAME \
+          --deployment-config-name CodeDeployDefault.OneAtATime \
+          --deployment-group-name $GROUP_NAME \
+          --description "Deploy commitId $GITHUB_SHA to EC2" \
+          --github-location repository=$GITHUB_REPOSITORY,commitId=$GITHUB_SHA
