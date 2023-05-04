@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - 'staging'
+    paths-ignore:
+      - '.vscode/**'
+      - 'logs/**'
 
 permissions:
   id-token: write
