@@ -6,5 +6,5 @@ cd /volunteer
 
 docker compose --project-directory /volunteer up -d
 
-# Remove unsed images
-docker image prune
+# Remove unused images
+docker image prune -f
