@@ -5,74 +5,13 @@
 <div class="column">
     <div id="expensemy" class="container" v-cloak>
       <div class="column">
-          <table class="table is-fullwidth">
-              <thead>
-                  <tr>
-                      <th>申請單號</th>
-                      <th>狀態</th>
-                      <th>預算編號</th>
-                      <th>金額</th>
-                      <th>期望出款時間</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr v-if="items.length == 0">
-                      <td colspan="8" class="has-text-centered">
-                          <span class="icon"><i class="fas fa-info-circle"></i></span>
-                          <span>目前沒有項目</span>
-                      </td>
-                  </tr>
-                  <tr v-for="item, index in items" :class="{'is-delete': item.enabled === false}">
-                      <td class="is-vcentered">
-                          <p><span class="tag is-link is-light">[[ item.code ]]</span></p>
-                          <p class="is-size-7">[[ new Date(item.create_at).toLocaleString() ]]</p>
-                      </td>
-                      <td class="is-vcentered">
-                          <span class="tag is-warning is-clickable" @click="edit(item, index)" v-if="item.status == '1'">
-                              <span class="icon"><i class="far fa-hand-paper"></i></span>
-                              <span>[[ status[item.status] ]]</span>
-                          </span>
-                          <span class="tag is-link is-clickable" @click="edit(item, index)" v-if="item.status == '2'">
-                              <span class="icon"><i class="fas fa-bolt"></i></span>
-                              <span>[[ status[item.status] ]]</span>
-                          </span>
-                          <span class="tag is-primary is-clickable" @click="edit(item, index)" v-if="item.status == '3'">
-                              <span class="icon"><i class="fas fa-hand-holding-usd"></i></span>
-                              <span>[[ status[item.status] ]]</span>
-                          </span>
-                          <span class="tag is-success is-light is-clickable" @click="edit(item, index)" v-if="item.status == '4'">
-                            <span class="icon"><i class="fas fa-stamp"></i></span>
-                            <span>[[ status[item.status] ]]</span>
-                          </span>
-                          <span class="tag is-success is-clickable" @click="edit(item, index)" v-if="item.status == '5'">
-                              <span class="icon"><i class="fas fa-clipboard-check"></i></span>
-                              <span>[[ status[item.status] ]]</span>
-                          </span>
-                      </td>
-                      <td class="is-vcentered">
-                          <span class="tag is-dark">[[ budgets[item.request.buid].bid ]]</span>
-                          <span><a @click="edit(item, index)">[[ budgets[item.request.buid].name ]]</a></span>
-                      </td>
-                      <td class="is-vcentered">
-                          <div class="field is-grouped is-grouped-multiline">
-                              <div class="control">
-                                  <div class="tags has-addons">
-                                      <span class="tag is-dark"><span class="icon"><i class="fas fa-file-invoice-dollar"></i></span></span>
-                                      <span class="tag is-link is-light">[[ item.invoices.length ]]</span>
-                                  </div>
-                              </div>
-                              <div class="control" v-for="invoice in item.invoices">
-                                  <div class="tags has-addons">
-                                      <span class="tag is-info">[[ invoice.currency ]]</span>
-                                      <span class="tag is-success is-light">$[[ invoice.total.toLocaleString('en') ]]</span>
-                                  </div>
-                              </div>
-                          </div>
-                      </td>
-                      <td class="is-vcentered">[[ item.request.paydate ]]</td>
-                  </tr>
-              </tbody>
-          </table>
+          <expense-table
+            :expenses="items"
+            :is-editable="true"
+            :budgets="budgets"
+            :is-admin="false"
+            @edit="edit"
+          ></expense-table>
       </div>
     <!-- modal -->
     <div class="modal" :class="{'is-active': modaldata.show === true}" v-if="modaldata.request">
@@ -273,10 +212,10 @@
               </div>
           </section>
           <footer class="modal-card-foot">
-              <button class="button is-info" @click="close" :class="{'is-loading': modaldata.is_loading}">
-                  確定
+              <button class="button" @click="close" :class="{'is-loading': modaldata.is_loading}">
+                  取消編輯
               </button>
-              <button class="button is-success is-light is-outlined"
+              <button class="button is-success"
                      @click="update" :class="{'is-loading': modaldata.is_loading}">
                   <span class="icon"><i class="far fa-save"></i></span>
                   <span>更新</span>
@@ -290,12 +229,16 @@
 {% endblock %}
 {% block js %}
 <script src="/js/axios.min.js"></script>
+<script src="{{ url_for('static', filename='buefy.min.js') }}"></script>
+<script src="{{ url_for('static', filename='InvoiceList.js') }}"></script>
+<script src="{{ url_for('static', filename='ExpenseStatusLabel.js') }}"></script>
+<script src="{{ url_for('static', filename='ExpenseTable.js') }}"></script>
 <script>
     (function () {
         let $expensemy = new Vue({
             el: '#expensemy',
             data: {
-                is_loading: 0,
+                is_loading: false,
                 modaldata: {show: false, total: 0},
                 budgets: {},
                 users: {},
@@ -315,38 +258,39 @@
                     this.modaldata = {show: false, total: 0};
                     document.querySelector('html').classList.toggle('is-clipped');
                 },
-                edit: function(item, index) {
+                edit: function(item) {
                     this.modaldata = Object.assign({}, item, {show: true, total: 0});
                     document.querySelector('html').classList.toggle('is-clipped');
                 },
-                remove: function() {
+                async remove () {
                     if (window.confirm('確定是否刪除？')) {
-                        ++this.is_loading;
-                        axios.post('./my', {casename: 'remove', eid: this.modaldata._id}).then(function(resp) {
-                            window.location.href = './my';
-                        });
+                        this.is_loading = true
+                        await axios.post('./my', {casename: 'remove', eid: this.modaldata._id})
+                        this.close()
+                        this.load()
+                        this.is_loading = false
                     }
                 },
-                update: function() {
-                    ++this.is_loading;
-                    axios.post('./my', {casename: 'update',
-                            eid: this.modaldata._id,
-                            invoices: this.modaldata.invoices,
-                            bank: this.modaldata.bank,
-                            req: this.modaldata.request,
-                        }).then(function(resp) {
-                        window.location.href = './my';
-                    });
+                async update () {
+                    this.is_loading = true
+                    await axios.post('./my', {casename: 'update',
+                        eid: this.modaldata._id,
+                        invoices: this.modaldata.invoices,
+                        bank: this.modaldata.bank,
+                        req: this.modaldata.request,
+                    })
+                    this.close()
+                    this.load()
                 },
                 load: function() {
-                    ++this.is_loading;
+                    this.is_loading = true
                     axios.post('./my', {casename: 'get'}).then(function(resp) {
                         $expensemy.teams = resp.data.teams;
                         $expensemy.status = resp.data.status;
                         $expensemy.users = resp.data.users;
                         $expensemy.budgets = resp.data.budgets;
                         $expensemy.items = resp.data.items;
-                        --$expensemy.is_loading;
+                        $expensemy.is_loading = false
                     });
                 }
             },

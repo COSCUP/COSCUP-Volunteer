@@ -16,9 +16,9 @@
                 <th>申請單號</th>
                 <th>狀態</th>
                 <th>預算編號</th>
-                <th>預算唯一編號</th>
-                <th>部門</th>
-                <th>申請人</th>
+                <th v-if="isAdmin">預算唯一編號</th>
+                <th v-if="isAdmin">部門</th>
+                <th v-if="isAdmin">申請人</th>
                 <th>金額</th>
                 <th>期望出款時間</th>
                 <th v-if="isEditable" />
@@ -51,11 +51,11 @@
                     <span class="tag is-dark">{{ budgets[item.request.buid].bid }}</span>
                     <span><a @click="edit(item)">{{ budgets[item.request.buid].name }}</a></span>
                 </td>
-                <td class="is-vcentered">
+                <td v-if="isAdmin" class="is-vcentered">
                     <span class="tag is-success is-light">{{ item.request.code }}</span>
                 </td>
-                <td class="is-vcentered">{{ item.tid }}</td>
-                <td class="is-vcentered">
+                <td v-if="isAdmin" class="is-vcentered">{{ item.tid }}</td>
+                <td v-if="isAdmin" class="is-vcentered">
                     <user-badge :id="item.create_by" :users="users" />
                 </td>
                 <td class="is-vcentered">
@@ -91,7 +91,9 @@
             },
             users: {
                 type: Object,
-                required: true
+                default () {
+                    return {}
+                }
             },
             isSelectable: {
                 type: Boolean,
@@ -110,6 +112,10 @@
                 default () {
                     return []
                 }
+            },
+            isAdmin: {
+                type: Boolean,
+                default: true
             }
         },
         data () {
