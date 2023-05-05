@@ -8,7 +8,7 @@ Fork the project from github and make [pull requests] to the origin repository.
 
 ### Sign and sign-off all commits or tags
 
-We prefer your commits or tags are **signed**. And also **[sign-off](/dev/how-to-signoff)** your commits.
+We prefer your commits or tags are **signed**. And also **[sign-off](how-to-signoff.md)** your commits.
 
 !!! tip
 
