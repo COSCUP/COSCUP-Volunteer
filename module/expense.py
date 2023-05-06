@@ -261,6 +261,18 @@ class Expense:
         return ExpenseDB().find({'pid': pid, 'create_by': create_by, 'enable': True})
 
     @staticmethod
+    def get_by_dispense_id (dispense_ids: list[str]) -> Cursor[dict[str, Any]]:
+        ''' Retrieve by dispense_id
+
+        Args:
+            dispense_ids (list[str]): list of dispense id
+
+        Returns:
+            Return the datas in [pymongo.cursor.Cursor][].
+        '''
+        return ExpenseDB().find({'dispense_id': { '$in': dispense_ids } })
+
+    @staticmethod
     def get_has_sent(pid: str, budget_id: str) -> Generator[dict[str, Any], None, None]:
         ''' Get has sent and not canceled
 
