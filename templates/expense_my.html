@@ -2,16 +2,34 @@
 {% block expense_subtitle %}我的申請單{% endblock %}
 {% block expense_my_menu %}is-active{% endblock %}
 {% block expense_body %}
+<link href="{{ url_for('static', filename='expense-component.css') }}" rel="stylesheet">
 <div class="column">
     <div id="expensemy" class="container" v-cloak>
-      <div class="column">
-          <expense-table
-            :expenses="items"
-            :is-editable="true"
-            :budgets="budgets"
-            :is-admin="false"
-            @edit="edit"
-          ></expense-table>
+      <div class="content">
+        <div class="section" v-if="stand_alone_expenses.length">
+            <h2>已申請、審核中</h2>
+            <expense-table
+              :expenses="stand_alone_expenses"
+              :is-editable="true"
+              :budgets="budgets"
+              :is-admin="false"
+              :me="my_id"
+              @edit="edit"
+            ></expense-table>
+        </div>
+        <div class="section" v-if="dispenses_by_status.length">
+            <h2>出款中、已出款、已完成</h2>
+            <dispense-table
+              :all-expenses="items"
+              :dispenses="dispenses_by_status"
+              :budgets="budgets"
+              :users="users"
+              :status-list="status_list"
+              :me="my_id"
+              :is-admin="false"
+              @edit-expense="edit"
+            ></dispense-table>
+        </div>
       </div>
     <!-- modal -->
     <div class="modal" :class="{'is-active': modaldata.show === true}" v-if="modaldata.request">
@@ -231,10 +249,16 @@
 <script src="/js/axios.min.js"></script>
 <script src="{{ url_for('static', filename='buefy.min.js') }}"></script>
 <script src="{{ url_for('static', filename='InvoiceList.js') }}"></script>
+<script src="{{ url_for('static', filename='UserBadge.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseStatusLabel.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseTable.js') }}"></script>
+<script src="{{ url_for('static', filename='DispenseTable.js') }}"></script>
 <script>
     (function () {
+        Vue.prototype.$buefy.config.setOptions({
+            defaultIconPack: 'fas'
+        })
+        const STAND_ALONE_STATUS = ['1', '2']
         let $expensemy = new Vue({
             el: '#expensemy',
             data: {
@@ -244,7 +268,30 @@
                 users: {},
                 status: {},
                 teams: [],
-                items: []
+                items: [],
+                dispenses: [],
+                my_id: ''
+            },
+            computed: {
+                stand_alone_expenses () {
+                    // only return expense status in 已申請 & 審核中
+                    return this.items
+                        .filter(item => STAND_ALONE_STATUS.includes(item.status))
+                        .sort((a, b) => a.status - b.status)
+                },
+                dispenses_by_status () {
+                    return this.dispenses
+                        .slice()
+                        .sort((a, b) => a.status - b.status)
+                },
+                status_list () {
+                    return Object
+                        .entries(this.status)
+                        .map(([code, label]) => {
+                            return { code, label }
+                        })
+                        .sort((a, b) => a.code - b.code)
+                }
             },
             mounted: function() {
                 this.load();
@@ -290,6 +337,8 @@
                         $expensemy.users = resp.data.users;
                         $expensemy.budgets = resp.data.budgets;
                         $expensemy.items = resp.data.items;
+                        $expensemy.dispenses = resp.data.dispenses;
+                        $expensemy.my_id = resp.data.my;
                         $expensemy.is_loading = false
                     });
                 }

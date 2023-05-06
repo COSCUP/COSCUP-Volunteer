@@ -23,7 +23,7 @@
                 <user-badge v-for="id in unique_items(props.row.expenses, 'create_by')" :users="users" :id="id" />
             </div>
         </b-table-column>
-        <b-table-column label="" v-slot="props" width="3rem">
+        <b-table-column label="" v-slot="props" width="3rem" v-if="isAdmin">
             <b-button @click="start_edit_dispense(props.row)">編輯出款單</b-button>
         </b-table-column>
         <template #detail="props">
@@ -32,10 +32,15 @@
                 :expenses="props.row.expenses"
                 :budgets="budgets"
                 :users="users"
+                :is-nested="true"
+                :is-admin="isAdmin"
+                :me="me"
+                @edit="edit_expense"
             ></expense-table>
         </template>
     </b-table>
     <dispense-editor
+      v-if="isAdmin"
       :pid="pid"
       :all-expenses="allExpenses"
       :dispense="dispense_to_edit"
@@ -51,10 +56,6 @@
     Vue.component('dispense-table', {
         template: tpl,
         props: {
-            pid: {
-                type: String,
-                required: true
-            },
             allExpenses: {
                 type: Array,
                 required: true
@@ -74,6 +75,18 @@
             statusList: {
                 type: Array,
                 required:true
+            },
+            pid: {
+                type: String,
+                default: 0
+            },
+            isAdmin: {
+                type: Boolean,
+                default: true
+            },
+            me: {
+                type: String,
+                default: ''
             }
         },
         data () {
@@ -116,6 +129,9 @@
             },
             start_edit_dispense (dispense) {
                 this.dispense_to_edit = dispense
+            },
+            edit_expense (expense) {
+                this.$emit('edit-expense', expense)
             }
         }
     })

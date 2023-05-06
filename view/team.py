@@ -1324,7 +1324,7 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
                         'profile': {'badge_name': value['profile']['badge_name']}, }
 
             return jsonify({'teams': teams, 'items': list(items.values()), 'dispenses': dispenses, 
-                            'budgets': budgets, 'users': users, 'status': Expense.status()})
+                            'budgets': budgets, 'users': users, 'status': Expense.status(), 'my': g.user['account']['_id']})
 
         if data and data['casename'] == 'update':
             invoices = {}

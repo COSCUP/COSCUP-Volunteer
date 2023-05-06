@@ -95,6 +95,7 @@
             :users="users"
             :status-list="status_list"
             @update="load"
+            @edit-expense="start_edit_expense"
         ></dispense-table>
         <div class="content disabled-table" v-if="disabled_dispenses.length">
             <h3>已刪除的出款單</h3>
@@ -106,6 +107,7 @@
                 :users="users"
                 :status-list="status_list"
                 @update="load"
+                @edit-expense="start_edit_expense"
             ></dispense-table>
         </div>
       </div>
@@ -114,7 +116,6 @@
             v-if="enabled_expenses.length"
             :expenses="enabled_expenses"
             :is-selectable="is_in_review_status"
-            :is-editable="true"
             :is-loading="is_loading"
             :budgets="budgets"
             :users="users"
@@ -126,7 +127,6 @@
             <expense-table
               :expenses="disabled_expenses"
               :is-selectable="is_in_review_status"
-              :is-editable="true"
               :is-loading="is_loading"
               :budgets="budgets"
               :users="users"
