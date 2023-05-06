@@ -1259,7 +1259,7 @@ def team_expense_lists(pid: str, tid: str) -> str | ResponseBase:
 @VIEW_TEAM.route('/<pid>/<tid>/expense/my', methods=('GET', 'POST'))
 def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
     ''' Team expense my '''
-    # pylint: disable=too-many-locals,too-many-branches,too-many-return-statements
+    # pylint: disable=too-many-locals,too-many-branches,too-many-return-statements,too-many-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
@@ -1290,9 +1290,9 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
 
             buids = set()
             uids = set()
-            items = dict()
+            items = {}
             dispense_ids = set()
-            dispenses = list()
+            dispenses = []
 
             for item in Expense.get_by_create_by(pid=pid, create_by=g.user['account']['_id']):
                 items[item['_id']] = item
@@ -1323,8 +1323,15 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
                         'oauth': value['oauth'],
                         'profile': {'badge_name': value['profile']['badge_name']}, }
 
-            return jsonify({'teams': teams, 'items': list(items.values()), 'dispenses': dispenses, 
-                            'budgets': budgets, 'users': users, 'status': Expense.status(), 'my': g.user['account']['_id']})
+            return jsonify({
+                'teams': teams,
+                'items': list(items.values()),
+                'dispenses': dispenses,
+                'budgets': budgets,
+                'users': users,
+                'status': Expense.status(),
+                'my': g.user['account']['_id']
+            })
 
         if data and data['casename'] == 'update':
             invoices = {}
