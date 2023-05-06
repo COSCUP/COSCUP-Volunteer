@@ -70,7 +70,7 @@
                     </div>
                 </td>
                 <td class="is-vcentered">{{ item.request.paydate }}</td>
-                <td v-if="isEditable">
+                <td class="is-vcentered" v-if="isEditable">
                     <b-button @click="edit(item)">編輯申請單</b-button>
                 </td>
             </tr>
