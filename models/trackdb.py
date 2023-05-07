@@ -56,7 +56,8 @@ class TrackDB(DBBase):
             self.bulk_write(bulks)
 
         self.delete_many(
-            {'pid': pid, 'cate': 'raw_sub', 'code': {'$nin': [submission.code for submission in submissions]}})
+            {'pid': pid, 'cate': 'raw_sub',
+             'code': {'$nin': [submission.code for submission in submissions]}})
 
     def get_raw_submissions(self, pid: str) -> list[Submission]:
         ''' Get raw submissions '''
@@ -71,8 +72,9 @@ class TrackDB(DBBase):
         ''' update submissions '''
         bulks = []
         for track in tracks.values():
-            bulks.append(UpdateOne({'pid': pid, 'cate': 'track', 'code': track['code'], 'lang': lang}, {
-                '$set': {'submissions': track['submissions']}}
+            bulks.append(UpdateOne({
+                'pid': pid, 'cate': 'track', 'code': track['code'], 'lang': lang},
+                {'$set': {'submissions': track['submissions']}}
             ))
 
         if bulks:

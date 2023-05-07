@@ -1,5 +1,4 @@
 ''' Track '''
-import logging
 from typing import Any
 
 from toldwords.pretalx import Pretalx, Submission

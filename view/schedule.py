@@ -15,6 +15,7 @@ def show_track(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
     if pid < 2023:
         return Response('', 404)
 
+    _ = track_name
     submissions = Track(pid=str(pid)).get_submissions_by_track_id(track_id)
     return render_template('schedule_submissions.html',
                            pid=pid,
