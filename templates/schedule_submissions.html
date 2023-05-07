@@ -2,6 +2,16 @@
 {% block head_title %}
     {{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / 大會議程、社群時程表 Schedule
 {% endblock %}
+{%block og%}
+<meta property="og:title" content="{{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="COSCUP Volunteer">
+<meta property="og:image" content="https://volunteer.coscup.org/img/volunteer_og.png">
+<meta property="og:description" content="{{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / {{ submissions[0].track['en'] }}">
+<meta property="twitter:title" content="{{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
+<meta property="twitter:card" content="summary">
+<meta property="twitter:site" content="@coscup">
+{%endblock%}
 {% block body %}
     <section class="section">
         <div class="container">
