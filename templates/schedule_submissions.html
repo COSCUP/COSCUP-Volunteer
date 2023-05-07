@@ -47,13 +47,15 @@
                         </h3>
                         <p>
                             <small>
-                                投稿狀態：
+                                <span class="tag is-info is-light">投稿狀態：</span>
                                 {% if submission.state == 'accepted' %}
                                 <span class="tag is-success">已接受（{{submission.state}}）</span>
                                 {% elif submission.state == 'submitted' %}
                                 <span class="tag is-link">已送出（{{submission.state}}）</span>
+                                <span class="tag is-warning">稿件審核中</span>
                                 {% elif submission.state == 'confirmed' %}
                                 <span class="tag is-info">已確認（{{submission.state}}）</span>
+                                <span class="tag is-warning">稿件審核中</span>
                                 {% else %}
                                 <span class="tag">{{ submission.state }}</span>
                                 {% endif %}
@@ -88,7 +90,7 @@
                         {% endfor %}
                         <p>
                             <div class="tags">
-                                <span class="tag">{{ submission.code }}</span>
+                                <span class="tag"><a href="https://coscup.org/2023/zh-TW/session/{{submission.code}}">{{ submission.code }}</a></span>
                                 <span class="tag">{{ submission.submission_type['en']}}</span>
                                 <span class="tag">{{ submission.track['en']}}</span>
                                 {% if submission.track.get('zh-tw') %}
