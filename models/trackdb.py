@@ -13,6 +13,16 @@ class TrackDB(DBBase):
     def __init__(self) -> None:
         super().__init__('tracks')
 
+    def index(self) -> None:
+        ''' To make collection's index
+
+        Indexs:
+            - `pid`
+            - `cate`
+
+        '''
+        self.create_index([('pid', -1), ('cate', 1)])
+
     def build_code(self, pid: str, tracks: list[str],
                    lang: str = 'zh-tw') -> dict[str, dict[str, str | list[str]]]:
         ''' Build unit code '''

@@ -152,6 +152,20 @@ class Tasks:
 
         return None
 
+    @staticmethod
+    def sitemap() -> list[str]:
+        ''' list sitemap paths '''
+        pid = set()
+        paths: list[str] = []
+        for task in TasksDB().find():
+            pid.add(task['pid'])
+            paths.append(f"/tasks/{task['pid']}/r/{task['_id']}")
+
+        for year in pid:
+            paths.append(f"/tasks/{year}")
+
+        return paths
+
 
 class TasksStar:
     ''' TasksStar object '''

@@ -12,6 +12,15 @@ class TasksDB(DBBase):
     def __init__(self) -> None:
         super().__init__('tasks')
 
+    def index(self) -> None:
+        ''' To make collection's index
+
+        Indexs:
+            - `pid`
+
+        '''
+        self.create_index([('pid', -1), ])
+
     @staticmethod
     def new(pid: str, body: dict[str, Any], endtime: Optional[datetime] = None) -> dict[str, Any]:
         ''' new data

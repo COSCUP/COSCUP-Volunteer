@@ -26,6 +26,7 @@ from module.mc import MC
 from module.oauth import OAuth
 from module.team import Team
 from module.track import Track
+from module.tasks import Tasks
 from module.users import PolicySigned, User
 from module.usession import USession
 from structs.users import PolicyType
@@ -401,6 +402,9 @@ def sitemap() -> ResponseBase:
         '/robots.txt',
         '/security_guard',
     ):
+        result.append(f'https://volunteer.coscup.org{path}')
+
+    for path in Tasks.sitemap():
         result.append(f'https://volunteer.coscup.org{path}')
 
     for path in Track.sitemap():

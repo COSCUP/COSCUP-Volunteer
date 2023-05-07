@@ -15,9 +15,11 @@ from models.mattermostdb import MattermostUsersDB
 from models.oauth_db import OAuthDB
 from models.projectdb import ProjectDB
 from models.senderdb import SenderReceiverDB
+from models.tasksdb import TasksDB
 from models.teamdb import (TeamDB, TeamMemberChangedDB, TeamMemberTagsDB,
                            TeamPlanDB)
 from models.telegram_db import TelegramDB
+from models.trackdb import TrackDB
 from models.users_db import PolicySignedDB, UsersDB
 from models.usessiondb import USessionDB
 from models.waitlistdb import WaitListDB
@@ -37,11 +39,13 @@ def make_index() -> None:
     PolicySignedDB().index()
     ProjectDB(pid='').index()
     SenderReceiverDB().index()
+    TasksDB().index()
     TeamDB(pid='', tid='').index()
     TeamMemberChangedDB().index()
     TeamMemberTagsDB().index()
     TeamPlanDB().index()
     TelegramDB().index()
+    TrackDB().index()
     USessionDB().index()
     UsersDB().index()
     WaitListDB().index()
