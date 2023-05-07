@@ -1,298 +1,402 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
   <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="/css/bulma.min.css" rel="stylesheet">
-    <link href="/faw/css/all.min.css" rel="stylesheet">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link href="/css/bulma.min.css" rel="stylesheet" />
+    <link href="/faw/css/all.min.css" rel="stylesheet" />
     <title>COSCUP Volunteer{%block head_title%}{%endblock%}</title>
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@coscup">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@coscup" />
     {%block og%}
-    <meta property="og:title" content="{%block og_title%}{%endblock%}Volunteer with COSCUP! 志工服務系統">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="COSCUP Volunteer">
-    <meta property="og:image" content="https://volunteer.coscup.org/img/volunteer_og.png">
-    <meta property="og:description" content="志工招募、完成志工成員登錄、各屆組織建立、住宿、交通費補助等行政事宜。Volunteer with COSCUP!">
+    <meta
+      property="og:title"
+      content="{%block og_title%}{%endblock%}Volunteer with COSCUP! 志工服務系統"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="COSCUP Volunteer" />
+    <meta
+      property="og:image"
+      content="https://volunteer.coscup.org/img/volunteer_og.png"
+    />
+    <meta
+      property="og:description"
+      content="志工招募、完成志工成員登錄、各屆組織建立、住宿、交通費補助等行政事宜。Volunteer with COSCUP!"
+    />
     {%endblock%}
-    <meta name="theme-color" content="#48c78e">
-    <meta name="google-site-verification" content="bNlKpOt_7KyKFIigR-8ZHnAVn4z-rLm8FdVIGC_wlTU" />
+    <meta name="theme-color" content="#48c78e" />
+    <meta
+      name="google-site-verification"
+      content="bNlKpOt_7KyKFIigR-8ZHnAVn4z-rLm8FdVIGC_wlTU"
+    />
     {%block header%}{%endblock%}
     <style>
-        [v-cloak] { display: none; }
-        html { font-size: 14px; }
+      [v-cloak] {
+        display: none;
+      }
+      html {
+        font-size: 14px;
+      }
     </style>
     {%block style%}{%endblock%}
   </head>
   <body>
-  <nav class="navbar is-success" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
+    <nav
+      class="navbar is-success"
+      role="navigation"
+      aria-label="main navigation"
+    >
+      <div class="navbar-brand">
         <a class="navbar-item is-active has-text-weight-semibold" href="/">
-            <img src="/img/coscup_volunteer_og.png" style="margin-right: 5px; box-shadow: white 0px 0px 10px;border-radius: 25px;">
-            COSCUP Volunteer
+          <img
+            src="/img/coscup_volunteer_og.png"
+            style="
+              margin-right: 5px;
+              box-shadow: white 0px 0px 10px;
+              border-radius: 25px;
+            "
+          />
+          COSCUP Volunteer
         </a>
 
-      <a role="button" class="navbar-burger" v-on:click="navtoggle = !navtoggle" v-bind:class="{'is-active': navtoggle}" data-target="navMenu" aria-label="menu" aria-expanded="false">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-    <div class="navbar-menu" id="navMenu" v-bind:class="{'is-active': navtoggle}">
-      <div class="navbar-start">
+        <a
+          role="button"
+          class="navbar-burger"
+          v-on:click="navtoggle = !navtoggle"
+          v-bind:class="{'is-active': navtoggle}"
+          data-target="navMenu"
+          aria-label="menu"
+          aria-expanded="false"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div
+        class="navbar-menu"
+        id="navMenu"
+        v-bind:class="{'is-active': navtoggle}"
+      >
+        <div class="navbar-start">
           {% if g.user and g.user.data %}
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link has-text-weight-medium" href="/project/2022/">
-                <span class="icon"><i class="fas fa-star"></i></span>
-                <span>2022</span>
+              <span class="icon"><i class="fas fa-star"></i></span>
+              <span>2022</span>
             </a>
             <div class="navbar-dropdown">
-                <a class="navbar-item has-text-weight-medium" href="/project/2022/">
-                    <span class="icon"><i class="far fa-bookmark"></i></span>
-                    <span>COSCUP 2022</span>
-                </a>
-                <a class="navbar-item has-text-weight-medium" href="/tasks/2022">
-                    <span class="icon"><i class="fas fa-pizza-slice"></i></span>
-                    <span>2022 解任務！</span>
-                </a>
+              <a
+                class="navbar-item has-text-weight-medium"
+                href="/project/2022/"
+              >
+                <span class="icon"><i class="far fa-bookmark"></i></span>
+                <span>COSCUP 2022</span>
+              </a>
+              <a class="navbar-item has-text-weight-medium" href="/tasks/2022">
+                <span class="icon"><i class="fas fa-pizza-slice"></i></span>
+                <span>2022 解任務！</span>
+              </a>
             </div>
           </div>
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link has-text-weight-medium" href="/project/2023/">
-                <span class="icon"><i class="fas fa-star"></i></span>
-                <span>2023</span>
+              <span class="icon"><i class="fas fa-star"></i></span>
+              <span>2023</span>
             </a>
             <div class="navbar-dropdown">
-                <a class="navbar-item has-text-weight-medium" href="/project/2023/">
-                    <span class="icon"><i class="far fa-bookmark"></i></span>
-                    <span>COSCUP 2023</span>
-                </a>
-                <a class="navbar-item has-text-weight-medium" href="/tasks/2023">
-                    <span class="icon"><i class="fas fa-pizza-slice"></i></span>
-                    <span>2023 解任務！</span>
-                </a>
+              <a
+                class="navbar-item has-text-weight-medium"
+                href="/project/2023/"
+              >
+                <span class="icon"><i class="far fa-bookmark"></i></span>
+                <span>COSCUP 2023</span>
+              </a>
+              <a class="navbar-item has-text-weight-medium" href="/tasks/2023">
+                <span class="icon"><i class="fas fa-pizza-slice"></i></span>
+                <span>2023 解任務！</span>
+              </a>
             </div>
           </div>
           {% else %}
           <a class="navbar-item has-text-weight-medium" href="/tasks/2022">
-              <span class="icon"><i class="fas fa-pizza-slice"></i></span>
-              <span>2022 解任務！</span>
+            <span class="icon"><i class="fas fa-pizza-slice"></i></span>
+            <span>2022 解任務！</span>
           </a>
           <a class="navbar-item has-text-weight-medium" href="/project/2023/">
-              <span class="icon"><i class="far fa-bookmark"></i></span>
-              <span>COSCUP 2023</span>
+            <span class="icon"><i class="far fa-bookmark"></i></span>
+            <span>COSCUP 2023</span>
           </a>
           {% endif %}
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link has-text-weight-medium" href="">
+              <span class="icon"><i class="fas fa-book"></i></span>
+              <span>引導手冊</span>
+            </a>
+            <div class="navbar-dropdown">
+              <a
+                class="navbar-item has-text-weight-medium"
+                target="_blank"
+                href="https://volunteer.coscup.org/docs/zh_TW/about_coscup/team_member_handbook/"
+              >
                 <span class="icon"><i class="fas fa-book"></i></span>
-                <span>引導手冊</span>
-            </a>
-            <div class="navbar-dropdown">
-                <a class="navbar-item has-text-weight-medium"
-                    target="_blank"
-                    href="https://volunteer.coscup.org/docs/zh_TW/about_coscup/team_member_handbook/">
-                    <span class="icon"><i class="fas fa-book"></i></span>
-                    <span>組員手冊</span>
-                </a>
-                <a class="navbar-item has-text-weight-medium"
-                    target="_blank"
-                    href="https://volunteer.coscup.org/docs/zh_TW/about_coscup/team_leader_handbook/">
-                    <span class="icon"><i class="fas fa-book"></i></span>
-                    <span>組長手冊</span>
-                </a>
+                <span>組員手冊</span>
+              </a>
+              <a
+                class="navbar-item has-text-weight-medium"
+                target="_blank"
+                href="https://volunteer.coscup.org/docs/zh_TW/about_coscup/team_leader_handbook/"
+              >
+                <span class="icon"><i class="fas fa-book"></i></span>
+                <span>組長手冊</span>
+              </a>
             </div>
           </div>
-          {% if g.user and g.user.data %}
-          {% if g.user['participate_in'] %}
+          <a class="navbar-item has-text-weight-medium" href="/schedule/2023">
+            <span class="icon"><i class="fas fa-bullhorn"></i></span>
+            <span>議程徵稿 CfP</span>
+          </a>
+          <a
+            class="navbar-item has-text-weight-medium"
+            target="_blank"
+            href="https://ocf.tw/p/oscvpass/"
+          >
+            <span class="icon"><i class="fas fa-ticket-alt"></i></span>
+            <span>OSCVPass 快速通關</span>
+          </a>
+          {% if g.user and g.user.data %} {% if g.user['participate_in'] %}
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link has-text-weight-medium" href="/team/{{g.user['participate_in'][0]['pid']}}/{{g.user['participate_in'][0]['tid']}}/">
-                <span class="icon"><i class="fas fa-thumbtack"></i></span>
-                <span>{{g.user['participate_in'][0]['name']}}</span>
+            <a
+              class="navbar-link has-text-weight-medium"
+              href="/team/{{g.user['participate_in'][0]['pid']}}/{{g.user['participate_in'][0]['tid']}}/"
+            >
+              <span class="icon"><i class="fas fa-thumbtack"></i></span>
+              <span>{{g.user['participate_in'][0]['name']}}</span>
             </a>
             <div class="navbar-dropdown">
-                {% for team in g.user['participate_in'] %}
-                <a class="navbar-item has-text-weight-medium" href="/team/{{team['pid']}}/{{team['tid']}}/">
-                    <span class="icon"><i class="fas fa-thumbtack"></i></span>
-                    <span>[{{team['pid']}}] {{team['name']}}</span>
-                </a>
-                {% endfor %}
+              {% for team in g.user['participate_in'] %}
+              <a
+                class="navbar-item has-text-weight-medium"
+                href="/team/{{team['pid']}}/{{team['tid']}}/"
+              >
+                <span class="icon"><i class="fas fa-thumbtack"></i></span>
+                <span>[{{team['pid']}}] {{team['name']}}</span>
+              </a>
+              {% endfor %}
             </div>
           </div>
-          {% endif %}
-          {% endif %}
-      </div>
-      <div class="navbar-end">
+          {% endif %} {% endif %}
+        </div>
+        <div class="navbar-end">
           {% if g.user and g.user.data %}
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
-                <span style="margin-right: 5px;">
-                    <figure class="image is-24x24">
-                        <img class="is-rounded" src="{{g.user.data.picture}}">
-                    </figure>
-                </span>
-                <span class="has-text-weight-medium">{{g.user.data.name}}</span>
+              <span style="margin-right: 5px">
+                <figure class="image is-24x24">
+                  <img class="is-rounded" src="{{g.user.data.picture}}" />
+                </figure>
+              </span>
+              <span class="has-text-weight-medium">{{g.user.data.name}}</span>
             </a>
             <div class="navbar-dropdown is-right">
-                <a class="navbar-item" href="/user/{{g.user.account._id}}">
-                    <span class="icon"><i class="far fa-id-badge"></i></span> <span>關於我</span>
-                </a>
-                <hr class="navbar-divider">
-                <a class="navbar-item" href="/setting">
-                    <span class="icon"><i class="fas fa-user-cog"></i></span> <span>設定</span>
-                </a>
-                <a class="navbar-item" href="/guide">
-                    <span class="icon"><i class="fas fa-book"></i></span> <span>使用手冊</span>
-                </a>
-                <a class="navbar-item" href="/setting/waitting">
-                    <span class="icon"><i class="fas fa-clipboard-check"></i></span> <span>組別申請狀況</span>
-                </a>
-                <hr class="navbar-divider">
-                <a class="navbar-item" href="/logout">
-                    <span class="icon"><i class="fas fa-sign-out-alt"></i></span> <span>登出</span>
-                </a>
+              <a class="navbar-item" href="/user/{{g.user.account._id}}">
+                <span class="icon"><i class="far fa-id-badge"></i></span>
+                <span>關於我</span>
+              </a>
+              <hr class="navbar-divider" />
+              <a class="navbar-item" href="/setting">
+                <span class="icon"><i class="fas fa-user-cog"></i></span>
+                <span>設定</span>
+              </a>
+              <a class="navbar-item" href="/guide">
+                <span class="icon"><i class="fas fa-book"></i></span>
+                <span>使用手冊</span>
+              </a>
+              <a class="navbar-item" href="/setting/waitting">
+                <span class="icon"><i class="fas fa-clipboard-check"></i></span>
+                <span>組別申請狀況</span>
+              </a>
+              <hr class="navbar-divider" />
+              <a class="navbar-item" href="/logout">
+                <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                <span>登出</span>
+              </a>
             </div>
           </div>
           {% else %}
           <div class="navbar-item">
-              <div class="field is-grouped">
-                  <p class="control">
-                  <a class="button is-info" href="/oauth2callback"><span class="icon"><i class="fas fa-sign-in-alt"></i></span> <span>Login</span></a>
-                  </p>
-              </div>
+            <div class="field is-grouped">
+              <p class="control">
+                <a class="button is-info" href="/oauth2callback"
+                  ><span class="icon"><i class="fas fa-sign-in-alt"></i></span>
+                  <span>Login</span></a
+                >
+              </p>
+            </div>
           </div>
           {% endif %}
+        </div>
       </div>
-    </div>
-  </nav>
-  {% block body %}{% endblock %}
-  <footer class="footer" style="margin-top: 50px;">
-    <div class="content has-text-centered">
-      <div class="columns">
-        <div class="column is-one-fifth"></div>
-        <div class="column">
+    </nav>
+    {% block body %}{% endblock %}
+    <footer class="footer" style="margin-top: 50px">
+      <div class="content has-text-centered">
+        <div class="columns">
+          <div class="column is-one-fifth"></div>
+          <div class="column">
             <div class="columns is-mobile">
               <div class="column">
-                  <div class="columns">
-                      <div class="column has-text-left">
-                          <p class="is-size-6">關於</p>
-                          <p>
-                              <a href="/docs/zh_TW/secretary_team/overview/">
-                                  <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
-                                  關於行政組
-                              </a>
-                          </p>
-                          <p>
-                              <a href="/docs/zh_TW/secretary_team/recruit/">
-                                  <span class="icon has-text-info"><i class="fas fa-briefcase"></i></span>
-                                  簡介與招募
-                              </a>
-                          </p>
-                      </div>
-                      <div class="column has-text-left">
-                          <p class="is-size-6">守則</p>
-                          <p>
-                              <a href="/coc" target="_blank">
-                                  <span class="icon has-text-info"><i class="fas fa-user-tag"></i></span>
-                                  社群守則
-                              </a>
-                          </p>
-                          <p>
-                              <a href="/security_guard" target="_blank">
-                                  <span class="icon has-text-info"><i class="fas fa-user-shield"></i></span>
-                                  資料保護原則
-                              </a>
-                          </p>
-                          <p>
-                              <a href="/privacy">
-                                  <span class="icon has-text-info"><i class="fas fa-user-shield"></i></span>
-                                  隱私權政策
-                              </a>
-                          </p>
-                      </div>
+                <div class="columns">
+                  <div class="column has-text-left">
+                    <p class="is-size-6">關於 About</p>
+                    <p>
+                      <a href="/docs/zh_TW/secretary_team/overview/">
+                        <span class="icon has-text-info"
+                          ><i class="fas fa-info-circle"></i
+                        ></span>
+                        關於行政組
+                      </a>
+                    </p>
+                    <p>
+                      <a href="/docs/zh_TW/secretary_team/recruit/">
+                        <span class="icon has-text-info"
+                          ><i class="fas fa-briefcase"></i
+                        ></span>
+                        簡介與招募
+                      </a>
+                    </p>
                   </div>
+                  <div class="column has-text-left">
+                    <p class="is-size-6">守則 Policy</p>
+                    <p>
+                      <a href="/coc" target="_blank">
+                        <span class="icon has-text-info"
+                          ><i class="fas fa-user-tag"></i
+                        ></span>
+                        社群守則
+                      </a>
+                    </p>
+                    <p>
+                      <a href="/security_guard" target="_blank">
+                        <span class="icon has-text-info"
+                          ><i class="fas fa-user-shield"></i
+                        ></span>
+                        資料保護原則
+                      </a>
+                    </p>
+                    <p>
+                      <a href="/privacy">
+                        <span class="icon has-text-info"
+                          ><i class="fas fa-user-shield"></i
+                        ></span>
+                        隱私權政策
+                      </a>
+                    </p>
+                  </div>
+                </div>
               </div>
               <div class="column">
-                  <div class="columns">
-                      <div class="column has-text-left">
-                          <p class="is-size-6">開發</p>
-                          <p>
-                              <a href="https://github.com/COSCUP/COSCUP-Volunteer" target="_blank">
-                                  <span class="icon has-text-info"><i class="fas fa-code-branch"></i></span>
-                                  開源貢獻
-                              </a>
-                          </p>
-                          <p>
-                              <a href="/docs/">
-                                  <span class="icon has-text-info"><i class="fas fa-code"></i></span>
-                                  開發文件
-                              </a>
-                          </p>
-                          <p>
-                              <a href="/api">
-                                  <span class="icon has-text-info"><i class="fas fa-cogs"></i></span>
-                                  API
-                              </a>
-                          </p>
-                      </div>
-                      <div class="column has-text-left">
-                          <p class="is-size-6">回報</p>
-                          <p>
-                            <a href="/bug-report">
-                              <span class="icon has-text-info"><i class="fas fa-bug"></i></span>
-                              缺陷回報
-                            </a>
-                          <p>
-                            <a href="mailto:coc@coscup.org">
-                              <span class="icon has-text-info"><i class="far fa-envelope"></i></span>
-                              違反社群守則
-                            </a>
-                          </p>
-                      </div>
+                <div class="columns">
+                  <div class="column has-text-left">
+                    <p class="is-size-6">開發 Develop</p>
+                    <p>
+                      <a
+                        href="https://github.com/COSCUP/COSCUP-Volunteer"
+                        target="_blank"
+                      >
+                        <span class="icon has-text-info"
+                          ><i class="fas fa-code-branch"></i
+                        ></span>
+                        開源貢獻
+                      </a>
+                    </p>
+                    <p>
+                      <a href="/docs/">
+                        <span class="icon has-text-info"
+                          ><i class="fas fa-code"></i
+                        ></span>
+                        開發文件
+                      </a>
+                    </p>
+                    <p>
+                      <a href="/api">
+                        <span class="icon has-text-info"
+                          ><i class="fas fa-cogs"></i
+                        ></span>
+                        API
+                      </a>
+                    </p>
                   </div>
+                  <div class="column has-text-left">
+                    <p class="is-size-6">回報 Report</p>
+                    <p>
+                      <a href="/bug-report">
+                        <span class="icon has-text-info"
+                          ><i class="fas fa-bug"></i
+                        ></span>
+                        缺陷回報
+                      </a>
+                    </p>
+
+                    <p>
+                      <a href="mailto:coc@coscup.org">
+                        <span class="icon has-text-info"
+                          ><i class="far fa-envelope"></i
+                        ></span>
+                        違反社群守則
+                      </a>
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
+          <div class="column is-one-fifth"></div>
         </div>
-        <div class="column is-one-fifth"></div>
-      </div>
-      <div class="columns">
-        <div class="column"></div>
-        <div class="column is-two-thirds">
+        <div class="columns">
+          <div class="column"></div>
+          <div class="column is-two-thirds">
             <p>COSCUP Volunteer 志工服務系統 | 行政組 建構</p>
-            <hr style="border: 3px solid #e1e1e1; border-radius: 3px;">
+            <hr style="border: 3px solid #e1e1e1; border-radius: 3px" />
             <p>
-                <span class="icon"><i class="fas fa-rocket"></i></span>
-                <span>2020, 2021, 2022, 2023</span>
+              <span class="icon"><i class="fas fa-rocket"></i></span>
+              <span>2020, 2021, 2022, 2023</span>
             </p>
+          </div>
+          <div class="column"></div>
         </div>
-        <div class="column"></div>
       </div>
-    </div>
-  </footer>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6B98ZDG12C"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    {% if g.user and g.user.data %}
-    gtag('set', {'user_id': '{{ g.user.account._id }}'});
-    {% endif %}
-    gtag('config', 'G-6B98ZDG12C');
-    gtag('config', 'AW-969732922');
-  </script>
-  <script src="/js/vue.min.js"></script>
-  <script>
-      (function() {
-          let app = new Vue({
-              el: 'nav',
-              data: {
-                  navtoggle: false
-              },
-              delimiters: ['[[', ']]']
-          });
+    </footer>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-6B98ZDG12C"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      {% if g.user and g.user.data %}
+      gtag('set', {'user_id': '{{ g.user.account._id }}'});
+      {% endif %}
+      gtag('config', 'G-6B98ZDG12C');
+      gtag('config', 'AW-969732922');
+    </script>
+    <script src="/js/vue.min.js"></script>
+    <script>
+      (function () {
+        let app = new Vue({
+          el: "nav",
+          data: {
+            navtoggle: false,
+          },
+          delimiters: ["[[", "]]"],
+        });
       })();
-  </script>
-  {% block js %}{% endblock %}
+    </script>
+    {% block js %}{% endblock %}
   </body>
 </html>

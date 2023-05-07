@@ -21,7 +21,7 @@
                         </ul>
                         <p class="menu-label">目次</p>
                         <ul class="menu-list">
-                            {% for submission in submissions %}
+                            {% for submission in submissions if submission.code not in exclude_submissions %}
                             <li>
                                 <a href="#{{submission.code}}">{{ submission.title }}</a>
                             </li>
@@ -30,7 +30,7 @@
                     </aside>
                 </div>
                 <div class="column">
-                    {% for submission in submissions %}
+                    {% for submission in submissions if submission.code not in exclude_submissions %}
                     <div class="content box">
                         <h3 id="{{submission.code}}">
                             <a href="#{{submission.code}}">{{ submission.title }}</a>

@@ -3,6 +3,7 @@ from flask import Blueprint, render_template
 from flask.wrappers import Response
 from werkzeug.wrappers import Response as ResponseBase
 
+import setting
 from module.mc import MC
 from module.track import Track
 
@@ -19,7 +20,8 @@ def show_track(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
     submissions = Track(pid=str(pid)).get_submissions_by_track_id(track_id)
     return render_template('schedule_submissions.html',
                            pid=pid,
-                           submissions=submissions)
+                           submissions=submissions,
+                           exclude_submissions=setting.EXCLUDE_SUBMISSIONS)
 
 
 @VIEW_SCHEDULE.route('/<int:pid>')

@@ -81,3 +81,4 @@ OPENAI_ARGS = {
 
 # ----- Pretalx ----- #
 PRETALX_API_KEY = ''
+EXCLUDE_SUBMISSIONS = []
