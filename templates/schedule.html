@@ -1,5 +1,26 @@
 {% extends "base.html" %} {% block head_title %} 大會議程、社群時程表 Schedule
-{% endblock %} {% block body %}
+{% endblock %} {%block og%}
+<meta
+  property="og:title"
+  content="大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統"
+/>
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="COSCUP Volunteer" />
+<meta
+  property="og:image"
+  content="https://volunteer.coscup.org/img/volunteer_og.png"
+/>
+<meta
+  property="og:description"
+  content="大會議程 社群時程表 議程投稿 議程簡介 Schedule"
+/>
+<meta
+  property="twitter:title"
+  content="大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統"
+/>
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="@coscup" />
+{%endblock%} {% block body %}
 <section class="section">
   <div class="container">
     <h1 class="title">議程、社群時程表</h1>
