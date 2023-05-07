@@ -25,17 +25,19 @@ from module.mattermost_bot import MattermostTools
 from module.mc import MC
 from module.oauth import OAuth
 from module.team import Team
+from module.track import Track
 from module.users import PolicySigned, User
 from module.usession import USession
 from structs.users import PolicyType
 from view.api import VIEW_API
 from view.budget import VIEW_BUDGET
-from view.expense import VIEW_EXPENSE
 from view.dispense import VIEW_DISPENSE
+from view.expense import VIEW_EXPENSE
 from view.guide import VIEW_GUIDE
 from view.links import VIEW_LINKS
 from view.project import VIEW_PROJECT
 from view.recruit import VIEW_RECRUIT
+from view.schedule import VIEW_SCHEDULE
 from view.sender import VIEW_SENDER
 from view.setting import VIEW_SETTING
 from view.tasks import VIEW_TASKS
@@ -56,12 +58,13 @@ app.config['SESSION_COOKIE_SECURE'] = True
 app.secret_key = setting.SECRET_KEY
 app.register_blueprint(VIEW_API)
 app.register_blueprint(VIEW_BUDGET)
-app.register_blueprint(VIEW_EXPENSE)
 app.register_blueprint(VIEW_DISPENSE)
+app.register_blueprint(VIEW_EXPENSE)
 app.register_blueprint(VIEW_GUIDE)
 app.register_blueprint(VIEW_LINKS)
 app.register_blueprint(VIEW_PROJECT)
 app.register_blueprint(VIEW_RECRUIT)
+app.register_blueprint(VIEW_SCHEDULE)
 app.register_blueprint(VIEW_SENDER)
 app.register_blueprint(VIEW_SETTING)
 app.register_blueprint(VIEW_TASKS)
@@ -166,7 +169,8 @@ def need_login() -> ResponseBase | None:
 
         return None
 
-    if request.path in NO_NEED_LOGIN_PATH or request.path.startswith('/tasks'):
+    if request.path in NO_NEED_LOGIN_PATH or \
+            request.path.startswith('/tasks') or request.path.startswith('/schedule'):
         return None
 
     if request.path not in NO_NEED_LOGIN_PATH:
@@ -397,6 +401,9 @@ def sitemap() -> ResponseBase:
         '/robots.txt',
         '/security_guard',
     ):
+        result.append(f'https://volunteer.coscup.org{path}')
+
+    for path in Track.sitemap():
         result.append(f'https://volunteer.coscup.org{path}')
 
     resp = make_response('\r\n'.join(result), 200)

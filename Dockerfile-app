@@ -17,8 +17,8 @@ ADD ./models/__init__.py \
     ./models/applyreviewdb.py \
     ./models/base.py \
     ./models/budgetdb.py \
-    ./models/expensedb.py \
     ./models/dispensedb.py \
+    ./models/expensedb.py \
     ./models/formdb.py \
     ./models/index.py \
     ./models/mailletterdb.py \
@@ -30,6 +30,7 @@ ADD ./models/__init__.py \
     ./models/tasksdb.py \
     ./models/teamdb.py \
     ./models/telegram_db.py \
+    ./models/trackdb.py \
     ./models/users_db.py \
     ./models/usessiondb.py \
     ./models/waitlistdb.py \
@@ -41,8 +42,8 @@ ADD ./module/__init__.py \
     ./module/awsses.py \
     ./module/budget.py \
     ./module/dietary_habit.py \
-    ./module/expense.py \
     ./module/dispense.py \
+    ./module/expense.py \
     ./module/form.py \
     ./module/gitlab_api.py \
     ./module/gsuite.py \
@@ -59,6 +60,7 @@ ADD ./module/__init__.py \
     ./module/tasks.py \
     ./module/team.py \
     ./module/telegram_bot.py \
+    ./module/track.py \
     ./module/users.py \
     ./module/usession.py \
     ./module/waitlist.py \
@@ -80,6 +82,7 @@ ADD ./templates/base.html \
     ./templates/privacy* \
     ./templates/project*.html \
     ./templates/recruit_list.html \
+    ./templates/schedule* \
     ./templates/security_guard* \
     ./templates/sender*.html \
     ./templates/setting*.html \
@@ -114,12 +117,13 @@ ADD ./static/ExpenseStatusLabel.js \
 ADD ./view/__init__.py \
     ./view/api.py \
     ./view/budget.py \
-    ./view/expense.py \
     ./view/dispense.py \
+    ./view/expense.py \
     ./view/guide.py \
     ./view/links.py \
     ./view/project.py \
     ./view/recruit.py \
+    ./view/schedule.py \
     ./view/sender.py \
     ./view/setting.py \
     ./view/tasks.py \

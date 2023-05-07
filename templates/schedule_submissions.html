@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block head_title %}
+    {{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / 大會議程、社群時程表 Schedule
+{% endblock %}
+{% block body %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">{{submissions[0].track.get('zh-tw', submissions[0].track['en'])}}</h1>
+            <p class="subtitle">{{ submissions[0].track['en'] }}</p>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-one-quarter">
+                    <aside class="menu">
+                        <ul class="menu-list">
+                            <li>
+                                <a href="/schedule/{{pid}}">回列表</a>
+                            </li>
+                        </ul>
+                        <p class="menu-label">目次</p>
+                        <ul class="menu-list">
+                            {% for submission in submissions %}
+                            <li>
+                                <a href="#{{submission.code}}">{{ submission.title }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                </div>
+                <div class="column">
+                    {% for submission in submissions %}
+                    <div class="content box">
+                        <h3 id="{{submission.code}}">
+                            <a href="#{{submission.code}}">{{ submission.title }}</a>
+                        </h3>
+                        <p>
+                            <small>
+                                投稿狀態：
+                                {% if submission.state == 'accepted' %}
+                                <span class="tag is-success">已接受（{{submission.state}}）</span>
+                                {% elif submission.state == 'submitted' %}
+                                <span class="tag is-link">已送出（{{submission.state}}）</span>
+                                {% elif submission.state == 'confirmed' %}
+                                <span class="tag is-info">已確認（{{submission.state}}）</span>
+                                {% else %}
+                                <span class="tag">{{ submission.state }}</span>
+                                {% endif %}
+                            </small>
+                        </p>
+                        <p>{{ submission.abstract|replace('\n', '<br>')|safe }}</p>
+                        <h4>投稿者</h4>
+                        {% for speaker in submission.speakers %}
+                        <div class="card mb-5">
+                            <div class="card-content">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <figure class="image is-32x32">
+                                            {% if speaker.avatar %}
+                                                <img class="is-rounded" src="{{ speaker.avatar }}" alt="{{ speaker.name }}">
+                                            {% else %}
+                                                <img class="is-rounded" src="https://volunteer.coscup.org/img/nonavatar.png" alt="{{ speaker.name }}">
+                                            {% endif %}
+                                        </figure>
+                                    </div>
+                                    <div class="media-content">
+                                        <p class="title is-5">{{ speaker.name }}</p>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <div class="content">
+                                        <p>{{ speaker.biography }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <p>
+                            <div class="tags">
+                                <span class="tag">{{ submission.code }}</span>
+                                <span class="tag">{{ submission.submission_type['en']}}</span>
+                                <span class="tag">{{ submission.track['en']}}</span>
+                                {% if submission.track.get('zh-tw') %}
+                                <span class="tag">{{ submission.track['zh-tw']}}</span>
+                                {% endif %}
+                            </div>
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

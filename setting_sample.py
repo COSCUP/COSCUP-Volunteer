@@ -78,3 +78,6 @@ OPENAI_ARGS = {
     'token': '',
     'organization': '',
 }
+
+# ----- Pretalx ----- #
+PRETALX_API_KEY = ''
