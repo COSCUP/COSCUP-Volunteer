@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block head_title %}
-    {{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / 大會議程、社群時程表 Schedule
+    {{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / {{pid}} 大會議程、社群時程表 Schedule
 {% endblock %}
 {%block og%}
-<meta property="og:title" content="{{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
+<meta property="og:title" content="{{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / {{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="COSCUP Volunteer">
 <meta property="og:image" content="https://volunteer.coscup.org/img/volunteer_og.png">
 <meta property="og:description" content="{{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / {{ submissions[0].track['en'] }}">
-<meta property="twitter:title" content="{{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
+<meta property="twitter:title" content="{{submissions[0].track.get('zh-tw', submissions[0].track['en'])}} / {{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
 <meta property="twitter:card" content="summary">
 <meta property="twitter:site" content="@coscup">
 {%endblock%}
@@ -52,20 +52,10 @@
                             <a href="#{{submission.code}}">{{ submission.title }}</a>
                         </h3>
                         <p>
-                            <small>
-                                <span class="tag is-info is-light">投稿狀態：</span>
-                                {% if submission.state == 'accepted' %}
-                                <span class="tag is-success">已接受（{{submission.state}}）</span>
-                                {% elif submission.state == 'submitted' %}
-                                <span class="tag is-link">已送出（{{submission.state}}）</span>
-                                <span class="tag is-warning">稿件審核中</span>
-                                {% elif submission.state == 'confirmed' %}
-                                <span class="tag is-info">已確認（{{submission.state}}）</span>
-                                <span class="tag is-warning">稿件審核中</span>
-                                {% else %}
-                                <span class="tag">{{ submission.state }}</span>
-                                {% endif %}
-                            </small>
+                            <span class="tags">
+                                <span class="tag is-link is-small">Submission Preview</span>
+                                <span class="tag is-warning is-small">稿件審核中</span>
+                            </span>
                         </p>
                         <p>{{ submission.abstract|replace('\n', '<br>')|safe }}</p>
                         <h4>投稿者</h4>

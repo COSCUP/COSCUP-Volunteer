@@ -1,8 +1,8 @@
-{% extends "base.html" %} {% block head_title %} 大會議程、社群時程表 Schedule
-{% endblock %} {%block og%}
+{% extends "base.html" %} {% block head_title %} {{pid}} 大會議程、社群時程表
+Schedule {% endblock %} {%block og%}
 <meta
   property="og:title"
-  content="大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統"
+  content="{{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統"
 />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="COSCUP Volunteer" />
@@ -12,18 +12,18 @@
 />
 <meta
   property="og:description"
-  content="大會議程 社群時程表 議程投稿 議程簡介 Schedule"
+  content="在活動期間有哪些需要注意的時程與社群 {{pid}} 大會議程 社群時程表 議程投稿 議程簡介 Schedule"
 />
 <meta
   property="twitter:title"
-  content="大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統"
+  content="{{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統"
 />
 <meta property="twitter:card" content="summary" />
 <meta property="twitter:site" content="@coscup" />
 {%endblock%} {% block body %}
 <section class="section">
   <div class="container">
-    <h1 class="title">議程、社群時程表</h1>
+    <h1 class="title">{{pid}} 議程、社群時程表</h1>
     <p class="subtitle">在活動期間有哪些需要注意的時程與社群</p>
   </div>
 </section>
