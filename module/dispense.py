@@ -2,6 +2,7 @@
 from typing import Any, Generator
 
 from pymongo.collection import ReturnDocument
+from pymongo.cursor import Cursor
 
 from models.expensedb import ExpenseDB
 from models.dispensedb import DispenseDB
@@ -63,6 +64,19 @@ class Dispense:
         '''
         for raw in DispenseDB().find({'pid': pid}):
             yield raw
+
+    @staticmethod
+    def get_by_ids(ids: list[str]) -> Cursor[dict[str, Any]]:
+        ''' Get all
+
+        Args:
+            ids (list[str]): list of dispense id.
+
+        Returns:
+            Return the dispense data in `ids`.
+
+        '''
+        return DispenseDB().find({'_id': { '$in': ids }})
 
     @staticmethod
     def update(dispense_id: str, data: dict[str, Any]) -> dict[str, Any] | int:

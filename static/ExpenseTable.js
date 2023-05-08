@@ -14,14 +14,14 @@
                   </label>
                 </th>
                 <th>申請單號</th>
-                <th>狀態</th>
+                <th v-if="!isNested">狀態</th>
                 <th>預算編號</th>
-                <th>預算唯一編號</th>
-                <th>部門</th>
-                <th>申請人</th>
+                <th v-if="isAdmin">預算唯一編號</th>
+                <th v-if="isAdmin">部門</th>
+                <th v-if="should_show_owner">申請人</th>
                 <th>金額</th>
                 <th>期望出款時間</th>
-                <th v-if="isEditable" />
+                <th v-if="is_some_editable" />
             </tr>
         </thead>
         <tbody>
@@ -44,18 +44,18 @@
 
                     <p class="is-size-7">{{ new Date(item.create_at).toLocaleString() }}</p>
                 </td>
-                <td class="is-vcentered">
+                <td v-if="!isNested" class="is-vcentered">
                     <expense-status-label class="tag is-clickable" @click="edit(item)" :item="item"></expense-status-label>
                 </td>
                 <td class="is-vcentered">
                     <span class="tag is-dark">{{ budgets[item.request.buid].bid }}</span>
                     <span><a @click="edit(item)">{{ budgets[item.request.buid].name }}</a></span>
                 </td>
-                <td class="is-vcentered">
+                <td v-if="isAdmin" class="is-vcentered">
                     <span class="tag is-success is-light">{{ item.request.code }}</span>
                 </td>
-                <td class="is-vcentered">{{ item.tid }}</td>
-                <td class="is-vcentered">
+                <td v-if="isAdmin" class="is-vcentered">{{ item.tid }}</td>
+                <td v-if="should_show_owner" class="is-vcentered">
                     <user-badge :id="item.create_by" :users="users" />
                 </td>
                 <td class="is-vcentered">
@@ -70,7 +70,7 @@
                     </div>
                 </td>
                 <td class="is-vcentered">{{ item.request.paydate }}</td>
-                <td v-if="isEditable">
+                <td class="is-vcentered" v-if="is_editable(item)">
                     <b-button @click="edit(item)">編輯申請單</b-button>
                 </td>
             </tr>
@@ -91,13 +91,11 @@
             },
             users: {
                 type: Object,
-                required: true
+                default () {
+                    return {}
+                }
             },
             isSelectable: {
-                type: Boolean,
-                default: false
-            },
-            isEditable: {
                 type: Boolean,
                 default: false
             },
@@ -110,6 +108,18 @@
                 default () {
                     return []
                 }
+            },
+            isAdmin: {
+                type: Boolean,
+                default: true
+            },
+            isNested: {
+                type: Boolean,
+                default: false
+            },
+            me: {
+                type: String,
+                default: ''
             }
         },
         data () {
@@ -121,6 +131,12 @@
             is_all_expense_selected () {
                 // local_selected_expense will be reset every time when expenses changed
                 return this.expenses.length === this.local_selected_expense.length
+            },
+            is_some_editable () {
+                return this.isAdmin || this.expenses.some(exp => exp.create_by === this.me)
+            },
+            should_show_owner () {
+                return this.isAdmin || this.isNested
             }
         },
         watch: {
@@ -135,6 +151,9 @@
             }
         },
         methods: {
+            is_editable (expense) {
+                return this.isAdmin || expense.create_by === this.me
+            },
             is_expense_selected (expense) {
                 return this.local_selected_expense.indexOf(expense) >= 0
             },
@@ -157,7 +176,7 @@
                 this.local_selected_expense = []
             },
             edit (item) {
-                if (this.isEditable) {
+                if (this.is_editable(item)) {
                     this.$emit('edit', item)
                 }
             }

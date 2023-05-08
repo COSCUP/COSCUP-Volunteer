@@ -207,7 +207,8 @@
                 return this.statusList.filter(status => AVAILABLE_EXPENSE_STATUS.includes(status.label))
             },
             should_create_dispense () {
-                return this.local_expense.status === '3' // 出款中
+                return this.local_expense.status === '3' && // 出款中
+                    this.local_expense.status !== this.expense.status
             },
             cta_label () {
                 if (this.should_create_dispense) {

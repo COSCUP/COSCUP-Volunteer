@@ -14,13 +14,13 @@
                             選取的申請單
                         </h4>
                         <ol type="1">
-                            <li v-for="expense in selected_expenses" :key="expense._id">
-                                <div class="is-flex is-align-items-center">
+                            <li v-for="expense in selected_expenses" :key="expense._id" class="mb-3">
+                                <div class="is-flex is-align-items-center is-flex-wrap-wrap">
                                     <span class="mr-1">{{ users[expense.create_by].profile.badge_name }} 申請的</span>
                                     <span class="tag is-dark mr-1">{{ budgets[expense.request.buid].bid }}</span>
                                     <span class="mr-2">{{ budgets[expense.request.buid].name }}，金額為</span>
                                     <invoice-list class="mr-1 mb-0" :invoices="expense.invoices" />
-                                    <span>，期望出款時間為 {{expense.request.paydate}} </span>
+                                    <span v-if="expense.request.paydate">，期望出款時間為 {{expense.request.paydate}} </span>
                                 </div>
                             </li>
                         </ol>

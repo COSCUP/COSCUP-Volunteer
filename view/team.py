@@ -20,6 +20,7 @@ from celery_task.task_expense import expense_create
 from models.teamdb import TeamMemberChangedDB, TeamPlanDB
 from module.budget import Budget
 from module.expense import Expense
+from module.dispense import Dispense
 from module.form import Form, FormAccommodation, FormTrafficFeeMapping
 from module.mattermost_bot import MattermostTools
 from module.team import Team
@@ -1258,7 +1259,7 @@ def team_expense_lists(pid: str, tid: str) -> str | ResponseBase:
 @VIEW_TEAM.route('/<pid>/<tid>/expense/my', methods=('GET', 'POST'))
 def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
     ''' Team expense my '''
-    # pylint: disable=too-many-locals,too-many-branches,too-many-return-statements
+    # pylint: disable=too-many-locals,too-many-branches,too-many-return-statements,too-many-statements
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
@@ -1289,11 +1290,25 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
 
             buids = set()
             uids = set()
-            items = []
+            items = {}
+            dispense_ids = set()
+            dispenses = []
+
             for item in Expense.get_by_create_by(pid=pid, create_by=g.user['account']['_id']):
+                items[item['_id']] = item
+                dispense_ids.add(item['dispense_id'])
+
+            dispense_ids_list = list(dispense_ids)
+
+            for item in Expense.get_by_dispense_id(dispense_ids_list):
+                items[item['_id']] = item
+
+            for item in items.values():
                 buids.add(item['request']['buid'])
                 uids.add(item['create_by'])
-                items.append(item)
+
+            for dispense in Dispense.get_by_ids(dispense_ids_list):
+                dispenses.append(dispense)
 
             budgets = {}
             if buids:
@@ -1308,8 +1323,15 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
                         'oauth': value['oauth'],
                         'profile': {'badge_name': value['profile']['badge_name']}, }
 
-            return jsonify({'teams': teams, 'items': items, 'budgets': budgets,
-                            'users': users, 'status': Expense.status()})
+            return jsonify({
+                'teams': teams,
+                'items': list(items.values()),
+                'dispenses': dispenses,
+                'budgets': budgets,
+                'users': users,
+                'status': Expense.status(),
+                'my': g.user['account']['_id']
+            })
 
         if data and data['casename'] == 'update':
             invoices = {}
