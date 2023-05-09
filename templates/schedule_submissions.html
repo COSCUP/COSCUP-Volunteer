@@ -50,8 +50,8 @@
                     <div class="content">
                         <h3>議程簡介</h3>
                         <div class="content box">
-                            {{ track_description.get('zh-tw')|safe }}
-                            {{ track_description.get('en')|safe }}
+                            {{ track_description.get('zh-tw', '')|safe }}
+                            {{ track_description.get('en', '')|safe }}
                         </div>
                     </div>
                     {% endif %}
