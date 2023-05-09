@@ -46,6 +46,17 @@
                     </aside>
                 </div>
                 <div class="column">
+                    {% if track_description %}
+                    <div class="content">
+                        <h3>議程簡介</h3>
+                        <div class="content box">
+                            {{ track_description.get('zh-tw')|safe }}
+                            {{ track_description.get('en')|safe }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="content">
+                    <h3>已投稿的議程</h3>
                     {% for submission in submissions if submission.code not in exclude_submissions %}
                     <div class="content box">
                         <h3 id="{{submission.code}}">
@@ -96,6 +107,7 @@
                         </p>
                     </div>
                     {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

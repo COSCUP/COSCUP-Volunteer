@@ -62,6 +62,20 @@ class Track:
         ''' Get Submissions by track_id '''
         return TrackDB().get_submissions_by_track_id(pid=self.pid, track_id=track_id)
 
+    def save_track_description(self, track_id: str,
+                               content: str, lang: str = 'zh-tw') -> None:
+        ''' Save track description '''
+        TrackDB().save_track_description(pid=self.pid,
+                                         track_id=track_id, content=content, lang=lang)
+
+    def get_track_description(self, track_id: str) -> dict[str, str]:
+        ''' Get track description '''
+        result: dict[str, str] = {}
+        for raw in TrackDB().find({'pid': self.pid, 'track_id': track_id}):
+            result[raw['lang']] = raw['content']
+
+        return result
+
     @classmethod
     def sitemap(cls) -> list[str]:
         ''' sitemap '''

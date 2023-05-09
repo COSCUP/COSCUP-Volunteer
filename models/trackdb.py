@@ -92,3 +92,12 @@ class TrackDB(DBBase):
             result.append(Submission.parse_obj(data['raw']))
 
         return result
+
+    def save_track_description(self, pid: str,
+                               track_id: str, content: str, lang: str) -> None:
+        ''' Save track description '''
+        self.find_one_and_update(
+            {'pid': pid, 'cate': 'desc', 'track_id': track_id, 'lang': lang},
+            {'$set': {'content': content}},
+            upsert=True,
+        )

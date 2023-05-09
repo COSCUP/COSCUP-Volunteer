@@ -18,9 +18,12 @@ def show_track(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
 
     _ = track_name
     submissions = Track(pid=str(pid)).get_submissions_by_track_id(track_id)
+    track_description = Track(
+        pid=str(pid)).get_track_description(track_id=track_id)
     return render_template('schedule_submissions.html',
                            pid=pid,
                            submissions=submissions,
+                           track_description=track_description,
                            exclude_submissions=setting.EXCLUDE_SUBMISSIONS)
 
 
