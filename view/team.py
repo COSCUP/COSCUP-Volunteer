@@ -281,7 +281,7 @@ def team_edit_user_dl_waiting(pid: str, tid: str) -> str | ResponseBase:
         csv_writer.writeheader()
         csv_writer.writerows(result.values())
 
-        filename = f"coscup_waiting_{pid}_{tid}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+        filename = f"coscup_waiting_{pid}_{tid}_{arrow.now().to('Asia/Taipei').format('YYYYMMDD-HHmmss')}.csv"
 
         return Response(
             files.getvalue().encode(encoding="utf-8-sig"),
