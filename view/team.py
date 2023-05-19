@@ -1,13 +1,17 @@
 ''' Team '''
 # pylint: disable=too-many-lines
+import csv
 import html
+import io
 import json
 import re
-from typing import Any, Callable
+from datetime import datetime
 from random import choice
+from typing import Any, Callable
 
 import arrow
 import phonenumbers
+from bson.objectid import ObjectId
 from flask import (Blueprint, flash, g, jsonify, make_response, redirect,
                    render_template, request, url_for)
 from flask.wrappers import Response
@@ -15,16 +19,17 @@ from markdown import markdown
 from pydantic import BaseModel, Field
 from werkzeug.wrappers import Response as ResponseBase
 
+import setting
 from celery_task.task_applyreview import applyreview_submit_one
 from celery_task.task_expense import expense_create
 from models.teamdb import TeamMemberChangedDB, TeamPlanDB
+from module.applyreview import ApplyReview
 from module.budget import Budget
-from module.expense import Expense
 from module.dispense import Dispense
+from module.expense import Expense
 from module.form import Form, FormAccommodation, FormTrafficFeeMapping
 from module.mattermost_bot import MattermostTools
 from module.team import Team
-from module.applyreview import ApplyReview
 from module.users import AccountPass, User
 from module.waitlist import WaitList
 from structs.teams import TeamUsers
@@ -224,6 +229,66 @@ def team_edit(pid: str, tid: str) -> str | ResponseBase:
                                 pid=team.pid, tid=team.id, _scheme='https', _external=True))
 
     return Response('', status=404)
+
+
+@VIEW_TEAM.route('/<pid>/<tid>/edit_user/dl_waiting', methods=('GET',))
+def team_edit_user_dl_waiting(pid: str, tid: str) -> str | ResponseBase:
+    ''' Team edit user '''
+    team, project, _redirect = check_the_team_and_project_are_existed(
+        pid=pid, tid=tid)
+    if _redirect:
+        return _redirect
+
+    if not team or not project:
+        return redirect('/')
+
+    teamusers = TeamUsers.parse_obj(team)
+    is_admin = (g.user['account']['_id'] in teamusers.chiefs or
+                g.user['account']['_id'] in teamusers.owners or
+                g.user['account']['_id'] in project.owners)
+
+    if not is_admin:
+        return redirect('/')
+
+    waitting_list: list[dict[str, Any]] = []
+    waiting_data = WaitList.list_by_team(pid=pid, tid=tid)
+
+    if waiting_data is not None:
+        for waiting in waiting_data:
+            waitting_list.append(waiting)
+
+    users_info = User.get_info([u['uid'] for u in waitting_list])
+
+    result: dict[str, dict[str, str]] = {}
+    for waiting in waitting_list:
+        uid = waiting['uid']
+        result[uid] = {}
+        result[uid]['name'] = users_info[uid]['profile']['badge_name']
+        email = users_info[uid]['oauth']['email']
+        result[uid]['email_for_to'] = f'"{result[uid]["name"]}" <{email}>'
+        result[uid]['submission'] = waiting['note']
+        result[uid]['intro'] = users_info[uid]['profile']['intro'].replace(
+            '\n', '\r\n')
+        result[uid]['url'] = f'https://{setting.DOMAIN}/user/{uid}'
+        result[uid]['date'] = arrow.get(ObjectId(waiting['_id']).generation_time).to(
+            'Asia/Taipei').format('YYYY-MM-DD')
+
+    with io.StringIO() as files:
+        csv_writer = csv.DictWriter(files,
+                                    fieldnames=['date', 'name', 'email_for_to', 'submission',
+                                                'url', 'intro'],
+                                    quoting=csv.QUOTE_MINIMAL)
+        csv_writer.writeheader()
+        csv_writer.writerows(result.values())
+
+        filename = f"coscup_waiting_{pid}_{tid}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+
+        return Response(
+            files.getvalue().encode(encoding="utf-8-sig"),
+            mimetype='text/csv',
+            headers={'Content-disposition': f'attachment; filename={filename}',
+                     'x-filename': filename,
+                     })
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/edit_user', methods=('GET', 'POST'))

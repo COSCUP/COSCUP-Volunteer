@@ -13,7 +13,14 @@
         </div>
         <div id="waittingTabs" class="content" style="display: none;">
         {% if waitting_list %}
-        <h3>等待核准組員（{{waitting_list|length}}）</h3>
+        <h3>
+            等待核准組員（{{waitting_list|length}}）
+            <a href="./edit_user/dl_waiting"
+               class="button is-small is-info is-light is-outlined">
+                <span class="icon"><i class="fas fa-download"></i></span>
+                <span>下載等候名單</span>
+            </a>
+        </h3>
         {% for u in waitting_list %}
         <article class="media box">
             <div class="media-left">
