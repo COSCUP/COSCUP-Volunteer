@@ -5,7 +5,6 @@ import html
 import io
 import json
 import re
-from datetime import datetime
 from random import choice
 from typing import Any, Callable
 
@@ -234,6 +233,7 @@ def team_edit(pid: str, tid: str) -> str | ResponseBase:
 @VIEW_TEAM.route('/<pid>/<tid>/edit_user/dl_waiting', methods=('GET',))
 def team_edit_user_dl_waiting(pid: str, tid: str) -> str | ResponseBase:
     ''' Team edit user '''
+    # pylint: disable=too-many-locals
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
@@ -281,7 +281,8 @@ def team_edit_user_dl_waiting(pid: str, tid: str) -> str | ResponseBase:
         csv_writer.writeheader()
         csv_writer.writerows(result.values())
 
-        filename = f"coscup_waiting_{pid}_{tid}_{arrow.now().to('Asia/Taipei').format('YYYYMMDD-HHmmss')}.csv"
+        filename = f"coscup_waiting_{pid}_{tid}_" + \
+                   f"{arrow.now().to('Asia/Taipei').format('YYYYMMDD-HHmmss')}.csv"
 
         return Response(
             files.getvalue().encode(encoding="utf-8-sig"),
