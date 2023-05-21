@@ -207,7 +207,7 @@
                         this.status_label_map.已出款,
                         this.status_label_map.已完成
                     ]
-                    return dispense_view.includes(this.filter.status_code) && this.visible_dispenses.length
+                    return dispense_view.includes(this.filter.status_code) && this.dispenses.length
                         
                 },
                 visible_dispenses () {
@@ -285,7 +285,14 @@
                     return this.visible_expenses.filter(item => !item.enable)
                 },
                 is_table_empty () {
-                    return this.is_loading || (!this.visible_expenses.length && !this.visible_dispenses.length)
+                    if (this.is_loading) {
+                        return true
+                    }
+                    if (this.should_show_dispense) {
+                        return !this.visible_dispenses.length
+                    } else {
+                        return !this.visible_expenses.length
+                    }
                 }
             },
             mounted: function() {
