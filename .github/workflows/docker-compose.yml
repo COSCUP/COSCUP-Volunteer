@@ -20,6 +20,9 @@ jobs:
       - name: Build the base image
         run: docker build -t coscupweb-base:23.06.07 -f ./Dockerfile-base-dev ./
       - name: UP
+        env:
+          CLIENT_ID: ${{ secrets.TDX_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.TDX_CLIENT_SECRET }}
         run: docker compose up --build --detach
       - name: List images
         run: docker images

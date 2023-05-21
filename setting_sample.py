@@ -1,3 +1,4 @@
+import os
 # ----- flask ----- #
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 6699
@@ -82,3 +83,9 @@ OPENAI_ARGS = {
 # ----- Pretalx ----- #
 PRETALX_API_KEY = ''
 EXCLUDE_SUBMISSIONS = []
+
+# ----- TDX (Transport Data eXchange) ----- #
+# This is used when connecting API for rail info
+# You need to apply for api keys on tdx.transportdata.tw
+CLIENT_ID = os.environ["CLIENT_ID"]
+CLIENT_SECRET = os.environ["CLIENT_SECRET"]
