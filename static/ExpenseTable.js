@@ -59,14 +59,14 @@
                     <user-badge :id="item.create_by" :users="users" />
                 </td>
                 <td class="is-vcentered">
-                    <div class="field is-grouped is-grouped-multiline">
+                    <div class="field is-grouped">
                         <div class="control">
                             <div class="tags has-addons">
                                 <span class="tag is-dark"><span class="icon"><i class="fas fa-file-invoice-dollar"></i></span></span>
                                 <span class="tag is-link is-light">{{ item.invoices.length }}</span>
                             </div>
                         </div>
-                        <invoice-list class="control" :invoices="item.invoices" />
+                        <invoice-list :invoices="item.invoices" />
                     </div>
                 </td>
                 <td class="is-vcentered">{{ item.request.paydate }}</td>
