@@ -8,10 +8,10 @@
         // as this is the only place to define color & icon for each status code
         // there's no way to migrate it back to expense model or module
         // as the result, no need to pass status from expense view :p
-        1: { color: 'is-warning', icon: 'hand-paper', label: '已申請' },
-        2: { color: 'is-link', icon: 'bolt', label: '審核中' },
-        3: { color: 'is-primary', icon: 'hand-holding-usd', label: '出款中' },
-        4: { color: 'is-success', icon: 'stamp', label: '已出款' },
+        1: { color: 'is-white', icon: 'hand-paper', label: '已申請' },
+        2: { color: 'is-warning', icon: 'bolt', label: '審核中' },
+        3: { color: 'is-info', icon: 'hand-holding-usd', label: '出款中' },
+        4: { color: 'is-primary', icon: 'stamp', label: '已出款' },
         5: { color: 'is-success', icon: 'clipboard-check', label: '已完成' },
         disable: { color: 'is-danger', icon: 'ban', label: '已刪除' },
         unknown: { color: 'is-danger', icon: 'ban', label: '不明狀態' }
