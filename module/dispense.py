@@ -96,7 +96,7 @@ class Dispense:
             if allowed_key in data:
                 to_set[allowed_key] = data[allowed_key]
 
-        if to_set['enable']:
+        if 'enable' in to_set and to_set['enable']:
             return 403
 
         resp = DispenseDB().find_one_and_update(
