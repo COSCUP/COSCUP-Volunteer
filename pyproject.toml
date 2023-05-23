@@ -24,7 +24,7 @@ pydantic = {extras = ["email"], version = "^1.10.1"}
 pylibmc = "^1.6.1"
 pymongo = "^4.3"
 python-multipart = "^0.0.6"
-requests = "^2.29"
+requests = "^2.31"
 toldwords = "^0.7.0"
 uWSGI = "^2.0.20"
 uvicorn = {extras = ["standard"], version = "^0.22.0"}
