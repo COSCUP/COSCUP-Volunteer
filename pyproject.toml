@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "coscup-volunteer"
-version = "2023.05.24"
+version = "2023.06.07"
 description = "COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政流程建立。"
 authors = ["COSCUP Volunteer <volunteer@coscup.org>"]
 license = "AGPL-3.0"
@@ -40,7 +40,7 @@ lxml = "^4.9.1"
 mkdocs-git-revision-date-localized-plugin = "^1.2"
 mkdocs-material = "^9.1"
 mkdocs-static-i18n = "^0.56"
-mkdocstrings = {extras = ["python"], version = "^0.21"}
+mkdocstrings = {extras = ["python"], version = "^0.22"}
 mongomock = "^4.1"
 mypy = "^1"
 pillow = "^9.5"
