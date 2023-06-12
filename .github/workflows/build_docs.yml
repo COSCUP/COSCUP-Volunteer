@@ -3,25 +3,25 @@ name: BuildDocs
 on:
   push:
     branches:
-      - 'main'
-      - 'dev_docs'
+      - "main"
+      - "dev_docs"
     paths:
-      - '.github/workflows/build_docs.yml'
-      - 'celery_task/**'
-      - 'docs_dev/**'
-      - 'main.py'
-      - 'models/**'
-      - 'module/**'
-      - 'structs/**'
-      - 'view/**'
+      - ".github/workflows/build_docs.yml"
+      - "celery_task/**"
+      - "docs_dev/**"
+      - "main.py"
+      - "models/**"
+      - "module/**"
+      - "structs/**"
+      - "view/**"
   workflow_dispatch:
 
 jobs:
   build:
     strategy:
       matrix:
-        os: ['ubuntu-20.04']
-        python-version: ['3.11']
+        os: ["ubuntu-20.04"]
+        python-version: ["3.11"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -67,10 +67,10 @@ jobs:
       - name: Load Noto Sans TC font
         run: cd docs_dev/.cache/plugin/social; wget https://volunteer.coscup.org/doc/NotoSansTC-Bold.otf;
       - name: Load Iansui094 font
-        run: cd docs_dev/.cache/plugin/social; wget https://volunteer.coscup.org/doc/Iansui094-Regular.ttf;
+        run: cd docs_dev/.cache/plugin/social; wget https://volunteer.coscup.org/doc/Iansui094-Regular.ttf -O NotoSansTC-Regular.ttf;
       - name: Build Docs
         env:
-          PYTHONPATH: '../'
+          PYTHONPATH: "../"
         run: cd docs_dev; poetry run mkdocs -v build;
       - name: Upload to S3
         env:
