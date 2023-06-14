@@ -6,6 +6,9 @@ from pymongo.cursor import Cursor
 
 from models.expensedb import ExpenseDB
 from models.dispensedb import DispenseDB
+from models.budgetdb import BudgetDB
+
+from module.expense import Expense
 
 class Dispense:
     ''' Dispense class '''
@@ -66,6 +69,21 @@ class Dispense:
             yield raw
 
     @staticmethod
+    def get_order_by_date(pid: str) -> Generator[dict[str, Any], None, None]:
+        ''' Get all and sort by dispense_date and create_at
+
+        Args:
+            pid (str): Project id.
+
+        Yields:
+            Return the dispense data in `pid`
+        '''
+        for raw in DispenseDB().find({'pid': pid}).sort([
+                ('dispense_date', 1),
+                ('create_at', 1)]):
+            yield raw
+
+    @staticmethod
     def get_by_ids(ids: list[str]) -> Cursor[dict[str, Any]]:
         ''' Get all
 
@@ -115,3 +133,106 @@ class Dispense:
                 )
 
         return resp
+
+    @staticmethod
+    def dl_format(pid: str) -> list[dict[str, Any]]:
+        ''' Make the dispense format
+
+        The fields datas:
+
+            - `出款日期`: `dispense.dispense_date`
+            - `出款總金額` `Sum of expense.incoice.total`
+            - `組別`: `expense.tid`.
+            - `申請單狀態`: `expense.enable`.
+            - `編號`: `budget.bid`.
+            - `預算項目`: `budget.name`.
+            - `預算貨幣`: `budget.currency`.
+            - `預算金額`: `budget.total`.
+            - `會計科目`: ` `.
+            - `請款狀態`: `ExpenseDB.status()[expense['status']]`.
+            - `申請時間`: `expense.create_at`.
+            - `分行名稱`: `expense.bank.branch`.
+            - `分行代碼`: `expense.bank.code`.
+            - `帳戶名稱`: `expense.bank.name`.
+            - `帳號`: `expense.bank.no`.
+            - `單據名稱`: `expense.invoice.name`.
+            - `單據貨幣`: `expense.invoice.currency`.
+            - `單據金額`: `expense.invoice.total`.
+            - `單據是否收到`: `expense.invoice.received`.
+        '''
+        raws = []
+
+        for dispense in Dispense.get_order_by_date(pid):
+            if dispense['enable'] is False:
+                continue
+
+            expenses = Expense.get_by_dispense_id([dispense['_id']])
+            expense_raws = []
+
+            dispense_base = {
+                '出款日期': dispense['dispense_date'],
+                '出款總金額': 0,
+                '組別': '',
+                '申請單狀態': '',
+                '編號': '',
+                '預算項目': '',
+                '預算貨幣': '',
+                '預算金額': '',
+                '會計科目': '',
+                '請款狀態': '',
+                '申請時間': '',
+                '分行名稱': '',
+                '分行代碼': '',
+                '帳戶名稱': '',
+                '帳號': '',
+                '單據名稱': '',
+                '單據貨幣': '',
+                '單據金額': '',
+                '單據是否收到': '',
+            }
+
+            for expense in expenses:
+                if expense['enable'] is False:
+                    continue
+
+                expense_base = {
+                    '組別': expense['tid'],
+                    '申請單狀態': expense['enable'],
+                    '編號': '',
+                    '預算項目': '',
+                    '預算貨幣': '',
+                    '預算金額': '',
+                    '會計科目': '',
+                    '請款狀態': ExpenseDB.status()[expense['status']],
+                    '申請時間': expense['create_at'],
+                    '分行名稱': expense['bank']['branch'],
+                    '分行代碼': expense['bank']['code'],
+                    '帳戶名稱': expense['bank']['name'],
+                    '帳號': expense['bank']['no'],
+                }
+
+                for budget in BudgetDB().find({'_id': expense['request']['buid']}):
+                    expense_base['編號'] = budget['bid']
+                    expense_base['預算項目'] = budget['name']
+                    expense_base['預算貨幣'] = budget['currency']
+                    expense_base['預算金額'] = budget['total']
+
+                for invoice in expense['invoices']:
+                    data = {}
+                    data.update(expense_base)
+
+                    dispense_base['出款總金額'] += invoice['total']
+                    invoice_data = {
+                        '單據名稱': invoice['name'],
+                        '單據貨幣': invoice['currency'],
+                        '單據金額': invoice['total'],
+                        '單據是否收到': invoice['received'],
+                    }
+
+                    data.update(invoice_data)
+                    expense_raws.append(data)
+
+            raws.append(dispense_base)
+            raws.extend(expense_raws)
+
+        return raws
