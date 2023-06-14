@@ -204,7 +204,7 @@ class Dispense:
                     '預算金額': '',
                     '會計科目': '',
                     '請款狀態': ExpenseDB.status()[expense['status']],
-                    '申請時間': expense['create_at'],
+                    '申請時間': expense['create_at'].strftime('%Y-%m-%d %H:%M:%S'),
                     '分行名稱': expense['bank']['branch'],
                     '分行代碼': expense['bank']['code'],
                     '帳戶名稱': expense['bank']['name'],
