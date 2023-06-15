@@ -212,7 +212,7 @@ def service_sync_mattermost_add_channel_one(sender: Any, **kwargs: str | list[st
     mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN,
                           base_url=setting.MATTERMOST_BASEURL)
     resp = mmt.post_user_to_channel(
-        channel_id=str(kwargs['ch_id']), uid=str(kwargs['mid']))
+        channel_id=str(kwargs['ch_id']), uid=str(kwargs['uid']))
     logger.info(resp.json())
 
 
