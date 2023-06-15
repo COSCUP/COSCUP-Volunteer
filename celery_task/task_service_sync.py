@@ -204,6 +204,18 @@ def service_sync_mattermost_invite(sender: Any, **kwargs: list[str]) -> None:
     logger.info(resp.json())
 
 
+@app.task(bind=True, name='servicesync.mattermost.add.channel.one',
+          autoretry_for=(Exception, ), retry_backoff=True, max_retries=10,
+          routing_key='cs.servicesync.mattermost.add.channel.one', exchange='COSCUP-SECRETARY')
+def service_sync_mattermost_add_channel_one(sender: Any, **kwargs: str | list[str]) -> None:
+    ''' Sync mattermost add to channel one '''
+    mmt = MattermostTools(token=setting.MATTERMOST_BOT_TOKEN,
+                          base_url=setting.MATTERMOST_BASEURL)
+    resp = mmt.post_user_to_channel(
+        channel_id=str(kwargs['ch_id']), uid=str(kwargs['mid']))
+    logger.info(resp.json())
+
+
 @app.task(bind=True, name='servicesync.mattermost.add.channel',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=5,
           routing_key='cs.servicesync.mattermost.add.channel', exchange='COSCUP-SECRETARY')
@@ -221,9 +233,9 @@ def service_sync_mattermost_add_channel(sender: Any, **kwargs: str | list[str]) 
     for uid in kwargs['uids']:
         mid = mmt.find_possible_mid(uid=uid)
         if mid:
-            resp = mmt.post_user_to_channel(
-                channel_id=project.mattermost_ch_id, uid=mid)
-            logger.info(resp.json())
+            service_sync_mattermost_add_channel_one.apply_sync(
+                kwargs={'ch_id': project.mattermost_ch_id, 'uid': mid}
+            )
 
 
 @app.task(bind=True, name='servicesync.mattermost.projectuserin.channel',
@@ -253,8 +265,9 @@ def service_sync_mattermost_projectuserin_channel(sender: Any) -> None:
         for uid in uids:
             mid = mmt.find_possible_mid(uid=uid)
             if mid:
-                resp = mmt.post_user_to_channel(channel_id=value, uid=mid)
-                logger.info(resp.json())
+                service_sync_mattermost_add_channel_one.apply_sync(
+                    kwargs={'ch_id': value, 'uid': mid}
+                )
 
 
 @app.task(bind=True, name='servicesync.mattermost.users.position',
