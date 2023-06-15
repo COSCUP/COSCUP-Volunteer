@@ -233,7 +233,7 @@ def service_sync_mattermost_add_channel(sender: Any, **kwargs: str | list[str]) 
     for uid in kwargs['uids']:
         mid = mmt.find_possible_mid(uid=uid)
         if mid:
-            service_sync_mattermost_add_channel_one.apply_sync(
+            service_sync_mattermost_add_channel_one.apply_async(
                 kwargs={'ch_id': project.mattermost_ch_id, 'uid': mid}
             )
 
@@ -265,7 +265,7 @@ def service_sync_mattermost_projectuserin_channel(sender: Any) -> None:
         for uid in uids:
             mid = mmt.find_possible_mid(uid=uid)
             if mid:
-                service_sync_mattermost_add_channel_one.apply_sync(
+                service_sync_mattermost_add_channel_one.apply_async(
                     kwargs={'ch_id': value, 'uid': mid}
                 )
 
