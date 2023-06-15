@@ -1,4 +1,7 @@
 '''Dispense'''
+import csv
+import io
+
 from typing import Any
 from flask import (Blueprint, g, jsonify, make_response, redirect, request, Response)
 from werkzeug.wrappers import Response as ResponseBase
@@ -52,3 +55,40 @@ def handle_update (data: dict[str, Any]) -> ResponseBase:
         return Response('Invalid parameter', result)
 
     return jsonify({'result': result})
+
+
+@VIEW_DISPENSE.route('/<pid>/dl', methods=('GET', 'POST'))
+def by_project_dl(pid: str) -> str | ResponseBase:
+    ''' Export dispanse by project id '''
+    project = Project.get(pid)
+
+    if not project:
+        return redirect('/')
+
+    is_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
+    if not is_admin:
+        return redirect('/')
+
+    if request.method == 'GET':
+        raws = Dispense.dl_format(pid)
+
+        if not raws:
+            return Response('', status=204)
+
+        with io.StringIO() as files:
+            csv_writer = csv.DictWriter(files, fieldnames=list(
+                raws[0].keys()), quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writeheader()
+            csv_writer.writerows(raws)
+
+            filename = f"{project.name} 出款單.csv".encode().decode("latin1")
+
+            return Response(
+                files.getvalue().encode(encoding="utf-8-sig"),
+                mimetype='text/csv',
+                headers={'Content-Type': 'charset=utf-8',
+                         'Content-disposition': f'attachment; filename={filename}',
+                         'x-filename': filename,
+                         })
+
+    return Response('', status=204)
