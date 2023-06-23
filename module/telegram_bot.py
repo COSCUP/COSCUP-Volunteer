@@ -1,6 +1,6 @@
 ''' TelegramBot '''
 from time import time
-from typing import Any, Union
+from typing import Any, Union, Optional
 from uuid import uuid4
 
 from requests import Response, Session
@@ -26,7 +26,10 @@ class Telegram(Session):
 
     def send_message(self, chat_id: str, text: str,
                      parse_mode: str = 'Markdown',
-                     reply_markup: Union[dict[str, Any], None] = None) -> Response:
+                     reply_markup: Union[dict[str, Any], None] = None,
+                     protect_content: bool = False,
+                     reply_to_message_id: Optional[int] = None,
+                     ) -> Response:
         ''' Send message
 
         Args:
@@ -34,6 +37,8 @@ class Telegram(Session):
             text (str): Text.
             parse_mode (str): `Markdown`, `MarkdownV2`, `HTML`.
             reply_markup (dict): Reply markup.
+            protect_content (bool): Protects the contents of the sent message from forwarding and saving.
+            reply_to_message_id (int): If the message is a reply, ID of the original message.
 
         References:
             https://core.telegram.org/bots/api#sendmessage
@@ -42,10 +47,15 @@ class Telegram(Session):
         data = {
             'chat_id': chat_id,
             'text': text,
-            'parse_mode': parse_mode}  # type: dict[str, Union[str, dict[str, Any]]]
+            'parse_mode': parse_mode,
+            'protect_content': protect_content,
+        }  # type: dict[str, Union[str, dict[str, Any], bool, int]]
 
         if reply_markup is not None:
             data['reply_markup'] = reply_markup
+
+        if reply_to_message_id is not None:
+            data['reply_to_message_id'] = reply_to_message_id
 
         return self.post(f'{self.url}/sendMessage', json=data)
 
