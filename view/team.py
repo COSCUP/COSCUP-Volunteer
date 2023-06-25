@@ -732,9 +732,7 @@ def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
             return jsonify({'data': {'selected': selected}})
 
         if post_data and post_data['casename'] == 'makechange':
-            msg = FormAccommodation.make_exchange(
-                pid=pid, uid=g.user['account']['_id'], exkey=post_data['key'].strip())
-            return jsonify({'msg': msg})
+            return jsonify({'msg': '今年不適用！'})
 
     return jsonify({})
 

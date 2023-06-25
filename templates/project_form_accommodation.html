@@ -12,7 +12,8 @@
                 <th>name</th>
                 <th><span @click="sorted">tid</span></th>
                 <th>ROCID</th>
-                <th>data</th>
+                <th>Need</th>
+                <th>Mixed</th>
                 <th>RoomKey</th>
                 <th><span @click="sort_room">Room</span></th>
             </tr>
@@ -34,6 +35,7 @@
                 <td style="vertical-align:middle;">[[raw.tid]]</td>
                 <td style="vertical-align:middle;"><span class="tag is-family-monospace">[[raw.roc_id]]</span></td>
                 <td style="vertical-align:middle;">[[ raw.data['key'] ]]</td>
+                <td style="vertical-align:middle;">[[ raw.data['mixed'] ]]</td>
                 <td style="vertical-align:middle;"><span class="tag is-family-monospace">[[ raw.data['room_key'] ]]</span></td>
                 <td style="vertical-align:middle;">
                     [[ raw.room ]]
