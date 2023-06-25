@@ -176,6 +176,7 @@ class Form:  # pylint: disable=too-many-public-methods
                 - `room`: Optional. The room numbers.
                 - `room_key`: Optional. The key for exchange the place for
                               some users want live together.
+                - `mixed`: (bool) accepted in mixed room.
 
         Returns:
             Return the added data.

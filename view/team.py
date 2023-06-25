@@ -685,13 +685,14 @@ def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
         post_data = request.get_json()
 
         if post_data and post_data['casename'] == 'get':
-            raw = {'selected': 'no'}
+            raw = {'selected': 'no', 'mixed': True}
             room = {}
 
             form_data = Form.get_accommodation(
                 pid=pid, uid=g.user['account']['_id'])
             if form_data:
                 raw['selected'] = form_data['data']['key']
+                raw['mixed'] = form_data['data']['mixed']
 
                 if 'room' in form_data['data'] and form_data['data']['room']:
                     room['no'] = form_data['data']['room']
@@ -722,6 +723,7 @@ def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
             data = {
                 'status': selected in ('yes', 'yes-longtraffic'),
                 'key': selected,
+                'mixed': post_data['mixed']
             }
 
             Form.update_accommodation(

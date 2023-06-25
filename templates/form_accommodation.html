@@ -5,17 +5,17 @@
 {% block form_body %}
 <div class="columns">
     <div class="column is-three-fifths">
-        <article class="message is-small">
+        <article class="message">
             <div class="message-body">
                 <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
                 以來自外縣市的夥伴為主，但如果妳的通勤時間特殊，會超過一個小時，也可以申請。
-                住宿名單會在活動前二個月公布。
+                如有任何住宿問題，請聯繫行政組或是 <a href="mailto:secretary@coscup.org">secretary@coscup.org</a>.
             </div>
         </article>
         {% if is_ok_submit %}
-        <section class="section" id="accommodationform">
+        <section class="section" id="accommodationform" v-cloak>
             <form v-on:submit.prevent="send">
-                <div class="field" v-cloak>
+                <div class="field" v-clock>
                     <div class="control">
                         <label class="label">我需要申請住宿？</label>
                         <div class="select">
@@ -25,6 +25,14 @@
                                 <option value="yes-longtraffic">我需要住宿，且通勤時間大於一小時(Yes)</option>
                             </select>
                         </div>
+                    </div>
+                </div>
+                <div class="field" v-if="raw.selected != 'no'" disabled>
+                    <div class="control">
+                        <label class="checkbox">
+                            <input type="checkbox" v-model="raw.mixed">
+                            可接受青年旅舍混宿房型
+                        </label>
                     </div>
                 </div>
                 <div class="field">
@@ -37,7 +45,7 @@
                 <article class="message">
                     <div class="message-body">
                         <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
-                        提出申請後稍等行政組分配房間，之後才能進行交換房間功能。
+                        提出申請後稍等行政組分配房間。
                     </div>
                 </article>
             </div>
@@ -133,7 +141,7 @@
         let $accommodationform = new Vue({
             el: '#accommodationform',
             data: {
-                raw: {selected: ''},
+                raw: {selected: 'no', mixed: true},
                 disabled: false,
                 room: {}
             },
@@ -164,7 +172,9 @@
                     });
                 },
                 send: function($e) {
-                    axios.post('./accommodation', {'casename': 'update', selected: this.raw.selected}).then(function(resp) {
+                    axios.post('./accommodation', {'casename': 'update',
+                                                    selected: this.raw.selected,
+                                                    mixed: this.raw.mixed}).then(function(resp) {
                         alert('已更新！');
                     });
                 }
