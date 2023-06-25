@@ -91,9 +91,6 @@ ADD ./templates/base.html \
     ./templates/user.html \
     ./templates/
 
-ADD ./static/ExpenseStatusLabel.js \
-    ./static/
-
 ADD ./templates/mail/base*.html \
     ./templates/mail/coscup_base.html \
     ./templates/mail/sender_base.html \
@@ -109,6 +106,7 @@ ADD ./static/ExpenseStatusLabel.js \
     ./static/InvoiceList.js \
     ./static/UserBadge.js \
     ./static/expense-component.css \
+    ./static/forms.css \
     ./static/buefy.min.js \
     ./static/buefy.min.css \
     ./static/dayjs.min.js \

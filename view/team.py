@@ -981,14 +981,10 @@ def team_form_clothes(pid: str, tid: str) -> str | ResponseBase:
             data = Form.get_clothes(
                 pid=team.pid, uid=g.user['account']['_id'])
 
-            in_action = False
             htg = ''
             if not data:
                 data = {'data': {'clothes': '',
-                                 'htg': htg, 'in_action': in_action}}
-
-            if arrow.get(project.action_date).shift(days=10) >= arrow.now():
-                in_action = True
+                                 'htg': htg, }}
 
             if 'htg' in data['data']:
                 htg = data['data']['htg']
@@ -996,7 +992,6 @@ def team_form_clothes(pid: str, tid: str) -> str | ResponseBase:
             return jsonify({
                 'clothes': data['data']['clothes'],
                 'htg': htg,
-                'in_action': in_action,
             })
 
         if post_data and post_data['casename'] == 'post':

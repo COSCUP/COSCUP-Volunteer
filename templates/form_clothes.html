@@ -2,60 +2,105 @@
 {% block head_title_form %}衣服尺寸{% endblock %}
 {% block head_subtitle %}衣服的大小，活動日穿著{% endblock %}
 {% block form_menu_clothes%}is-active{% endblock %}
+{% block style %}
+<link href="{{ url_for('static', filename='forms.css') }}" rel="stylesheet">
+{% endblock %}
 {% block form_body %}
 <div class="columns">
     <div id="clothesform" class="column is-three-fifths" v-cloak>
         <form @submit.prevent="submit">
             <div class="field">
                 <div class="control">
-                    <a @click="is_active=!is_active">
-                        <p class="image is-16by9">
-                        <img src="/s3/img/2020_clothes_16x9.png"></p>
-                    </a>
-                </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <label class="label">活動服</label>
-                    <div class="select">
-                        <select v-model="size">
-                            <option value="" disabled>請選擇尺寸...</option>
-                            <optgroup label="上圖（有腰身）">
-                                <option value="S / 38.5 / 55">S / 38.5 / 55</option>
-                                <option value="M / 41 / 58">M / 41 / 58</option>
-                                <option value="L / 44.5 / 60">L / 44.5 / 60</option>
-                                <option value="XL / 46 / 63">XL / 46 / 63</option>
-                                <option value="2XL / 48 / 64">2XL / 48 / 64</option>
-                                <option value="3XL / 50.5 / 65">3XL / 50.5 / 65</option>
-                            </optgroup>
-                            <optgroup label="下圖（無腰身）">
-                                <option value="XS / 44 / 64">XS / 44 / 64</option>
-                                <option value="S / 47 / 67">S / 47 / 67</option>
-                                <option value="M / 50 / 70">M / 50 / 70</option>
-                                <option value="L / 53 / 73">L / 53 / 73</option>
-                                <option value="XL / 56 / 75">XL / 56 / 75</option>
-                                <option value="2XL / 59 / 77">2XL / 59 / 77</option>
-                            </optgroup>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="field" v-if="!in_action">
-                <label class="label">取得方式</label>
-                <div class="control">
-                    <label class="radio mr-3">
-                        <input type="radio" value="1" v-model="htg">
-                        活動日自取
-                    </label>
-                    <label class="radio mr-3">
-                        <input type="radio" value="2" v-model="htg">
-                        友人代領
-                    </label>
-                </div>
-            </div>
-            <div class="field" v-if="!in_action">
-                <div class="notification is-success is-light">
-                    由於我們在 2021 年活動為線上舉辦，今年 2022 年回到實體活動，承諾在今年兌現的工人衣服會透過<strong>「活動日自取」</strong>或<strong>「友人代領」</strong>的方式發送，請勾選你可以取得的方式，感謝！
+                    <table class="table is-narrow is-hoverable">
+                        <thead>
+                            <th>選擇</th>
+                            <th>尺寸</th>
+                            <th>胸寬</th>
+                            <th>衣寬</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label class="radio"><input type="radio" v-model="size" value="XS"></label>
+                                </td>
+                                <td>XS</td>
+                                <td>44</td>
+                                <td>64</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="radio"><input type="radio" v-model="size" value="S"></label>
+                                </td>
+                                <td>S</td>
+                                <td>47</td>
+                                <td>67</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="radio"><input type="radio" v-model="size" value="M"></label>
+                                </td>
+                                <td>M</td>
+                                <td>50</td>
+                                <td>70</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="radio"><input type="radio" v-model="size" value="L"></label>
+                                </td>
+                                <td>L</td>
+                                <td>53</td>
+                                <td>73</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="radio"><input type="radio" v-model="size" value="XL"></label>
+                                </td>
+                                <td>XL</td>
+                                <td>56</td>
+                                <td>75</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="radio"><input type="radio" v-model="size" value="2XL"></label>
+                                </td>
+                                <td>2XL</td>
+                                <td>59</td>
+                                <td>77</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="radio"><input type="radio" v-model="size" value="3XL"></label>
+                                </td>
+                                <td>3XL</td>
+                                <td>63</td>
+                                <td>80</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="radio"><input type="radio" v-model="size" value="4XL"></label>
+                                </td>
+                                <td>4XL</td>
+                                <td>66</td>
+                                <td>83</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="radio"><input type="radio" v-model="size" value="5XL"></label>
+                                </td>
+                                <td>5XL</td>
+                                <td>71</td>
+                                <td>86</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label class="radio"><input type="radio" v-model="size" value="6XL"></label>
+                                </td>
+                                <td>6XL</td>
+                                <td>76</td>
+                                <td>86</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="field" v-if="submit_size.length > 0">
@@ -69,27 +114,18 @@
                 </div>
             </div>
         </form>
-        <!-- modal -->
-        <div class="modal" :class="{'is-active': is_active}">
-            <div class="modal-background" @click="is_active=!is_active"></div>
-            <div class="modal-content">
-                <p class="image is-16by9"><img src="/s3/img/2020_clothes_16x9.png"></p>
-            </div>
-            <button class="modal-close is-large" aria-label="close" @click="is_active=!is_active"></button>
-        </div>
     </div>
 </div>
 {% endblock %}
 {% block js %}
 <script src="/js/axios.min.js"></script>
+<script src="{{ url_for('static', filename='buefy.min.js') }}"></script>
 <script>
     (function() {
         let $clothesform = new Vue({
             el: '#clothesform',
             data: {
                 debug: null,
-                is_active: false,
-                in_action: true,
                 size: '',
                 submit_size: '',
                 htg: ''
@@ -97,11 +133,19 @@
             mounted: function() {
                 this.load();
             },
+            watch: {
+                size: function(newsize) {
+                    Vue.prototype.$buefy.snackbar.open({
+                        message: `尺寸容許範圍 +-2cm`,
+                        type: 'is-info',
+                        position: 'is-top',
+                    })
+                }
+            },
             methods: {
                 load: function() {
                     let $this = this;
                     axios.post('./clothes', {casename: 'get'}).then(function(resp) {
-                        $this.in_action = resp.data.in_action;
                         $this.htg = resp.data.htg;
                         $this.size = resp.data.clothes;
                         $this.submit_size = resp.data.clothes;
@@ -111,20 +155,15 @@
                     let $btn = $e.target.querySelector('.button');
                     $btn.classList.add('is-loading');
 
-                    let $inputs = $e.target.closest('form').querySelectorAll('input, select');
-                    $inputs.forEach(function(input) {
-                        input.disabled = true;
-                    });
-
                     let $this = this;
                     axios.post('./clothes', {casename: 'post', clothes: this.size,
-                                             in_action: this.in_action, htg: this.htg}).then(function(resp) {
+                                             htg: this.htg}).then(function(resp) {
                         $this.load();
                         $btn.classList.remove('is-loading');
-
-                        $inputs.forEach(function(input) {
-                            input.disabled = false;
-                        });
+                        Vue.prototype.$buefy.snackbar.open({
+                            message: `已送出衣服尺寸：${$this.size}`,
+                            position: 'is-top',
+                        })
                     });
                 }
             },

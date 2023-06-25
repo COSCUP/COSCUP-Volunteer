@@ -98,6 +98,7 @@ ADD ./static/ExpenseStatusLabel.js \
     ./static/InvoiceList.js \
     ./static/UserBadge.js \
     ./static/expense-component.css \
+    ./static/forms.css \
     ./static/buefy.min.js \
     ./static/buefy.min.css \
     ./static/dayjs.min.js \
