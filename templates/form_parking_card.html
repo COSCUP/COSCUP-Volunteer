@@ -3,89 +3,13 @@
 {% block head_subtitle %}台科大停車券{% endblock %}
 {% block form_menu_parking_card%}is-active{% endblock %}
 {% block form_body %}
-<div id="parkingcard" class="columns">
-    <div class="column is-three-fifths" v-cloak>
+<div class="columns">
+    <div class="column is-three-fifths">
         <article class="message is-info">
             <div class="message-body">
-                在活動期間如果需要開車前往台科大，並停於停車場部分，需要先提供車號才能放行。
+                臺科大停車已委外經營，詳細的停車辦法可以參考「<a href="https://www.general.ntust.edu.tw/var/file/54/1054/img/1986/198952929.pdf">停車場委外經營管理作業要點</a>」
             </div>
         </article>
-        <form @submit.prevent="submit">
-            <div class="field" v-if="Object.keys(posted_data).length > 0">
-                <div class="control">
-                    <label class="label">目前收到的資料</label>
-                    <ul>
-                        <li>車號：[[ posted_data.carno ]]</li>
-                        <li>需求天數：[[ posted_data.dates ]]</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="field">
-                <label class="label">車號</label>
-                <div class="control">
-                    <input class="input" type="text" v-model="data.carno" required>
-                </div>
-            </div>
-            <div class="field">
-                <label class="label">需求天數</label>
-                <div class="control">
-                    <label class="checkbox mr-3" v-for="op in parking_card_options">
-                        <input type="checkbox" :value="op" v-model="data.dates">
-                        [[ op ]]
-                    </label>
-                </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <button class="button is-primary" type="submit">送出</button>
-                </div>
-            </div>
-        </form>
     </div>
 </div>
-{% endblock %}
-{% block js %}
-<script src="/js/axios.min.js"></script>
-<script>
-    (function() {
-        let $parkingcard = new Vue({
-            el: '#parkingcard',
-            data: {
-                data: {carno: '', dates: []},
-                posted_data: {},
-                parking_card_options: []
-            },
-            mounted: function() {
-                this.load();
-            },
-            methods: {
-                load: function() {
-                    axios.post('./parking_card', {casename: 'get'}).then(function(resp) {
-                        $parkingcard.data = resp.data.data;
-                        $parkingcard.posted_data = Object.assign({}, resp.data.data);
-                        $parkingcard.parking_card_options = resp.data.parking_card_options;
-                    });
-                },
-                submit: function($e) {
-                    let $btn = $e.target.querySelector('.button');
-                    $btn.classList.add('is-loading');
-
-                    let $inputs = $e.target.closest('form').querySelectorAll('input');
-                    $inputs.forEach(function(input) {
-                        input.disabled = true;
-                    });
-
-                    axios.post('./parking_card', {casename: 'post', data: this.data}).then(function(resp) {
-                        $parkingcard.load();
-                        $btn.classList.remove('is-loading');
-                        $inputs.forEach(function(input) {
-                            input.disabled = false;
-                        });
-                    });
-                }
-            },
-            delimiters: ['[[', ']]']
-        });
-    })();
-</script>
 {% endblock %}
