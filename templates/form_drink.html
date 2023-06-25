@@ -2,6 +2,9 @@
 {% block head_title_form %}理性飲酒聲明{% endblock %}
 {% block head_subtitle %}閱讀完之後我會知道改怎麼喝酒{% endblock %}
 {% block form_menu_drink%}is-active{% endblock %}
+{% block style %}
+<link href="{{ url_for('static', filename='forms.css') }}" rel="stylesheet">
+{% endblock %}
 {% block form_body %}
 <div class="columns">
     <div id="drinkform" class="column is-three-fifths">
@@ -41,6 +44,7 @@
 {% endblock %}
 {% block js %}
 <script src="/js/axios.min.js"></script>
+<script src="{{ url_for('static', filename='buefy.min.js') }}"></script>
 <script>
     (function() {
         let $drinkform = new Vue({
@@ -67,6 +71,10 @@
                         $btn.classList.add('is-success');
                         $btn.classList.add('is-outlined');
                         $btn.textContent = 'OK';
+                        Vue.prototype.$buefy.snackbar.open({
+                            message: `已送出「理性飲酒聲明」`,
+                            position: 'is-top',
+                        })
                     });
                 }
             },
