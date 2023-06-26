@@ -4,7 +4,7 @@
 {% block form_menu_traffic_fee %}is-active{% endblock %}
 {% block form_body %}
 <div class="columns">
-    <div class="column is-three-fifths">
+    <div class="column is-10">
         {% if not project.traffic_fee_doc %}
         <article class="message is-small">
             <div class="message-body">
@@ -13,15 +13,160 @@
             </div>
         </article>
         {% else %}
-        <article class="message is-small">
+        <article class="message">
             <div class="message-body">
                 <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
-                <span>請先參閱補助辦法：<a href="{{project.traffic_fee_doc}}" target="_blank">
-                        補助辦法<span class="icon"><i class="fas fa-external-link-alt"></i></span>
-                    </a>
-                </span>
+                <span>請先參閱補助辦法</span>
             </div>
         </article>
+        <div class="content">
+            <h3>工作人員交通費補助辦法</h3>
+            <ol>
+                <li>交通費補助核發對象，以 COSCUP 全體工作人員為限。</li>
+                <li>交通費補助業務由行政組及財務組協辦之。</li>
+                <li>須憑票根或購票證明申請，申請人務必妥善保留票根或相關證明文件以利補助業
+                    務辦理；如不慎遺失，煩請自行負擔。申請人務必詳閱本辦法及相關注意事項。</li>
+                <li>申請期限：</li>
+                <ul>
+                    <li>開始申請日：即日起</li>
+                    <li>截止申請日：2022/7/25</li>
+                </ul>
+                <li>申請程序：</li>
+                <ul>
+                    <li>交通費補助須在申請期限間申請，並經審核通過。事後申請者，不予補助。</li>
+                    <li>請於大會結束後，將票根或購票證明正本及存摺影本郵寄至「110928 台北信
+                        義郵局第 203 號信箱」，並於信封上註明「蔣偉志 （COSCUP2023 交通補
+                        助）收」，並於存摺影本上註明「組別」及「暱稱」。</li>
+                </ul>
+                <li>交通費補助項目：</li>
+                <ol type="I">
+                    <li>來回程交通費皆予補助。</li>
+                    <li>交通費補助限於往返活動會場之交通費，活動期間內個人之其餘交通費，不
+                        另予補助。</li>
+                    <li>自行騎車或開車前往者，不予補助油資。</li>
+                    <li>公車、計程車。</li>
+                    <li>非大台北地區：限於客運、火車、高鐵、計程車；不補助大台北地區範圍內
+                        之交通費。</li>
+                    <li>交通費補助有上限，且各縣市有不同標準，詳列如附件。</li>
+                    <li>交通費未達交通補助費上限者，依實際使用之交通費金額補助。</li>
+                    <li>交通費逾越交通補助費上限部份，不予補助，請自行斟酌交通方式。</li>
+                </ol>
+                <li>相關注意事項：</li>
+                <ol type="I">
+                    <li>需票據、購票證明申請（若無，請諒無法提供補助費用）。</li>
+                    <li>交通費購票證明方式：</li>
+                    <ol>
+                        <li>捷運（一般票）：進站前或出站後，向捷運服務處服務人員申請開立購票
+                            證明。</li>
+                        <li>捷運（悠遊卡）：</li>
+                        <ul>
+                            <li>出站後，向捷運服務處服務人員申請開立購票證明。</li>
+                            <li>使用捷運站內之悠遊卡查詢機，查詢近期六筆內使用紀錄。</li>
+                            <li>「ibon 便利生活站」之門市免費查詢票卡最近六筆交易紀錄與付費
+                                列印（前 3 日至 30 日）歷史交易明細。</li>
+                        </ul>
+                    </ol>
+                    <li>鐵路（一般票）：憑車票加蓋車站購票證明章。</li>
+                    <li>鐵路（持卡）：出站前，持卡至出口列印該筆乘車紀錄，加蓋車站證明章。</li>
+                    <li>高鐵：</li>
+                    <ul>
+                        <li>憑車票或購票證明（任一出口服務台可開立購票證明）。</li>
+                        <li>使用手機 T Express 手機票者，可上網查詢購票紀錄及列印證明。</li>
+                    </ul>
+                    <li>客運：憑車票。</li>
+                    <li>計程車：憑乘車收據。</li>
+                </ol>
+                <li>補助上限：</li>
+                <ol type="I">
+                    <li>交通費補助上限計算方式，以各地區主要車站抵達台北火車站、自強號來回
+                        票價計算。</li>
+                    <li>大台北地區計算方式：</li>
+                    <ul>
+                        <li>以捷運公館站與淡水之捷運票價計算補助上限。</li>
+                        <li>無住宿之工作人員，補助活動期間來回之交通費，以三趟為限。</li>
+                    </ul>
+                    <li>離島者以屏東至臺北計算。</li>
+                    <li>花蓮、臺東地區以火車自強號計算。</li>
+                </ol>
+            </ol>
+        </div>
+        <div class="has-text-centered">
+            <table class="table is-bordered is-narrow is-striped is-hoverable">
+                <thead>
+                    <tr>
+                        <th align="center">地區</th>
+                        <th align="center">補助上限</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>基隆</td>
+                        <td>64</td>
+                    </tr>
+                    <tr>
+                        <td>大台北地區</td>
+                        <td>110</td>
+                    </tr>
+                    <tr>
+                        <td>宜蘭</td>
+                        <td>218</td>
+                    </tr>
+                    <tr>
+                        <td>花蓮</td>
+                        <td>440</td>
+                    </tr>
+                    <tr>
+                        <td>臺東</td>
+                        <td>1205</td>
+                    </tr>
+                    <tr>
+                        <td>桃園</td>
+                        <td>1922</td>
+                    </tr>
+                    <tr>
+                        <td>新竹</td>
+                        <td>1811</td>
+                    </tr>
+                    <tr>
+                        <td>苗栗</td>
+                        <td>255</td>
+                    </tr>
+                    <tr>
+                        <td>臺中</td>
+                        <td>1614</td>
+                    </tr>
+                    <tr>
+                        <td>彰化</td>
+                        <td>1574</td>
+                    </tr>
+                    <tr>
+                        <td>車埕</td>
+                        <td>1546</td>
+                    </tr>
+                    <tr>
+                        <td>斗六</td>
+                        <td>527</td>
+                    </tr>
+                    <tr>
+                        <td>嘉義</td>
+                        <td>1390</td>
+                    </tr>
+                    <tr>
+                        <td>臺南</td>
+                        <td>1251</td>
+                    </tr>
+                    <tr>
+                        <td>高雄</td>
+                        <td>843</td>
+                    </tr>
+                    <tr>
+                        <td>屏東</td>
+                        <td>1097</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr style="border: 3px solid #cfe8d4;border-radius: 3px;">
         {% endif %}
         {% if not is_ok_submit %}
         <article class="message is-warning is-small">

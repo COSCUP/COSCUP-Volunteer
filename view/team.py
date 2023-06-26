@@ -766,7 +766,7 @@ def team_form_traffic_fee(pid: str, tid: str) -> str | ResponseBase:
     user = g.user['account']
     feemapping = FormTrafficFeeMapping.get(pid=pid)
 
-    if project.traffic_fee_doc and feemapping:
+    if project.traffic_fee_doc == 'https://on.org/' and feemapping:
         if 'profile_real' in user and 'bank' in user['profile_real']:
             _short_check = []
             for k in ('name', 'branch', 'no', 'code'):
@@ -935,7 +935,7 @@ def team_form_appreciation(pid: str, tid: str) -> str | ResponseBase:
             elif request.form['appreciation'] == 'real_name':
                 name = g.user['account']['profile_real']['name']
             else:
-                raise Exception("Can not find the `name`.")
+                raise NameError("Can not find the `name`.")
 
             app_data = AppreciationData.parse_obj({
                 'available': True,
