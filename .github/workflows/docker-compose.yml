@@ -8,7 +8,7 @@ jobs:
   docker:
     strategy:
       matrix:
-        os: ['ubuntu-20.04', 'ubuntu-22.04']
+        os: ["ubuntu-20.04", "ubuntu-22.04"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -18,7 +18,7 @@ jobs:
       - name: Rename sample setting file
         run: mv ./setting_sample.py ./setting.py
       - name: Build the base image
-        run: docker build -t coscupweb-base:23.06.07 -f ./Dockerfile-base-dev ./
+        run: docker build -t coscupweb-base:23.06.28 -f ./Dockerfile-base-dev ./
       - name: UP
         run: docker compose up --build --detach
       - name: List images

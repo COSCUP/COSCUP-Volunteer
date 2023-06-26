@@ -1,18 +1,17 @@
 [tool.poetry]
-name = "coscup-volunteer"
-version = "2023.06.07"
-description = "COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政流程建立。"
 authors = ["COSCUP Volunteer <volunteer@coscup.org>"]
+description = "COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政流程建立。"
 license = "AGPL-3.0"
+name = "coscup-volunteer"
+version = "2023.06.28"
 
 [tool.poetry.dependencies]
-python = "^3.11"
 Markdown = "^3.3.7"
 arrow = "^1.2.2"
 blinker = "^1.6"
 boto3 = "^1.26"
 celery = "^5.2"
-fastapi = "^0.97.0"
+fastapi = "^0.98.0"
 flask = "^2.3"
 google-api-python-client = "^2.86.0"
 google-auth = "^2.17.0"
@@ -23,6 +22,7 @@ phonenumbers = "^8.13"
 pydantic = {extras = ["email"], version = "^1.10.1"}
 pylibmc = "^1.6.1"
 pymongo = "^4.3"
+python = "^3.11"
 python-multipart = "^0.0.6"
 requests = "^2.29"
 toldwords = "^0.7.0"
@@ -51,8 +51,8 @@ types-markdown = "^3.4.2.1"
 types-requests = "^2.29"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
 
 # https://docs.pytest.org/en/7.1.x/reference/customize.html#pyproject-toml
 [tool.pytest.ini_options]
@@ -68,33 +68,33 @@ virtual_env = "./.venv"
 
 [tool.mypy]
 # --strict
+check_untyped_defs = true
 disallow_any_generics = true
+disallow_incomplete_defs = true
 disallow_subclassing_any = true
 disallow_untyped_calls = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
 disallow_untyped_decorators = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_return_any = true
+disallow_untyped_defs = true
 implicit_reexport = false
+no_implicit_optional = true
 strict_equality = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_ignores = true
 # --strict end
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
 module = [
-    'apiclient',
-    'celery.*',
-    'celery_task.*',
-    'google_auth_oauthlib.*',
-    'kombu',
+  'apiclient',
+  'celery.*',
+  'celery_task.*',
+  'google_auth_oauthlib.*',
+  'kombu',
 ]
 # TODO: Need to fix this for typing hint
-ignore_missing_imports = true
 disallow_untyped_decorators = false
+ignore_missing_imports = true
 
 [tool.pydantic-mypy]
 init_forbid_extra = true
@@ -104,8 +104,8 @@ warn_untyped_fields = true
 
 [tool.pylint.main]
 extension-pkg-whitelist = "pydantic"
-init-hook="import os, sys; sys.path.insert(0, os.getcwd())"
-good-names="i,j,k,ex,Run,_,id"
+good-names = "i,j,k,ex,Run,_,id"
+init-hook = "import os, sys; sys.path.insert(0, os.getcwd())"
 
 [tool.pylint."messages control"]
 disable = ["W0223", "E1101", "E0611"]

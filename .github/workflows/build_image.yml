@@ -3,21 +3,21 @@ name: BuildImages
 on:
   push:
     paths:
-      - 'Dockerfile-**'
-      - '.github/workflows/build_image.yml'
+      - "Dockerfile-**"
+      - ".github/workflows/build_image.yml"
   workflow_dispatch:
 
 jobs:
   docker-dev:
     strategy:
       matrix:
-        os: ['ubuntu-20.04', 'ubuntu-22.04']
+        os: ["ubuntu-20.04", "ubuntu-22.04"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build the base image
-        run: docker build -t coscupweb-base:23.06.07 -f ./Dockerfile-base-dev ./
+        run: docker build -t coscupweb-base:23.06.28 -f ./Dockerfile-base-dev ./
       - name: List images
         run: docker images
       - name: Rename sample setting file
