@@ -30,6 +30,7 @@ class Telegram(Session):
                      protect_content: bool = False,
                      reply_to_message_id: Optional[int] = None,
                      ) -> Response:
+        # pylint: disable=too-many-arguments
         ''' Send message
 
         Args:
@@ -37,7 +38,8 @@ class Telegram(Session):
             text (str): Text.
             parse_mode (str): `Markdown`, `MarkdownV2`, `HTML`.
             reply_markup (dict): Reply markup.
-            protect_content (bool): Protects the contents of the sent message from forwarding and saving.
+            protect_content (bool): Protects the contents of the sent message
+                                    from forwarding and saving.
             reply_to_message_id (int): If the message is a reply, ID of the original message.
 
         References:
