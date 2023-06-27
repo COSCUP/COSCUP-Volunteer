@@ -58,9 +58,10 @@ class Track:
 
         TrackDB().update_submissions(pid=self.pid, tracks=tracks, lang=lang)
 
-    def get_submissions_by_track_id(self, track_id: str) -> list[Submission]:
+    def get_submissions_by_track_id(self, track_id: str,
+                                    state: str = 'confirmed') -> list[Submission]:
         ''' Get Submissions by track_id '''
-        return TrackDB().get_submissions_by_track_id(pid=self.pid, track_id=track_id)
+        return TrackDB().get_submissions_by_track_id(pid=self.pid, track_id=track_id, state=state)
 
     def save_track_description(self, track_id: str,
                                content: str, lang: str = 'zh-tw') -> None:

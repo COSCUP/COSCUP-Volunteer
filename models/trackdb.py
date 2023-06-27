@@ -80,11 +80,16 @@ class TrackDB(DBBase):
         if bulks:
             self.bulk_write(bulks)
 
-    def get_submissions_by_track_id(self, pid: str, track_id: str) -> list[Submission]:
+    def get_submissions_by_track_id(self, pid: str, track_id: str,
+                                    state: str | None = None) -> list[Submission]:
         ''' Get submissions by track_id '''
-
         codes: list[str] = []
-        for data in self.find({'pid': pid, 'cate': 'track', 'code': track_id}):
+        query: dict[str, str] = {'pid': pid, 'cate': 'track', 'code': track_id}
+
+        if state is not None:
+            query['raw.state'] = state
+
+        for data in self.find(query):
             codes = data['submissions']
 
         result: list[Submission] = []

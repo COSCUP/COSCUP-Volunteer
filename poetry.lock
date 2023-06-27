@@ -80,17 +80,17 @@ pycodestyle = ">=2.10.0"
 
 [[package]]
 name = "awscli"
-version = "1.27.160"
+version = "1.27.161"
 description = "Universal Command Line Environment for AWS."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "awscli-1.27.160-py3-none-any.whl", hash = "sha256:9a4549f0df8bad7a043771a82f6ea379653a77a50e276625615d34c214b917de"},
-    {file = "awscli-1.27.160.tar.gz", hash = "sha256:31c95ae5686cc21648844a1fc67dbf41330ae0b4f754a33e77c1077caea8b49d"},
+    {file = "awscli-1.27.161-py3-none-any.whl", hash = "sha256:e1a620c24143adb2fbb071b9b476bfa25c9bd67bf2b790a5985c30739ec9fdbc"},
+    {file = "awscli-1.27.161.tar.gz", hash = "sha256:5651f47ea6bb8f7850a1dd1281cfbac210cfd147a5c139fe1f3b4d1d60756efa"},
 ]
 
 [package.dependencies]
-botocore = "1.29.160"
+botocore = "1.29.161"
 colorama = ">=0.2.5,<0.4.5"
 docutils = ">=0.10,<0.17"
 PyYAML = ">=3.10,<5.5"
@@ -213,17 +213,17 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.26.160"
+version = "1.26.161"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.26.160-py3-none-any.whl", hash = "sha256:d12643d6c18caa79b385a0c4251698391da7a6f5ffa0879b4c10c5d64e5c8b31"},
-    {file = "boto3-1.26.160.tar.gz", hash = "sha256:5218869eddeeb70efead1dd01037c3553dc7b268de3b80a0c3a2baeec2b97fc9"},
+    {file = "boto3-1.26.161-py3-none-any.whl", hash = "sha256:f66e5c9dbe7f34383bcf64fa6070771355c11a44dd75c7f1279f2f37e1c89183"},
+    {file = "boto3-1.26.161.tar.gz", hash = "sha256:662731e464d14af1035f44fc6a46b0e3112ee011ac0a5ed416d205daa3e15f25"},
 ]
 
 [package.dependencies]
-botocore = ">=1.29.160,<1.30.0"
+botocore = ">=1.29.161,<1.30.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -232,13 +232,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.29.160"
+version = "1.29.161"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.29.160-py3-none-any.whl", hash = "sha256:15d38dae978aba829daaf8d1b02ba2f2b73d4c1e4edc75234163d65a1328c1b5"},
-    {file = "botocore-1.29.160.tar.gz", hash = "sha256:dacf41787978c0d550321d334e0001a488145200f8a6c9bd893fb8e281b25cf7"},
+    {file = "botocore-1.29.161-py3-none-any.whl", hash = "sha256:b906999dd53dda2ef0ef6f7f55fcc81a4b06b9f1c8a9f65c546e0b981f959f5f"},
+    {file = "botocore-1.29.161.tar.gz", hash = "sha256:a50edd715eb510343e27849f36483804aae4b871590db4d4996aa53368dcac40"},
 ]
 
 [package.dependencies]
@@ -890,13 +890,13 @@ uritemplate = ">=3.0.1,<5"
 
 [[package]]
 name = "google-auth"
-version = "2.20.0"
+version = "2.21.0"
 description = "Google Authentication Library"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "google-auth-2.20.0.tar.gz", hash = "sha256:030af34138909ccde0fbce611afc178f1d65d32fbff281f25738b1fe1c6f3eaa"},
-    {file = "google_auth-2.20.0-py2.py3-none-any.whl", hash = "sha256:23b7b0950fcda519bfb6692bf0d5289d2ea49fc143717cc7188458ec620e63fa"},
+    {file = "google-auth-2.21.0.tar.gz", hash = "sha256:b28e8048e57727e7cf0e5bd8e7276b212aef476654a09511354aa82753b45c66"},
+    {file = "google_auth-2.21.0-py2.py3-none-any.whl", hash = "sha256:da3f18d074fa0f5a7061d99b9af8cee3aa6189c987af7c1b07d94566b6b11268"},
 ]
 
 [package.dependencies]
@@ -2527,16 +2527,17 @@ test = ["flake8", "isort", "pytest"]
 
 [[package]]
 name = "toldwords"
-version = "0.7.0"
+version = "0.8.0"
 description = "Using ChatGPT to make keywords for the papers from COSCUP."
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "toldwords-0.7.0-py3-none-any.whl", hash = "sha256:131841a485027ce181d1e3a6469c3df5226aa51ed209b08799902c7185217d6d"},
-    {file = "toldwords-0.7.0.tar.gz", hash = "sha256:7e39851e5f383fc5603aeef2bc42b85f43bdbca964773fd43041fb0bbea78815"},
+    {file = "toldwords-0.8.0-py3-none-any.whl", hash = "sha256:394144f25fbe72273c010f327e2a2897641ddf8f108248b166771072c26d3d76"},
+    {file = "toldwords-0.8.0.tar.gz", hash = "sha256:ad169d7d85a7c1774c820cf23eccf39afb2e4f7794c89ad4d30700282c432076"},
 ]
 
 [package.dependencies]
+arrow = ">=1.2.3,<2.0.0"
 certifi = "*"
 pydantic = ">=1.10.6,<2.0.0"
 requests = ">=2.28.2,<3.0.0"
@@ -3005,4 +3006,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "22e0e291db9dd344d90c465c6e6bde73637db63f8aacf549ac0751414b7c2f41"
+content-hash = "a7f9f6e30902a88c5bc6bb2850bd61c794183aeec75ec40304ce3cfca0d21c09"
