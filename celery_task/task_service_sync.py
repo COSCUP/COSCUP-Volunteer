@@ -328,6 +328,7 @@ def service_sync_mattermost_users_position(sender: Any) -> None:
             position.append(f'[{uid}]')
             mmb.put_users_patch(uid=mid, position=' '.join(position))
 
+
 @app.task(bind=True, name='servicesync.pretalx.schedule',
           autoretry_for=(Exception, ), retry_backoff=True, max_retries=2,
           routing_key='cs.servicesync.pretalx.schedule', exchange='COSCUP-SECRETARY')
