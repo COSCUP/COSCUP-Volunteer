@@ -16,6 +16,7 @@ from module.mattermost_bot import MattermostBot, MattermostTools
 from module.project import Project
 from module.service_sync import SyncGSuite
 from module.team import Team
+from module.track import Track
 from module.users import User
 
 logger = get_task_logger(__name__)
@@ -326,3 +327,12 @@ def service_sync_mattermost_users_position(sender: Any) -> None:
             position.extend(value)
             position.append(f'[{uid}]')
             mmb.put_users_patch(uid=mid, position=' '.join(position))
+
+@app.task(bind=True, name='servicesync.pretalx.schedule',
+          autoretry_for=(Exception, ), retry_backoff=True, max_retries=2,
+          routing_key='cs.servicesync.pretalx.schedule', exchange='COSCUP-SECRETARY')
+def service_sync_pretalx_schedule(sender: Any, **kwargs: str) -> None:
+    ''' Sync pretalx schedule '''
+    track = Track(pid=str(kwargs['pid']))
+    track.fetch()
+    track.save_raw_submissions()

@@ -4,6 +4,7 @@ from flask.wrappers import Response
 from werkzeug.wrappers import Response as ResponseBase
 
 import setting
+from celery_task.task_service_sync import service_sync_pretalx_schedule
 from module.mc import MC
 from module.track import Track
 
@@ -36,11 +37,10 @@ def index(pid: int) -> str | ResponseBase:
     mem_cache = MC.get_client()
 
     track = Track(pid=str(pid))
-    if mem_cache.get('schedule'):
-        track.get_raw_subnissions()
-    else:
-        track.fetch()
-        track.save_raw_submissions()
+    track.get_raw_subnissions()
+
+    if not mem_cache.get('schedule'):
+        service_sync_pretalx_schedule.apply_async(kwargs={'pid': str(pid)})
         mem_cache.set('schedule', 1, 1800)
 
     track_name_data = track.tracks()
