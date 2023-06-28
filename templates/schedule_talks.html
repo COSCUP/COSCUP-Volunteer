@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block head_title %}
+    {{talks[0].track.get('zh-tw', talks[0].track['en'])}} / {{pid}} 大會議程、社群時程表 Schedule
+{% endblock %}
+{%block og%}
+<meta property="og:title" content="{{talks[0].track.get('zh-tw', talks[0].track['en'])}} / {{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="COSCUP Volunteer">
+<meta property="og:image" content="https://volunteer.coscup.org/img/volunteer_og.png">
+<meta property="og:description" content="{{talks[0].track.get('zh-tw', talks[0].track['en'])}} / {{ talks[0].track['en'] }}">
+<meta property="twitter:title" content="{{talks[0].track.get('zh-tw', talks[0].track['en'])}} / {{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
+<meta property="twitter:card" content="summary">
+<meta property="twitter:site" content="@coscup">
+{%endblock%}
+{% block body %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">{{talks[0].track.get('zh-tw', talks[0].track['en'])}}</h1>
+            <p class="subtitle">{{ talks[0].track['en'] }}</p>
+        </div>
+    </section>
+    <section class="section" id="talks" v-cloak>
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    {% if track_description %}
+                    <div class="content">
+                        <h3>議程簡介</h3>
+                        <div class="content box">
+                            {{ track_description.get('zh-tw', '')|safe }}
+                            {{ track_description.get('en', '')|safe }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="content">
+                    <h3>議題</h3>
+                    {% for talk in talks %}
+                    <div class="content box">
+                        <h3 id="{{talk.code}}">
+                            <a href="#{{talk.code}}">{{ talk.title }}</a>
+                        </h3>
+                        <p>
+                            <span class="tags">
+                                <span class="tag is-family-monospace">
+                                    <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
+                                    <span>{{ talk.slot.room['en'] }}</span>
+                                </span>
+                                <span class="tag is-success is-light is-family-monospace">
+                                    <span class="icon"><i class="fas fa-calendar-day"></i></span>
+                                    <span>[[ new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'}) ]]</span>
+                                </span>
+                                <span class="tag is-info is-light is-family-monospace">
+                                    <span class="icon"><i class="far fa-clock"></i></span>
+                                    <span>[[ new Date( '{{ talk.slot.start }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]] ~
+                                          [[ new Date( '{{ talk.slot.end }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]]</span>
+                                </span>
+                                <span class="tag is-warning is-light is-family-monospace">
+                                    <span class="icon"><i class="fas fa-language"></i></span>
+                                    <span>{{ talk.content_locale }}</span>
+                                </span>
+                            </span>
+                        </p>
+                        <p>{{ talk.abstract|safe }}</p>
+                        <h4>講者</h4>
+                        {% for speaker in talk.speakers %}
+                        <div class="card mb-5">
+                            <div class="card-content">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <figure class="image is-32x32">
+                                            {% if speaker.avatar %}
+                                                <img class="is-rounded" src="{{ speaker.avatar }}" alt="{{ speaker.name }}">
+                                            {% else %}
+                                                <img class="is-rounded" src="https://volunteer.coscup.org/img/nonavatar.png" alt="{{ speaker.name }}">
+                                            {% endif %}
+                                        </figure>
+                                    </div>
+                                    <div class="media-content">
+                                        <p class="title is-5">{{ speaker.name }}</p>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <div class="content">
+                                        <p>{{ speaker.biography|safe }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <p>
+                            <div class="tags">
+                                <span class="tag"><a href="https://coscup.org/2023/zh-TW/session/{{talk.code}}">{{ talk.code }}</a></span>
+                                <span class="tag">{{ talk.submission_type['en']}}</span>
+                                <span class="tag">{{ talk.track['en']}}</span>
+                                {% if talk.track.get('zh-tw') %}
+                                <span class="tag">{{ talk.track['zh-tw']}}</span>
+                                {% endif %}
+                            </div>
+                        </p>
+                    </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                <div class="column is-one-third">
+                    <aside class="menu">
+                        <ul class="menu-list">
+                            <li>
+                                <a href="/schedule/{{pid}}">回列表</a>
+                            </li>
+                        </ul>
+                        <p class="menu-label">目次</p>
+                        <ul class="menu-list">
+                            {% for talk in talks %}
+                            <li>
+                                <a href="#{{talk.code}}">
+                                    <span class="is-family-monospace">
+                                        [[ new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'}) ]]
+                                        [[ new Date( '{{ talk.slot.start }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]] ~
+                                        [[ new Date( '{{ talk.slot.end }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]]
+                                    </span>
+                                    <br>
+                                    <span class="is-family-monospace">[{{ talk.slot.room['en'] }}]</span>
+                                    <span>{{ talk.title }}</span>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+<script>
+    (function () {
+        let $talks = new Vue({
+            el: '#talks',
+            mounted: function() {
+                console.info('123');
+            },
+            delimiters: ["[[", "]]"]
+        });
+    })();
+</script>
+{% endblock %}
