@@ -1,7 +1,7 @@
 ''' Track '''
 from typing import Any
 
-from toldwords.pretalx import Pretalx, Submission
+from toldwords.pretalx import Pretalx, Submission, Talk
 from toldwords.utils import DATA2023
 
 import setting
@@ -15,10 +15,15 @@ class Track:
         DATA2023['token'] = setting.PRETALX_API_KEY
         self.pretalx = Pretalx(**DATA2023)
         self.submissions: list[Submission]
+        self.talks: list[Talk]
         self.pid = pid
 
     def fetch(self) -> None:
         ''' fetch '''
+        self.talks = []
+        for raw in self.pretalx.talks():
+            self.talks.extend(raw)
+
         self.submissions = []
         for raw in self.pretalx.submissions():
             self.submissions.extend(raw)
@@ -37,7 +42,11 @@ class Track:
         ''' save submissions raw data '''
         TrackDB().save_raw_submissions(pid=self.pid, submissions=self.submissions)
 
-    def get_raw_subnissions(self) -> None:
+    def save_raw_talks(self) -> None:
+        ''' save talks raw data '''
+        TrackDB().save_raw_talks(pid=self.pid, talks=self.talks)
+
+    def get_raw_submissions(self) -> None:
         ''' Get submissions data from db '''
         self.submissions = TrackDB().get_raw_submissions(pid=self.pid)
 
@@ -62,6 +71,10 @@ class Track:
                                     state: str = 'confirmed') -> list[Submission]:
         ''' Get Submissions by track_id '''
         return TrackDB().get_submissions_by_track_id(pid=self.pid, track_id=track_id, state=state)
+
+    def get_talks_by_track_id(self, track_id: str) -> list[Talk]:
+        ''' Get Talks by track_id '''
+        return TrackDB().get_talks_by_track_id(pid=self.pid, track_id=track_id)
 
     def save_track_description(self, track_id: str,
                                content: str, lang: str = 'zh-tw') -> None:

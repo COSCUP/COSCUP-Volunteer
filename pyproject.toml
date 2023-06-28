@@ -25,7 +25,7 @@ pymongo = "^4.3"
 python = "^3.11"
 python-multipart = "^0.0.6"
 requests = "^2.29"
-toldwords = "^0.8.0"
+toldwords = "^0.8"
 uWSGI = "^2.0.20"
 uvicorn = {extras = ["standard"], version = "^0.22.0"}
 

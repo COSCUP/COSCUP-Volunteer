@@ -2527,13 +2527,13 @@ test = ["flake8", "isort", "pytest"]
 
 [[package]]
 name = "toldwords"
-version = "0.8.0"
+version = "0.8.1"
 description = "Using ChatGPT to make keywords for the papers from COSCUP."
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "toldwords-0.8.0-py3-none-any.whl", hash = "sha256:394144f25fbe72273c010f327e2a2897641ddf8f108248b166771072c26d3d76"},
-    {file = "toldwords-0.8.0.tar.gz", hash = "sha256:ad169d7d85a7c1774c820cf23eccf39afb2e4f7794c89ad4d30700282c432076"},
+    {file = "toldwords-0.8.1-py3-none-any.whl", hash = "sha256:68409bdb76a3fb6ccc2ef0e0002b80b4ba387b0d5beedd13c608e73b32357e32"},
+    {file = "toldwords-0.8.1.tar.gz", hash = "sha256:33939cdb1f6ae2749265364039abaee54c4edaafbd0be612eff0c5e3c6cc03a9"},
 ]
 
 [package.dependencies]
@@ -3006,4 +3006,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "a7f9f6e30902a88c5bc6bb2850bd61c794183aeec75ec40304ce3cfca0d21c09"
+content-hash = "8deabcca426a71ff3ac2e65d371f060dc3531d4613c763673ae20374255cbbcf"

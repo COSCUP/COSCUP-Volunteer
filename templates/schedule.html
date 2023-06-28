@@ -35,15 +35,6 @@ Schedule {% endblock %} {%block og%}
           <p class="menu-label">目次</p>
           <ul class="menu-list">
             <li>
-              <a
-                class="has-text-info"
-                href="https://pretalx.coscup.org/coscup-2023/cfp"
-              >
-                <span class="icon"><i class="fas fa-share-square"></i></span>
-                <span>前往議程投稿</span>
-              </a>
-            </li>
-            <li>
               <a href="#link_tracks">社群議程軌</a>
             </li>
           </ul>
@@ -73,7 +64,7 @@ Schedule {% endblock %} {%block og%}
                 {% for track_name, track_data in tracks %}
                 <li>
                   <a
-                    href="/schedule/{{pid}}/track/{{track_data['code']}}/{{track_name}}"
+                    href="/schedule/{{pid}}/talks/{{track_data['code']}}/{{track_name}}"
                     >{{ track_name }}</a
                   >
                 </li>

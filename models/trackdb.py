@@ -1,8 +1,9 @@
 ''' TrackDB '''
+from typing import Any
 from uuid import uuid4
 
 from pymongo import UpdateOne
-from toldwords.pretalx import Submission
+from toldwords.pretalx import Submission, Talk
 
 from models.base import DBBase
 
@@ -59,11 +60,34 @@ class TrackDB(DBBase):
             {'pid': pid, 'cate': 'raw_sub',
              'code': {'$nin': [submission.code for submission in submissions]}})
 
+    def save_raw_talks(self, pid: str, talks: list[Talk]) -> None:
+        ''' Save talks raw data '''
+        bulks = []
+        for talk in talks:
+            bulks.append(UpdateOne({'pid': pid, 'cate': 'raw_talk', 'code': talk.code}, {
+                '$set': {'pid': pid, 'code': talk.code, 'raw': talk.dict()}},
+                upsert=True))
+
+        if bulks:
+            self.bulk_write(bulks)
+
+        self.delete_many(
+            {'pid': pid, 'cate': 'raw_talk',
+             'code': {'$nin': [talk.code for talk in talks]}})
+
     def get_raw_submissions(self, pid: str) -> list[Submission]:
         ''' Get raw submissions '''
         result = []
         for data in self.find({'pid': pid, 'cate': 'raw_sub'}):
             result.append(Submission.parse_obj(data['raw']))
+
+        return result
+
+    def get_raw_talks(self, pid: str) -> list[Submission]:
+        ''' Get raw talks '''
+        result = []
+        for data in self.find({'pid': pid, 'cate': 'raw_talk'}):
+            result.append(Talk.parse_obj(data['raw']))
 
         return result
 
@@ -84,17 +108,32 @@ class TrackDB(DBBase):
                                     state: str | None = None) -> list[Submission]:
         ''' Get submissions by track_id '''
         codes: list[str] = []
-        query: dict[str, str] = {'pid': pid, 'cate': 'track', 'code': track_id}
+
+        for data in self.find({'pid': pid, 'cate': 'track', 'code': track_id}):
+            codes = data['submissions']
+
+        result: list[Submission] = []
+        query: dict[str, Any] = {'pid': pid,
+                                 'cate': 'raw_sub', 'code': {'$in': codes}}
 
         if state is not None:
             query['raw.state'] = state
 
         for data in self.find(query):
+            result.append(Submission.parse_obj(data['raw']))
+
+        return result
+
+    def get_talks_by_track_id(self, pid: str, track_id: str) -> list[Talk]:
+        ''' Get talks by track_id '''
+        codes: list[str] = []
+        for data in self.find({'pid': pid, 'cate': 'track', 'code': track_id}):
             codes = data['submissions']
 
-        result: list[Submission] = []
-        for data in self.find({'pid': pid, 'cate': 'raw_sub', 'code': {'$in': codes}}):
-            result.append(Submission.parse_obj(data['raw']))
+        result: list[Talk] = []
+        for data in self.find({'pid': pid, 'cate': 'raw_talk',
+                               'code': {'$in': codes}}):
+            result.append(Talk.parse_obj(data['raw']))
 
         return result
 

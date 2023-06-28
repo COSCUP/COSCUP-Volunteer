@@ -336,4 +336,5 @@ def service_sync_pretalx_schedule(sender: Any, **kwargs: str) -> None:
     ''' Sync pretalx schedule '''
     track = Track(pid=str(kwargs['pid']))
     track.fetch()
+    track.save_raw_talks()
     track.save_raw_submissions()

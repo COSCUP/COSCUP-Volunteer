@@ -1,6 +1,7 @@
 ''' Schedule '''
-from flask import Blueprint, render_template
+from flask import Blueprint, redirect, render_template
 from flask.wrappers import Response
+from markdown import markdown
 from werkzeug.wrappers import Response as ResponseBase
 
 import setting
@@ -9,6 +10,36 @@ from module.mc import MC
 from module.track import Track
 
 VIEW_SCHEDULE = Blueprint('schedule', __name__, url_prefix='/schedule')
+
+
+@VIEW_SCHEDULE.route('/<int:pid>/talks/<track_id>/<track_name>')
+def show_talks(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
+    ''' show talks '''
+    if pid < 2023:
+        return Response('', 404)
+
+    _ = track_name
+    talks = Track(pid=str(pid)).get_talks_by_track_id(track_id)
+    # type: ignore
+    talks = sorted(talks, key=lambda talk: talk.slot.room['en'])
+    talks = sorted(talks, key=lambda talk: talk.slot.start)
+
+    for talk in talks:
+        talk.abstract = markdown(talk.abstract)
+        for speaker in talk.speakers:
+            if speaker.biography:
+                speaker.biography = markdown(speaker.biography)
+
+    track_description = Track(
+        pid=str(pid)).get_track_description(track_id=track_id)
+
+    if not talks:
+        return redirect(f'/schedule/{pid}')
+
+    return render_template('schedule_talks.html',
+                           pid=pid,
+                           talks=talks,
+                           track_description=track_description)
 
 
 @VIEW_SCHEDULE.route('/<int:pid>/track/<track_id>/<track_name>')
@@ -37,7 +68,7 @@ def index(pid: int) -> str | ResponseBase:
     mem_cache = MC.get_client()
 
     track = Track(pid=str(pid))
-    track.get_raw_subnissions()
+    track.get_raw_submissions()
 
     if not mem_cache.get('schedule'):
         service_sync_pretalx_schedule.apply_async(kwargs={'pid': str(pid)})
