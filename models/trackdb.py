@@ -83,7 +83,7 @@ class TrackDB(DBBase):
 
         return result
 
-    def get_raw_talks(self, pid: str) -> list[Submission]:
+    def get_raw_talks(self, pid: str) -> list[Talk]:
         ''' Get raw talks '''
         result = []
         for data in self.find({'pid': pid, 'cate': 'raw_talk'}):

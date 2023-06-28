@@ -20,7 +20,6 @@ def show_talks(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
 
     _ = track_name
     talks = Track(pid=str(pid)).get_talks_by_track_id(track_id)
-    # type: ignore
     talks = sorted(talks, key=lambda talk: talk.slot.room['en'])
     talks = sorted(talks, key=lambda talk: talk.slot.start)
 

@@ -21,12 +21,12 @@ class Track:
     def fetch(self) -> None:
         ''' fetch '''
         self.talks = []
-        for raw in self.pretalx.talks():
-            self.talks.extend(raw)
+        for talks in self.pretalx.talks():
+            self.talks.extend(talks)
 
         self.submissions = []
-        for raw in self.pretalx.submissions():
-            self.submissions.extend(raw)
+        for submissions in self.pretalx.submissions():
+            self.submissions.extend(submissions)
 
     def tracks(self, lang: str = 'zh-tw') -> dict[str, dict[str, str | list[str]]]:
         ''' tracks '''
