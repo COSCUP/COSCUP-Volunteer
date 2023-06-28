@@ -7,7 +7,7 @@ import secrets
 import traceback
 from pathlib import Path
 from typing import Any, Callable
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, quote_plus, urlparse
 
 import arrow
 import google_auth_oauthlib.flow
@@ -24,9 +24,9 @@ from models.mailletterdb import MailLetterDB
 from module.mattermost_bot import MattermostTools
 from module.mc import MC
 from module.oauth import OAuth
+from module.tasks import Tasks
 from module.team import Team
 from module.track import Track
-from module.tasks import Tasks
 from module.users import PolicySigned, User
 from module.usession import USession
 from structs.users import PolicyType
@@ -72,6 +72,7 @@ app.register_blueprint(VIEW_TASKS)
 app.register_blueprint(VIEW_TEAM)
 app.register_blueprint(VIEW_TELEGRAM)
 app.register_blueprint(VIEW_USER)
+app.jinja_env.filters['quote_plus'] = lambda u: quote_plus(u)
 
 # Enable TEMPLATES_AUTO_RELOAD with Debug mode enabled
 if app.debug:

@@ -26,7 +26,7 @@
     <section class="section" id="talks" v-cloak>
         <div class="container">
             <div class="columns">
-                <div class="column">
+                <div class="column is-6 is-offset-1">
                     {% if track_description %}
                     <div class="content">
                         <h3>議程簡介</h3>
@@ -65,9 +65,14 @@
                             </span>
                         </p>
                         <p>{{ talk.abstract|safe }}</p>
-                        <h4>講者</h4>
                         {% for speaker in talk.speakers %}
-                        <div class="card mb-5">
+                        <div class="card mb-3">
+                            <header class="card-header">
+                                <p class="card-header-title">
+                                    <span class="icon"><i class="fas fa-id-card"></i></span>
+                                    <span>講者</span>
+                                </p>
+                            </header>
                             <div class="card-content">
                                 <div class="media">
                                     <div class="media-left">
@@ -91,25 +96,36 @@
                             </div>
                         </div>
                         {% endfor %}
-                        <p>
-                            <div class="tags">
-                                <span class="tag"><a href="https://coscup.org/2023/zh-TW/session/{{talk.code}}">{{ talk.code }}</a></span>
-                                <span class="tag">{{ talk.submission_type['en']}}</span>
-                                <span class="tag">{{ talk.track['en']}}</span>
-                                {% if talk.track.get('zh-tw') %}
-                                <span class="tag">{{ talk.track['zh-tw']}}</span>
-                                {% endif %}
+                        <div class="card mb-3">
+                            <header class="card-header">
+                                <p class="card-header-title">
+                                    <span class="icon"><i class="fas fa-tags"></i></span>
+                                    <span>相關標籤</span>
+                                </p>
+                            </header>
+                            <div class="card-content">
+                                <div class="tags">
+                                    <span class="tag"><a href="https://coscup.org/2023/zh-TW/session/{{talk.code}}">{{ talk.code }}</a></span>
+                                    <span class="tag">{{ talk.submission_type['en']}}</span>
+                                    <span class="tag">{{ talk.track['en']}}</span>
+                                    {% if talk.track.get('zh-tw') %}
+                                    <span class="tag">{{ talk.track['zh-tw']}}</span>
+                                    {% endif %}
+                                </div>
                             </div>
-                        </p>
+                        </div>
                     </div>
                     {% endfor %}
                     </div>
                 </div>
-                <div class="column is-one-third">
+                <div class="column is-4">
                     <aside class="menu">
                         <ul class="menu-list">
                             <li>
-                                <a href="/schedule/{{pid}}">回列表</a>
+                                <a href="/schedule/{{pid}}">
+                                    <span class="icon"><i class="fas fa-list-ul"></i></span>
+                                    <span>回列表</span>
+                                </a>
                             </li>
                         </ul>
                         <p class="menu-label">目次</p>
@@ -117,6 +133,7 @@
                             {% for talk in talks %}
                             <li>
                                 <a href="#{{talk.code}}">
+                                    <span class="icon"><i class="far fa-comment-alt"></i></span>
                                     <span class="is-family-monospace">
                                         [[ new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'}) ]]
                                         [[ new Date( '{{ talk.slot.start }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]] ~

@@ -35,7 +35,16 @@ Schedule {% endblock %} {%block og%}
           <p class="menu-label">目次</p>
           <ul class="menu-list">
             <li>
-              <a href="#link_tracks">社群議程軌</a>
+              <a href="#link_tracks">
+                <span class="icon"><i class="fas fa-list-ul"></i></span>
+                <span>社群議程軌</span>
+              </a>
+            </li>
+            <li>
+              <a href="/schedule/{{pid}}">
+                <span class="icon"><i class="far fa-calendar-check"></i></span>
+                <span>我所關注的議程</span>
+              </a>
             </li>
           </ul>
         </aside>
@@ -44,12 +53,26 @@ Schedule {% endblock %} {%block og%}
         <div class="content">
           <article class="message is-info">
             <div class="message-body">
-              目前各合作社群議程還在徵稿與審稿中，部分議程社群軌並未完整顯示，詳細的投稿方式請參考<a
-                href="https://blog.coscup.org/2023/04/coscup-2023-coscup-2023-call-for.html"
-                >徵稿辦法</a
-              >，正式投稿截止日期：2023/05/22 請把握時間投稿！
+              <span class="icon"><i class="fas fa-running"></i></span>
+              鼓勵志工夥伴在活動二日也可抽空參與各社群所排定的議程主題，如有想要聽得議程，可以與組長協調調整執勤時間後參與。
             </div>
           </article>
+          <h2 id="track_intro">
+            <a href="#track_intro">議程表 | 社群協助</a>
+          </h2>
+          <p>
+            本頁面資料與大會的議程表同步更新，COSCUP
+            志工夥伴或是您來不及參與這次的籌備團隊都可以透過以下目的使用：
+          </p>
+          <ol>
+            <li>
+              COSCUP
+              志工夥伴可以在活動二日抽空聽有興趣的議程，可以先大致瀏覽系喜愛的議程後加入關注，之後可以在個人頁面快速顯示已關注的議程時間表。（此功能稍候上線）
+            </li>
+            <li>
+              一般會眾可以透過此頁面找尋議程軌，先去聆聽議程，如有興趣可以直接詢問社群議程負責人表達往後參與的意願，平時的小聚活動也可一同參與！登入後也可使用關注議程的功能喔！
+            </li>
+          </ol>
           <h2 id="link_tracks">
             <a href="#link_tracks">社群議程軌</a>
           </h2>
@@ -64,7 +87,7 @@ Schedule {% endblock %} {%block og%}
                 {% for track_name, track_data in tracks %}
                 <li>
                   <a
-                    href="/schedule/{{pid}}/talks/{{track_data['code']}}/{{track_name}}"
+                    href="/schedule/{{pid}}/talks/{{track_data['code']}}/{{track_name|replace('/', '-')|quote_plus}}"
                     >{{ track_name }}</a
                   >
                 </li>
