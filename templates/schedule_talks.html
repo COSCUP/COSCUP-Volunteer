@@ -7,7 +7,11 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="COSCUP Volunteer">
 <meta property="og:image" content="https://volunteer.coscup.org/img/volunteer_og.png">
+{% if track_description.get('zh-tw', track_description.get('en', '')) == '' %}
 <meta property="og:description" content="{{talks[0].track.get('zh-tw', talks[0].track['en'])}} / {{ talks[0].track['en'] }}">
+{% else %}
+<meta property="og:description" content="{{track_description.get('zh-tw', track_description.get('en', ''))}} / {{ talks[0].track['en'] }}">
+{% endif %}
 <meta property="twitter:title" content="{{talks[0].track.get('zh-tw', talks[0].track['en'])}} / {{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
 <meta property="twitter:card" content="summary">
 <meta property="twitter:site" content="@coscup">

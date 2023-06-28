@@ -1,4 +1,5 @@
 ''' Track '''
+import urllib
 from typing import Any
 
 from toldwords.pretalx import Pretalx, Submission, Talk
@@ -50,6 +51,10 @@ class Track:
         ''' Get submissions data from db '''
         self.submissions = TrackDB().get_raw_submissions(pid=self.pid)
 
+    def get_raw_talks(self) -> None:
+        ''' Get talks data from db '''
+        self.talks = TrackDB().get_raw_talks(pid=self.pid)
+
     def update_tracks_submissions(self, tracks: dict[str, dict[str, Any]],
                                   lang: str = 'zh-tw') -> None:
         ''' Update tracks submissions
@@ -96,11 +101,12 @@ class Track:
         paths: list[str] = []
         for pid in ('2023', ):
             track = cls(pid=pid)
-            track.fetch()
-            track.save_raw_submissions()
+            track.get_raw_submissions()
             paths.append(f'/schedule/{pid}')
             for name, data in track.tracks().items():
                 paths.append(
-                    f"/schedule/{pid}/track/{data['code']}/{name}")
+                    f"/schedule/{pid}/track/{data['code']}/{urllib.parse.quote_plus(name)}")
+                paths.append(
+                    f"/schedule/{pid}/talks/{data['code']}/{urllib.parse.quote_plus(name)}")
 
         return paths
