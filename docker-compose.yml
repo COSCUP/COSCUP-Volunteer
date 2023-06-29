@@ -50,6 +50,8 @@ services:
       - backend
     environment:
       - PYTHONPATH=/app
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
     command: sh
 
   cmdapp:
@@ -78,6 +80,8 @@ services:
       - secretary_mongo
     environment:
       - PYTHONPATH=/app
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
     networks:
       - backend
     entrypoint: ["poetry", "run", "python3", "cmdtools/main.py"]
@@ -107,6 +111,9 @@ services:
       - memcached-prod
       - queue_sender
       - secretary_mongo
+    environment:
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
     expose:
       - "5000"
     deploy:
@@ -145,6 +152,8 @@ services:
     environment:
       - UVICORN_HOST=0.0.0.0
       - UVICORN_WORKERS=2
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
     networks:
       - backend
     entrypoint: ["poetry", "run", "uvicorn", "api.main:app", "--reload"]
@@ -172,6 +181,8 @@ services:
       - secretary_mongo
     environment:
       - C_FORCE_ROOT=true
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
     networks:
       - backend
     entrypoint: ["poetry", "run", "celery", "-A", "celery_task.celery_main", "worker", "-B", "-l", "info", "-O", "fair", "-c", "4", "--logfile", "/var/log/workers/log.log"]
@@ -206,6 +217,8 @@ services:
       replicas: 1
     environment:
       - PYTHONPATH=../
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
     networks:
       - backend
     working_dir: /app/docs_dev
