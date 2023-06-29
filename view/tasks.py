@@ -192,11 +192,11 @@ def add(pid: str, task_id: str | None = None) -> str | ResponseBase:
             task_item.cate = data['cate']
             task_item.limit = data['limit']
 
-            task_item.starttime = arrow.get(f"{data['date']} {data['starttime']}",
-                                            tzinfo='Asia/Taipei').naive
+            task_item.starttime = arrow.get(arrow.get(f"{data['date']} {data['starttime']}",
+                                            tzinfo='Asia/Taipei').timestamp()).naive
             if 'endtime' in data and data['endtime']:
-                task_item.endtime = arrow.get(f"{data['date']} {data['endtime']}",
-                                              tzinfo='Asia/Taipei').naive
+                task_item.endtime = arrow.get(arrow.get(f"{data['date']} {data['endtime']}",
+                                              tzinfo='Asia/Taipei').timestamp()).naive
 
             if 'task_id' in post_data and post_data['task_id']:
                 task_item.id = post_data['task_id']
