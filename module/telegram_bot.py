@@ -130,6 +130,9 @@ class Telegram(Session):
         if data['message']['from']['is_bot']:
             return False
 
+        if 'text' not in data['message']:
+            return False
+
         if data['message']['text'].strip() in ('/start linkme', '/linkme'):
             return True
 
