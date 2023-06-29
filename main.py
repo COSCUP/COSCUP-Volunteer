@@ -72,7 +72,7 @@ app.register_blueprint(VIEW_TASKS)
 app.register_blueprint(VIEW_TEAM)
 app.register_blueprint(VIEW_TELEGRAM)
 app.register_blueprint(VIEW_USER)
-app.jinja_env.filters['quote_plus'] = lambda u: quote_plus(u)
+app.jinja_env.filters['quote_plus'] = quote_plus
 
 # Enable TEMPLATES_AUTO_RELOAD with Debug mode enabled
 if app.debug:
