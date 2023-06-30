@@ -23,7 +23,7 @@
             <p class="subtitle">{{ talks[0].track['en'] }}</p>
         </div>
     </section>
-    <section class="section" id="talks" v-cloak>
+    <section class="section" id="talks">
         <div class="container">
             <div class="columns">
                 <div class="column is-6 is-offset-1">
@@ -43,7 +43,7 @@
                         <h3 id="{{talk.code}}">
                             <a href="#{{talk.code}}">{{ talk.title }}</a>
                         </h3>
-                        <p>
+                        <p v-cloak>
                             <span class="tags">
                                 <span class="tag is-family-monospace">
                                     <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
@@ -134,7 +134,7 @@
                             <li>
                                 <a href="#{{talk.code}}">
                                     <span class="icon"><i class="far fa-comment-alt"></i></span>
-                                    <span class="is-family-monospace">
+                                    <span class="is-family-monospace" v-cloak>
                                         [[ new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'}) ]]
                                         [[ new Date( '{{ talk.slot.start }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]] ~
                                         [[ new Date( '{{ talk.slot.end }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]]
