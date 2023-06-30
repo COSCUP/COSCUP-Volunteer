@@ -44,21 +44,21 @@
                             <a href="#{{talk.code}}">{{ talk.title }}</a>
                         </h3>
                         <p>
-                            <span class="tags">
+                            <span class="tags" v-cloak>
                                 <span class="tag is-family-monospace">
                                     <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
                                     <span>{{ talk.slot.room['en'] }}</span>
                                 </span>
-                                <span class="tag is-success is-light is-family-monospace" v-cloak>
+                                <span class="tag is-success is-light is-family-monospace">
                                     <span class="icon"><i class="fas fa-calendar-day"></i></span>
                                     <span>[[ new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'}) ]]</span>
                                 </span>
-                                <span class="tag is-info is-light is-family-monospace" v-cloak>
+                                <span class="tag is-info is-light is-family-monospace">
                                     <span class="icon"><i class="far fa-clock"></i></span>
                                     <span>[[ new Date( '{{ talk.slot.start }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]] ~
                                           [[ new Date( '{{ talk.slot.end }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]]</span>
                                 </span>
-                                <span class="tag is-warning is-light is-family-monospace" v-cloak>
+                                <span class="tag is-warning is-light is-family-monospace">
                                     <span class="icon"><i class="fas fa-language"></i></span>
                                     <span>{{ talk.content_locale }}</span>
                                 </span>
