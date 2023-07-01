@@ -505,3 +505,209 @@ Track(pid='2023').save_track_description(
     track_id='2e81b', lang='en', content=content.strip())
 
 # ------
+
+content = '''
+<p>歡迎 Google Kubernetes Engine 相關議題包括:</p>
+<ul>
+    <li>Android/Java/Kotlin</li>
+    <li>Google Cloud</li>
+    <li>Flutter</li>
+    <li>Google Assistant (AOG)</li>
+    <li>TensorFlow</li>
+    <li>WTM</li>
+</ul>
+'''
+Track(pid='2023').save_track_description(
+    track_id='ef371', lang='zh-tw', content=content.strip())
+
+content = '''
+<p>Welcome Google Kubernetes Engine related topics, such as:</p>
+<ul>
+    <li>Android/Java/Kotlin</li>
+    <li>Google Cloud</li>
+    <li>Flutter</li>
+    <li>Google Assistant (AOG)</li>
+    <li>TensorFlow</li>
+    <li>WTM</li>
+</ul>
+'''
+Track(pid='2023').save_track_description(
+    track_id='ef371', lang='en', content=content.strip())
+
+# ------
+
+content = '''
+<p>此徵稿議題設立目的是希望能集結社群及產官學界無線存取網路（RAN）、B5G/6G和軟體定義網路（SDN）相關的開放網路技術研究者及愛好者一起交流！可能適合這個議題的講題包括：</p>
+<ul>
+	<li>O-RAN 的開源專案及實作</li>
+	<li>O-RAN 的虛擬化和自動化部署</li>
+	<li>O-RAN 智慧控制器（RIC）</li>
+	<li>O-RAN 的協議優化</li>
+	<li>O-RAN 的物理層加速</li>
+	<li>O-RAN 的軟體安全性</li>
+	<li>O-RAN 軟體社群（OSC）和 O-RAN 聯盟的最新發展</li>
+	<li>6G 的開放網路架構原型系統</li>
+	<li>開發開放的 6G 原型系統</li>
+	<li>測試和測量未來開放的 6G 系統功能技術</li>
+	<li>開放 6G 用例的早期驗證</li>
+	<li>在開放 6G 技術領域中的通訊人才培養</li>
+	<li>B5G/6G 中與 O-RAN 相關的雲端技術</li>
+	<li>開源 SDN 技術</li>
+</ul>
+<p>歡迎對以上議題有心得的朋友投稿交流，其他跟開源 O-RAN/B5G/6G 相關的主題也同樣歡迎共襄盛舉！</p>
+
+<p>This issue is focused on open network technologies related to Radio Access Network (RAN), B5G/6G, and software-defined networking (SDN). Potential topics that may fit this issue include:</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='43d00', lang='zh-tw', content=content.strip())
+
+content = '''
+<p>This issue is focused on open network technologies related to Radio Access Network (RAN), B5G/6G, and software-defined networking (SDN). Potential topics that may fit this issue include:</p>
+<ul>
+	<li>Open RAN open source projects and implementations</li>
+	<li>Open RAN virtualization and automatic deployment</li>
+	<li>Open RAN intelligent controller (RIC)</li>
+	<li>Protocol optimization for Open RAN</li>
+	<li>Physical layer acceleration for Open RAN</li>
+	<li>Software security for Open RAN</li>
+	<li>The latest development of the O-RAN Software Community (OSC) and O-RAN Alliance</li>
+	<li>Open network architecture prototype systems for 6G</li>
+	<li>Development of Open 6G prototype systems</li>
+	<li>Testing and measurement of future Open 6G system functional technologies</li>
+	<li>Early-stage verification of Open 6G use cases</li>
+	<li>Communication talent cultivation in the field of Open 6G technology</li>
+	<li>Cloud technologies related to O-RAN in B5G/6G</li>
+	<li>Open SDN technologies</li>
+</ul>
+<p>These topics are aligned with the aim of developing key enabling software technologies for open network technologies and establishing forward-looking research for 6G technology. Other relevant topics related to O-RAN/B5G/6G can also be considered-.</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='43d00', lang='en', content=content.strip())
+
+# ------
+
+content = '''
+<p>Chatbot Developers Taiwan 社群致力於提供一個討論聊天機器人的相關應用的社群。在台北、台中每個月皆有一次的定期 meetup 聚會，每回小聚都會安排講者主題分享、新知討論，環繞在 chatbot 與 AI ，及大家共同關心的話題中。歡迎大家踴躍分享、自由與會眾交流，也期望大家可以在分享中得到收穫。 同時，也很歡迎各位自薦、推薦講者。亦或者是上台閃電秀，分享自己開發的 chatbot 或是任何 chatbot 有關的任何議題。</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='74574', lang='zh-tw', content=content.strip())
+
+content = '''
+<p>Chatbot Developers Taiwan Community is dedicated to providing a platform for discussing chatbot-related applications. We hold regular meetups in Taipei and Taichung every month, featuring guest speakers and discussions on the latest developments and topics related to chatbots and AI. We welcome everyone to actively participate in sharing and exchanging ideas, and hope that everyone can benefit from these events. We also welcome recommendations for speakers, lightning talks, and sharing any chatbot-related topics, including your own chatbot development experiences.</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='74574', lang='en', content=content.strip())
+
+# ------
+
+content = '''
+<p>本議程邀請日本的開源社群 OSPN (Open Source People Network) 的講者，來分享日本開源相關議題的現況，並和 COSCUP 會眾進行國際交流。</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='2ae73', lang='zh-tw', content=content.strip())
+
+content = '''
+<p>In this track, speakers from OSPN (Open Source People Network) Japan will present the newest open source related topics in Japan. The speakers are willing to share, to communicate and to interact with COSCUP attendees.</p>
+<p>このトラックでは、OSPN（Open Source People Network）Japan のスピーカーの方々が日本で最新のオープンソース関連トピックを紹介します。COSCUPの参加者と情報共有し、コミュニケーションを図り、交流することを望みます。</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='2ae73', lang='en', content=content.strip())
+
+# ------
+
+content = '''
+<p>想知道 PyCon TW 走過十幾個年頭的酸甜苦辣嗎？想聽聽厲害的講者分享 Python 相關的開發經驗嗎？我們即將在 COSCUP 與大家交流研討會舉辦秘辛，並邀請優秀的講者來與我們分享精彩演講！期待在 COSCUP 2023 與您相見！</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='5a203', lang='zh-tw', content=content.strip())
+
+content = '''
+<p>Do you want to know the story of PyCon TW over the past decade? Are you curious about the development experience of Python experts? We’re going to invite speakers to give talks and share the secrets of the conference with everyone at COSCUP. We are looking forward to meeting you at COSCUP 2023!</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='5a203', lang='en', content=content.strip())
+
+# ------
+content = '''
+<p>所有 Rust 相關開源議題。</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='fda3f', lang='zh-tw', content=content.strip())
+
+content = '''
+<p>all open source topics related to Rust.</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='fda3f', lang='en', content=content.strip())
+
+# ------
+
+content = '''
+<p>Laravel Taiwan 和 Vue Taiwan 都是由熱愛相應技術的社群成員共同創立的社群，旨在提供對於 Laravel 和 Vue.js 相關議題、專案、技術以及工作的朋友們進行分享與交流的平台。去年與前年，兩個社群更攜手舉辦了 {Laravel x Vue} Conf Taiwan，廣邀各界技術高手前來共襄盛舉，希望能為技術愛好者打造一個良好的學習和交流環境。希望透過本次Coscup的社群議程與攤位，進行相關技術的推廣與分享。</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='f194d', lang='zh-tw', content=content.strip())
+
+content = '''
+<p>Laravel Taiwan and Vue Taiwan are both communities founded by members who love the respective technologies, aiming to provide a platform for sharing and exchanging ideas related to Laravel and Vue.js, including topics, projects, techniques, and jobs. In the past two years, the two communities joined forces to hold {Laravel x Vue} Conf Taiwan, inviting experts from various fields to come and join the event, hoping to create a good learning and communication environment for technology enthusiasts. Through the community schedule and booth at this year's Coscup, we hope to promote and share related technologies.</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='f194d', lang='en', content=content.strip())
+
+# ------
+
+content = '''
+<p>我們好奇科技領域內的多元聲音，以及人們如何促進科技領域的開放共榮。我們關注職場安全、性別平等、多元文化，題目可包含（但不限）女性在職場環境裡如何突破職場的性別歧視、多元性別在科技領域裡的困境與復原力、貧富差距如何造就資訊差異及其補救措施⋯⋯等等。我們好奇的是，當人內心懷抱正義與理想時，要如何在舊有的不正義社會輪帶中脫離，又如何真正地行動與自我賦能。 </p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='5133e', lang='zh-tw', content=content.strip())
+
+content = '''
+<p>We are curious about the diverse voices in the field of technology and how people can promote openness and mutual prosperity in this area. We are concerned with workplace safety, gender equality, and multiculturalism. Possible topics may include (but are not limited to) how women can overcome gender discrimination in the workplace, the challenges and resilience of gender diversity in the technology field, how wealth disparity leads to information discrepancies and its remedies, and so on. We are curious about how individuals can break away from the unjust social system and take real action and self-empowerment when they hold justice and ideals in their hearts.</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='5133e', lang='en', content=content.strip())
+
+# ------
+
+content = '''
+<p>近年來胎玩有許多組織的型態並非單一的藝術組織，而是透過議題是的發生，結合各種不同領域的專業，進行對社會的提問，促使社會的各種面向被看見。這些組織特性以及目的皆不同，我們究竟應不應該定義組織的核心？又或者我們在進行跨域對話的時候，如何先從理解對方語言，在試著把自己的專業讓彼此了解，進而擴大各種可能性。若我們希望擴及各大的知識層面，促使更多人加入相關領域的研究和政策的推進，『開放』究竟是什麼？應該怎麼做？</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='a3683', lang='zh-tw', content=content.strip())
+
+content = '''
+<p>In recent years, there have been many organizations in Taiwan that are not simply art organizations, but rather bring together professionals from various fields through issue-based events to raise questions and bring different aspects of society to light. These organizations have different characteristics and purposes, but should we define the core of these organizations? And in cross-disciplinary dialogues, how can we first understand each other's language, try to make our own expertise understood, and expand possibilities? If we hope to reach various knowledge levels and encourage more people to participate in related fields of research and policy promotion, what exactly is "openness" and how should we approach it?</p>
+'''
+Track(pid='2023').save_track_description(
+    track_id='a3683', lang='en', content=content.strip())
+
+# ------
+
+content = '''
+<p>開放教育議程軌，期望透過議程分享進一步探討有關開放教育資源（Open Education Resources）與開源教育（Open Source Education）等，和開放與教育相關的議題，從開放式課程、教材到開源貢獻者的培育與傳承等。我議程主題包含但不限於：</p>
+<ul>
+	<li>如何培育下一代開源貢獻者</li>
+	<li>藉由 FLOSS 專案進行課程規劃的分享</li>
+	<li>開放式課程與開放教育教材的使用者分析</li>
+	<li>與教育有關的開源社群籌辦或參與經驗</li>
+	<li>FLOSS 概念及開源精神在教育現場的應用情境</li>
+</ul>
+'''
+Track(pid='2023').save_track_description(
+    track_id='fecd1', lang='zh-tw', content=content.strip())
+
+content = '''
+<p>The Open Education track aims to further explore topics related to Open Education Resources and Open Source Education through sharing sessions. Including discussions on issues related to open education, from open courses and education resources to the training and continuation of open source contributors. session topics have included, but are not limited to:</p>
+<ul>
+	<li>How to educate the next generation of open source contributors</li>
+	<li>Planning of FLOSS project related courses</li>
+	<li>User analysis of open course platforms and open educational resourses</li>
+	<li>Experiences in hosting or participating in open source communities related to education</li>
+	<li>The usage of FLOSS and open source concept in different educational scenarios.</li>
+</ul>
+'''
+Track(pid='2023').save_track_description(
+    track_id='fecd1', lang='en', content=content.strip())
+
+# ------
