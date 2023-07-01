@@ -16,6 +16,9 @@
 <meta property="twitter:card" content="summary">
 <meta property="twitter:site" content="@coscup">
 {%endblock%}
+{%block style%}
+<link href="{{ url_for('static', filename='buefy.min.css') }}" rel="stylesheet">
+{%endblock%}
 {% block body %}
     <section class="section">
         <div class="container">
@@ -154,6 +157,7 @@
 {% endblock %}
 
 {% block js %}
+<script src="{{ url_for('static', filename='buefy.min.js') }}"></script>
 <script>
     (function () {
         let $talks = new Vue({

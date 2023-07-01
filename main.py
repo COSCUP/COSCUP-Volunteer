@@ -172,7 +172,9 @@ def need_login() -> ResponseBase | None:
         return None
 
     if request.path in NO_NEED_LOGIN_PATH or \
-            request.path.startswith('/tasks') or request.path.startswith('/schedule'):
+            request.path.startswith('/static/') or \
+            request.path.startswith('/tasks') or \
+    request.path.startswith('/schedule'):
         return None
 
     if request.path not in NO_NEED_LOGIN_PATH:

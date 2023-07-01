@@ -85,25 +85,6 @@
         <div class="navbar-start">
           {% if g.user and g.user.data %}
           <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link has-text-weight-medium" href="/project/2022/">
-              <span class="icon"><i class="fas fa-star"></i></span>
-              <span>2022</span>
-            </a>
-            <div class="navbar-dropdown">
-              <a
-                class="navbar-item has-text-weight-medium"
-                href="/project/2022/"
-              >
-                <span class="icon"><i class="far fa-bookmark"></i></span>
-                <span>COSCUP 2022</span>
-              </a>
-              <a class="navbar-item has-text-weight-medium" href="/tasks/2022">
-                <span class="icon"><i class="fas fa-pizza-slice"></i></span>
-                <span>2022 解任務！</span>
-              </a>
-            </div>
-          </div>
-          <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link has-text-weight-medium" href="/project/2023/">
               <span class="icon"><i class="fas fa-star"></i></span>
               <span>2023</span>
@@ -123,9 +104,9 @@
             </div>
           </div>
           {% else %}
-          <a class="navbar-item has-text-weight-medium" href="/tasks/2022">
+          <a class="navbar-item has-text-weight-medium" href="/tasks/2023">
             <span class="icon"><i class="fas fa-pizza-slice"></i></span>
-            <span>2022 解任務！</span>
+            <span>2023 解任務！</span>
           </a>
           <a class="navbar-item has-text-weight-medium" href="/project/2023/">
             <span class="icon"><i class="far fa-bookmark"></i></span>
@@ -178,7 +159,7 @@
               <span>{{g.user['participate_in'][0]['name']}}</span>
             </a>
             <div class="navbar-dropdown">
-              {% for team in g.user['participate_in'] %}
+              {% for team in g.user['participate_in'][:2] %}
               <a
                 class="navbar-item has-text-weight-medium"
                 href="/team/{{team['pid']}}/{{team['tid']}}/"
