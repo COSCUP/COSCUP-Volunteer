@@ -37,6 +37,7 @@ def show_talks(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
 
     return render_template('schedule_talks.html',
                            pid=pid,
+                           track_id=track_id,
                            talks=talks,
                            track_description=track_description)
 

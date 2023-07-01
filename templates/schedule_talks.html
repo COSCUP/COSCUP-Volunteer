@@ -67,6 +67,15 @@
                                 </span>
                             </span>
                         </p>
+                        <div class="buttons are-small">
+                            <span class="button is-link is-light is-outlined">
+                                <span class="icon"><i class="far fa-calendar-plus"></i></span>
+                                <span><a target="_blank"
+                                    :href="`https://calendar.google.com/calendar/render?action=TEMPLATE&text={{talk.title|quote_plus}}&dates=${new Date( '{{ talk.slot.start }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}/${new Date( '{{ talk.slot.end }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}&details={{ ('https://volunteer.coscup.org/schedule/%s/talks/%s/%s#%s' % (pid, track_id, talks[0].track.get('zh-tw', talks[0].track['en']), talk.code)) | quote_plus }}&location={{talk.slot.room['en']}}`">
+                                    加入行事曆</a>
+                                </span>
+                            </span>
+                        </div>
                         <p>{{ talk.abstract|safe }}</p>
                         {% for speaker in talk.speakers %}
                         <div class="card mb-3">
@@ -108,7 +117,7 @@
                             </header>
                             <div class="card-content">
                                 <div class="tags">
-                                    <span class="tag"><a href="https://coscup.org/2023/zh-TW/session/{{talk.code}}">{{ talk.code }}</a></span>
+                                    <span class="tag"><a href="https://coscup.org/{{pid}}/zh-TW/session/{{talk.code}}">{{ talk.code }}</a></span>
                                     <span class="tag">{{ talk.submission_type['en']}}</span>
                                     <span class="tag">{{ talk.track['en']}}</span>
                                     {% if talk.track.get('zh-tw') %}
