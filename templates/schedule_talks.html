@@ -217,6 +217,14 @@
                                     <span>我的關注議程</span>
                                 </a>
                             </li>
+                            {% if share_code != '' %}
+                            <li>
+                                <a href="/schedule/{{pid}}/talks/fav/share/{{share_code}}">
+                                    <span class="icon"><i class="far fa-share-square"></i></span>
+                                    <span>分享我的關注議程連結</span>
+                                </a>
+                            </li>
+                            {% endif %}
                         </ul>
                         <p class="menu-label">目次</p>
                         <ul class="menu-list">

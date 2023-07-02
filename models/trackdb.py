@@ -202,8 +202,26 @@ class TalkFavsDB(DBBase):
 
         return []
 
+    def get_share_code(self) -> str:
+        ''' Get share code '''
+        for raw in self.find({'pid': self.pid, 'uid': self.uid}):
+            return raw['share_code']
+
+        return ''
+
+    def get_by_share_code(self, share_code: str) -> dict[str, Any]:
+        ''' Get favs by share code'''
+        for raw in self.find({'pid': self.pid, 'share_code': share_code}):
+            return raw
+
+        return {}
+
     def add(self, talk_id: str) -> list[str]:
         ''' Add talk '''
+        if self.count_documents({'pid': self.pid, 'uid': self.uid}) == 0:
+            self.insert_one({'pid': self.pid, 'uid': self.uid,
+                             'share_code': str(uuid4())})
+
         return self.find_one_and_update(
             {'pid': self.pid, 'uid': self.uid},
             {'$addToSet': {'talks': talk_id}},

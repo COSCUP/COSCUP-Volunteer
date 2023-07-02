@@ -9,6 +9,7 @@ import setting
 from celery_task.task_service_sync import service_sync_pretalx_schedule
 from module.mc import MC
 from module.track import TalkFavs, Track
+from module.users import User
 
 VIEW_SCHEDULE = Blueprint('schedule', __name__, url_prefix='/schedule')
 
@@ -40,24 +41,38 @@ def talks_all(pid: int) -> str | ResponseBase:
                            title=talks[0].track.get(
                                'zh-tw', talks[0].track['en']),
                            title_en=talks[0].track['en'],
+                           share_code='',
                            talks=talks,
                            track_description={})
 
 
 @VIEW_SCHEDULE.route('/<int:pid>/talks/fav/my', methods=('GET', 'POST'))
-def talks_favs_my(pid: int) -> str | ResponseBase:
+@VIEW_SCHEDULE.route('/<int:pid>/talks/fav/share/<share_code>', methods=('GET', 'POST'))
+def talks_favs_my(pid: int, share_code: str | None = None) -> str | ResponseBase:
     ''' Talks favs '''
     if pid < 2023:
         return Response('', 404)
 
     uid = g.get('user', {}).get('account', {}).get('_id')
-    if not uid:
+    if not uid and share_code is None:
         session.pop('sid', None)
         session['r'] = request.path
         return redirect(url_for('oauth2callback', _scheme='https', _external=True))
 
-    talk_ids = TalkFavs(pid=str(pid), uid=uid).get()
-    talks = Track(pid=str(pid)).get_talks_by_talk_ids(talk_ids=talk_ids)
+    talk_favs = TalkFavs(pid=str(pid), uid=uid)
+    if share_code is None:
+        talk_ids = talk_favs.get()
+        talks = Track(pid=str(pid)).get_talks_by_talk_ids(talk_ids=talk_ids)
+        title = '關注的議程'
+        title_en = 'My Favorite Talks'
+    else:
+        favs_data = talk_favs.get_by_share_code(share_code=share_code)
+        user_info = User.get_info(uids=[favs_data['uid'], ])[favs_data['uid']]
+        talks = Track(pid=str(pid)).get_talks_by_talk_ids(
+            talk_ids=favs_data['talks'])
+        title = f"{user_info['profile']['badge_name']} 所關注的議程"
+        title_en = f"{user_info['profile']['badge_name']}'s Favorite Talks"
+
     talks = sorted(talks, key=lambda talk: talk.slot.room['en'])
     talks = sorted(talks, key=lambda talk: talk.slot.start)
 
@@ -70,9 +85,10 @@ def talks_favs_my(pid: int) -> str | ResponseBase:
     return render_template('schedule_talks.html',
                            pid=pid,
                            track_id='',
-                           is_login=True,
-                           title='關注的議程',
-                           title_en='',
+                           is_login=bool(uid),
+                           title=title,
+                           title_en=title_en,
+                           share_code=talk_favs.get_share_code(),
                            talks=talks,
                            track_description={})
 
@@ -138,6 +154,7 @@ def show_talks(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
                            title=talks[0].track.get(
                                'zh-tw', talks[0].track['en']),
                            title_en=talks[0].track['en'],
+                           share_code='',
                            talks=talks,
                            track_description=track_description)
 

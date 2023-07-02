@@ -130,6 +130,14 @@ class TalkFavs:
         ''' Get talks '''
         return self.talk_favs_db.get()
 
+    def get_share_code(self) -> str:
+        ''' Get share code '''
+        return self.talk_favs_db.get_share_code()
+
+    def get_by_share_code(self, share_code: str) -> dict[str, Any]:
+        ''' Get by share code '''
+        return self.talk_favs_db.get_by_share_code(share_code=share_code)
+
     def add(self, talk_id: str) -> list[str]:
         ''' Add talk '''
         return self.talk_favs_db.add(talk_id=talk_id)
