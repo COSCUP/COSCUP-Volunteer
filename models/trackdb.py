@@ -3,6 +3,7 @@ from typing import Any
 from uuid import uuid4
 
 from pymongo import UpdateOne
+from pymongo.collection import ReturnDocument
 from toldwords.pretalx import Submission, Talk
 
 from models.base import DBBase
@@ -145,3 +146,47 @@ class TrackDB(DBBase):
             {'$set': {'content': content}},
             upsert=True,
         )
+
+
+class TalkFavsDB(DBBase):
+    ''' TalkFavsDB '''
+
+    def __init__(self, pid: str, uid: str) -> None:
+        super().__init__('talk_favs')
+        self.pid = pid
+        self.uid = uid
+
+    def index(self) -> None:
+        ''' To make collection's index
+
+        Indexs:
+            - `pid`
+            - `uid`
+
+        '''
+        self.create_index([('pid', -1), ('uid', 1)])
+
+    def get(self) -> list[str]:
+        ''' Get talks '''
+        for raw in self.find({'pid': self.pid, 'uid': self.uid}):
+            return raw['talks']
+
+        return []
+
+    def add(self, talk_id: str) -> list[str]:
+        ''' Add talk '''
+        return self.find_one_and_update(
+            {'pid': self.pid, 'uid': self.uid},
+            {'$addToSet': {'talks': talk_id}},
+            upsert=True,
+            return_document=ReturnDocument.AFTER,
+        )['talks']
+
+    def delete(self, talk_id: str) -> list[str]:
+        ''' Remove talk '''
+        return self.find_one_and_update(
+            {'pid': self.pid, 'uid': self.uid},
+            {'$pull': {'talks': talk_id}},
+            upsert=True,
+            return_document=ReturnDocument.AFTER,
+        )['talks']

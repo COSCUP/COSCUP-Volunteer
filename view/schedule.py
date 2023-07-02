@@ -1,5 +1,5 @@
 ''' Schedule '''
-from flask import Blueprint, redirect, render_template
+from flask import Blueprint, g, redirect, render_template, request, jsonify
 from flask.wrappers import Response
 from markdown import markdown
 from werkzeug.wrappers import Response as ResponseBase
@@ -7,9 +7,39 @@ from werkzeug.wrappers import Response as ResponseBase
 import setting
 from celery_task.task_service_sync import service_sync_pretalx_schedule
 from module.mc import MC
-from module.track import Track
+from module.track import TalkFavs, Track
 
 VIEW_SCHEDULE = Blueprint('schedule', __name__, url_prefix='/schedule')
+
+
+@VIEW_SCHEDULE.route('/<int:pid>/talks/fav', methods=('GET', 'POST'))
+def talks_favs(pid: int) -> str | ResponseBase:
+    ''' Talks favs '''
+    if pid < 2023:
+        return Response('', 404)
+
+    uid = g.get('user', {}).get('account', {}).get('_id')
+
+    if not uid:
+        return jsonify({'note': '提醒：需要登入才可以使用加入關注議程功能！'})
+
+    if request.method == 'POST':
+        data = request.get_json()
+
+        if data['case'] == 'get':
+            favs = TalkFavs(pid=str(pid), uid=uid).get()
+            return jsonify({'note': '已匯入關注議程', 'favs': favs})
+
+        if data['case'] == 'add':
+            favs = TalkFavs(pid=str(pid), uid=uid).add(talk_id=data['talk_id'])
+            return jsonify({'note': '已加入關注', 'favs': favs})
+
+        if data['case'] == 'delete':
+            favs = TalkFavs(pid=str(pid), uid=uid).delete(
+                talk_id=data['talk_id'])
+            return jsonify({'note': '已移除關注', 'favs': favs})
+
+    return jsonify({'note': '????'})
 
 
 @VIEW_SCHEDULE.route('/<int:pid>/talks/<track_id>/<track_name>')
@@ -18,6 +48,7 @@ def show_talks(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
     if pid < 2023:
         return Response('', 404)
 
+    uid = g.get('user', {}).get('account', {}).get('_id')
     _ = track_name
     talks = Track(pid=str(pid)).get_talks_by_track_id(track_id)
     talks = sorted(talks, key=lambda talk: talk.slot.room['en'])
@@ -38,6 +69,7 @@ def show_talks(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
     return render_template('schedule_talks.html',
                            pid=pid,
                            track_id=track_id,
+                           is_login=bool(uid),
                            talks=talks,
                            track_description=track_description)
 

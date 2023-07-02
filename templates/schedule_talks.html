@@ -44,6 +44,17 @@
                             <div class="control">
                                 <span class="tag is-info">篩選條件</span>
                             </div>
+                            {% for i in range(4)%}
+                            <div class="control is-loading" v-if="selectTagsDate.size == 0">
+                                <span class="tag is-primary is-light">
+                                    <label class="checkbox">
+                                        <input type="checkbox">
+                                        <span class="icon"><i class="fas fa-redo-alt"></i></span>
+                                        Loading ...
+                                    </label>
+                                </span>
+                            </div>
+                            {% endfor %}
                             <div class="control" v-for="item in selectTagsDate" v-if="selectTagsDate.size > 1" v-cloak>
                                 <span class="tag is-success is-light">
                                     <label class="checkbox">
@@ -104,13 +115,29 @@
                                 </span>
                             </span>
                         </p>
-                        <div class="buttons are-small">
-                            <span class="button is-link is-light is-outlined">
+                        <div class="buttons are-small is-right">
+                            <span class="button is-text">
                                 <span class="icon"><i class="far fa-calendar-plus"></i></span>
                                 <span><a target="_blank"
                                     :href="`https://calendar.google.com/calendar/render?action=TEMPLATE&text={{talk.title|quote_plus}}&dates=${new Date( '{{ talk.slot.start }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}/${new Date( '{{ talk.slot.end }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}&details={{ ('https://volunteer.coscup.org/schedule/%s/talks/%s/%s#%s' % (pid, track_id, talks[0].track.get('zh-tw', talks[0].track['en']), talk.code)) | quote_plus }}&location={{talk.slot.room['en']}}`">
                                     加入行事曆</a>
                                 </span>
+                            </span>
+                            <span v-cloak class="button is-text" v-if="!is_login" onclick="alert('需登入才可加入使用。')" v-cloak>
+                                <span v-cloak class="icon"><i class="far fa-bookmark"></i></span>
+                                <span v-cloak>加入關注</span>
+                            </span>
+                            <span v-cloak class="button is-text"
+                                  v-if="is_login && !favs.includes('{{talk.code}}')"
+                                  @click="addfav('{{talk.code}}')">
+                                <span v-cloak class="icon"><i class="far fa-bookmark"></i></span>
+                                <span v-cloak>加入關注</span>
+                            </span>
+                            <span v-cloak class="button is-primary is-light is-outlined"
+                                  v-if="is_login && favs.includes('{{talk.code}}')"
+                                  @click="delfav('{{talk.code}}')">
+                                <span v-cloak class="icon"><i class="fas fa-bookmark"></i></span>
+                                <span v-cloak>已關注</span>
                             </span>
                         </div>
                         <p>{{ talk.abstract|safe }}</p>
@@ -206,6 +233,7 @@
 {% endblock %}
 
 {% block js %}
+<script src="/js/axios.min.js"></script>
 <script src="{{ url_for('static', filename='buefy.min.js') }}"></script>
 <script>
     (function () {
@@ -218,7 +246,9 @@
                 selectTagsRoom: new Set(),
                 selectedRoom: [],
                 selectTagsLang: new Set(),
-                selectedLang: []
+                selectedLang: [],
+                favs: [],
+                is_login: {{ 'true' if is_login else 'false'}}
             },
             watch: {
                 selectedDate: function(item) {
@@ -235,6 +265,28 @@
                 this.init();
             },
             methods: {
+                addfav: function(talk_id) {
+                    let $this = this;
+                    axios.post('/schedule/{{pid}}/talks/fav', {case: 'add', talk_id: talk_id}).then(function(resp) {
+                        $this.favs = resp.data.favs;
+                        Vue.prototype.$buefy.snackbar.open({
+                            message: resp.data.note,
+                            type: 'is-info',
+                            position: 'is-bottom-left',
+                        })
+                    });
+                },
+                delfav: function(talk_id) {
+                    let $this = this;
+                    axios.post('/schedule/{{pid}}/talks/fav', {case: 'delete', talk_id: talk_id}).then(function(resp) {
+                        $this.favs = resp.data.favs;
+                        Vue.prototype.$buefy.snackbar.open({
+                            message: resp.data.note,
+                            type: 'is-info',
+                            position: 'is-bottom-left',
+                        })
+                    });
+                },
                 selected: function() {
                     let $this = this;
                     if ($this.selectedDate.length === 0 && $this.selectedLang.length === 0 && $this.selectedRoom.length === 0) {
@@ -276,6 +328,16 @@
                     this.selectTagsDate = dateTags;
                     this.selectTagsRoom = roomTags;
                     this.selectTagsLang = langTags;
+
+                    let $this = this;
+                    axios.post('/schedule/{{pid}}/talks/fav', {case: 'get'}).then(function(resp) {
+                        $this.favs = resp.data.favs;
+                        Vue.prototype.$buefy.snackbar.open({
+                            message: resp.data.note,
+                            type: 'is-info',
+                            position: 'is-bottom-left',
+                        })
+                    });
                 }
             },
             delimiters: ["[[", "]]"]

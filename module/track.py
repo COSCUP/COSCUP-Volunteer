@@ -6,7 +6,7 @@ from toldwords.pretalx import Pretalx, Submission, Talk
 from toldwords.utils import DATA2023
 
 import setting
-from models.trackdb import TrackDB
+from models.trackdb import TalkFavsDB, TrackDB
 
 
 class Track:
@@ -110,3 +110,22 @@ class Track:
                     f"/schedule/{pid}/talks/{data['code']}/{urllib.parse.quote_plus(name)}")
 
         return paths
+
+
+class TalkFavs:
+    ''' Talk Favs '''
+
+    def __init__(self, pid: str, uid: str) -> None:
+        self.talk_favs_db = TalkFavsDB(pid=pid, uid=uid)
+
+    def get(self) -> list[str]:
+        ''' Get talks '''
+        return self.talk_favs_db.get()
+
+    def add(self, talk_id: str) -> list[str]:
+        ''' Add talk '''
+        return self.talk_favs_db.add(talk_id=talk_id)
+
+    def delete(self, talk_id: str) -> list[str]:
+        ''' Delete talk '''
+        return self.talk_favs_db.delete(talk_id=talk_id)
