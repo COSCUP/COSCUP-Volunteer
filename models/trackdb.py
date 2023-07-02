@@ -171,7 +171,7 @@ class TrackDB(DBBase):
         )
 
     @staticmethod
-    def replace_rooms(talks: list[Talk]):
+    def replace_rooms(talks: list[Talk]) -> None:
         ''' Replace `Room` -> `TR` '''
         for talk in talks:
             talk.slot.room['en'] = talk.slot.room['en'].replace('Room', 'TR')
@@ -197,17 +197,19 @@ class TalkFavsDB(DBBase):
 
     def get(self) -> list[str]:
         ''' Get talks '''
+        result: list[str] = []
         for raw in self.find({'pid': self.pid, 'uid': self.uid}):
-            return raw['talks']
+            result = raw['talks']
 
-        return []
+        return result
 
     def get_share_code(self) -> str:
         ''' Get share code '''
+        result: str = ''
         for raw in self.find({'pid': self.pid, 'uid': self.uid}):
-            return raw['share_code']
+            result = raw['share_code']
 
-        return ''
+        return result
 
     def get_by_share_code(self, share_code: str) -> dict[str, Any]:
         ''' Get favs by share code'''
@@ -222,18 +224,22 @@ class TalkFavsDB(DBBase):
             self.insert_one({'pid': self.pid, 'uid': self.uid,
                              'share_code': str(uuid4())})
 
-        return self.find_one_and_update(
+        result: list[str] = self.find_one_and_update(
             {'pid': self.pid, 'uid': self.uid},
             {'$addToSet': {'talks': talk_id}},
             upsert=True,
             return_document=ReturnDocument.AFTER,
         )['talks']
 
+        return result
+
     def delete(self, talk_id: str) -> list[str]:
         ''' Remove talk '''
-        return self.find_one_and_update(
+        result: list[str] = self.find_one_and_update(
             {'pid': self.pid, 'uid': self.uid},
             {'$pull': {'talks': talk_id}},
             upsert=True,
             return_document=ReturnDocument.AFTER,
         )['talks']
+
+        return result
