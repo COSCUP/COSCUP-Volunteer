@@ -136,6 +136,29 @@ class TrackDB(DBBase):
                                'code': {'$in': codes}}):
             result.append(Talk.parse_obj(data['raw']))
 
+        self.replace_rooms(talks=result)
+
+        return result
+
+    def get_talks_by_talk_ids(self, pid: str, talk_ids: list[str]) -> list[Talk]:
+        ''' Get talks by talk_ids '''
+        result: list[Talk] = []
+        for data in self.find({'pid': pid, 'cate': 'raw_talk',
+                               'code': {'$in': talk_ids}}):
+            result.append(Talk.parse_obj(data['raw']))
+
+        self.replace_rooms(talks=result)
+
+        return result
+
+    def get_talks_by_pid(self, pid: str) -> list[Talk]:
+        ''' Get talks by talk_ids '''
+        result: list[Talk] = []
+        for data in self.find({'pid': pid, 'cate': 'raw_talk'}):
+            result.append(Talk.parse_obj(data['raw']))
+
+        self.replace_rooms(talks=result)
+
         return result
 
     def save_track_description(self, pid: str,
@@ -146,6 +169,12 @@ class TrackDB(DBBase):
             {'$set': {'content': content}},
             upsert=True,
         )
+
+    @staticmethod
+    def replace_rooms(talks: list[Talk]):
+        ''' Replace `Room` -> `TR` '''
+        for talk in talks:
+            talk.slot.room['en'] = talk.slot.room['en'].replace('Room', 'TR')
 
 
 class TalkFavsDB(DBBase):

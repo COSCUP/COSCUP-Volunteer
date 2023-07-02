@@ -41,8 +41,8 @@ Schedule {% endblock %} {%block og%}
               </a>
             </li>
             <li>
-              <a href="/schedule/{{pid}}">
-                <span class="icon"><i class="far fa-calendar-check"></i></span>
+              <a href="/schedule/{{pid}}/talks/fav/my">
+                <span class="icon"><i class="fas fa-bookmark"></i></span>
                 <span>我所關注的議程</span>
               </a>
             </li>
@@ -67,7 +67,7 @@ Schedule {% endblock %} {%block og%}
           <ol>
             <li>
               COSCUP
-              志工夥伴可以在活動二日抽空聽有興趣的議程，可以先大致瀏覽系喜愛的議程後加入關注，之後可以在個人頁面快速顯示已關注的議程時間表。（此功能稍候上線）
+              志工夥伴可以在活動二日抽空聽有興趣的議程，可以先大致瀏覽系喜愛的議程後加入關注，之後可以在個人頁面快速顯示<a href="/schedule/{{pid}}/talks/fav/my">已關注的議程時間表</a>。
             </li>
             <li>
               一般會眾可以透過此頁面找尋議程軌，先去聆聽議程，如有興趣可以直接詢問社群議程負責人表達往後參與的意願，平時的小聚活動也可一同參與！登入後也可使用關注議程的功能喔！
@@ -80,6 +80,7 @@ Schedule {% endblock %} {%block og%}
             透過社群議程軌的徵求，今年約有 {{total_tracks}}
             組社群申請自辦、自審議程，透過活動二日分享開放原始碼、開源精神、開源貢獻相關的議題。
           </p>
+          <p>或是直接顯示<a href="/schedule/{{pid}}/talks/all">所有議程列表</a>！</p>
           <div class="columns">
             {% for tracks in tracks_groups%}
             <div class="column">

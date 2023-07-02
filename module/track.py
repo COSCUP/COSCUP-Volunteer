@@ -81,6 +81,14 @@ class Track:
         ''' Get Talks by track_id '''
         return TrackDB().get_talks_by_track_id(pid=self.pid, track_id=track_id)
 
+    def get_talks_by_talk_ids(self, talk_ids: list[str]) -> list[Talk]:
+        ''' Get Talks by talk_ids '''
+        return TrackDB().get_talks_by_talk_ids(pid=self.pid, talk_ids=talk_ids)
+
+    def get_talks_by_pid(self) -> list[Talk]:
+        ''' Get Talks by pid'''
+        return TrackDB().get_talks_by_pid(pid=self.pid)
+
     def save_track_description(self, track_id: str,
                                content: str, lang: str = 'zh-tw') -> None:
         ''' Save track description '''

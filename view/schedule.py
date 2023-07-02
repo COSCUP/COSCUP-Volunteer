@@ -1,5 +1,6 @@
 ''' Schedule '''
-from flask import Blueprint, g, redirect, render_template, request, jsonify
+from flask import (Blueprint, g, jsonify, redirect, render_template, request,
+                   session, url_for)
 from flask.wrappers import Response
 from markdown import markdown
 from werkzeug.wrappers import Response as ResponseBase
@@ -10,6 +11,70 @@ from module.mc import MC
 from module.track import TalkFavs, Track
 
 VIEW_SCHEDULE = Blueprint('schedule', __name__, url_prefix='/schedule')
+
+
+@VIEW_SCHEDULE.route('/<int:pid>/talks/all', methods=('GET', 'POST'))
+def talks_all(pid: int) -> str | ResponseBase:
+    ''' Talks '''
+    if pid < 2023:
+        return Response('', 404)
+
+    uid = g.get('user', {}).get('account', {}).get('_id')
+    talks = Track(pid=str(pid)).get_talks_by_pid()
+    talks = sorted(talks, key=lambda talk: talk.slot.room['en'])
+    talks = sorted(talks, key=lambda talk: talk.slot.start)
+
+    for talk in talks:
+        talk.abstract = markdown(talk.abstract)
+        for speaker in talk.speakers:
+            if speaker.biography:
+                speaker.biography = markdown(speaker.biography)
+
+    if not talks:
+        return redirect(f'/schedule/{pid}')
+
+    return render_template('schedule_talks.html',
+                           pid=pid,
+                           track_id='',
+                           is_login=bool(uid),
+                           title=talks[0].track.get(
+                               'zh-tw', talks[0].track['en']),
+                           title_en=talks[0].track['en'],
+                           talks=talks,
+                           track_description={})
+
+
+@VIEW_SCHEDULE.route('/<int:pid>/talks/fav/my', methods=('GET', 'POST'))
+def talks_favs_my(pid: int) -> str | ResponseBase:
+    ''' Talks favs '''
+    if pid < 2023:
+        return Response('', 404)
+
+    uid = g.get('user', {}).get('account', {}).get('_id')
+    if not uid:
+        session.pop('sid', None)
+        session['r'] = request.path
+        return redirect(url_for('oauth2callback', _scheme='https', _external=True))
+
+    talk_ids = TalkFavs(pid=str(pid), uid=uid).get()
+    talks = Track(pid=str(pid)).get_talks_by_talk_ids(talk_ids=talk_ids)
+    talks = sorted(talks, key=lambda talk: talk.slot.room['en'])
+    talks = sorted(talks, key=lambda talk: talk.slot.start)
+
+    for talk in talks:
+        talk.abstract = markdown(talk.abstract)
+        for speaker in talk.speakers:
+            if speaker.biography:
+                speaker.biography = markdown(speaker.biography)
+
+    return render_template('schedule_talks.html',
+                           pid=pid,
+                           track_id='',
+                           is_login=True,
+                           title='關注的議程',
+                           title_en='',
+                           talks=talks,
+                           track_description={})
 
 
 @VIEW_SCHEDULE.route('/<int:pid>/talks/fav', methods=('GET', 'POST'))
@@ -70,6 +135,9 @@ def show_talks(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
                            pid=pid,
                            track_id=track_id,
                            is_login=bool(uid),
+                           title=talks[0].track.get(
+                               'zh-tw', talks[0].track['en']),
+                           title_en=talks[0].track['en'],
                            talks=talks,
                            track_description=track_description)
 

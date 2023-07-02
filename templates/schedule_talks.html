@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% block head_title %}
-    {{talks[0].track.get('zh-tw', talks[0].track['en'])}} / {{pid}} 大會議程、社群時程表 Schedule
+    {{title}} / {{ title_en }} / {{pid}} 大會議程、社群時程表 Schedule
 {% endblock %}
 {%block og%}
-<meta property="og:title" content="{{talks[0].track.get('zh-tw', talks[0].track['en'])}} / {{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
+<meta property="og:title" content="{{title}} / {{title_en}} / {{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="COSCUP Volunteer">
 <meta property="og:image" content="https://volunteer.coscup.org/img/volunteer_og.png">
 {% if track_description.get('zh-tw', track_description.get('en', '')) == '' %}
-<meta property="og:description" content="{{talks[0].track.get('zh-tw', talks[0].track['en'])}} / {{ talks[0].track['en'] }}">
+<meta property="og:description" content="{{title}} / {{title_en}}">
 {% else %}
-<meta property="og:description" content="{{track_description.get('zh-tw', track_description.get('en', ''))}} / {{ talks[0].track['en'] }}">
+<meta property="og:description" content="{{track_description.get('zh-tw', track_description.get('en', ''))}} / {{title}} / {{ title_en}}">
 {% endif %}
-<meta property="twitter:title" content="{{talks[0].track.get('zh-tw', talks[0].track['en'])}} / {{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
+<meta property="twitter:title" content="{{title}} / {{ title_en }} / {{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
 <meta property="twitter:card" content="summary">
 <meta property="twitter:site" content="@coscup">
 {%endblock%}
@@ -22,8 +22,8 @@
 {% block body %}
     <section class="section">
         <div class="container">
-            <h1 class="title">{{talks[0].track.get('zh-tw', talks[0].track['en'])}}</h1>
-            <p class="subtitle">{{ talks[0].track['en'] }}</p>
+            <h1 class="title">{{title}}</h1>
+            <p class="subtitle">{{ title_en }}</p>
         </div>
     </section>
     <section class="section" id="talks">
@@ -86,6 +86,14 @@
                     </div>
                     <div class="content">
                     <h3>議題</h3>
+                    {% if talks|length == 0 %}
+                    <article class="message is-info">
+                        <div class="message-body">
+                          <span class="icon"><i class="fas fa-running"></i></span>
+                          目前無任何議程載入，<a href="/schedule/{{pid}}">請參考其他議程軌內容</a>。
+                        </div>
+                    </article>
+                    {% endif %}
                     {% for talk in talks %}
                     <div class="content box"
                         :data-date="new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'})"
@@ -200,7 +208,13 @@
                             <li>
                                 <a href="/schedule/{{pid}}">
                                     <span class="icon"><i class="fas fa-list-ul"></i></span>
-                                    <span>回列表</span>
+                                    <span>回議程列表</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/schedule/{{pid}}/talks/fav/my">
+                                    <span class="icon"><i class="fas fa-bookmark"></i></span>
+                                    <span>我的關注議程</span>
                                 </a>
                             </li>
                         </ul>
