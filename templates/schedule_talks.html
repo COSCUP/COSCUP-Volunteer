@@ -40,9 +40,46 @@
                     </div>
                     {% endif %}
                     <div class="content">
+                        <div class="field is-grouped is-grouped-multiline">
+                            <div class="control">
+                                <span class="tag is-info">篩選條件</span>
+                            </div>
+                            <div class="control" v-for="item in selectTagsDate" v-if="selectTagsDate.size > 1" v-cloak>
+                                <span class="tag is-success is-light">
+                                    <label class="checkbox">
+                                        <input type="checkbox" :value="item" v-model="selectedDate">
+                                        <span class="icon"><i class="fas fa-calendar-day"></i></span>
+                                        [[ item ]]
+                                    </label>
+                                </span>
+                            </div>
+                            <div class="control" v-for="item in selectTagsRoom" v-if="selectTagsRoom.size > 1" v-cloak>
+                                <span class="tag">
+                                    <label class="checkbox">
+                                        <input type="checkbox" :value="item" v-model="selectedRoom">
+                                        <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
+                                        [[ item ]]
+                                    </label>
+                                </span>
+                            </div>
+                            <div class="control" v-for="item in selectTagsLang" v-if="selectTagsLang.size > 1" v-cloak>
+                                <span class="tag is-warning is-light">
+                                    <label class="checkbox">
+                                        <input type="checkbox" :value="item" v-model="selectedLang">
+                                        <span class="icon"><i class="fas fa-language"></i></span>
+                                        [[ item ]]
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
                     <h3>議題</h3>
                     {% for talk in talks %}
-                    <div class="content box">
+                    <div class="content box"
+                        :data-date="new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'})"
+                        data-room="{{ talk.slot.room['en'] }}"
+                        data-lang="{{ talk.content_locale }}">
                         <h3 id="{{talk.code}}">
                             <a href="#{{talk.code}}">{{ talk.title }}</a>
                         </h3>
@@ -143,7 +180,10 @@
                         <p class="menu-label">目次</p>
                         <ul class="menu-list">
                             {% for talk in talks %}
-                            <li>
+                            <li
+                                :data-date="new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'})"
+                                data-room="{{ talk.slot.room['en'] }}"
+                                data-lang="{{ talk.content_locale }}">
                                 <a href="#{{talk.code}}">
                                     <span class="icon"><i class="far fa-comment-alt"></i></span>
                                     <span class="is-family-monospace" v-cloak>
@@ -171,8 +211,72 @@
     (function () {
         let $talks = new Vue({
             el: '#talks',
+            data: {
+                datas: [],
+                selectTagsDate: new Set(),
+                selectedDate: [],
+                selectTagsRoom: new Set(),
+                selectedRoom: [],
+                selectTagsLang: new Set(),
+                selectedLang: []
+            },
+            watch: {
+                selectedDate: function(item) {
+                    this.selected();
+                },
+                selectedRoom: function(item) {
+                    this.selected();
+                },
+                selectedLang: function(item) {
+                    this.selected();
+                }
+            },
             mounted: function() {
-                console.info('123');
+                this.init();
+            },
+            methods: {
+                selected: function() {
+                    let $this = this;
+                    if ($this.selectedDate.length === 0 && $this.selectedLang.length === 0 && $this.selectedRoom.length === 0) {
+                        this.datas.forEach(item => {item.style.display = 'block';});
+                    } else {
+                        const allTrue = (ele) => ele === true;
+                        this.datas.forEach(item => {
+                            let result = [];
+                            let display = 'block';
+                            if ($this.selectedDate.length > 0) {
+                                if (!$this.selectedDate.includes(item.dataset.date)) {
+                                    display = 'none';
+                                }
+                            }
+                            if ($this.selectedRoom.length > 0) {
+                                if (display === 'block' && !$this.selectedRoom.includes(item.dataset.room)) {
+                                    display = 'none';
+                                }
+                            }
+                            if ($this.selectedLang.length > 0) {
+                                if (display === 'block' && !$this.selectedLang.includes(item.dataset.lang)) {
+                                    display = 'none';
+                                }
+                            }
+                            item.style.display = display;
+                        })
+                    }
+                },
+                init: function() {
+                    this.datas = document.querySelectorAll('#talks [data-date]');
+                    let dateTags = new Set();
+                    let roomTags = new Set();
+                    let langTags = new Set();
+                    this.datas.forEach(item => {
+                        dateTags.add(item.dataset.date);
+                        roomTags.add(item.dataset.room);
+                        langTags.add(item.dataset.lang);
+                    });
+                    this.selectTagsDate = dateTags;
+                    this.selectTagsRoom = roomTags;
+                    this.selectTagsLang = langTags;
+                }
             },
             delimiters: ["[[", "]]"]
         });
