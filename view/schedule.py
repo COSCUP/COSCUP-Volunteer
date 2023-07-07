@@ -5,7 +5,6 @@ from flask.wrappers import Response
 from markdown import markdown
 from werkzeug.wrappers import Response as ResponseBase
 
-import setting
 from celery_task.task_service_sync import service_sync_pretalx_schedule
 from module.mc import MC
 from module.track import TalkFavs, Track
