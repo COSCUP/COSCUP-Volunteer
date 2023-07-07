@@ -45,7 +45,7 @@
                                 <span class="tag is-info">篩選條件</span>
                             </div>
                             {% for i in range(4)%}
-                            <div class="control is-loading" v-if="selectTagsDate.size == 0">
+                            <div class="control is-loading" v-if="!is_loaded">
                                 <span class="tag is-primary is-light">
                                     <label class="checkbox">
                                         <input type="checkbox">
@@ -270,7 +270,8 @@
                 selectTagsLang: new Set(),
                 selectedLang: [],
                 favs: [],
-                is_login: {{ 'true' if is_login else 'false'}}
+                is_login: {{ 'true' if is_login else 'false'}},
+                is_loaded: false
             },
             watch: {
                 selectedDate: function(item) {
@@ -285,6 +286,7 @@
             },
             mounted: function() {
                 this.init();
+                this.is_loaded = true;
             },
             methods: {
                 addfav: function(talk_id) {
