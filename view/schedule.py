@@ -165,15 +165,7 @@ def show_track(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
     if pid < 2023:
         return Response('', 404)
 
-    _ = track_name
-    submissions = Track(pid=str(pid)).get_submissions_by_track_id(track_id)
-    track_description = Track(
-        pid=str(pid)).get_track_description(track_id=track_id)
-    return render_template('schedule_submissions.html',
-                           pid=pid,
-                           submissions=submissions,
-                           track_description=track_description,
-                           exclude_submissions=setting.EXCLUDE_SUBMISSIONS)
+    return redirect(f'/schedule/{pid}/talks/{track_id}/{track_name}', code=307)
 
 
 @VIEW_SCHEDULE.route('/<int:pid>')
