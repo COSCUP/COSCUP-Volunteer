@@ -312,9 +312,16 @@ def campaign_schedule(pid: str, tid: str, cid: str) -> str | ResponseBase:
                 for raw_tuple in raws_all:
                     user_datas.append(dict(zip(fields_all, raw_tuple)))
 
+            dist_user_datas = []
+            emails = set()
+            for user_data in user_datas:
+                if user_data['mail'] not in emails:
+                    emails.add(user_data['mail'])
+                    dist_user_datas.append(user_data)
+
             SenderLogs.save(cid=cid,
                             layout=campaign_data['mail']['layout'],
-                            desc='Send', receivers=user_datas)
+                            desc='Send', receivers=dist_user_datas)
 
             source = None
             if campaign_data['mail']['layout'] == '2':
@@ -329,7 +336,7 @@ def campaign_schedule(pid: str, tid: str, cid: str) -> str | ResponseBase:
 
             sender_mailer_start.apply_async(kwargs={
                 'campaign_data': campaign_data, 'team_name': team.name, 'source': source,
-                'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
+                'user_datas': dist_user_datas, 'layout': campaign_data['mail']['layout']})
 
             return jsonify({})
 
@@ -353,27 +360,29 @@ def campaign_schedule(pid: str, tid: str, cid: str) -> str | ResponseBase:
                 fields_tag, raws_tag = SenderReceiver.get_by_tags(
                     pid=team.pid, tid=team.id,
                     tags=campaign_data['receiver']['team_w_tags'][team.id])
-                if raws:
+                if raws_tag:
                     user_datas.append(
                         dict(zip(fields_tag, random.choice(raws_tag))))
 
             if campaign_data['receiver']['all_users']:
                 fields_all, raws_all = SenderReceiver.get_all_users()
-                if raws:
+                if raws_all:
                     user_datas.append(
                         dict(zip(fields_all, random.choice(raws_all))))
 
             uid = g.user['account']['_id']
             users = User.get_info(uids=[uid, ])
 
-            for user_data in user_datas:
+            dist_user_datas = [random.choice(user_datas), ]
+
+            for user_data in dist_user_datas:
                 user_data.update({
                     'mail': users[uid]['oauth']['email'],
                 })
 
             SenderLogs.save(cid=cid,
                             layout=campaign_data['mail']['layout'],
-                            desc='Test Send', receivers=user_datas)
+                            desc='Test Send', receivers=dist_user_datas)
 
             source = None
             if campaign_data['mail']['layout'] == '2':
@@ -388,7 +397,7 @@ def campaign_schedule(pid: str, tid: str, cid: str) -> str | ResponseBase:
 
             sender_mailer_start.apply_async(kwargs={
                 'campaign_data': campaign_data, 'team_name': team.name, 'source': source,
-                'user_datas': user_datas, 'layout': campaign_data['mail']['layout']})
+                'user_datas': dist_user_datas, 'layout': campaign_data['mail']['layout']})
 
             return jsonify({})
 
