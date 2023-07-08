@@ -7,12 +7,16 @@
         <div id="senderschedule" class="content" v-cloak>
             <div class="content">
                 <h3>發送測試信</h3>
-                <button class="button is-warning is-light" v-on:click="sendtest">
+                <button class="button is-warning is-light"
+                        :class="{'is-loading': is_loading}"
+                        v-on:click="sendtest">
                     <span class="icon"><i class="fas fa-robot"></i></span>
                     <span>發送 測試信</span>
                 </button>
                 <h3>正式發送</h3>
-                <button class="button is-info is-light" v-on:click="send">
+                <button class="button is-info is-light"
+                        :class="{'is-loading': is_loading}"
+                        v-on:click="send">
                     <span class="icon"><i class="far fa-paper-plane"></i></span>
                     <span>發送！</span>
                 </button>
@@ -47,26 +51,31 @@
         let $senderschedule= new Vue({
             el: '#senderschedule',
             data: {
-                logs: []
+                logs: [],
+                is_loading: true
             },
             mounted: function() {
                 this.loadlogs();
             },
             methods: {
                 loadlogs: function() {
+                    $this = this;
                     axios.post('./schedule', {casename: 'getlogs'}).then(function(resp) {
                         $senderschedule.logs = resp.data.logs;
+                        $this.is_loading = false;
                     });
                 },
                 send: function() {
                     let msg = window.prompt('請輸入 "SEND" 再次確認發送！');
                     if (msg == 'SEND') {
+                        this.is_loading = true;
                         axios.post('./schedule', {casename: 'send'}).then(function(resp) {
                             window.location.href = './schedule';
                         });
                     }
                 },
                 sendtest: function() {
+                    this.is_loading = true;
                     axios.post('./schedule', {casename: 'sendtest'}).then(function(resp) {
                             window.location.href = './schedule';
                     });
