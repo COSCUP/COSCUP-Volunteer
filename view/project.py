@@ -58,7 +58,7 @@ def project_edit(pid: str) -> str | ResponseBase:
         return render_template('./project_edit.html', project=project.dict(by_alias=True))
 
     if request.method == 'POST':
-        data: dict[str, str | dict[str, bool]] = dict(request.form)
+        data: dict[str, Any] = dict(request.form)
         data['formswitch'] = FormsSwitch().dict()
         for key in data:
             if key.startswith('formswitch.'):
