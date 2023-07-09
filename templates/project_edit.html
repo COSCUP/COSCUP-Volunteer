@@ -27,9 +27,9 @@
                 <p class="help is-success">時數申請上限，顯示在說明處。</p>
             </div>
             <div class="field">
-                <label class="label">停車卡日期</label>
+                <label class="label">停車卡日期 (Deprecated)</label>
                 <div class="control">
-                    <input class="input" type="text" name="parking_card" value="{{project.parking_card}}">
+                    <input class="input" type="text" name="parking_card" value="{{project.parking_card}}" disabled>
                 </div>
                 <p class="help is-success">文字字串或是日期 ',' 分隔</p>
             </div>
@@ -81,6 +81,45 @@
                     <input class="input" type="text" name="gitlab_project_id" value="{{project.gitlab_project_id or ''}}">
                 </div>
                 <p class="help is-success">Project ID，給予邀請加入使用 Issue Board</p>
+            </div>
+            <div class="field">
+                <label class="label">申請表單開關</label>
+                <div class="control">
+                    <label class="checkbox">
+                        <input type="checkbox" name="formswitch.traffic"
+                        {{'checked' if project.formswitch.traffic else ''}} />
+                        啟用 申請交通費補助
+                    </label>
+                </div>
+                <div class="control">
+                    <label class="checkbox">
+                        <input type="checkbox" name="formswitch.clothes"
+                        {{'checked' if project.formswitch.clothes else ''}} />
+                        啟用 衣服尺寸
+                    </label>
+                </div>
+                <div class="control">
+                    <label class="checkbox">
+                        <input type="checkbox" name="formswitch.certificate"
+                        {{'checked' if project.formswitch.certificate else ''}} />
+                        啟用 志工時數證明
+                    </label>
+                </div>
+                <div class="control">
+                    <label class="checkbox">
+                        <input type="checkbox" name="formswitch.appreciation"
+                        {{'checked' if project.formswitch.appreciation else ''}} />
+                        啟用 感謝狀
+                    </label>
+                </div>
+                <div class="control">
+                    <label class="checkbox">
+                        <input type="checkbox" name="formswitch.accommodation"
+                        {{'checked' if project.formswitch.accommodation else ''}} />
+                        啟用 志工住宿 {{project.formswitch.accommodation}}
+                    </label>
+                </div>
+                <p class="help is-success">表單是否可以申請的開關</p>
             </div>
             <div class="field">
                 <div class="control">
