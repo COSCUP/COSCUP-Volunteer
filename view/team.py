@@ -822,7 +822,7 @@ def team_form_traffic_fee(pid: str, tid: str) -> str | ResponseBase:
 @VIEW_TEAM.route('/<pid>/<tid>/form/volunteer_certificate', methods=('GET', 'POST'))
 def team_form_volunteer_certificate(pid: str, tid: str) -> str | ResponseBase:
     ''' Team form volunteer certificate '''
-    # pylint: disable=too-many-return-statements
+    # pylint: disable=too-many-return-statements,too-many-branches
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
