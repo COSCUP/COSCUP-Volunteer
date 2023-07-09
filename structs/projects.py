@@ -22,6 +22,17 @@ def convert_action_date(value: Any) -> datetime:
     return arrow.get(value).naive
 
 
+class FormsSwitch(BaseModel):
+    ''' FormsSwitch '''
+    traffic: bool = Field(description='traffic on/off', default=False)
+    clothes: bool = Field(description='clothes on/off', default=False)
+    certificate: bool = Field(description='certificate on/off', default=False)
+    appreciation: bool = Field(
+        description='appreciation on/off', default=False)
+    accommodation: bool = Field(
+        description='accommodation on/off', default=False)
+
+
 class ProjectBase(BaseModel):
     ''' ProjectBase'''
     id: str = Field(description='`pid`, project id', alias='_id')
@@ -43,6 +54,10 @@ class ProjectBase(BaseModel):
     volunteer_certificate_hours: int = Field(
         default=16, ge=0,
         description='hours for volunteer certificate')
+    formswitch: FormsSwitch = Field(
+        default_factory=FormsSwitch,
+        description='on/off the forms for available'
+    )
 
     _validate_skip_empty_str = validator(
         '*', pre=True, allow_reuse=True)(skip_empty_str)
@@ -69,6 +84,10 @@ class ProjectBaseUpdate(BaseModel):
     volunteer_certificate_hours: int = Field(
         default=16, ge=0,
         description='hours for volunteer certificate')
+    formswitch: FormsSwitch = Field(
+        default_factory=FormsSwitch,
+        description='on/off the forms for available'
+    )
 
     _validate_skip_empty_str = validator(
         '*', pre=True, allow_reuse=True)(skip_empty_str)
