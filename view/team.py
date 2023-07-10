@@ -715,6 +715,9 @@ def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
             return jsonify({'data': raw, 'room': room})
 
         if post_data and post_data['casename'] == 'update':
+            if not project.formswitch.accommodation:
+                return make_response({}, 401)
+
             selected = html.escape(post_data['selected'])
 
             if selected not in ('no', 'yes', 'yes-longtraffic'):
@@ -794,6 +797,9 @@ def team_form_traffic_fee(pid: str, tid: str) -> str | ResponseBase:
                                data=data, is_ok_submit=is_ok_submit)
 
     if request.method == 'POST':
+        if not project.formswitch.traffic:
+            return Response('', status=401)
+
         if is_ok_submit and feemapping and \
                 request.form['fromwhere'] in [item.location for item in feemapping]:
             fee_data: FeeMapping = FeeMapping.parse_obj({
@@ -816,7 +822,7 @@ def team_form_traffic_fee(pid: str, tid: str) -> str | ResponseBase:
 @VIEW_TEAM.route('/<pid>/<tid>/form/volunteer_certificate', methods=('GET', 'POST'))
 def team_form_volunteer_certificate(pid: str, tid: str) -> str | ResponseBase:
     ''' Team form volunteer certificate '''
-    # pylint: disable=too-many-return-statements
+    # pylint: disable=too-many-return-statements,too-many-branches
     team, project, _redirect = check_the_team_and_project_are_existed(
         pid=pid, tid=tid)
     if _redirect:
@@ -856,6 +862,9 @@ def team_form_volunteer_certificate(pid: str, tid: str) -> str | ResponseBase:
                                is_ok_submit=is_ok_submit, select_value=select_value)
 
     if request.method == 'POST':
+        if not project.formswitch.certificate:
+            return Response('', status=401)
+
         if not is_ok_submit:
             return Response('', status=406)
 
@@ -921,6 +930,9 @@ def team_form_appreciation(pid: str, tid: str) -> str | ResponseBase:
                                select_value=select_value)
 
     if request.method == 'POST':
+        if not project.formswitch.appreciation:
+            return Response('', status=401)
+
         if request.form['appreciation'] not in ('oauth', 'badge_name', 'real_name', 'no'):
             return Response('', status=406)
 
@@ -995,6 +1007,9 @@ def team_form_clothes(pid: str, tid: str) -> str | ResponseBase:
             })
 
         if post_data and post_data['casename'] == 'post':
+            if not project.formswitch.clothes:
+                return make_response({}, 401)
+
             if 'clothes' in post_data and post_data['clothes']:
                 Form.update_clothes(pid=team.pid, uid=g.user['account']['_id'],
                                     data={'clothes': post_data['clothes'],
