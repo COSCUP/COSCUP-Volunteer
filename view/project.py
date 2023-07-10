@@ -22,7 +22,8 @@ from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.team import Team
 from module.users import User
-from structs.projects import ProjectBaseUpdate, ProjectTrafficLocationFeeItem
+from structs.projects import (FormsSwitch, ProjectBaseUpdate,
+                              ProjectTrafficLocationFeeItem)
 
 VIEW_PROJECT = Blueprint('project', __name__, url_prefix='/project')
 
@@ -57,7 +58,14 @@ def project_edit(pid: str) -> str | ResponseBase:
         return render_template('./project_edit.html', project=project.dict(by_alias=True))
 
     if request.method == 'POST':
-        Project.update(pid, ProjectBaseUpdate.parse_obj(request.form))
+        data: dict[str, Any] = dict(request.form)
+        data['formswitch'] = FormsSwitch().dict()
+        for key in data:
+            if key.startswith('formswitch.'):
+                item = key.split('.')[1]
+                data['formswitch'][item] = True
+
+        Project.update(pid, ProjectBaseUpdate.parse_obj(data))
         return redirect(url_for('project.project_edit', pid=pid, _scheme='https', _external=True))
 
     return Response('', status=404)
