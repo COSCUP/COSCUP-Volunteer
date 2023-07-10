@@ -8,14 +8,6 @@
 {% block form_body %}
 <div class="columns">
     <div id="clothesform" class="column is-three-fifths" v-cloak>
-        {% if not project.formswitch.cloths %}
-        <article class="message is-warning">
-            <div class="message-body">
-                <span class="icon has-text-info"><i class="fas fa-exclamation-triangle"></i></span>
-                目前已停止申請，如有任何需求請聯繫行政組。
-            </div>
-        </article>
-        {% endif %}
         <form @submit.prevent="submit">
             <div class="field">
                 <div class="control">
