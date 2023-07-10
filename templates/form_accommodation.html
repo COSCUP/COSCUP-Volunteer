@@ -5,14 +5,6 @@
 {% block form_body %}
 <div class="columns">
     <div class="column is-three-fifths">
-        {% if not project.formswitch.accommodation %}
-        <article class="message is-warning">
-            <div class="message-body">
-                <span class="icon has-text-info"><i class="fas fa-exclamation-triangle"></i></span>
-                目前已停止申請，如有任何需求請聯繫行政組。
-            </div>
-        </article>
-        {% endif %}
         <article class="message">
             <div class="message-body">
                 <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
@@ -189,8 +181,6 @@
                                                     selected: this.raw.selected,
                                                     mixed: this.raw.mixed}).then(function(resp) {
                         alert('已更新！');
-                    }).catch(function(resp){
-                        alert('無法送出！')
                     });
                 }
             },
