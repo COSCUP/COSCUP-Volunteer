@@ -36,6 +36,7 @@ def talks_all(pid: int) -> str | ResponseBase:
     return render_template('schedule_talks.html',
                            pid=pid,
                            track_id='',
+                           all_tracks=True,
                            is_login=bool(uid),
                            title=talks[0].track.get(
                                'zh-tw', talks[0].track['en']),
