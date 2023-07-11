@@ -95,42 +95,45 @@
                     </article>
                     {% endif %}
                     {% for talk in talks %}
-                    <div class="content box"
+                    <div class="card mb-3"
                         :data-date="new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'})"
                         data-room="{{ talk.slot.room['en'] }}"
                         data-lang="{{ talk.content_locale }}">
-                        <h3 id="{{talk.code}}">
-                            <a href="#{{talk.code}}">{{ talk.title }}</a>
-                        </h3>
-                        <p>
-                            <span class="tags">
-                                <span class="tag is-family-monospace">
-                                    <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
-                                    <span>{{ talk.slot.room['en'] }}</span>
-                                </span>
-                                <span class="tag is-success is-light is-family-monospace">
-                                    <span class="icon"><i class="fas fa-calendar-day"></i></span>
-                                    <span v-cloak>[[ new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'}) ]]</span>
-                                </span>
-                                <span class="tag is-info is-light is-family-monospace">
-                                    <span class="icon"><i class="far fa-clock"></i></span>
-                                    <span v-cloak>[[ new Date( '{{ talk.slot.start }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]] ~
-                                          [[ new Date( '{{ talk.slot.end }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]]</span>
-                                </span>
-                                <span class="tag is-warning is-light is-family-monospace">
-                                    <span class="icon"><i class="fas fa-language"></i></span>
-                                    <span>{{ talk.content_locale }}</span>
-                                </span>
+                        <header class="card-header">
+                            <p class="card-header-title" id="{{talk.code}}" style="margin-bottom: 0;">
+                                <a href="#{{talk.code}}">
+                                    <span class="icon"><i class="far fa-comment-alt"></i></span>
+                                    <span>{{ talk.title }}</span>
+                                </a>
+                            </p>
+                        </header>
+                        <div class="card-content">
+                        <span class="tags mb-1">
+                            <span class="tag mr-1 is-family-monospace">
+                                <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
+                                <span>{{ talk.slot.room['en'] }}</span>
                             </span>
-                        </p>
-                        <div class="buttons are-small is-right">
-                            <span class="button is-text">
+                            <span class="tag mr-1 is-success is-light is-family-monospace">
+                                <span class="icon"><i class="fas fa-calendar-day"></i></span>
+                                <span v-cloak>[[ new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'}) ]]</span>
+                            </span>
+                            <span class="tag mr-1 is-info is-light is-family-monospace">
+                                <span class="icon"><i class="far fa-clock"></i></span>
+                                <span v-cloak>[[ new Date( '{{ talk.slot.start }}' ).toLocaleTimeString('zh-Hant', {hour12: false, hour: '2-digit', minute:'2-digit'}) ]] ~
+                                        [[ new Date( '{{ talk.slot.end }}' ).toLocaleTimeString('zh-Hant', {hour12: false, hour: '2-digit', minute:'2-digit'}) ]]</span>
+                            </span>
+                            <span class="tag mr-1 is-warning is-light is-family-monospace">
+                                <span class="icon"><i class="fas fa-language"></i></span>
+                                <span>{{ talk.content_locale }}</span>
+                            </span>
+                        </span>
+                        <div class="buttons are-small is-right has-addons mb-1">
+                            <a class="button is-text"
+                               target="_blank"
+                              :href="`https://calendar.google.com/calendar/render?action=TEMPLATE&text={{talk.title|quote_plus}}&dates=${new Date( '{{ talk.slot.start }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}/${new Date( '{{ talk.slot.end }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}&details={{ ('https://volunteer.coscup.org/schedule/%s/talks/%s/%s#%s' % (pid, track_id, talks[0].track.get('zh-tw', talks[0].track['en']), talk.code)) | quote_plus }}&location={{talk.slot.room['en']}}`">
                                 <span class="icon"><i class="far fa-calendar-plus"></i></span>
-                                <span><a target="_blank"
-                                    :href="`https://calendar.google.com/calendar/render?action=TEMPLATE&text={{talk.title|quote_plus}}&dates=${new Date( '{{ talk.slot.start }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}/${new Date( '{{ talk.slot.end }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}&details={{ ('https://volunteer.coscup.org/schedule/%s/talks/%s/%s#%s' % (pid, track_id, talks[0].track.get('zh-tw', talks[0].track['en']), talk.code)) | quote_plus }}&location={{talk.slot.room['en']}}`">
-                                    加入行事曆</a>
-                                </span>
-                            </span>
+                                <span>加入行事曆</span>
+                            </a>
                             <span v-cloak class="button is-text" v-if="!is_login" onclick="alert('需登入才可加入使用。')" v-cloak>
                                 <span v-cloak class="icon"><i class="far fa-bookmark"></i></span>
                                 <span v-cloak>加入關注</span>
@@ -148,11 +151,19 @@
                                 <span v-cloak>已關注</span>
                             </span>
                         </div>
-                        <p>{{ talk.abstract|safe }}</p>
+                        {% if share_code != '' or all_tracks %}
+                        <div class="tags">
+                            <span class="tag has-text-info-dark">{{ talk.track['en']}}</span>
+                            {% if talk.track.get('zh-tw') and talk.track['zh-tw'] != talk.track['en'] %}
+                            <span class="tag has-text-info-dark">{{ talk.track['zh-tw']}}</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        {{ talk.abstract|safe }}
                         {% for speaker in talk.speakers %}
                         <div class="card mb-3">
                             <header class="card-header">
-                                <p class="card-header-title">
+                                <p class="card-header-title has-text-success-dark">
                                     <span class="icon"><i class="fas fa-id-card"></i></span>
                                     <span>講者</span>
                                 </p>
@@ -180,23 +191,14 @@
                             </div>
                         </div>
                         {% endfor %}
-                        <div class="card mb-3">
-                            <header class="card-header">
-                                <p class="card-header-title">
-                                    <span class="icon"><i class="fas fa-tags"></i></span>
-                                    <span>相關標籤</span>
-                                </p>
-                            </header>
-                            <div class="card-content">
-                                <div class="tags">
-                                    <span class="tag"><a href="https://coscup.org/{{pid}}/zh-TW/session/{{talk.code}}">{{ talk.code }}</a></span>
-                                    <span class="tag">{{ talk.submission_type['en']}}</span>
-                                    <span class="tag">{{ talk.track['en']}}</span>
-                                    {% if talk.track.get('zh-tw') %}
-                                    <span class="tag">{{ talk.track['zh-tw']}}</span>
-                                    {% endif %}
-                                </div>
-                            </div>
+                        <div class="tags">
+                            <span class="tag has-text-info-dark">{{ talk.track['en']}}</span>
+                            {% if talk.track.get('zh-tw') and talk.track['zh-tw'] != talk.track['en'] %}
+                            <span class="tag has-text-info-dark">{{ talk.track['zh-tw']}}</span>
+                            {% endif %}
+                            <span class="tag"><a href="https://coscup.org/{{pid}}/zh-TW/session/{{talk.code}}">{{ talk.code }}</a></span>
+                            <span class="tag">{{ talk.submission_type['en']}}</span>
+                        </div>
                         </div>
                     </div>
                     {% endfor %}
@@ -219,7 +221,7 @@
                             </li>
                             {% if share_code != '' %}
                             <li>
-                                <a href="/schedule/{{pid}}/talks/fav/share/{{share_code}}">
+                                <a class="has-text-info" href="/schedule/{{pid}}/talks/fav/share/{{share_code}}">
                                     <span class="icon"><i class="far fa-share-square"></i></span>
                                     <span>分享我的關注議程連結</span>
                                 </a>
@@ -237,8 +239,8 @@
                                     <span class="icon"><i class="far fa-comment-alt"></i></span>
                                     <span class="is-family-monospace" v-cloak>
                                         [[ new Date( '{{ talk.slot.start }}' ).toLocaleDateString('ja', {year: 'numeric', month: '2-digit', day: '2-digit'}) ]]
-                                        [[ new Date( '{{ talk.slot.start }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]] ~
-                                        [[ new Date( '{{ talk.slot.end }}' ).toLocaleTimeString('zh-Hant', {hour12: false}) ]]
+                                        [[ new Date( '{{ talk.slot.start }}' ).toLocaleTimeString('zh-Hant', {hour12: false, hour: '2-digit', minute:'2-digit'}) ]] ~
+                                        [[ new Date( '{{ talk.slot.end }}' ).toLocaleTimeString('zh-Hant', {hour12: false, hour: '2-digit', minute:'2-digit'}) ]]
                                     </span>
                                     <br>
                                     <span class="is-family-monospace">[{{ talk.slot.room['en'] }}]</span>
