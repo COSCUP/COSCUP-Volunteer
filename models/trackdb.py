@@ -243,3 +243,11 @@ class TalkFavsDB(DBBase):
         )['talks']
 
         return result
+
+    def list(self) -> list[dict[str, str]]:
+        ''' List favs '''
+        result: list[dict[str, str]] = []
+        for raw in self.find({'pid': self.pid}, {'share_code': 1, 'pid': 1}):
+            result.append(raw)
+
+        return result

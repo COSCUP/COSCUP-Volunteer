@@ -26,7 +26,7 @@ from module.mc import MC
 from module.oauth import OAuth
 from module.tasks import Tasks
 from module.team import Team
-from module.track import Track
+from module.track import TalkFavs, Track
 from module.users import PolicySigned, User
 from module.usession import USession
 from structs.users import PolicyType
@@ -411,6 +411,9 @@ def sitemap() -> ResponseBase:
         result.append(f'https://volunteer.coscup.org{path}')
 
     for path in Track.sitemap():
+        result.append(f'https://volunteer.coscup.org{path}')
+
+    for path in TalkFavs(pid='2023', uid='').sitemap():
         result.append(f'https://volunteer.coscup.org{path}')
 
     resp = make_response('\r\n'.join(result), 200)
