@@ -145,3 +145,12 @@ class TalkFavs:
     def delete(self, talk_id: str) -> list[str]:
         ''' Delete talk '''
         return self.talk_favs_db.delete(talk_id=talk_id)
+
+    def sitemap(self) -> list[str]:
+        ''' Render sitemap '''
+        result: list[str] = []
+        for raw in self.talk_favs_db.list():
+            result.append(
+                f"/schedule/{raw['pid']}/talks/fav/share/{raw['share_code']}")
+
+        return result
