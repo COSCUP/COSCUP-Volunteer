@@ -410,6 +410,9 @@ def sitemap() -> ResponseBase:
     for path in Tasks.sitemap():
         result.append(f'https://volunteer.coscup.org{path}')
 
+    for path in Track.sitemap():
+        result.append(f'https://volunteer.coscup.org{path}')
+
     for path in TalkFavs(pid='2023', uid='').sitemap():
         result.append(f'https://volunteer.coscup.org{path}')
 
