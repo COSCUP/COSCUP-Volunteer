@@ -75,7 +75,13 @@
                       <li>
                           <a href="/tasks/{{ team.pid }}">
                               <span class="icon"><i class="fas fa-pizza-slice"></i></span>
-                              <span>解任務！</span>
+                              <span>一日志工 志工任務</span>
+                          </a>
+                      </li>
+                      <li>
+                          <a href="/schedule/{{ team.pid }}" class="has-text-info-dark">
+                              <span class="icon"><i class="far fa-list-alt"></i></span>
+                              <span>議程表</span>
                           </a>
                       </li>
                   </ul>
@@ -185,7 +191,18 @@
                   </ul>
 			  </aside>
           </div>
-          <div class="column">{% block team_body %}{% endblock %}</div>
+          <div class="column">
+            <div class="content">
+                <article class="message is-success">
+                  <div class="message-body">
+                    <span class="icon"><i class="fas fa-running"></i></span>
+                    鼓勵志工夥伴在活動二日也可抽空參與各社群所排定的議程主題，如有想要聽得議程，可以與組長協調調整執勤時間後參與。
+                    也歡迎使用志工平台提供的<a href="/schedule/{{team.pid}}">議程表</a>可收藏與分享議程！
+                  </div>
+                </article>
+            </div>
+            {% block team_body %}{% endblock %}
+        </div>
       </div>
   </div>
 </section>

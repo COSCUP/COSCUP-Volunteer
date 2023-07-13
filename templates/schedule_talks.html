@@ -153,9 +153,9 @@
                         </div>
                         {% if share_code != '' or all_tracks %}
                         <div class="tags">
-                            <span class="tag has-text-info-dark">{{ talk.track['en']}}</span>
+                            <span class="tag has-text-info-dark" style="white-space:unset;height:auto;">{{ talk.track['en']}}</span>
                             {% if talk.track.get('zh-tw') and talk.track['zh-tw'] != talk.track['en'] %}
-                            <span class="tag has-text-info-dark">{{ talk.track['zh-tw']}}</span>
+                            <span class="tag has-text-info-dark" style="white-space:unset;height:auto;">{{ talk.track['zh-tw']}}</span>
                             {% endif %}
                         </div>
                         {% endif %}
@@ -192,9 +192,9 @@
                         </div>
                         {% endfor %}
                         <div class="tags">
-                            <span class="tag has-text-info-dark">{{ talk.track['en']}}</span>
+                            <span class="tag has-text-info-dark" style="white-space:unset;height:auto;">{{ talk.track['en']}}</span>
                             {% if talk.track.get('zh-tw') and talk.track['zh-tw'] != talk.track['en'] %}
-                            <span class="tag has-text-info-dark">{{ talk.track['zh-tw']}}</span>
+                            <span class="tag has-text-info-dark" style="white-space:unset;height:auto;">{{ talk.track['zh-tw']}}</span>
                             {% endif %}
                             <span class="tag"><a href="https://coscup.org/{{pid}}/zh-TW/session/{{talk.code}}">{{ talk.code }}</a></span>
                             <span class="tag">{{ talk.submission_type['en']}}</span>
