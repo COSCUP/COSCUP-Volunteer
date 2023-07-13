@@ -113,8 +113,6 @@ class Track:
             paths.append(f'/schedule/{pid}')
             for name, data in track.tracks().items():
                 paths.append(
-                    f"/schedule/{pid}/track/{data['code']}/{urllib.parse.quote_plus(name)}")
-                paths.append(
                     f"/schedule/{pid}/talks/{data['code']}/{urllib.parse.quote_plus(name)}")
 
         return paths
