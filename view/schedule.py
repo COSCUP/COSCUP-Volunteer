@@ -165,7 +165,7 @@ def show_track(pid: int, track_id: str, track_name: str) -> str | ResponseBase:
     if pid < 2023:
         return Response('', 404)
 
-    return redirect(f'/schedule/{pid}/talks/{track_id}/{track_name}', code=307)
+    return redirect(f'/schedule/{pid}/talks/{track_id}/{track_name}', code=301)
 
 
 @VIEW_SCHEDULE.route('/<int:pid>')
