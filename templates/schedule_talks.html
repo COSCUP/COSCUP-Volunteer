@@ -1,22 +1,32 @@
 {% extends "base.html" %}
 {% block head_title %}
-    {{title}} / {{ title_en }} / {{pid}} 大會議程、社群時程表 Schedule
-{% endblock %}
+{%- if one_talk is not true %}{{title}} / {{ title_en }}
+{%- else %}{{title}} {{ title_en }}{%endif%}{% endblock %}
+
 {%block og%}
-<link rel="canonical" href="https://volunteer.coscup.org{{request.path}}" />
-<meta property="og:title" content="{{title}} / {{title_en}} / {{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="COSCUP Volunteer">
-<meta property="og:image" content="https://volunteer.coscup.org/img/volunteer_og.png">
-{% if track_description.get('zh-tw', track_description.get('en', '')) == '' %}
-<meta property="og:description" content="{{title}} / {{title_en}}">
-{% else %}
-<meta property="og:description" content="{{track_description.get('zh-tw', track_description.get('en', ''))}} / {{title}} / {{ title_en}}">
-{% endif %}
-<meta property="twitter:title" content="{{title}} / {{ title_en }} / {{pid}} 大會議程、社群時程表 Schedule - Volunteer with COSCUP! 志工服務系統">
-<meta property="twitter:card" content="summary">
-<meta property="twitter:site" content="@coscup">
+    <link rel="canonical" href="https://volunteer.coscup.org{{request.path}}" />
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="COSCUP Volunteer">
+    <meta property="og:image" content="https://volunteer.coscup.org/img/volunteer_og.png">
+    {% if one_talk is not true %}
+        {% if track_description.get('zh-tw', track_description.get('en', '')) == '' %}
+        <meta property="og:description" content="{{title}} / {{title_en}}">
+        {% else %}
+        <meta property="og:description" content="{{track_description.get('zh-tw', track_description.get('en', ''))}} / {{title}} / {{ title_en}}">
+        {% endif %}
+    {% else %}
+        <meta property="og:description" content="{{title}} {{title_en}}">
+    {% endif %}
+
+    {% if one_talk is not true %}
+        <meta property="og:title" content="{{title}} / {{title_en}}">
+        <meta property="twitter:title" content="{{title}} / {{ title_en }}">
+    {% endif %}
+
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:site" content="@coscup">
 {%endblock%}
+
 {%block style%}
 <link href="{{ url_for('static', filename='buefy.min.css') }}" rel="stylesheet">
 {%endblock%}
@@ -43,7 +53,9 @@
                     <div class="content">
                         <div class="field is-grouped is-grouped-multiline">
                             <div class="control">
+                                {% if one_talk is not true %}
                                 <span class="tag is-info">篩選條件</span>
+                                {% endif %}
                             </div>
                             {% for i in range(4)%}
                             <div class="control is-loading" v-if="!is_loaded">
@@ -102,7 +114,7 @@
                         data-lang="{{ talk.content_locale }}">
                         <header class="card-header">
                             <p class="card-header-title" id="{{talk.code}}" style="margin-bottom: 0;">
-                                <a href="#{{talk.code}}">
+                                <a href="/schedule/{{pid}}/session/{{talk.code}}">
                                     <span class="icon"><i class="far fa-comment-alt"></i></span>
                                     <span>{{ talk.title }}</span>
                                 </a>
@@ -197,7 +209,7 @@
                             {% if talk.track.get('zh-tw') and talk.track['zh-tw'] != talk.track['en'] %}
                             <span class="tag has-text-info-dark" style="white-space:unset;height:auto;">{{ talk.track['zh-tw']}}</span>
                             {% endif %}
-                            <span class="tag"><a href="https://coscup.org/{{pid}}/zh-TW/session/{{talk.code}}">{{ talk.code }}</a></span>
+                            <span class="tag"><a href="/schedule/{{pid}}/session/{{talk.code}}">{{ talk.code }}</a></span>
                             <span class="tag">{{ talk.submission_type['en']}}</span>
                         </div>
                         </div>
