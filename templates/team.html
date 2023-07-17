@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block head_title %}{{project.name}} / {{team.name}} {% if join_able or preview_public %}加入簡介{%else%}{%block head_title_team %}{%endblock%}{%endif%} | {% endblock %}
+{% block head_title %}{{project.name}} / {{team.name}} {% if join_able or preview_public %}加入簡介{%else%}{%block head_title_team %}{%endblock%}{%endif%}{% endblock %}
 {% block body %}
 <section class="section">
   <div class="container">
