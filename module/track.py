@@ -121,6 +121,10 @@ class Track:
                 paths.append(
                     f"/schedule/{pid}/talks/{data['code']}/{urllib.parse.quote_plus(name)}")
 
+            for talk in Track(pid=pid).get_talks_by_pid():
+                paths.append(
+                    f"/schedule/{pid}/session/{talk.code}")
+
         return paths
 
 
