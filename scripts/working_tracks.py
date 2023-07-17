@@ -619,13 +619,13 @@ content = '''
 <p>想知道 PyCon TW 走過十幾個年頭的酸甜苦辣嗎？想聽聽厲害的講者分享 Python 相關的開發經驗嗎？我們即將在 COSCUP 與大家交流研討會舉辦秘辛，並邀請優秀的講者來與我們分享精彩演講！期待在 COSCUP 2023 與您相見！</p>
 '''
 Track(pid='2023').save_track_description(
-    track_id='5a203', lang='zh-tw', content=content.strip())
+    track_id='e28f8', lang='zh-tw', content=content.strip())
 
 content = '''
 <p>Do you want to know the story of PyCon TW over the past decade? Are you curious about the development experience of Python experts? We’re going to invite speakers to give talks and share the secrets of the conference with everyone at COSCUP. We are looking forward to meeting you at COSCUP 2023!</p>
 '''
 Track(pid='2023').save_track_description(
-    track_id='5a203', lang='en', content=content.strip())
+    track_id='e28f8', lang='en', content=content.strip())
 
 # ------
 content = '''
