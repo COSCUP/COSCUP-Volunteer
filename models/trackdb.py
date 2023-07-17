@@ -161,6 +161,19 @@ class TrackDB(DBBase):
 
         return result
 
+    def get_talk(self, pid: str, talk_id: str) -> list[Talk]:
+        ''' Get one talk by `talk_id` '''
+        result: list[Talk] = []
+        for data in self.find({'pid': pid,
+                               'cate': 'raw_talk',
+                               'code': talk_id,
+                               }):
+            result.append(Talk.parse_obj(data['raw']))
+
+        self.replace_rooms(talks=result)
+
+        return result
+
     def save_track_description(self, pid: str,
                                track_id: str, content: str, lang: str) -> None:
         ''' Save track description '''

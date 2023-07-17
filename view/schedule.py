@@ -46,6 +46,39 @@ def talks_all(pid: int) -> str | ResponseBase:
                            track_description={})
 
 
+@VIEW_SCHEDULE.route('/<int:pid>/session/<session_id>', methods=('GET', 'POST'))
+def talk_one(pid: int, session_id: str) -> str | ResponseBase:
+    ''' Talk one '''
+    if pid < 2023:
+        return Response('', 404)
+
+    uid = g.get('user', {}).get('account', {}).get('_id')
+    talks = Track(pid=str(pid)).get_talk(talk_id=session_id)
+    talks = sorted(talks, key=lambda talk: talk.slot.room['en'])
+    talks = sorted(talks, key=lambda talk: talk.slot.start)
+
+    for talk in talks:
+        talk.abstract = markdown(talk.abstract)
+        for speaker in talk.speakers:
+            if speaker.biography:
+                speaker.biography = markdown(speaker.biography)
+
+    if not talks:
+        return redirect(f'/schedule/{pid}')
+
+    return render_template('schedule_talks.html',
+                           pid=pid,
+                           track_id='',
+                           one_talk=True,
+                           all_tracks=False,
+                           is_login=bool(uid),
+                           title=talks[0].title,
+                           title_en=f'By {talks[0].speakers[0].name}',
+                           share_code='',
+                           talks=talks,
+                           track_description={})
+
+
 @VIEW_SCHEDULE.route('/<int:pid>/talks/fav/my', methods=('GET', 'POST'))
 @VIEW_SCHEDULE.route('/<int:pid>/talks/fav/share/<share_code>', methods=('GET', 'POST'))
 def talks_favs_my(pid: int, share_code: str | None = None) -> str | ResponseBase:
