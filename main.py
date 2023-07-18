@@ -383,7 +383,11 @@ def bug_report() -> str:
 @app.route('/robots.txt')
 def robots() -> ResponseBase:
     ''' robots '''
-    resp = make_response('User-agent: *\r\nAllow: /', 200)
+    resp = make_response('''User-agent: *
+Allow: /
+
+Sitemap: https://volunteer.coscup.org/sitemap.txt
+Sitemap: https://volunteer.coscup.org/docs/sitemap.xml''', 200)
     resp.mimetype = 'text/plain'
     return resp
 
