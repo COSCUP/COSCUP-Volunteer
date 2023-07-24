@@ -64,7 +64,7 @@ def talk_one(pid: int, session_id: str) -> str | ResponseBase:
                 speaker.biography = markdown(speaker.biography)
 
     if not talks:
-        return redirect(f'/schedule/{pid}')
+        return redirect('/schedule/2023')
 
     return render_template('schedule_talks.html',
                            pid=pid,
