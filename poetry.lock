@@ -80,17 +80,17 @@ pycodestyle = ">=2.10.0"
 
 [[package]]
 name = "awscli"
-version = "1.29.5"
+version = "1.29.9"
 description = "Universal Command Line Environment for AWS."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "awscli-1.29.5-py3-none-any.whl", hash = "sha256:2670ead96ea62055b40803f35f5e87e0c6a99ed9e5e72dd78af342e3d07db40f"},
-    {file = "awscli-1.29.5.tar.gz", hash = "sha256:18543103a22684d67f713ffb2eb3630d92ef45a94f28ab83e7607219de515154"},
+    {file = "awscli-1.29.9-py3-none-any.whl", hash = "sha256:f77e55b3b2930f76c9e72c3c02ab061fda2091883e5ce066993fbdeedf9a360e"},
+    {file = "awscli-1.29.9.tar.gz", hash = "sha256:f1298ebbbf4564448bd47775e7075dd66d547b0b30a9aba6db2f0b399025f4ff"},
 ]
 
 [package.dependencies]
-botocore = "1.31.5"
+botocore = "1.31.9"
 colorama = ">=0.2.5,<0.4.5"
 docutils = ">=0.10,<0.17"
 PyYAML = ">=3.10,<6.1"
@@ -210,17 +210,17 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.28.5"
+version = "1.28.9"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.28.5-py3-none-any.whl", hash = "sha256:a5c815ab81219a606f20362c9d9c190f5c224bf33c5dc4c20501036cc4a9034f"},
-    {file = "boto3-1.28.5.tar.gz", hash = "sha256:2c76db4a1208b8d09814261fc5e530fc36b3b952ef807312495e6869fa6eaad5"},
+    {file = "boto3-1.28.9-py3-none-any.whl", hash = "sha256:01f078047eb4d238c6b9c6cc623f2af33b4ae67980c5326691e35cb5493ff6c7"},
+    {file = "boto3-1.28.9.tar.gz", hash = "sha256:4cc0c6005be910e52077227e670930ab55a41ba86cdb6d1c052571d08cd4d32c"},
 ]
 
 [package.dependencies]
-botocore = ">=1.31.5,<1.32.0"
+botocore = ">=1.31.9,<1.32.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -229,13 +229,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.31.5"
+version = "1.31.9"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.31.5-py3-none-any.whl", hash = "sha256:8aec97512587a5475036a982785e406c52efd260457b809846985f849c3d7cf3"},
-    {file = "botocore-1.31.5.tar.gz", hash = "sha256:b35114dae9c451895a11fef13d76881e2bb5428e5de8a702cc8589a28fb34c7a"},
+    {file = "botocore-1.31.9-py3-none-any.whl", hash = "sha256:e56ccd3536a90094ea5b176b5dd33bfe4f049efdf71af468ea1661bd424c787d"},
+    {file = "botocore-1.31.9.tar.gz", hash = "sha256:bd849d3ac95f1781385ed831d753a04a3ec870a59d6598175aaedd71dc2baf5f"},
 ]
 
 [package.dependencies]
@@ -244,7 +244,7 @@ python-dateutil = ">=2.1,<3.0.0"
 urllib3 = ">=1.25.4,<1.27"
 
 [package.extras]
-crt = ["awscrt (==0.16.9)"]
+crt = ["awscrt (==0.16.26)"]
 
 [[package]]
 name = "cachetools"
@@ -355,13 +355,13 @@ zstd = ["zstandard (==0.21.0)"]
 
 [[package]]
 name = "certifi"
-version = "2023.5.7"
+version = "2023.7.22"
 description = "Python package for providing Mozilla's CA Bundle."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "certifi-2023.5.7-py3-none-any.whl", hash = "sha256:c6c2e98f5c7869efca1f8916fed228dd91539f9f1b444c314c06eef02980c716"},
-    {file = "certifi-2023.5.7.tar.gz", hash = "sha256:0f0d56dc5a6ad56fd4ba36484d6cc34451e1c6548c61daad8c320169f91eddc7"},
+    {file = "certifi-2023.7.22-py3-none-any.whl", hash = "sha256:92d6037539857d8206b8f6ae472e8b77db8058fec5937a1ef3f54304089edbb9"},
+    {file = "certifi-2023.7.22.tar.gz", hash = "sha256:539cc1d13202e33ca466e88b2807e29f4c13049d6d87031a3c110744495cb082"},
 ]
 
 [[package]]
@@ -702,13 +702,13 @@ files = [
 
 [[package]]
 name = "dill"
-version = "0.3.6"
-description = "serialize all of python"
+version = "0.3.7"
+description = "serialize all of Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "dill-0.3.6-py3-none-any.whl", hash = "sha256:a07ffd2351b8c678dfc4a856a3005f8067aea51d6ba6c700796a4d9e280f39f0"},
-    {file = "dill-0.3.6.tar.gz", hash = "sha256:e5db55f3687856d8fbdab002ed78544e1c4559a130302693d839dfe8f93f2373"},
+    {file = "dill-0.3.7-py3-none-any.whl", hash = "sha256:76b122c08ef4ce2eedcd4d1abd8e641114bfc6c2867f49f3c41facf65bf19f5e"},
+    {file = "dill-0.3.7.tar.gz", hash = "sha256:cc1c8b182eb3013e24bd475ff2e9295af86c1a38eb1aff128dac8962a9ce3c03"},
 ]
 
 [package.extras]
@@ -1559,13 +1559,13 @@ python-legacy = ["mkdocstrings-python-legacy (>=0.2.1)"]
 
 [[package]]
 name = "mkdocstrings-python"
-version = "1.2.0"
+version = "1.2.1"
 description = "A Python handler for mkdocstrings."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "mkdocstrings_python-1.2.0-py3-none-any.whl", hash = "sha256:2924c9c4286fd236bdae64402b5cc5010dee13779b3edf1a65d97bc02303657b"},
-    {file = "mkdocstrings_python-1.2.0.tar.gz", hash = "sha256:e16bedc236a3a6aa04c916ae6b9d37d2299c80c6e7169fc481a30ed9f8f362a4"},
+    {file = "mkdocstrings_python-1.2.1-py3-none-any.whl", hash = "sha256:7c08f33e9ba7b1655e9cf0608eba3ce7a9513bd8b42a68a8d24ffaf4a6a50cfc"},
+    {file = "mkdocstrings_python-1.2.1.tar.gz", hash = "sha256:ae40825b3b676a94626882901ed9c8fcf9a7f0330e466ffe37ce15c525987aa9"},
 ]
 
 [package.dependencies]
@@ -1703,13 +1703,13 @@ files = [
 
 [[package]]
 name = "phonenumbers"
-version = "8.13.16"
+version = "8.13.17"
 description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
 optional = false
 python-versions = "*"
 files = [
-    {file = "phonenumbers-8.13.16-py2.py3-none-any.whl", hash = "sha256:d7ca6b392eac44b50b923c6dc661525c73b21fa506723d2540c72de3db023442"},
-    {file = "phonenumbers-8.13.16.tar.gz", hash = "sha256:92772b142eac9f3aeb0e87958c436996ac16d468d96646483997c8a57517933b"},
+    {file = "phonenumbers-8.13.17-py2.py3-none-any.whl", hash = "sha256:e8ffd86b2e0b844fd6189fdb0927dbe8707cb03b59102cba5532b3ea305cc1bd"},
+    {file = "phonenumbers-8.13.17.tar.gz", hash = "sha256:89671217c706cbaa3ced101deefafa779836feac3e059434d886ac31f09f32c0"},
 ]
 
 [[package]]
@@ -2583,24 +2583,24 @@ files = [
 
 [[package]]
 name = "types-markdown"
-version = "3.4.2.9"
+version = "3.4.2.10"
 description = "Typing stubs for Markdown"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-Markdown-3.4.2.9.tar.gz", hash = "sha256:0930057bea0a534e06bbc021d57520720ad2a65b363612614ab0599cc7f606a9"},
-    {file = "types_Markdown-3.4.2.9-py3-none-any.whl", hash = "sha256:c23a8a4dd9313539a446ba3dc673a6a920d79580c406de10a5c85a16733890a7"},
+    {file = "types-Markdown-3.4.2.10.tar.gz", hash = "sha256:11e3558d50e3bc1e3f52f3fe073788f4ab917a829374fb354476221c700629e8"},
+    {file = "types_Markdown-3.4.2.10-py3-none-any.whl", hash = "sha256:543ff3027fda21c3149780bf835a721cd094c5729e9a87725f180569c960bff8"},
 ]
 
 [[package]]
 name = "types-requests"
-version = "2.31.0.1"
+version = "2.31.0.2"
 description = "Typing stubs for requests"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-requests-2.31.0.1.tar.gz", hash = "sha256:3de667cffa123ce698591de0ad7db034a5317457a596eb0b4944e5a9d9e8d1ac"},
-    {file = "types_requests-2.31.0.1-py3-none-any.whl", hash = "sha256:afb06ef8f25ba83d59a1d424bd7a5a939082f94b94e90ab5e6116bd2559deaa3"},
+    {file = "types-requests-2.31.0.2.tar.gz", hash = "sha256:6aa3f7faf0ea52d728bb18c0a0d1522d9bfd8c72d26ff6f61bfc3d06a411cf40"},
+    {file = "types_requests-2.31.0.2-py3-none-any.whl", hash = "sha256:56d181c85b5925cbc59f4489a57e72a8b2166f18273fd8ba7b6fe0c0b986f12a"},
 ]
 
 [package.dependencies]
@@ -2608,13 +2608,13 @@ types-urllib3 = "*"
 
 [[package]]
 name = "types-urllib3"
-version = "1.26.25.13"
+version = "1.26.25.14"
 description = "Typing stubs for urllib3"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-urllib3-1.26.25.13.tar.gz", hash = "sha256:3300538c9dc11dad32eae4827ac313f5d986b8b21494801f1bf97a1ac6c03ae5"},
-    {file = "types_urllib3-1.26.25.13-py3-none-any.whl", hash = "sha256:5dbd1d2bef14efee43f5318b5d36d805a489f6600252bb53626d4bfafd95e27c"},
+    {file = "types-urllib3-1.26.25.14.tar.gz", hash = "sha256:229b7f577c951b8c1b92c1bc2b2fdb0b49847bd2af6d1cc2a2e3dd340f3bda8f"},
+    {file = "types_urllib3-1.26.25.14-py3-none-any.whl", hash = "sha256:9683bbb7fb72e32bfe9d2be6e04875fbe1b3eeec3cbb4ea231435aa7fd6b4f0e"},
 ]
 
 [[package]]
