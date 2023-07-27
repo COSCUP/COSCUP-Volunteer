@@ -1,310 +1,361 @@
-{% extends "form.html" %}
-{% block head_title_form %}交通費補助{% endblock %}
-{% block head_subtitle %}交通費補助申請{% endblock %}
-{% block form_menu_traffic_fee %}is-active{% endblock %}
-{% block form_body %}
+{% extends "form.html" %} {% block head_title_form %}交通費補助{% endblock %} {%
+block head_subtitle %}交通費補助申請{% endblock %} {% block
+form_menu_traffic_fee %}is-active{% endblock %} {% block form_body %}
 <div class="columns">
-    <div class="column is-10">
-        {% if not project.traffic_fee_doc %}
-        <article class="message is-small">
-            <div class="message-body">
-                <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
-                <span>尚未開始申請</span>
-            </div>
-        </article>
-        {% else %}
-        {% if not project.formswitch.traffic %}
-        <article class="message is-warning">
-            <div class="message-body">
-                <span class="icon has-text-info"><i class="fas fa-exclamation-triangle"></i></span>
-                目前已停止申請，如有任何需求請聯繫行政組。
-            </div>
-        </article>
-        {% endif %}
-        <article class="message">
-            <div class="message-body">
-                <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
-                <span>請先參閱補助辦法</span>
-            </div>
-        </article>
-        <div class="content">
-            <h3>工作人員交通費補助辦法</h3>
-            <article class="message is-warning">
-                <div class="message-body">
-                    交通費補助主要以志工從出發地到臺北的交通費用。如有其他與交通費用類似的費用，請各組再額外提交預算項目申請。
-                </div>
-            </article>
-            <ol>
-                <li>交通費補助核發對象，以 COSCUP 全體工作人員為限。</li>
-                <li>交通費補助業務由行政組及財務組協辦之。</li>
-                <li>須憑票根或購票證明申請，申請人務必妥善保留票根或相關證明文件以利補助業
-                    務辦理；如不慎遺失，煩請自行負擔。申請人務必詳閱本辦法及相關注意事項。
-                    提交申請的票據證明請符合財務組「<a target="_blank" href="https://docs.google.com/document/d/1SrqmeuwltHLQVWpBI-p7vdno3fRoYcrtDfTZhEH3Csk/edit">請款說明文件</a>」中「交通費核銷」項目所指定的規格。
-                </li>
-                <li>申請期限：</li>
-                <ul>
-                    <li>開始申請日：即日起</li>
-                    <li>截止申請日：2023/7/25</li>
-                </ul>
-                <li>申請程序：</li>
-                <ul>
-                    <li>交通費補助須在申請期限間申請，並經審核通過。事後申請者，不予補助。</li>
-                    <li><del>請於大會結束後，將票根或購票證明正本及存摺影本郵寄至「110928 台北信
-                        義郵局第 203 號信箱」，並於信封上註明「蔣偉志 （COSCUP2023 交通補
-                        助）收」，並於存摺影本上註明「組別」及「暱稱」。</del>
-                        （稍候公告）
-                    </li>
-                </ul>
-                <li>交通費補助項目：</li>
-                <ol type="I">
-                    <li>來回程交通費皆予補助。</li>
-                    <li>交通費補助限於往返活動會場之交通費，活動期間內個人之其餘交通費，不
-                        另予補助。</li>
-                    <li>自行騎車或開車前往者，不予補助油資。</li>
-                    <li>公車、計程車。</li>
-                    <li>非大台北地區：限於客運、火車、高鐵、計程車；不補助大台北地區範圍內
-                        之交通費。</li>
-                    <li>交通費補助有上限，且各縣市有不同標準，詳列如附件。</li>
-                    <li>交通費未達交通補助費上限者，依實際使用之交通費金額補助。</li>
-                    <li>交通費逾越交通補助費上限部份，不予補助，請自行斟酌交通方式。</li>
-                </ol>
-                <li>相關注意事項：</li>
-                <ol type="I">
-                    <li>需票據、購票證明申請（若無，請諒無法提供補助費用）。</li>
-                    <li>交通費購票證明方式：</li>
-                    <ol>
-                        <li>捷運（一般票）：進站前或出站後，向捷運服務處服務人員申請開立購票
-                            證明。</li>
-                        <li>捷運（悠遊卡）：</li>
-                        <ul>
-                            <li><a href="https://queryweb.tscc.com.tw/mrt_web/default.aspx">線上申請</a></li>
-                            <li>出站後，向捷運服務處服務人員申請開立購票證明。</li>
-                        </ul>
-                    </ol>
-                    <li>鐵路（一般票）：憑車票加蓋車站購票證明章。</li>
-                    <li>鐵路（持卡）：<a href="https://queryweb.tscc.com.tw/tra_web/">線上申請</a>。</li>
-                    <li>高鐵：</li>
-                    <ul>
-                        <li><a href="https://ptis.thsrc.com.tw/ptis/">線上申請</a></li>
-                        <li>憑車票或購票證明（任一出口服務台可開立購票證明）。</li>
-                        <li>使用手機 T Express 手機票者，可上網查詢購票紀錄及列印證明。</li>
-                    </ul>
-                    <li>客運：憑車票。</li>
-                    <li>計程車：憑乘車收據。</li>
-                </ol>
-                <li>補助上限：</li>
-                <ol type="I">
-                    <li>交通費補助上限計算方式，以各地區主要車站抵達台北火車站、自強號來回
-                        票價計算。</li>
-                    <li>大台北地區計算方式：</li>
-                    <ul>
-                        <li>以捷運公館站與淡水之捷運票價計算補助上限。</li>
-                        <li>無住宿之工作人員，補助活動期間來回之交通費，以三趟為限。</li>
-                    </ul>
-                    <li>離島者以屏東至臺北計算。</li>
-                    <li>花蓮、臺東地區以火車自強號計算。</li>
-                </ol>
-            </ol>
+  <div class="column is-10">
+    {% if not project.traffic_fee_doc %}
+    <article class="message is-small">
+      <div class="message-body">
+        <span class="icon has-text-info"
+          ><i class="fas fa-info-circle"></i
+        ></span>
+        <span>尚未開始申請</span>
+      </div>
+    </article>
+    {% else %} {% if not project.formswitch.traffic %}
+    <article class="message is-warning">
+      <div class="message-body">
+        <span class="icon has-text-info"
+          ><i class="fas fa-exclamation-triangle"></i
+        ></span>
+        目前已停止申請，如有任何需求請聯繫行政組。
+      </div>
+    </article>
+    {% endif %}
+    <article class="message">
+      <div class="message-body">
+        <span class="icon has-text-info"
+          ><i class="fas fa-info-circle"></i
+        ></span>
+        <span>請先參閱補助辦法</span>
+      </div>
+    </article>
+    <div class="content">
+      <h3>工作人員交通費補助辦法</h3>
+      <article class="message is-warning">
+        <div class="message-body">
+          交通費補助主要以志工從出發地到臺北的交通費用。如有其他與交通費用類似的費用，請各組再額外提交預算項目申請。
         </div>
-        <div class="has-text-centered">
-            <table class="table is-bordered is-narrow is-striped is-hoverable">
-                <thead>
-                    <tr>
-                        <th align="center">出發地區</th>
-                        <th align="center">補助上限</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>基隆</td>
-                        <td>128</td>
-                    </tr>
-                    <tr>
-                        <td>大台北地區</td>
-                        <td>110</td>
-                    </tr>
-                    <tr>
-                        <td>宜蘭</td>
-                        <td>436</td>
-                    </tr>
-                    <tr>
-                        <td>花蓮</td>
-                        <td>880</td>
-                    </tr>
-                    <tr>
-                        <td>臺東</td>
-                        <td>1566</td>
-                    </tr>
-                    <tr>
-                        <td>桃園</td>
-                        <td>132</td>
-                    </tr>
-                    <tr>
-                        <td>新竹</td>
-                        <td>354</td>
-                    </tr>
-                    <tr>
-                        <td>苗栗</td>
-                        <td>510</td>
-                    </tr>
-                    <tr>
-                        <td>臺中</td>
-                        <td>750</td>
-                    </tr>
-                    <tr>
-                        <td>彰化</td>
-                        <td>830</td>
-                    </tr>
-                    <tr>
-                        <td>車埕</td>
-                        <td>1064</td>
-                    </tr>
-                    <tr>
-                        <td>斗六</td>
-                        <td>1064</td>
-                    </tr>
-                    <tr>
-                        <td>嘉義</td>
-                        <td>1196</td>
-                    </tr>
-                    <tr>
-                        <td>臺南</td>
-                        <td>1476</td>
-                    </tr>
-                    <tr>
-                        <td>高雄</td>
-                        <td>1686</td>
-                    </tr>
-                    <tr>
-                        <td>屏東/離島地區</td>
-                        <td>2194</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <br>
-        <div class="content">
-            <article class="message is-warning">
-                <div class="message-body">
-                    「補助上限」是包含來回交通費用，但如有其他狀況，還是可以洽詢行政組尋求解決。
-                </div>
-            </article>
-        </div>
-        <hr style="border: 3px solid #cfe8d4;border-radius: 3px;">
-        {% endif %}
-        {% if not is_ok_submit %}
-        <article class="message is-warning is-small">
-            <div class="message-body">
-                <span class="icon has-text-info"><i class="fas fa-info-circle"></i></span>
-                需要提供「銀行資訊」內容，請在設定 > <a href="/setting/profile_real">真實資料</a>中新增。
-            </div>
-        </article>
-        {% else %}
-        <form id="trafficform" method="POST">
-            <div class="field">
-                <div class="control">
-                    <label class="label">我需要申請交通費補助？</label>
-                    <div class="select">
-                        <select name="apply" v-model="data.apply" required>
-                            <option value="no">否 (No)</option>
-                            <option value="yes">是 (Yes)</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="field" v-cloak>
-                <div class="control">
-                    <label class="label">出發地</label>
-                    <div class="select">
-                        <select name="fromwhere" v-model="data.fromwhere" required>
-                            <option value="" disabled>請選擇...</option>
-                            <option v-for="l in locations" v-bind:value="l[0]">[[ l[0] ]]</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <label class="label">預計交通方式</label>
-                    <input class="input" type="text" name="howto" v-model.lazy.trim="data.howto" required>
-                </div>
-                <p class="help is-success">（請參閱補助辦法）</p>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <label class="label">預計交通費用</label>
-                    <input class="input" type="number" min="0" v-bind:max="maxfee" name="fee" v-model.number.lazy="data.fee" required>
-                </div>
-                <p class="help is-success">此為試算費用，最後補助會以所提供的車票與補助上限核發。（MIN(補助上限, 車票)）</p>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <label class="label">是否閱讀補助辦法？</label>
-                    <label class="checkbox">
-                        <input type="checkbox" v-model="readed" required> 我已閱讀「補助辦法」
-                    </label>
-                </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <button class="button is-primary" type="submit" v-bind:disabled="!readed">送出申請</button>
-                </div>
-            </div>
-        </form>
-        {% endif %}
+      </article>
+      <ol>
+        <li>交通費補助核發對象，以 COSCUP 全體工作人員為限。</li>
+        <li>交通費補助業務由行政組及財務組協辦之。</li>
+        <li>
+          須憑票根或購票證明申請，申請人務必妥善保留票根或相關證明文件以利補助業
+          務辦理；如不慎遺失，煩請自行負擔。申請人務必詳閱本辦法及相關注意事項。
+          提交申請的票據證明請符合財務組「<a
+            target="_blank"
+            href="https://docs.google.com/document/d/1SrqmeuwltHLQVWpBI-p7vdno3fRoYcrtDfTZhEH3Csk/edit"
+            >請款說明文件</a
+          >」中「交通費核銷」項目所指定的規格。
+        </li>
+        <li>申請期限：</li>
+        <ul>
+          <li>開始申請日：即日起</li>
+          <li>截止申請日：2023/7/25</li>
+        </ul>
+        <li>申請程序：</li>
+        <ul>
+          <li>
+            交通費補助須在申請期限間申請，並經審核通過。事後申請者，不予補助。
+          </li>
+          <li>
+            請於大會結束後，將票根或購票證明正本及存摺影本郵寄至「(105057)
+            臺北市松山區八德路四段 636 之 1 號 」，並於信封上註明「COSCUP2023
+            行政組交通補助 收」，並於存摺影本上註明「組別」及「暱稱」。
+          </li>
+        </ul>
+        <li>交通費補助項目：</li>
+        <ol type="I">
+          <li>來回程交通費皆予補助。</li>
+          <li>
+            交通費補助限於往返活動會場之交通費，活動期間內個人之其餘交通費，不
+            另予補助。
+          </li>
+          <li>自行騎車或開車前往者，不予補助油資。</li>
+          <li>公車、計程車。</li>
+          <li>
+            非大台北地區：限於客運、火車、高鐵、計程車；不補助大台北地區範圍內
+            之交通費。
+          </li>
+          <li>交通費補助有上限，且各縣市有不同標準，詳列如附件。</li>
+          <li>交通費未達交通補助費上限者，依實際使用之交通費金額補助。</li>
+          <li>交通費逾越交通補助費上限部份，不予補助，請自行斟酌交通方式。</li>
+        </ol>
+        <li>相關注意事項：</li>
+        <ol type="I">
+          <li>需票據、購票證明申請（若無，請諒無法提供補助費用）。</li>
+          <li>交通費購票證明方式：</li>
+          <ol>
+            <li>
+              捷運（一般票）：進站前或出站後，向捷運服務處服務人員申請開立購票
+              證明。
+            </li>
+            <li>捷運（悠遊卡）：</li>
+            <ul>
+              <li>
+                <a href="https://queryweb.tscc.com.tw/mrt_web/default.aspx"
+                  >線上申請</a
+                >
+              </li>
+              <li>出站後，向捷運服務處服務人員申請開立購票證明。</li>
+            </ul>
+          </ol>
+          <li>鐵路（一般票）：憑車票加蓋車站購票證明章。</li>
+          <li>
+            鐵路（持卡）：<a href="https://queryweb.tscc.com.tw/tra_web/"
+              >線上申請</a
+            >。
+          </li>
+          <li>高鐵：</li>
+          <ul>
+            <li><a href="https://ptis.thsrc.com.tw/ptis/">線上申請</a></li>
+            <li>憑車票或購票證明（任一出口服務台可開立購票證明）。</li>
+            <li>使用手機 T Express 手機票者，可上網查詢購票紀錄及列印證明。</li>
+          </ul>
+          <li>客運：憑車票。</li>
+          <li>計程車：憑乘車收據。</li>
+        </ol>
+        <li>補助上限：</li>
+        <ol type="I">
+          <li>
+            交通費補助上限計算方式，以各地區主要車站抵達台北火車站、自強號來回
+            票價計算。
+          </li>
+          <li>大台北地區計算方式：</li>
+          <ul>
+            <li>以捷運公館站與淡水之捷運票價計算補助上限。</li>
+            <li>無住宿之工作人員，補助活動期間來回之交通費，以三趟為限。</li>
+          </ul>
+          <li>離島者以屏東至臺北計算。</li>
+          <li>花蓮、臺東地區以火車自強號計算。</li>
+        </ol>
+      </ol>
     </div>
+    <div class="has-text-centered">
+      <table class="table is-bordered is-narrow is-striped is-hoverable">
+        <thead>
+          <tr>
+            <th align="center">出發地區</th>
+            <th align="center">補助上限</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>基隆</td>
+            <td>128</td>
+          </tr>
+          <tr>
+            <td>大台北地區</td>
+            <td>110</td>
+          </tr>
+          <tr>
+            <td>宜蘭</td>
+            <td>436</td>
+          </tr>
+          <tr>
+            <td>花蓮</td>
+            <td>880</td>
+          </tr>
+          <tr>
+            <td>臺東</td>
+            <td>1566</td>
+          </tr>
+          <tr>
+            <td>桃園</td>
+            <td>132</td>
+          </tr>
+          <tr>
+            <td>新竹</td>
+            <td>354</td>
+          </tr>
+          <tr>
+            <td>苗栗</td>
+            <td>510</td>
+          </tr>
+          <tr>
+            <td>臺中</td>
+            <td>750</td>
+          </tr>
+          <tr>
+            <td>彰化</td>
+            <td>830</td>
+          </tr>
+          <tr>
+            <td>車埕</td>
+            <td>1064</td>
+          </tr>
+          <tr>
+            <td>斗六</td>
+            <td>1064</td>
+          </tr>
+          <tr>
+            <td>嘉義</td>
+            <td>1196</td>
+          </tr>
+          <tr>
+            <td>臺南</td>
+            <td>1476</td>
+          </tr>
+          <tr>
+            <td>高雄</td>
+            <td>1686</td>
+          </tr>
+          <tr>
+            <td>屏東/離島地區</td>
+            <td>2194</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <br />
+    <div class="content">
+      <article class="message is-warning">
+        <div class="message-body">
+          「補助上限」是包含來回交通費用，但如有其他狀況，還是可以洽詢行政組尋求解決。
+        </div>
+      </article>
+    </div>
+    <hr style="border: 3px solid #cfe8d4; border-radius: 3px" />
+    {% endif %} {% if not is_ok_submit %}
+    <article class="message is-warning is-small">
+      <div class="message-body">
+        <span class="icon has-text-info"
+          ><i class="fas fa-info-circle"></i
+        ></span>
+        需要提供「銀行資訊」內容，請在設定 >
+        <a href="/setting/profile_real">真實資料</a>中新增。
+      </div>
+    </article>
+    {% else %}
+    <form id="trafficform" method="POST">
+      <div class="field">
+        <div class="control">
+          <label class="label">我需要申請交通費補助？</label>
+          <div class="select">
+            <select name="apply" v-model="data.apply" required>
+              <option value="no">否 (No)</option>
+              <option value="yes">是 (Yes)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="field" v-cloak>
+        <div class="control">
+          <label class="label">出發地</label>
+          <div class="select">
+            <select name="fromwhere" v-model="data.fromwhere" required>
+              <option value="" disabled>請選擇...</option>
+              <option v-for="l in locations" v-bind:value="l[0]">
+                [[ l[0] ]]
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <label class="label">預計交通方式</label>
+          <input
+            class="input"
+            type="text"
+            name="howto"
+            v-model.lazy.trim="data.howto"
+            required
+          />
+        </div>
+        <p class="help is-success">（請參閱補助辦法）</p>
+      </div>
+      <div class="field">
+        <div class="control">
+          <label class="label">預計交通費用</label>
+          <input
+            class="input"
+            type="number"
+            min="0"
+            v-bind:max="maxfee"
+            name="fee"
+            v-model.number.lazy="data.fee"
+            required
+          />
+        </div>
+        <p class="help is-success">
+          此為試算費用，最後補助會以所提供的車票與補助上限核發。（MIN(補助上限,
+          車票)）
+        </p>
+      </div>
+      <div class="field">
+        <div class="control">
+          <label class="label">是否閱讀補助辦法？</label>
+          <label class="checkbox">
+            <input type="checkbox" v-model="readed" required />
+            我已閱讀「補助辦法」
+          </label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <button
+            class="button is-primary"
+            type="submit"
+            v-bind:disabled="!readed"
+          >
+            送出申請
+          </button>
+        </div>
+      </div>
+    </form>
+    {% endif %}
+  </div>
 </div>
-{% endblock %}
-{% block js %}
-{% if is_ok_submit %}
+{% endblock %} {% block js %} {% if is_ok_submit %}
 <script src="/js/axios.min.js"></script>
 <script>
-    (function () {
-        let $formtraffic = new Vue({
-            el: '#trafficform',
-            data: {
-                readed: false,
-                data: {% if data %}{{data|safe}}{%else%}{apply: 'no', fromwhere: '', howto: '', fee: 0}{%endif%},
-                maxfee: 0,
-                locations: []
-            },
-            mounted: function() {
-                this.loadlocation();
-            },
-            watch: {
-                readed: function() {
-                    this.calmaxfee(this.data.fromwhere);
-                },
-                'data.apply': function() {
-                    this.calmaxfee(this.data.fromwhere);
-                },
-                'data.fromwhere': function(val) {
-                    this.calmaxfee(val);
-                }
-            },
-            methods: {
-                loadlocation: function(){
-                    axios.get('./api', {params: {case: 'traffic_fee'}}).then(function(resp){
-                        $formtraffic.locations = resp.data.locations;
-                    });
-                },
-                calmaxfee: function(val) {
-                    if (this.readed === false || this.data.apply === 'no') {
-                        $formtraffic.maxfee = 0;
-                    } else {
-                        $formtraffic.locations.every(function(loc) {
-                            if (val === loc[0]) {
-                                $formtraffic.maxfee = loc[1];
-                                return false;
-                            }
-                            return true;
-                        });
-                    };
-                }
-            },
-            delimiters: ['[[', ']]']
-        });
-    })();
+  (function () {
+      let $formtraffic = new Vue({
+          el: '#trafficform',
+          data: {
+              readed: false,
+              data: {% if data %}{{data|safe}}{%else%}{apply: 'no', fromwhere: '', howto: '', fee: 0}{%endif%},
+              maxfee: 0,
+              locations: []
+          },
+          mounted: function() {
+              this.loadlocation();
+          },
+          watch: {
+              readed: function() {
+                  this.calmaxfee(this.data.fromwhere);
+              },
+              'data.apply': function() {
+                  this.calmaxfee(this.data.fromwhere);
+              },
+              'data.fromwhere': function(val) {
+                  this.calmaxfee(val);
+              }
+          },
+          methods: {
+              loadlocation: function(){
+                  axios.get('./api', {params: {case: 'traffic_fee'}}).then(function(resp){
+                      $formtraffic.locations = resp.data.locations;
+                  });
+              },
+              calmaxfee: function(val) {
+                  if (this.readed === false || this.data.apply === 'no') {
+                      $formtraffic.maxfee = 0;
+                  } else {
+                      $formtraffic.locations.every(function(loc) {
+                          if (val === loc[0]) {
+                              $formtraffic.maxfee = loc[1];
+                              return false;
+                          }
+                          return true;
+                      });
+                  };
+              }
+          },
+          delimiters: ['[[', ']]']
+      });
+  })();
 </script>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}
