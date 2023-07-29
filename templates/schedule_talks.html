@@ -143,7 +143,7 @@
                         <div class="buttons are-small is-right has-addons mb-1">
                             <a class="button is-text"
                                target="_blank"
-                              :href="`https://calendar.google.com/calendar/render?action=TEMPLATE&text={{talk.title|quote_plus}}&dates=${new Date( '{{ talk.slot.start }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}/${new Date( '{{ talk.slot.end }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}&details={{ ('https://volunteer.coscup.org/schedule/%s/talks/%s/%s#%s' % (pid, track_id, talks[0].track.get('zh-tw', talks[0].track['en']), talk.code)) | quote_plus }}&location={{talk.slot.room['en']}}`">
+                              :href="`https://calendar.google.com/calendar/render?action=TEMPLATE&text={{talk.title|quote_plus}}&dates=${new Date( '{{ talk.slot.start }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}/${new Date( '{{ talk.slot.end }}' ).toISOString().replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')}&details={{ ('https://volunteer.coscup.org/schedule/%s/session/%s' % (pid, talk.code)) | quote_plus }}&location={{talk.slot.room['en']}}`">
                                 <span class="icon"><i class="far fa-calendar-plus"></i></span>
                                 <span>加入行事曆</span>
                             </a>
