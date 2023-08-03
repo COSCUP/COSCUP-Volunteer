@@ -94,6 +94,7 @@ nav:
       - "Community Volunteers Plan": secretary_team/tasks/community_volunteers_plan.md
   - Announcement:
     - Review in 2022: announcement/review_in_2022.md
+    - PyCon TW Sprints: announcement/pycontw_2023_sprints.md
 theme:
   name: material
   icon:
