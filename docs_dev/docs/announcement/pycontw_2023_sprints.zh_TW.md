@@ -1,4 +1,9 @@
-# PyCon TW 2023 Sprints Project Recruit
+---
+title: PyCon Tw 2023 Sprints
+summary: COSCUP 行政組後勤系統（志工服務平台、電子報訂閱與發送）於 PyCon Tw Sprints
+description: 也可無程式背景參與規劃部分，詳細與持續增補的內容可參考「專案連結」，預計完成：1) 開 ISSUES：從大會檢討文件中建立與志工平台相關事宜。2) 協助電子報訂閱系統專案轉成公開專案前的 Review。3) 參與「開源社群志工」規劃與流程制定。
+---
+# PyCon TW 2023 Sprints
 
 !!! info "持續更新"
 
