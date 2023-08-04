@@ -100,6 +100,7 @@ If there is a group email, you can see "the mailling-list of the team" at the bo
     - Finance Team [accounting@coscup.org](mailto:accounting@coscup.org)
     - Field Team [service@coscup.org](mailto:service@coscup.org)
     - Streaming Team [streaming@coscup.org](mailto:streaming@coscup.org)
+    - Booth Team [booth@coscup.org](mailto:booth@coscup.org)
 
 ## Issue Reporting
 
