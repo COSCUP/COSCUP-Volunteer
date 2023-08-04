@@ -205,6 +205,30 @@ class MattermostBot(Session):
         }
         return self.put(f'{self.base_url}/users/{uid}/patch', json=data)
 
+    def post_revoke_all_sessions_for_a_user(self, uid) -> Response:
+        ''' Revoke all sessions for a user
+
+        Args:
+            uid (str): User id.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
+        return self.post(f'{self.base_url}/users/{uid}/sessions/revoke/all')
+
+    def del_deactivate_user(self, uid) -> Response:
+        ''' Deactivate user account
+
+        Args:
+            uid (str): User id.
+
+        Returns:
+            Return the [requests.Response][] object.
+
+        '''
+        return self.delete(f'{self.base_url}/users/{uid}')
+
 
 class MattermostTools(MattermostBot):
     ''' MattermostTools for more implement in operation
