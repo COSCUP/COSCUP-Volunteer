@@ -1,0 +1,46 @@
+name: 檢討會項目整理 #retro
+description: 從檢討會文件中或活動進行時（預先）整理已知問題與討論可行的修正方式
+title: "[retro]: "
+labels: ["retro"]
+body:
+  - type: dropdown
+    id: year_of
+    attributes:
+      label: "年度"
+      description: "在哪一年度發生的狀況？"
+      multiple: false
+      options:
+        - "2023"
+        - "2022"
+        - "2021"
+  - type: textarea
+    attributes:
+      label: "問題"
+      description: "所發生的狀況或問題，請盡量描述問題的發生"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "預期結果"
+      description: "原本預期的結果或是一個未曾考慮的問題"
+  - type: textarea
+    attributes:
+      label: "修正"
+      description: "如何針對問題來改善的建議"
+      value: |
+        1.
+        2.
+        3.
+        ...
+  - type: checkboxes
+    attributes:
+      label: "角色"
+      description: "有哪些角色與這問題有關？"
+      options:
+        - label: "籌備志工（組員）"
+        - label: "籌備志工（組長）"
+        - label: "一般會眾"
+        - label: "一日志工"
+        - label: "社群志工"
+        - label: "平台志工"
+        - label: "其他未歸類"
