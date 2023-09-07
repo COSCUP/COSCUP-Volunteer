@@ -205,7 +205,7 @@ class MattermostBot(Session):
         }
         return self.put(f'{self.base_url}/users/{uid}/patch', json=data)
 
-    def post_revoke_all_sessions_for_a_user(self, uid) -> Response:
+    def post_revoke_all_sessions_for_a_user(self, uid: str) -> Response:
         ''' Revoke all sessions for a user
 
         Args:
@@ -217,7 +217,7 @@ class MattermostBot(Session):
         '''
         return self.post(f'{self.base_url}/users/{uid}/sessions/revoke/all')
 
-    def del_deactivate_user(self, uid) -> Response:
+    def del_deactivate_user(self, uid: str) -> Response:
         ''' Deactivate user account
 
         Args:
