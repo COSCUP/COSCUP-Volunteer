@@ -85,17 +85,17 @@ pycodestyle = ">=2.10.0"
 
 [[package]]
 name = "awscli"
-version = "1.29.73"
+version = "1.29.74"
 description = "Universal Command Line Environment for AWS."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "awscli-1.29.73-py3-none-any.whl", hash = "sha256:963cfb22cd922d7199523ac0376b1ef40ddb800e34aa904dcc6c3204c412aaba"},
-    {file = "awscli-1.29.73.tar.gz", hash = "sha256:11c340e25ccfdd3b7bc3166d1fad17a85eeceae608854a7a764d322e986e68fb"},
+    {file = "awscli-1.29.74-py3-none-any.whl", hash = "sha256:ad9b1d5da39aab6c048f7114127b29a0c84416a32b2510c1e7fa106ed6912a8e"},
+    {file = "awscli-1.29.74.tar.gz", hash = "sha256:dfb25caebf0356639fd42772b7562377201feb2619380ab58d24938f47b1d24d"},
 ]
 
 [package.dependencies]
-botocore = "1.31.73"
+botocore = "1.31.74"
 colorama = ">=0.2.5,<0.4.5"
 docutils = ">=0.10,<0.17"
 PyYAML = ">=3.10,<6.1"
@@ -217,17 +217,17 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.28.73"
+version = "1.28.74"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "boto3-1.28.73-py3-none-any.whl", hash = "sha256:bbe377a288b6b12b526fae3b3d743318c6868626cf67e1e97f104345a5194b1e"},
-    {file = "boto3-1.28.73.tar.gz", hash = "sha256:a61cf96f7e196b1450afdf4856b7ea0e58080752e687b0011157be96934489be"},
+    {file = "boto3-1.28.74-py3-none-any.whl", hash = "sha256:a12619d23d50523bdfa6bd2d0c124a9567a5434ec63e47df71c3e88fc9d482f6"},
+    {file = "boto3-1.28.74.tar.gz", hash = "sha256:c4d89ff98cf53e1e74ed8c1c1bb13a7bd7d909e1c0d9ad25792ccfe2cb1575bc"},
 ]
 
 [package.dependencies]
-botocore = ">=1.31.73,<1.32.0"
+botocore = ">=1.31.74,<1.32.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.7.0,<0.8.0"
 
@@ -236,13 +236,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.31.73"
+version = "1.31.74"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.7"
 files = [
-    {file = "botocore-1.31.73-py3-none-any.whl", hash = "sha256:6e9caaa7205e0c0505f4868a4053e96eaf3f4b6bce0368a46970a8efeeacb492"},
-    {file = "botocore-1.31.73.tar.gz", hash = "sha256:5334c22d5a3f4643931896137c57b2496fef005b039d87d8740e7a28eb31519d"},
+    {file = "botocore-1.31.74-py3-none-any.whl", hash = "sha256:3eef070a8d8c4240aad07e5c89395002b140af213bcfc4dcd1d441e3ee4b3bee"},
+    {file = "botocore-1.31.74.tar.gz", hash = "sha256:2549ca7dc0f9227d8692a56a133c1346642efb38736c7c3f1330724d937ad6ec"},
 ]
 
 [package.dependencies]
@@ -1702,13 +1702,13 @@ files = [
 
 [[package]]
 name = "phonenumbers"
-version = "8.13.23"
+version = "8.13.24"
 description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
 optional = false
 python-versions = "*"
 files = [
-    {file = "phonenumbers-8.13.23-py2.py3-none-any.whl", hash = "sha256:34d6cb279dd4a64714e324c71350f96e5bda3237be28d11b4c555c44701544cd"},
-    {file = "phonenumbers-8.13.23.tar.gz", hash = "sha256:869e44fcaaf276eca6b953a401e2b27d57461f3a18a66cf5f13377e7bb0e228c"},
+    {file = "phonenumbers-8.13.24-py2.py3-none-any.whl", hash = "sha256:7dd66c57da00c0f373de83074e78d66a0801381cface4d010cfe07be2fa77fe5"},
+    {file = "phonenumbers-8.13.24.tar.gz", hash = "sha256:7abc66f38d92c3b9e827d597b5d590283ca3b05288d9fadea8bc0d6c8ad73c06"},
 ]
 
 [[package]]
@@ -2894,13 +2894,13 @@ anyio = ">=3.0.0"
 
 [[package]]
 name = "wcwidth"
-version = "0.2.8"
+version = "0.2.9"
 description = "Measures the displayed width of unicode strings in a terminal"
 optional = false
 python-versions = "*"
 files = [
-    {file = "wcwidth-0.2.8-py2.py3-none-any.whl", hash = "sha256:77f719e01648ed600dfa5402c347481c0992263b81a027344f3e1ba25493a704"},
-    {file = "wcwidth-0.2.8.tar.gz", hash = "sha256:8705c569999ffbb4f6a87c6d1b80f324bd6db952f5eb0b95bc07517f4c1813d4"},
+    {file = "wcwidth-0.2.9-py2.py3-none-any.whl", hash = "sha256:9a929bd8380f6cd9571a968a9c8f4353ca58d7cd812a4822bba831f8d685b223"},
+    {file = "wcwidth-0.2.9.tar.gz", hash = "sha256:a675d1a4a2d24ef67096a04b85b02deeecd8e226f57b5e3a72dbb9ed99d27da8"},
 ]
 
 [[package]]
