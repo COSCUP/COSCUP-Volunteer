@@ -30,7 +30,7 @@ description: 也可無程式背景參與規劃部分，詳細與持續增補的�
 
 `COSCUP 行政組`
 
-:   主要處理大會行政事務、志工招募與登錄、會眾服務（療癒市集與講座、前夜派對）。可參考[行政組簡介](/docs/zh_TW/secretary_team/overview/)。
+:   主要處理大會行政事務、志工招募與登錄、會眾服務（療癒市集與講座、前夜派對）。可參考[行政組簡介](/docs/zh-TW/secretary_team/overview/)。
 
 `志工服務平台`
 

@@ -1,1 +1,1 @@
-This page is now only in `zh-TW`, please refer to [here](/docs/zh_TW/announcement/pycontw_2023_sprints/).
+This page is now only in `zh-TW`, please refer to [here](/docs/zh-TW/announcement/pycontw_2023_sprints/).

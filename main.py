@@ -141,7 +141,7 @@ def need_login() -> ResponseBase | None:
 
                 if has_suspended:
                     session.pop('sid', None)
-                    return redirect('/docs/zh_TW/error_note/e001/')
+                    return redirect('/docs/zh-TW/error_note/e001/')
 
                 g.user = {}  # pylint: disable=assigning-non-slot
                 g.user['account'] = User(uid=session_data['uid']).get()

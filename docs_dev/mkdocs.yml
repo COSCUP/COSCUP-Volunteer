@@ -9,92 +9,92 @@ copyright: "CC BY 4.0 2022-2023 COSCUP Volunteer"
 nav:
   - Home: index.md
   - Introduction:
-    - Overview: intro.md
-    - Contributing: contribute.md
+      - Overview: intro.md
+      - Contributing: contribute.md
   - Developers:
-    - Developer Beginner: dev/beginners.md
-    - Build Base Image: dev/build-base-image.md
-    - Dev Page: dev/dev-page.md
-    - Contributing:
-      - Contributing on Github: dev/contribute-on-github.md
-      - Developer Certificate of Origin (DCO): dev/dco.md
-      - How to sign-off commits: dev/how-to-signoff.md
-    - API: dev/api.md
-    - Code Reference:
-      - Overview: code_reference/overview.md
-      - Main: code_reference/main.md
-      - View: code_reference/view.md
-      - Celery Task: code_reference/celery_task.md
-      - Models:
-        - applyreviewdb: code_reference/models/applyreviewdb.md
-        - base: code_reference/models/base.md
-        - budgetdb: code_reference/models/budgetdb.md
-        - expensedb: code_reference/models/expensedb.md
-        - formdb: code_reference/models/formdb.md
-        - index: code_reference/models/index.md
-        - mailletterdb: code_reference/models/mailletterdb.md
-        - mattermost_link_db: code_reference/models/mattermost_link_db.md
-        - mattermostdb: code_reference/models/mattermostdb.md
-        - oauth_db: code_reference/models/oauth_db.md
-        - projectdb: code_reference/models/projectdb.md
-        - senderdb: code_reference/models/senderdb.md
-        - tasksdb: code_reference/models/tasksdb.md
-        - teamdb: code_reference/models/teamdb.md
-        - telegram_db: code_reference/models/telegram_db.md
-        - users_db: code_reference/models/users_db.md
-        - usessiondb: code_reference/models/usessiondb.md
-        - waitlistdb: code_reference/models/waitlistdb.md
-      - Module:
-        - applyreview: code_reference/module/applyreview.md
-        - awsses: code_reference/module/awsses.md
-        - budget: code_reference/module/budget.md
-        - dietary_habit: code_reference/module/dietary_habit.md
-        - expense: code_reference/module/expense.md
-        - form: code_reference/module/form.md
-        - mc: code_reference/module/mc.md
-        - oauth: code_reference/module/oauth.md
-        - project: code_reference/module/project.md
-        - sender: code_reference/module/sender.md
-        - service_sync: code_reference/module/service_sync.md
-        - skill: code_reference/module/skill.md
-        - tasks: code_reference/module/tasks.md
-        - users: code_reference/module/users.md
-        - usession: code_reference/module/usession.md
-        - waitlist: code_reference/module/waitlist.md
-        - Third Party API:
-          - gitlab_api: code_reference/module/gitlab_api.md
-          - gsuite: code_reference/module/gsuite.md
-          - ipinfo: code_reference/module/ipinfo.md
-          - mattermost: code_reference/module/mattermost.md
-          - telegram_bot: code_reference/module/telegram_bot.md
-      - Structs:
-        - projects: code_reference/structs/projects.md
-        - tasks: code_reference/structs/tasks.md
-        - teams: code_reference/structs/teams.md
-        - users: code_reference/structs/users.md
+      - Developer Beginner: dev/beginners.md
+      - Build Base Image: dev/build-base-image.md
+      - Dev Page: dev/dev-page.md
+      - Contributing:
+          - Contributing on Github: dev/contribute-on-github.md
+          - Developer Certificate of Origin (DCO): dev/dco.md
+          - How to sign-off commits: dev/how-to-signoff.md
+      - API: dev/api.md
+      - Code Reference:
+          - Overview: code_reference/overview.md
+          - Main: code_reference/main.md
+          - View: code_reference/view.md
+          - Celery Task: code_reference/celery_task.md
+          - Models:
+              - applyreviewdb: code_reference/models/applyreviewdb.md
+              - base: code_reference/models/base.md
+              - budgetdb: code_reference/models/budgetdb.md
+              - expensedb: code_reference/models/expensedb.md
+              - formdb: code_reference/models/formdb.md
+              - index: code_reference/models/index.md
+              - mailletterdb: code_reference/models/mailletterdb.md
+              - mattermost_link_db: code_reference/models/mattermost_link_db.md
+              - mattermostdb: code_reference/models/mattermostdb.md
+              - oauth_db: code_reference/models/oauth_db.md
+              - projectdb: code_reference/models/projectdb.md
+              - senderdb: code_reference/models/senderdb.md
+              - tasksdb: code_reference/models/tasksdb.md
+              - teamdb: code_reference/models/teamdb.md
+              - telegram_db: code_reference/models/telegram_db.md
+              - users_db: code_reference/models/users_db.md
+              - usessiondb: code_reference/models/usessiondb.md
+              - waitlistdb: code_reference/models/waitlistdb.md
+          - Module:
+              - applyreview: code_reference/module/applyreview.md
+              - awsses: code_reference/module/awsses.md
+              - budget: code_reference/module/budget.md
+              - dietary_habit: code_reference/module/dietary_habit.md
+              - expense: code_reference/module/expense.md
+              - form: code_reference/module/form.md
+              - mc: code_reference/module/mc.md
+              - oauth: code_reference/module/oauth.md
+              - project: code_reference/module/project.md
+              - sender: code_reference/module/sender.md
+              - service_sync: code_reference/module/service_sync.md
+              - skill: code_reference/module/skill.md
+              - tasks: code_reference/module/tasks.md
+              - users: code_reference/module/users.md
+              - usession: code_reference/module/usession.md
+              - waitlist: code_reference/module/waitlist.md
+              - Third Party API:
+                  - gitlab_api: code_reference/module/gitlab_api.md
+                  - gsuite: code_reference/module/gsuite.md
+                  - ipinfo: code_reference/module/ipinfo.md
+                  - mattermost: code_reference/module/mattermost.md
+                  - telegram_bot: code_reference/module/telegram_bot.md
+          - Structs:
+              - projects: code_reference/structs/projects.md
+              - tasks: code_reference/structs/tasks.md
+              - teams: code_reference/structs/teams.md
+              - users: code_reference/structs/users.md
   - Error Note:
-    - E001: error_note/e001.md
+      - E001: error_note/e001.md
   - Security: security.md
   - About COSCUP:
-    - Team Leader Handbook: about_coscup/team_leader_handbook.md
-    - Team Member Handbook: about_coscup/team_member_handbook.md
+      - Team Leader Handbook: about_coscup/team_leader_handbook.md
+      - Team Member Handbook: about_coscup/team_member_handbook.md
   - About Secretary Team:
-    - Overview: secretary_team/overview.md
-    - Recruit: secretary_team/recruit.md
-    - Roadmap: secretary_team/roadmap.md
-    - Instructions:
-      - Overview: secretary_team/instructions/overview.md
-      - "Scope of Team": secretary_team/instructions/scope_of_team.md
-      - "Process Management": secretary_team/instructions/process_management.md
-      - "Writing Documentation": secretary_team/instructions/writing_documentation.md
-    - Tasks:
-      - "List of Tasks": secretary_team/tasks/overview.md
-      - "Accounting System": secretary_team/tasks/accounting_system.md
-      - "Enhance Recruitment": secretary_team/tasks/enhance_recruitment.md
-      - "Community Volunteers Plan": secretary_team/tasks/community_volunteers_plan.md
+      - Overview: secretary_team/overview.md
+      - Recruit: secretary_team/recruit.md
+      - Roadmap: secretary_team/roadmap.md
+      - Instructions:
+          - Overview: secretary_team/instructions/overview.md
+          - "Scope of Team": secretary_team/instructions/scope_of_team.md
+          - "Process Management": secretary_team/instructions/process_management.md
+          - "Writing Documentation": secretary_team/instructions/writing_documentation.md
+      - Tasks:
+          - "List of Tasks": secretary_team/tasks/overview.md
+          - "Accounting System": secretary_team/tasks/accounting_system.md
+          - "Enhance Recruitment": secretary_team/tasks/enhance_recruitment.md
+          - "Community Volunteers Plan": secretary_team/tasks/community_volunteers_plan.md
   - Announcement:
-    - Review in 2022: announcement/review_in_2022.md
-    - PyCon TW Sprints: announcement/pycontw_2023_sprints.md
+      - Review in 2022: announcement/review_in_2022.md
+      - PyCon TW Sprints: announcement/pycontw_2023_sprints.md
 theme:
   name: material
   icon:
@@ -136,48 +136,50 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/COSCUP/COSCUP-Volunteer
     - icon: fontawesome/solid/users-rectangle
-      link: https://volunteer.coscup.org/docs/zh_TW/secretary_team/overview/
+      link: https://volunteer.coscup.org/docs/zh-TW/secretary_team/overview/
 plugins:
   - i18n:
-      default_language: en
-      default_language_only: false
       docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
       languages:
-        en:
-          name: "English (en-US)"
-          build: true
-        zh_TW:
-          name: "臺灣正體 (zh-TW)"
-          build: true
-      nav_translations:
-        zh_TW:
-          Home: "首頁"
-          Overview: "摘要"
-          Introduction: "介紹"
-          Developers: "開發者"
-          Developer Beginner: "初次開發"
-          Contributing: "貢獻"
-          Security: "資安通報"
-          "About Secretary Team": "關於行政組"
-          Recruit: "招募"
-          "About COSCUP": "關於 COSCUP"
-          "Team Leader Handbook": "組長手冊"
-          "Team Member Handbook": "組員手冊"
-          "Tasks": "任務規劃執行"
-          "List of Tasks": "任務列表"
-          "Accounting System": "財務會計系統"
-          "Enhance Recruitment": "招募流程增進計畫"
-          "Error Note": "錯誤訊息"
-          "Announcement": "訊息發佈"
-          "Review in 2022": "2022 回顧"
-          "Instructions": "使用手冊"
-          "Scope of Team": "組任務範圍"
-          "Process Management": "任務流程方式"
-          "Writing Documentation": "文件紀錄"
-          "Roadmap": "路線圖"
-          "Community Volunteers Plan": "社群志工參與計畫"
-          "Build Base Image": "建立基本映像檔"
-          "Dev Page": "開發設定頁面"
+        - build: true
+          default: true
+          locale: en
+          name: English (en-US)
+        - build: true
+          default: false
+          locale: zh-TW
+          name: 臺灣正體 (zh-TW)
+          nav_translations:
+            About COSCUP: 關於 COSCUP
+            About Secretary Team: 關於行政組
+            Accounting System: 財務會計系統
+            Announcement: 訊息發佈
+            Build Base Image: 建立基本映像檔
+            Community Volunteers Plan: 社群志工參與計畫
+            Contributing: 貢獻
+            Dev Page: 開發設定頁面
+            Developer Beginner: 初次開發
+            Developers: 開發者
+            Enhance Recruitment: 招募流程增進計畫
+            Error Note: 錯誤訊息
+            Home: 首頁
+            Instructions: 使用手冊
+            Introduction: 介紹
+            List of Tasks: 任務列表
+            Overview: 摘要
+            Process Management: 任務流程方式
+            Recruit: 招募
+            Review in 2022: 2022 回顧
+            Roadmap: 路線圖
+            Scope of Team: 組任務範圍
+            Security: 資安通報
+            Tasks: 任務規劃執行
+            Team Leader Handbook: 組長手冊
+            Team Member Handbook: 組員手冊
+            Writing Documentation: 文件紀錄
   - search
   - social:
       cards_font: Noto Sans TC

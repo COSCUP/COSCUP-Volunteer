@@ -6,7 +6,7 @@ step by step to figure out what we are doing or have been done here.
 
 !!! Info "有中文版了！"
 
-    :white_check_mark: **正體中文**請參考[這裡](zh_TW/)開始閱讀。
+    :white_check_mark: **正體中文**請參考[這裡](zh-TW/)開始閱讀。
 
 ## About
 
@@ -21,8 +21,8 @@ the project on Github.
 
 Or mail your thoughts to [volunteer@coscup.org](mailto:volunteer@coscup.org).
 
-Base Info  |                                                                                                                         |
-----------:| ----------------------------------------------------------------------------------------------------------------------- |
-URL        | [https://volunteer.coscup.org/](https://volunteer.coscup.org/)                                                          |
-Repository | [https://github.com/COSCUP/COSCUP-Volunteer](https://github.com/COSCUP/COSCUP-Volunteer)                                |
-License    | [GNU Affero General Public License v3.0 (AGPL-3.0)](https://github.com/COSCUP/COSCUP-Volunteer/blob/main/LICENSE.txt) |
+|  Base Info |                                                                                                                       |
+| ---------: | --------------------------------------------------------------------------------------------------------------------- |
+|        URL | [https://volunteer.coscup.org/](https://volunteer.coscup.org/)                                                        |
+| Repository | [https://github.com/COSCUP/COSCUP-Volunteer](https://github.com/COSCUP/COSCUP-Volunteer)                              |
+|    License | [GNU Affero General Public License v3.0 (AGPL-3.0)](https://github.com/COSCUP/COSCUP-Volunteer/blob/main/LICENSE.txt) |

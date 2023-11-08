@@ -110,4 +110,4 @@ description: 在活動籌備期間給予組長行政指引的手冊
 
 ## 組員手冊
 
-最後，也請花點時間閱讀一下「[組員手冊](/docs/zh_TW/about_coscup/team_member_handbook/)」，感謝！
+最後，也請花點時間閱讀一下「[組員手冊](/docs/zh-TW/about_coscup/team_member_handbook/)」，感謝！

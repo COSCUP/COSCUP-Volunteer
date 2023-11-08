@@ -13,7 +13,7 @@ description: 如何設定基本開發環境
 
 ### 簽名（sign-off）與簽章（sign）你的提交或標籤
 
-我們希望你的提交與標籤都有**簽章**，並且**[簽名](how-to-signoff.zh_TW.md)**你的提交。
+我們希望你的提交與標籤都有**簽章**，並且**[簽名](how-to-signoff.zh-TW.md)**你的提交。
 
 !!! tip "提示"
 

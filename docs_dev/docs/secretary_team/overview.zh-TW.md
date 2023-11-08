@@ -4,8 +4,8 @@
 
 ## 相關目錄
 
-- [2023 招募訊息](recruit.zh_TW.md)
-- [行政組使用手冊](instructions/overview.zh_TW.md)
+- [2023 招募訊息](recruit.zh-TW.md)
+- [行政組使用手冊](instructions/overview.zh-TW.md)
 
 ## 與籌備相關工具
 
