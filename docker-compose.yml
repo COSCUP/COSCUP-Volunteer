@@ -253,14 +253,14 @@ services:
     entrypoint: ["./entrypoint.sh", "poetry", "run", "mkdocs", "build"]
 
   memcached-prod:
-    image: "memcached:1.6.21-alpine"
+    image: "memcached:1.6.22-alpine"
     deploy:
       replicas: 1
     networks:
       - backend
 
   queue_sender:
-    image: "rabbitmq:3.11.18-management-alpine"
+    image: "rabbitmq:3.11.27-management-alpine"
     deploy:
       replicas: 1
     depends_on:
@@ -271,7 +271,7 @@ services:
       - rabbitdata:/var/lib/rabbitmq
 
   secretary_mongo:
-    image: "mongo:6.0.6-jammy"
+    image: "mongo:6.0.12-jammy"
     deploy:
       replicas: 1
     volumes:
@@ -282,7 +282,7 @@ services:
       - backend
 
   link_mongo:
-    image: "mongo:6.0.6-jammy"
+    image: "mongo:6.0.12-jammy"
     deploy:
       replicas: 1
     volumes:
