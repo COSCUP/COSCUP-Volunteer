@@ -101,7 +101,7 @@ description: 在活動籌備期間給予組長行政指引的手冊
     - 財務組 [accounting@coscup.org](mailto:accounting@coscup.org)
     - 場務組 [service@coscup.org](mailto:service@coscup.org)
     - 製播組 [streaming@coscup.org](mailto:streaming@coscup.org)
-    - 擺攤組 [booth@coscup.org](mailto:booth@coscup.org)
+    - 交流組 [engagement@coscup.org](mailto:engagement@coscup.org)
 
 ## 問題回報
 

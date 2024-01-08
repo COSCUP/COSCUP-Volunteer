@@ -137,7 +137,6 @@ After COSCUP, we also hope to see you participate in regular community gathering
 #### Conferences
 
 - [COSCUP](https:/coscup.org/) 開源人年會
-- [SITCON](https://sitcon.org/) 學生計算機年會
 - [HITCON](https://hitcon.org/) 台灣駭客年會
 - [PyCon Taiwan](https://tw.pycon.org/) Python 年會
 - [JCConf Taiwan](https://jcconf.tw/) Java 研討會

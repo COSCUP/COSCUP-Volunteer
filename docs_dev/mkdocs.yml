@@ -5,7 +5,7 @@ site_author: "COSCUP Secretary Team / 行政組"
 repo_url: https://github.com/COSCUP/COSCUP-Volunteer
 repo_name: COSCUP/COSCUP-Volunteer
 edit_uri: https://github.com/COSCUP/COSCUP-Volunteer/blob/main/docs_dev/docs/
-copyright: "CC BY 4.0 2022-2023 COSCUP Volunteer"
+copyright: "CC BY 4.0 2022-2024 COSCUP Volunteer"
 nav:
   - Home: index.md
   - Introduction:
@@ -78,6 +78,7 @@ nav:
   - About COSCUP:
       - Team Leader Handbook: about_coscup/team_leader_handbook.md
       - Team Member Handbook: about_coscup/team_member_handbook.md
+      - Team Setup: about_coscup/team_setup.md
   - About Secretary Team:
       - Overview: secretary_team/overview.md
       - Recruit: secretary_team/recruit.md
@@ -179,6 +180,7 @@ plugins:
             Tasks: 任務規劃執行
             Team Leader Handbook: 組長手冊
             Team Member Handbook: 組員手冊
+            Team Setup: 組別建立與設定
             Writing Documentation: 文件紀錄
   - search
   - social:
