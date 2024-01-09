@@ -1,95 +1,138 @@
 # CoCoCo - COSCUP Code of Conduct
 
-version [(v20220430)](https://hackmd.io/@coscup/cococo-zh)
+目前版本 [(v20240109)](https://hackmd.io/@coscup/cococo-zh) CC By-4.0 , 
+前一版本 [v20220430](https://hackmd.io/@coscup/CoCoCo-zh-v20220430)
 
-## COSCUP 社群守則
+----
+# COSCUP 社群守則
+COSCUP 開源人年會自 2006 年以來，已逐漸發展為華人開源圈年度盛事，在建立開放、友善、多元、包容、透明的開源社群環境時，COSCUP 相信「尊重所有人」為最基本的社會文化共識，在此基礎之上，促進平等互動、維護社群價值、預防不當事件的發生、避免所有參與者受到任何形式的歧視或騷擾並提供協助，當是 COSCUP 開源人年會戮力的方向，因此，建立行為準則即為此目標的具體實踐，同時也會社會責任盡一份心力。
 
-以下是開源人年會的社群守則，絕大部分的人只需要看這一段即可：
+### 關於參與者
+COSCUP 參與者包括志工、講者、合作社群、會眾、合作廠商及贊助商，在進行合作之前，COSCUP 籌備團隊有義務告知上述各方此行為準則之存在。
 
-> 請**尊重**所有人。
-> 如果覺得被冒犯或不受尊重時，請明確**勸告**對方停手，仍無法解決時請**找社群夥伴協助**，或**聯繫大會工作人員**。
-> 如經大會判斷確實為冒犯騷擾情事，大會將明確公告並請其離場。
+### 關於行為準則適用時間及範圍
+本準則規範 COSCUP 相關之線上線下活動，包含但不限於如前期大會籌備至會期結束後慶功宴等，考量籌備團隊志工整體量能，以處理事件之發生二個月內之申訴為原則。
 
-「尊重與您相同或不相同的其他人」應該是社會的基本協定，無論是否身在 COSCUP 都應該有此意識，本文關注範圍暫且限定在 COSCUP 所有線上線下頻道，並涵括大會期間以及大會相關的會前、會後工作。請全體參與者共同維護此守則。
+### 我們期許有助於年會正向發展之行為
+- 40% 聽演講，60% 交朋友。
+- 夥伴是謙虛的、團隊是歡樂的、做事是熱血的。
+- 鼓勵自我實現，坐而言不如起而行。
+- 展現對他人的同理心和善意。
+- 尊重所有參與者不同的主張、觀點和感受。
+- 在尊重基於事實的前提下進行直接專業的交流。
+- 包容來自不同國籍、文化、信念所造成的觀點差異。
+- 給予建設性的回饋，也有風度地接受建設性回饋。
+- 承擔責任並向受我們錯誤影響的人道歉，並從經驗中汲取教訓。
+- 關注對整個開源社群最有利的事情，而不僅僅是個人。
+- 言行如一，有助於自身信譽與信任。
+- 其他高於道德標準之利他行為。
+- 對事不對人，以善意推斷進行每ㄧ個討論。
 
-## 關於「尊重」
+### 我們絕不容許發生的行為
+- 歧視行為，包含針對性別、性向、種族、外貌、宗教、年齡、身體狀況或個人身分的挑釁、冒犯、錯稱或差別待遇。
+- 公開發表、展示或放映含有侮辱、歧視、仇恨、暴力或是性暗示的言論或影像。 
+- 公開或私下的騷擾行為。
+- 未經大會同意蒐集或公開散佈個人資料，包含但不限聯絡方式、職業、工作地點等。
+- 持續干擾議程或活動的正常進行，無視工作人員或與會者的制止。
+- 其他違反法律的行為，例如但不限於：
+    - 以跟蹤、尾隨、社交軟體工具騷擾，使他人感到不安恐懼威脅等行為。
+    - 性騷擾、造成當事人反感的綽號或肢體接觸，以及任何形式的言語或肢體霸凌。
+    - 任何暴力行為或暴力威脅。
 
-請尊重所有參與者，無論其性別認同、性傾向、年齡、國籍、政治傾向、信仰、服儀、軟體偏好等等。
+## 該怎麼通報?
+- 若為志工，請向組長回報，組長應同時回報籌備團隊。
+- 若為講者、合作社群、合作廠商或贊助商，請向您的 COSCUP 窗口回報，由窗口回報籌備團隊。
+- 若回報對口為利害關係人或行為人，得行迴避，轉由總召處理。
+- 若與會者在大會或相關期間遭遇 CoC 事件，可即時向現場人員通報尋求協助，或來信 coc@coscup.org，COSCUP 負隱私保密責任，由專人處理。
+- 來信通報時建議附上相關人、事、時、地、物之說明，包含證詞、證物及您的聯絡方式，若為匿名通報，大會將視情況處理或僅做為紀錄。
 
-在進行簡報、議程討論時的笑話、現場茶敘的行為……等，都應以尊重與禮貌為原則。如果您不確定某種行為或表達方式會不會冒犯他人，別瞎猜，先找個朋友問問看吧。
+### CoC 處理團隊
+- 事件發生後一個月內，當屆總召應與被行為人選出可信任且具備法律相關知能第三人，一同組成處理團隊。
+- 處理團隊得選出其他具備相關知能的第三人進來協助相關事件。
 
-## 關於「勸告」
+### 我們的處理
+- 若籌備團隊發現曾有違反上述行為紀錄或法律者，大會得敘明緣由後拒絕合作，如有疑義者，請聯絡籌備團隊了解爭議所在。
+- 若大會期間發生上述行為，大會將視嚴重程度進行道德勸說、警告、請離會場或報警交由司法處理，處置程度包含但不限於：
+    - 地圖砲、不尊重、不當追求等行為將進行道德勸說，並紀錄於籌備團隊內部文件。
+    - 事涉特定單人，較明確的攻擊、霸凌行為將施予警告並公佈事件。
+    - 前述處理文件將記錄於籌備團隊組長群資料夾，各屆職權得以存取，並實際依 CoC 條款執行營運之。
+    - 經查違反行為準則，嚴重性逾越道德勸說之對象，大會將公告行為人、行為事項及處置內容。
+    - 大會將保護通報者個資，並盡力提供相關資源協助被行為人妥善處理。
 
-請善意推斷其他社群成員也願意共同營造彼此尊重的社群，且樂於接受指教。若您覺得受到冒犯，或見到某種不尊重他人的行為，我們鼓勵您向對方明確指出這樣的感受，並勸告對方停手。
+COSCUP 開源人年會不僅是個開源社群的聚會，在推動開源文化的同時，我們期待在行為準則之下，共創讓每一個參與者皆能自由自在一窺開源世界的美好平臺，沉浸一年一度的開源盛會，開源大法好！
 
-如果您被他人提醒自己的行為有不當之處（或者您自己發現了），還請記得停止不當行為，並向對方鄭重道歉。大家都會犯錯，有時即使無心也可能不慎傷人。只要能重新檢視行為並避免下次再錯，我們就能有更好的社群。
+本行為準則部分參考自：
 
-## 關於「找社群夥伴協助」
-
-COSCUP 是社群集結、為了社群茁壯而籌辦的研討會。如果您認為有人違反「彼此尊重」的原則，或是對您有任何騷擾情事，您可以優先聯繫您周遭可信任的朋友先參與協助。每位社群夥伴都是構成 COSCUP 的一份子，與您所在社群一同打造安心的交流環境，也都可以為了讓開源社群更蓬勃發展。
-
-如果您覺得您與可信任的社群朋友皆難以處理，請儘速告知大會工作人員，並描述狀況以便我們協助處理。
-
-## 關於「聯繫大會工作人員」
-
-您可找尋在會場的工作人員協助，我們都穿著容易辨識的衣服。
-
-或者，您可以：
-
-- [聯絡大會](mailto:coc@coscup.org)
-
-這個信箱會由當屆總召、行政組長、議程組長收信處理，請留下事件經過，若您願意亦可留下即時的聯絡方式。
-
-若大會工作人員發現不尊重他人的行為，工作人員將依據情形不同採取必要行動。如同每位參與大會的社群成員一樣，工作人員將盡全力以禮相待，以維護社群茁壯成長為原則來處理各種衝突與不當行為。
-
-最極端的狀況下，我們可能通知警方協助，或於不預先警告的情況下請人離場。過去 COSCUP 從未發生此事，請不要搶頭香。
-
-## 感謝 & 授權
-
-本文大致編修自 https://indieweb.org/code-of-conduct ，並同以 CC0 釋出供大眾使用。
+[Hacking Thursday 參與者公約](https://www.hackingthursday.org/coc)
+[SITCON 行為準則 / Code of Conduct CC BY 4.0](https://sitcon.org/code-of-conduct/)
+[Wikimedia Taiwan/ Code of Conduct Taiwan ，CC BY-SA 4.0](https://meta.wikimedia.org/?curid=10978449)
+[g0v 行為守則／g0v Code of Conduct (CoC)，CC BY 3.0](https://g0v.hackmd.io/s/COC)
 
 ---
-
 # COSCUP Code of Conduct
 
-version [(v20220430)](https://hackmd.io/s/r1Vah91TN)
+[English version](https://hackmd.io/@coscup/cococo-en) CC By 4.0 
+Translated from [the Chinese version (v20230725)](https://hackmd.io/@coscup/cococo-zh)
 
----
+----
+Since 2006, the COSCUP, Conference for Open Source Coders, Users, and Promoters has gradually developed into an annual event in the Chinese-speaking open-source community. In establishing an open, friendly, diverse, inclusive, and transparent open-source community environment, COSCUP believes that "respecting all people" is the most basic social consensus. On this basis, we promote equal interaction, maintain community values, prevent the occurrence of inappropriate incidents, and avoid any form of discrimination or harassment of all participants. This is the direction COSCUP strives towards, and therefore, the establishment of this Code of Conduct is the concrete implementation of this goal and also a fulfillment of our social responsibility.
 
-> **Be respectful** of other people. **Respectfully ask people to stop** if you are bothered, and if you can't resolve an issue, **contact any ally** you may know, or **the event staff**. If you engage in that behavior (offensive or disruptive), you'll be asked to leave.
+### About Participants
+Participants in COSCUP include volunteers, speakers, partner communities, audiences, partners, and sponsors. Before cooperation, the COSCUP organizing team is obligated to inform all parties of the existence of this Code of Conduct.
 
-Not just in COSCUP, we believe that "be respectful" is what you should do to make the world a better place. This code of conduct applies to all COSCUP spaces online and offline, including our events, SNS / Telegram channels, and HackMD documents.
+### About the Time and Scope of Application of the Code of Conduct
+This Code applies to all online and offline activities related to COSCUP, including but not limited to pre-conference preparations to post-conference celebrations. Given the capacity of the organizing team, the principle is to handle complaints occurring within two months of the event.
 
-## Respect
+### We Expect Behaviors That Promote Positive Development of the Conference
+- 40% listen to speeches, 60% make friends.
+- Partners are humble, the team is joyful, and actions are passionate.
+- Encourage self-realization, actions speak louder than words.
+- Show empathy and goodwill towards others.
+- Respect all participants' different beliefs, viewpoints, and feelings.
+- Have direct professional exchanges based on respect for facts.
+- Tolerate differences in viewpoints arising from different nationalities, cultures, and beliefs.
+- Provide constructive feedback and gracefully accept it.
+- Assume responsibility and apologize to those affected by our mistakes, learning from the experience.
+- Focus on what is most beneficial to the entire open-source community, not just individuals.
+- Actions align with words, contributing to personal credibility and trust.
+- Altruistic behaviors that are above moral standards.
+- Judge issues not individuals, and assume good faith in every discussion.
 
-COSCUP spaces are inclusive. We treat all individuals respectfully, regardless of gender (including transgender status), sexual orientation, age, nationality, ethnicity, religion (or lack thereof), physical appearance, politics, software preferences, etc.
+### We Absolutely Do Not Tolerate the Following Behaviors
+- Discriminatory behavior, including provocation, offense, misnaming, or differential treatment based on gender, sexual orientation, race, appearance, religion, age, physical condition, or personal identity.
+- Public expression, display, or broadcast of insulting, discriminatory, hateful, violent, or sexually suggestive speeches or images.
+- Public or private harassment.
+- Collection or public distribution of personal data without conference approval, including but not limited to contact information, occupation, workplace, etc.
+- Continued disruption of the agenda or normal conduct of activities, ignoring the stoppage by staff or participants.
+- Any illegal behaviors, including but not limited to:
+    - Harassment using tracking, stalking, or social software tools, causing others to feel uneasy, afraid, or threatened.
+    - Sexual harassment, offensive nicknames or physical contact, and any form of verbal or physical bullying.
+    - Any violent behaviors or violent threats.
 
-Please be respectful of others when doing anything, such as making jokes during the presentation, discussion, tea time, etc. If you’re unsre about the behaviors you do or the words you say offend others, ask someone instead of assuming.
+## How to Report?
+- If you're a volunteer, report to your team leader, who should also report to the organizing team.
+- If you're a speaker, partner community, partner, or sponsor, report to your COSCUP contact, who will then report to the organizing team.
+- If the report involves a conflict of interest or perpetrator, it can be passed to the general coordinator.
+- If participants encounter a CoC incident during the conference or related period, they can immediately report to the onsite staff for assistance or email coc@coscup.org. COSCUP is responsible for privacy and confidentiality, and a designated person will handle the matter.
+- When reporting by email, it's suggested to include details of related people, incidents, time, location, and objects, including evidence, testimonials, and your contact information. For anonymous reports, the conference will handle it based on the situation or record it.
 
-## Resolve Peacefully
+### CoC Processing Team
+- Within one month after the incident, the general coordinator should form a processing team with a trustworthy third party with legal knowledge, selected by the person acted upon.
+- The processing team may select other third parties with relevant knowledge to assist with related incidents.
 
-COSCUP is a conference hosted by the FLOSS community for the FLOSS community. We believe peer-to-peer discussions, feedback, and corrections can help build a stronger, safer, and more welcoming community.
+### Our Actions
+- If the organizing team finds someone who has violated the above behaviors or the law, the conference can refuse to cooperate after stating the reasons. If there are any doubts, please contact the organizing team for clarification.
+- If the aforementioned behaviors occur during the conference, the severity of the incident will be assessed and actions including moral persuasion, warnings, removal from the venue, or calling the police will be taken. The handling includes but is not limited to:
+    - Moral persuasion will be used for map cannons, disrespect, improper pursuits, etc., and it will be recorded in the internal documents of the organizing team.
+    - Specific single-person involved, clearer attacks, bullying behaviors will receive warnings and the incident will be announced.
+    - The aforementioned handling documents will be recorded in the folder of the organizing team leader group, with access granted to each authority, and it will actually operate according to the CoC terms.
+    - After investigation, if the Code of Conduct is violated and the severity exceeds moral persuasion, the conference will announce the person acted upon, the incident, and the handling content.
+    - The conference will protect the personal data of the reporter and provide resources to assist the person acted upon in proper handling.
 
-Our community members are willing to work together to create a respectful community and are open to criticism. If you feel offended or witness a disrespectful act, we encourage you to make it clear to the other person how you feel and tell them to stop.
+COSCUP Open Source Conference is not just a gathering of the open-source community. While promoting open-source culture, we expect, under this Code of Conduct, to co-create a platform that allows every participant to freely explore the beauty of the open-source world, immerse in the annual open-source event. Open source is great!
 
-If you are reminded of your misconduct by someone else, please remember to stop the misconduct and apologize to the person. We all make mistakes, and sometimes we can inadvertently hurt someone even when we don't mean to. We can have a better community by re-examining behavior and avoiding errors next time.
-
-## Ally
-
-If you believe that someone is violating the principle of "mutual respect" or is harassing you in any way, your priority is to contact a nearby trusted friend to help first. Anyone in the community should feel empowered to resolve issues and uphold our standards.
-
-## Contact Staff
-
-If you feel the issue requires escalation to a community organizer, please contact:
-
-- coc@coscup.org
-
-The general coordinator, Administrative group leader, and Program group leader will receive your mail. Please leave a description of the incident or, if you prefer, real-time contact information.
-
-If the organizer finds disrespectful behavior, the staff will take the necessary action depending on the circumstances. The team will do its best to deal with conflicts and misconduct courteously and with the principle of maintaining a strong and growing community.
-
-In extreme cases, we may notify the police or ask people to leave the venue without prior warning. **This situation has never happened at COSCUP in the past. Please don’t be the first.**
-
-## Thanks / License
-
-This document was adopted from the [CoC of IndieWeb](https://indieweb.org/code-of-conduct). CC0.
+### Reference:
+[Hacking Thursday 參與者公約](https://www.hackingthursday.org/coc)
+[SITCON 行為準則 / Code of Conduct CC BY 4.0](https://sitcon.org/code-of-conduct/)
+[Wikimedia Taiwan/Code of Conduct Taiwan ，CC BY-SA 4.0](https://meta.wikimedia.org/?curid=10978449)
+[g0v 行為守則／g0v Code of Conduct (CoC)，CC BY 3.0](https://g0v.hackmd.io/s/COC)
