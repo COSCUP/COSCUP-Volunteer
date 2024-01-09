@@ -138,6 +138,8 @@ extra:
       link: https://github.com/COSCUP/COSCUP-Volunteer
     - icon: fontawesome/solid/users-rectangle
       link: https://volunteer.coscup.org/docs/zh-TW/secretary_team/overview/
+extra_css:
+  - stylesheets/extra.css
 plugins:
   - i18n:
       docs_structure: suffix
