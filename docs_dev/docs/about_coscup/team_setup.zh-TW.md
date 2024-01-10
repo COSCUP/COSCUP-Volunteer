@@ -28,7 +28,7 @@
 
 !!! Success "前往 2024 組別列表"
 
-    - [https://volunteer.coscup.org/project/2024/]()
+    - [https://volunteer.coscup.org/project/2024/](https://volunteer.coscup.org/project/2024/)
 
 ??? Tip "網址格式"
 
