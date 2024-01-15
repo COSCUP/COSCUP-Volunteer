@@ -77,7 +77,7 @@
                           <textarea class="textarea" minlength="100" name="note"{% if messages %}disabled{%else%}required{% endif %}></textarea>
                       </div>
                       <p class="help is-warning">
-                        請完整敘述內容。勿留空白或隨意提交資訊！<strong>提交字數若不足，請再多寫一點。</strong>
+                        {% if messages %} 請先至上方 <strong>「請先完成以下事項」</strong> 紅色區域，依指示逐條完成小任務，即可開始提出申請成為組員。 {%else%} 請完整敘述內容。勿留空白或隨意提交資訊！<strong>提交字數若不足，請再多寫一點。</strong> {% endif %}
                       </p>
                   </div>
                   <div class="field">
