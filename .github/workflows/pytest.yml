@@ -19,7 +19,7 @@ jobs:
       - name: Install memcached libs
         run: sudo apt-get install ca-certificates libmemcached-tools
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Cache Poetry venv
