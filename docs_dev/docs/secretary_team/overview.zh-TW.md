@@ -4,12 +4,12 @@
 
 ## 相關目錄
 
-- [2023 招募訊息](recruit.zh-TW.md)
+- [招募訊息](recruit.zh-TW.md)
 - [行政組使用手冊](instructions/overview.zh-TW.md)
 
 ## 與籌備相關工具
 
 - [Trello](https://trello.com/b/CBc8kC1H)
-- [志工平台](https://volunteer.coscup.org/team/2023/secretary/)
+- [志工平台](https://volunteer.coscup.org/team/2024/secretary/)
 - [大會共享文件](https://drive.google.com/drive/folders/1U2qvoGZln3l2TJQHefGwNQ35E3TOd4X9)、[大會行事曆](https://calendar.google.com/calendar/embed?src=c_a376ec8beb6ef0ab3acb5fe3213880dfcbba50ce89107532aacbfdda71c6e294@group.calendar.google.com&ctz=Asia%2FTaipei)
 - [行政組討論頻道](https://chat.coscup.org/coscup/channels/secretary)

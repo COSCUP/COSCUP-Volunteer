@@ -1,7 +1,7 @@
 ---
 title: 行政組簡介與招募
-summary: 介紹行政組主要的工作任務內容與 2023 招募對象與辦法
-description: 介紹行政組主要的工作任務內容與 2023 招募對象與辦法
+summary: 介紹行政組主要的工作任務內容與 2024 招募對象與辦法
+description: 介紹行政組主要的工作任務內容與 2024 招募對象與辦法
 ---
 
 # 行政組簡介與招募
@@ -67,7 +67,7 @@ COSCUP 通常會在每一年的農曆年後開始籌備，大會活動日會以�
 
 !!! note ""
 
-    :material-chat-processing-outline: COSCUP 2023 預計在 2023/07/29 ~ 2023/07/30 於台科大舉辦。
+    :material-chat-processing-outline: COSCUP 2024 預計在 2024/08/02 ~ 2024/08/03 於台科大舉辦。
 
 ### 會議規則與工作事項管理
 
@@ -141,6 +141,10 @@ COSCUP 通常會在每一年的農曆年後開始籌備，大會活動日會以�
         :warning: 請勿使用學生帳號或是公司帳號註冊志工平台，可能會因為**畢業**或是**離職**造成帳號無法使用。
 
 ## 2023 Preparation 整地期間召募
+
+!!! warning "已結束"
+
+    整地期間已結束，請等候 2024 的活動公告。
 
 <figure markdown>
   <a href="https://volunteer.coscup.org/doc/docs_preparation.svg">
