@@ -22,7 +22,7 @@ services:
       - backend
 
   workerapp:
-    image: "coscupweb-base:23.12.23"
+    image: "coscupweb-base:24.01.18"
     links:
       - "memcached-prod:memcached"
       - "queue_sender:rabbitmq"
@@ -55,7 +55,7 @@ services:
     command: sh
 
   cmdapp:
-    image: "coscupweb-base:23.12.23"
+    image: "coscupweb-base:24.01.18"
     links:
       - "memcached-prod:memcached"
       - "queue_sender:rabbitmq"
@@ -87,7 +87,7 @@ services:
     entrypoint: ["poetry", "run", "python3", "cmdtools/main.py"]
 
   webapp:
-    image: "coscupweb-base:23.12.23"
+    image: "coscupweb-base:24.01.18"
     links:
       - "memcached-prod:memcached"
       - "queue_sender:rabbitmq"
@@ -134,7 +134,7 @@ services:
       ]
 
   apiapp:
-    image: "coscupweb-base:23.12.23"
+    image: "coscupweb-base:24.01.18"
     links:
       - "memcached-prod:memcached"
       - "queue_sender:rabbitmq"
@@ -170,7 +170,7 @@ services:
     entrypoint: ["poetry", "run", "uvicorn", "api.main:app", "--reload"]
 
   celery_worker:
-    image: "coscupweb-base:23.12.23"
+    image: "coscupweb-base:24.01.18"
     links:
       - "queue_sender:rabbitmq"
       - "secretary_mongo:mongo"
@@ -216,7 +216,7 @@ services:
       ]
 
   docs:
-    image: "coscupweb-base:23.12.23"
+    image: "coscupweb-base:24.01.18"
     links:
       - "memcached-prod:memcached"
       - "queue_sender:rabbitmq"

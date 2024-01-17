@@ -19,7 +19,7 @@ description: 在本地端建立基本映像檔
 
 建立「基本映像檔」於本地開發。（建立的版本號會依[每次釋出](https://github.com/COSCUP/COSCUP-Volunteer/releases)而有所改變）
 
-    docker build -t coscupweb-base:23.12.23 -f ./Dockerfile-base-dev ./
+    docker build -t coscupweb-base:24.01.18 -f ./Dockerfile-base-dev ./
 
 !!! note
 

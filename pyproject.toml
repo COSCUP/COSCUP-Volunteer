@@ -3,7 +3,7 @@ authors = ["COSCUP Volunteer <volunteer@coscup.org>"]
 description = "COSCUP Volunteer 志工服務系統，主要解決招募、人員管理、行政流程建立。"
 license = "AGPL-3.0"
 name = "coscup-volunteer"
-version = "2023.12.23"
+version = "2024.01.18"
 
 [tool.poetry.dependencies]
 Markdown = "^3.3.7"
