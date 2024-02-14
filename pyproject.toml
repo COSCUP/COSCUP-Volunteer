@@ -29,6 +29,9 @@ toldwords = "^0.8"
 uWSGI = "^2.0.20"
 uvicorn = {extras = ["standard"], version = "^0.22.0"}
 
+# TODO: temporarily fixed in 3.0
+watchdog = "^3.0"
+
 [tool.poetry.group.dev.dependencies]
 autopep8 = "^2.0.0"
 awscli = "^1.27"
