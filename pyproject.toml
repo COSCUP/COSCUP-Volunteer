@@ -22,7 +22,7 @@ phonenumbers = "^8.13"
 pydantic = {extras = ["email"], version = "^1.10.1"}
 pylibmc = "^1.6.1"
 pymongo = "^4.3"
-python = "^3.11"
+python = "~3.11.7"
 python-multipart = "^0.0.6"
 requests = "^2.29"
 toldwords = "^0.8"

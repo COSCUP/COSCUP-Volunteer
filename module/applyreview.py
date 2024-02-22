@@ -63,7 +63,7 @@ class ApplyReview:
             uid (str): User id
 
         Returns:
-            The struct of [toldwords.openai.RespCompletions][]
+            The struct of `toldwords.openai.RespCompletions`
 
         '''
         note: str = ''

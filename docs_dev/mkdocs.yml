@@ -186,7 +186,8 @@ plugins:
             Writing Documentation: 文件紀錄
   - search
   - social:
-      cards_font: Noto Sans TC
+      cards_layout_options:
+        font_family: Noto Sans TC
   - git-revision-date-localized
   - mkdocstrings:
       handlers:
@@ -206,8 +207,8 @@ plugins:
 markdown_extensions:
   - pymdownx.details
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
       use_pygments: true
