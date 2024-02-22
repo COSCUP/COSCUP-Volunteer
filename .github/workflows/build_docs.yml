@@ -73,7 +73,7 @@ jobs:
       - name: Build Docs
         env:
           PYTHONPATH: "../"
-        run: cd docs_dev; poetry run mkdocs -v build;
+        run: cd docs_dev; poetry run mkdocs -v build -s;
       - name: Upload to S3
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DOC_S3_ID }}
