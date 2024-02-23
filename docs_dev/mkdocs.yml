@@ -79,6 +79,9 @@ nav:
       - Team Leader Handbook: about_coscup/team_leader_handbook.md
       - Team Member Handbook: about_coscup/team_member_handbook.md
       - Team Setup: about_coscup/team_setup.md
+      - Email Newsletters:
+          - 2024:
+              - 2024/01/18: about_coscup/newsletters/2024/20240118.md
   - About Secretary Team:
       - Overview: secretary_team/overview.md
       - Recruit: secretary_team/recruit.md
