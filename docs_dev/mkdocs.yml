@@ -80,6 +80,7 @@ nav:
       - Team Member Handbook: about_coscup/team_member_handbook.md
       - Team Setup: about_coscup/team_setup.md
       - Email Newsletters:
+          - Overview: about_coscup/newsletters/overview.md
           - 2024:
               - 2024/01/18: about_coscup/newsletters/2024/20240118.md
           - 2023:
