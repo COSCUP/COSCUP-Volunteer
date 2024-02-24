@@ -82,6 +82,8 @@ nav:
       - Email Newsletters:
           - 2024:
               - 2024/01/18: about_coscup/newsletters/2024/20240118.md
+          - 2023:
+              - 2023/03/02: about_coscup/newsletters/2023/20230302.md
   - About Secretary Team:
       - Overview: secretary_team/overview.md
       - Recruit: secretary_team/recruit.md
@@ -169,6 +171,7 @@ plugins:
             Dev Page: 開發設定頁面
             Developer Beginner: 初次開發
             Developers: 開發者
+            Email Newsletters: 舊報攤（過往電子報）
             Enhance Recruitment: 招募流程增進計畫
             Error Note: 錯誤訊息
             Home: 首頁
