@@ -79,6 +79,7 @@ nav:
       - Team Leader Handbook: about_coscup/team_leader_handbook.md
       - Team Member Handbook: about_coscup/team_member_handbook.md
       - Team Setup: about_coscup/team_setup.md
+      - COSCUP Calendar: about_coscup/calendar.md
       - Email Newsletters:
           - Overview: about_coscup/newsletters/overview.md
           - 2024:
@@ -174,6 +175,7 @@ plugins:
             Accounting System: 財務會計系統
             Announcement: 訊息發佈
             Build Base Image: 建立基本映像檔
+            COSCUP Calendar: 活動行事曆
             Community Volunteers Plan: 社群志工參與計畫
             Contributing: 貢獻
             Dev Page: 開發設定頁面
