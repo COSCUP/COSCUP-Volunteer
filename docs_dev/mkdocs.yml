@@ -200,7 +200,14 @@ plugins:
             Team Member Handbook: 組員手冊
             Team Setup: 組別建立與設定
             Writing Documentation: 文件紀錄
-  - search
+  - search:
+      pipeline:
+        - stemmer
+        - stopWordFilter
+        - trimmer
+      lang:
+        - en
+        - zh
   - social:
       cards_layout_options:
         font_family: Noto Sans TC
