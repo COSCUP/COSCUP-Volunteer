@@ -2,6 +2,7 @@
 title: COSCUP Event Calendar
 summary: Starting from 2023, we will begin using a calendar to document COSCUP event schedules.
 description: Starting from 2023, we will begin using a calendar to document COSCUP event schedules.
+comments: true
 ---
 
 # COSCUP Event Calendar

@@ -2,6 +2,7 @@
 title: Old newspaper stand (Archived newsletters)
 summary: 整理 COSCUP 過往發送的活動電子報，方便查閱活動期間已公告的事項。
 description: 整理 COSCUP 過往發送的活動電子報，方便查閱活動期間已公告的事項。
+comments: true
 ---
 
 # Newsletters / Old newspaper stand

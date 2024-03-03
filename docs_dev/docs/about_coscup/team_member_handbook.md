@@ -2,6 +2,7 @@
 title: COSCUP Team Member Handbook
 summary: Guidelines Handbook for Team Members during Event Preparation Period
 description: Guidelines Handbook for Team Members during Event Preparation Period
+comments: true
 ---
 
 # Team Member Handbook

@@ -2,6 +2,7 @@
 title: 舊報攤（過往電子報）
 summary: 整理 COSCUP 過往發送的活動電子報，方便查閱活動期間已公告的事項。
 description: 整理 COSCUP 過往發送的活動電子報，方便查閱活動期間已公告的事項。
+comments: true
 ---
 
 # 舊報攤（過往電子報）
