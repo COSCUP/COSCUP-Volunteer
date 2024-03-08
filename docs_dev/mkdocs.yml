@@ -108,6 +108,8 @@ nav:
           - "Accounting System": secretary_team/tasks/accounting_system.md
           - "Enhance Recruitment": secretary_team/tasks/enhance_recruitment.md
           - "Community Volunteers Plan": secretary_team/tasks/community_volunteers_plan.md
+  - Global Engagement:
+      - Hello World: global_engagement/hello_world.md
   - Announcement:
       - Review in 2022: announcement/review_in_2022.md
       - PyCon TW Sprints: announcement/pycontw_2023_sprints.md
@@ -185,6 +187,7 @@ plugins:
             Email Newsletters: 舊報攤（過往電子報）
             Enhance Recruitment: 招募流程增進計畫
             Error Note: 錯誤訊息
+            Global Engagement: 國際交流
             Home: 首頁
             Instructions: 使用手冊
             Introduction: 介紹
