@@ -10,13 +10,23 @@ comments: true
 
 # Hi and Hello World
 
-Thank you for reaching out to us. This page will continuously update version, so feel free to learn more from our flyers, booth, stand at any conferences.
+Thank you for reaching out to us. This page will be continuously update version, so feel free to learn more from our flyers, booth, stand at any conferences.
 
 ## Schedules
 
-- [x] [FOSDEM](https://fosdem.org/) '24, Brussels, Belgium, 2024/02/03 - 2024/02/04
+<figure markdown="span">
+    ![COSCUP-world-pacific](https://volunteer.coscup.org/img/COSCUP-world-pacific.svg){ loading=lazy }
+    <figcaption>These countries that we had been there.</figcaption>
+</figure>
+
 - [ ] [SCaLE 21x](https://www.socallinuxexpo.org/scale/21x), Pasadena, CA, 2024/03/14 - 2024/03/17
 - [ ] [FOSSASIA Summit 2024](https://eventyay.com/e/55d2a466), Hà Nội, Vietnam, 2024/04/08 - 2024/04/10
+- [x] [FOSDEM](https://fosdem.org/) '24, Brussels, Belgium, 2024/02/03 - 2024/02/04
+- [x] [COSCon](https://kaiyuanshe.cn/activity/coscon-2023) 2023, Chengdu China, 2023/10/28 - 2023/10/29
+- [x] [HKOSCon](https://hkoscon.gitlab.io/2023/) '23, Hong Kong, 2023/06/09 - 2023/06/10
+- [x] [OSC2023 Nagoya](https://event.ospn.jp/osc2023-nagoya/), Nagoya Japan, 2023/05/28
+- [x] [FOSSASIA Summit 2023](https://eventyay.com/e/7cfe0771), Singapore, 2023/04/13 - 2023/04/15
+- [x] [FOSDEM](https://archive.fosdem.org/2023/) '23, Brussels, Belgium, 2023/02/04 - 2023/02/05
 
 ## What’s COSCUP
 
@@ -57,20 +67,20 @@ This page could be shared by following :material-qrcode-scan: QRCode, when you a
 ??? info ":material-qrcode-scan: This Global Engagement Page"
 
     <figure markdown="span">
-        ![Image title](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=https://volunteer.coscup.org/docs/global_engagement/hello_world/){ loading=lazy width=200 }
+        ![Global Engagement Page](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=https://volunteer.coscup.org/docs/global_engagement/hello_world/){ loading=lazy width=200 }
         <figcaption><https://volunteer.coscup.org/docs/global_engagement/hello_world/></figcaption>
     </figure>
 
 ??? info ":material-qrcode-scan: Mailto Engagement Team"
 
     <figure markdown="span">
-        ![Image title](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=mailto:COSCUP Engagement Team<engagement@coscup.org>){ loading=lazy width=200 }
+        ![Mailto Engagement Team](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=mailto:COSCUP Engagement Team<engagement@coscup.org>){ loading=lazy width=200 }
         <figcaption>["COSCUP Engagement Team" <engagement@coscup.org>](mailto:COSCUP Engagement Team<engagement@coscup.org>)</figcaption>
     </figure>
 
 ??? info ":material-qrcode-scan: Call for Participation"
 
     <figure markdown="span">
-        ![Image title](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=https://blog.coscup.org/2024/02/blog-post.html){ loading=lazy width=200 }
+        ![Call for Participation](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=https://blog.coscup.org/2024/02/blog-post.html){ loading=lazy width=200 }
         <figcaption><https://blog.coscup.org/2024/02/blog-post.html></figcaption>
     </figure>
