@@ -22,11 +22,11 @@ Thank you for reaching out to us. This page will continuously update version, so
 
 COSCUP is the Conference for Open Source Coders, Users & Promoters. It is organized by a group of Taiwan open-source communities together and usually takes place at the end of July or early August every year. Around 2000 - 3000 attendees participate in COSCUP each year.
 
-This year it will take place on 2024/08/03 - 2024/08/04.
+This year it will take place on **[2024/08/03 - 2024/08/04 at Taipei, Taiwan](http://www.google.com/calendar/render?action=TEMPLATE&dates=20240803T010000Z%2F20240804T090000Z&ctz=Asia/Taipei&text=COSCUP%202024&location=National%20Taiwan%20University%20of%20Science%20and%20Technology&details=Conference%20for%20Open%20Source%20Coders%2C%20Users%20and%20Promoters%20(COSCUP))**.
 
 ## Call for Participation
 
-We are now calling for participation for open source community booths/stands, open source tracks, and speakers. For further details, please refer to the information page.
+We are now calling for participation for open source community booths/stands, open source tracks, and speakers. For further details, please refer to the [information page](https://blog.coscup.org/2024/02/blog-post.html).
 
 ## Call for Volunteers
 
@@ -46,6 +46,31 @@ We have decided to continue seeking opportunities to participate on the internat
 
 ### Stay Updated with Us
 
-There are two ways to stay updated with us: subscribe to our newsletter to stay informed about any upcoming events and not miss out on important moments.
+There are two ways to stay updated with us: [subscribe to our newsletter](../about_coscup/newsletters/overview.md) to stay informed about any upcoming events and not miss out on important moments.
 
-Alternatively, you can directly contact our engagement team. If you have any questions or ideas for collaboration, whether it's regarding the program, volunteering, sponsorship, or any other matters, please feel free to email us to discuss further.
+Alternatively, you can directly contact our [engagement team](mailto:COSCUP Engagement Team<engagement@coscup.org>). If you have any questions or ideas for collaboration, whether it's regarding the program, volunteering, sponsorship, or any other matters, please feel free to email us to discuss further.
+
+## Others
+
+This page could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
+
+??? info ":material-qrcode-scan: This Global Engagement Page"
+
+    <figure markdown="span">
+        ![Image title](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=https://volunteer.coscup.org/docs/global_engagement/hello_world/){ loading=lazy width=200 }
+        <figcaption><https://volunteer.coscup.org/docs/global_engagement/hello_world/></figcaption>
+    </figure>
+
+??? info ":material-qrcode-scan: Mailto Engagement Team"
+
+    <figure markdown="span">
+        ![Image title](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=mailto:COSCUP Engagement Team<engagement@coscup.org>){ loading=lazy width=200 }
+        <figcaption>["COSCUP Engagement Team" <engagement@coscup.org>](mailto:COSCUP Engagement Team<engagement@coscup.org>)</figcaption>
+    </figure>
+
+??? info ":material-qrcode-scan: Call for Participation"
+
+    <figure markdown="span">
+        ![Image title](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=https://blog.coscup.org/2024/02/blog-post.html){ loading=lazy width=200 }
+        <figcaption><https://blog.coscup.org/2024/02/blog-post.html></figcaption>
+    </figure>
