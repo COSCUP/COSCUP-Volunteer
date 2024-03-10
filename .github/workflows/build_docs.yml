@@ -37,17 +37,17 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Cache Poetry venv
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ./.venv
           key: poetry-venv-${{ matrix.python-version }}${{ hashFiles('**/poetry.lock') }}
       - name: Cache Poetry local
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.local/share/pypoetry
           key: poetry-local-${{ matrix.python-version }}${{ hashFiles('**/poetry.lock') }}
       - name: Cache Poetry cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pypoetry
           key: poetry-cache-${{ matrix.python-version }}${{ hashFiles('**/poetry.lock') }}
