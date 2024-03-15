@@ -21,7 +21,7 @@ comments: true
   <a href="https://volunteer.coscup.org/doc/docs_coscup_howto_community.svg">
     <img alt="Howto community" src="https://volunteer.coscup.org/doc/docs_coscup_howto_community.svg">
   </a>
-  <figcaption>開源社群可以透過參與的方式招集講者與志工</figcaption>
+  <figcaption><small>開源社群可以透過參與的方式招集講者與志工</small></figcaption>
 </figure>
 
 COSCUP 與臺灣其他研討會不同之處在於議程籌備參與的形式。每一個議程軌都是由開源社群自行籌辦與排定。COSCUP 籌備團隊所負責的事項在於將場地、時間確定後協助發佈消息。
@@ -31,6 +31,7 @@ COSCUP 與臺灣其他研討會不同之處在於議程籌備參與的形式。�
 ## Call for Participation
 
 ### 社群議程軌
+
 COSCUP 是需要開源社群一同參與，這個階段是招集開源社群以各種形式的方式，在活動日二日或一日整天、半天的議程軌提案。
 
 !!! note ""
@@ -38,6 +39,7 @@ COSCUP 是需要開源社群一同參與，這個階段是招集開源社群以�
     2024 年的 [CfP](https://blog.coscup.org/2024/02/blog-post.html) 徵集到 ==2024/03/17==，如果社群無法維持一整天的議程，也可以找其他同領域或是同議題，共同舉辦一個社群議程軌的方式進行。
 
 ### 社群攤位
+
 COSCUP 二日活動可以聚集會眾參與，對於社群在 COSCUP 有一個攤位以進行招募夥伴、倡議理念、宣傳平時小聚活動，是一個對於找到志同道合的社群夥伴最省力辦法。
 
 !!! note ""
