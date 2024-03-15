@@ -80,6 +80,8 @@ nav:
       - Team Member Handbook: about_coscup/team_member_handbook.md
       - Team Setup: about_coscup/team_setup.md
       - COSCUP Calendar: about_coscup/calendar.md
+      - How to Participate in COSCUP:
+          - about_coscup/how_to_participate/index.md
       - Email Newsletters:
           - Overview: about_coscup/newsletters/overview.md
           - 2024:
@@ -139,6 +141,7 @@ theme:
     code: "Noto Sans Mono"
   features:
     - content.code.annotate
+    - navigation.indexes
     - navigation.top
     - search.suggest
     - navigation.footer
@@ -189,6 +192,7 @@ plugins:
             Error Note: 錯誤訊息
             Global Engagement: 國際交流
             Home: 首頁
+            How to Participate in COSCUP: 如何參與、準備 COSCUP
             Instructions: 使用手冊
             Introduction: 介紹
             List of Tasks: 任務列表
