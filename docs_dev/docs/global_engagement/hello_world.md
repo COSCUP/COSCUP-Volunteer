@@ -30,7 +30,7 @@ Thank you for reaching out to us. This page will be continuously update version,
 
 COSCUP is the Conference for Open Source Coders, Users & Promoters. It is organized by a group of Taiwan open-source communities together and usually takes place at **the end of July or early August every year**. Around 2000 - 3000 attendees participate in COSCUP each year.
 
-This year it will take place on **2024/08/03 - 2024/08/04 at Taipei, Taiwan**. ([:material-calendar: Add the event](http://www.google.com/calendar/render?action=TEMPLATE&dates=20240803T010000Z%2F20240804T090000Z&ctz=Asia/Taipei&text=COSCUP%202024&location=National%20Taiwan%20University%20of%20Science%20and%20Technology&details=Conference%20for%20Open%20Source%20Coders%2C%20Users%20and%20Promoters%20(COSCUP)))
+This year it will take place on **Aug 3, 2024 - Aug 4, 2024 at Taipei, Taiwan**. ([:material-calendar: Add the event](http://www.google.com/calendar/render?action=TEMPLATE&dates=20240803T010000Z%2F20240804T090000Z&ctz=Asia/Taipei&text=COSCUP%202024&location=National%20Taiwan%20University%20of%20Science%20and%20Technology&details=Conference%20for%20Open%20Source%20Coders%2C%20Users%20and%20Promoters%20(COSCUP)))
 
 ## :octicons-goal-24: Achievements
 
@@ -56,7 +56,7 @@ We are now calling for participation for open source community booths/stands, op
 
 ??? note ":material-qrcode-scan: Call for Participation"
 
-    This page could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
+    This section could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
 
     <figure markdown="span">
         ![Call for Participation](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=https://blog.coscup.org/2024/02/blog-post.html){ loading=lazy width=200 }
@@ -73,7 +73,6 @@ We are very welcome to invite you to join our volunteers. To be honest we may no
 
 We warmly welcome you to propose a topic for us or to share your experiences with open-source projects, whether you're from the community or working on an open-source project. Currently, we are particularly interested in topics related to establishing open-source projects, team experiences, and collaborating with open-source contributors from around the world!
 
-
 ### International Engagement
 
 In 2023, COSCUP attempted our first venture into international conferences and booth promotions. After our initial experience collaborating with partners from other regions, we realized that many issues we face are not unique to us alone.
@@ -88,9 +87,38 @@ Alternatively, you can directly contact our [engagement team](mailto:COSCUP Enga
 
 ??? note ":material-qrcode-scan: Mailto Engagement Team"
 
-    This page could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
+    This section could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
 
     <figure markdown="span">
         ![Mailto Engagement Team](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=mailto:COSCUP Engagement Team<engagement@coscup.org>){ loading=lazy width=200 }
         <figcaption>["COSCUP Engagement Team" <engagement@coscup.org>](mailto:COSCUP Engagement Team<engagement@coscup.org>)</figcaption>
+    </figure>
+
+## :fontawesome-solid-id-card: Taiwan Employment Gold Card
+
+Until the end of October 2024, Gold Card holders are eligible for incentives, including airfare and accommodation expenses, when you come to Taiwan even for COSCUP.
+
+### How to apply for
+
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/doc/2024/DIGI+Gold+Card+Community_Digital+Field+Taiwan+Gold+Card+%26+Incentive+Program_Info_EN_20240131-1.pdf">
+        <img loading="lazy" alt="Taiwan Employment Gold Card" src="https://volunteer.coscup.org/doc/2024/Taiwan_Gold_Card_Incentive_Program_Info_EN_20240131-1.jpg"
+        style="border: 1px solid #ccc;border-radius: 8px; width: 80%;">
+    </a>
+    <figcaption>Taiwan Employment Gold Card. *Click the image for download the file of PDF.*</figcaption>
+</figure>
+
+The more details about the Gold Card could refer to the offcial online application platform:
+
+- <https://coa.immigration.gov.tw/coa-frontend/four-in-one/entry/main?lang=en>
+- <https://coa.immigration.gov.tw/coa-frontend/four-in-one/entry/golden-card>
+- <https://digigoldcard.tca.org.tw/lang/en>
+
+??? note ":material-qrcode-scan: Taiwan Gold Card"
+
+    This section could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
+
+    <figure markdown="span">
+        ![Taiwan Gold Card](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=https://volunteer.coscup.org/doc/2024/DIGI%2BGold%2BCard%2BCommunity_Digital%2BField%2BTaiwan%2BGold%2BCard%2B%26%2BIncentive%2BProgram_Info_EN_20240131-1.pdf){ loading=lazy width=200 }
+        <figcaption>The PDF file refer to the plan introduction</figcaption>
     </figure>
