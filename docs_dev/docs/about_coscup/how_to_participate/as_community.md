@@ -36,7 +36,7 @@ COSCUP requires participation from the open-source community. This phase involve
 
 !!! note ""
 
-    The [Call for Proposals (CfP)](https://blog.coscup.org/2024/02/blog-post.html) for 2024 will be open until ==March 17, 2024==. If the community cannot sustain a full day of sessions, they can collaborate with other communities in the same field or with similar topics to jointly organize a community session track.
+    The [Call for Participation (CfP)](https://blog.coscup.org/2024/02/blog-post.html) for 2024 will be open until ==March 17, 2024==. If the community cannot sustain a full day of sessions, they can collaborate with other communities in the same field or with similar topics to jointly organize a community session track.
 
 ### Community Booths
 
@@ -45,3 +45,7 @@ Over the two days of COSCUP, attendees gather to participate. For communities, h
 !!! note ""
 
     Due to the significant number of overseas participants coming to Taiwan in 2023, it is recommended to consider creating English versions of booth pamphlets or promotional materials.
+
+## Assistance
+
+If community partners have any questions, you can seek assistance from [the program team](mailto:program@coscup.org). If you are a member of the open-source community, you can first inquire with the community leader or contact person for help.
