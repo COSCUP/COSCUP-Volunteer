@@ -288,10 +288,8 @@ def oauth2callback() -> ResponseBase:
             session.pop('r', None)
             session.pop('state', None)
 
-            if redirect_path.startswith('http') or redirect_path.startswith('//'):
-                return redirect('/')
-
-            return redirect(redirect_path)
+            if not urlparse(redirect_path).netloc:
+                return redirect(redirect_path)
 
         return redirect(url_for('index', _scheme='https', _external=True))
 
