@@ -283,10 +283,14 @@ def oauth2callback() -> ResponseBase:
         session['sid'] = user_session.inserted_id
 
         if 'r' in session:
-            redirect_path = session['r']
+            redirect_path = str(session['r'])
             logging.info('login r: %s', redirect_path)
             session.pop('r', None)
             session.pop('state', None)
+
+            if redirect_path.startswith('http') or redirect_path.startswith('//'):
+                return redirect('/')
+
             return redirect(redirect_path)
 
         return redirect(url_for('index', _scheme='https', _external=True))
