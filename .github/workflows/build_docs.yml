@@ -74,6 +74,11 @@ jobs:
         env:
           PYTHONPATH: "../"
         run: cd docs_dev; poetry run mkdocs -v build -s;
+      - name: Clean the all files
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DOC_S3_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DOC_S3_KEY }}
+        run: poetry run aws s3 rm s3://coscup-volunteer-docs --recursive
       - name: Upload to S3
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DOC_S3_ID }}
