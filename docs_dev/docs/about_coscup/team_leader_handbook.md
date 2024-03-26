@@ -26,7 +26,7 @@ During the event, various documents and records will be created and shared using
     ??? info "Task tracking"
 
         - Currently, there is no unified requirement for using a specific tool for task tracking or management system in the conference. Each team can decide on their own.
-        - Some teams are known to use Trello for task assignment.
+        - Some teams are known to use Trello, Github Project for task assignment.
 
 ## Meeting
 

@@ -26,7 +26,7 @@ comments: true
     ??? info "任務追蹤"
 
         - 目前大會無統一規定使用特定工具作為**任務追蹤**或是**管理系統**，依各組自行決定即可。
-        - 目前已知部分組別使用 [Trello](https://trello.com/) 作任務分派。
+        - 目前已知部分組別使用 [Trello](https://trello.com/), [Github Project](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects) 作任務分派。
 
 ## 會議
 
