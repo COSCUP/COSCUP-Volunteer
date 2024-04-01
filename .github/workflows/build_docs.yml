@@ -65,11 +65,11 @@ jobs:
       - name: Create setting.py
         run: mv setting_sample.py setting.py
       - name: Create docs .cache folder
-        run: cd docs_dev; mkdir -p .cache/plugin/social/fonts/Noto\ Sans\ TC
+        run: cd docs_dev; mkdir -p .cache/plugin/social/fonts/Roboto
       - name: Load Noto Sans TC font
-        run: cd docs_dev/.cache/plugin/social/fonts/Noto\ Sans\ TC; wget https://volunteer.coscup.org/doc/NotoSansTC-Bold.otf;
+        run: cd docs_dev/.cache/plugin/social/fonts/Roboto; wget https://volunteer.coscup.org/doc/NotoSansTC-Bold.otf;
       - name: Load Iansui094 font
-        run: cd docs_dev/.cache/plugin/social/fonts/Noto\ Sans\ TC; wget https://volunteer.coscup.org/doc/Iansui094-Regular.ttf -O NotoSansTC-Regular.ttf;
+        run: cd docs_dev/.cache/plugin/social/fonts/Roboto; wget https://volunteer.coscup.org/doc/Iansui094-Regular.ttf -O Roboto-Regular.ttf;
       - name: Build Docs
         env:
           PYTHONPATH: "../"
