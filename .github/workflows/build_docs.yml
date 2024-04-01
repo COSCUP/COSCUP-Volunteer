@@ -71,7 +71,7 @@ jobs:
       - name: Load Iansui094 font
         run: cd docs_dev/.cache/plugin/social/fonts/Noto\ Sans\ TC; wget https://volunteer.coscup.org/doc/Iansui094-Regular.ttf -O NotoSansTC-Regular.ttf;
       - name: manual install mkdocs-material
-        run: git clone https://github.com/squidfunk/mkdocs-material.git; cd mkdocs-material; poetry run python3 setup.py install;
+        run: git clone https://github.com/squidfunk/mkdocs-material.git; cd ./mkdocs-material; poetry run python3 ./setup.py install;
       - name: Build Docs
         env:
           PYTHONPATH: "../"
