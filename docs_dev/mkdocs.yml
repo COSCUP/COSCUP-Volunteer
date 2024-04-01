@@ -219,9 +219,6 @@ plugins:
       lang:
         - en
         - zh
-  - social:
-      cards_layout_options:
-        font_family: Noto Sans TC
   - git-revision-date-localized
   - mkdocstrings:
       handlers:
