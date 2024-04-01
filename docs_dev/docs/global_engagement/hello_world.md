@@ -17,7 +17,7 @@ Thank you for reaching out to us. This page will be continuously update version,
     This page could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
 
     <figure markdown="span">
-        ![Global Engagement Page](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=https://volunteer.coscup.org/docs/global_engagement/hello_world/){ loading=lazy width=200 }
+        ![Global Engagement Page](https://volunteer.coscup.org/doc/docs_link_hello_world.png){ loading=lazy width=200 }
         <figcaption><https://volunteer.coscup.org/docs/global_engagement/hello_world/></figcaption>
     </figure>
 
@@ -59,7 +59,7 @@ We are now calling for participation for open source community booths/stands, op
     This section could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
 
     <figure markdown="span">
-        ![Call for Participation](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=https://blog.coscup.org/2024/02/blog-post.html){ loading=lazy width=200 }
+        ![Call for Participation](https://volunteer.coscup.org/doc/docs_link_cfp_2024.png){ loading=lazy width=200 }
         <figcaption><https://blog.coscup.org/2024/02/blog-post.html></figcaption>
     </figure>
 
@@ -90,7 +90,7 @@ Alternatively, you can directly contact our [engagement team](mailto:COSCUP Enga
     This section could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
 
     <figure markdown="span">
-        ![Mailto Engagement Team](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=mailto:COSCUP Engagement Team<engagement@coscup.org>){ loading=lazy width=200 }
+        ![Mailto Engagement Team](https://volunteer.coscup.org/doc/docs_link_mailto_emgagement.png){ loading=lazy width=200 }
         <figcaption>["COSCUP Engagement Team" <engagement@coscup.org>](mailto:COSCUP Engagement Team<engagement@coscup.org>)</figcaption>
     </figure>
 
@@ -119,6 +119,6 @@ The more details about the Gold Card could refer to the offcial online applicati
     This section could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
 
     <figure markdown="span">
-        ![Taiwan Gold Card](https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=M|1&chl=https://volunteer.coscup.org/doc/2024/DIGI%2BGold%2BCard%2BCommunity_Digital%2BField%2BTaiwan%2BGold%2BCard%2B%26%2BIncentive%2BProgram_Info_EN_20240131-1.pdf){ loading=lazy width=200 }
+        ![Taiwan Gold Card](https://volunteer.coscup.org/doc/docs_link_gold_card.png){ loading=lazy width=200 }
         <figcaption>The PDF file refer to the plan introduction</figcaption>
     </figure>
