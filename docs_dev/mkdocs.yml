@@ -219,6 +219,7 @@ plugins:
       lang:
         - en
         - zh
+  - social
   - git-revision-date-localized
   - mkdocstrings:
       handlers:
