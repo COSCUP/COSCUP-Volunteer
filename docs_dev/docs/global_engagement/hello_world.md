@@ -39,8 +39,8 @@ This year it will take place on **Aug 3, 2024 - Aug 4, 2024 at Taipei, Taiwan**.
     <figcaption>:fontawesome-solid-location-dot: These countries that we had been there.</figcaption>
 </figure>
 
-- [ ] [SCaLE 21x](https://www.socallinuxexpo.org/scale/21x), Pasadena, CA, 2024/03/14 - 2024/03/17
-- [ ] [FOSSASIA Summit 2024](https://eventyay.com/e/55d2a466), Hà Nội, Vietnam, 2024/04/08 - 2024/04/10
+- [x] [FOSSASIA Summit 2024](https://eventyay.com/e/55d2a466), Hà Nội, Vietnam, 2024/04/08 - 2024/04/10
+- [x] [SCaLE 21x](https://www.socallinuxexpo.org/scale/21x), Pasadena, CA, 2024/03/14 - 2024/03/17
 - [x] [FOSDEM](https://fosdem.org/) '24, Brussels, Belgium, 2024/02/03 - 2024/02/04
 - [x] [COSCon](https://kaiyuanshe.cn/activity/coscon-2023) 2023, Chengdu China, 2023/10/28 - 2023/10/29
 - [x] [HKOSCon](https://hkoscon.gitlab.io/2023/) '23, Hong Kong, 2023/06/09 - 2023/06/10

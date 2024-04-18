@@ -83,6 +83,7 @@ nav:
       - How to Participate in COSCUP:
           - about_coscup/how_to_participate/index.md
           - As Community: about_coscup/how_to_participate/as_community.md
+          - As Speaker: about_coscup/how_to_participate/as_speaker.md
       - Email Newsletters:
           - Overview: about_coscup/newsletters/overview.md
           - 2024:
@@ -114,6 +115,8 @@ nav:
           - "Community Volunteers Plan": secretary_team/tasks/community_volunteers_plan.md
   - Global Engagement:
       - Hello World: global_engagement/hello_world.md
+      - Post-Event Report:
+          - SCaLE21x: global_engagement/scale21x.md
   - Announcement:
       - Review in 2022: announcement/review_in_2022.md
       - PyCon TW Sprints: announcement/pycontw_2023_sprints.md
@@ -183,6 +186,7 @@ plugins:
             Accounting System: 財務會計系統
             Announcement: 訊息發佈
             As Community: 身為「開源社群」
+            As Speaker: 身為「議題講者」
             Build Base Image: 建立基本映像檔
             COSCUP Calendar: 活動行事曆
             Community Volunteers Plan: 社群志工參與計畫
@@ -200,6 +204,7 @@ plugins:
             Introduction: 介紹
             List of Tasks: 任務列表
             Overview: 摘要
+            Post-Event Report: 會後參與報告
             Process Management: 任務流程方式
             Recruit: 招募
             Review in 2022: 2022 回顧
