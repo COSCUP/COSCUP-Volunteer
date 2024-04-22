@@ -21,7 +21,7 @@ comments: true
 
 -   :material-home-group: [開源社群](./as_community.md) - 與開放原始碼相關的社群團體 <small>[:octicons-arrow-right-24: 了解更多](./as_community.md)</small>
 
--   :fontawesome-solid-chalkboard-user: 議題講者 - 分享開源議題的講者 <small>:octicons-arrow-right-24: 了解更多</small>
+-   :fontawesome-solid-chalkboard-user: [議題講者](./as_speaker.md) - 分享開源議題的講者 <small>[:octicons-arrow-right-24: 了解更多](./as_speaker.md)</small>
 
 -   :fontawesome-solid-users-between-lines: 會眾 - 參與研討會的一般大眾 <small>:octicons-arrow-right-24: 了解更多</small>
 

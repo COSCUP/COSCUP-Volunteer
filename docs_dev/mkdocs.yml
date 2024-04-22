@@ -83,7 +83,9 @@ nav:
       - How to Participate in COSCUP:
           - about_coscup/how_to_participate/index.md
           - As Community: about_coscup/how_to_participate/as_community.md
-          - As Speaker: about_coscup/how_to_participate/as_speaker.md
+          - As Speaker:
+              - about_coscup/how_to_participate/as_speaker.md
+              - 2024 Call for Proposals: about_coscup/how_to_participate/2024_cfp.md
       - Email Newsletters:
           - Overview: about_coscup/newsletters/overview.md
           - 2024:
@@ -244,6 +246,7 @@ plugins:
             - https://requests.readthedocs.io/en/master/objects.inv
             - https://sendapatch.se/projects/pylibmc/objects.inv
 markdown_extensions:
+  - pymdownx.critic
   - pymdownx.details
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
