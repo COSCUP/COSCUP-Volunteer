@@ -8,10 +8,10 @@ edit_uri: https://github.com/COSCUP/COSCUP-Volunteer/blob/main/docs_dev/docs/
 copyright: "CC BY 4.0 2022-2024 COSCUP Volunteer"
 nav:
   - Home: index.md
-  - Introduction:
-      - Overview: intro.md
-      - Contributing: contribute.md
   - Developers:
+      - Introduction:
+          - Overview: intro.md
+          - Contributing: contribute.md
       - Developer Beginner: dev/beginners.md
       - Build Base Image: dev/build-base-image.md
       - Dev Page: dev/dev-page.md
@@ -72,9 +72,9 @@ nav:
               - tasks: code_reference/structs/tasks.md
               - teams: code_reference/structs/teams.md
               - users: code_reference/structs/users.md
-  - Error Note:
-      - E001: error_note/e001.md
-  - Security: security.md
+      - Error Note:
+          - E001: error_note/e001.md
+      - Security: security.md
   - About COSCUP:
       - Team Leader Handbook: about_coscup/team_leader_handbook.md
       - Team Member Handbook: about_coscup/team_member_handbook.md
@@ -84,7 +84,7 @@ nav:
           - about_coscup/how_to_participate/index.md
           - As Community: about_coscup/how_to_participate/as_community.md
           - As Speaker:
-              - about_coscup/how_to_participate/as_speaker.md
+              - As Speaker: about_coscup/how_to_participate/as_speaker.md
               - 2024 Call for Proposals: about_coscup/how_to_participate/2024_cfp.md
       - Email Newsletters:
           - Overview: about_coscup/newsletters/overview.md
@@ -150,6 +150,8 @@ theme:
     - content.code.annotate
     - navigation.indexes
     - navigation.top
+    - navigation.tabs
+    - navigation.tracking
     - search.suggest
     - navigation.footer
     - content.action.view
@@ -195,7 +197,7 @@ plugins:
             Contributing: 貢獻
             Dev Page: 開發設定頁面
             Developer Beginner: 初次開發
-            Developers: 開發者
+            Developers: 志工平台開發
             Email Newsletters: 舊報攤（過往電子報）
             Enhance Recruitment: 招募流程增進計畫
             Error Note: 錯誤訊息

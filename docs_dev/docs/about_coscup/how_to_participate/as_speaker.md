@@ -17,6 +17,8 @@ Don't hesitate anymore; taking action leads to opportunities!
 
     The Call for Proposals has been announced. You can refer to [this article](./2024_cfp.md) for introductions to each community track.
 
+[Submit your proposals](https://pretalx.coscup.org/coscup-2024/){ .md-button .md-button--primary }
+
 ## Speaker Framework
 
 This framework outlines the journey of becoming a speaker at COSCUP, whether you're about to or have already become one. It guides you on how to prepare thoroughly and takes you through the first step with ease.

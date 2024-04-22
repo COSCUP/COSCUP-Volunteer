@@ -17,6 +17,8 @@ comments: true
 
     Call for Proposals 已公告，各社群議程軌的介紹可以參考[這篇文章](./2024_cfp.md)。
 
+[前往議程投稿](https://pretalx.coscup.org/coscup-2024/){ .md-button .md-button--primary }
+
 ## 參與框架
 
 這個框架是目前 COSCUP 即將成為或是成為講者的旅程，梳理一下該如何作足準備，引導你無負擔的跨出第一步。
