@@ -1,4 +1,4 @@
-FROM coscupweb-base:24.03.18
+FROM coscupweb-base:24.04.25
 
 ADD ./setting.py \
     ./uwsgi.ini \
