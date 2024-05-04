@@ -1,0 +1,29 @@
+name: 跨組協助
+description: 各組需要行政組協助的事項
+title: "[跨組協助]: "
+labels: ["跨組支援"]
+body:
+  - type: checkboxes
+    attributes:
+      label: "組別"
+      description: "需要協助的組別"
+      options:
+        - label: "總召組 General Coordinator"
+        - label: "議程組 Program Team"
+        - label: "行銷組 Marketing"
+        - label: "贊助組 Sponsor"
+        - label: "資訊組 IT"
+        - label: "紀錄組 Documentary"
+        - label: "財務組 Finance"
+        - label: "場務組 Field"
+        - label: "製播組 Streaming"
+        - label: "交流組 Engagement"
+        - label: "CoC 服務小組 CoC"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "協助事項"
+      description: "說明需要協助的事項"
+    validations:
+      required: true
