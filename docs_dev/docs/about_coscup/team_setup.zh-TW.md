@@ -102,6 +102,7 @@ comments: true
     - 場務組 [service@coscup.org](mailto:service@coscup.org)
     - 製播組 [streaming@coscup.org](mailto:streaming@coscup.org)
     - 交流組 [engagement@coscup.org](mailto:engagement@coscup.org)
+    - CoC 服務小組 [coc@coscup.org](mailto:coc@coscup.org)
 
 ??? Info "大會共用信箱"
 
