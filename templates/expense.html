@@ -142,6 +142,7 @@
     <expense-editor
       :pid="pid"
       :expense="expense_to_edit"
+      :expense-list="expenses_in_same_budget"
       :budgets="budgets"
       :users="users"
       :teams="teams"
@@ -170,6 +171,7 @@
 <script src="{{ url_for('static', filename='UserBadge.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseStatusLabel.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseTable.js') }}"></script>
+<script src="{{ url_for('static', filename='ExpenseInvoiceTotalCard.js') }}"></script>
 <script src="{{ url_for('static', filename='ExpenseEditor.js') }}"></script>
 <script src="{{ url_for('static', filename='DispenseEditor.js') }}"></script>
 <script src="{{ url_for('static', filename='DispenseTable.js') }}"></script>
@@ -199,6 +201,7 @@
 
                     // for expense modal
                     expense_to_edit: null,
+                    expenses_in_same_budget: [],
 
                     // for 審核中 modal
                     dispense_to_create: null
@@ -320,8 +323,11 @@
                 filter_by_status (status) {
                     this.filter.status_code = status.code
                 },
-                start_edit_expense (expense) {
-                    this.expense_to_edit = expense
+                start_edit_expense (expense_to_edit) {
+                    this.expense_to_edit = expense_to_edit
+                    this.expenses_in_same_budget = this.items.filter((expense) => {
+                        return expense.enable && expense.request.buid === expense_to_edit.request.buid
+                    })
                 },
                 async load () {
                     this.is_loading = true;

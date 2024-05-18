@@ -129,6 +129,21 @@
                               </tbody>
                           </table>
                       </div>
+                      <div>
+                          <h4>申請金額試算</h4>
+                          <div class="field">
+                              <div class="field-body">
+                                  <expense-invoice-total-card
+                                    label="已申請合計"
+                                    :invoices-total="applied_invoice_total"
+                                  />
+                                  <expense-invoice-total-card
+                                    label="預算餘額計算"
+                                    :invoices-total="rest_budget"
+                                  />
+                              </div>
+                          </div>
+                      </div>
                       <div class="content" v-if="local_expense.bank">
                           <h4>匯款資訊</h4>
                           <ul>
@@ -178,6 +193,10 @@
                 type: Object,
                 required: true
             },
+            expenseList: {
+                type: Array,
+                required: true
+            },
             budgets: {
                 type: Object,
                 required: true
@@ -198,6 +217,7 @@
         data () {
             return {
                 local_expense: null,
+                local_budget: null,
                 dispense_date: '',
                 is_modal_opened: false
             }
@@ -215,6 +235,38 @@
                     return '更新，並建立出款單'
                 }
                 return '更新'
+            },
+            applied_invoice_total () {
+                return this.expenseList.reduce((result, expense) => {
+                    const { invoices } = expense
+                    const invoices_total = this.get_invoices_total(invoices)
+
+                    for (const currency in invoices_total) {
+                        if (result[currency] === undefined) {
+                            result[currency] = 0
+                        }
+
+                        result[currency] += invoices_total[currency]
+                    }
+
+                    return result
+                }, { })
+            },
+            rest_budget () {
+                const { currency: budgetCurrency, total: budgetTotal } = this.local_budget
+                const result = {}
+
+                result[budgetCurrency] = budgetTotal                
+                const applied_invoice_total = this.applied_invoice_total
+                for (const currency in applied_invoice_total) {
+                    if (result[currency] === undefined) {
+                        result[currency] = 0
+                    }
+
+                    result[currency] -= applied_invoice_total[currency]
+                }
+
+                return result
             }
         },
         watch: {
@@ -225,6 +277,7 @@
         methods: {
             reset_editor (item) {
                 this.local_expense = Object.assign({}, item, {is_edit: true});
+                this.local_budget = this.budgets[this.local_expense.request.buid]
                 // default set dispense after 10 days
                 this.dispense_date = dayjs().add(10, 'days').format('YYYY-MM-DD')
                 this.is_modal_opened = true
@@ -233,6 +286,17 @@
                 this.is_modal_opened = false
                 this.local_expense = null
                 this.$emit('close')
+            },
+            get_invoices_total (invoices) {
+                return invoices.reduce((result, invoice) => {
+                    const { currency, total } = invoice
+                    if (result[currency] === undefined) {
+                        result[currency] = 0
+                    }
+
+                    result[currency] += total ?? 0
+                    return result
+                }, { })
             },
             async to_update () {
                 await axios.post('./'+this.pid, {casename: 'update', data: this.local_expense})
