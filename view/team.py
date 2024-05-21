@@ -1378,7 +1378,7 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
 
             dispense_ids_list = list(dispense_ids)
 
-            for item in Expense.get_by_dispense_id(dispense_ids_list):
+            for item in Expense.get_by_dispense_id(dispense_ids_list, pid=pid):
                 items[item['_id']] = item
 
             for item in items.values():
