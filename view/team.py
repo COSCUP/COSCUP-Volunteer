@@ -1372,7 +1372,9 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
 
             for item in Expense.get_by_create_by(pid=pid, create_by=g.user['account']['_id']):
                 items[item['_id']] = item
-                dispense_ids.add(item['dispense_id'])
+                has_dispense = item['dispense_id'] is not None and len(item['dispense_id']) > 0
+                if (has_dispense):
+                    dispense_ids.add(item['dispense_id'])
 
             dispense_ids_list = list(dispense_ids)
 
