@@ -77,7 +77,6 @@ app.jinja_env.filters['quote_plus'] = quote_plus
 # Enable TEMPLATES_AUTO_RELOAD with Debug mode enabled
 if app.debug:
     app.config['TEMPLATES_AUTO_RELOAD'] = True
-    logging.getLogger('watchdog.observers.inotify_buffer').setLevel(logging.INFO)
 
 NO_NEED_LOGIN_PATH = {
     '/',
