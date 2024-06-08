@@ -1,7 +1,8 @@
 ''' oauth database '''
 from typing import Any
 
-from google.oauth2.credentials import Credentials  # type: ignore
+# type: ignore[unused-ignore]
+from google.oauth2.credentials import Credentials
 
 from models.base import DBBase
 

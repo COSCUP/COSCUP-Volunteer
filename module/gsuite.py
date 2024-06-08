@@ -4,7 +4,7 @@ from __future__ import print_function
 import re
 from typing import Any, Generator, Union
 
-from google.oauth2 import service_account  # type: ignore
+from google.oauth2 import service_account  # type: ignore[unused-ignore]
 from googleapiclient import errors  # type: ignore
 from googleapiclient.discovery import build  # type:ignore
 
@@ -26,7 +26,7 @@ class GSuite:
               )
 
     def __init__(self, credentialfile: str, with_subject: str):
-        creds = service_account.Credentials.from_service_account_file(
+        creds = service_account.Credentials.from_service_account_file(  # type: ignore[no-untyped-call]
             credentialfile, scopes=self.SCOPES).with_subject(with_subject)
 
         self.service = build('admin', 'directory_v1',
