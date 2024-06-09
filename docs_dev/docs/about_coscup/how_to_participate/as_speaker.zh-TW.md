@@ -17,7 +17,8 @@ comments: true
 
     Call for Proposals 已公告，各社群議程軌的介紹可以參考[這篇文章](./2024_cfp.md)。
 
-[前往議程投稿](https://pretalx.coscup.org/coscup-2024/){ .md-button .md-button--primary }
+[:material-send-check-outline: 前往議程投稿](https://pretalx.coscup.org/coscup-2024/){ .md-button .md-button--primary }
+[:octicons-info-16: 各議程軌投稿簡介](./2024_cfp.md){ .md-button .md-button--primary }
 
 ## 參與框架
 
