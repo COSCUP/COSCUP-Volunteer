@@ -166,7 +166,7 @@ class Dispense:
             if dispense['enable'] is False:
                 continue
 
-            expenses = Expense.get_by_dispense_id([dispense['_id']])
+            expenses = Expense.get_by_dispense_id([dispense['_id']], pid=pid)
             expense_raws = []
 
             dispense_base = {
