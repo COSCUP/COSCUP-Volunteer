@@ -26,8 +26,10 @@ class GSuite:
               )
 
     def __init__(self, credentialfile: str, with_subject: str):
-        creds = service_account.Credentials.from_service_account_file(  # type: ignore[no-untyped-call]
-            credentialfile, scopes=self.SCOPES).with_subject(with_subject)
+        creds = service_account.Credentials.from_service_account_file(
+            credentialfile,
+            scopes=self.SCOPES
+        ).with_subject(with_subject)  # type: ignore[no-untyped-call]
 
         self.service = build('admin', 'directory_v1',
                              credentials=creds, cache_discovery=False)

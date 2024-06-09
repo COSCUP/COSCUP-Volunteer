@@ -22,7 +22,7 @@ class Team:
 
         '''
         if not tid or not pid or not owners:
-            raise Exception('lost required')
+            raise ValueError('lost required')
 
         teamdb = TeamDB(pid, tid)
         data = TeamBase.parse_obj(
@@ -160,7 +160,7 @@ class Team:
         for tid in tids:
             team = TeamDB(pid=pid, tid=tid).get()
             if not team:
-                raise Exception(f"no team: {tid}")
+                raise ValueError(f"no team: {tid}")
 
             teamusers = TeamUsers.parse_obj(team)
             users[tid] = teamusers.chiefs + teamusers.members

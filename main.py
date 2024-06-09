@@ -12,8 +12,8 @@ from urllib.parse import parse_qs, quote_plus, urlparse
 import arrow
 import google_auth_oauthlib.flow
 from apiclient import discovery
-from flask import (Flask, flash, g, got_request_exception, make_response,
-                   redirect, render_template, request, session, url_for)
+from flask import (Flask, flash, g, got_request_exception, make_response, redirect, render_template,
+                   request, session, url_for)
 from flask.wrappers import Response
 from markdown import markdown
 from werkzeug.wrappers import Response as ResponseBase
@@ -431,7 +431,7 @@ def exception_func() -> str:
     try:
         return str(1/0)
     except Exception as error:
-        raise Exception('Error: [{error}]') from error
+        raise ZeroDivisionError('Error: [{error}]') from error
 
 
 def error_exception(sender: Any, exception: Any, **extra: Any) -> None:

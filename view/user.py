@@ -70,7 +70,7 @@ def user_page(uid: str, nickname: str | None = None) -> ResponseBase | str:  # p
     for item in Team.participate_in(uid):
         project = Project.get(item['pid'])
         if not project:
-            raise Exception('No project')
+            raise TypeError('No project')
 
         item['_project'] = project.dict(by_alias=True)
         item['_title'] = '???'

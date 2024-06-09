@@ -52,10 +52,10 @@ class User:
         if not force:
             oauth_data = OAuthDB().find_one({'_id': mail}, {'owner': 1})
             if oauth_data is None:
-                raise Exception(f'mail: `{mail}` not in the oauth dbs')
+                raise TypeError(f'mail: `{mail}` not in the oauth dbs')
 
             if 'owner' in oauth_data and oauth_data['owner']:
-                raise Exception(f'mail:`{mail}` already bind')
+                raise ValueError(f'mail:`{mail}` already bind')
 
         user = UsersDB().add(UsersDB.new(mail=mail))
         OAuthDB().setup_owner(mail=user['mail'], uid=user['_id'])
@@ -204,7 +204,7 @@ class User:
         '''
         user_data = self.get()
         if not user_data:
-            raise Exception('No account.')
+            raise TypeError('No account.')
 
         if 'property' in user_data and 'suspend' in user_data['property'] and \
                 user_data['property']['suspend']:
@@ -245,7 +245,7 @@ class User:
             )
 
             if not oauth_data:
-                raise Exception(f"no user's oauth: {user['_id']}")
+                raise TypeError(f"no user's oauth: {user['_id']}")
 
             users[user['_id']]['oauth'] = {
                 'name': oauth_data['data']['name'],

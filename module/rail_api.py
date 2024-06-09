@@ -44,6 +44,7 @@ class TrainStations:
 @dataclass
 class Fare:
     """Class for Ticket Fare Info"""
+
     def __init__(self, fare: dict[str, Any]) -> None:
         self.ticket_type = TicketType(fare["TicketType"])
         self.fare_class = FareClass(fare["FareClass"])
@@ -78,7 +79,7 @@ class RailApi:
                 timeout=30,
             )
             if not res.ok:
-                raise Exception(res.text)
+                raise ConnectionError(res.text)
             self._access_token = res.json()["access_token"]
             self._auth_expiration = time() + res.json()["expires_in"]
         return self._access_token
@@ -106,7 +107,7 @@ class RailApi:
             headers={"authorization": f"Bearer {self._get_auth()}"},
         )
         if not res.ok:
-            raise Exception(res.text)
+            raise ConnectionError(res.text)
         ret: dict[str, Any] = res.json()
         return ret
 

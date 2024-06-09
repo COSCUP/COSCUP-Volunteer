@@ -30,7 +30,7 @@ logger = get_task_logger(__name__)
 def mail_sys_test(sender: Any, **kwargs: str) -> None:
     ''' mail sys test '''
     logger.info('!!! [%s]', kwargs)
-    raise Exception('Test in error and send mail.')
+    raise NotImplementedError('Test in error and send mail.')
 
 
 @app.task(bind=True, name='mail.sys.weberror',
@@ -91,9 +91,9 @@ def mail_member_waiting(sender: Any) -> None:
                     team_name=team.name, pid=team.pid, tid=team.id, )
 
                 raw_mail = awsses.raw_mail(
-                    to_addresses=(dict(
-                        name=users[uid]['profile']['badge_name'],
-                        mail=users[uid]['oauth']['email']), ),
+                    to_addresses=({
+                        'name': users[uid]['profile']['badge_name'],
+                        'mail': users[uid]['oauth']['email']}, ),
                     subject=f"申請加入通知信 - {users[raw['uid']]['profile']['badge_name']}",
                     body=body,
                 )
@@ -150,7 +150,7 @@ def mail_member_deny(sender: Any) -> None:
 
         raw_mail = awsses.raw_mail(
             to_addresses=(
-                dict(name=user['profile']['badge_name'], mail=user['oauth']['email']), ),
+                {'name': user['profile']['badge_name'], 'mail': user['oauth']['email']}, ),
             subject=f"申請加入 {team.name} 未核准",
             body=body,
         )
@@ -190,7 +190,7 @@ def mail_member_add(sender: Any) -> None:
 
         raw_mail = awsses.raw_mail(
             to_addresses=(
-                dict(name=user['profile']['badge_name'], mail=user['oauth']['email']), ),
+                {'name': user['profile']['badge_name'], 'mail': user['oauth']['email']}, ),
             subject=f"申請加入 {team.name} 核准",
             body=body,
         )
@@ -232,7 +232,7 @@ def mail_member_del(sender: Any) -> None:
 
         raw_mail = awsses.raw_mail(
             to_addresses=(
-                dict(name=user['profile']['badge_name'], mail=user['oauth']['email']), ),
+                {'name': user['profile']['badge_name'], 'mail': user['oauth']['email']}, ),
             subject=f"您已被移除 {team.name} 的組員資格！",
             body=body,
         )
@@ -279,8 +279,9 @@ def mail_member_welcome_send(sender: Any, **kwargs: list[str]) -> None:
             name=users[uid]['profile']['badge_name'], )
 
         raw_mail = awsses.raw_mail(
-            to_addresses=(dict(
-                name=users[uid]['profile']['badge_name'], mail=users[uid]['oauth']['email']), ),
+            to_addresses=({
+                'name': users[uid]['profile']['badge_name'],
+                'mail': users[uid]['oauth']['email']}, ),
             subject=f"歡迎使用志工服務系統 - {users[uid]['profile']['badge_name']}",
             body=body,
         )
@@ -288,7 +289,7 @@ def mail_member_welcome_send(sender: Any, **kwargs: list[str]) -> None:
         resp = awsses.send_raw_email(data=raw_mail)
         logger.info(resp)
         if resp['ResponseMetadata']['HTTPStatusCode'] != 200:
-            raise Exception('HTTPStatusCode not `200`, do retry')
+            raise ConnectionError('HTTPStatusCode not `200`, do retry')
 
         MailLetterDB().make_sent(uid=uid, code='welcome')
 
@@ -307,7 +308,7 @@ def mail_member_send(sender: Any, **kwargs: str) -> None:
     resp = awsses.send_raw_email(data_str=kwargs['raw_mail'])
     logger.info(resp)
     if resp['ResponseMetadata']['HTTPStatusCode'] != 200:
-        raise Exception('HTTPStatusCode not `200`, do retry')
+        raise ConnectionError('HTTPStatusCode not `200`, do retry')
 
     team_member_change_db.find_one_and_update(
         {'_id': ObjectId(kwargs['rid'])}, {'$set': {'done.mail': True}})

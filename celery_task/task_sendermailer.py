@@ -8,8 +8,7 @@ from celery.utils.log import get_task_logger
 from markdown import markdown
 
 from celery_task.celery_main import app
-from module.sender import (SenderMailerCOSCUP, SenderMailerVolunteer,
-                           SenderSESLogs)
+from module.sender import SenderMailerCOSCUP, SenderMailerVolunteer, SenderSESLogs
 
 logger = get_task_logger(__name__)
 
@@ -74,4 +73,4 @@ def sender_mailer_start_one(sender: Any, **kwargs: dict[str, Any]) -> None:
     )
 
     if result['ResponseMetadata']['HTTPStatusCode'] != 200:
-        raise Exception('Send mail error, do retry ...')
+        raise ConnectionError('Send mail error, do retry ...')

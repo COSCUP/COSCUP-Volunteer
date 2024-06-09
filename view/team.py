@@ -11,8 +11,8 @@ from typing import Any, Callable
 import arrow
 import phonenumbers
 from bson.objectid import ObjectId
-from flask import (Blueprint, flash, g, jsonify, make_response, redirect,
-                   render_template, request, url_for)
+from flask import (Blueprint, flash, g, jsonify, make_response, redirect, render_template, request,
+                   url_for)
 from flask.wrappers import Response
 from markdown import markdown
 from pydantic import BaseModel, Field
@@ -139,7 +139,7 @@ def members(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-ma
             if 'tid' in post_data and post_data['tid'] != tid:
                 team = Team.get(pid=pid, tid=post_data['tid'])
                 if team is None:
-                    raise Exception('Not found')
+                    raise TypeError('Not found')
 
             else:
                 for lteam in Team.list_by_pid(pid=pid):

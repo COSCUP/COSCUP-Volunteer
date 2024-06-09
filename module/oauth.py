@@ -61,6 +61,6 @@ class OAuth:
         '''
         data = OAuthDB().find_one({'_id': mail}, {'owner': 1})
         if not data:
-            raise Exception(f'No oauth data of `{mail}`')
+            raise TypeError(f'No oauth data of `{mail}`')
 
         return data.get('owner')
