@@ -249,7 +249,6 @@ plugins:
             - https://pymongo.readthedocs.io/en/stable/objects.inv
             - https://requests.readthedocs.io/en/master/objects.inv
             - https://sendapatch.se/projects/pylibmc/objects.inv
-  - privacy
 markdown_extensions:
   - pymdownx.critic
   - pymdownx.details
