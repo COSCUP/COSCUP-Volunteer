@@ -89,6 +89,13 @@ If you cannot find a suitable track for submission, it is recommended to prepare
 
 As COSCUP sees increasing participation from international partners, it is suggested to present your slides in English content. Even if you deliver your presentation in Chinese or any other language on-site, presenting in English can lower the participation barrier for international partners. Of course, we also highly encourage setting a personal challenge to present in English. **COSCUP is just a small stage for practice, hoping to provide you with opportunities to speak at international conferences in the future!**
 
+#### General Guidelines for Colorblind-Friendly Presentations
+
+1. Use High Contrast: Ensure there is a high contrast or high light-dark contrast between text and background. Avoid using light text on a light background or dark text on a dark background.
+2. Avoid Reliance on Color Alone: Distinguish content by using separators and borders between color blocks. In addition to colors, utilize lines, patterns, shapes, or text to convey information.
+3. Use Colorblind-Friendly Palettes: Implement color schemes that are distinguishable for individuals with colorblindness. Tools such as [ColorBrewer](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3) can assist in selecting these palettes, or you can refer to the [Color Universal Design (CUD) recommended color set](https://cudo.jp/?page_id=1565).
+4. Test Your Presentation: Employ tools and simulators such as [Color Oracle Overview](https://colororacle.org/) or [ColorShark](https://colorshark.io/) to ensure your materials are accessible to individuals with colourblindness.
+
 ## Information Related to 2024
 
 - Submit your proposal: <https://pretalx.coscup.org/coscup-2024/>
