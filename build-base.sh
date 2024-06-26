@@ -1,1 +1,1 @@
-docker build --no-cache=true -t coscupweb-base:24.06.10 -f ./Dockerfile-base ./
+docker build --no-cache=true -t coscupweb-base:24.06.26 -f ./Dockerfile-base ./
