@@ -94,7 +94,10 @@ class Dispense:
             Return the dispense data in `ids`.
 
         '''
-        return DispenseDB().find({'_id': { '$in': ids }})
+        return DispenseDB().find({
+            '_id': { '$in': ids },
+            'enable': { '$eq': True }
+        })
 
     @staticmethod
     def update(dispense_id: str, data: dict[str, Any]) -> dict[str, Any] | int:
