@@ -99,6 +99,7 @@ ADD ./templates/mail/base*.html \
     ./templates/mail/
 
 ADD ./static/ExpenseStatusLabel.js \
+    ./static/ExpenseInvoiceTotalCard.js \
     ./static/ExpenseTable.js \
     ./static/ExpenseEditor.js \
     ./static/DispenseEditor.js \
