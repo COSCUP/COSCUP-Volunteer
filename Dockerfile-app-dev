@@ -91,6 +91,7 @@ ADD ./templates/base.html \
     ./templates/
 
 ADD ./static/ExpenseStatusLabel.js \
+    ./static/ExpenseInvoiceTotalCard.js \
     ./static/ExpenseTable.js \
     ./static/ExpenseEditor.js \
     ./static/DispenseEditor.js \
