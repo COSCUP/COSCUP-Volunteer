@@ -62,8 +62,7 @@ class Tasks:
             Yield return the data.
 
         '''
-        for raw in TasksDB().find({'pid': pid}, sort=(('starttime', 1), )):
-            yield raw
+        yield from TasksDB().find({'pid': pid}, sort=(('starttime', 1), ))
 
     @staticmethod
     def get_with_pid(pid: str, _id: str) -> Optional[dict[str, Any]]:
@@ -251,5 +250,4 @@ class TasksStar:
             Return the datas.
 
         '''
-        for user in TasksStarDB().find({'pid': pid}, {'uid': 1}):
-            yield user
+        yield from TasksStarDB().find({'pid': pid}, {'uid': 1})

@@ -47,9 +47,8 @@ class USession:
             Return the data, `ipinfo` is not exist.
 
         '''
-        for raw in USessionDB().find({'ipinfo': {'$exists': False}},
-                                     {'header.X-Real-Ip': 1, 'header.X-Forwarded-For': 1}):
-            yield raw
+        yield from USessionDB().find({'ipinfo': {'$exists': False}},
+                                     {'header.X-Real-Ip': 1, 'header.X-Forwarded-For': 1})
 
     @staticmethod
     def update_ipinfo(sid: str, data: dict[str, Any]) -> None:
@@ -75,10 +74,9 @@ class USession:
             Return the recently datas.
 
         '''
-        for raw in USessionDB(token='').find({'uid': uid},
+        yield from USessionDB(token='').find({'uid': uid},
                                              sort=(('created_at', -1), ),
-                                             limit=limit):
-            yield raw
+                                             limit=limit)
 
     @staticmethod
     def get_alive(uid: str) -> Generator[dict[str, Any], None, None]:
@@ -91,9 +89,8 @@ class USession:
             Return the datas.
 
         '''
-        for raw in USessionDB(token='').find({'uid': uid, 'alive': True},
-                                             sort=(('created_at', -1), )):
-            yield raw
+        yield from USessionDB(token='').find({'uid': uid, 'alive': True},
+                                             sort=(('created_at', -1), ))
 
     @staticmethod
     def make_dead(sid: str, uid: Optional[str] = None) -> None:

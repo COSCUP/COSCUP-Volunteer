@@ -357,11 +357,10 @@ class User:
             Return all user's uids
 
         '''
-        for row in UsersDB().find({
+        yield from UsersDB().find({
             '_id': {'$in': uids},
             'property.suspend': True,
-        }, {'_id': 1}):
-            yield row
+        }, {'_id': 1})
 
     @staticmethod
     def get_all_users(include_suspend: bool = False) -> Generator[dict[str, Any], None, None]:
@@ -382,8 +381,7 @@ class User:
                     {'property.suspend': False},
                 ]}
 
-        for row in UsersDB().find(query, {'_id': 1}):
-            yield row
+        yield from UsersDB().find(query, {'_id': 1})
 
     @staticmethod
     def count(include_suspend: bool = False) -> int:
@@ -487,8 +485,7 @@ class TobeVolunteer:
         if _or:
             _query['$or'] = _or
 
-        for raw in TobeVolunteerDB().find(_query):
-            yield raw
+        yield from TobeVolunteerDB().find(_query)
 
 
 class PolicySigned:
@@ -517,10 +514,9 @@ class PolicySigned:
         '''
         sign_at = arrow.now().shift(days=days*-1).naive
 
-        for raw in PolicySignedDB().find({
+        yield from PolicySignedDB().find({
             'type': _type.value, 'uid': uid, 'sign_at': {'$gte': sign_at}
-        }, {'_id': 0}):
-            yield raw
+        }, {'_id': 0})
 
 
 class AccountPass(BaseModel):

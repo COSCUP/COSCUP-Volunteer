@@ -103,8 +103,7 @@ class WaitList:
             Return the datas.
 
         '''
-        for raw in WaitListDB().find({'pid': pid, 'tid': tid, 'uid': uid}):
-            yield raw
+        yield from WaitListDB().find({'pid': pid, 'tid': tid, 'uid': uid})
 
     @staticmethod
     def get_note(pid: str, tid: str, uid: str) -> Generator[dict[str, str], None, None]:
@@ -119,10 +118,9 @@ class WaitList:
             Return the datas.
 
         '''
-        for raw in WaitListDB().find(
+        yield from WaitListDB().find(
             filter={'pid': pid, 'tid': tid, 'uid': uid},
             projection={'_id': 0},
             sort=(('_id', -1), ),
             limit=1,
-        ):
-            yield raw
+        )

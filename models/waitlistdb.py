@@ -89,8 +89,7 @@ class WaitListDB(DBBase):
             if data:
                 yield data
         else:
-            for data in self.find(query):
-                yield data
+            yield from self.find(query)
 
     def make_result(self, _id: str, pid: str, uid: str,
                     result: Literal['approval', 'deny']) -> Optional[dict[str, Any]]:

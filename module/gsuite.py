@@ -114,12 +114,10 @@ dyn/admin_directory_v1.groups.html#list
 
         '''
         groups = self.groups_list(page_token=page_token)
-        for group in groups['groups']:
-            yield group
+        yield from groups['groups']
 
         if 'nextPageToken' in groups:
-            for group in self.groups_list_loop(page_token=groups['nextPageToken']):
-                yield group
+            yield from self.groups_list_loop(page_token=groups['nextPageToken'])
 
     def groups_insert(self, email: str, description: Union[str, None] = None,
                       name: Union[str, None] = None) -> Any:
@@ -166,14 +164,12 @@ dyn/admin_directory_v1.members.html
 
         '''
         members = self.members_list(group_key)
-        for member in members.get('members', []):
-            yield member
+        yield from members.get('members', [])
 
         while 'nextPageToken' in members:
             members = self.members_list(
                 group_key, page_token=members['nextPageToken'])
-            for member in members.get('members', []):
-                yield member
+            yield from members.get('members', [])
 
     def members_insert(self, group_key: str, email: str,
                        role: str = 'MEMBER', delivery_settings: str = 'ALL_MAIL') -> Any:

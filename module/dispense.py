@@ -4,11 +4,11 @@ from typing import Any, Generator
 from pymongo.collection import ReturnDocument
 from pymongo.cursor import Cursor
 
-from models.expensedb import ExpenseDB
-from models.dispensedb import DispenseDB
 from models.budgetdb import BudgetDB
-
+from models.dispensedb import DispenseDB
+from models.expensedb import ExpenseDB
 from module.expense import Expense
+
 
 class Dispense:
     ''' Dispense class '''
@@ -28,15 +28,15 @@ class Dispense:
         '''
         dispense_data = DispenseDB.new(pid, expense_ids)
         dispense_data['dispense_date'] = dispense_date
-        dispense = DispenseDB().add(data = dispense_data)
+        dispense = DispenseDB().add(data=dispense_data)
 
         for expense_id in expense_ids:
             ExpenseDB().find_one_and_update(
-                { '_id': expense_id },
+                {'_id': expense_id},
                 {
                     '$set': {
                         'dispense_id': dispense['_id'],
-                        'status': '3' # 出款中
+                        'status': '3'  # 出款中
                     }
                 },
                 return_document=ReturnDocument.AFTER,
@@ -65,8 +65,7 @@ class Dispense:
             Return the dispense data in `pid`.
 
         '''
-        for raw in DispenseDB().find({'pid': pid}):
-            yield raw
+        yield from DispenseDB().find({'pid': pid})
 
     @staticmethod
     def get_order_by_date(pid: str) -> Generator[dict[str, Any], None, None]:
@@ -78,10 +77,9 @@ class Dispense:
         Yields:
             Return the dispense data in `pid`
         '''
-        for raw in DispenseDB().find({'pid': pid}).sort([
-                ('dispense_date', 1),
-                ('create_at', 1)]):
-            yield raw
+        yield from DispenseDB().find({'pid': pid}).sort([
+            ('dispense_date', 1),
+            ('create_at', 1)])
 
     @staticmethod
     def get_by_ids(ids: list[str]) -> Cursor[dict[str, Any]]:
@@ -95,8 +93,8 @@ class Dispense:
 
         '''
         return DispenseDB().find({
-            '_id': { '$in': ids },
-            'enable': { '$eq': True }
+            '_id': {'$in': ids},
+            'enable': {'$eq': True}
         })
 
     @staticmethod
@@ -131,7 +129,7 @@ class Dispense:
             for exp_id in resp['expense_ids']:
                 ExpenseDB().find_one_and_update(
                     {'_id': exp_id},
-                    {'$set': {'status': '2'}}, # back to 審核中
+                    {'$set': {'status': '2'}},  # back to 審核中
                     return_document=ReturnDocument.AFTER,
                 )
 

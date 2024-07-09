@@ -92,5 +92,4 @@ class MailLetterDB(DBBase):
             The data haven't been sent yet.
 
         '''
-        for raw in self.find({f'code.{code}': {'$exists': False}}):
-            yield raw
+        yield from self.find({f'code.{code}': {'$exists': False}})

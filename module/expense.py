@@ -9,6 +9,7 @@ from pymongo.cursor import Cursor
 from models.budgetdb import BudgetDB
 from models.expensedb import ExpenseDB
 
+
 class Expense:
     ''' Expense class '''
 
@@ -110,8 +111,7 @@ class Expense:
             Return the expenses data in `pid`.
 
         '''
-        for raw in ExpenseDB().find({'pid': pid}):
-            yield raw
+        yield from ExpenseDB().find({'pid': pid})
 
     @staticmethod
     def get_by_eid(expense_id: str) -> Generator[dict[str, Any], None, None]:
@@ -124,8 +124,7 @@ class Expense:
             Return the expenses data in `expense_id`.
 
         '''
-        for raw in ExpenseDB().find({'_id': expense_id}):
-            yield raw
+        yield from ExpenseDB().find({'_id': expense_id})
 
     @staticmethod
     def update_invoices(expense_id: str, invoices: list[dict[str, Any]]) -> dict[str, Any]:
@@ -261,7 +260,7 @@ class Expense:
         return ExpenseDB().find({'pid': pid, 'create_by': create_by, 'enable': True})
 
     @staticmethod
-    def get_by_dispense_id (dispense_ids: list[str], pid: str) -> Cursor[dict[str, Any]]:
+    def get_by_dispense_id(dispense_ids: list[str], pid: str) -> Cursor[dict[str, Any]]:
         ''' Retrieve by dispense_id
 
         Args:
@@ -272,7 +271,7 @@ class Expense:
         '''
         return ExpenseDB().find({
             'pid': pid,
-            'dispense_id': { '$in': dispense_ids }
+            'dispense_id': {'$in': dispense_ids}
         })
 
     @staticmethod
@@ -288,8 +287,7 @@ class Expense:
 
         '''
         query = {'pid': pid, 'request.buid': budget_id, 'enable': True}
-        for raw in ExpenseDB().find(query, {'invoices': 1, 'code': 1}):
-            yield raw
+        yield from ExpenseDB().find(query, {'invoices': 1, 'code': 1})
 
     @staticmethod
     def dl_format(pid: str) -> list[dict[str, Any]]:

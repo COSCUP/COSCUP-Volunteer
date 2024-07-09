@@ -7,8 +7,7 @@ from pymongo.collection import ReturnDocument
 from pymongo.cursor import Cursor
 
 import setting
-from models.senderdb import (SenderCampaignDB, SenderLogsDB, SenderReceiverDB,
-                             SenderSESLogsDB)
+from models.senderdb import SenderCampaignDB, SenderLogsDB, SenderReceiverDB, SenderSESLogsDB
 from module.awsses import AWSSES
 from module.team import Team
 from module.users import User
@@ -233,8 +232,7 @@ class SenderLogs:
         :param str cid: cid
 
         '''
-        for raw in SenderLogsDB().find({'cid': cid}, sort=(('_id', -1), )):
-            yield raw
+        yield from SenderLogsDB().find({'cid': cid}, sort=(('_id', -1), ))
 
 
 class SenderSESLogs:

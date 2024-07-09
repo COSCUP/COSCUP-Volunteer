@@ -60,8 +60,7 @@ class Form:  # pylint: disable=too-many-public-methods
             Return the data in `pid`.
 
         '''
-        for raw in FormDB().find({'case': 'appreciation', 'pid': pid}):
-            yield raw
+        yield from FormDB().find({'case': 'appreciation', 'pid': pid})
 
     @staticmethod
     def update_volunteer_certificate(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
@@ -108,8 +107,7 @@ class Form:  # pylint: disable=too-many-public-methods
             Return the data in `pid`.
 
         '''
-        for raw in FormDB().find({'case': 'volunteer_certificate', 'pid': pid}):
-            yield raw
+        yield from FormDB().find({'case': 'volunteer_certificate', 'pid': pid})
 
     @staticmethod
     def update_traffic_fee(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
@@ -159,8 +157,7 @@ class Form:  # pylint: disable=too-many-public-methods
             Return the data in `pid`.
 
         '''
-        for raw in FormDB().find({'case': 'traffic_fee', 'pid': pid}):
-            yield raw
+        yield from FormDB().find({'case': 'traffic_fee', 'pid': pid})
 
     @staticmethod
     def update_accommodation(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
@@ -216,8 +213,7 @@ class Form:  # pylint: disable=too-many-public-methods
             Return the data in `pid`.
 
         '''
-        for raw in FormDB().find({'case': 'accommodation', 'pid': pid}):
-            yield raw
+        yield from FormDB().find({'case': 'accommodation', 'pid': pid})
 
     @staticmethod
     def update_clothes(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
@@ -264,8 +260,7 @@ class Form:  # pylint: disable=too-many-public-methods
             Return the data in `pid`.
 
         '''
-        for raw in FormDB().find({'case': 'clothes', 'pid': pid}):
-            yield raw
+        yield from FormDB().find({'case': 'clothes', 'pid': pid})
 
     @staticmethod
     def update_parking_card(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
@@ -314,8 +309,7 @@ class Form:  # pylint: disable=too-many-public-methods
             Return the data in `pid`.
 
         '''
-        for raw in FormDB().find({'case': 'parking_card', 'pid': pid}):
-            yield raw
+        yield from FormDB().find({'case': 'parking_card', 'pid': pid})
 
     @staticmethod
     def update_drink(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
@@ -362,8 +356,7 @@ class Form:  # pylint: disable=too-many-public-methods
             Return the data in `pid`.
 
         '''
-        for raw in FormDB().find({'case': 'drink', 'pid': pid}):
-            yield raw
+        yield from FormDB().find({'case': 'drink', 'pid': pid})
 
 
 class FormTrafficFeeMapping:
@@ -434,8 +427,7 @@ class FormAccommodation:
             Return the data in `pid`.
 
         '''
-        for raw in FormDB().find({'case': 'accommodation', 'pid': pid, 'data.key': {'$ne': 'no'}}):
-            yield raw
+        yield from FormDB().find({'case': 'accommodation', 'pid': pid, 'data.key': {'$ne': 'no'}})
 
     @staticmethod
     def update_room(pid: str, uid: str, room: str, change_key: bool = True) -> dict[str, Any]:
