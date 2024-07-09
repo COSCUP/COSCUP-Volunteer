@@ -84,6 +84,8 @@ nav:
               - 2024 Call for Proposals: about_coscup/how_to_participate/2024_cfp.md
       - Health Market:
           - Overview: about_coscup/health_market/overview.md
+      - Healing Lectures:
+          - Overview: about_coscup/healing_lectures/overview.md
       - Email Newsletters:
           - Overview: about_coscup/newsletters/overview.md
           - 2024:
@@ -206,6 +208,7 @@ plugins:
             Enhance Recruitment: 招募流程增進計畫
             Error Note: 錯誤訊息
             Global Engagement: 國際交流
+            Healing Lectures: 療癒講座
             Health Market: 療癒市集
             Home: 首頁
             How to Participate in COSCUP: 如何參與、準備 COSCUP

@@ -11,9 +11,11 @@ COSCUP 2024 will continue the Healing Market from last year, providing services 
 
 This year's Healing Market includes the following activities:
 
-- 🧘Meditation
 - 💃Yoga Wine
 - 💆Massage Station
+- 🎨Healing Painting
+- 🛌Peaceful Sleep
+- We also welcome you to attend and engage with our new initiative, 《Healing Lectures - Tech-Human Dialogue in Open Culture: Love, Harm, Understanding, Repair》
 
 !!! note
 
@@ -253,3 +255,7 @@ Amid the hustle and bustle of daily life, give yourself a chance to calm down. E
     </tbody>
 </table>
 </div>
+
+## Others
+
+- 2023 Healing Market Activities: <https://blog.coscup.org/2023/07/introducing-healing-market-with-yoga.html>
