@@ -1,4 +1,4 @@
-FROM coscupweb-base:24.06.26
+FROM coscupweb-base:24.07.10
 
 ADD ./client_secret.json \
     ./secretary-e00794553a7d.json \
