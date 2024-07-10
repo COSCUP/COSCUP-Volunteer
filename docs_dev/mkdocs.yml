@@ -86,6 +86,8 @@ nav:
           - Overview: about_coscup/health_market/overview.md
       - Healing Lectures:
           - Overview: about_coscup/healing_lectures/overview.md
+      - Fun Fair:
+          - Overview: about_coscup/fun_fair/overview.md
       - Email Newsletters:
           - Overview: about_coscup/newsletters/overview.md
           - 2024:
@@ -207,6 +209,7 @@ plugins:
             Email Newsletters: 舊報攤（過往電子報）
             Enhance Recruitment: 招募流程增進計畫
             Error Note: 錯誤訊息
+            Fun Fair: 開．源遊會
             Global Engagement: 國際交流
             Healing Lectures: 療癒講座
             Health Market: 療癒市集
