@@ -1,3 +1,10 @@
+---
+title: 親子工作坊 COSCUP Junior Workshops
+summary: 今年課程為「伴伴學焊接很容易」、「自己的電玩遊戲自己做」錯過了要再等一年喔！
+description: 今年課程為「伴伴學焊接很容易」、「自己的電玩遊戲自己做」錯過了要再等一年喔！
+comments: true
+---
+
 # 親子工作坊
 
 COSCUP 向下扎根，如果您的小朋友對以下課程有興趣且符合課程適合年齡，歡迎預約參與。今年我們依舊請到社群夥伴「[伴伴學 Accomdemy - 陪伴科技學習](https://www.facebook.com/groups/accomdemy/)」來協助、設計親子工作坊的課程：「伴伴學焊接很容易」、「自己的電玩遊戲自己做」。
