@@ -21,8 +21,13 @@ comments: true
 
 ## 議程表
 
+### Day 1
+
 <table>
     <thead>
+        <tr>
+            <th colspan=3>2024/08/03 RB101</th>
+        </tr>
         <tr>
             <th>時間</th>
             <th>主題</th>
@@ -50,6 +55,28 @@ comments: true
             <td><a href="https://pretalx.coscup.org/coscup-2024/talk/QUGDAQ/">從數據出發：資料新聞如何看見故事？</a></td>
             <td>Readr 資料新聞記者<br>徐湘芸</td>
         </tr>
+        <tr>
+            <td>14:30 - 15:00</td>
+            <td><a href="https://pretalx.coscup.org/coscup-2024/talk/M99LX7/">Fostering Diversity and Inclusivity in Open Source Communities</a></td>
+            <td>Pallavi Thukral</td>
+        </tr>
+    </tbody>
+</table>
+
+### Day 2
+
+<table>
+    <thead>
+        <tr>
+            <th colspan=3>2024/08/04 RB105</th>
+        </tr>
+        <tr>
+            <th>時間</th>
+            <th>主題</th>
+            <th>講者</th>
+        </tr>
+    </thead>
+    <tbody>
         <tr>
             <td>10:00 - 10:30</td>
             <td><a href="https://pretalx.coscup.org/coscup-2024/talk/UNURKF/">沒錢諮商，AI 能幫上忙嗎？</a></td>
