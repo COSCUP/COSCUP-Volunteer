@@ -76,6 +76,8 @@ jobs:
         env:
           PYTHONPATH: "../"
         run: cd docs_dev; poetry run mkdocs -v build -s;
+      - name: Replaces og
+        run: cd docs_dev; wget https://volunteer.coscup.org/img/2024/coscup_junior_workshop_2024_1.jpg -o ./site/assets/images/social/about_coscup/junior_workshop/overview.png;
       - name: Clean the all files
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DOC_S3_ID }}

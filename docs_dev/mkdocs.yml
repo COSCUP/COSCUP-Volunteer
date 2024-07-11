@@ -82,12 +82,11 @@ nav:
           - As Speaker:
               - As Speaker: about_coscup/how_to_participate/as_speaker.md
               - 2024 Call for Proposals: about_coscup/how_to_participate/2024_cfp.md
-      - Health Market:
-          - Overview: about_coscup/health_market/overview.md
-      - Healing Lectures:
-          - Overview: about_coscup/healing_lectures/overview.md
-      - Fun Fair:
-          - Overview: about_coscup/fun_fair/overview.md
+      - Attendee Services:
+          - Junior Workshop: about_coscup/junior_workshop/overview.md
+          - Health Market: about_coscup/health_market/overview.md
+          - Healing Lectures: about_coscup/healing_lectures/overview.md
+          - Fun Fair: about_coscup/fun_fair/overview.md
       - Email Newsletters:
           - Overview: about_coscup/newsletters/overview.md
           - 2024:
@@ -197,6 +196,7 @@ plugins:
             About Secretary Team: 關於行政組
             Accounting System: 財務會計系統
             Announcement: 訊息發佈
+            Attendee Services: 會眾服務
             As Community: 身為「開源社群」
             As Speaker: 身為「議題講者」
             Build Base Image: 建立基本映像檔
@@ -217,6 +217,7 @@ plugins:
             How to Participate in COSCUP: 如何參與、準備 COSCUP
             Instructions: 使用手冊
             Introduction: 介紹
+            Junior Workshop: 親子工作坊
             List of Tasks: 任務列表
             Overview: 摘要
             Post-Event Report: 會後參與報告
