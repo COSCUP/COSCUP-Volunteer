@@ -71,8 +71,8 @@ Born in New York in 2017, Yoga Wine is a course that incorporates red wine into 
 
 ### Course Information
 
-1. Each session lasts for one hour, with up to 12 participants.
-2. This class includes approximately 45 minutes of wine yoga practice and around 15 minutes of explanation. Wine glasses will be provided. In case of any damage to the wine glasses, we kindly charge a **NTD$???** fee per wine glass.
+1. Each session lasts for one hour, `NTD$500` per people, with up to 12 participants.
+2. This class includes approximately 45 minutes of wine yoga practice and around 15 minutes of explanation. Wine glasses will be provided. In case of any damage to the wine glasses, we kindly charge a **NTD$280** fee per wine glass.
 3. Bring to class: Yoga mat, bottle of water, small towel.
 
 !!! info "2024 Wine Yoga"
@@ -88,9 +88,9 @@ Harmony pastels have the characteristic of providing warm, healing energy. By co
 
 ### Course Information
 
-1. ...
-2. ...
-3. ...
+1. The course lasts one and a half hours and costs `NTD$250` per person. Since the craft takes a longer time, please arrive on time.
+2. The course is suitable for those looking to relieve stress and heal through handmade creations. There are no age limits, and it is open to people with no prior experience in pastel harmony or drawing.
+3. After the course, participants will take home a 15cm x 15cm artwork they created themselves.
 
 !!! info "2024 Therapeutic Painting"
 
@@ -104,9 +104,9 @@ Amid the hustle and bustle of daily life, give yourself a chance to calm down. E
 
 ### Course Information
 
-1. ...
-2. ...
-3. ...
+1. The course lasts one and a half hours and costs `NTD$250` per person. Since the craft takes a longer time, please arrive on time.
+2. The course is suitable for those looking to relieve stress and heal through handmade creations. It is open to people with no prior experience in aromatherapy, but it is not recommended for pregnant women.
+3. After the course, participants will take home a 10 ml natural essential oil roll-on bottle they created themselves.
 
 !!! info "2024 Peaceful Sleep"
 
