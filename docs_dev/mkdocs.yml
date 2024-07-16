@@ -87,6 +87,7 @@ nav:
           - Health Market: about_coscup/health_market/overview.md
           - Healing Lectures: about_coscup/healing_lectures/overview.md
           - Fun Fair: about_coscup/fun_fair/overview.md
+          - Eve Gathering: about_coscup/eve_gathering/overview.md
       - Email Newsletters:
           - Overview: about_coscup/newsletters/overview.md
           - 2024:
@@ -206,6 +207,7 @@ plugins:
             Dev Page: 開發設定頁面
             Developer Beginner: 初次開發
             Developers: 志工平台開發
+            Eve Gathering: 前夜派對
             Email Newsletters: 舊報攤（過往電子報）
             Enhance Recruitment: 招募流程增進計畫
             Error Note: 錯誤訊息

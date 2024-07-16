@@ -43,9 +43,10 @@ comments: true
   > 豆干、滷味、飲品
 - :white_check_mark: **攤位 02** [三輪行動咖啡氣泡飲](https://www.facebook.com/TrN2co2)
   > 氮氣咖啡、氮氣紅茶
-- :ballot_box_with_check: **攤位 03** （已預定）
-  > 攤位資訊確認中
-- :wave: **攤位 04** （熱情招商中）
+- :white_check_mark: **攤位 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
+  > 浮游花、軟木塞磁鐵
+- :wave: **攤位 04** （聯繫中）
+  > 調酒 / 咖啡 / 炒泡麵
 - :wave: **攤位 05** （熱情招商中）
 - :wave: **攤位 06** （熱情招商中）
 
@@ -58,9 +59,10 @@ comments: true
 - :wave: **攤位 01** （熱情招商中）
 - :white_check_mark: **攤位 02** [三輪行動咖啡氣泡飲](https://www.facebook.com/TrN2co2)
   > 氮氣咖啡、氮氣紅茶
-- :ballot_box_with_check: **攤位 03** （已預定）
-  > 攤位資訊確認中
-- :wave: **攤位 04** （熱情招商中）
+- :white_check_mark: **攤位 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
+  > 浮游花、軟木塞磁鐵
+- :ballot_box_with_check: **攤位 04** （聯繫中）
+  > 調酒 / 咖啡 / 炒泡麵
 - :wave: **攤位 05** （熱情招商中）
 - :wave: **攤位 06** （熱情招商中）
 
