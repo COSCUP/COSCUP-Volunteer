@@ -22,7 +22,7 @@ comments: true
 - 時間：2024/08/02 18:15 - 21:30 UTC+8
 - 地點：[華山町餐酒館](https://www.google.com/maps/search/%E8%8F%AF%E5%B1%B1%E7%94%BA%E9%A4%90%E9%85%92%E9%A4%A8)
 
-[:ticket: 購買暢飲券（一人一券）](){ .md-button }
+[:ticket: 購買暢飲券（一人一券）](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button }
 
 不用報名，請直接前往，唯一需要付費的是暢飲券（包含無酒精飲料），暢飲券可以協助我們折抵場地費，請多多支持我們，現場有稍微填補肚子的餐點。
 

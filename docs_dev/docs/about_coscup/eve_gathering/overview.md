@@ -20,9 +20,9 @@ The Eve Gathering is a party that allows everyone to warm up in preparation for 
 The time and location of this year's Welcome party:
 
 - Date：August 2<sup>nd</sup> 18:15 - 21:30 UTC+8
-- 地點：[Hua Shan Din Cafe x Bar（華山町餐酒館）](https://www.google.com/maps/search/%E8%8F%AF%E5%B1%B1%E7%94%BA%E9%A4%90%E9%85%92%E9%A4%A8)
+- Location：[Hua Shan Din Cafe x Bar（華山町餐酒館）](https://www.google.com/maps/search/%E8%8F%AF%E5%B1%B1%E7%94%BA%E9%A4%90%E9%85%92%E9%A4%A8)
 
-[:ticket: Pay for unlimited drink coupon (1 ticket p.p.)](){ .md-button }
+[:ticket: Pay for unlimited drink coupon (1 ticket p.p.)](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button }
 
 No registration is required, please go directly. The only thing you need to pay for is the unlimited drink coupon (including non-alcoholic beverages). These coupons can help us offset the venue fee, please support us. There will be some light food available to satisfy your hunger on site.
 
