@@ -76,10 +76,12 @@ jobs:
         env:
           PYTHONPATH: "../"
         run: cd docs_dev; poetry run mkdocs -v build -s;
-      - name: Replaces og
+      - name: Replaces og Junior Workshop
         run: cd docs_dev/site/assets/images/social/about_coscup/junior_workshop/; wget https://volunteer.coscup.org/img/2024/coscup_junior_workshop_2024_1.png -O ./overview.png; cp ./overview.png ./overview.zh-TW.png;
-      - name: Replaces og
+      - name: Replaces og Healing Market
         run: cd docs_dev/site/assets/images/social/about_coscup/health_market/; wget https://secretary.coscup.org/s3/img/2022_yoga_1600.jpg -O ./overview.png; cp ./overview.png ./overview.zh-TW.png;
+      - name: Replaces og Eve Gathering
+        run: cd docs_dev/site/assets/images/social/about_coscup/eve_gathering/; wget https://volunteer.coscup.org/s3/img/Two-pints-beer-main.jpg -O ./overview.png; cp ./overview.png ./overview.zh-TW.png;
       - name: Clean the all files
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DOC_S3_ID }}
