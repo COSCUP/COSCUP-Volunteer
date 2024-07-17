@@ -3,9 +3,10 @@ title: COSCUP Fun Fair
 summary: It's a small market where booth vendors will share their unique skills, recipes, or production methods in the spirit of open source. Attendees can ask the vendors questions and exchange ideas and thoughts.
 description: It's a small market where booth vendors will share their unique skills, recipes, or production methods in the spirit of open source. Attendees can ask the vendors questions and exchange ideas and thoughts.
 comments: true
+icon: material/store
 ---
 
-# Fun Fair
+# :convenience_store: Fun Fair
 
 "COSCUP Fun Fair" is a new event initiative for 2024. The goal is to recruit booth vendors through "open source menus," inviting them to set up booths at the event and share or exchange their unique recipes, production methods, or the process of creating various items with attendees. This initiative aims to embody the spirit of open source in everyday life.
 

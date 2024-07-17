@@ -3,18 +3,19 @@ title: Healing Market combines massage booths, wine yoga, and therapeutic painti
 summary: We hope to soothe your mind and relax your body when you work hard in your life. The Healing Market aims to bring you a different experience!
 description: We hope to soothe your mind and relax your body when you work hard in your life. The Healing Market aims to bring you a different experience!
 comments: true
+icon: material/head-heart
 ---
 
-# Introducing the Healing Market with Massage Booths, Wine Yoga, and Therapeutic Painting
+# :mending_heart: Introducing the Healing Market with Massage Booths, Wine Yoga, and Therapeutic Painting
 
 COSCUP 2024 will continue the Healing Market from last year, providing services to attendees. We hope to soothe your mind and relax your body when you work hard in your life. The Healing Market aims to bring you a different experience!
 
 This year's Healing Market includes the following activities:
 
-- 💃Yoga Wine
-- 💆Massage Station
-- 🎨Healing Painting
-- 🛌Peaceful Sleep
+- 💃 Yoga Wine
+- 💆 Massage Station
+- 🎨 Healing Painting
+- 🛌 Peaceful Sleep
 - We also welcome you to attend and engage with our new initiative, 《Healing Lectures - Tech-Human Dialogue in Open Culture: Love, Harm, Understanding, Repair》
 
 !!! note
@@ -75,6 +76,8 @@ Born in New York in 2017, Yoga Wine is a course that incorporates red wine into 
 2. This class includes approximately 45 minutes of wine yoga practice and around 15 minutes of explanation. Wine glasses will be provided. In case of any damage to the wine glasses, we kindly charge a **NTD$280** fee per wine glass.
 3. Bring to class: Yoga mat, bottle of water, small towel.
 
+[:hatched_chick: Book a Course](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
+
 !!! info "2024 Wine Yoga"
 
     Wine Yoga schedule is as follows, held in the TR-612 classroom. Participation requires a reservation.
@@ -92,6 +95,8 @@ Harmony pastels have the characteristic of providing warm, healing energy. By co
 2. The course is suitable for those looking to relieve stress and heal through handmade creations. There are no age limits, and it is open to people with no prior experience in pastel harmony or drawing.
 3. After the course, participants will take home a 15cm x 15cm artwork they created themselves.
 
+[:hatched_chick: Book a Course](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
+
 !!! info "2024 Therapeutic Painting"
 
     Therapeutic painting schedule is as follows, held in the TR-612 classroom. Participation requires a reservation.
@@ -107,6 +112,8 @@ Amid the hustle and bustle of daily life, give yourself a chance to calm down. E
 1. The course lasts one and a half hours and costs `NTD$250` per person. Since the craft takes a longer time, please arrive on time.
 2. The course is suitable for those looking to relieve stress and heal through handmade creations. It is open to people with no prior experience in aromatherapy, but it is not recommended for pregnant women.
 3. After the course, participants will take home a 10 ml natural essential oil roll-on bottle they created themselves.
+
+[:hatched_chick: Book a Course](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
 
 !!! info "2024 Peaceful Sleep"
 

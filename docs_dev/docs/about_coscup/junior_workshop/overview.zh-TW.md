@@ -3,9 +3,10 @@ title: 親子工作坊 COSCUP Junior Workshops
 summary: 今年課程為「伴伴學焊接很容易」、「自己的電玩遊戲自己做」錯過了要再等一年喔！
 description: 今年課程為「伴伴學焊接很容易」、「自己的電玩遊戲自己做」錯過了要再等一年喔！
 comments: true
+icon: material/ferris-wheel
 ---
 
-# 親子工作坊
+# :ferris_wheel: 親子工作坊
 
 COSCUP 向下扎根，如果您的小朋友對以下課程有興趣且符合課程適合年齡，歡迎預約參與。今年我們依舊請到社群夥伴「[伴伴學 Accomdemy - 陪伴科技學習](https://www.facebook.com/groups/accomdemy/)」來協助、設計親子工作坊的課程：「伴伴學焊接很容易」、「自己的電玩遊戲自己做」。
 
@@ -48,6 +49,8 @@ COSCUP 向下扎根，如果您的小朋友對以下課程有興趣且符合課�
 
 - 一人 300 元（伴伴學一起玩，推廣教育價）
 
+[:hatched_chick: 預訂課程](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
+
 ### 時間、教室
 
 !!! warning "努力調度中"
@@ -88,6 +91,8 @@ COSCUP 向下扎根，如果您的小朋友對以下課程有興趣且符合課�
 ### 費用
 
 為推廣我們所設計與開發的掌上遊戲機 maGc ，本次課程的費用 NTD$500 元。
+
+[:hatched_chick: 預訂課程](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
 
 ### 時間、教室
 

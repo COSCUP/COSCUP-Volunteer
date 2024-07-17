@@ -3,9 +3,10 @@ title: COSCUP Junior Workshops
 summary: This year's courses include 'Welding Made Easy with a Partner' and 'Make Your Own Video Games'. If you miss them, you'll have to wait another year!
 description: This year's courses include 'Welding Made Easy with a Partner' and 'Make Your Own Video Games'. If you miss them, you'll have to wait another year!
 comments: true
+icon: material/ferris-wheel
 ---
 
-# COSCUP Junior Workshops
+# :ferris_wheel: COSCUP Junior Workshops
 
 COSCUP is reaching out to the younger generation. If your children are interested in the following courses and meet the appropriate age requirements, feel free to sign up. This year, we once again have our community partner [Accomdemy - Technology Learning Companion](https://www.facebook.com/groups/accomdemy/) to assist with designing and conducting junior workshops: 'Welding Made Easy with a Partner' and 'Make Your Own Video Games'.
 
@@ -48,6 +49,8 @@ Electronic welding is actually very simple! Join our workshop and learn anytime.
 
 - NT$300 per person (Accomdemy promotional educational price)
 
+[:hatched_chick: Book a Course](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
+
 ### Time and Classroom
 
 !!! warning "Efforts in Scheduling"
@@ -88,6 +91,8 @@ Inspire children's curiosity about the world of programming through engaging vid
 ### Price
 
 To promote our designed and developed handheld game console, maGc, the cost of this course is NTD$500.
+
+[:hatched_chick: Book a Course](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
 
 ### Time and Classroom
 

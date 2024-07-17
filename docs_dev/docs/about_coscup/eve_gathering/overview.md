@@ -3,9 +3,10 @@ title: Eve Gathering
 summary: Regardless of whether you participate in the next day's event, we very much welcome you to come and have a drink with us and talk about open source. Looking forward to meeting you!
 description: Regardless of whether you participate in the next day's event, we very much welcome you to come and have a drink with us and talk about open source. Looking forward to meeting you!
 comments: true
+icon: fontawesome/solid/beer-mug-empty
 ---
 
-# Eve Gathering
+# :beers: Eve Gathering
 
 <figure markdown="span">
     <a href="https://volunteer.coscup.org/s3/img/Two-pints-beer-main.jpg">
@@ -24,7 +25,11 @@ The time and location of this year's Welcome party:
 
 [:ticket: Pay for unlimited drink coupon (1 ticket p.p.)](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button }
 
-No registration is required, please go directly. The only thing you need to pay for is the unlimited drink coupon (including non-alcoholic beverages). These coupons can help us offset the venue fee, please support us. There will be some light food available to satisfy your hunger on site.
+{++（:hatching_chick: There are also package options of 3 and 10 tickets available for purchase!）++}
+
+!!! note "Non-Alcoholic Beverages"
+
+    No registration is required, please go directly. The only thing you need to pay for is the unlimited drink coupon (including non-alcoholic beverages). These coupons can help us offset the venue fee, please support us. There will be some light food available to satisfy your hunger on site.
 
 ## After the Party
 

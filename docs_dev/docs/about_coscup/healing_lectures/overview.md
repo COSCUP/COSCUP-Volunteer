@@ -1,3 +1,11 @@
+---
+title: "Healing Lectures - Tech-Human Dialogue in Open Culture: Love, Harm, Understanding, Repair"
+summary: This year's agenda mainly focuses on discussions of topics such as love, harm, understanding, and repair, with a particular emphasis on themes related to love, trauma, justice, and civic dialogue.
+description: This year's agenda mainly focuses on discussions of topics such as love, harm, understanding, and repair, with a particular emphasis on themes related to love, trauma, justice, and civic dialogue.
+comments: true
+icon: material/hand-heart
+---
+
 # :heart_exclamation: Healing Lectures - Tech-Human Dialogue in Open Culture: Love, Harm, Understanding, Repair
 
 ==:heartbeat: The Healing Market series of activities== {++:green_apple: Hosted by Secretary Team++}
