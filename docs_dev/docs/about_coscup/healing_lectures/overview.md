@@ -10,6 +10,14 @@ icon: material/hand-heart
 
 ==:heartbeat: The Healing Market series of activities== {++:green_apple: Hosted by Secretary Team++}
 
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/img/2024/healing_lectures.jpg">
+        <img src="https://volunteer.coscup.org/img/2024/healing_lectures.jpg"
+            alt="COSCUP 療癒講座 Healing Lectures" title="COSCUP 療癒講座 Healing Lectures"
+            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
+    </a>
+</figure>
+
 Unlike the complex technical jargon or obscure industry terminology, the Healing Seminar focuses more on exploring issues related to technology, humanities, society, and open organizations in our day-to-day life. It aims to promote understanding of how technology influences our values, emotions, and social interactions. Through these discussions, we hope to explore how to achieve harmonious coexistence between technology and the humanities in this turbulent era, as well as how to address various challenges brought about by technological development.
 
 This year's agenda mainly focuses on discussions of topics such as love, harm, understanding, and repair, with a particular emphasis on themes related to love, trauma, justice, and civic dialogue.

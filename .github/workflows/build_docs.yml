@@ -81,7 +81,13 @@ jobs:
       - name: Replaces og Healing Market
         run: cd docs_dev/site/assets/images/social/about_coscup/health_market/; wget https://secretary.coscup.org/s3/img/2022_yoga_1600.jpg -O ./overview.png; cp ./overview.png ./overview.zh-TW.png;
       - name: Replaces og Eve Gathering
-        run: cd docs_dev/site/assets/images/social/about_coscup/eve_gathering/; wget https://volunteer.coscup.org/s3/img/Two-pints-beer-main.jpg -O ./overview.png; cp ./overview.png ./overview.zh-TW.png;
+        run: cd docs_dev/site/assets/images/social/about_coscup/eve_gathering/; wget https://volunteer.coscup.org/img/2024/eve_gathering.jpg -O ./overview.png; cp ./overview.png ./overview.zh-TW.png;
+      - name: Replaces og Healing Lectures
+        run: cd docs_dev/site/assets/images/social/about_coscup/healing_lectures/; wget https://volunteer.coscup.org/img/2024/healing_lectures.jpg -O ./overview.png; cp ./overview.png ./overview.zh-TW.png;
+      - name: Replaces og Fun Fair
+        run: cd docs_dev/site/assets/images/social/about_coscup/fun_fair/; wget https://volunteer.coscup.org/img/2024/fun_fair.jpg -O ./overview.png; cp ./overview.png ./overview.zh-TW.png;
+      - name: Replaces og Attendee Services
+        run: cd docs_dev/site/assets/images/social/about_coscup/attendee_services/; wget https://volunteer.coscup.org/img/2024/attendee_services.jpg -O ./index.png; cp ./index.png ./index.zh-TW.png;
       - name: Clean the all files
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DOC_S3_ID }}

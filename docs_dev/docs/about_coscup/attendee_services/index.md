@@ -8,6 +8,14 @@ icon: material/hand-coin-outline
 
 # :raised_hands: Attendee Services
 
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/img/2024/attendee_services.jpg">
+        <img src="https://volunteer.coscup.org/img/2024/attendee_services.jpg"
+            alt="COSCUP 會眾服務 Attendee Services" title="COSCUP 會眾服務 Attendee Services"
+            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
+    </a>
+</figure>
+
 COSCUP Attendee Services offers services beyond the main conference agenda, aimed at participants. In addition to the two-day main event, attendees can enjoy more fun, special, and relaxed activities over the weekend and during weekdays.
 
 The COSCUP 2024 secretary team has organized the current planned activities and given them a more appropriate name: "Attendee Services." We hope that this year and in the future, we will have clearer goals to continue planning activities for attendees and participants.

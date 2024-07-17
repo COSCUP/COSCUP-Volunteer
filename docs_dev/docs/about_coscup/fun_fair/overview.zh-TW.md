@@ -8,6 +8,14 @@ icon: material/store
 
 # :convenience_store: 開．源遊會
 
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/img/2024/fun_fair.jpg">
+        <img src="https://volunteer.coscup.org/img/2024/fun_fair.jpg"
+            alt="COSCUP 開．源遊會 Fun Fair" title="COSCUP 開．源遊會 Fun Fair"
+            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
+    </a>
+</figure>
+
 「開．源遊會」是 2024 年新嘗試的活動企劃，希望透過「開源菜單」的方式進行攤位招商，進駐到活動攤位場地，並與往來的會眾分享、交換其菜單、食譜的製作方式，或是物件、物品的製作過程。讓開源精神能體現在一般生活之中。
 
 由於是第一年新企劃，目前算在「試營運」階段，因此無場地進駐費用，唯一不能使用明火的器具，或是製作過程中產生大量的廢氣之外，非常歡迎任何類型的攤位申請進駐，吃、喝、玩、樂都是我們這次招商的範圍。由於本企劃為第一次舉辦，歡迎與我們一起形塑攤位參與的任何可能。

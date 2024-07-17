@@ -33,6 +33,14 @@ The time and location of this year's Welcome party:
 
 ## After the Party
 
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/img/2024/eve_gathering_after.jpg">
+        <img src="https://volunteer.coscup.org/img/2024/eve_gathering_after.jpg"
+            alt="COSCUP 前夜派對續攤 After Eve Gathering" title="COSCUP 前夜派對續攤 After Eve Gathering"
+            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
+    </a>
+</figure>
+
 Since the party on the eve will only lasts until 21:30<sup>UTC+8</sup>, we encourage everyone to go to the [Huashan 1914 Creative Park](https://www.google.com/maps/search/%E8%8F%AF%E5%B1%B11914%E6%96%87%E5%89%B5%E5%9C%92%E5%8D%80) which is across the street. There, you will find the familiar Palm Breweries craft beer for after-hours drinks. Or, you can visit our community partner MozTW, [Mozilla Community Space Taipei](https://moztw.org/space/) nearby!
 
 

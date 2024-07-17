@@ -8,6 +8,14 @@ icon: material/store
 
 # :convenience_store: Fun Fair
 
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/img/2024/fun_fair.jpg">
+        <img src="https://volunteer.coscup.org/img/2024/fun_fair.jpg"
+            alt="COSCUP 開．源遊會 Fun Fair" title="COSCUP 開．源遊會 Fun Fair"
+            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
+    </a>
+</figure>
+
 "COSCUP Fun Fair" is a new event initiative for 2024. The goal is to recruit booth vendors through "open source menus," inviting them to set up booths at the event and share or exchange their unique recipes, production methods, or the process of creating various items with attendees. This initiative aims to embody the spirit of open source in everyday life.
 
 Since this is the first year of this new initiative, currently considered a "trial run," there are no fees for booth space. The only restrictions are no open flames or equipment that produces large amounts of exhaust during the production process. All types of booths are welcome, whether they involve food, drinks, games, entertainment, etc. We invite you to join us in shaping all possible forms of participation for this inaugural event.

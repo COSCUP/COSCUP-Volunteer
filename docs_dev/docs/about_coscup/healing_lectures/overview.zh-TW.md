@@ -10,6 +10,14 @@ icon: material/hand-heart
 
 ==:heartbeat: 療癒市集系列活動== {++:green_apple: 行政組自辦議程++}
 
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/img/2024/healing_lectures.jpg">
+        <img src="https://volunteer.coscup.org/img/2024/healing_lectures.jpg"
+            alt="COSCUP 療癒講座 Healing Lectures" title="COSCUP 療癒講座 Healing Lectures"
+            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
+    </a>
+</figure>
+
 比起艱澀的技術或是冷僻的行內術語，療癒講座更專注探討人們遭遇的各種與科技、人文社會以及開放組織有關的真實的日常問題。旨在促進對於科技以及開放文化如何影響我們的價值觀、情感和社會互動的理解。通過這些討論，我們探索如何在這個動蕩的時代中實現科技和人文的和諧共存，並能應對因科技發展而帶來的各種挑戰。
 
 本年度議程主要針對愛、傷害、理解和修復等議題的討論，將特別青睞與愛、創傷、司法正義、公民對話相關的主題。

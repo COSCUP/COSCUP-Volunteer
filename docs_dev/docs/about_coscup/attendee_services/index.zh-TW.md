@@ -8,6 +8,14 @@ icon: material/hand-coin-outline
 
 # :raised_hands: 會眾服務
 
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/img/2024/attendee_services.jpg">
+        <img src="https://volunteer.coscup.org/img/2024/attendee_services.jpg"
+            alt="COSCUP 會眾服務 Attendee Services" title="COSCUP 會眾服務 Attendee Services"
+            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
+    </a>
+</figure>
+
 「COSCUP 會眾服務」是提供除了大會議程以外、面向參與者的服務。在參與大會二日的活動外，還能一起在週末、週日期間，體驗更多好玩的、特別的、軟性的活動。
 
 COSCUP 2024 行政組整理目前規劃的活動、並賦予較合適的名稱為「會眾服務」，希望今年或是未來有更明確的目標繼續規劃屬於會眾、參與者的活動。
