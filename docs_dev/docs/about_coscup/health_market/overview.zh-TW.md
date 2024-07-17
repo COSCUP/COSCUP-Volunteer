@@ -76,10 +76,10 @@ icon: material/head-heart
 
 !!! info "2024 紅酒瑜伽"
 
-    紅酒瑜伽時間如下，地點在 TR-612 教室。須預約時段參與。
+    紅酒瑜伽時間如下，地點在 `TR-612` 教室。須預約時段參與。
 
-    - 8/3 ??:?? ~ ??:??
-    - 8/4 ??:?? ~ ??:??
+    - 8/4 11:30 ~ 12:30
+    - 8/4 13:00 ~ 14:00
 
 ## 紓壓放鬆．和諧粉彩療癒畫
 
@@ -160,31 +160,25 @@ icon: material/head-heart
         <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
         ㊡
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
-        按摩小站
+        <td class="massage" rowspan="6" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
+        按摩小站<br><small>（全天）</small>
         </td>
         <td class="meditation" style="background-color: #eeeefc; text-align: center; vertical-align: middle;">
         療癒睡眠按摩油<br><small>（~ 11:30）</small>
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
-        按摩小站
+        <td class="massage" rowspan="5" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
+        按摩小站<br><small>（全天）</small>
         </td>
     </tr>
     <tr>
-        <td style="text-align: center;">
-        11:00 - 12:00
+        <td style="text-align: center;vertical-align:middle;">
+        11:30 - 12:30
+        </td>
+        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;vertical-align:middle;">
+        ㊡
         </td>
         <td class="yoga" style="background-color: #ffebeb; text-align: center;">
-        紅酒瑜珈
-        </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        按摩小站
-        </td>
-        <td class="yoga" style="background-color: #ffebeb; text-align: center;">
-        紅酒瑜珈
-        </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        按摩小站
+        紅酒瑜珈<br><small>(11:30 - 12:30)</small>
         </td>
     </tr>
     <tr>
@@ -194,14 +188,8 @@ icon: material/head-heart
         <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
         ㊡
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        按摩小站
-        </td>
         <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
         ㊡
-        </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        按摩小站
         </td>
     </tr>
     <tr>
@@ -211,31 +199,19 @@ icon: material/head-heart
         <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
         ㊡
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        按摩小站
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
-        ㊡
-        </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        按摩小站
+        <td class="yoga" style="background-color: #ffebeb; text-align: center;">
+        紅酒瑜珈
         </td>
     </tr>
     <tr>
         <td style="text-align: center;vertical-align:middle;">
-        14:00 - 15:00
+        14:00 - 15:30
         </td>
         <td class="meditation" style="background-color: #eeeefc; text-align: center;vertical-align:middle;">
         和諧粉彩療癒畫<br><small>（~ 15:30）</small>
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;vertical-align:middle;">
-        按摩小站
-        </td>
         <td class="meditation" style="background-color: #eeeefc; text-align: center;vertical-align:middle;">
         療癒睡眠按摩油<br><small>（~ 15:30）</small>
-        </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;vertical-align:middle;">
-        按摩小站
         </td>
     </tr>
     <tr>
@@ -245,14 +221,11 @@ icon: material/head-heart
         <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
         ㊡
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        按摩小站
-        </td>
         <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
         ㊡
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        按摩小站
+        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
+        活動結束
         </td>
     </tr>
     </tbody>

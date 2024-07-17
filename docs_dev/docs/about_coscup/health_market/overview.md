@@ -45,7 +45,7 @@ Do you have shoulder and neck pain? If you have accumulated fatigue from daily l
 
 !!! info "2024 Massage Station"
 
-    Massage Booth Hours are from 10:00 AM to 4:00 PM daily, located outside TR-612 classroom. No fees required, but a donation box is available for voluntary contributions.
+    Massage Booth Hours are from 10:00 AM to 4:00 PM daily, located outside `TR-612` classroom. No fees required, but a donation box is available for voluntary contributions.
 
 ## Yoga Wine
 
@@ -80,10 +80,10 @@ Born in New York in 2017, Yoga Wine is a course that incorporates red wine into 
 
 !!! info "2024 Wine Yoga"
 
-    Wine Yoga schedule is as follows, held in the TR-612 classroom. Participation requires a reservation.
+    Wine Yoga schedule is as follows, held in the `TR-612` classroom. Participation requires a reservation.
 
-    - 8/3 ??:?? ~ ??:??
-    - 8/4 ??:?? ~ ??:??
+    - 8/4 11:30 ~ 12:30
+    - 8/4 13:00 ~ 14:00
 
 ## Stress Relief and Harmony Pastel Healing Painting
 
@@ -99,7 +99,7 @@ Harmony pastels have the characteristic of providing warm, healing energy. By co
 
 !!! info "2024 Therapeutic Painting"
 
-    Therapeutic painting schedule is as follows, held in the TR-612 classroom. Participation requires a reservation.
+    Therapeutic painting schedule is as follows, held in the `TR-612` classroom. Participation requires a reservation.
 
     - 8/3 14:00 ~ 15:30
 
@@ -117,7 +117,7 @@ Amid the hustle and bustle of daily life, give yourself a chance to calm down. E
 
 !!! info "2024 Peaceful Sleep"
 
-    Therapeutic sleep sessions are scheduled as follows, held in the TR-612 classroom. Participation requires a reservation.
+    Therapeutic sleep sessions are scheduled as follows, held in the `TR-612` classroom. Participation requires a reservation.
 
     - 8/3 10:00 ~ 11:30
     - 8/4 14:00 ~ 15:30
@@ -164,48 +164,36 @@ Amid the hustle and bustle of daily life, give yourself a chance to calm down. E
         <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
         ㊡
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
+        <td class="massage" rowspan="6" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
         Massage Station
         </td>
         <td class="meditation" style="background-color: #eeeefc; text-align: center; vertical-align: middle;">
         Peaceful Sleep<br><small>（~ 11:30）</small>
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
+        <td class="massage" rowspan="5" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
         Massage Station
         </td>
     </tr>
     <tr>
         <td style="text-align: center;">
-        11:00 - 12:00
+        11:30 - 12:30
+        </td>
+        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
+        ㊡
         </td>
         <td class="yoga" style="background-color: #ffebeb; text-align: center;">
-        Yoga Wine
-        </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        Massage Station
-        </td>
-        <td class="yoga" style="background-color: #ffebeb; text-align: center;">
-        Yoga Wine
-        </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        Massage Station
+        Yoga Wine<br><small>(11:30~12:30)</small>
         </td>
     </tr>
     <tr>
         <td style="text-align: center;">
         12:00 - 13:00
         </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
+        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
         ㊡
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        Massage Station
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
+        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
         ㊡
-        </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        Massage Station
         </td>
     </tr>
     <tr>
@@ -215,48 +203,33 @@ Amid the hustle and bustle of daily life, give yourself a chance to calm down. E
         <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
         ㊡
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        Massage Station
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
-        ㊡
-        </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        Massage Station
+        <td class="yoga" style="background-color: #ffebeb; text-align: center;vertical-align: middle;">
+        Yoga Wine
         </td>
     </tr>
     <tr>
         <td style="text-align: center; vertical-align: middle;">
-        14:00 - 15:00
+        14:00 - 15:30
         </td>
         <td class="meditation" style="background-color: #eeeefc; text-align: center; vertical-align: middle;">
         Healing Painting<br><small>（~ 15:30）</small>
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
-        Massage Station
-        </td>
         <td class="meditation" style="background-color: #eeeefc; text-align: center; vertical-align: middle;">
         Peaceful Sleep<br><small>（~ 15:30）</small>
-        </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
-        Massage Station
         </td>
     </tr>
     <tr>
         <td style="text-align: center;">
         15:00 - 16:00
         </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
+        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
         ㊡
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        Massage Station
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
+        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
         ㊡
         </td>
-        <td class="massage" style="background-color: #f7faef; text-align: center;">
-        Massage Station
+        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;vertical-align: middle;">
+        The End
         </td>
     </tr>
     </tbody>
