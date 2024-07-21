@@ -51,11 +51,12 @@ Electronic welding is actually very simple! Join our workshop and learn anytime.
 
 [:hatched_chick: Book a Course](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
 
-### Time and Classroom
+!!! info "2024 Date and Class Room"
 
-!!! warning "Efforts in Scheduling"
+    Please remember to attend a course in any time slot.
 
-    The **COSCUP Secretary Team** is currently working on scheduling the classrooms and times. Please stay tuned for further announcements! If you are worried about missing any updates, please email [secretary@coscup.org](mailto:secretary@coscup.org?subject=COSCUP%20Junior%20Workshop) with your contact information, and we will notify you as soon as the latest information becomes available!
+    - 8/3 11:30 ~ 13:00 Room `TR-612`
+    - 8/4 11:30 ~ 13:30 Room `TR-610`
 
 ## Make Your Own Video Games
 
@@ -94,8 +95,8 @@ To promote our designed and developed handheld game console, maGc, the cost of t
 
 [:hatched_chick: Book a Course](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
 
-### Time and Classroom
+!!! info "2024 Date and Class Room"
 
-!!! warning "Efforts in Scheduling"
+    Please remember to attend the course.
 
-    The **COSCUP Secretary Team** is currently working on scheduling the classrooms and times. Please stay tuned for further announcements! If you are worried about missing any updates, please email [secretary@coscup.org](mailto:secretary@coscup.org?subject=COSCUP%20Junior%20Workshop) with your contact information, and we will notify you as soon as the latest information becomes available!
+    - 8/4 14:00 ~ 17:00 Room `TR-210`

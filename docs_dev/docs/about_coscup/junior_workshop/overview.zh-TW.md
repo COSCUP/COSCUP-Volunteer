@@ -51,11 +51,12 @@ COSCUP 向下扎根，如果您的小朋友對以下課程有興趣且符合課�
 
 [:hatched_chick: 預訂課程](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
 
-### 時間、教室
+!!! info "2024 伴伴學焊接很容易 時段、教室"
 
-!!! warning "努力調度中"
+    請記得前往任一時段的課程。
 
-    目前 **COSCUP 行政組**還在調度教室與時間，敬待稍後公告！如怕錯過資訊，請直接寄信到 [secretary@coscup.org](mailto:secretary@coscup.org?subject=COSCUP Junior Workshop) 留下聯絡方式，當最新資訊補上後會主動通知您！
+    - 8/3 11:30 ~ 13:00 地點 `TR-612`
+    - 8/4 11:30 ~ 13:30 地點 `TR-610`
 
 ## 自己的電玩遊戲自己做
 
@@ -94,8 +95,8 @@ COSCUP 向下扎根，如果您的小朋友對以下課程有興趣且符合課�
 
 [:hatched_chick: 預訂課程](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
 
-### 時間、教室
+!!! info "2024 自己的遊戲自己做 時段、教室"
 
-!!! warning "努力調度中"
+    請記得前往課程。
 
-    目前 **COSCUP 行政組**還在調度教室與時間，敬待稍後公告！如怕錯過資訊，請直接寄信到 [secretary@coscup.org](mailto:secretary@coscup.org?subject=COSCUP Junior Workshop) 留下聯絡方式，當最新資訊補上後會主動通知您！
+    - 8/4 14:00 ~ 17:00 地點 `TR-210`
