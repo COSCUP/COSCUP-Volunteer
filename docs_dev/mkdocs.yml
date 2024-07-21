@@ -90,6 +90,7 @@ nav:
           - Healing Lectures: about_coscup/healing_lectures/overview.md
           - Junior Workshop: about_coscup/junior_workshop/overview.md
       - Email Newsletters:
+          - about_coscup/newsletters/index.md
           - Overview: about_coscup/newsletters/overview.md
           - 2024:
               - 2024/07/18: about_coscup/newsletters/2024/20240718.md

@@ -3,6 +3,7 @@ title: COSCUP Team Leader Handbook
 summary: Guidelines Handbook for Team Leaders during Event Preparation Period
 description: Guidelines Handbook for Team Leaders during Event Preparation Period
 comments: true
+icon: material/book-heart
 ---
 
 # Team Leader Handbook

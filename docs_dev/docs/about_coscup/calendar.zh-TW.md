@@ -3,6 +3,7 @@ title: COSCUP 活動行事曆
 summary: 從 2023 年開始使用紀錄 COSCUP 活動行事曆。
 description: 從 2023 年開始使用紀錄 COSCUP 活動行事曆。
 comments: true
+icon: material/calendar-star
 ---
 
 # COSCUP 活動行事曆
