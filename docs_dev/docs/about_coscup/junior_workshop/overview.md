@@ -99,4 +99,4 @@ To promote our designed and developed handheld game console, maGc, the cost of t
 
     Please remember to attend the course.
 
-    - 8/4 14:00 ~ 17:00 Room `TR-210`
+    - 8/4 14:00 ~ 17:00 Room `TR-614`
