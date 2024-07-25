@@ -1,6 +1,6 @@
 # Enhance Recruitment[^1]
 
-This page is now only in `zh-TW`, please refer to [here](/docs/zh-TW/secretary_team/tasks/enhance_recruitment/).
+This page is now only in `zh-TW`, please refer to [here](./enhance_recruitment.md).
 
 [^1]: "Enhance Recruitment 與 Enhance recruiting 的差異"
 

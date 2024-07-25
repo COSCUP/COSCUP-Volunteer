@@ -1,6 +1,6 @@
 ''' User Structs '''
-from enum import Enum
 from datetime import datetime
+from enum import Enum
 from time import time
 from typing import Optional
 
@@ -173,7 +173,7 @@ class PolicySigned(BaseModel):
 
     Attributes:
         uid: user id.
-        type: type of [PolicyType](PolicyType).
+        type: type of `PolicyType`.
         sign_at: datetime.
 
     '''

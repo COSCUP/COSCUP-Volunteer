@@ -3,6 +3,7 @@ title: COSCUP 組長手冊
 summary: 在活動籌備期間給予組長行政指引的手冊
 description: 在活動籌備期間給予組長行政指引的手冊
 comments: true
+icon: material/book-heart
 ---
 
 # 組長手冊
@@ -111,4 +112,4 @@ comments: true
 
 ## 組員手冊
 
-最後，也請花點時間閱讀一下「[組員手冊](/docs/zh-TW/about_coscup/team_member_handbook/)」，感謝！
+最後，也請花點時間閱讀一下「[組員手冊](./team_member_handbook.md)」，感謝！

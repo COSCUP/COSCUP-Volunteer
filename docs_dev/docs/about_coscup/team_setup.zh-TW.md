@@ -3,6 +3,7 @@ title: COSCUP 組別建立設定
 summary: 每年度建立新組別時需要注意的設定項目
 description: 每年度建立新組別時需要注意的設定項目
 comments: true
+icon: material/book-cog
 ---
 
 # 組別建立與設定
@@ -115,4 +116,4 @@ comments: true
 
 ## 最後
 
-以上如有其他問題，請直接聯繫行政組協助，完成組別基本設定後，下一步請接著閱讀「[組長手冊](../team_member_handbook)」。
+以上如有其他問題，請直接聯繫行政組協助，完成組別基本設定後，下一步請接著閱讀「[組長手冊](./team_leader_handbook.md)」。
