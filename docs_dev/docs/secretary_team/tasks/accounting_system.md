@@ -1,1 +1,1 @@
-This page is now only in `zh-TW`, please refer to [here](/docs/zh-TW/secretary_team/tasks/accounting_system/).
+This page is now only in `zh-TW`, please refer to `zh-TW`.

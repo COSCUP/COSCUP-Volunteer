@@ -112,4 +112,4 @@ icon: material/book-heart
 
 ## 組員手冊
 
-最後，也請花點時間閱讀一下「[組員手冊](/docs/zh-TW/about_coscup/team_member_handbook/)」，感謝！
+最後，也請花點時間閱讀一下「[組員手冊](./team_member_handbook.md)」，感謝！

@@ -111,4 +111,4 @@ If there is a group email, you can see "the mailling-list of the team" at the bo
 
 ## Team Member Handbook
 
-Lastly, please take some time to read the "[Team Member Handbook](/docs/about_coscup/team_member_handbook/)", thank you!
+Lastly, please take some time to read the "[Team Member Handbook](./team_member_handbook.md)", thank you!

@@ -6,7 +6,7 @@ step by step to figure out what we are doing or have been done here.
 
 !!! Info "有中文版了！"
 
-    :white_check_mark: **正體中文**請參考[這裡](zh-TW/)開始閱讀。
+    :white_check_mark: **正體中文**請記得切換文件語系後開始閱讀。
 
 ## About
 

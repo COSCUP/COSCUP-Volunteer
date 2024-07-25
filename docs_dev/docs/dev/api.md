@@ -49,8 +49,8 @@ in the future will be published here.
 The interactive API docs are provided by [Swagger UI](https://swagger.io/tools/swagger-ui/)
 included in [fastAPI](https://fastapi.tiangolo.com/).
 
- - Docs: [https://volunteer.coscup.org/api/docs](/api/docs)
- - ... or [Redoc](/api/redoc) style.
+ - Docs: <https://volunteer.coscup.org/api/docs>
+ - ... or [Redoc](https://volunteer.coscup.org/api/redoc) style.
 
 ## Getting started
 
@@ -63,10 +63,10 @@ included in [fastAPI](https://fastapi.tiangolo.com/).
 
 ### User authorization
 
-1. Get the temporary and ont-time-use exchange username, password from [here](/setting/api_token).
-2. Submit a POST request to [/api/token](/api/docs#/login/exchange_access_token_token_post) to get the api token.
+1. Get the temporary and ont-time-use exchange username, password from [here](https://volunteer.coscup.org/setting/api_token).
+2. Submit a POST request to [/api/token](https://volunteer.coscup.org/api/docs#/login/exchange_access_token_token_post) to get the api token.
 3. Submit the request with a header `Authorization` with a value of `Bearer` plus the api token.
-4. ... or make a try in the [api docs](/api/docs).
+4. ... or make a try in the [api docs](https://volunteer.coscup.org/api/docs).
 
 ## Deprecated API
 
