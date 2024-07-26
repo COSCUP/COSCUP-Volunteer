@@ -64,6 +64,9 @@ icon: material/store
   > → [:pancakes: 可使用預購單](https://docs.google.com/forms/d/e/1FAIpQLSeRURGdfmV4amlReqWy44REfTSMCUrBKsKBFq9HMvMKR9SRqg/viewform)
 - :white_check_mark: **攤位 06** [金嗓果物](http://www.g-lucky.url.tw/info.html)
   > 農產加工品果乾蜜餞濃縮果汁餅乾
+- :white_check_mark: **攤位 07** [曉咖啡](https://www.facebook.com/akatsukicoffee)
+  > 手沖咖啡
+- :wave: **攤位 08** （熱情招商中）
 
 </div>
 
