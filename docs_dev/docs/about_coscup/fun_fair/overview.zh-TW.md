@@ -50,14 +50,20 @@ icon: material/store
 
 - :white_check_mark: **攤位 01** [干苑 - 麻香冷滷味](https://www.facebook.com/ganyuan.ludogan)
   > 豆干、滷味、飲品
-- :white_check_mark: **攤位 02** [三輪行動咖啡氣泡飲](https://www.facebook.com/TrN2co2)
-  > 氮氣咖啡、氮氣紅茶
+  >
+  > → [:pancakes: 可使用預購單](https://docs.google.com/forms/d/e/1FAIpQLSeRURGdfmV4amlReqWy44REfTSMCUrBKsKBFq9HMvMKR9SRqg/viewform)
+- :white_check_mark: **攤位 02** [EMOJI Cafe & Bar](https://www.instagram.com/emoji0701/)
+  > 調酒 / 咖啡 / 炒泡麵
 - :white_check_mark: **攤位 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
   > 浮游花、軟木塞磁鐵
-- :wave: **攤位 04** （聯繫中）
-  > 調酒 / 咖啡 / 炒泡麵
-- :wave: **攤位 05** （熱情招商中）
-- :wave: **攤位 06** （熱情招商中）
+- :white_check_mark: **攤位 04** [台灣高校制服貓](https://www.facebook.com/taiwanuniformcat)
+  > 明信片、複製畫、磁鐵、貼紙、手作小物
+- :white_check_mark: **攤位 05** [享苜手捲](https://www.facebook.com/profile.php?id=100093809626577&mibextid=LQQJ4d)
+  > 苜蓿芽手捲、梅子露、冷泡茶
+  >
+  > → [:pancakes: 可使用預購單](https://docs.google.com/forms/d/e/1FAIpQLSeRURGdfmV4amlReqWy44REfTSMCUrBKsKBFq9HMvMKR9SRqg/viewform)
+- :white_check_mark: **攤位 06** [金嗓果物](http://www.g-lucky.url.tw/info.html)
+  > 農產加工品果乾蜜餞濃縮果汁餅乾
 
 </div>
 
@@ -65,13 +71,13 @@ icon: material/store
 
 <div class="grid cards" markdown>
 
-- :wave: **攤位 01** （熱情招商中）
-- :white_check_mark: **攤位 02** [三輪行動咖啡氣泡飲](https://www.facebook.com/TrN2co2)
-  > 氮氣咖啡、氮氣紅茶
+- :white_check_mark: **攤位 01** [路遊茶](https://www.facebook.com/routea0601/)
+  > 冷泡茶、茶包、蜜餞
+- :white_check_mark: **攤位 02** [EMOJI Cafe & Bar](https://www.instagram.com/emoji0701/)
+  > 調酒 / 咖啡 / 炒泡麵
 - :white_check_mark: **攤位 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
   > 浮游花、軟木塞磁鐵
-- :ballot_box_with_check: **攤位 04** （聯繫中）
-  > 調酒 / 咖啡 / 炒泡麵
+- :wave: **攤位 04** （聯繫中）
 - :wave: **攤位 05** （熱情招商中）
 - :wave: **攤位 06** （熱情招商中）
 

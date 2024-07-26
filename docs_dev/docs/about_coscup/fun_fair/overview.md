@@ -50,8 +50,7 @@ The event will be held at NTUST in classroom `TR412-3`. We expect to host 4 to 6
 
 - :white_check_mark: **Booth 01** [干苑 - 麻香冷滷味](https://www.facebook.com/ganyuan.ludogan)
   > 豆干、滷味、飲品
-- :white_check_mark: **Booth 02** [三輪行動咖啡氣泡飲](https://www.facebook.com/TrN2co2)
-  > 氮氣咖啡、氮氣紅茶
+- :white_check_mark: **Booth 02**（Actively Recruiting）
 - :white_check_mark: **Booth 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
   > 浮游花、軟木塞磁鐵
 - :wave: **Booth 04** （In Contact）
@@ -66,8 +65,7 @@ The event will be held at NTUST in classroom `TR412-3`. We expect to host 4 to 6
 <div class="grid cards" markdown>
 
 - :wave: **Booth 01** （熱情招商中）
-- :white_check_mark: **Booth 02** [三輪行動咖啡氣泡飲](https://www.facebook.com/TrN2co2)
-  > 氮氣咖啡、氮氣紅茶
+- :white_check_mark: **Booth 02**（Actively Recruiting）
 - :white_check_mark: **Booth 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
   > 浮游花、軟木塞磁鐵
 - :ballot_box_with_check: **Booth 04** （In Contact）
