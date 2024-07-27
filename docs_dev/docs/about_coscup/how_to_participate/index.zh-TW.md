@@ -68,3 +68,7 @@ icon: material/tooltip-question-outline
 
     - 今年「[療癒市集](../health_market/overview.md)」還有按摩小站、紅酒瑜伽，冥想正念則改為療癒彩繪、療癒睡眠。另外我們今年延續「療癒」主題主持一個議程軌「[療癒講座](../healing_lectures/overview.md)」，歡迎前往聆聽。
     - 我們也將以上服務整合一個完整的「[會眾服務](../attendee_services/index.md)」，也歡迎多多利用、參與！
+
+??? question "大件行李如何處處理？"
+
+    - 大會有提供「行李寄放處」，位置在 `TR-517`，可將行李託付寄存，輕鬆的逛大會。
