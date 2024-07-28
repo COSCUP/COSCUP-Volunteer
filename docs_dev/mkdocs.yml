@@ -82,6 +82,7 @@ nav:
           - As Speaker: about_coscup/how_to_participate/as_speaker.md
           - As Attendee: about_coscup/how_to_participate/as_attendee.md
           - As Sponsor: about_coscup/how_to_participate/as_sponsor.md
+          - As Organizing Team: about_coscup/how_to_participate/as_organizing_team.md
       - Attendee Services:
           - about_coscup/attendee_services/index.md
           - Eve Gathering: about_coscup/eve_gathering/overview.md
@@ -200,22 +201,23 @@ plugins:
             About Secretary Team: 關於行政組
             Accounting System: 財務會計系統
             Announcement: 訊息發佈
-            Attendee Services: 會眾服務
             As Attendee: 身為「會眾」
             As Community: 身為「開源社群」
+            As Organizing Team: 身為「籌備團隊」
             As Speaker: 身為「議題講者」
             As Sponsor: 身為「贊助夥伴」
+            Attendee Services: 會眾服務
             Build Base Image: 建立基本映像檔
-            COSCUP Calendar: 活動行事曆
             Community Volunteers Plan: 社群志工參與計畫
             Contributing: 貢獻
+            COSCUP Calendar: 活動行事曆
             Dev Page: 開發設定頁面
             Developer Beginner: 初次開發
             Developers: 志工平台開發
-            Eve Gathering: 前夜派對
             Email Newsletters: 舊報攤（過往電子報）
             Enhance Recruitment: 招募流程增進計畫
             Error Note: 錯誤訊息
+            Eve Gathering: 前夜派對
             Fun Fair: 開．源遊會
             Global Engagement: 國際交流
             Healing Lectures: 療癒講座

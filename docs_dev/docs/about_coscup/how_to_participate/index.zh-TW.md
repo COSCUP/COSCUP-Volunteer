@@ -30,7 +30,7 @@ icon: material/tooltip-question-outline
 
 -   :fontawesome-regular-handshake: [贊助夥伴](./as_sponsor.md) - 以任何方式支持、認同我們的夥伴 <small>[:octicons-arrow-right-24: 了解更多](./as_sponsor.md)</small>
 
--   :fontawesome-regular-handshake: 籌備團隊 - 志工組成，協助活動籌備與規劃 <small>:octicons-arrow-right-24: 了解更多</small>
+-   :fontawesome-regular-handshake: [籌備團隊](./as_organizing_team.md) - 志工組成，協助活動籌備與規劃 <small>[:octicons-arrow-right-24: 了解更多](./as_organizing_team.md)</small>
 
 </div>
 

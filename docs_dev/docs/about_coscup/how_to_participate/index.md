@@ -28,7 +28,7 @@ This guide gradually directs you on how to participate or assist at different st
 
 -   :fontawesome-regular-handshake: [Sponsor Partners](./as_sponsor.md) - Partners who support and identify with us in any way. <small>[:octicons-arrow-right-24: More details](./as_sponsor.md)</small>
 
--   :fontawesome-regular-handshake: Organizing Team - Volunteer group assisting in event preparation and planning. <small>:octicons-arrow-right-24: More details</small>
+-   :fontawesome-regular-handshake: [Organizing Team](./as_organizing_team.md) - Volunteer group assisting in event preparation and planning. <small>[:octicons-arrow-right-24: More details](./as_organizing_team.md)</small>
 
 </div>
 
