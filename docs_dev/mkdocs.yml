@@ -79,10 +79,9 @@ nav:
       - How to Participate in COSCUP:
           - about_coscup/how_to_participate/index.md
           - As Community: about_coscup/how_to_participate/as_community.md
-          - As Speaker:
-              - As Speaker: about_coscup/how_to_participate/as_speaker.md
-              - 2024 Call for Proposals: about_coscup/how_to_participate/2024_cfp.md
+          - As Speaker: about_coscup/how_to_participate/as_speaker.md
           - As Attendee: about_coscup/how_to_participate/as_attendee.md
+          - As Sponsor: about_coscup/how_to_participate/as_sponsor.md
       - Attendee Services:
           - about_coscup/attendee_services/index.md
           - Eve Gathering: about_coscup/eve_gathering/overview.md
@@ -205,6 +204,7 @@ plugins:
             As Attendee: 身為「會眾」
             As Community: 身為「開源社群」
             As Speaker: 身為「議題講者」
+            As Sponsor: 身為「贊助夥伴」
             Build Base Image: 建立基本映像檔
             COSCUP Calendar: 活動行事曆
             Community Volunteers Plan: 社群志工參與計畫

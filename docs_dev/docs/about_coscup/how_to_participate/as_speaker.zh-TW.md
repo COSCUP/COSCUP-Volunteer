@@ -5,6 +5,7 @@ description: 關於身為「議題講者」如何參與、準備 COSCUP 的指�
 authors:
     - Toomore Chiang
 comments: true
+icon: material/account-supervisor
 ---
 
 # 議題講者

@@ -26,7 +26,7 @@ This guide gradually directs you on how to participate or assist at different st
 
 -   :fontawesome-solid-users-between-lines: [Attendees](./as_attendee.md) - General public participating in COSCUP. <small>[:octicons-arrow-right-24: More details](./as_attendee.md)</small>
 
--   :fontawesome-regular-handshake: Sponsor Partners - Partners who support and identify with us in any way. <small>:octicons-arrow-right-24: More details</small>
+-   :fontawesome-regular-handshake: [Sponsor Partners](./as_sponsor.md) - Partners who support and identify with us in any way. <small>[:octicons-arrow-right-24: More details](./as_sponsor.md)</small>
 
 -   :fontawesome-regular-handshake: Organizing Team - Volunteer group assisting in event preparation and planning. <small>:octicons-arrow-right-24: More details</small>
 

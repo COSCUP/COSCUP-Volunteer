@@ -5,6 +5,7 @@ description: A Guidebook on How to Participate and Prepare for COSCUP for the Co
 authors:
     - Toomore Chiang
 comments: true
+icon: material/account-supervisor
 ---
 
 # Speakers

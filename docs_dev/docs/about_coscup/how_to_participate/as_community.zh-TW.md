@@ -5,6 +5,7 @@ description: 關於身為「開源社群」如何參與、準備 COSCUP 的指�
 authors:
     - Toomore Chiang
 comments: true
+icon: material/account-supervisor
 ---
 
 # 開源社群

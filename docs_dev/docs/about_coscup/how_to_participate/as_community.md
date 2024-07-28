@@ -5,6 +5,7 @@ description: A Guidebook on How to Participate and Prepare for COSCUP for the Op
 authors:
     - Toomore Chiang
 comments: true
+icon: material/account-supervisor
 ---
 
 # Open Source Community
