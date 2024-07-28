@@ -26,7 +26,7 @@ icon: material/tooltip-question-outline
 
 -   :fontawesome-solid-chalkboard-user: [議題講者](./as_speaker.md) - 分享開源議題的講者 <small>[:octicons-arrow-right-24: 了解更多](./as_speaker.md)</small>
 
--   :fontawesome-solid-users-between-lines: 會眾 - 參與研討會的一般大眾 <small>:octicons-arrow-right-24: 了解更多</small>
+-   :fontawesome-solid-users-between-lines: [會眾](./as_attendee.md) - 參與研討會的一般大眾 <small>[:octicons-arrow-right-24: 了解更多](./as_attendee.md)</small>
 
 -   :fontawesome-regular-handshake: 贊助夥伴 - 以任何方式支持、認同我們的夥伴 <small>:octicons-arrow-right-24: 了解更多</small>
 

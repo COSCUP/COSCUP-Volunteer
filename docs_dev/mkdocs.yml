@@ -82,6 +82,7 @@ nav:
           - As Speaker:
               - As Speaker: about_coscup/how_to_participate/as_speaker.md
               - 2024 Call for Proposals: about_coscup/how_to_participate/2024_cfp.md
+          - As Attendee: about_coscup/how_to_participate/as_attendee.md
       - Attendee Services:
           - about_coscup/attendee_services/index.md
           - Eve Gathering: about_coscup/eve_gathering/overview.md
@@ -201,6 +202,7 @@ plugins:
             Accounting System: 財務會計系統
             Announcement: 訊息發佈
             Attendee Services: 會眾服務
+            As Attendee: 身為「會眾」
             As Community: 身為「開源社群」
             As Speaker: 身為「議題講者」
             Build Base Image: 建立基本映像檔
