@@ -27,7 +27,7 @@ If your sponsorship package includes a booth, please take note of the following 
 - Parking: The school's parking lot is outsourced to a private company. For detailed fee information, you can search for "**CITY PARKING 城市車旅停車場 國立臺灣科技大學停車場(台科大站)**."
       - For brief unloading, it is suggested to temporarily stop (without turning off the engine) at **Lane 155, Section 3, Keelung Road** for unloading.
 - Booth Location: You can refer to the [Booth Map Information](https://drive.google.com/file/d/19ggSO_tz8ozeyH9KwgJD_WAxLcEIL4kN/view).
-- Booth Setup: Please refer to the [Booth Setup Guide](https://docs.google.com/presentation/d/1Pdzt5qR_u_QkBJ2Q4hGTpcsv0HiVA_8R/).
+- Booth Setup: Please refer to the [Booth Setup Guide](https://docs.google.com/presentation/d/1LYh8fVA4ef9h6Mc5sz0EqEYmZIONJgMV/).
 
 ???+ note "Venue"
 
