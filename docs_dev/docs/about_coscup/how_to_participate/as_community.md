@@ -45,10 +45,18 @@ Over the two days of COSCUP, attendees gather to participate. For communities, h
 
 The current booth information has been announced. You can refer to the [Community Booth Locations](https://drive.google.com/file/d/19ggSO_tz8ozeyH9KwgJD_WAxLcEIL4kN/view) and the [Booth Setup Guide](https://docs.google.com/presentation/d/1LYh8fVA4ef9h6Mc5sz0EqEYmZIONJgMV/).
 
-Items provided:
+??? question "How do the booth canival games work?"
 
-- One table (180 x 60 cm), with two chairs. Tables might probably share with other communities if necessary.
-- At least ONE 110V AC socket (Total power consumption mustn’t exceed 550W), bring an own power strip if it is needed.
+    When attendees visit your booth, you can ask them to show the QR code in their dedicated OPass.
+
+    1. Use a device with a camera and internet access to open the link for the community booth stamp provided by the conference. (The link has already been sent to the booth manager.)
+    2. Scan the attendee's OPass QR Code.
+    3. When the scanning device screen displays "Successfully stamped for OOO," the community booth stamp is completed, and the attendee has earned their stamp points for redemption.
+
+??? info "Items provided"
+
+    - One table (180 x 60 cm), with two chairs. Tables might probably share with other communities if necessary.
+    - At least ONE 110V AC socket (Total power consumption mustn’t exceed 550W), bring an own power strip if it is needed.
 
 ??? info "2024 Community Booths"
 
