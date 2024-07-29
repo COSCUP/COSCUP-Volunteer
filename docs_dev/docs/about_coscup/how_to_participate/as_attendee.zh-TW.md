@@ -164,6 +164,14 @@ COSCUP 除了社群議程之外，我們也提供給予會眾身心靈放鬆的�
 
     建議排版都用 A4 尺寸的方式製作，尺寸調整在影印、印刷店時請店員以 A5 或 A6 方式輸出。
 
+
+## 臺灣飲食指南
+
+這部份需要和您說聲不好意思，今年無法在大會前完成臺灣飲食指南，但我們有找到一些還不錯的內容，如果您從其他國家來臺灣參與 COSCUP，希望能讓您感到特別！
+
+- [Enjoy The Local Delights and Diverse Global Cuisines - WordCamp Asia 2024](https://asia.wordcamp.org/2024/taste-of-taiwan/)
+- [台灣交通部觀光署](https://www.taiwan.net.tw/)
+
 ## 參與者調查
 
 <figure markdown="span">

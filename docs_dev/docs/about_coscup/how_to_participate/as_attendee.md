@@ -166,6 +166,13 @@ Based on previous planning, approximately 20 flyers are needed to cover all bull
 
     It is recommended to design your layout using A4 size. For size adjustments, ask the staff at the copying or printing shop to output the flyers in A5 or A6 size.
 
+## Taiwan Food Guide
+
+We apologize that we couldn't complete the Taiwan Food Guide before the conference this year. However, we found some good content that we hope will make your visit special, especially if you're coming from another country to attend COSCUP!
+
+- [Enjoy The Local Delights and Diverse Global Cuisines - WordCamp Asia 2024](https://asia.wordcamp.org/2024/taste-of-taiwan/)
+- [Taiwan Tourism Administration, MOTC](https://eng.taiwan.net.tw/)
+
 ## Attendee Survey
 
 <figure markdown="span">
