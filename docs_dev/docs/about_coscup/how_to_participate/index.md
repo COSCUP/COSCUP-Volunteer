@@ -14,17 +14,29 @@ icon: material/tooltip-question-outline
 
     There are many ways to participate in COSCUP, and becoming a part of the organizing volunteer team is not the only option.
 
+This guide gradually directs you on how to participate or assist at different stages, depending on your role. The ultimate goal is to converge on a perfect outcome over the two days of the event!
+
 ## Roles
 
-This guide gradually directs you on how to participate or assist at different stages, depending on your role. The ultimate goal is to converge on a perfect outcome over the two days of the event!
+### Basic Participation as an "Attendee"
+
+We collectively define everyone present at the venue and participants as "attendees." They may then be assigned additional roles or attributes, which could belong to one or multiple categories.
+
+<div class="grid cards" markdown>
+
+-   :fontawesome-solid-users-between-lines: [Attendees](./as_attendee.md) - General public participating in COSCUP. <small>[:octicons-arrow-right-24: More details](./as_attendee.md)</small>
+
+</div>
+
+### Role Attributes
+
+You may have multiple role attributes for this event. You can find the relevant guides that match your specific roles.
 
 <div class="grid cards" markdown>
 
 -   :material-home-group: [Open Source Community](./as_community.md) - Community groups related to open-source. <small>[:octicons-arrow-right-24: More details](./as_community.md)</small>
 
 -   :fontawesome-solid-chalkboard-user: [Speakers](./as_speaker.md) - Presenters sharing open-source topics. <small>[:octicons-arrow-right-24: More details](./as_speaker.md)</small>
-
--   :fontawesome-solid-users-between-lines: [Attendees](./as_attendee.md) - General public participating in COSCUP. <small>[:octicons-arrow-right-24: More details](./as_attendee.md)</small>
 
 -   :fontawesome-regular-handshake: [Sponsor Partners](./as_sponsor.md) - Partners who support and identify with us in any way. <small>[:octicons-arrow-right-24: More details](./as_sponsor.md)</small>
 
@@ -70,3 +82,7 @@ This guide gradually directs you on how to participate or assist at different st
 ??? question "How to handle large luggage?"
 
     - The conference provides a "Luggage Storage Area" located at `TR-517`. You can leave your luggage there and enjoy the conference with ease.
+
+??? info "Badges"
+
+    - During the event, you can pick up name tags and write your nickname at the registration desk located in `TR-1F`. In the earlier days of COSCUP when participant name tags were printed, many people would collect all the different role badges throughout the event!

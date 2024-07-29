@@ -102,3 +102,11 @@ icon: material/account-supervisor
 - 提交稿件：<https://pretalx.coscup.org/coscup-2024/>
 - 各社群議程軌介紹：[整理版本](./2024_cfp.md)
 - 議程組聯絡信箱：<program@coscup.org>
+
+確定成為議程講者後，請再次確認議程時間與地點，如何聯絡社群議程負責人，如無法或不知如何聯繫，可以尋求議程組的協助。
+
+由於 COSCUP 是開源社群驅動的年會，各社群有其呈現的方式，大會提供平台與資源將會眾引導到會場，也希望能透過你的社群管道，協助我們一起推廣、宣傳 COSCUP！
+
+在空閒之餘，也歡迎轉換為會眾的身份一起參與、到處逛逛攤位，參考「[會眾](./as_attendee.md)」的引導手冊。
+
+[「會眾」參與指南](./as_attendee.md){ .md-button }

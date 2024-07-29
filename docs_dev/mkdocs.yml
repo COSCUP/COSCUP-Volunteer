@@ -78,9 +78,9 @@ nav:
   - About COSCUP:
       - How to Participate in COSCUP:
           - about_coscup/how_to_participate/index.md
+          - As Attendee: about_coscup/how_to_participate/as_attendee.md
           - As Community: about_coscup/how_to_participate/as_community.md
           - As Speaker: about_coscup/how_to_participate/as_speaker.md
-          - As Attendee: about_coscup/how_to_participate/as_attendee.md
           - As Sponsor: about_coscup/how_to_participate/as_sponsor.md
           - As Organizing Team: about_coscup/how_to_participate/as_organizing_team.md
       - Attendee Services:

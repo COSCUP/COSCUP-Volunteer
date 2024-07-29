@@ -102,3 +102,11 @@ As COSCUP sees increasing participation from international partners, it is sugge
 - Submit your proposal: <https://pretalx.coscup.org/coscup-2024/>
 - Introductions to each community track: [Compiled version](./2024_cfp.md).
 - Contact email for the Program Team: <program@coscup.org>.
+
+After confirming your role as a session speaker, please double-check the schedule and location, and how to contact the community track coordinator. If you are unable or unsure how to make contact, you can seek assistance from the programming team.
+
+Since COSCUP is a community-driven annual conference, each community has its own way of presenting topics. The conference provides a platform and resources to attract attendees to the venue, and we hope that you can also help promote and publicize COSCUP through your community channels.
+
+In your spare time, you are welcome to switch to the role of an attendee, explore the booths, and participate in various activities. For more information, refer to the [Attendee](./as_attendee.md) guide.
+
+[Attendee Participation Guide](./as_attendee.md){ .md-button }

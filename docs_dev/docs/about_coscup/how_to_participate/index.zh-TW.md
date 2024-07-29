@@ -18,15 +18,27 @@ icon: material/tooltip-question-outline
 
 ## 角色
 
-在 COSCUP 活動中，大約可以歸納為幾種參與角色：籌備團隊志工、開源社群、議題講者、會眾、贊助夥伴。
+在 COSCUP 活動中，大約可以歸納為數個參與角色，如：籌備團隊志工、開源社群、議題講者、會眾、贊助夥伴。
+
+### 基本參與「會眾」
+
+我們統一將所有來會場的所有人、參與者定義為「會眾」，再附加上角色屬性，可能是一類或多類的歸屬。
+
+<div class="grid cards" markdown>
+
+-   :fontawesome-solid-users-between-lines: [會眾](./as_attendee.md) - 參與 COSCUP 的一般大眾 <small>[:octicons-arrow-right-24: 了解更多](./as_attendee.md)</small>
+
+</div>
+
+### 角色屬性
+
+您可能在這次活動用有許多角色屬性，可以找到符合您相關的引導手冊。
 
 <div class="grid cards" markdown>
 
 -   :material-home-group: [開源社群](./as_community.md) - 與開放原始碼相關的社群團體 <small>[:octicons-arrow-right-24: 了解更多](./as_community.md)</small>
 
 -   :fontawesome-solid-chalkboard-user: [議題講者](./as_speaker.md) - 分享開源議題的講者 <small>[:octicons-arrow-right-24: 了解更多](./as_speaker.md)</small>
-
--   :fontawesome-solid-users-between-lines: [會眾](./as_attendee.md) - 參與研討會的一般大眾 <small>[:octicons-arrow-right-24: 了解更多](./as_attendee.md)</small>
 
 -   :fontawesome-regular-handshake: [贊助夥伴](./as_sponsor.md) - 以任何方式支持、認同我們的夥伴 <small>[:octicons-arrow-right-24: 了解更多](./as_sponsor.md)</small>
 
@@ -72,3 +84,7 @@ icon: material/tooltip-question-outline
 ??? question "大件行李如何處處理？"
 
     - 大會有提供「行李寄放處」，位置在 `TR-517`，可將行李託付寄存，輕鬆的逛大會。
+
+??? info "識別證、名牌"
+
+    - 活動期間在 `TR-1F` 報到處有名牌可以索取與手寫暱稱。在好久好久以前的 COSCUP 還會印製參與者名牌時，有許多人會在一屆中蒐集所有的參與身份！
