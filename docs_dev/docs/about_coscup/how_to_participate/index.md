@@ -16,6 +16,15 @@ icon: material/tooltip-question-outline
 
 This guide gradually directs you on how to participate or assist at different stages, depending on your role. The ultimate goal is to converge on a perfect outcome over the two days of the event!
 
+??? note ":material-qrcode-scan: Share by QRCode"
+
+    This page could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
+
+    <figure markdown="span">
+        ![How to participate in COSCUP Page](https://volunteer.coscup.org/doc/qrcode_how_to_participate.png){ loading=lazy width=200 }
+        <figcaption><https://volunteer.coscup.org/docs/about_coscup/how_to_participate/></figcaption>
+    </figure>
+
 ## Roles
 
 ### Basic Participation as an "Attendee"

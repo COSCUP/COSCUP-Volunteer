@@ -22,6 +22,15 @@ The COSCUP 2024 secretary team has organized the current planned activities and 
 
 The confirmed activities for 2024 are as follows. You can read the detailed activity descriptions one by one, and note that some activities require reservations to participate!
 
+??? note ":material-qrcode-scan: Share by QRCode"
+
+    This page could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
+
+    <figure markdown="span">
+        ![Attendee Services Page](https://volunteer.coscup.org/doc/qrcode_attendee_services.png){ loading=lazy width=200 }
+        <figcaption><https://volunteer.coscup.org/docs/about_coscup/attendee_services/></figcaption>
+    </figure>
+
 ## Service List
 
 <div class="grid cards" markdown>

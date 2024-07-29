@@ -16,6 +16,15 @@ icon: material/tooltip-question-outline
 
 這份指南逐步引導在不同時程階段、如何依您所在的角色，可以參與或協助的方式。最終的目標在活動二日收斂一個完美的成果！
 
+??? note ":material-qrcode-scan: QRCode 頁面分享"
+
+    當您在攤位現場推廣時，可以透過 :material-qrcode-scan: QRCode 分享此頁面。
+
+    <figure markdown="span">
+        ![如何參與、準備 COSCUP 頁面](https://volunteer.coscup.org/doc/qrcode_how_to_participate_zh-TW.png){ loading=lazy width=200 }
+        <figcaption><https://volunteer.coscup.org/docs/zh-TW/about_coscup/how_to_participate/></figcaption>
+    </figure>
+
 ## 角色
 
 在 COSCUP 活動中，大約可以歸納為數個參與角色，如：籌備團隊志工、開源社群、議題講者、會眾、贊助夥伴。
