@@ -73,6 +73,15 @@ Drink tickets for the "Eve Gathering" and some activities require reservations. 
 
 [:ticket: "Eve Gathering," "Healing Market," and "Junior Workshops" order page :fontawesome-solid-share:](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
 
+??? note ":material-qrcode-scan: Share by QRCode"
+
+    This page could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
+
+    <figure markdown="span">
+        ![Attendee Services Order Page](https://volunteer.coscup.org/doc/qrcode_attendee_services_order.png){ loading=lazy width=200 }
+        <figcaption><https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44></figcaption>
+    </figure>
+
 !!! note "Other Services at COSCUP"
 
     In addition to the activities planned by the administrative team, there are also items planned by other groups:

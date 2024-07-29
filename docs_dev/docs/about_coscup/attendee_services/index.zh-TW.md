@@ -73,6 +73,15 @@ COSCUP 2024 行政組整理目前規劃的活動、並賦予較合適的名稱�
 
 [:ticket: 「前夜派對」、「療癒市集」、「親子工作坊」訂購頁 :fontawesome-solid-share:](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
 
+??? note ":material-qrcode-scan: QRCode 頁面分享"
+
+    當您在攤位現場推廣時，可以透過 :material-qrcode-scan: QRCode 分享此頁面。
+
+    <figure markdown="span">
+        ![會眾服務訂購頁面](https://volunteer.coscup.org/doc/qrcode_attendee_services_order.png){ loading=lazy width=200 }
+        <figcaption><https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44></figcaption>
+    </figure>
+
 !!! note "大會其他的服務"
 
     除了行政組所規劃的活動外，也有其他組別所規劃的項目：
