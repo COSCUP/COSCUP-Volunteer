@@ -426,7 +426,7 @@ class User:
             yield data
 
     @staticmethod
-    def get_dietary_habit_statistics(uids: list[str]):
+    def get_dietary_habit_statistics(uids: list[str]) -> dict[str, int]:
         ''' Get dietary habit statistics by given uids '''
         result: dict[str, int] = { }
 
