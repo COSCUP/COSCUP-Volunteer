@@ -513,10 +513,12 @@ def project_statictics(pid: str) -> str | ResponseBase:
             all_users.update(team.members)
 
     habit_statistics = User.get_dietary_habit_statistics(uids=list(all_users))
+    clothes_statistics = Form.get_clothes_statistics(pid=pid)
 
     return render_template('./project_statistics.html',
                             project=project.dict(by_alias=True),
                             habit_statistics=habit_statistics,
+                            clothes_statistics=clothes_statistics,
                             editable=editable)
 
 

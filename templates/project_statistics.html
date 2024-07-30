@@ -44,6 +44,23 @@
             </tbody>
           </table>
         </div>
+        <div class="column">
+          <h4 class="title is-4">衣服尺寸人數分布</h4>
+          <table class="table">
+            <thead>
+              <th>尺寸</th>
+              <th>人數</th>
+            </thead>
+            <tbody>
+              {% for clothes_size, count in clothes_statistics.items() %}
+                <tr>
+                  <td>{{ clothes_size }}</td>
+                  <td>{{ count }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
   </div>
 </section>

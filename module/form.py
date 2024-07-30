@@ -263,6 +263,27 @@ class Form:  # pylint: disable=too-many-public-methods
         yield from FormDB().find({'case': 'clothes', 'pid': pid})
 
     @staticmethod
+    def get_clothes_statistics(pid: str) -> dict[str, int]:
+        ''' Get clothes statistics by given pid '''
+        result = {
+            'XS': 0,
+            'S': 0,
+            'M': 0,
+            'L': 0,
+            'XL': 0,
+            '2XL': 0,
+            '3XL': 0,
+            '4XL': 0,
+            '5XL': 0,
+            '6XL': 0,
+        }
+
+        for form in Form.all_clothes(pid=pid):
+            result[form['data']['clothes']] += 1
+
+        return result
+
+    @staticmethod
     def update_parking_card(pid: str, uid: str, data: dict[str, Any]) -> dict[str, Any]:
         ''' Update parking card
 
