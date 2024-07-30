@@ -7,7 +7,7 @@ from pymongo.collection import ReturnDocument
 
 from models.oauth_db import OAuthDB
 from models.users_db import PolicySignedDB, TobeVolunteerDB, UsersDB
-from module.dietary_habit import DietaryHabitItemsValue
+from module.dietary_habit import DietaryHabitItemsName, DietaryHabitItemsValue
 from module.mattermost_bot import MattermostTools
 from module.skill import TobeVolunteerStruct
 from structs.users import PolicyType
@@ -424,6 +424,26 @@ class User:
                 data['dietary_habit'] = user_info['profile_real']['dietary_habit']
 
             yield data
+
+    @staticmethod
+    def get_dietary_habit_statistics(uids: list[str]):
+        ''' Get dietary habit statistics by given uids '''
+        result: dict[str, int] = { }
+
+        for item in DietaryHabitItemsName:
+            result[item.value] = 0
+
+        user_infos = User.get_info(uids=uids)
+        for user_info in user_infos.values():
+            if "profile_real" not in user_info or \
+                "dietary_habit" not in user_info["profile_real"]:
+                continue
+
+            for habit in user_info["profile_real"]["dietary_habit"]:
+                habit_enum_name = DietaryHabitItemsValue(habit).name
+                result[DietaryHabitItemsName[habit_enum_name].value] += 1
+
+        return result
 
 
 class TobeVolunteer:

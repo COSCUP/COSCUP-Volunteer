@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block head_title %}{{project.name}} 統計資訊{% endblock %}
+{% block body %}
+<section class="section">
+  <div class="container">
+    <h1 class="title">
+        {{project.name}}
+    </h1>
+    <div class="content">
+        <p>{{project.desc}}</p>
+        {% if editable %}
+        <div class="buttons is-right">
+            <a class="button is-info is-light" href="/project/{{project._id}}/edit">
+                <span class="icon"><i class="far fa-edit"></i></span> <span>Edit</span>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+      <div class="tabs">
+        <ul>
+          <li><a href="/project/{{project._id}}">組別列表</a></li>
+          <li class="is-active"><a>統計資訊</a></li>
+        </ul>
+      </div>
+      <div class="columns">
+        <div class="column">
+          <h4 class="title is-4">飲食習慣人數分布</h4>
+          <table class="table">
+            <thead>
+              <th>習慣</th>
+              <th>人數</th>
+            </thead>
+            <tbody>
+              {% for habit, count in habit_statistics.items() %}
+                <tr>
+                  <td>{{ habit }}</td>
+                  <td>{{ count }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+  </div>
+</section>
+{% endblock %}
