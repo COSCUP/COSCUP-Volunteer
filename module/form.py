@@ -451,6 +451,19 @@ class FormAccommodation:
         yield from FormDB().find({'case': 'accommodation', 'pid': pid, 'data.key': {'$ne': 'no'}})
 
     @staticmethod
+    def get_statistics(pid: str) -> dict[str, int]:
+        ''' Get accommodation statistics by given pid '''
+        result = {
+            'yes': 0,
+            'yes-longtraffic': 0,
+        }
+
+        for form in FormAccommodation.get(pid=pid):
+            result[form['data']['key']] += 1
+
+        return result
+
+    @staticmethod
     def update_room(pid: str, uid: str, room: str, change_key: bool = True) -> dict[str, Any]:
         ''' Update room no
 
