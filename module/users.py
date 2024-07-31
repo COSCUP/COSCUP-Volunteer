@@ -15,7 +15,7 @@ from structs.users import User as UserStruct
 from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase
 
 
-class User:
+class User:  # pylint: disable=too-many-public-methods
     ''' User
 
     Args:
@@ -428,7 +428,7 @@ class User:
     @staticmethod
     def get_dietary_habit_statistics(uids: list[str]) -> dict[str, int]:
         ''' Get dietary habit statistics by given uids '''
-        result: dict[str, int] = { }
+        result: dict[str, int] = {}
 
         for item in DietaryHabitItemsName:
             result[item.value] = 0
@@ -436,7 +436,7 @@ class User:
         user_infos = User.get_info(uids=uids)
         for user_info in user_infos.values():
             if "profile_real" not in user_info or \
-                "dietary_habit" not in user_info["profile_real"]:
+                    "dietary_habit" not in user_info["profile_real"]:
                 continue
 
             for habit in user_info["profile_real"]["dietary_habit"]:
