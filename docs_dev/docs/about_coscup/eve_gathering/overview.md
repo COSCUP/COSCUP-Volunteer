@@ -31,6 +31,10 @@ The time and location of this year's Welcome party:
 
     No registration is required, please go directly. The only thing you need to pay for is the unlimited drink coupon (including non-alcoholic beverages). These coupons can help us offset the venue fee, please support us. There will be some light food available to satisfy your hunger on site.
 
+!!! question "Is outside food allowed?"
+
+    Yes! We have arranged with the venue to allow outside food. So, feel free to bring your KFC bucket, egg tarts, or even braised snacks and stinky tofu to enjoy!
+
 ## After the Party
 
 <figure markdown="span">

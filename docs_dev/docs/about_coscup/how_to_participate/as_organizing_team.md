@@ -29,12 +29,14 @@ A survey regarding dietary preferences was conducted a few weeks before the even
 Accommodation details have been announced on the volunteer service platform under the "Event Day Accommodation" application page. Please ensure you check in and check out within the specified times. If you have any accommodation issues, such as changing rooms midway, please contact the **Secretary Team**. Do not book and then fail to show up or leave arbitrarily, as roll call will be enforced this year.
 
 - Accommodation Dates: Check-in starts on 8/2 at 17:00, 8/2 and 8/3 nights, with check-out on the morning of 8/4.
+    - **Accommodation**: Please refer to the "Event Day Accommodation" page on the volunteer platform. When checking in, please present your identification and mention that it is a **group booking**.
 - Shared bathroom area includes 5 toilets and 4 showers.
 - Provided items: Shampoo, shower gel, and hairdryer. Please bring your own towels and toothbrushes.
 
 !!! note "Shuttle Service"
 
-    There will be two shuttle buses from the accommodation to NTUST each day, departing at `06:30` and `06:45`. Please be on time for the departure to NTUST.
+    - There will be two shuttle buses from the accommodation to NTUST each day, departing at `06:30` and `06:45`. Please be on time for the departure to NTUST.
+    - Please wait for the bus at the "Liugongjun Park (瑠公圳公園)" bus stop, located in front of "[No. 82, Section 1, Fuxing South Road, Da’an District, Taipei City](https://www.google.com/maps/@25.0436677,121.543732,3a,75y,216.42h,80.36t/data=!3m6!1e1!3m4!1sPSscdT-p_D2qFdnqWHWQIg!2e0!7i16384!8i8192)."
 
 ## Staff T-Shirt Distribution
 
