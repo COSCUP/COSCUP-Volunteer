@@ -3,18 +3,28 @@ import urllib
 from typing import Any
 
 from toldwords.pretalx import Pretalx, Submission, Talk
-from toldwords.utils import DATA2023
 
 import setting
 from models.trackdb import TalkFavsDB, TrackDB
+
+PRETALX_SETTING = {
+    '2023': {
+        'domain': 'pretalx.coscup.org',
+        'event': 'coscup-2023',
+    },
+    '2024': {
+        'domain': 'pretalx.coscup.org',
+        'event': 'coscup-2024',
+    }
+}
 
 
 class Track:
     ''' Track '''
 
     def __init__(self, pid: str) -> None:
-        DATA2023['token'] = setting.PRETALX_API_KEY
-        self.pretalx = Pretalx(**DATA2023)
+        PRETALX_SETTING[pid]['token'] = setting.PRETALX_API_KEY[pid]
+        self.pretalx = Pretalx(**PRETALX_SETTING[pid])
         self.submissions: list[Submission]
         self.talks: list[Talk]
         self.pid = pid
