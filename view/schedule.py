@@ -1,6 +1,5 @@
 ''' Schedule '''
-from flask import (Blueprint, g, jsonify, redirect, render_template, request,
-                   session, url_for)
+from flask import Blueprint, g, jsonify, redirect, render_template, request, session, url_for
 from flask.wrappers import Response
 from markdown import markdown
 from werkzeug.wrappers import Response as ResponseBase
@@ -64,7 +63,7 @@ def talk_one(pid: int, session_id: str) -> str | ResponseBase:
                 speaker.biography = markdown(speaker.biography)
 
     if not talks:
-        return redirect('/schedule/2023')
+        return redirect('/schedule/2024')
 
     return render_template('schedule_talks.html',
                            pid=pid,
