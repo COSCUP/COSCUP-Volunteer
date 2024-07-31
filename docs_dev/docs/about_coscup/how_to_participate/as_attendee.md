@@ -48,8 +48,9 @@ Currently, there are two ways to view the schedule. Please choose the one that s
 
 1. [Offcial Schedule](https://coscup.org/2024/en/session)：Designed for wide screens. Remember, there are more session tracks on the right side.
 2. [Pretalx Submission System](https://pretalx.coscup.org/coscup-2024/schedule/)：Offers various ways to view by "Schedule," "Sessions," or "Speakers." It's slightly more suited for mobile devices, tablets, or those who prefer a listed format.
+3. [Schedule from Volunteer Platform](https://volunteer.coscup.org/schedule/2024): Displays session tracks in a listed format, allowing you to bookmark, add to your calendar, and discuss sessions.
 
-[Offcial Schedule](https://coscup.org/2024/en/session){ .md-button } [Pretalx Submission System](https://pretalx.coscup.org/coscup-2024/schedule/){ .md-button }
+[Offcial Schedule](https://coscup.org/2024/en/session){ .md-button } [Pretalx Submission System](https://pretalx.coscup.org/coscup-2024/schedule/){ .md-button } [Schedule from Volunteer Platform](https://volunteer.coscup.org/schedule/2024){ .md-button }
 
 ## BoF
 

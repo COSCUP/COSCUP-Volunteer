@@ -48,8 +48,9 @@ COSCUP 是由開源社群主持開源議題、議程，因此我們會在同一�
 
 1. [大會議程表](https://coscup.org/2024/zh-TW/session)：適合寬銀幕使用，請記得右側還有更多議程軌內容。
 2. [Pretalx 投稿系統](https://pretalx.coscup.org/coscup-2024/schedule/)：可針對「議程表」、「議程」或「講者」呈現不同的瀏覽方式，稍微適合行動裝置、平板尺寸、或比較習慣條列式的呈現。
+3. [志工平台議程表](https://volunteer.coscup.org/schedule/2024)：針對議程軌條列呈現，可收藏、加入行事曆與留言討論議程。
 
-[COSCUP 官方議程](https://coscup.org/2024/zh-TW/session){ .md-button } [Pretalx 投稿系統](https://pretalx.coscup.org/coscup-2024/schedule/){ .md-button }
+[COSCUP 官方議程](https://coscup.org/2024/zh-TW/session){ .md-button } [Pretalx 投稿系統](https://pretalx.coscup.org/coscup-2024/schedule/){ .md-button } [志工平台議程表](https://volunteer.coscup.org/schedule/2024){ .md-button }
 
 ## BoF
 
