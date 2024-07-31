@@ -7,7 +7,7 @@ from toldwords.pretalx import Pretalx, Submission, Talk
 import setting
 from models.trackdb import TalkFavsDB, TrackDB
 
-PRETALX_SETTING = {
+PRETALX_SETTING: dict[str, dict[str, str]] = {
     '2023': {
         'domain': 'pretalx.coscup.org',
         'event': 'coscup-2023',
