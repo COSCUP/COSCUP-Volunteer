@@ -58,10 +58,8 @@ icon: material/store
   > 浮游花、軟木塞磁鐵
 - :white_check_mark: **攤位 04** [台灣高校制服貓](https://www.facebook.com/taiwanuniformcat)
   > 明信片、複製畫、磁鐵、貼紙、手作小物
-- :white_check_mark: **攤位 05** [享苜手捲](https://www.facebook.com/profile.php?id=100093809626577&mibextid=LQQJ4d)
-  > 苜蓿芽手捲、梅子露、冷泡茶
-  >
-  > → [:pancakes: 可使用預購單](https://docs.google.com/forms/d/e/1FAIpQLSeRURGdfmV4amlReqWy44REfTSMCUrBKsKBFq9HMvMKR9SRqg/viewform)
+- :white_check_mark: **攤位 05** BobChao 暢聊開源吃布丁
+  > 手工布丁
 - :white_check_mark: **攤位 06** [金嗓果物](http://www.g-lucky.url.tw/info.html)
   > 農產加工品果乾蜜餞濃縮果汁餅乾
 - :white_check_mark: **攤位 07** [曉咖啡](https://www.facebook.com/akatsukicoffee)
