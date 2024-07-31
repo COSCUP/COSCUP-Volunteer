@@ -46,9 +46,11 @@ Accommodation details have been announced on the volunteer service platform unde
 
 ## Other Notes
 
-1. If you have transportation reimbursement receipts, you can submit them directly to the **volunteer service desk in `TR-312`**.
-2. The celebration banquet will be held on 8/4 in `TR-3F`, starting at 18:00.
-3. Communication equipment distribution and charging will be available in the staff lounge in `TR-617`.
-4. The staff group photo will be taken on 8/4 at 07:40 in `TR-1F`.
-5. The "Massage Station" is located in `TR-612`, and staff can use it for massages at any time.
-6. During your free time, you can also switch roles to become an [attendee](./as_attendee.md) and listen to sessions or participate in the various [attendee services](../attendee_services/index.md) offered.
+1. 8/2 [Venue Setup Registration Form](https://docs.google.com/forms/d/e/1FAIpQLScUjuWW5xC3-X-MkTdLUUvVcw7Jcs7lJYJKxIF0vAVp7sspcQ/viewform)。
+2. If you have transportation reimbursement receipts, you can submit them directly to the **volunteer service desk in `TR-312`**.
+3. The celebration banquet will be held on 8/4 in `TR-3F`, starting at 18:00.
+4. Communication equipment distribution and charging will be available in the staff lounge in `TR-617`.
+5. The staff group photo will be taken on **8/4 at 07:20** in `TR-1F`.
+      - For those staying overnight, remember to bring your luggage and board any of the shuttle buses.
+6. The "[Massage Station](../health_market/overview.md)" is located in `TR-612`, and staff can use it for massages at any time.
+7. During your free time, you can also switch roles to become an [attendee](./as_attendee.md) and listen to sessions or participate in the various [attendee services](../attendee_services/index.md) offered.

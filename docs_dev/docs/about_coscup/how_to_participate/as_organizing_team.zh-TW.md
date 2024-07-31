@@ -46,9 +46,11 @@ icon: material/account-supervisor
 
 ## 其他
 
-1. 如有交通費補助單據，也可直接到 **`TR-312` 志工服務台**提交。
-2. 慶功宴在 `TR-3F`，預計 8/4 18:00 開吃！
-3. 通訊設備發送與充電在 `TR-617` 工人休息室。
-4. 工作人員大合照於 8/4 07:40 `TR-1F` 拍攝大合照。
-5. 「按摩小站」在 `TR-612`，工作人員可隨時去按摩。
-6. 空檔時間也可以轉變為[會眾](./as_attendee.md)去聽議程或是參與體驗相關的[會眾服務](../attendee_services/index.md)。
+1. 8/2 [場地佈置報名表](https://docs.google.com/forms/d/e/1FAIpQLScUjuWW5xC3-X-MkTdLUUvVcw7Jcs7lJYJKxIF0vAVp7sspcQ/viewform)。
+2. 如有交通費補助單據，也可直接到 **`TR-312` 志工服務台**提交。
+3. 慶功宴在 `TR-3F`，預計 8/4 18:00 開吃！
+4. 通訊設備發送與充電在 `TR-617` 工人休息室。
+5. 工作人員大合照於 **8/4 07:20** `TR-1F` 拍攝大合照。
+      - 住宿的夥伴記得行李也要上手、並搭上任一台交通接駁車。
+6. 「[按摩小站](../health_market/overview.md)」在 `TR-612`，工作人員可隨時去按摩。
+7. 空檔時間也可以轉變為[會眾](./as_attendee.md)去聽議程或是參與體驗相關的[會眾服務](../attendee_services/index.md)。
