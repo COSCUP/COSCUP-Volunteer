@@ -40,6 +40,32 @@ Accommodation details have been announced on the volunteer service platform unde
 
 ## Staff T-Shirt Distribution
 
+### Dress Code
+
+#### Day 1
+
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/img/2024/2024_clothes_day1.webp">
+        <img src="https://volunteer.coscup.org/img/2024/2024_clothes_day1.webp"
+            alt="COSCUP Staff Clothes Day 1" title="COSCUP Staff Clothes Day 1"
+            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
+    </a>
+    <figcaption>Features: Pattern on the left chest, codepecker design on the back.</figcaption>
+</figure>
+
+#### Day 2
+
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/img/2024/2024_clothes_day2.webp">
+        <img src="https://volunteer.coscup.org/img/2024/2024_clothes_day2.webp"
+            alt="COSCUP Staff Clothes Day 2" title="COSCUP Staff Clothes Day 2    "
+            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
+    </a>
+    <figcaption>Features: Codepecker design on the front, COSCUP logo on the upper back.</figcaption>
+</figure>
+
+### Pickup and Distribution
+
 1. On 8/2 during setup, you can pick up your T-shirt at the volunteer service desk in `TR-312` after 14:00.
 2. On 8/3, the first day of the event, you can pick up your T-shirt at the volunteer service desk in `TR-312` after 09:00.
 3. On 8/4, the second day, please pick up your T-shirt at the volunteer service desk in `TR-312` before 10:00. {++After this time, the remaining T-shirts will be organized and handed over to the marketing team for sale++}.

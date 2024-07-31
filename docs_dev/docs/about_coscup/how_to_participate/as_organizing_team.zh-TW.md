@@ -38,7 +38,33 @@ icon: material/account-supervisor
     - 住宿地點到臺科大的交通車預計每日 `06:30`、`06:45` 二個班次，請趕上發車時間前往臺科大。
     - 請在公車站牌「瑠公圳公園」等候上車，站牌位置在「[106 台北市大安區復興南路一段82號](https://www.google.com/maps/@25.0436677,121.543732,3a,75y,216.42h,80.36t/data=!3m6!1e1!3m4!1sPSscdT-p_D2qFdnqWHWQIg!2e0!7i16384!8i8192)」前。
 
-## 工人衣服發送
+## 工人衣服
+
+### 衣服穿著
+
+#### 第一天
+
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/img/2024/2024_clothes_day1.webp">
+        <img src="https://volunteer.coscup.org/img/2024/2024_clothes_day1.webp"
+            alt="COSCUP 工作人員衣服 Day 1" title="COSCUP 工作人員衣服 Day 1"
+            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
+    </a>
+    <figcaption>特徵：左胸口圖案，小啄圖樣在背後。</figcaption>
+</figure>
+
+#### 第二天
+
+<figure markdown="span">
+    <a href="https://volunteer.coscup.org/img/2024/2024_clothes_day2.webp">
+        <img src="https://volunteer.coscup.org/img/2024/2024_clothes_day2.webp"
+            alt="COSCUP 工作人員衣服 Day 2" title="COSCUP 工作人員衣服 Day 2    "
+            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
+    </a>
+    <figcaption>特徵：小啄圖樣在前，背後上方 COSCUP Logo。</figcaption>
+</figure>
+
+### 領取發送
 
 1. 在 8/2 場佈期間，預計 14:00 後在 `TR-312` 志工服務台領取。
 2. 在 8/3 第一天，預計 09:00 後在 `TR-312` 志工服務台領取。
