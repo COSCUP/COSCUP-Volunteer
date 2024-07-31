@@ -496,6 +496,34 @@ def team_page(pid: str) -> str | ResponseBase:
                            )
 
 
+@VIEW_PROJECT.route('/<pid>/statistics', methods=('GET',))
+def project_statictics(pid: str) -> str | ResponseBase:
+    ''' Statistics page '''
+    project = Project.get(pid)
+    if not project:
+        return Response('no data', status=404)
+
+    editable = g.user['account']['_id'] in project.owners
+
+    all_users = set()
+    for team in Team.list_by_pid(pid=pid):
+        if team.chiefs:
+            all_users.update(team.chiefs)
+        if team.members:
+            all_users.update(team.members)
+
+    habit_statistics = User.get_dietary_habit_statistics(uids=list(all_users))
+    clothes_statistics = Form.get_clothes_statistics(pid=pid)
+    accommodation_statictics = FormAccommodation.get_statistics(pid=pid)
+
+    return render_template('./project_statistics.html',
+                            project=project.dict(by_alias=True),
+                            habit_statistics=habit_statistics,
+                            clothes_statistics=clothes_statistics,
+                            accommodation_statictics=accommodation_statictics,
+                            editable=editable)
+
+
 @VIEW_PROJECT.route('/<pid>/form_traffic_mapping', methods=('GET', 'POST'))
 def project_form_traffic_mapping(pid: str) -> str | ResponseBase:
     ''' Project form traffic mapping '''
