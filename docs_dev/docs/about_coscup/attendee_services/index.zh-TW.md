@@ -22,6 +22,15 @@ COSCUP 2024 行政組整理目前規劃的活動、並賦予較合適的名稱�
 
 今年 2024 已確定的活動如下，詳細的活動內容可以逐一閱讀，部份活動需要預訂才能參與！
 
+??? note ":material-qrcode-scan: QRCode 頁面分享"
+
+    當您在攤位現場推廣時，可以透過 :material-qrcode-scan: QRCode 分享此頁面。
+
+    <figure markdown="span">
+        ![會眾服務頁面](https://volunteer.coscup.org/doc/qrcode_attendee_services_zh-TW.png){ loading=lazy width=200 }
+        <figcaption><https://volunteer.coscup.org/docs/zh-TW/about_coscup/attendee_services/></figcaption>
+    </figure>
+
 ## 服務列表
 
 <div class="grid cards" markdown>
@@ -63,6 +72,15 @@ COSCUP 2024 行政組整理目前規劃的活動、並賦予較合適的名稱�
 「前夜派對」酒券與部份活動需要預訂，請透過以下訂購頁面完成訂購。
 
 [:ticket: 「前夜派對」、「療癒市集」、「親子工作坊」訂購頁 :fontawesome-solid-share:](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
+
+??? note ":material-qrcode-scan: QRCode 頁面分享"
+
+    當您在攤位現場推廣時，可以透過 :material-qrcode-scan: QRCode 分享此頁面。
+
+    <figure markdown="span">
+        ![會眾服務訂購頁面](https://volunteer.coscup.org/doc/qrcode_attendee_services_order.png){ loading=lazy width=200 }
+        <figcaption><https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44></figcaption>
+    </figure>
 
 !!! note "大會其他的服務"
 
