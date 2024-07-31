@@ -119,7 +119,7 @@ Amid the hustle and bustle of daily life, give yourself a chance to calm down. E
 
     Therapeutic sleep sessions are scheduled as follows, held in the `TR-612` classroom. Participation requires a reservation.
 
-    - 8/3 10:00 ~ 11:30
+    - 8/4 10:00 ~ 11:30
     - 8/4 14:00 ~ 15:30
 
 ## Schedule
