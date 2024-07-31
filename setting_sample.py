@@ -1,4 +1,5 @@
 import os
+
 # ----- flask ----- #
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 6699
@@ -81,7 +82,7 @@ OPENAI_ARGS = {
 }
 
 # ----- Pretalx ----- #
-PRETALX_API_KEY = ''
+PRETALX_API_KEY = {'2023': '', '2024': ''}
 EXCLUDE_SUBMISSIONS = []
 
 # ----- TDX (Transport Data eXchange) ----- #
