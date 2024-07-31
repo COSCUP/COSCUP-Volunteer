@@ -24,7 +24,7 @@ As mentioned, the only requirement is to provide something akin to an "open sour
 
 ## Booth Information
 
-The event will be held at NTUST in classroom `TR412-3`. We expect to host 4 to 6 booths in this classroom, with booths set up around the perimeter. The center of the classroom will be arranged as a simple dining and chatting area for attendees (dine-in area).
+The event will be held at NTUST in classroom `TR413-2`. We expect to host 4 to 6 booths in this classroom, with booths set up around the perimeter. The center of the classroom will be arranged as a simple dining and chatting area for attendees (dine-in area).
 
 - Booth table dimensions: `90L x 180W x 75H (cm)`. We plan to provide power outlets, electrical equipment, one long table, and two chairs per booth. Please bring any additional equipment you might need.
 
