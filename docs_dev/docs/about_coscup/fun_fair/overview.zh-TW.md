@@ -58,7 +58,7 @@ icon: material/store
   > 浮游花、軟木塞磁鐵
 - :white_check_mark: **攤位 04** [台灣高校制服貓](https://www.facebook.com/taiwanuniformcat)
   > 明信片、複製畫、磁鐵、貼紙、手作小物
-- :white_check_mark: **攤位 05** BobChao 暢聊開源吃布丁
+- :wave: **攤位 05** （熱情招商中）
   > 手工布丁
 - :white_check_mark: **攤位 06** [金嗓果物](http://www.g-lucky.url.tw/info.html)
   > 農產加工品果乾蜜餞濃縮果汁餅乾
@@ -78,7 +78,8 @@ icon: material/store
   > 調酒 / 咖啡 / 炒泡麵
 - :white_check_mark: **攤位 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
   > 浮游花、軟木塞磁鐵
-- :wave: **攤位 04** （聯繫中）
+- :white_check_mark: **攤位 04** [BobChao 暢聊開源吃布丁](https://www.facebook.com/bobchao/posts/pfbid09NqgFcPgjN7ZxF3pu9tXftuG3ojg9LziUPC37j1r4rvRrVujZm3gLyryEt4GpG8tl)
+  > 手工布丁
 - :wave: **攤位 05** （熱情招商中）
 - :wave: **攤位 06** （熱情招商中）
 
