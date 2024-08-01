@@ -76,7 +76,7 @@
                         <tr>
                             <td>住宿地點</td>
                             <td>101艾美琪旅店六星級背包客 - 台北市大安區復興南路一段126巷1號4樓<br>
-                                <small>（Check-in：17:00，check-in 時說是<span class="tag is-success is-light">COSCUP</span>或<span class="tag is-success is-light">開源人年會</span>）</small></td>
+                                <small>（Check-in：17:00，check-in 時說是<span class="tag is-success is-light">團體訂房</span>）</small></td>
                         </tr>
                         <tr>
                             <td>住宿時間</td>
@@ -92,7 +92,7 @@
                                 <span>101艾美琪旅店 → 臺科大</span>
                                 <span class="tag is-link is-light">06:30</span>
                                 <span class="tag is-link is-light">06:45</span>
-                                <span>上車地點在 ???，要提早離開並移動</span>
+                                <span>上車地點請在公車站牌「瑠公圳公園」等候上車，站牌位置在「106 台北市大安區復興南路一段82號」前。</span>
                             </td>
                         </tr>
                         <tr>
@@ -102,13 +102,17 @@
                                 <ul>
                                     <li>◎ 請依分配的床位入住，勿私自更換位置，並在活動期間、包含住宿期間遵守大會的社群守則</li>
                                     <li>◎ 大家要抓好時間盥洗避免塞車</li>
-                                    <li>◎ 「不提供」毛巾、牙刷（會有沐浴乳、洗髮乳）</li>
+                                    <li>◎ 僅提供：洗髮精、沐浴乳、吹風機，請務必自備毛巾、牙刷。</li>
+                                    <li>請依<a href="https://volunteer.coscup.org/docs/zh-TW/about_coscup/how_to_participate/as_organizing_team/">此頁面「籌備團隊 | 如何參與、準備 COSCUP」公告內容</a>為主。</li>
                                 </ul>
                             </td>
                         </tr>
                         <tr>
                             <td>室友</td>
-                            <td v-if="Object.keys(room.mate).length > 0" style="vertical-align:middle;">
+                            <td v-if="Object.keys(room.mate).length === 0">
+                                <span class="tag is-danger is-light">今年不適用！</span>
+                            </td>
+                            <td v-if="Object.keys(room.mate).length === 0" style="vertical-align:middle;">
                                 <div style="display: inline-flex;">
                                     <a :href="'/user/'+room.mate.uid" style="display:inherit;">
                                         <figure class="image is-32x32">
