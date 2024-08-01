@@ -48,22 +48,21 @@ The event will be held at NTUST in classroom `TR413-2`. We expect to host 4 to 6
 
 <div class="grid cards" markdown>
 
-- :white_check_mark: **攤位 01** [干苑 - 麻香冷滷味](https://www.facebook.com/ganyuan.ludogan)
-  > 豆干、滷味、飲品
+- :white_check_mark: **Booth 01** [干苑 - 麻香冷滷味](https://www.facebook.com/ganyuan.ludogan)
+  > Dried Tofu / Braised Snacks / Beverages
   >
-  > → [:pancakes: 可使用預購單](https://docs.google.com/forms/d/e/1FAIpQLSeRURGdfmV4amlReqWy44REfTSMCUrBKsKBFq9HMvMKR9SRqg/viewform)
+  > → [:pancakes: Available for pre-order](https://docs.google.com/forms/d/e/1FAIpQLSeRURGdfmV4amlReqWy44REfTSMCUrBKsKBFq9HMvMKR9SRqg/viewform)
 - :white_check_mark: **Booth 02** [EMOJI Cafe & Bar](https://www.instagram.com/emoji0701/)
-  > 調酒 / 咖啡 / 炒泡麵
+  > Mixology / Cocktails / Coffee / Cookies
 - :white_check_mark: **Booth 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
-  > 浮游花、軟木塞磁鐵
+  > Floating Flowers / Cork Magnets
 - :white_check_mark: **Booth 04** [台灣高校制服貓](https://www.facebook.com/taiwanuniformcat)
-  > 明信片、複製畫、磁鐵、貼紙、手作小物
+  > Postcards / Prints / Magnets / Stickers / Handmade Crafts
 - :wave: **Booth 05** （Actively Recruiting）
-  > 手工布丁
 - :white_check_mark: **Booth 06** [金嗓果物](http://www.g-lucky.url.tw/info.html)
-  > 農產加工品果乾蜜餞濃縮果汁餅乾
+  > Agricultural Processed Products: Dried Fruits, Preserved Fruits, Concentrated Fruit Juice, Cookies
 - :white_check_mark: **Booth 07** [曉咖啡](https://www.facebook.com/akatsukicoffee)
-  > 手沖咖啡
+  > Pour Over Coffee
 - :wave: **Booth 08** （Actively Recruiting）
 
 </div>
@@ -72,14 +71,14 @@ The event will be held at NTUST in classroom `TR413-2`. We expect to host 4 to 6
 
 <div class="grid cards" markdown>
 
-- :white_check_mark: **攤位 01** [路遊茶](https://www.facebook.com/routea0601/)
-  > 冷泡茶、茶包、蜜餞
-- :white_check_mark: **攤位 02** [EMOJI Cafe & Bar](https://www.instagram.com/emoji0701/)
-  > 調酒 / 咖啡 / 炒泡麵
-- :white_check_mark: **攤位 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
-  > 浮游花、軟木塞磁鐵
-- :white_check_mark: **攤位 04** [BobChao 暢聊開源吃布丁](https://www.facebook.com/bobchao/posts/pfbid09NqgFcPgjN7ZxF3pu9tXftuG3ojg9LziUPC37j1r4rvRrVujZm3gLyryEt4GpG8tl)
-  > 手工布丁
+- :white_check_mark: **Booth 01** [路遊茶](https://www.facebook.com/routea0601/)
+  > Cold Brew Tea / Tea Bags / Preserved Fruits
+- :white_check_mark: **Booth 02** [EMOJI Cafe & Bar](https://www.instagram.com/emoji0701/)
+  > Mixology / Cocktails / Coffee / Cookies
+- :white_check_mark: **Booth 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
+  > Floating Flowers / Cork Magnets
+- :white_check_mark: **Booth 04** [BobChao 暢聊開源吃布丁](https://www.facebook.com/bobchao/posts/pfbid09NqgFcPgjN7ZxF3pu9tXftuG3ojg9LziUPC37j1r4rvRrVujZm3gLyryEt4GpG8tl)
+  > Handmade Pudding
 - :wave: **Booth 05** （Actively Recruiting）
 - :wave: **Booth 06** （Actively Recruiting）
 

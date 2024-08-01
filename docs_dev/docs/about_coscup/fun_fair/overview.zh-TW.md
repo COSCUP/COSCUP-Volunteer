@@ -53,7 +53,7 @@ icon: material/store
   >
   > → [:pancakes: 可使用預購單](https://docs.google.com/forms/d/e/1FAIpQLSeRURGdfmV4amlReqWy44REfTSMCUrBKsKBFq9HMvMKR9SRqg/viewform)
 - :white_check_mark: **攤位 02** [EMOJI Cafe & Bar](https://www.instagram.com/emoji0701/)
-  > 調酒 / 咖啡 / 炒泡麵
+  > 調酒 / 咖啡 / 餅乾
 - :white_check_mark: **攤位 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
   > 浮游花、軟木塞磁鐵
 - :white_check_mark: **攤位 04** [台灣高校制服貓](https://www.facebook.com/taiwanuniformcat)
@@ -75,7 +75,7 @@ icon: material/store
 - :white_check_mark: **攤位 01** [路遊茶](https://www.facebook.com/routea0601/)
   > 冷泡茶、茶包、蜜餞
 - :white_check_mark: **攤位 02** [EMOJI Cafe & Bar](https://www.instagram.com/emoji0701/)
-  > 調酒 / 咖啡 / 炒泡麵
+  > 調酒 / 咖啡 / 餅乾
 - :white_check_mark: **攤位 03** [萍水相逢花藝工作室](https://www.instagram.com/mebych)
   > 浮游花、軟木塞磁鐵
 - :white_check_mark: **攤位 04** [BobChao 暢聊開源吃布丁](https://www.facebook.com/bobchao/posts/pfbid09NqgFcPgjN7ZxF3pu9tXftuG3ojg9LziUPC37j1r4rvRrVujZm3gLyryEt4GpG8tl)
