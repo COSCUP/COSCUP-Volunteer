@@ -2571,13 +2571,13 @@ test = ["pytest", "ruff"]
 
 [[package]]
 name = "toldwords"
-version = "0.8.4"
+version = "0.8.6"
 description = "Using ChatGPT to make keywords for the papers from COSCUP."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "toldwords-0.8.4-py3-none-any.whl", hash = "sha256:aba9a9f3d4d09d6d6f115ef460a4ec7bda6e1e5b75add0e4c8b1c10036e6ee9f"},
-    {file = "toldwords-0.8.4.tar.gz", hash = "sha256:e832679e2c977a0aba2bc8fe8f792f33ae29402ef9d090df41f23bd2c23fd366"},
+    {file = "toldwords-0.8.6-py3-none-any.whl", hash = "sha256:ef7b9ffe5db147c42b344391dcfa4568b404011f6dacc7ce8d2dfee3e447fe27"},
+    {file = "toldwords-0.8.6.tar.gz", hash = "sha256:299b0b8da19c194f1d1a16d851c2adb48b6aa077155f3a810e1a92bfefc89e3f"},
 ]
 
 [package.dependencies]
