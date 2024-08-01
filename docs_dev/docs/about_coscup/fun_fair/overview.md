@@ -92,7 +92,7 @@ The event will be held at NTUST in classroom `TR413-2`. We expect to host 4 to 6
 
 ??? question "Open flames are not allowed, can I use an induction cooker?"
 
-    We plan to rent a small generator to provide power on site, but we are still in the process of coordinating with the school. We will notify you once confirmed.
+    We will rent small generators to provide power on-site. Booth applications will include a survey of the electrical equipment that needs to be used.
 
 ??? question "Can I set up a booth for only one day or if I can't be at the booth for a certain period?"
 
