@@ -68,7 +68,7 @@ icon: material/account-supervisor
 
 1. 在 8/2 場佈期間，預計 14:00 後在 `TR-312` 志工服務台領取。
 2. 在 8/3 第一天，預計 09:00 後在 `TR-312` 志工服務台領取。
-3. 在 8/4 第二天，請在 10:00 前到 `TR-312` 志工服務台領取，{++時間截止後將整理回行銷組販售++}。
+3. 在 8/4 第二天，請在 09:30 前到 `TR-312` 志工服務台領取，{++時間截止後將整理回行銷組販售++}。
 
 ## 其他
 
@@ -77,6 +77,8 @@ icon: material/account-supervisor
 3. 慶功宴在 `TR-3F`，預計 8/4 18:00 開吃！
 4. 通訊設備發送與充電在 `TR-617` 工人休息室。
 5. 工作人員大合照於 **8/4 07:20** `TR-1F` 拍攝大合照。
-      - 住宿的夥伴記得行李也要上手、並搭上任一台交通接駁車。
+      - 住宿的夥伴記得行李也要上手、並搭上任一台交通接駁車，抵達臺科大後直接到操場集合拍照。
+      - 07:20 為拍照時間，請在 07:00 集合。
 6. 「[按摩小站](../health_market/overview.md)」在 `TR-612`，工作人員可隨時去按摩。
 7. 空檔時間也可以轉變為[會眾](./as_attendee.md)去聽議程或是參與體驗相關的[會眾服務](../attendee_services/index.md)。
+8. 8/4 [紅酒瑜伽](https://volunteer.coscup.org/docs/zh-TW/about_coscup/health_market/overview/#_4)、[療癒睡眠](https://volunteer.coscup.org/docs/zh-TW/about_coscup/health_market/overview/#_9)提供給志工夥伴參加，請確定可以參與的時間來 TR312 志工服務台兌換通行證。

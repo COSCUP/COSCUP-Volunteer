@@ -78,5 +78,7 @@ Accommodation details have been announced on the volunteer service platform unde
 4. Communication equipment distribution and charging will be available in the staff lounge in `TR-617`.
 5. The staff group photo will be taken on **8/4 at 07:20** in `TR-1F`.
       - For those staying overnight, remember to bring your luggage and board any of the shuttle buses.
+      - 07:20 is the time for the photoshoot, please gather at 07:00.
 6. The "[Massage Station](../health_market/overview.md)" is located in `TR-612`, and staff can use it for massages at any time.
 7. During your free time, you can also switch roles to become an [attendee](./as_attendee.md) and listen to sessions or participate in the various [attendee services](../attendee_services/index.md) offered.
+8. On 8/4, [Wine Yoga](../health_market/overview.md#yoga-wine) and [Healing Sleep](../health_market/overview.md#peaceful-sleep-therapeutic-sleep-massage-oil) sessions are available for volunteers. Please confirm your available time and visit the Volunteer Service Desk at TR312 to redeem your pass.
