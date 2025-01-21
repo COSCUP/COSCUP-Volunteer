@@ -30,7 +30,7 @@ jobs:
         run: docker ps -a
       - name: Cat Celery Log
         run: |
-          sleep 45 ;
+          sleep 90 ;
           ls -alh ;
           ls -alh ./logs ;
           ls -alh ./logs/workers ;
