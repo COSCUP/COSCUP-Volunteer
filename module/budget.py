@@ -4,7 +4,7 @@ from enum import Enum
 from typing import Any, Optional, Union
 
 import arrow
-from pydantic import BaseModel, error_wrappers, validator
+from pydantic import field_validator, ConfigDict, BaseModel, error_wrappers
 from pymongo.cursor import Cursor
 
 from models.budgetdb import BudgetDB
@@ -64,12 +64,10 @@ class BudgetImportItem(BaseModel):
     currency: Currency
     paydate: str
     estimate: str
+    model_config = ConfigDict(use_enum_values=True)
 
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Model config '''
-        use_enum_values = True
-
-    @validator('total')
+    @field_validator('total')
+    @classmethod
     def verify_total(cls, value: str) -> Union[int, float]:
         ''' verify total.
 
@@ -85,7 +83,8 @@ class BudgetImportItem(BaseModel):
 
         return int(value)
 
-    @validator('paydate')
+    @field_validator('paydate')
+    @classmethod
     def verify_paydate(cls, value: str, **kwargs: Any) -> str:
         ''' verify paydate
 

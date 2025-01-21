@@ -1,7 +1,7 @@
 ''' Teams Structs '''
 from datetime import datetime
 
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import field_validator, ConfigDict, BaseModel, EmailStr, Field
 
 
 class TagMembers(BaseModel):
@@ -15,21 +15,18 @@ class TeamBase(BaseModel):
     id: str = Field(description='`tid`, team id', alias='tid')
     pid: str = Field(description='`pid`, project id')
     name: str = Field(description='team name')
-    owners: list[str] | None = Field(description="list of owners' uids")
-    chiefs: list[str] | None = Field(description="list of chiefs' uids")
-    members: list[str] | None = Field(description="list of members' uids")
-    desc: str | None = Field(description='desc')
-    mailling: EmailStr | None = Field(description='mailing list for team')
-    headcount: int | None = Field(description='the headcount of team')
-    public_desc: str | None = Field(description='public desc for not members')
+    owners: list[str] | None = Field(None, description="list of owners' uids")
+    chiefs: list[str] | None = Field(None, description="list of chiefs' uids")
+    members: list[str] | None = Field(None, description="list of members' uids")
+    desc: str | None = Field(None, description='desc')
+    mailling: EmailStr | None = Field(None, description='mailing list for team')
+    headcount: int | None = Field(None, description='the headcount of team')
+    public_desc: str | None = Field(None, description='public desc for not members')
     disabled: bool = Field(default=False, description='disabled the team')
     tag_members: list[TagMembers] | None = Field(
-        description='tags for members')
-    created_at: datetime | None = Field(description='create at')
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config '''
-        anystr_strip_whitespace = True
+        None, description='tags for members')
+    created_at: datetime | None = Field(None, description='create at')
+    model_config = ConfigDict(str_strip_whitespace=True)
 
 
 class TeamUsers(BaseModel):
@@ -41,7 +38,8 @@ class TeamUsers(BaseModel):
     members: list[str] = Field(
         default_factory=list, description="list of members' uids")
 
-    @validator('*', pre=True)
+    @field_validator('*', mode="before")
+    @classmethod
     def process_none(cls, value: list[str] | None) -> list[str]:  # pylint: disable=no-self-argument
         ''' process none '''
         if value is None:

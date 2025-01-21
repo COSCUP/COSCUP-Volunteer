@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Any
 
 import arrow
-from pydantic import BaseModel, EmailStr, Field, HttpUrl, validator
+from pydantic import ConfigDict, BaseModel, EmailStr, Field, HttpUrl, validator
 
 
 def skip_empty_str(value: Any) -> Any:
@@ -39,18 +39,18 @@ class ProjectBase(BaseModel):
     name: str = Field(description='project name')
     owners: list[str] = Field(description='list of owners')
     action_date: datetime = Field(description='action date')
-    desc: str | None = Field(description='desc')
-    calendar: str | None = Field(description='calendar url')
-    gitlab_project_id: str | None = Field(description='gitlab project id')
+    desc: str | None = Field(None, description='desc')
+    calendar: str | None = Field(None, description='calendar url')
+    gitlab_project_id: str | None = Field(None, description='gitlab project id')
     mailling_leader: EmailStr | None = Field(
-        description='mailing list of leader')
+        None, description='mailing list of leader')
     mailling_staff: EmailStr | None = Field(
-        description='mailing list of staff')
+        None, description='mailing list of staff')
     mattermost_ch_id: str | None = Field(
-        description='Mattermost main channel id')
-    shared_drive: HttpUrl | None = Field(description='Google shared drive')
+        None, description='Mattermost main channel id')
+    shared_drive: HttpUrl | None = Field(None, description='Google shared drive')
     traffic_fee_doc: HttpUrl | None = Field(
-        description='doc fields for traffic fee')
+        None, description='doc fields for traffic fee')
     volunteer_certificate_hours: int = Field(
         default=16, ge=0,
         description='hours for volunteer certificate')
@@ -67,20 +67,20 @@ class ProjectBase(BaseModel):
 
 class ProjectBaseUpdate(BaseModel):
     ''' ProjectBaseUpdate '''
-    name: str | None = Field(description='project name')
-    action_date: datetime | None = Field(description='action date')
-    desc: str | None = Field(description='desc')
-    calendar: str | None = Field(description='calendar url')
-    gitlab_project_id: str | None = Field(description='gitlab project id')
+    name: str | None = Field(None, description='project name')
+    action_date: datetime | None = Field(None, description='action date')
+    desc: str | None = Field(None, description='desc')
+    calendar: str | None = Field(None, description='calendar url')
+    gitlab_project_id: str | None = Field(None, description='gitlab project id')
     mailling_leader: EmailStr | None = Field(
-        description='mailing list of leader')
+        None, description='mailing list of leader')
     mailling_staff: EmailStr | None = Field(
-        description='mailing list of staff')
+        None, description='mailing list of staff')
     mattermost_ch_id: str | None = Field(
-        description='Mattermost main channel id')
-    shared_drive: HttpUrl | None = Field(description='Google shared drive')
+        None, description='Mattermost main channel id')
+    shared_drive: HttpUrl | None = Field(None, description='Google shared drive')
     traffic_fee_doc: HttpUrl | None = Field(
-        description='doc fields for traffic fee')
+        None, description='doc fields for traffic fee')
     volunteer_certificate_hours: int = Field(
         default=16, ge=0,
         description='hours for volunteer certificate')
@@ -99,11 +99,7 @@ class ProjectTrafficLocationFeeItem(BaseModel):
     ''' ProjectTrafficLocationFeeItem '''
     location: str = Field(default='', description='location')
     fee: int = Field(default=0, description='fee in TWD', gt=0)
-
-    class Config:
-        ''' Config '''
-        # pylint: disable=too-few-public-methods
-        anystr_strip_whitespace = True
+    model_config = ConfigDict(str_strip_whitespace=True)
 
 
 class ProjectTrafficLocationFee(BaseModel):

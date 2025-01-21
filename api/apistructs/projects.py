@@ -2,7 +2,7 @@
 from datetime import date, datetime
 
 import arrow
-from pydantic import BaseModel, EmailStr, Field, HttpUrl, validator
+from pydantic import field_validator, BaseModel, EmailStr, Field, HttpUrl
 
 from api.apistructs.items import ProjectItem, TeamItem
 from structs.projects import ProjectTrafficLocationFeeItem
@@ -29,7 +29,8 @@ class ProjectCreateOutput(ProjectCreate):
     ''' Project create output '''
     pid: str = Field(description='project id', alias='_id')
 
-    @validator('action_date', pre=True)
+    @field_validator('action_date', mode="before")
+    @classmethod
     def convert_action_date(cls, value: datetime) -> str:  # pylint: disable=no-self-argument
         ''' convert_action_date '''
         return arrow.get(value).format('YYYY/MM/DD')
@@ -37,28 +38,29 @@ class ProjectCreateOutput(ProjectCreate):
 
 class ProjectItemUpdateInput(BaseModel):
     ''' Update project item input '''
-    name: str | None = Field(description='project name')
-    desc: str | None = Field(description='desc')
-    action_date: date | None = Field(description='action date')
-    calendar: str | None = Field(description='calendar url')
-    gitlab_project_id: str | None = Field(description='gitlab project id')
+    name: str | None = Field(None, description='project name')
+    desc: str | None = Field(None, description='desc')
+    action_date: date | None = Field(None, description='action date')
+    calendar: str | None = Field(None, description='calendar url')
+    gitlab_project_id: str | None = Field(None, description='gitlab project id')
     mailling_leader: EmailStr | None = Field(
-        description='mailing list of leader')
+        None, description='mailing list of leader')
     mailling_staff: EmailStr | None = Field(
-        description='mailing list of staff')
+        None, description='mailing list of staff')
     mattermost_ch_id: str | None = Field(
-        description='Mattermost main channel id')
-    shared_drive: HttpUrl | None = Field(description='Google shared drive')
+        None, description='Mattermost main channel id')
+    shared_drive: HttpUrl | None = Field(None, description='Google shared drive')
     traffic_fee_doc: HttpUrl | None = Field(
-        description='doc fields for traffic fee')
+        None, description='doc fields for traffic fee')
     volunteer_certificate_hours: int | None = Field(
-        description='hours for volunteer certificate')
+        None, description='hours for volunteer certificate')
 
 
 class ProjectItemUpdateOutput(ProjectItemUpdateInput):
     ''' Update project item output '''
 
-    @validator('action_date', pre=True)
+    @field_validator('action_date', mode="before")
+    @classmethod
     def convert_action_date(cls, value: str | int | float) -> date:  # pylint:disable=no-self-argument
         ''' convert action_date to date '''
         return arrow.get(value).date()

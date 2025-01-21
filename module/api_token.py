@@ -5,7 +5,7 @@ from uuid import uuid4
 
 import arrow
 from passlib.context import CryptContext  # type: ignore
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 
 from models.api_tokendb import APITokenDB
 
@@ -22,10 +22,7 @@ class APITokenBase(BaseModel):
     create_at: datetime = Field(default_factory=datetime.now)
     alive: bool = Field(default=True)
     token_type: APITokenType
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' config '''
-        use_enum_values = True
+    model_config = ConfigDict(use_enum_values=True)
 
 
 class APITokenTemp(APITokenBase):

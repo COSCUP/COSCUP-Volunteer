@@ -4,7 +4,7 @@ from typing import Any
 from uuid import uuid4
 
 import arrow
-from pydantic import BaseModel, Field, validator
+from pydantic import ConfigDict, BaseModel, Field, validator
 
 
 def convert_datetime(value: Any) -> datetime:
@@ -39,8 +39,4 @@ class TaskItem(BaseModel):
     _validate_convert_datetime = validator(
         'created_at', 'starttime', 'endtime',
         pre=True, allow_reuse=True, always=True)(convert_datetime)
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config '''
-        anystr_strip_whitespace = True
-        validate_assignment = True
+    model_config = ConfigDict(str_strip_whitespace=True, validate_assignment=True)

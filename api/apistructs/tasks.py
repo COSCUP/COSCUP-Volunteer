@@ -1,7 +1,7 @@
 ''' API Structs - Tasks '''
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 
 from api.apistructs.items import UserItem
 from structs.tasks import TaskItem
@@ -23,11 +23,7 @@ class TaskCreateInput(BaseModel):
     endtime: datetime = Field(
         default_factory=datetime.now, description='task end')
     limit: int = Field(default=1, ge=1, description='expect required users')
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config '''
-        anystr_strip_whitespace = True
-        validate_assignment = True
+    model_config = ConfigDict(str_strip_whitespace=True, validate_assignment=True)
 
 
 class TaskCreateOutput(TaskItem):
@@ -40,25 +36,19 @@ class TaskGetOutput(TaskItem):
 
 class TaskUpdateInput(BaseModel):
     ''' TaskUpdateInput '''
-    title: str | None = Field(description='title')
-    cate: str | None = Field(description='cate')
-    desc: str | None = Field(description='desc')
-    starttime: datetime | None = Field(description='task start')
-    endtime: datetime | None = Field(description='task end')
-    limit: int | None = Field(description='expect required users')
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config '''
-        anystr_strip_whitespace = True
+    title: str | None = Field(None, description='title')
+    cate: str | None = Field(None, description='cate')
+    desc: str | None = Field(None, description='desc')
+    starttime: datetime | None = Field(None, description='task start')
+    endtime: datetime | None = Field(None, description='task end')
+    limit: int | None = Field(None, description='expect required users')
+    model_config = ConfigDict(str_strip_whitespace=True)
 
 
 class TaskAttendeeInput(BaseModel):
     ''' TaskAttendeeInput '''
     uids: list[str] = Field(description='uids')
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config '''
-        anystr_strip_whitespace = True
+    model_config = ConfigDict(str_strip_whitespace=True)
 
 
 class TaskGetAttendeeOutput(BaseModel):

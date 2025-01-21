@@ -53,6 +53,7 @@ pytest = "^8"
 pytest-cov = "^6.0.0"
 types-markdown = "^3.4.2.1"
 types-requests = "^2.29"
+bump-pydantic = "^0.8.0"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
