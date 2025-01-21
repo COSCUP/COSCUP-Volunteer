@@ -34,4 +34,4 @@ jobs:
           ls -alh ;
           ls -alh ./logs ;
           ls -alh ./logs/workers ;
-          cat ./logs/workers/log.log
+          docker logs coscup-volunteer-celery_worker-1
