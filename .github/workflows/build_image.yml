@@ -5,6 +5,9 @@ on:
     paths:
       - "Dockerfile-**"
       - ".github/workflows/build_image.yml"
+      - "pyproject.toml"
+      - "poetry.toml"
+      - "poetry.lock"
   workflow_dispatch:
 
 jobs:
