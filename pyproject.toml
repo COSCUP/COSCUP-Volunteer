@@ -45,7 +45,7 @@ mkdocs-git-revision-date-localized-plugin = "^1.2"
 mkdocs-material = "^9.1"
 mkdocs-static-i18n = {extras = ["material"], version = "^1.2"}
 mkdocstrings = {extras = ["python"], version = "^0.25"}
-mongomock = "^4.1"
+mongomock = "^4.2"
 mypy = "^1"
 pillow = "^10.0"
 pylint = "^3"
