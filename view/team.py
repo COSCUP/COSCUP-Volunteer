@@ -106,7 +106,7 @@ class UserInfoBase(BaseModel):
     profile: dict[str, str]
     oauth: dict[str, str]
     is_chief: bool = Field(default=False)
-    chat: dict[str, str] | None = Field(default_factory=dict)
+    chat: dict[str, str] | None = Field(default_factory=lambda _: {})
 
 
 @VIEW_TEAM.route('/<pid>/<tid>/members', methods=('GET', 'POST'))

@@ -4,7 +4,7 @@ from typing import Any
 from uuid import uuid4
 
 import arrow
-from pydantic import ConfigDict, BaseModel, Field, validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 def convert_datetime(value: Any) -> datetime:
@@ -36,7 +36,11 @@ class TaskItem(BaseModel):
     people: list[str] = Field(default_factory=list,
                               description='list of users')
 
-    _validate_convert_datetime = validator(
-        'created_at', 'starttime', 'endtime',
-        pre=True, allow_reuse=True, always=True)(convert_datetime)
-    model_config = ConfigDict(str_strip_whitespace=True, validate_assignment=True)
+    model_config = ConfigDict(
+        str_strip_whitespace=True, validate_assignment=True)
+
+    @field_validator("created_at", "starttime", "endtime", mode="before")
+    @classmethod
+    def valid_convert_action_date(cls, value: Any) -> Any:
+        ''' convert `action_date` to date '''
+        return convert_datetime(value=value)

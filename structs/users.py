@@ -4,7 +4,7 @@ from enum import Enum
 from time import time
 from typing import Optional
 
-from pydantic import ConfigDict, BaseModel, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 from module.dietary_habit import DietaryHabitItemsValue
 
@@ -85,7 +85,7 @@ class UserProfleReal(UserProfleRealBase):
     bank: Optional[UserBank] = Field(default_factory=UserBank)
     address: Optional[UserAddress] = Field(default_factory=UserAddress)
     dietary_habit: Optional[list[DietaryHabitItemsValue]] = Field(
-        default_factory=list)
+        default_factory=lambda _: [])
     model_config = ConfigDict()
 
 

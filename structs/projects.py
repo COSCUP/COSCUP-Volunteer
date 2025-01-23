@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Any
 
 import arrow
-from pydantic import ConfigDict, BaseModel, EmailStr, Field, HttpUrl, validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, HttpUrl, field_validator
 
 
 def skip_empty_str(value: Any) -> Any:
@@ -41,14 +41,16 @@ class ProjectBase(BaseModel):
     action_date: datetime = Field(description='action date')
     desc: str | None = Field(None, description='desc')
     calendar: str | None = Field(None, description='calendar url')
-    gitlab_project_id: str | None = Field(None, description='gitlab project id')
+    gitlab_project_id: str | None = Field(
+        None, description='gitlab project id')
     mailling_leader: EmailStr | None = Field(
         None, description='mailing list of leader')
     mailling_staff: EmailStr | None = Field(
         None, description='mailing list of staff')
     mattermost_ch_id: str | None = Field(
         None, description='Mattermost main channel id')
-    shared_drive: HttpUrl | None = Field(None, description='Google shared drive')
+    shared_drive: HttpUrl | None = Field(
+        None, description='Google shared drive')
     traffic_fee_doc: HttpUrl | None = Field(
         None, description='doc fields for traffic fee')
     volunteer_certificate_hours: int = Field(
@@ -59,10 +61,17 @@ class ProjectBase(BaseModel):
         description='on/off the forms for available'
     )
 
-    _validate_skip_empty_str = validator(
-        '*', pre=True, allow_reuse=True)(skip_empty_str)
-    _validate_convert_action_date = validator(
-        'action_date', pre=True, allow_reuse=True)(convert_action_date)
+    @field_validator("*", mode="before")
+    @classmethod
+    def valid_skip_empty_str(cls, value: Any) -> Any:
+        ''' skip empty string '''
+        return skip_empty_str(value=value)
+
+    @field_validator("action_date", mode="before")
+    @classmethod
+    def valid_convert_action_date(cls, value: Any) -> Any:
+        ''' convert `action_date` to date '''
+        return convert_action_date(value=value)
 
 
 class ProjectBaseUpdate(BaseModel):
@@ -71,14 +80,16 @@ class ProjectBaseUpdate(BaseModel):
     action_date: datetime | None = Field(None, description='action date')
     desc: str | None = Field(None, description='desc')
     calendar: str | None = Field(None, description='calendar url')
-    gitlab_project_id: str | None = Field(None, description='gitlab project id')
+    gitlab_project_id: str | None = Field(
+        None, description='gitlab project id')
     mailling_leader: EmailStr | None = Field(
         None, description='mailing list of leader')
     mailling_staff: EmailStr | None = Field(
         None, description='mailing list of staff')
     mattermost_ch_id: str | None = Field(
         None, description='Mattermost main channel id')
-    shared_drive: HttpUrl | None = Field(None, description='Google shared drive')
+    shared_drive: HttpUrl | None = Field(
+        None, description='Google shared drive')
     traffic_fee_doc: HttpUrl | None = Field(
         None, description='doc fields for traffic fee')
     volunteer_certificate_hours: int = Field(
@@ -89,10 +100,17 @@ class ProjectBaseUpdate(BaseModel):
         description='on/off the forms for available'
     )
 
-    _validate_skip_empty_str = validator(
-        '*', pre=True, allow_reuse=True)(skip_empty_str)
-    _validate_convert_action_date = validator(
-        'action_date', pre=True, allow_reuse=True)(convert_action_date)
+    @field_validator("*", mode="before")
+    @classmethod
+    def valid_skip_empty_str(cls, value: Any) -> Any:
+        ''' skip empty string '''
+        return skip_empty_str(value=value)
+
+    @field_validator("action_date", mode="before")
+    @classmethod
+    def valid_convert_action_date(cls, value: Any) -> Any:
+        ''' convert `action_date` to date '''
+        return convert_action_date(value=value)
 
 
 class ProjectTrafficLocationFeeItem(BaseModel):
