@@ -4,7 +4,7 @@ from enum import Enum
 from typing import Any, Optional, Union
 
 import arrow
-from pydantic import field_validator, ConfigDict, BaseModel, error_wrappers
+from pydantic import BaseModel, ConfigDict, error_wrappers, field_validator
 from pymongo.cursor import Cursor
 
 from models.budgetdb import BudgetDB
@@ -269,8 +269,8 @@ class Budget:
         error_result: list[tuple[int, Optional[list[dict[str, Any]]]]] = []
         for (serial_no, raw) in enumerate(items):
             try:
-                item = BudgetImportItem.parse_obj(raw)
-                result.append(item.dict())
+                item = BudgetImportItem.model_validate(raw)
+                result.append(item.model_dump())
             except error_wrappers.ValidationError as error:
                 error_infos = [
                     {'loc': error_info['loc'], 'msg': error_info['msg']}

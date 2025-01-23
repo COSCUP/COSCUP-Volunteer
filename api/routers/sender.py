@@ -3,8 +3,7 @@ import csv
 import io
 from typing import Any
 
-from fastapi import (APIRouter, Depends, File, HTTPException, Path, UploadFile,
-                     status)
+from fastapi import APIRouter, Depends, File, HTTPException, Path, UploadFile, status
 from pydantic import BaseModel, Field
 
 from api.apistructs.sender import SenderCampaignLists
@@ -37,7 +36,7 @@ async def sender_all(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if current_user['uid'] not in (teamusers.owners + teamusers.chiefs + teamusers.members):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -45,7 +44,7 @@ async def sender_all(
     for campaign in SenderCampaign.get_list(pid=pid, tid=tid):
         campaigns.append(campaign)
 
-    return SenderCampaignLists.parse_obj({'datas': campaigns})
+    return SenderCampaignLists.model_validate({'datas': campaigns})
 
 
 class UploadReceiverOutput(BaseModel):
@@ -98,14 +97,14 @@ async def sender_upload_receiver_lists_replace(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if current_user['uid'] not in (teamusers.owners + teamusers.chiefs + teamusers.members):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     csv_rows = await sender_upload_receiver(pid=pid, tid=tid, cid=cid,
                                             file=file, upload_type='replace')
 
-    return UploadReceiverOutput.parse_obj({'rows': csv_rows})
+    return UploadReceiverOutput.model_validate({'rows': csv_rows})
 
 
 @router.patch('/{pid}/{tid}/{cid}/receiver/lists',
@@ -128,14 +127,14 @@ async def sender_upload_receiver_lists_update(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if current_user['uid'] not in (teamusers.owners + teamusers.chiefs + teamusers.members):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     csv_rows = await sender_upload_receiver(pid=pid, tid=tid, cid=cid,
                                             file=file, upload_type='update')
 
-    return UploadReceiverOutput.parse_obj({'rows': csv_rows})
+    return UploadReceiverOutput.model_validate({'rows': csv_rows})
 
 
 @router.delete('/{pid}/{tid}/{cid}/receiver/lists',
@@ -156,9 +155,9 @@ async def sender_upload_receiver_lists_delete(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if current_user['uid'] not in (teamusers.owners + teamusers.chiefs + teamusers.members):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-    return UploadReceiverOutput.parse_obj({
+    return UploadReceiverOutput.model_validate({
         'rows': SenderReceiver.remove(pid=pid, cid=cid)})

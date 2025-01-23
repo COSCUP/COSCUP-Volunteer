@@ -5,8 +5,7 @@ import io
 import random
 
 import arrow
-from flask import (Blueprint, g, jsonify, make_response, redirect,
-                   render_template, request)
+from flask import Blueprint, g, jsonify, make_response, redirect, render_template, request
 from werkzeug.wrappers import Response as ResponseBase
 
 from celery_task.task_sendermailer import sender_mailer_start
@@ -30,7 +29,7 @@ def index(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-many
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
@@ -82,7 +81,7 @@ def campaign(pid: str, tid: str, cid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
@@ -93,7 +92,7 @@ def campaign(pid: str, tid: str, cid: str) -> str | ResponseBase:
     campaign_data = SenderCampaign.get(cid=cid, pid=pid, tid=tid)
 
     return render_template('./sender_campaign_index.html',
-                           campaign=campaign_data, team=team.dict(by_alias=True))
+                           campaign=campaign_data, team=team.model_dump(by_alias=True))
 
 
 @VIEW_SENDER.route('/<pid>/<tid>/campaign/<cid>/content', methods=('GET', 'POST'))
@@ -107,7 +106,7 @@ def campaign_content(pid: str, tid: str, cid: str) -> str | ResponseBase:  # pyl
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
@@ -120,7 +119,7 @@ def campaign_content(pid: str, tid: str, cid: str) -> str | ResponseBase:  # pyl
             cid=cid, pid=team.pid, tid=team.id)
 
         return render_template('./sender_campaign_content.html',
-                               campaign=campaign_data, team=team.dict(by_alias=True))
+                               campaign=campaign_data, team=team.model_dump(by_alias=True))
 
     if request.method == 'POST':
         data = request.get_json()
@@ -157,7 +156,7 @@ def campaign_receiver(pid: str, tid: str, cid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
@@ -168,7 +167,7 @@ def campaign_receiver(pid: str, tid: str, cid: str) -> str | ResponseBase:
     campaign_data = SenderCampaign.get(cid=cid, pid=team.pid, tid=team.id)
     if request.method == 'GET':
         return render_template('./sender_campaign_receiver.html',
-                               campaign=campaign_data, team=team.dict(by_alias=True))
+                               campaign=campaign_data, team=team.model_dump(by_alias=True))
 
     if request.method == 'POST':  # pylint: disable=too-many-nested-blocks
         if request.is_json:
@@ -181,7 +180,8 @@ def campaign_receiver(pid: str, tid: str, cid: str) -> str | ResponseBase:
 
                 team_w_tags = []
                 if team.tag_members:
-                    team_w_tags = [t_m.dict() for t_m in team.tag_members]
+                    team_w_tags = [t_m.model_dump()
+                                   for t_m in team.tag_members]
 
                 sender_receiver = SenderReceiver.get(pid=team.pid, cid=cid)
 
@@ -254,7 +254,7 @@ def campaign_schedule(pid: str, tid: str, cid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
@@ -266,7 +266,7 @@ def campaign_schedule(pid: str, tid: str, cid: str) -> str | ResponseBase:
         cid=cid, pid=team.pid, tid=team.id)
     if request.method == 'GET':
         return render_template('./sender_campaign_schedule.html',
-                               campaign=campaign_data, team=team.dict(by_alias=True))
+                               campaign=campaign_data, team=team.model_dump(by_alias=True))
 
     if request.method == 'POST':
         data = request.get_json()

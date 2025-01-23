@@ -5,7 +5,7 @@ from uuid import uuid4
 
 import arrow
 from passlib.context import CryptContext  # type: ignore
-from pydantic import ConfigDict, BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from models.api_tokendb import APITokenDB
 
@@ -47,7 +47,7 @@ class APIToken:  # pylint: disable=too-few-public-methods
     def save_temp(data: APITokenTemp) -> None:
         ''' Save temp token '''
         hash_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
-        save_data = data.dict()
+        save_data = data.model_dump()
         save_data['password'] = hash_context.hash(data.password)
         APITokenDB().insert_one(save_data)
 
@@ -91,7 +91,7 @@ class APIToken:  # pylint: disable=too-few-public-methods
         '''
         token = APITokenSession(uid=uid)
 
-        save_data = token.dict()
+        save_data = token.model_dump()
         hash_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
         save_data['token'] = hash_context.hash(token.token)
         APITokenDB().insert_one(save_data)

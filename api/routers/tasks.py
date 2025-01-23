@@ -4,9 +4,8 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
 
 from api.apistructs.items import UserItem
-from api.apistructs.tasks import (TaskAttendeeInput, TaskCreateInput,
-                                  TaskCreateOutput, TaskGetAttendeeOutput,
-                                  TaskGetOutput, TaskMeJoinOutput,
+from api.apistructs.tasks import (TaskAttendeeInput, TaskCreateInput, TaskCreateOutput,
+                                  TaskGetAttendeeOutput, TaskGetOutput, TaskMeJoinOutput,
                                   TasksGetAllOutput, TaskUpdateInput)
 from api.dependencies import get_current_user
 from module.project import Project
@@ -50,13 +49,13 @@ async def tasks_all(
 
     datas = []
     for task in Tasks.get_by_pid(pid=pid):
-        task_data = TaskItem.parse_obj(task)
+        task_data = TaskItem.model_validate(task)
         if not is_in_project:
             task_data.people = []
 
         datas.append(task_data)
 
-    return TasksGetAllOutput.parse_obj({'datas': datas})
+    return TasksGetAllOutput.model_validate({'datas': datas})
 
 
 @router.post('/{pid}',
@@ -90,14 +89,14 @@ async def tasks_create(
     if not project:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    data = update_data.dict()
+    data = update_data.model_dump()
     data['pid'] = pid
     data['created_by'] = current_user['uid']
-    task_item = TaskItem.parse_obj(data)
+    task_item = TaskItem.model_validate(data)
     raw = Tasks.add(pid=pid,
-                    body=task_item.dict(by_alias=True))
+                    body=task_item.model_dump(by_alias=True))
 
-    return TaskCreateOutput.parse_obj(raw)
+    return TaskCreateOutput.model_validate(raw)
 
 
 @router.get('/{pid}/{task_id}',
@@ -134,7 +133,7 @@ async def tasks_get(
     if not is_in_project:
         task_data['people'] = []
 
-    return TaskGetOutput.parse_obj(task_data)
+    return TaskGetOutput.model_validate(task_data)
 
 
 @router.patch('/{pid}/{task_id}',
@@ -172,13 +171,13 @@ async def tasks_update(
     if not is_in_project:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-    data = update_data.dict(exclude_none=True)
+    data = update_data.model_dump(exclude_none=True)
     data['_id'] = task_id
     data['pid'] = pid
 
     if data:
         raw = Tasks.add(pid=pid, body=data)
-        return TaskGetOutput.parse_obj(raw)
+        return TaskGetOutput.model_validate(raw)
 
     raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE)
 
@@ -292,13 +291,13 @@ async def tasks_users_add(
             if user_infos:
                 for uid in task_data['people']:
                     if uid in user_infos:
-                        result.append(UserItem.parse_obj({
+                        result.append(UserItem.model_validate({
                             'id': uid,
                             'badge_name': user_infos[uid]['profile']['badge_name'],
                             'avatar': user_infos[uid]['oauth']['picture'],
                         }))
 
-        return TaskGetAttendeeOutput.parse_obj({'datas': result})
+        return TaskGetAttendeeOutput.model_validate({'datas': result})
 
     if update_data is not None:
         if request.method == 'PATCH':

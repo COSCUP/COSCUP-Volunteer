@@ -59,7 +59,7 @@ def index(pid: str, tid: str) -> str | ResponseBase:
     if 'preview' in request.args:
         preview_public = True
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     join_able = not (g.user['account']['_id'] in teamusers.members or
                      g.user['account']['_id'] in teamusers.chiefs or
                      g.user['account']['_id'] in teamusers.owners or
@@ -69,8 +69,8 @@ def index(pid: str, tid: str) -> str | ResponseBase:
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
 
-    return render_template('./team_index.html', team=team.dict(by_alias=True),
-                           project=project.dict(by_alias=True),
+    return render_template('./team_index.html', team=team.model_dump(by_alias=True),
+                           project=project.model_dump(by_alias=True),
                            join_able=join_able, is_admin=is_admin,
                            preview_public=preview_public)
 
@@ -87,14 +87,14 @@ def calendar(pid: str, tid: str) -> str | ResponseBase:
         return redirect('/')
 
     if project.calendar:
-        teamusers = TeamUsers.parse_obj(team)
+        teamusers = TeamUsers.model_validate(team)
         is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                     g.user['account']['_id'] in teamusers.owners or
                     g.user['account']['_id'] in project.owners)
 
         return render_template('./team_calendar.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True), is_admin=is_admin)
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True), is_admin=is_admin)
 
     return redirect(url_for('team.index',
                             pid=team.pid, tid=team.id, _scheme='https', _external=True))
@@ -121,15 +121,15 @@ def members(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-ma
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
 
     if request.method == 'GET':
         return render_template('./team_members.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True), is_admin=is_admin)
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -158,7 +158,7 @@ def members(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-ma
             result_members = []
             for uid in uids:
                 if uid in users_info:
-                    user = UserInfoBase.parse_obj(
+                    user = UserInfoBase.model_validate(
                         {'_id': uid,
                          'profile': {'badge_name': users_info[uid]['profile']['badge_name']},
                          'oauth': {'picture': users_info[uid]['oauth']['picture']}})
@@ -171,7 +171,7 @@ def members(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-ma
                         user.chat = {
                             'mid': mid, 'name': MattermostTools.find_user_name(mid=mid)}
 
-                    result_members.append(user.dict(by_alias=True))
+                    result_members.append(user.model_dump(by_alias=True))
 
             call_func_bg: Callable[[dict[str, Any], ],
                                    Any] = lambda u: u['profile']['badge_name'].lower()
@@ -183,7 +183,7 @@ def members(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=too-ma
 
             tags = []
             if team.tag_members:
-                tags = [t_m.dict() for t_m in team.tag_members]
+                tags = [t_m.model_dump() for t_m in team.tag_members]
 
             members_tags = Team.get_members_tags(pid=team.pid, tid=team.id)
 
@@ -204,7 +204,7 @@ def team_edit(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
@@ -214,8 +214,8 @@ def team_edit(pid: str, tid: str) -> str | ResponseBase:
 
     if request.method == 'GET':
         return render_template('./team_edit_setting.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True))
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True))
 
     if request.method == 'POST':
         data = {
@@ -242,7 +242,7 @@ def team_edit_user_dl_waiting(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
@@ -304,7 +304,7 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
@@ -363,8 +363,8 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
                     waiting_uids_tags_name[uid].append(mapping_name[tag])
 
         return render_template('./team_edit_user.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(
                                    by_alias=True, exclude_none=True),
                                waitting_list=waitting_list,
                                waiting_uids_tags_name=waiting_uids_tags_name,
@@ -416,7 +416,7 @@ def team_edit_user(pid: str, tid: str) -> str | ResponseBase:
 
                 return jsonify({
                     'members': result_members,
-                    'tags': [t_m.dict() for t_m in team.tag_members] if team.tag_members else [],
+                    'tags': [t_m.model_dump() for t_m in team.tag_members] if team.tag_members else [],  # pylint: disable=line-too-long
                     'members_tags': Team.get_members_tags(pid=pid, tid=tid),
                 })
 
@@ -462,7 +462,7 @@ def team_edit_user_api(pid: str, tid: str) -> ResponseBase:  # pylint: disable=t
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
@@ -528,7 +528,7 @@ def team_edit_user_api(pid: str, tid: str) -> ResponseBase:  # pylint: disable=t
         if data['casename'] == 'get_tags':
             return jsonify({
                 'user_tags': Team.get_tags_by_uids(pid=pid, tid=tid, uids=[data['uid'], ]),
-                'tags': [raw.dict() for raw in team.tag_members] if team.tag_members else [],
+                'tags': [raw.model_dump() for raw in team.tag_members] if team.tag_members else [],
             })
 
         if data['casename'] == 'presave_tags':
@@ -560,7 +560,7 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if g.user['account']['_id'] in teamusers.members or \
             g.user['account']['_id'] in teamusers.chiefs:
         return redirect(url_for('team.index', pid=pid, tid=tid))
@@ -596,8 +596,8 @@ def team_join_to(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
                                       markdown(html.escape(team.public_desc)))
 
         return render_template('./team_join_to.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True), is_in_wait=is_in_wait)
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True), is_in_wait=is_in_wait)
 
     if request.method == 'POST':
         if not all((user_pass.is_profile, user_pass.is_coc, user_pass.is_security_guard)):
@@ -633,7 +633,7 @@ def team_form_api(pid: str, tid: str) -> ResponseBase:
     if not team:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
@@ -659,7 +659,7 @@ def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
@@ -674,8 +674,8 @@ def team_form_accommodation(pid: str, tid: str) -> str | ResponseBase:
 
     if request.method == 'GET':
         return render_template('./form_accommodation.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True),
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True),
                                is_ok_submit=is_ok_submit)
 
     if request.method == 'POST':
@@ -760,7 +760,7 @@ def team_form_traffic_fee(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
@@ -792,8 +792,8 @@ def team_form_traffic_fee(pid: str, tid: str) -> str | ResponseBase:
                 'fee': form_data['data']['fee'],
             })
         return render_template('./form_traffic_fee.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True),
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True),
                                data=data, is_ok_submit=is_ok_submit)
 
     if request.method == 'POST':
@@ -802,14 +802,14 @@ def team_form_traffic_fee(pid: str, tid: str) -> str | ResponseBase:
 
         if is_ok_submit and feemapping and \
                 request.form['fromwhere'] in [item.location for item in feemapping]:
-            fee_data: FeeMapping = FeeMapping.parse_obj({
+            fee_data: FeeMapping = FeeMapping.model_validate({
                 'fee': int(request.form['fee']),
                 'howto': request.form['howto'].strip(),
                 'apply': request.form['apply'].strip() == 'yes',
                 'fromwhere': request.form['fromwhere'],
             })
             Form.update_traffic_fee(
-                pid=pid, uid=g.user['account']['_id'], data=fee_data.dict())
+                pid=pid, uid=g.user['account']['_id'], data=fee_data.model_dump())
             return redirect(url_for('team.team_form_traffic_fee',
                                     pid=team.pid, tid=team.id,
                                     _scheme='https', _external=True))
@@ -831,7 +831,7 @@ def team_form_volunteer_certificate(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
@@ -857,8 +857,8 @@ def team_form_volunteer_certificate(pid: str, tid: str) -> str | ResponseBase:
             select_value = 'no'
 
         return render_template('./form_volunteer_certificate.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True),
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True),
                                is_ok_submit=is_ok_submit, select_value=select_value)
 
     if request.method == 'POST':
@@ -897,7 +897,7 @@ def team_form_appreciation(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
@@ -925,8 +925,8 @@ def team_form_appreciation(pid: str, tid: str) -> str | ResponseBase:
                 select_value = form_data['data']['key']
 
         return render_template('./form_appreciation.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True), names=names.items(),
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True), names=names.items(),
                                select_value=select_value)
 
     if request.method == 'POST':
@@ -949,14 +949,14 @@ def team_form_appreciation(pid: str, tid: str) -> str | ResponseBase:
             else:
                 raise NameError("Can not find the `name`.")
 
-            app_data = AppreciationData.parse_obj({
+            app_data = AppreciationData.model_validate({
                 'available': True,
                 'key': request.form['appreciation'],
                 'value': name,
             })
 
         Form().update_appreciation(
-            pid=team.pid, uid=g.user['account']['_id'], data=app_data.dict())
+            pid=team.pid, uid=g.user['account']['_id'], data=app_data.model_dump())
 
         return redirect(url_for('team.team_form_appreciation',
                                 pid=team.pid, tid=team.id, _scheme='https', _external=True))
@@ -976,15 +976,15 @@ def team_form_clothes(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     if request.method == 'GET':
         return render_template('./form_clothes.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True))
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -1032,15 +1032,15 @@ def team_form_drink(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     if request.method == 'GET':
         return render_template('./form_drink.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True))
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -1075,15 +1075,15 @@ def team_form_parking_card(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
 
     if request.method == 'GET':
         return render_template('./form_parking_card.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True))
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -1127,7 +1127,7 @@ def team_plan_edit(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
@@ -1138,8 +1138,8 @@ def team_plan_edit(pid: str, tid: str) -> str | ResponseBase:
 
     if request.method == 'GET':
         return render_template('./team_plan_edit.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True), is_admin=is_admin)
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':  # pylint: disable=too-many-nested-blocks
         data = request.get_json()
@@ -1264,7 +1264,7 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
@@ -1289,7 +1289,7 @@ def team_expense_index(pid: str, tid: str) -> ResponseBase:
             bank = User.get_bank(uid=g.user['account']['_id'])
 
             return jsonify({'teams': teams, 'items': items,
-                            'select_team': select_team, 'bank': bank.dict()})
+                            'select_team': select_team, 'bank': bank.model_dump()})
 
         if data and data['casename'] == 'add_expense':
             # create expense and send notification.
@@ -1317,7 +1317,7 @@ def team_expense_lists(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
@@ -1325,8 +1325,8 @@ def team_expense_lists(pid: str, tid: str) -> str | ResponseBase:
     if request.method == 'GET':
         budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
         return render_template('./expense_lists.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True),
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True),
                                budget_menu=budget_admin)
 
     return Response('', status=404)
@@ -1344,7 +1344,7 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if not (g.user['account']['_id'] in teamusers.members or
             g.user['account']['_id'] in teamusers.chiefs):
         return redirect('/')
@@ -1352,8 +1352,8 @@ def team_expense_my(pid: str, tid: str) -> str | ResponseBase:
     if request.method == 'GET':
         budget_admin = Budget.is_admin(pid=pid, uid=g.user['account']['_id'])
         return render_template('./expense_my.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True),
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True),
                                budget_menu=budget_admin)
 
     if request.method == 'POST':

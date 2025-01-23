@@ -51,7 +51,7 @@ class TrackDB(DBBase):
         bulks = []
         for submission in submissions:
             bulks.append(UpdateOne({'pid': pid, 'cate': 'raw_sub', 'code': submission.code}, {
-                '$set': {'pid': pid, 'code': submission.code, 'raw': submission.dict()}},
+                '$set': {'pid': pid, 'code': submission.code, 'raw': submission.model_dump()}},
                 upsert=True))
 
         if bulks:
@@ -66,7 +66,7 @@ class TrackDB(DBBase):
         bulks = []
         for talk in talks:
             bulks.append(UpdateOne({'pid': pid, 'cate': 'raw_talk', 'code': talk.code}, {
-                '$set': {'pid': pid, 'code': talk.code, 'raw': talk.dict()}},
+                '$set': {'pid': pid, 'code': talk.code, 'raw': talk.model_dump()}},
                 upsert=True))
 
         if bulks:
@@ -80,7 +80,7 @@ class TrackDB(DBBase):
         ''' Get raw submissions '''
         result = []
         for data in self.find({'pid': pid, 'cate': 'raw_sub'}):
-            result.append(Submission.parse_obj(data['raw']))
+            result.append(Submission.model_validate(data['raw']))
 
         return result
 
@@ -88,7 +88,7 @@ class TrackDB(DBBase):
         ''' Get raw talks '''
         result = []
         for data in self.find({'pid': pid, 'cate': 'raw_talk'}):
-            result.append(Talk.parse_obj(data['raw']))
+            result.append(Talk.model_validate(data['raw']))
 
         return result
 
@@ -121,7 +121,7 @@ class TrackDB(DBBase):
             query['raw.state'] = state
 
         for data in self.find(query):
-            result.append(Submission.parse_obj(data['raw']))
+            result.append(Submission.model_validate(data['raw']))
 
         return result
 
@@ -134,7 +134,7 @@ class TrackDB(DBBase):
         result: list[Talk] = []
         for data in self.find({'pid': pid, 'cate': 'raw_talk',
                                'code': {'$in': codes}}):
-            result.append(Talk.parse_obj(data['raw']))
+            result.append(Talk.model_validate(data['raw']))
 
         self.replace_rooms(talks=result)
 
@@ -145,7 +145,7 @@ class TrackDB(DBBase):
         result: list[Talk] = []
         for data in self.find({'pid': pid, 'cate': 'raw_talk',
                                'code': {'$in': talk_ids}}):
-            result.append(Talk.parse_obj(data['raw']))
+            result.append(Talk.model_validate(data['raw']))
 
         self.replace_rooms(talks=result)
 
@@ -155,7 +155,7 @@ class TrackDB(DBBase):
         ''' Get talks by talk_ids '''
         result: list[Talk] = []
         for data in self.find({'pid': pid, 'cate': 'raw_talk'}):
-            result.append(Talk.parse_obj(data['raw']))
+            result.append(Talk.model_validate(data['raw']))
 
         self.replace_rooms(talks=result)
 
@@ -168,7 +168,7 @@ class TrackDB(DBBase):
                                'cate': 'raw_talk',
                                'code': talk_id,
                                }):
-            result.append(Talk.parse_obj(data['raw']))
+            result.append(Talk.model_validate(data['raw']))
 
         self.replace_rooms(talks=result)
 

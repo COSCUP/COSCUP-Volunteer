@@ -3,8 +3,7 @@ import csv
 import io
 from datetime import datetime
 
-from flask import (Blueprint, g, jsonify, make_response, redirect,
-                   render_template, request)
+from flask import Blueprint, g, jsonify, make_response, redirect, render_template, request
 from flask.wrappers import Response
 from werkzeug.wrappers import Response as ResponseBase
 
@@ -30,7 +29,7 @@ def by_project_index(pid: str) -> str | ResponseBase:
 
     if request.method == 'GET':
         return render_template('./expense.html',
-                               project=project.dict(by_alias=True), is_admin=is_admin)
+                               project=project.model_dump(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':
         data = request.get_json()

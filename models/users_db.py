@@ -7,7 +7,7 @@ from pymongo.collection import ReturnDocument
 from pymongo.results import InsertOneResult
 
 from models.base import DBBase
-from structs.users import PolicyType, PolicySigned
+from structs.users import PolicySigned, PolicyType
 
 
 class UsersDB(DBBase):  # pylint: disable=abstract-method
@@ -110,4 +110,4 @@ class PolicySignedDB(DBBase):
             _type (PolicyType): Ploicy type
 
         '''
-        return self.insert_one(PolicySigned(uid=uid, type=_type).dict())
+        return self.insert_one(PolicySigned(uid=uid, type=_type).model_dump())

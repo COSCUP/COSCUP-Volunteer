@@ -1,6 +1,5 @@
 ''' Dev '''
-from flask import (Blueprint, jsonify, redirect, render_template, request,
-                   session, url_for)
+from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 from werkzeug.wrappers import Response as ResponseBase
 
 from models.users_db import UsersDB
@@ -39,7 +38,7 @@ def index() -> str | ResponseBase:
                     'sid': session['sid'],
                     'accounts': accounts,
                     'sessions': sessions,
-                    'projects': [item.dict(by_alias=True) for item in Project.all()],
+                    'projects': [item.model_dump(by_alias=True) for item in Project.all()],
                 })
 
             if 'casename' in data and data['casename'] == 'create_project':
