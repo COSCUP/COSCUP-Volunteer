@@ -28,6 +28,6 @@ class ApplyReviewDB(DBBase):
 
         self.find_one_and_update(
             {'pid': data.pid, 'tid': data.tid, 'uid': data.uid},
-            {'$set': data.dict()},
+            {'$set': data.model_dump()},
             upsert=True,
         )

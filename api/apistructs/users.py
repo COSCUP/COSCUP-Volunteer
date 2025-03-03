@@ -1,7 +1,7 @@
 ''' API Structs - Users '''
 from datetime import date
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import ConfigDict, BaseModel, Field, HttpUrl
 
 from api.apistructs.items import ProjectItem, TeamItem
 from module.skill import SkillEnum, StatusEnum, TeamsEnum, TobeVolunteerStruct
@@ -75,7 +75,7 @@ class UserMeDietaryHabitInput(BaseModel):
     ''' UserMeDietaryHabitInput '''
     checked: list[str] = Field(
         description='lists value of `DietaryHabitItemsValue`',
-        example=['0.001', '0.002'],
+        examples=[['0.001', '0.002']],
     )
 
 
@@ -116,11 +116,7 @@ class UserMeToBeVolunteerInput(BaseModel):
     hours: int = Field(description='Hours in an week')
     status: StatusEnum = Field(description='status')
     desc: str = Field(default='', description='more description')
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config '''
-        anystr_strip_whitespace: bool = True
-        use_enum_values: bool = True
+    model_config = ConfigDict()
 
 
 class UserMeToBeVolunteerOutput(BaseModel):

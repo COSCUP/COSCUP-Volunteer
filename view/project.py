@@ -6,8 +6,7 @@ import math
 from typing import Any, Literal, Mapping
 
 import arrow
-from flask import (Blueprint, g, jsonify, make_response, redirect,
-                   render_template, request, url_for)
+from flask import Blueprint, g, jsonify, make_response, redirect, render_template, request, url_for
 from flask.wrappers import Response
 from werkzeug.wrappers import Response as ResponseBase
 
@@ -22,8 +21,7 @@ from module.mattermost_bot import MattermostTools
 from module.project import Project
 from module.team import Team
 from module.users import User
-from structs.projects import (FormsSwitch, ProjectBaseUpdate,
-                              ProjectTrafficLocationFeeItem)
+from structs.projects import FormsSwitch, ProjectBaseUpdate, ProjectTrafficLocationFeeItem
 
 VIEW_PROJECT = Blueprint('project', __name__, url_prefix='/project')
 
@@ -34,7 +32,7 @@ def index() -> str:
     projects = []
     datas = []
     for project in Project.all():
-        datas.append(project.dict(by_alias=True))
+        datas.append(project.model_dump(by_alias=True))
 
     for data in datas:
         date = arrow.get(data['action_date'])
@@ -55,17 +53,17 @@ def project_edit(pid: str) -> str | ResponseBase:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if project and request.method == 'GET':
-        return render_template('./project_edit.html', project=project.dict(by_alias=True))
+        return render_template('./project_edit.html', project=project.model_dump(by_alias=True))
 
     if request.method == 'POST':
         data: dict[str, Any] = dict(request.form)
-        data['formswitch'] = FormsSwitch().dict()
+        data['formswitch'] = FormsSwitch().model_dump()
         for key in data:
             if key.startswith('formswitch.'):
                 item = key.split('.')[1]
                 data['formswitch'][item] = True
 
-        Project.update(pid, ProjectBaseUpdate.parse_obj(data))
+        Project.update(pid, ProjectBaseUpdate.model_validate(data))
         return redirect(url_for('project.project_edit', pid=pid, _scheme='https', _external=True))
 
     return Response('', status=404)
@@ -81,10 +79,10 @@ def project_edit_create_team(pid: str) -> str | ResponseBase:
     if project:
         teams = []
         for team in Team.list_by_pid(project.id, show_all=True):
-            teams.append(team.dict(by_alias=True))
+            teams.append(team.model_dump(by_alias=True))
 
         return render_template('./project_edit_create_team.html',
-                               project=project.dict(by_alias=True), teams=teams)
+                               project=project.model_dump(by_alias=True), teams=teams)
 
     return Response('', status=404)
 
@@ -97,7 +95,7 @@ def project_form(pid: str) -> str | ResponseBase:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if project and request.method == 'GET':
-        return render_template('./project_form.html', project=project.dict(by_alias=True))
+        return render_template('./project_form.html', project=project.model_dump(by_alias=True))
 
     return Response('', status=404)
 
@@ -393,7 +391,7 @@ def project_edit_create_team_api(pid: str) -> ResponseBase:  # pylint: disable=t
     if request.method == 'GET':
         _data = Team.get(pid, request.args['tid'].strip())
         if _data is not None:
-            _team = _data.dict(by_alias=True)
+            _team = _data.model_dump(by_alias=True)
 
             team = {}
             for k in ('name', 'chiefs', 'members', 'owners', 'tid',
@@ -457,7 +455,8 @@ def team_page(pid: str) -> str | ResponseBase:
     if not project:
         return Response('no data', status=404)
 
-    data = [team.dict(by_alias=True) for team in Team.list_by_pid(project.id)]
+    data = [team.model_dump(by_alias=True)
+            for team in Team.list_by_pid(project.id)]
     uids = []
     for team in data:
         if team['chiefs']:
@@ -490,7 +489,7 @@ def team_page(pid: str) -> str | ResponseBase:
 
     return render_template('./project_teams_index.html',
                            teams=teams,
-                           project=project.dict(by_alias=True),
+                           project=project.model_dump(by_alias=True),
                            editable=editable,
                            total=total,
                            )
@@ -517,11 +516,11 @@ def project_statictics(pid: str) -> str | ResponseBase:
     accommodation_statictics = FormAccommodation.get_statistics(pid=pid)
 
     return render_template('./project_statistics.html',
-                            project=project.dict(by_alias=True),
-                            habit_statistics=habit_statistics,
-                            clothes_statistics=clothes_statistics,
-                            accommodation_statictics=accommodation_statictics,
-                            editable=editable)
+                           project=project.model_dump(by_alias=True),
+                           habit_statistics=habit_statistics,
+                           clothes_statistics=clothes_statistics,
+                           accommodation_statictics=accommodation_statictics,
+                           editable=editable)
 
 
 @VIEW_PROJECT.route('/<pid>/form_traffic_mapping', methods=('GET', 'POST'))
@@ -533,13 +532,13 @@ def project_form_traffic_mapping(pid: str) -> str | ResponseBase:
 
     if project and request.method == 'GET':
         return render_template('./project_form_traffic_mapping.html',
-                               project=project.dict(by_alias=True))
+                               project=project.model_dump(by_alias=True))
 
     if request.method == 'POST':
         data = request.get_json()
         if data and 'casename' in data and data['casename'] == 'init':
             return jsonify({
-                'base': ProjectTrafficLocationFeeItem().dict(),
+                'base': ProjectTrafficLocationFeeItem().model_dump(),
                 'data': {item.location: item.fee for item in FormTrafficFeeMapping.get(pid=pid)},
             })
 
@@ -548,7 +547,7 @@ def project_form_traffic_mapping(pid: str) -> str | ResponseBase:
             for raw in data['data']:
                 if raw['location'].strip():
                     feemapping.append(
-                        ProjectTrafficLocationFeeItem.parse_obj(raw))
+                        ProjectTrafficLocationFeeItem.model_validate(raw))
 
             saved = FormTrafficFeeMapping.save(pid=pid, datas=feemapping)
             result = {}
@@ -569,7 +568,7 @@ def project_form_accommodation(pid: str) -> str | ResponseBase:  # pylint: disab
 
     if project and request.method == 'GET':
         return render_template('./project_form_accommodation.html',
-                               project=project.dict(by_alias=True))
+                               project=project.model_dump(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -632,7 +631,7 @@ def project_dietary_habit(pid: str) -> str | ResponseBase:
 
     if project and request.method == 'GET':
         return render_template('./project_dietary_habit.html',
-                               project=project.dict(by_alias=True))
+                               project=project.model_dump(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -675,7 +674,8 @@ def project_contact_book(pid: str) -> str | ResponseBase:
         return redirect(url_for('project.team_page', pid=pid, _scheme='https', _external=True))
 
     if project and request.method == 'GET':
-        return render_template('./project_contact_book.html', project=project.dict(by_alias=True))
+        return render_template('./project_contact_book.html',
+                               project=project.model_dump(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()

@@ -71,7 +71,7 @@ class User:  # pylint: disable=too-many-public-methods
         '''
         for data in UsersDB().find({'_id': self.uid}, {'profile': 1}):
             if 'profile' in data:
-                return UserProfle.parse_obj(data['profile'])
+                return UserProfle.model_validate(data['profile'])
 
         return None
 
@@ -103,7 +103,7 @@ class User:  # pylint: disable=too-many-public-methods
         '''
         for data in UsersDB().find({'_id': self.uid}, {'profile_real': 1}):
             if 'profile_real' in data:
-                return UserProfleRealBase.parse_obj(data['profile_real'])
+                return UserProfleRealBase.model_validate(data['profile_real'])
 
         return UserProfleRealBase()
 
@@ -117,7 +117,7 @@ class User:  # pylint: disable=too-many-public-methods
             Return the updated data.
 
         '''
-        return UserProfleRealBase.parse_obj(UsersDB().find_one_and_update(
+        return UserProfleRealBase.model_validate(UsersDB().find_one_and_update(
             {'_id': self.uid},
             {'$set': {
                 'profile_real.name': data.name,
@@ -283,7 +283,7 @@ class User:  # pylint: disable=too-many-public-methods
         '''
         for user in UsersDB().find({'_id': uid}, {'profile_real.bank': 1}):
             if 'profile_real' in user and 'bank' in user['profile_real']:
-                return UserBank.parse_obj(user['profile_real']['bank'])
+                return UserBank.model_validate(user['profile_real']['bank'])
 
         return UserBank()
 
@@ -300,11 +300,11 @@ class User:  # pylint: disable=too-many-public-methods
         '''
         result = UsersDB().find_one_and_update(
             {'_id': uid},
-            {'$set': {'profile_real.bank': data.dict()}},
+            {'$set': {'profile_real.bank': data.model_dump()}},
             return_document=ReturnDocument.AFTER,
         )
 
-        return UserBank.parse_obj(result['profile_real']['bank'])
+        return UserBank.model_validate(result['profile_real']['bank'])
 
     @staticmethod
     def get_address(uid: str) -> dict[str, Any]:
@@ -340,11 +340,11 @@ class User:  # pylint: disable=too-many-public-methods
         '''
         result = UsersDB().find_one_and_update(
             {'_id': uid},
-            {'$set': {'profile_real.address': data.dict()}},
+            {'$set': {'profile_real.address': data.model_dump()}},
             return_document=ReturnDocument.AFTER,
         )
 
-        return UserAddress.parse_obj(result['profile_real']['address'])
+        return UserAddress.model_validate(result['profile_real']['address'])
 
     @staticmethod
     def get_suspend_uids(uids: list[str]) -> Generator[dict[str, Any], None, None]:
@@ -477,7 +477,7 @@ class TobeVolunteer:
             data.update(item)
             data['uid'] = data['_id']
 
-        return TobeVolunteerStruct.parse_obj(data)
+        return TobeVolunteerStruct.model_validate(data)
 
     @staticmethod
     def query(query: dict[str, Any]) -> Generator[dict[str, Any], None, None]:
@@ -563,7 +563,7 @@ class AccountPass(BaseModel):
             at_least (int): at least words
 
         '''
-        user_data = UserStruct.parse_obj(User(uid=self.uid).get())
+        user_data = UserStruct.model_validate(User(uid=self.uid).get())
         if user_data is None:
             return None
 

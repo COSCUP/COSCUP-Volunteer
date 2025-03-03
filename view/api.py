@@ -43,7 +43,7 @@ def project_members() -> ResponseBase:
         data.name = team.name
         data.tid = team.id
 
-        teamusers = TeamUsers.parse_obj(team)
+        teamusers = TeamUsers.model_validate(team)
         chiefs_infos = User.get_info(uids=teamusers.chiefs)
         for uid in teamusers.chiefs:
             if uid not in chiefs_infos:
@@ -52,7 +52,7 @@ def project_members() -> ResponseBase:
             user = chiefs_infos[uid]
             h_msg = hashlib.md5()
             h_msg.update(user['oauth']['email'].encode('utf-8'))
-            data.chiefs.append(Member.parse_obj({
+            data.chiefs.append(Member.model_validate({
                 'name': user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
@@ -61,11 +61,11 @@ def project_members() -> ResponseBase:
                 uids=list(set(teamusers.members) - set(teamusers.chiefs))).values():
             h_msg = hashlib.md5()
             h_msg.update(user['oauth']['email'].encode('utf-8'))
-            data.members.append(Member.parse_obj({
+            data.members.append(Member.model_validate({
                 'name': user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
 
-        result.append(data.dict())
+        result.append(data.model_dump())
 
     return jsonify({'data': result})

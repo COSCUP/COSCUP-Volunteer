@@ -2,8 +2,7 @@
 from typing import Any
 
 import arrow
-from flask import (Blueprint, g, jsonify, make_response, redirect,
-                   render_template, request, url_for)
+from flask import Blueprint, g, jsonify, make_response, redirect, render_template, request, url_for
 from flask.wrappers import Response
 from werkzeug.wrappers import Response as ResponseBase
 
@@ -41,7 +40,8 @@ def project(pid: str) -> str | ResponseBase:
             break
 
     if request.method == 'GET':
-        return render_template('./tasks_project.html', project=project_info.dict(by_alias=True))
+        return render_template('./tasks_project.html',
+                               project=project_info.model_dump(by_alias=True))
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -179,7 +179,7 @@ def add(pid: str, task_id: str | None = None) -> str | ResponseBase:
 
     if request.method == 'GET':
         catelist = Tasks.get_cate(pid=pid)
-        return render_template('./tasks_add.html', project=project_info.dict(by_alias=True),
+        return render_template('./tasks_add.html', project=project_info.model_dump(by_alias=True),
                                catelist=catelist, task_id=task_id)
 
     if request.method == 'POST':
@@ -202,7 +202,7 @@ def add(pid: str, task_id: str | None = None) -> str | ResponseBase:
                 task_item.id = post_data['task_id']
 
             raw = Tasks.add(pid=pid,
-                            body=task_item.dict(by_alias=True))
+                            body=task_item.model_dump(by_alias=True))
 
             if 'task_id' in post_data and not post_data['task_id']:
                 mail_tasks_star.apply_async(

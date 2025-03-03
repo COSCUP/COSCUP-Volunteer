@@ -1,10 +1,9 @@
 ''' recruit.py '''
-from flask import (Blueprint, g, jsonify, redirect, render_template,
-                   request)
+from flask import Blueprint, g, jsonify, redirect, render_template, request
 from werkzeug.wrappers import Response as ResponseBase
 
-from module.skill import (RecruitQuery, SkillEnum, SkillEnumDesc, StatusEnum,
-                          StatusEnumDesc, TeamsEnum, TeamsEnumDesc)
+from module.skill import (RecruitQuery, SkillEnum, SkillEnumDesc, StatusEnum, StatusEnumDesc,
+                          TeamsEnum, TeamsEnumDesc)
 from module.users import TobeVolunteer, User
 from structs.teams import TeamUsers
 from view.utils import check_the_team_and_project_are_existed
@@ -24,7 +23,7 @@ def recurit_list(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
     if not team or not project:
         return redirect('/')
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     is_admin = (g.user['account']['_id'] in teamusers.chiefs or
                 g.user['account']['_id'] in teamusers.owners or
                 g.user['account']['_id'] in project.owners)
@@ -34,8 +33,8 @@ def recurit_list(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
 
     if request.method == 'GET':
         return render_template('./recruit_list.html',
-                               project=project.dict(by_alias=True),
-                               team=team.dict(by_alias=True), is_admin=is_admin)
+                               project=project.model_dump(by_alias=True),
+                               team=team.model_dump(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':
         post_data = request.get_json()
@@ -55,7 +54,8 @@ def recurit_list(pid: str, tid: str) -> str | ResponseBase:  # pylint: disable=t
             })
 
         if post_data and post_data['casename'] == 'query':
-            query = RecruitQuery.parse_obj(post_data['query']).dict()
+            query = RecruitQuery.model_validate(
+                post_data['query']).model_dump()
             data = list(TobeVolunteer.query(query))
 
             users_info = User.get_info(uids=[user['uid'] for user in data])

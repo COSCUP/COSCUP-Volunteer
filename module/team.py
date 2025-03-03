@@ -25,7 +25,7 @@ class Team:
             raise ValueError('lost required')
 
         teamdb = TeamDB(pid, tid)
-        data = TeamBase.parse_obj(
+        data = TeamBase.model_validate(
             {'pid': pid, 'tid': tid, 'name': name, 'owners': owners})
         return teamdb.add(data)
 
@@ -74,13 +74,13 @@ class Team:
         '''
         if show_all:
             for team in TeamDB('', '').find({'pid': pid}):
-                yield TeamBase.parse_obj(team)
+                yield TeamBase.model_validate(team)
 
         else:
             for team in TeamDB('', '').find({
                 'pid': pid,
                     '$or': [{'disabled': {'$exists': False}}, {'disabled': False}]}):
-                yield TeamBase.parse_obj(team)
+                yield TeamBase.model_validate(team)
 
     @staticmethod
     def get(pid: str, tid: str) -> TeamBase | None:
@@ -162,7 +162,7 @@ class Team:
             if not team:
                 raise ValueError(f"no team: {tid}")
 
-            teamusers = TeamUsers.parse_obj(team)
+            teamusers = TeamUsers.model_validate(team)
             users[tid] = teamusers.chiefs + teamusers.members
 
         return users

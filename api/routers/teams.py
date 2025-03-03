@@ -4,9 +4,8 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Path, Request, status
 
 from api.apistructs.items import TeamItem, UserItem
-from api.apistructs.teams import (TeamAddressBookOutput,
-                                  TeamGetVolunteersOutput, TeamItemUpdateInput,
-                                  TeamItemUpdateOutput, TeamUpdateMembers,
+from api.apistructs.teams import (TeamAddressBookOutput, TeamGetVolunteersOutput,
+                                  TeamItemUpdateInput, TeamItemUpdateOutput, TeamUpdateMembers,
                                   TeamUpdateMembersOutput)
 from api.dependencies import get_current_user
 from module.mattermost_bot import MattermostTools
@@ -43,7 +42,7 @@ async def teams_one(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    return TeamItem.parse_obj(team)
+    return TeamItem.model_validate(team)
 
 
 @router.patch('/{pid}/{tid}',
@@ -74,7 +73,7 @@ async def teams_one_update(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     include: set[str] | None = None
     if current_user['uid'] in teamusers.owners:
         include = None
@@ -85,9 +84,9 @@ async def teams_one_update(
     updated: dict[str, Any] | None = None
     if current_user['uid'] in teamusers.owners or include is not None:
         updated = Team.update_setting(
-            pid=pid, tid=tid, data=update_data.dict(include=include))
+            pid=pid, tid=tid, data=update_data.model_dump(include=include))
 
-    return TeamItemUpdateOutput.parse_obj(updated)
+    return TeamItemUpdateOutput.model_validate(updated)
 
 
 @router.get('/{pid}/{tid}/addressbook',
@@ -113,7 +112,7 @@ async def teams_one_address_book(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if current_user['uid'] not in (teamusers.owners + teamusers.chiefs + teamusers.members):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -130,7 +129,7 @@ async def teams_one_address_book(
             chat = {'mid': mid,
                     'name': MattermostTools.find_user_name(mid=mid)}
 
-        datas.append(UserItem.parse_obj(
+        datas.append(UserItem.model_validate(
             {'id': uid,
              'badge_name': users_info[uid]['profile']['badge_name'],
              'avatar': users_info[uid]['oauth']['picture'],
@@ -140,7 +139,7 @@ async def teams_one_address_book(
 
         datas.sort(key=lambda data: data.is_chief or False, reverse=True)
 
-    return TeamAddressBookOutput.parse_obj({'datas': datas})
+    return TeamAddressBookOutput.model_validate({'datas': datas})
 
 
 @router.patch('/{pid}/{tid}/chiefs',
@@ -184,7 +183,7 @@ async def teams_chiefs_update(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if current_user['uid'] not in (teamusers.owners + teamusers.chiefs):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -240,7 +239,7 @@ async def teams_members_update(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if current_user['uid'] not in (teamusers.owners + teamusers.chiefs):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -285,7 +284,7 @@ async def teams_get_volunteers(
     if not team:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    teamusers = TeamUsers.parse_obj(team)
+    teamusers = TeamUsers.model_validate(team)
     if current_user['uid'] not in (teamusers.owners + teamusers.chiefs+teamusers.members):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -312,4 +311,4 @@ async def teams_get_volunteers(
             chat=None,
         ))
 
-    return TeamGetVolunteersOutput.parse_obj({'datas': result})
+    return TeamGetVolunteersOutput.model_validate({'datas': result})

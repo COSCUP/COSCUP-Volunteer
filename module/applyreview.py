@@ -1,5 +1,6 @@
 ''' Apply review '''
 from typing import Any
+
 from toldwords.openai import Message, OpenAIAPI, RespCompletions, Role
 
 import setting
@@ -98,7 +99,7 @@ class ApplyReview:
         data = TeamApplyReview(pid=pid, tid=tid, uid=uid)
         for choice in resp.choices:
             data.messages.append(
-                TeamApplyReviewMessage.parse_obj(choice.message)
+                TeamApplyReviewMessage.model_validate(choice.message)
             )
 
         ApplyReviewDB().save(data=data)

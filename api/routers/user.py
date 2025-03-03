@@ -6,25 +6,19 @@ from fastapi import APIRouter, Depends, status
 from pydantic import parse_obj_as
 
 from api.apistructs.items import ProjectItem, TeamItem
-from api.apistructs.users import (UserMeAddressInput, UserMeAddressOutput,
-                                  UserMeBankInput, UserMeBankOut,
-                                  UserMeDietaryHabitInput,
-                                  UserMeDietaryHabitItem,
-                                  UserMeDietaryHabitOutput, UserMeOut,
-                                  UserMeParticipatedItem,
-                                  UserMeParticipatedOut, UserMeProfileInput,
-                                  UserMeProfileOutput, UserMeProfileRealInput,
-                                  UserMeProfileRealOutput,
-                                  UserMeToBeVolunteerInput,
-                                  UserMeToBeVolunteerOptionIntItem,
+from api.apistructs.users import (UserMeAddressInput, UserMeAddressOutput, UserMeBankInput,
+                                  UserMeBankOut, UserMeDietaryHabitInput, UserMeDietaryHabitItem,
+                                  UserMeDietaryHabitOutput, UserMeOut, UserMeParticipatedItem,
+                                  UserMeParticipatedOut, UserMeProfileInput, UserMeProfileOutput,
+                                  UserMeProfileRealInput, UserMeProfileRealOutput,
+                                  UserMeToBeVolunteerInput, UserMeToBeVolunteerOptionIntItem,
                                   UserMeToBeVolunteerOptionsOutput,
-                                  UserMeToBeVolunteerOptionStrItem,
-                                  UserMeToBeVolunteerOutput)
+                                  UserMeToBeVolunteerOptionStrItem, UserMeToBeVolunteerOutput)
 from api.dependencies import get_current_user
 from module.dietary_habit import DietaryHabitItemsName, DietaryHabitItemsValue
 from module.project import Project
-from module.skill import (SkillEnum, SkillEnumDesc, StatusEnum, StatusEnumDesc,
-                          TeamsEnum, TeamsEnumDesc)
+from module.skill import (SkillEnum, SkillEnumDesc, StatusEnum, StatusEnumDesc, TeamsEnum,
+                          TeamsEnumDesc)
 from module.team import Team
 from module.users import TobeVolunteer, User
 from structs.users import UserAddress, UserBank, UserProfle, UserProfleRealBase
@@ -69,11 +63,11 @@ async def me_participated(
             continue
 
         data = UserMeParticipatedItem(
-            project=ProjectItem.parse_obj(
+            project=ProjectItem.model_validate(
                 {'id': project.id, 'name': project.name}),
-            team=TeamItem.parse_obj({'id': team['tid'],
-                                     'name': team['name'],
-                                     'pid': project.id}),
+            team=TeamItem.model_validate({'id': team['tid'],
+                                          'name': team['name'],
+                                          'pid': project.id}),
             action=project.action_date,
         )
 
@@ -97,7 +91,7 @@ async def me_participated(
 async def me_bank(
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeBankOut:
     ''' Get current user's bank info '''
-    return UserMeBankOut.parse_obj(
+    return UserMeBankOut.model_validate(
         User.get_bank(uid=current_user['uid']))
 
 
@@ -109,8 +103,8 @@ async def me_bank_update(
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeBankOut:
     ''' Update current user's bank info '''
     data = User.update_bank(
-        uid=current_user['uid'], data=UserBank.parse_obj(update_data))
-    return UserMeBankOut.parse_obj(data)
+        uid=current_user['uid'], data=UserBank.model_validate(update_data))
+    return UserMeBankOut.model_validate(data)
 
 
 @router.get('/me/address',
@@ -119,7 +113,7 @@ async def me_bank_update(
 async def me_address(
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeAddressOutput:
     ''' Get current user's Address info '''
-    return UserMeAddressOutput.parse_obj(
+    return UserMeAddressOutput.model_validate(
         User.get_address(uid=current_user['uid']))
 
 
@@ -131,8 +125,8 @@ async def me_address_update(
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeAddressOutput:
     ''' Update current user's address info '''
     data = User.update_address(
-        uid=current_user['uid'], data=UserAddress.parse_obj(update_data))
-    return UserMeAddressOutput.parse_obj(data)
+        uid=current_user['uid'], data=UserAddress.model_validate(update_data))
+    return UserMeAddressOutput.model_validate(data)
 
 
 @router.get('/me/profile',
@@ -143,9 +137,9 @@ async def me_profile(
     ''' Get current user's profile and the `intro` in Markdown format '''
     data = User(uid=current_user['uid']).get_profile()
     if data:
-        return UserMeProfileOutput.parse_obj(data)
+        return UserMeProfileOutput.model_validate(data)
 
-    return UserMeProfileOutput.parse_obj({})
+    return UserMeProfileOutput.model_validate({})
 
 
 @router.put('/me/profile',
@@ -156,9 +150,9 @@ async def me_profile_update(
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeProfileOutput:
     ''' Update current user's profile and the `intro` in Markdown format '''
     data = User(uid=current_user['uid']).update_profile(
-        UserProfle.parse_obj(update_data).dict()
+        UserProfle.model_validate(update_data).model_dump()
     )
-    return UserMeProfileOutput.parse_obj(data['profile'])
+    return UserMeProfileOutput.model_validate(data['profile'])
 
 
 @router.get('/me/profile_real',
@@ -167,7 +161,7 @@ async def me_profile_update(
 async def me_profile_real(
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeProfileRealOutput:
     ''' Get current user's real profile '''
-    return UserMeProfileRealOutput.parse_obj(
+    return UserMeProfileRealOutput.model_validate(
         User(uid=current_user['uid']).get_profile_real())
 
 
@@ -178,7 +172,7 @@ async def me_profile_real_update(
         update_data: UserMeProfileRealInput,
         current_user: dict[str, Any] = Depends(get_current_user)) -> UserMeProfileRealOutput:
     ''' Update current user's real profile '''
-    need_update = UserProfleRealBase.parse_obj(update_data)
+    need_update = UserProfleRealBase.model_validate(update_data)
     phone: str = ''
 
     try:
@@ -191,9 +185,9 @@ async def me_profile_real_update(
     need_update.phone = phone
     data = User(uid=current_user['uid']).get_profile_real()
     saved = User(uid=current_user['uid']).update_profile_real_base(
-        data=data.copy(update=need_update.dict()))
+        data=data.model_copy(update=need_update.model_dump()))
 
-    return UserMeProfileRealOutput.parse_obj(saved)
+    return UserMeProfileRealOutput.model_validate(saved)
 
 
 @router.get('/me/dietary_habit',
@@ -206,7 +200,7 @@ async def me_dietary_habit(
 
     datas = []
     for item in DietaryHabitItemsValue:
-        datas.append(UserMeDietaryHabitItem.parse_obj(
+        datas.append(UserMeDietaryHabitItem.model_validate(
             {
                 'name': DietaryHabitItemsName[item.name].value,
                 'value': item.value,
@@ -214,7 +208,7 @@ async def me_dietary_habit(
             }
         ))
 
-    return UserMeDietaryHabitOutput.parse_obj({'data': datas})
+    return UserMeDietaryHabitOutput.model_validate({'data': datas})
 
 
 @router.put('/me/dietary_habit',
@@ -244,7 +238,7 @@ async def me_to_be_volunteer_options(
         'teams': [], 'skills': [], 'status': []}
     for team in TeamsEnum:
         result['teams'].append(
-            UserMeToBeVolunteerOptionIntItem.parse_obj({
+            UserMeToBeVolunteerOptionIntItem.model_validate({
                 'code': team.name,
                 'value': team.value,
                 'desc': TeamsEnumDesc[team.name].value,
@@ -253,7 +247,7 @@ async def me_to_be_volunteer_options(
 
     for skill in SkillEnum:
         result['skills'].append(
-            UserMeToBeVolunteerOptionStrItem.parse_obj({
+            UserMeToBeVolunteerOptionStrItem.model_validate({
                 'code': skill.name,
                 'value': skill.value,
                 'desc': SkillEnumDesc[skill.name].value,
@@ -262,14 +256,14 @@ async def me_to_be_volunteer_options(
 
     for _status in StatusEnum:
         result['status'].append(
-            UserMeToBeVolunteerOptionIntItem.parse_obj({
+            UserMeToBeVolunteerOptionIntItem.model_validate({
                 'code': _status.name,
                 'value': _status.value,
                 'desc': StatusEnumDesc[_status.name].value,
             })
         )
 
-    return UserMeToBeVolunteerOptionsOutput.parse_obj(result)
+    return UserMeToBeVolunteerOptionsOutput.model_validate(result)
 
 
 @router.get('/me/to_be_volunteer',
@@ -279,7 +273,7 @@ async def me_to_be_volunteer(
         current_user: dict[str, Any] = Depends(get_current_user)
 ) -> UserMeToBeVolunteerOutput:
     ''' Get to be volunteer '''
-    return UserMeToBeVolunteerOutput.parse_obj(
+    return UserMeToBeVolunteerOutput.model_validate(
         {'data': TobeVolunteer.get(uid=current_user['uid'])}
     )
 
@@ -292,7 +286,7 @@ async def me_to_be_volunteer_update(
         current_user: dict[str, Any] = Depends(get_current_user)
 ) -> UserMeToBeVolunteerOutput:
     ''' Update to be volunteer '''
-    data = update_data.dict()
+    data = update_data.model_dump()
     data['uid'] = current_user['uid']
     TobeVolunteer.save(data=data)
     result = await me_to_be_volunteer(current_user=current_user)

@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Any
 
 import arrow
-from pydantic import BaseModel, Field, validator
+from pydantic import field_validator, BaseModel, Field
 
 
 class SenderCampaignInput(BaseModel):
@@ -18,7 +18,8 @@ class Creater(BaseModel):
     uid: str = Field(description='user id')
     at: datetime = Field(description='created at in timestamp')
 
-    @validator('at', pre=True)
+    @field_validator('at', mode="before")
+    @classmethod
     def convert_to_datetime(cls, value: int | float | datetime) -> datetime:  # pylint: disable=no-self-argument
         ''' convert to datetime '''
         return arrow.get(value).naive
@@ -41,7 +42,8 @@ class Receiver(BaseModel):
     all_users: bool = Field(
         default=False, description='Send to all users in platform')
 
-    @validator('team_w_tags', pre=True)
+    @field_validator('team_w_tags', mode="before")
+    @classmethod
     def convert_to_list(cls,  # pylint: disable=no-self-argument
                         value: Any | list[dict[str, str | list[str]]]) -> list[
             dict[str, str | list[str]]]:

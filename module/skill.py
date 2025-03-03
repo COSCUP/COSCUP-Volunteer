@@ -2,7 +2,7 @@
 # pylint: disable=too-few-public-methods
 from enum import Enum, IntEnum, unique
 
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 
 
 @unique
@@ -121,13 +121,9 @@ class TobeVolunteerStruct(BaseModel):
     skill: list[SkillEnum] = Field(
         default_factory=list, description='list of skills')
     hours: int = Field(default=0, description='Hours in an week')
-    status: StatusEnum | None = Field(description='status')
+    status: StatusEnum | None = Field(None, description='status')
     desc: str = Field(default='', description='more description')
-
-    class Config:
-        ''' Config '''
-        anystr_strip_whitespace: bool = True
-        use_enum_values: bool = True
+    model_config = ConfigDict()
 
 
 class RecruitQuery(BaseModel):
@@ -145,7 +141,4 @@ class RecruitQuery(BaseModel):
         default_factory=list, description='list of skills')
     status: list[StatusEnum] = Field(
         default_factory=list, description='list of status')
-
-    class Config:
-        ''' Config '''
-        use_enum_values = True
+    model_config = ConfigDict(use_enum_values=True)

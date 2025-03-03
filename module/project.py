@@ -23,12 +23,12 @@ class Project:
             Return the added data.
 
         '''
-        new_project = ProjectBase.parse_obj({
+        new_project = ProjectBase.model_validate({
             '_id': pid, 'name': name, 'owners': owners, 'action_date': action_date,
         })
 
         return ProjectDB(pid=pid).add(
-            data=new_project.dict(by_alias=True, exclude_none=True))
+            data=new_project.model_dump(by_alias=True, exclude_none=True))
 
     @staticmethod
     def all() -> Generator[ProjectBase, None, None]:
@@ -39,7 +39,7 @@ class Project:
 
         '''
         for item in ProjectDB(pid='').find({}, sort=(('action_date', -1), )):
-            yield ProjectBase.parse_obj(item)
+            yield ProjectBase.model_validate(item)
 
     @staticmethod
     def get(pid: str) -> ProjectBase | None:
@@ -53,7 +53,7 @@ class Project:
 
         '''
         for item in ProjectDB(pid).find({'_id': pid}):
-            return ProjectBase.parse_obj(item)
+            return ProjectBase.model_validate(item)
 
         return None
 
@@ -67,11 +67,11 @@ class Project:
                          Can be updated fields refer to [structs.projects.ProjectBaseUpdate][]
 
         '''
-        _data = data.dict(exclude_none=True)
+        _data = data.model_dump(exclude_none=True)
         result = ProjectDB(pid).find_one_and_update(
             {'_id': pid},
             {'$set': _data},
             return_document=ReturnDocument.AFTER,
         )
 
-        return ProjectBaseUpdate.parse_obj(result)
+        return ProjectBaseUpdate.model_validate(result)

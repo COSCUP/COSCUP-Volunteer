@@ -44,7 +44,7 @@ async def members_past(
             _user = chiefs_infos[uid]
             h_msg = hashlib.md5()
             h_msg.update(_user['oauth']['email'].encode('utf-8'))
-            data_chiefs.append(MembersInfo.parse_obj({
+            data_chiefs.append(MembersInfo.model_validate({
                 'name': _user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
@@ -60,12 +60,12 @@ async def members_past(
         for _user in User.get_info(uids=list(uids)).values():
             h_msg = hashlib.md5()
             h_msg.update(_user['oauth']['email'].encode('utf-8'))
-            data_members.append(MembersInfo.parse_obj({
+            data_members.append(MembersInfo.model_validate({
                 'name': _user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
 
-        result.data.append(MembersTeams.parse_obj(
+        result.data.append(MembersTeams.model_validate(
             {'name': team.name, 'tid': team.id,
              'chiefs': data_chiefs, 'members': data_members}
         ))
@@ -103,7 +103,7 @@ async def members(
             user = chiefs_infos[uid]
             h_msg = hashlib.md5()
             h_msg.update(user['oauth']['email'].encode('utf-8'))
-            data_chiefs.append(MembersInfo.parse_obj({
+            data_chiefs.append(MembersInfo.model_validate({
                 'name': user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
@@ -119,12 +119,12 @@ async def members(
         for user in User.get_info(uids=list(uids)).values():
             h_msg = hashlib.md5()
             h_msg.update(user['oauth']['email'].encode('utf-8'))
-            data_members.append(MembersInfo.parse_obj({
+            data_members.append(MembersInfo.model_validate({
                 'name': user['profile']['badge_name'],
                 'email_hash': h_msg.hexdigest(),
             }))
 
-        result.data.append(MembersTeams.parse_obj(
+        result.data.append(MembersTeams.model_validate(
             {'name': team.name, 'tid': team.id,
              'chiefs': data_chiefs, 'members': data_members}
         ))

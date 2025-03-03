@@ -72,7 +72,7 @@ def user_page(uid: str, nickname: str | None = None) -> ResponseBase | str:  # p
         if not project:
             raise TypeError('No project')
 
-        item['_project'] = project.dict(by_alias=True)
+        item['_project'] = project.model_dump(by_alias=True)
         item['_title'] = '???'
         if uid in item['chiefs']:
             item['_title'] = 'chief'

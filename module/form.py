@@ -406,7 +406,7 @@ class FormTrafficFeeMapping:
         result = []
         saved = FormTrafficFeeMappingDB().save(pid=pid, data=_data)
         for location, fee in saved['data'].items():
-            result.append(ProjectTrafficLocationFeeItem.parse_obj({
+            result.append(ProjectTrafficLocationFeeItem.model_validate({
                 'location': location, 'fee': fee}))
 
         return result
@@ -428,7 +428,7 @@ class FormTrafficFeeMapping:
         datas = FormTrafficFeeMappingDB().find_one({'_id': pid})
         if datas and 'data' in datas:
             for location, fee in datas['data'].items():
-                result.append(ProjectTrafficLocationFeeItem.parse_obj({
+                result.append(ProjectTrafficLocationFeeItem.model_validate({
                     'location': location,
                     'fee': fee,
                 }))
