@@ -13,14 +13,14 @@ form_menu_traffic_fee %}is-active{% endblock %} {% block form_body %}
       </div>
     </article>
     {% else %} {% if not project.formswitch.traffic %}
-    <article class="message is-warning">
-      <div class="message-body">
-        <span class="icon has-text-info"
-          ><i class="fas fa-exclamation-triangle"></i
-        ></span>
-        目前已停止申請，如有任何需求請聯繫行政組。
-      </div>
-    </article>
+  <!--  <article class="message is-warning"> -->
+    <!--  <div class="message-body"> -->
+     <!--   <span class="icon has-text-info" -->
+     <!--     ><i class="fas fa-exclamation-triangle"></i -->
+     <!--   ></span> -->
+     <!--   目前已停止申請，如有任何需求請聯繫行政組。 -->
+   <!--   </div> -->
+   <!-- </article> -->
     {% endif %}
     <article class="message">
       <div class="message-body">
@@ -52,7 +52,7 @@ form_menu_traffic_fee %}is-active{% endblock %} {% block form_body %}
         <li>申請期限：</li>
         <ul>
           <li>開始申請日：即日起</li>
-          <li>截止申請日：<strong>2024/07/25</strong></li>
+          <li>截止申請日：<strong>2025/07/09</strong></li>
         </ul>
         <li>申請程序：</li>
         <ul>
@@ -61,7 +61,7 @@ form_menu_traffic_fee %}is-active{% endblock %} {% block form_body %}
           </li>
           <li>
             請於大會結束後，將票根或購票證明正本及存摺影本郵寄至「(105057)
-            臺北市松山區八德路四段 636 之 1 號 」，並於信封上註明「COSCUP2024
+            臺北市松山區八德路四段 636 之 1 號 」，並於信封上註明「COSCUP2025
             行政組交通補助 收」，並於存摺影本上註明「組別」及「暱稱」。
           </li>
         </ul>
@@ -101,19 +101,40 @@ form_menu_traffic_fee %}is-active{% endblock %} {% block form_body %}
               <li>出站後，向捷運服務處服務人員申請開立購票證明。</li>
             </ul>
           </ol>
-          <li>鐵路（一般票）：憑車票加蓋車站購票證明章。</li>
+          <li>鐵路</li>
+          <ul>
+            <li>
+              實體車票：憑車票。
+            </li>
+            <li>
+              電子車票：<a href="https://tip.railway.gov.tw/tra-tip-web/tip/tip001/tip115/query"
+              >線上申請</a
+          </li>
           <li>
-            鐵路（持卡）：<a href="https://queryweb.tscc.com.tw/tra_web/"
+              電子票證（持卡）：<a href="https://www.railway.gov.tw/tra-tip-web/tip/tip00C/tipC21/view?proCode=8ae4cac3756b7b41017572e76e08178d&subCode=8ae4cac288733c90018875c5e47902c4&lang=zh_TW"
               >線上申請</a
             >。
           </li>
+            </ul>
           <li>高鐵：</li>
           <ul>
-            <li><a href="https://ptis.thsrc.com.tw/ptis/">線上申請</a></li>
-            <li>憑車票或購票證明（任一出口服務台可開立購票證明）。</li>
-            <li>使用手機 T Express 手機票者，可上網查詢購票紀錄及列印證明。</li>
+            <li>
+              實體車票：憑車票。
+            </li>
+            <li>
+              電子車票(T Express)：<a href="https://tip.railway.gov.tw/tra-tip-web/tip/tip001/tip115/query"
+              >線上申請</a
+          </li>
+            <li>
+              使用手機 T Express 手機票者，可上網列印電子車票證明。
+              抬頭：財團法人開放文化基金會 統編：38552170
+          </li>
           </ul>
           <li>客運：憑車票。</li>
+          <ul>
+            <li> 實體票：憑車票。</li>
+            <li> 電子票：電子購票證明。</li>
+          </ul>
           <li>計程車：憑乘車收據。</li>
         </ol>
         <li>補助上限：</li>
@@ -164,6 +185,10 @@ form_menu_traffic_fee %}is-active{% endblock %} {% block form_body %}
           <tr>
             <td>桃園</td>
             <td>132</td>
+          </tr>
+          <tr>
+            <td>中壢</td>
+            <td>178</td>
           </tr>
           <tr>
             <td>新竹</td>
