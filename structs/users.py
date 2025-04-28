@@ -4,7 +4,7 @@ from enum import Enum
 from time import time
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 from module.dietary_habit import DietaryHabitItemsValue
 
@@ -17,17 +17,9 @@ class UserProfle(BaseModel):
         intro: introduction.
 
     '''
-    badge_name: str = Field(default='', example='Badge Name')
+    badge_name: str = Field(default='', examples=['Badge Name'])
     intro: str = Field(default='', description='Markdown format')
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config
-
-        Attributes:
-            anystr_strip_whitespace: `True`
-
-        '''
-        anystr_strip_whitespace: bool = True
+    model_config = ConfigDict()
 
 
 class UserBank(BaseModel):
@@ -44,15 +36,7 @@ class UserBank(BaseModel):
     no: str = Field(default='', description='bank account numbers')
     branch: str = Field(default='', description='bank branch name')
     name: str = Field(default='', description='bank account name')
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config
-
-        Attributes:
-            anystr_strip_whitespace: `True`
-
-        '''
-        anystr_strip_whitespace: bool = True
+    model_config = ConfigDict()
 
 
 class UserAddress(BaseModel):
@@ -67,15 +51,7 @@ class UserAddress(BaseModel):
     code: str = Field(default='')
     receiver: str = Field(default='')
     address: str = Field(default='')
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config
-
-        Attributes:
-            anystr_strip_whitespace: `True`
-
-        '''
-        anystr_strip_whitespace: bool = True
+    model_config = ConfigDict()
 
 
 class UserProfleRealBase(BaseModel):
@@ -92,15 +68,7 @@ class UserProfleRealBase(BaseModel):
     phone: str = Field(default='')
     roc_id: str = Field(default='')
     company: str = Field(default='')
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config
-
-        Attributes:
-            anystr_strip_whitespace: `True`
-
-        '''
-        anystr_strip_whitespace: bool = True
+    model_config = ConfigDict()
 
 
 class UserProfleReal(UserProfleRealBase):
@@ -117,18 +85,8 @@ class UserProfleReal(UserProfleRealBase):
     bank: Optional[UserBank] = Field(default_factory=UserBank)
     address: Optional[UserAddress] = Field(default_factory=UserAddress)
     dietary_habit: Optional[list[DietaryHabitItemsValue]] = Field(
-        default_factory=list)
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config
-
-        Attributes:
-            anystr_strip_whitespace: `True`
-            use_enum_values: `True`
-
-        '''
-        anystr_strip_whitespace: bool = True
-        use_enum_values: bool = True
+        default_factory=lambda _: [])
+    model_config = ConfigDict()
 
 
 class User(BaseModel):
@@ -149,17 +107,9 @@ class User(BaseModel):
     id: str = Field(..., alias='_id')
     created_at: int = Field(default_factory=lambda: int(time()))
     mail: EmailStr = Field(..., description="User's mail")
-    profile: Optional[UserProfle]
-    profile_real: Optional[UserProfleReal]
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config
-
-        Attributes:
-            anystr_strip_whitespace: `True`
-
-        '''
-        anystr_strip_whitespace: bool = True
+    profile: Optional[UserProfle] = None
+    profile_real: Optional[UserProfleReal] = None
+    model_config = ConfigDict()
 
 
 class PolicyType(str, Enum):
@@ -181,7 +131,4 @@ class PolicySigned(BaseModel):
     type: PolicyType = Field(description='Policy type')
     sign_at: datetime = Field(
         description='The policy signed at', default_factory=datetime.now)
-
-    class Config:  # pylint: disable=too-few-public-methods
-        ''' Config'''
-        use_enum_values = True
+    model_config = ConfigDict(use_enum_values=True)

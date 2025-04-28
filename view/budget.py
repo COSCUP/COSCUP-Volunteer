@@ -27,7 +27,7 @@ def batch(pid: str) -> str | ResponseBase:  # pylint: disable=too-many-branches
 
     if request.method == 'GET':
         return render_template('./budget_batch.html',
-                               project=project.dict(by_alias=True), is_admin=is_admin)
+                               project=project.model_dump(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':
         if request.is_json:
@@ -106,7 +106,7 @@ def by_project_index(pid: str) -> str | ResponseBase:
 
     if request.method == 'GET':
         return render_template('./budget.html',
-                               project=project.dict(by_alias=True), is_admin=is_admin)
+                               project=project.model_dump(by_alias=True), is_admin=is_admin)
 
     if request.method == 'POST':
         data = request.get_json()

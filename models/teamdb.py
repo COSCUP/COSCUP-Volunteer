@@ -87,9 +87,9 @@ class TeamDB(DBBase):
             Return the inserted / updated data.
 
         '''
-        return TeamBase.parse_obj(self.find_one_and_update(
+        return TeamBase.model_validate(self.find_one_and_update(
             {'pid': self.pid, 'tid': self.tid},
-            {'$set': data.dict(exclude_none=True)},
+            {'$set': data.model_dump(exclude_none=True)},
             upsert=True,
             return_document=ReturnDocument.AFTER,
         ))
@@ -139,7 +139,7 @@ class TeamDB(DBBase):
 
         '''
         for team in self.find({'pid': self.pid, 'tid': self.tid}):
-            return TeamBase.parse_obj(team)
+            return TeamBase.model_validate(team)
 
         return None
 

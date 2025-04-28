@@ -4,14 +4,11 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Path, status
 
 from api.apistructs.items import ProjectItem, TeamItem
-from api.apistructs.projects import (ProjectAllOut, ProjectCreateInput,
-                                     ProjectCreateOutput,
-                                     ProjectItemUpdateInput,
-                                     ProjectItemUpdateOutput,
+from api.apistructs.projects import (ProjectAllOut, ProjectCreateInput, ProjectCreateOutput,
+                                     ProjectItemUpdateInput, ProjectItemUpdateOutput,
                                      ProjectSettingTrafficSubsidyInput,
                                      ProjectSettingTrafficSubsidyOutput,
-                                     ProjectTeamDietaryHabitOutput,
-                                     ProjectTeamsOutput)
+                                     ProjectTeamDietaryHabitOutput, ProjectTeamsOutput)
 from api.apistructs.teams import TeamCreateInput, TeamCreateOutput
 from api.dependencies import get_current_user
 from module.dietary_habit import DietaryHabitItemsName, DietaryHabitItemsValue
@@ -41,10 +38,10 @@ async def projects_all(current_user: dict[str, Any] = Depends(get_current_user))
     datas = []
     for data in Project.all():
         if current_user['uid'] in data.owners:
-            datas.append(ProjectItem.parse_obj(data))
+            datas.append(ProjectItem.model_validate(data))
         else:
             datas.append(
-                ProjectItem.parse_obj({
+                ProjectItem.model_validate({
                     'id': data.id,
                     'name': data.name,
                     'desc': data.desc,
@@ -68,10 +65,10 @@ async def projects_create(
     if current_user['uid'] not in API_DEFAULT_OWNERS:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-    data = create_date.dict()
+    data = create_date.model_dump()
     data['owners'] = API_DEFAULT_OWNERS
     result = Project.create(**data)
-    return ProjectCreateOutput.parse_obj(result)
+    return ProjectCreateOutput.model_validate(result)
 
 
 @router.patch('/{pid}',
@@ -105,9 +102,9 @@ async def projects_one_update(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     result = Project.update(pid=pid,
-                            data=ProjectBaseUpdate.parse_obj(update_data))
+                            data=ProjectBaseUpdate.model_validate(update_data))
 
-    return ProjectItemUpdateOutput.parse_obj(result)
+    return ProjectItemUpdateOutput.model_validate(result)
 
 
 @router.get('/{pid}/teams',
@@ -125,9 +122,9 @@ async def projects_teams(
     ''' Lists of teams in project '''
     teams = []
     for team in Team.list_by_pid(pid=pid):
-        teams.append(TeamItem.parse_obj(team))
+        teams.append(TeamItem.model_validate(team))
 
-    return ProjectTeamsOutput.parse_obj({'teams': teams})
+    return ProjectTeamsOutput.model_validate({'teams': teams})
 
 
 @router.post('/{pid}/teams',
@@ -155,7 +152,7 @@ async def projects_teams_create(
     result = Team.create(
         pid=pid, tid=create_date.id, name=create_date.name, owners=project.owners)
 
-    return TeamCreateOutput.parse_obj(result)
+    return TeamCreateOutput.model_validate(result)
 
 
 @router.get('/{pid}/teams/dietary_habit',
@@ -199,10 +196,10 @@ async def projects_teams_dietary_habit(
     datas = []
     for habit, count in habit_count.items():
         datas.append(
-            ProjectTeamDietaryHabitOutput.parse_obj({'name': dietary_habit_info[habit],
-                                                     'count': count,
-                                                     'code': habit,
-                                                     }))
+            ProjectTeamDietaryHabitOutput.model_validate({'name': dietary_habit_info[habit],
+                                                          'count': count,
+                                                          'code': habit,
+                                                          }))
 
     return datas
 
@@ -235,7 +232,7 @@ async def projects_traffic(
     if current_user['uid'] not in project.owners:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-    return ProjectSettingTrafficSubsidyOutput.parse_obj({
+    return ProjectSettingTrafficSubsidyOutput.model_validate({
         'datas': FormTrafficFeeMapping.get(pid=pid)})
 
 
@@ -270,4 +267,4 @@ async def projects_traffic_update(
 
     result = FormTrafficFeeMapping.save(pid=pid, datas=update_data.datas)
 
-    return ProjectSettingTrafficSubsidyOutput.parse_obj({'datas': result})
+    return ProjectSettingTrafficSubsidyOutput.model_validate({'datas': result})
