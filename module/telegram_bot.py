@@ -1,6 +1,6 @@
 ''' TelegramBot '''
 from time import time
-from typing import Any, Union, Optional
+from typing import Any, Optional, Union
 from uuid import uuid4
 
 from requests import Response, Session
@@ -30,7 +30,7 @@ class Telegram(Session):
                      protect_content: bool = False,
                      reply_to_message_id: Optional[int] = None,
                      ) -> Response:
-        # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-arguments, too-many-positional-arguments
         ''' Send message
 
         Args:
