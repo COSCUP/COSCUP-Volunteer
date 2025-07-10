@@ -20,10 +20,10 @@ The Eve Gathering is a party that allows everyone to warm up in preparation for 
 
 The time and location of this year's Welcome party:
 
-- Date：August 2<sup>nd</sup> 18:15 - 21:30 UTC+8
+- Date：August 8<sup>nd</sup> 18:15 - 21:30 UTC+8
 - Location：[Hua Shan Din Cafe x Bar（華山町餐酒館）](https://www.google.com/maps/search/%E8%8F%AF%E5%B1%B1%E7%94%BA%E9%A4%90%E9%85%92%E9%A4%A8)
 
-[:ticket: Pay for unlimited drink coupon (1 ticket p.p.)](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button }
+[:ticket: Pay for unlimited drink coupon (1 ticket p.p.)](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=47){ .md-button }
 
 {++（:hatching_chick: There are also package options of 3 and 10 tickets available for purchase!）++}
 
@@ -45,7 +45,7 @@ The time and location of this year's Welcome party:
     </a>
 </figure>
 
-Since the party on the eve will only lasts until 21:30<sup>UTC+8</sup>, we encourage everyone to go to the [Huashan 1914 Creative Park](https://www.google.com/maps/search/%E8%8F%AF%E5%B1%B11914%E6%96%87%E5%89%B5%E5%9C%92%E5%8D%80) which is across the street. There, you will find the familiar Palm Breweries craft beer for after-hours drinks. Or, you can visit our community partner MozTW, [Mozilla Community Space Taipei](https://moztw.org/space/) nearby!
+Since the party on the eve will only lasts until 21:30<sup>UTC+8</sup>, we encourage everyone to go to the [Huashan 1914 Creative Park](https://www.google.com/maps/search/%E8%8F%AF%E5%B1%B11914%E6%96%87%E5%89%B5%E5%9C%92%E5%8D%80) which is across the street. There, you will find the familiar Palm Breweries craft beer for after-hours drinks. Or, you can visit our community partner MozTW, [Mozilla Community Space Taipei](https://moztw.org/space/)!
 
 
 !!! info ":partying_face: After-Party Events by Open Source Communities!"
