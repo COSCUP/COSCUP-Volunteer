@@ -183,20 +183,20 @@ extra:
 extra_css:
   - stylesheets/extra.css
 plugins:
+  - autorefs:
+      resolve_closest: true
   - i18n:
       docs_structure: suffix
       fallback_to_default: true
-      reconfigure_material: true
       reconfigure_search: true
       languages:
-        - build: true
-          default: true
-          locale: en
+        - locale: en
           name: English (en-US)
-        - build: true
-          default: false
-          locale: zh-TW
+          default: true
+          build: true
+        - locale: zh_TW
           name: 臺灣正體 (zh-TW)
+          build: true
           nav_translations:
             About COSCUP: 關於 COSCUP
             About Secretary Team: 關於行政組
