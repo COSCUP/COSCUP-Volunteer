@@ -5,7 +5,7 @@ site_author: "COSCUP Secretary Team / 行政組"
 repo_url: https://github.com/COSCUP/COSCUP-Volunteer
 repo_name: COSCUP/COSCUP-Volunteer
 edit_uri: https://github.com/COSCUP/COSCUP-Volunteer/blob/main/docs_dev/docs/
-copyright: "CC BY 4.0 2022-2024 COSCUP Volunteer"
+copyright: "CC BY 4.0 2022-2025 COSCUP Volunteer"
 nav:
   - Home: index.md
   - Developers:
@@ -86,10 +86,6 @@ nav:
       - Attendee Services:
           - about_coscup/attendee_services/index.md
           - Eve Gathering: about_coscup/eve_gathering/overview.md
-          - Fun Fair: about_coscup/fun_fair/overview.md
-          - Health Market: about_coscup/health_market/overview.md
-          - Healing Lectures: about_coscup/healing_lectures/overview.md
-          - Junior Workshop: about_coscup/junior_workshop/overview.md
       - Email Newsletters:
           - about_coscup/newsletters/index.md
           - Overview: about_coscup/newsletters/overview.md
@@ -219,15 +215,11 @@ plugins:
             Enhance Recruitment: 招募流程增進計畫
             Error Note: 錯誤訊息
             Eve Gathering: 前夜派對
-            Fun Fair: 開．源遊會
             Global Engagement: 國際交流
-            Healing Lectures: 療癒講座
-            Health Market: 療癒市集
             Home: 首頁
             How to Participate in COSCUP: 如何參與、準備 COSCUP
             Instructions: 使用手冊
             Introduction: 介紹
-            Junior Workshop: 親子工作坊
             List of Tasks: 任務列表
             Overview: 摘要
             Post-Event Report: 會後參與報告

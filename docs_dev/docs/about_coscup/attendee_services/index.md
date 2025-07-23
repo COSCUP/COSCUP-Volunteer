@@ -41,46 +41,13 @@ The confirmed activities for 2024 are as follows. You can read the detailed acti
 
     We will find a bar in Taipei City and invite everyone to come and chat about open source, and have a drink, whether or not you plan to attend COSCUP in the coming days! :laughing: [Go to :fontawesome-solid-share:](../eve_gathering/overview.md)
 
--   :department_store: [【Fun Fair】](../fun_fair/overview.md)
-
-    ---
-
-    How to implement the "open source spirit" in real life? We are asking booths to present their products, processes, or recipes in the form of an "open source menu" and share their results with attendees who visit their booths. :ferris_wheel: [Go to :fontawesome-solid-share:](../fun_fair/overview.md)
-
--   :mending_heart: [【Health Market】](../health_market/overview.md)
-
-    ---
-
-    "Massage Station," "Wine Yoga," "Healing Painting," and "Healing Sleep" are places where you can achieve complete relaxation for your body, mind, and spirit.:person_getting_massage: [Go to :fontawesome-solid-share:](../health_market/overview.md)
-
--   :gift_heart: [【Healing Lectures】](../healing_lectures/overview.md)
-
-    ---
-
-    Compared to complex technologies or obscure industry jargon, the healing seminars focus more on exploring the real everyday issues people face related to technology, humanities, society, and open organizations. Discussions cover topics such as love, harm, understanding, and trauma recovery. :heart_hands: [Go to :fontawesome-solid-share:](../healing_lectures/overview.md)
-
--   :playground_slide: [【Junior Workshops】](../junior_workshop/overview.md)
-
-    ---
-
-    Bring your kids to participate in the annual open source event. We have designed beginner-level hands-on courses that not only teach children the latest technology knowledge but also inspire their creativity. :mechanic_tone1: [Go to :fontawesome-solid-share:](../junior_workshop/overview.md)
-
 </div>
 
 ## Reserve Activities
 
-Drink tickets for the "Eve Gathering" and some activities require reservations. Please complete your purchase through the following order page.
+Drink tickets for the "Eve Gathering" requires reservations. Please complete your purchase through the following order page.
 
-[:ticket: "Eve Gathering," "Healing Market," and "Junior Workshops" order page :fontawesome-solid-share:](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
-
-??? note ":material-qrcode-scan: Share by QRCode"
-
-    This page could be shared by following :material-qrcode-scan: QRCode, when you are in-person promoting at booths.
-
-    <figure markdown="span">
-        ![Attendee Services Order Page](https://volunteer.coscup.org/doc/qrcode_attendee_services_order.png){ loading=lazy width=200 }
-        <figcaption><https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44></figcaption>
-    </figure>
+[:ticket: "Eve Gathering" order page :fontawesome-solid-share:](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=47){ .md-button .md-button--primary }
 
 !!! note "Other Services at COSCUP"
 
