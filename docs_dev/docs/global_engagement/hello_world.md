@@ -4,7 +4,8 @@ summary: Most of the updated information can be obtained after the initial conta
 description: Most of the updated information can be obtained after the initial contact.
 authors:
     - Toomore Chiang
-date: 2024-03-08
+    - Lihan nfsnfs Chen
+date: 202-07-23
 comments: true
 ---
 
@@ -30,7 +31,7 @@ Thank you for reaching out to us. This page will be continuously update version,
 
 COSCUP is the Conference for Open Source Coders, Users & Promoters. It is organized by a group of Taiwan open-source communities together and usually takes place at **the end of July or early August every year**. Around 2000 - 3000 attendees participate in COSCUP each year.
 
-This year it will take place on **Aug 3, 2024 - Aug 4, 2024 at Taipei, Taiwan**. ([:material-calendar: Add the event](http://www.google.com/calendar/render?action=TEMPLATE&dates=20240803T010000Z%2F20240804T090000Z&ctz=Asia/Taipei&text=COSCUP%202024&location=National%20Taiwan%20University%20of%20Science%20and%20Technology&details=Conference%20for%20Open%20Source%20Coders%2C%20Users%20and%20Promoters%20(COSCUP)))
+This year it will take place on **Aug 9, 2025 - Aug 10, 2025 at Taipei, Taiwan**. ([:material-calendar: Add the event](https://calendar.google.com/calendar/u/0/r/eventedit?dates=20250809T010000Z/20250810T090000Z&ctz=Asia/Taipei&text=COSCUP+2025&location=National+Taiwan+University+of+Science+and+Technology&details=Conference+for+Open+Source+Coders,+Users+and+Promoters+(COSCUP)))
 
 ## :octicons-goal-24: Achievements
 
