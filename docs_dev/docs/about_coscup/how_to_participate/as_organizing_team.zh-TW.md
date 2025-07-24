@@ -72,7 +72,7 @@ icon: material/account-supervisor
 
 ## 其他
 
-1. 8/8 [場地佈置報名表](https://docs.google.com/forms/d/e/1FAIpQLScUjuWW5xC3-X-MkTdLUUvVcw7Jcs7lJYJKxIF0vAVp7sspcQ/viewform](https://forms.gle/4o9Zmb5mcNiVDrNg7)。
+1. 8/8 [場地佈置報名表](https://forms.gle/4o9Zmb5mcNiVDrNg7)。
 2. 如有交通費補助單據，也可直接到 **`TR-413-2` **提交。
 3. 慶功宴在 `TR-3F`，預計 8/10 18:00 開吃！
 4. 通訊設備發送與充電在 `TR-516` 工人休息室。
