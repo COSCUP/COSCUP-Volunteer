@@ -6,7 +6,7 @@ comments: true
 icon: material/head-heart
 ---
 
-# :mending_heart: Introducing the Healing Market with Massage Booths, Wine Yoga, and Therapeutic Painting
+# :mending_heart: Introducing the Pause Room combines massage booths, Childcare services, and Nitro Coffee.
 
 COSCUP 2025 A quiet shared space for childcare and relaxing massage. Take a break—or let someone care for your little one while you enjoy the event.
 
