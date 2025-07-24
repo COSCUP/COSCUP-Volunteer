@@ -1,7 +1,7 @@
 ---
-title: Healing Market combines massage booths, wine yoga, and therapeutic painting.
-summary: We hope to soothe your mind and relax your body when you work hard in your life. The Healing Market aims to bring you a different experience!
-description: We hope to soothe your mind and relax your body when you work hard in your life. The Healing Market aims to bring you a different experience!
+title: Pause Room combines massage booths, Childcare services, and Nitro Coffee.
+summary: A quiet shared space for childcare and relaxing massage. Take a break—or let someone care for your little one while you enjoy the event.
+description: A quiet shared space for childcare and relaxing massage. Take a break—or let someone care for your little one while you enjoy the event.
 comments: true
 icon: material/head-heart
 ---
@@ -12,11 +12,9 @@ COSCUP 2024 will continue the Healing Market from last year, providing services 
 
 This year's Healing Market includes the following activities:
 
-- 💃 Yoga Wine
 - 💆 Massage Station
-- 🎨 Healing Painting
-- 🛌 Peaceful Sleep
-- We also welcome you to attend and engage with our new initiative, 《Healing Lectures - Tech-Human Dialogue in Open Culture: Love, Harm, Understanding, Repair》
+- 🎨 Childcare services
+- 🛌 Nitro Coffee 
 
 !!! note
 
@@ -43,198 +41,34 @@ Do you have shoulder and neck pain? If you have accumulated fatigue from daily l
 2. Try not to exceed 30 minutes at a time. It's not advisable to have a massage for too long!
 3. After the massage, it is recommended to drink warm water. There are water dispensers at National Taiwan University of Science and Technology, so it is recommended to bring a water bottle.
 
-!!! info "2024 Massage Station"
+!!! info "2025 Massage Station"
 
-    Massage Booth Hours are from 10:00 AM to 4:00 PM daily, located outside `TR-612` classroom. No fees required, but a donation box is available for voluntary contributions.
+    Massage Booth Hours are from 10:00 AM to 4:00 PM daily, located `TR 413-2` classroom. No fees required, but a donation box is available for voluntary contributions.
 
-## Yoga Wine
+## Childcare services
 
-<figure markdown="span">
-    <a href="https://secretary.coscup.org/s3/img/2022_yoga_1600.jpg">
-        <img src="https://secretary.coscup.org/s3/img/2022_yoga_1600.jpg"
-            alt="Yoga Wine" title="Yoga Wine"
-            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
-    </a>
-    <figcaption>照片來源：台南安平雅樂軒酒店</figcaption>
-</figure>
+Childcare services are available in Mandarin only.
 
-Urban life is fast-paced with high work pressure, and on weekends, we always want activities that help us relieve stress and recharge ourselves, allowing us to face tomorrow's challenges in a better state.
+[:hatched_chick: Childcare services](https://docs.google.com/forms/d/1ShAqLmkaDqEUPSAFZO-TC5QosZALA7DSwetylcoL-Vw/edit){ .md-button .md-button--primary }
 
-And when it comes to the latest trendy and fashionable choice, we can't ignore the popular "Yoga Wine" from Europe and America.
+!!! info "2025 Childcare services"
 
-Now you can experience this body-mind-spirit wellness exercise at COSCUP.
+    Childcare services, located `TR 413-2` classroom.
 
-During the course, the instructor will guide participants to taste different stages of wine while practicing various yoga poses, experiencing the wine's flavors and savoring its layers and nuances. The alcohol also increases blood circulation, generating body heat and achieving muscle warm-up, similar to the effects of hot yoga.
+    - 8/9 09:00 ~ 17:00
+    - 8/10 09:00 ~ 15:30
 
-### What is Yoga Wine?
-
-Born in New York in 2017, Yoga Wine is a course that incorporates red wine into yoga practice. During the yoga session, participants each hold a glass of red wine. The instructor leads the participants in yoga poses and incorporates cup movements to increase the difficulty and intensity. For example, holding a wine glass while performing Warrior III in yoga requires more muscular endurance compared to traditional yoga without props, as it prevents the liquid from spilling. This can lead to greater fat burning and exercise benefits.
-
-### Course Information
-
-1. Each session lasts for one hour, `NTD$500` per people, with up to 12 participants.
-2. This class includes approximately 45 minutes of wine yoga practice and around 15 minutes of explanation. Wine glasses will be provided. In case of any damage to the wine glasses, we kindly charge a **NTD$280** fee per wine glass.
-3. Bring to class: Yoga mat, bottle of water, small towel.
-
-[:hatched_chick: Book a Course](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
-
-!!! info "2024 Wine Yoga"
-
-    Wine Yoga schedule is as follows, held in the `TR-612` classroom. Participation requires a reservation.
-
-    - 8/4 11:30 ~ 12:30
-    - 8/4 13:00 ~ 14:00
-
-## Stress Relief and Harmony Pastel Healing Painting
+## Nitro Coffee 
 
 Harmony pastels have the characteristic of providing warm, healing energy. By combining different colors and varying presentation styles, you can express your feelings and showcase your unique self. This activity also helps to calm the mind, fostering a sense of positive hope and healing.
 
-### Course Information
+!!! info "2025 Nitro Coffee "
 
-1. The course lasts one and a half hours and costs `NTD$250` per person. Since the craft takes a longer time, please arrive on time.
-2. The course is suitable for those looking to relieve stress and heal through handmade creations. There are no age limits, and it is open to people with no prior experience in pastel harmony or drawing.
-3. After the course, participants will take home a 15cm x 15cm artwork they created themselves.
+    The nitro coffee stand schedule is as follows. Location: TR-1F. Available while supplies last.
 
-[:hatched_chick: Book a Course](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
+    - 8/9 09:00 ~ 16:30
+    - 8/10 09:00 ~ 15:30
 
-!!! info "2024 Therapeutic Painting"
-
-    Therapeutic painting schedule is as follows, held in the `TR-612` classroom. Participation requires a reservation.
-
-    - 8/3 14:00 ~ 15:30
-
-## Peaceful Sleep: Therapeutic Sleep Massage Oil
-
-Amid the hustle and bustle of daily life, give yourself a chance to calm down. Enhance self-awareness, relieve mental stress, and heal your mind and body through aromatherapy. Additionally, blend your own sleep massage oil to help yourself rest well.
-
-### Course Information
-
-1. The course lasts one and a half hours and costs `NTD$250` per person. Since the craft takes a longer time, please arrive on time.
-2. The course is suitable for those looking to relieve stress and heal through handmade creations. It is open to people with no prior experience in aromatherapy, but it is not recommended for pregnant women.
-3. After the course, participants will take home a 10 ml natural essential oil roll-on bottle they created themselves.
-
-[:hatched_chick: Book a Course](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
-
-!!! info "2024 Peaceful Sleep"
-
-    Therapeutic sleep sessions are scheduled as follows, held in the `TR-612` classroom. Participation requires a reservation.
-
-    - 8/4 10:00 ~ 11:30
-    - 8/4 14:00 ~ 15:30
-
-## Schedule
-
-<div class="center-table">
-<table style="font-size: 1em;">
-    <thead>
-    <tr>
-        <th style="text-align: right;">
-        Date
-        </th>
-        <th colspan="2" style="background-color: #fffbeb; border-right: 1px solid rgb(219, 219, 219); text-align: center;">
-        2024-08-03
-        </th>
-        <th colspan="2" style="background-color: #fffbeb; text-align: center;">
-        2024-08-04
-        </th>
-    </tr>
-    <tr>
-        <th style="text-align: right;">
-        Class
-        </th>
-        <th style="background-color: whitesmoke; text-align: center;">
-        TR 612
-        </th>
-        <th style="background-color: whitesmoke; border-right: 1px solid rgb(219, 219, 219); text-align: center;">
-        TR 612<br>(Outside)
-        </th>
-        <th style="background-color: whitesmoke; text-align: center;">
-        TR 612
-        </th>
-        <th style="background-color: whitesmoke; text-align: center;">
-        TR 612<br>(Outside)
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: center; vertical-align: middle;">
-        10:00 - 11:00
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
-        ㊡
-        </td>
-        <td class="massage" rowspan="6" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
-        Massage Station
-        </td>
-        <td class="meditation" style="background-color: #eeeefc; text-align: center; vertical-align: middle;">
-        Peaceful Sleep<br><small>（~ 11:30）</small>
-        </td>
-        <td class="massage" rowspan="5" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
-        Massage Station
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: center;">
-        11:30 - 12:30
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
-        ㊡
-        </td>
-        <td class="yoga" style="background-color: #ffebeb; text-align: center;">
-        Yoga Wine<br><small>(11:30~12:30)</small>
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: center;">
-        12:00 - 13:00
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
-        ㊡
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
-        ㊡
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: center;">
-        13:00 - 14:00
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
-        ㊡
-        </td>
-        <td class="yoga" style="background-color: #ffebeb; text-align: center;vertical-align: middle;">
-        Yoga Wine
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: center; vertical-align: middle;">
-        14:00 - 15:30
-        </td>
-        <td class="meditation" style="background-color: #eeeefc; text-align: center; vertical-align: middle;">
-        Healing Painting<br><small>（~ 15:30）</small>
-        </td>
-        <td class="meditation" style="background-color: #eeeefc; text-align: center; vertical-align: middle;">
-        Peaceful Sleep<br><small>（~ 15:30）</small>
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: center;">
-        15:00 - 16:00
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
-        ㊡
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
-        ㊡
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;vertical-align: middle;">
-        The End
-        </td>
-    </tr>
-    </tbody>
-</table>
-</div>
 
 ## Others
 
