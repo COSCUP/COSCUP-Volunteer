@@ -41,7 +41,7 @@ COSCUP 2025 行政組整理目前規劃的活動、並賦予較合適的名稱�
 
     我們會在台北市找一間酒吧，然後把大家找來一起聊開源、喝一杯，即使或是不管你明後天是否要參加 COSCUP！:laughing: [前往 :fontawesome-solid-share:](../eve_gathering/overview.md)
 
--   :mending_heart: [【小歇室】](../health_market/overview.md)
+-   :mending_heart: [【小歇所】](../health_market/overview.md)
 
     ---
 
