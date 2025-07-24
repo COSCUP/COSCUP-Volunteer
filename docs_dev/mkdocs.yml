@@ -86,6 +86,7 @@ nav:
       - Attendee Services:
           - about_coscup/attendee_services/index.md
           - Eve Gathering: about_coscup/eve_gathering/overview.md
+          - Health Market: about_coscup/health_market/overview.md
       - Email Newsletters:
           - about_coscup/newsletters/index.md
           - Overview: about_coscup/newsletters/overview.md
@@ -215,6 +216,7 @@ plugins:
             Enhance Recruitment: 招募流程增進計畫
             Error Note: 錯誤訊息
             Eve Gathering: 前夜派對
+            Health Market: 小歇室
             Global Engagement: 國際交流
             Home: 首頁
             How to Participate in COSCUP: 如何參與、準備 COSCUP
