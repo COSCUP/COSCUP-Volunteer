@@ -28,57 +28,55 @@ icon: material/account-supervisor
 
 住宿地點已公告在志工服務平台「活動日住宿」申請頁面，請記得在時間內入住與退房，如有讓何住宿問題，如：中途換宿…等，請聯絡**行政組**，勿預訂後不前往或任意離開，今年會落實點名。
 
-- 住宿時間：8/2（17:00 開始 check-in）, 8/3 二晚，8/4 早上退房。
+- 住宿時間：8/8（17:00 開始 check-in）, 8/9 二晚，8/10 早上退房。
     - **住宿地點**請查閱志工平台「活動日住宿」頁面的內容。入住時請出示身份證件，並說明為**團體訂房**。
 - 共用衛浴區共有 5 間廁所和 4 間淋浴間。
 - 僅提供：洗髮精、沐浴乳、吹風機，請務必自備毛巾、牙刷。
 
 !!! note "交通接駁車"
 
-    - 住宿地點到臺科大的交通車預計每日 `06:30`、`06:45` 二個班次，請趕上發車時間前往臺科大。
+    - 住宿地點到臺科大的交通車預計每日 `06:30`、`06:40` 二個班次，請趕上發車時間前往臺科大。
     - 請在公車站牌「瑠公圳公園」等候上車，站牌位置在「[106 台北市大安區復興南路一段82號](https://www.google.com/maps/@25.0436677,121.543732,3a,75y,216.42h,80.36t/data=!3m6!1e1!3m4!1sPSscdT-p_D2qFdnqWHWQIg!2e0!7i16384!8i8192)」前。
 
 ## 工人衣服
 
 ### 衣服穿著
 
-#### 第一天
+#### 第一天 粉紅
 
 <figure markdown="span">
-    <a href="https://volunteer.coscup.org/img/2024/2024_clothes_day1.webp">
-        <img src="https://volunteer.coscup.org/img/2024/2024_clothes_day1.webp"
+    <a href="https://upload.cc/i1/2025/07/24/cJ4Ab7.png">
+        <img src="https://upload.cc/i1/2025/07/24/cJ4Ab7.png"
             alt="COSCUP 工作人員衣服 Day 1" title="COSCUP 工作人員衣服 Day 1"
             style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
     </a>
-    <figcaption>特徵：左胸口圖案，小啄圖樣在背後。</figcaption>
+    <figcaption>特徵：衣服設計有 20 週年。</figcaption>
 </figure>
 
-#### 第二天
+#### 第二天 粉藍
 
 <figure markdown="span">
-    <a href="https://volunteer.coscup.org/img/2024/2024_clothes_day2.webp">
-        <img src="https://volunteer.coscup.org/img/2024/2024_clothes_day2.webp"
+    <a href="https://upload.cc/i1/2025/07/24/n9oE5p.png">
+        <img src="https://upload.cc/i1/2025/07/24/n9oE5p.png"
             alt="COSCUP 工作人員衣服 Day 2" title="COSCUP 工作人員衣服 Day 2    "
             style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
     </a>
-    <figcaption>特徵：小啄圖樣在前，背後上方 COSCUP Logo。</figcaption>
+    <figcaption>特徵：圖案在正面拍大合照好看。</figcaption>
 </figure>
 
 ### 領取發送
 
-1. 在 8/2 場佈期間，預計 14:00 後在 `TR-312` 志工服務台領取。
-2. 在 8/3 第一天，預計 09:00 後在 `TR-312` 志工服務台領取。
-3. 在 8/4 第二天，請在 09:30 前到 `TR-312` 志工服務台領取，{++時間截止後將整理回行銷組販售++}。
+1. 在 8/8 場佈期間，預計 14:00 後在 `TR-516` 工人休息室領取。
+2. 在 8/9 第一天，預計 07:30-09:00 後在 `TR-516` 志工服務台領取，09:30 之後到 `TR-413-2` 領取。
+3. 在 8/10 第二天，請在 09:30 前到 `TR-413-2` 領取，{++時間截止後將整理回行銷組販售++}。
 
 ## 其他
 
-1. 8/2 [場地佈置報名表](https://docs.google.com/forms/d/e/1FAIpQLScUjuWW5xC3-X-MkTdLUUvVcw7Jcs7lJYJKxIF0vAVp7sspcQ/viewform)。
-2. 如有交通費補助單據，也可直接到 **`TR-312` 志工服務台**提交。
-3. 慶功宴在 `TR-3F`，預計 8/4 18:00 開吃！
-4. 通訊設備發送與充電在 `TR-617` 工人休息室。
-5. 工作人員大合照於 **8/4 07:20** `TR-1F` 拍攝大合照。
+1. 8/8 [場地佈置報名表]([https://docs.google.com/forms/d/e/1FAIpQLScUjuWW5xC3-X-MkTdLUUvVcw7Jcs7lJYJKxIF0vAVp7sspcQ/viewform](https://forms.gle/4o9Zmb5mcNiVDrNg7))。
+2. 如有交通費補助單據，也可直接到 **`TR-413-2` **提交。
+3. 慶功宴在 `TR-3F`，預計 8/10 18:00 開吃！
+4. 通訊設備發送與充電在 `TR-516` 工人休息室。
+5. 工作人員大合照於 **8/10 07:15** `TR-1F` 拍攝大合照。
       - 住宿的夥伴記得行李也要上手、並搭上任一台交通接駁車，抵達臺科大後直接到操場集合拍照。
       - 07:20 為拍照時間，請在 07:00 集合。
-6. 「[按摩小站](../health_market/overview.md)」在 `TR-612`，工作人員可隨時去按摩。
-7. 空檔時間也可以轉變為[會眾](./as_attendee.md)去聽議程或是參與體驗相關的[會眾服務](../attendee_services/index.md)。
-8. 8/4 [紅酒瑜伽](https://volunteer.coscup.org/docs/zh-TW/about_coscup/health_market/overview/#_4)、[療癒睡眠](https://volunteer.coscup.org/docs/zh-TW/about_coscup/health_market/overview/#_9)提供給志工夥伴參加，請確定可以參與的時間來 TR312 志工服務台兌換通行證。
+6. 「[按摩小站](../health_market/overview.md)」在 `TR-413-2`，工作人員可隨時去按摩。
