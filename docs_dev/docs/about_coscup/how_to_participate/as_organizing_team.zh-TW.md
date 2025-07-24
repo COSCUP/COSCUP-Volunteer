@@ -28,7 +28,7 @@ icon: material/account-supervisor
 
 住宿地點已公告在志工服務平台「活動日住宿」申請頁面，請記得在時間內入住與退房，如有讓何住宿問題，如：中途換宿…等，請聯絡**行政組**，勿預訂後不前往或任意離開，今年會落實點名。
 
-- 住宿時間：8/8（17:00 開始 check-in）, 8/9 二晚，8/10 早上退房。
+- 住宿時間：8/8（17:00 開始 check-in）, 8/8、8/9 二晚，8/10 早上退房。
     - **住宿地點**請查閱志工平台「活動日住宿」頁面的內容。入住時請出示身份證件，並說明為**團體訂房**。
 - 共用衛浴區共有 5 間廁所和 4 間淋浴間。
 - 僅提供：洗髮精、沐浴乳、吹風機，請務必自備毛巾、牙刷。
@@ -45,8 +45,8 @@ icon: material/account-supervisor
 #### 第一天 粉紅
 
 <figure markdown="span">
-    <a href="https://upload.cc/i1/2025/07/24/cJ4Ab7.png">
-        <img src="https://upload.cc/i1/2025/07/24/cJ4Ab7.png"
+    <a href="https://private-user-images.githubusercontent.com/131974713/450666571-d52d17cb-4b96-4f68-9ba2-01bb9551522a.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTMzMTgwODYsIm5iZiI6MTc1MzMxNzc4NiwicGF0aCI6Ii8xMzE5NzQ3MTMvNDUwNjY2NTcxLWQ1MmQxN2NiLTRiOTYtNGY2OC05YmEyLTAxYmI5NTUxNTIyYS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNzI0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDcyNFQwMDQzMDZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05OTMyYjI0MmY0Y2UzZDZkMzg2NDg1MmU4YWQ0YTZiMWYzMjU3OWM2YTBhNDg4NWNkNjllZjQwMzYwY2ViNjU5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.reZ0WTvAzhospXRuh5TP3nLSS_lC5P3xug99_-ZZnew">
+        <img src="[https://upload.cc/i1/2025/07/24/cJ4Ab7.png](https://private-user-images.githubusercontent.com/131974713/450666571-d52d17cb-4b96-4f68-9ba2-01bb9551522a.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTMzMTgwODYsIm5iZiI6MTc1MzMxNzc4NiwicGF0aCI6Ii8xMzE5NzQ3MTMvNDUwNjY2NTcxLWQ1MmQxN2NiLTRiOTYtNGY2OC05YmEyLTAxYmI5NTUxNTIyYS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNzI0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDcyNFQwMDQzMDZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05OTMyYjI0MmY0Y2UzZDZkMzg2NDg1MmU4YWQ0YTZiMWYzMjU3OWM2YTBhNDg4NWNkNjllZjQwMzYwY2ViNjU5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.reZ0WTvAzhospXRuh5TP3nLSS_lC5P3xug99_-ZZnew)"
             alt="COSCUP 工作人員衣服 Day 1" title="COSCUP 工作人員衣服 Day 1"
             style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
     </a>
@@ -56,8 +56,8 @@ icon: material/account-supervisor
 #### 第二天 粉藍
 
 <figure markdown="span">
-    <a href="https://upload.cc/i1/2025/07/24/n9oE5p.png">
-        <img src="https://upload.cc/i1/2025/07/24/n9oE5p.png"
+    <a href="https://private-user-images.githubusercontent.com/131974713/457642067-5f6d9a7a-bdd2-4191-9b23-789545df84a6.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTMzMTc5NzAsIm5iZiI6MTc1MzMxNzY3MCwicGF0aCI6Ii8xMzE5NzQ3MTMvNDU3NjQyMDY3LTVmNmQ5YTdhLWJkZDItNDE5MS05YjIzLTc4OTU0NWRmODRhNi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNzI0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDcyNFQwMDQxMTBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04MWEyYWU1N2Y0MTE1OGFmMzQxMjRjMzY1YTI3NDM4NWM5MmM0OWM3ZTgxN2IxMjIxZWEwODZjYTE2YzRlODUyJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.D86MlPbn_J3bLXl52bPzhXkv4G3NS8GVqRvFqSJL6RE">
+        <img src="https://private-user-images.githubusercontent.com/131974713/457642067-5f6d9a7a-bdd2-4191-9b23-789545df84a6.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTMzMTc5NzAsIm5iZiI6MTc1MzMxNzY3MCwicGF0aCI6Ii8xMzE5NzQ3MTMvNDU3NjQyMDY3LTVmNmQ5YTdhLWJkZDItNDE5MS05YjIzLTc4OTU0NWRmODRhNi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNzI0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDcyNFQwMDQxMTBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04MWEyYWU1N2Y0MTE1OGFmMzQxMjRjMzY1YTI3NDM4NWM5MmM0OWM3ZTgxN2IxMjIxZWEwODZjYTE2YzRlODUyJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.D86MlPbn_J3bLXl52bPzhXkv4G3NS8GVqRvFqSJL6RE"
             alt="COSCUP 工作人員衣服 Day 2" title="COSCUP 工作人員衣服 Day 2    "
             style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
     </a>
