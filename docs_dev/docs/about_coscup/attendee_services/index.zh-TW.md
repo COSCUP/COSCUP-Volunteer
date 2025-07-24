@@ -41,6 +41,12 @@ COSCUP 2024 行政組整理目前規劃的活動、並賦予較合適的名稱�
 
     我們會在台北市找一間酒吧，然後把大家找來一起聊開源、喝一杯，即使或是不管你明後天是否要參加 COSCUP！:laughing: [前往 :fontawesome-solid-share:](../eve_gathering/overview.md)
 
+-   :mending_heart: [【小歇室】](../health_market/overview.md)
+
+    ---
+
+    「按摩小棧」、「托育服務」、「氮氣咖啡攤」一個讓你身心靈可以獲得充分放鬆的地方。:person_getting_massage: [前往 :fontawesome-solid-share:](../health_market/overview.md)
+    
 </div>
 
 ## 預訂活動
@@ -53,5 +59,5 @@ COSCUP 2024 行政組整理目前規劃的活動、並賦予較合適的名稱�
 
     除了行政組所規劃的活動外，也有其他組別所規劃的項目：
 
-    - 紀錄組：「形象照」拍攝，詳細的地點請參考大會地圖。
+    - 紀錄組：「形象照」拍攝，地點 TR413-1。
     - 議程組：BoF 活動。
