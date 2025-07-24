@@ -8,7 +8,7 @@ icon: material/head-heart
 
 # :mending_heart: Introducing the Healing Market with Massage Booths, Wine Yoga, and Therapeutic Painting
 
-COSCUP 2024 will continue the Healing Market from last year, providing services to attendees. We hope to soothe your mind and relax your body when you work hard in your life. The Healing Market aims to bring you a different experience!
+COSCUP 2025 A quiet shared space for childcare and relaxing massage. Take a break—or let someone care for your little one while you enjoy the event.
 
 This year's Healing Market includes the following activities:
 
