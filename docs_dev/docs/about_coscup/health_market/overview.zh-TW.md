@@ -1,28 +1,21 @@
 ---
-title: 「療癒市集」結合按摩小站、紅酒瑜伽、療癒彩繪、療癒睡眠
+title: 「小歇室」結合按摩小站、托育服務、氮氣咖啡
 summary: 希望在繁忙的平日還抽空在假日來參與活動時，能夠療癒一下心靈與放鬆身體的負擔，療癒市集希望能夠為你帶來不一樣的體驗！
 description: 希望在繁忙的平日還抽空在假日來參與活動時，能夠療癒一下心靈與放鬆身體的負擔，療癒市集希望能夠為你帶來不一樣的體驗！
 comments: true
 icon: material/head-heart
 ---
 
-# :mending_heart: 會眾服務「療癒市集」結合按摩小站、紅酒瑜伽、療癒彩繪
+# :mending_heart: 會眾服務「小歇室」結合按摩小站、托育服務、氮氣咖啡
 
-今年的 COSCUP 2024 將延續去年的療癒市集繼續提供會眾服務，希望在繁忙的平日還抽空在假日來參與活動時，能夠療癒一下心靈與放鬆身體的負擔，療癒市集希望能夠為你帶來不一樣的體驗！
+今年的 COSCUP 2025 將延續去年的療癒市集繼續提供會眾服務，希望在繁忙的平日還抽空在假日來參與活動時，能夠療癒一下心靈與放鬆身體的負擔，小歇室希望能夠為你帶來不一樣的體驗！
 
-今年的療癒市集包含以下項目：
+今年的小歇室包含以下項目：
 
-- 💃 紅酒瑜珈
 - 💆 按摩小站
-- 🎨 療癒彩繪
-- 🛌 療癒睡眠
-- 與我們新嘗試的【療癒講座 - 開放文化下科技與人文的反覆對話：愛、傷害、理解與修復】也歡迎前往聆聽與交流。
+- 🎨 托育服務
+- 🛌 氮氣咖啡
 
-!!! note
-
-    由於冥想正念與紅酒瑜珈需要預先報名，如果你有意參與課程，請直接填表單報名！
-
-    - 線上連結：（尚未開始報名，請稍後再回來）
 
 ## 按摩小站
 
@@ -43,194 +36,32 @@ icon: material/head-heart
 2. 單次盡量不要超過 30 分鐘，按太久也不好！
 3. 按摩後建議飲用溫開水，台科大有飲水機，建議攜帶水瓶。
 
-!!! info "2024 按摩小站"
+!!! info "2025 按摩小站"
 
-    按摩小站時間於每日 10:00 到 16:00，地點在 `TR-612` 教室外。無須費用，但有樂捐箱歡迎樂捐。
+    按摩小站時間於每日 10:00 到 16:00，地點在 `TR-413-2` 教室外。無須費用，但有樂捐箱歡迎樂捐。
 
-## 紅酒瑜伽
+## 托育服務
 
-<figure markdown="span">
-    <a href="https://secretary.coscup.org/s3/img/2022_yoga_1600.jpg">
-        <img src="https://secretary.coscup.org/s3/img/2022_yoga_1600.jpg"
-            alt="Yoga Wine" title="Yoga Wine"
-            style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
-    </a>
-    <figcaption>照片來源：台南安平雅樂軒酒店</figcaption>
-</figure>
+COSCUP x RubyConf TW 2025 將透過台北市社會局聘請專業托育人員，於活動期間提供 12 歲以下兒童臨時托育服務。
 
-都市生活步調快、上班壓力大，周末總想找些紓壓的活動幫自己充飽電，用更好的狀態去迎接明天的挑戰。而說到現在最新穎、時尚的選擇那就不能不提風靡歐美的「紅酒瑜珈」。現在不用出國，在 COSCUP 也可以體驗這種身心靈保養的運動。
+[:hatched_chick: 托育報名](https://docs.google.com/forms/d/1ShAqLmkaDqEUPSAFZO-TC5QosZALA7DSwetylcoL-Vw/edit){ .md-button .md-button--primary }
 
-課程中，老師也會指引學員在不同階段品嘗手中的葡萄酒，感受這支紅酒在不同醒酒階段的各種風味，細細品嚐它的層次與韻味。酒精也同時能夠增加血液循環，讓身體發熱，達到肌肉暖身，類似熱瑜珈的運動效果！
+!!! info "2025 托育服務"
 
-### 紅酒瑜珈是什麼？
+    托育服務時間如下，地點在 `TR-413-2` 教室。須預約時段參與。
 
-於 2017 年誕生於紐約，紅酒瑜珈是把紅酒帶進瑜珈練習的一種課程。在瑜珈練習的過程中，學員們手上各有一杯紅酒。老師帶領著學員練習瑜珈姿勢，並加入酒杯動作來增加難度與運動量。比如說，手握紅酒杯進行戰士三式（Warrior III），為了不讓液體撒出來，其實比起沒有道具輔助的瑜珈需要多一點肌耐力，所以可以達到更大的脂肪燃燒跟運動效果。
+    - 8/9 09:00 ~ 17:00
+    - 8/10 09:00 ~ 15:30
 
-### 課程須知
+## 氮氣咖啡攤
 
-1. 每一課程時長為一個小時，費用 `NTD$500` / 人，每一堂最多 12 人
-2. 講座內容包含：活動包含約 45 分鐘的紅酒瑜珈活動，以及約 15 分鐘的講解。課程會提供酒杯。若損壞葡萄酒杯，每個費用為 `NTD$250` 元
-3. 需自備：需自行準備瑜珈墊、水壺、毛巾等個人用品
+在 40% 聽演講，60% 交朋友當中，來杯氮氣咖啡補充元氣。
 
-[:hatched_chick: 預訂課程](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
 
-!!! info "2024 紅酒瑜伽"
+!!! info "2025 氮氣咖啡攤"
 
-    紅酒瑜伽時間如下，地點在 `TR-612` 教室。須預約時段參與。
+    療癒彩繪時間如下，地點在 `TR-1樓` 。售完截止。
 
-    - 8/4 11:30 ~ 12:30
-    - 8/4 13:00 ~ 14:00
-
-## 紓壓放鬆．和諧粉彩療癒畫
-
-和諧粉彩有著溫暖療癒力量的特質。透過不同顏色的搭配、呈現方式的差異，來表達自己感受、展現獨一無二的自己，也能幫助心情逐漸平靜，感覺到正向的希望和療癒感。
-
-### 課程須知
-
-1. 課程時常一個半小時，費用 `NTD$250` / 人，手作需花費較長時間，請準時到場。
-2. 課程適合透過手工創作，減壓療癒的人，沒有年齡限制、完全沒有接觸任何和諧粉彩或是無繪畫基礎的人也可以參加。
-3. 課程結束後，將獲得一幅 `15cmx15cm` 自己親手製作的畫作。
-
-[:hatched_chick: 預訂課程](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
-
-!!! info "2024 療癒彩繪"
-
-    療癒彩繪時間如下，地點在 `TR-612` 教室。須預約時段參與。
-
-    - 8/3 14:00 ~ 15:30
-
-## 沉靜好眠．療癒睡眠按摩油
-
-在忙碌的生活工作中，給自己一個機會靜下心，透過香氛增進自我認識、緩解精神壓力、療癒身心靈，並調配睡眠按摩油幫助自己好好休息。
-
-### 課程須知
-
-1. 課程時常一個半小時，費用 `NTD$250` / 人，手作需花費較長時間，請準時到場。
-2. 課程適合透過手工創作，減壓療癒的人，完全沒有接觸任何芳療的人也可以參加，但不建議孕婦參加。
-3. 課程結束後，將獲得 1 支自己親手製作的 `10 ml` 天然精油滾珠瓶。
-
-[:hatched_chick: 預訂課程](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=44){ .md-button .md-button--primary }
-
-!!! info "2024 療癒睡眠"
-
-    療癒睡眠時間如下，地點在 `TR-612` 教室。須預約時段參與。
-
-    - 8/4 10:00 ~ 11:30
-    - 8/4 14:00 ~ 15:30
-
-## 課程時段
-
-<div class="center-table">
-<table style="font-size: 1em;">
-    <thead>
-    <tr>
-        <th style="text-align: right;">
-        Date
-        </th>
-        <th colspan="2" style="background-color: #fffbeb; border-right: 1px solid rgb(219, 219, 219); text-align: center;">
-        2024-08-03
-        </th>
-        <th colspan="2" style="background-color: #fffbeb; text-align: center;">
-        2024-08-04
-        </th>
-    </tr>
-    <tr>
-        <th style="text-align: right;">
-        Class
-        </th>
-        <th style="background-color: whitesmoke; text-align: center;">
-        TR 612
-        </th>
-        <th style="background-color: whitesmoke; border-right: 1px solid rgb(219, 219, 219); text-align: center;">
-        TR 612<br>（走廊外）
-        </th>
-        <th style="background-color: whitesmoke; text-align: center;">
-        TR 612
-        </th>
-        <th style="background-color: whitesmoke; text-align: center;">
-        TR 612<br>（走廊外）
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: center;vertical-align:middle;">
-        10:00 - 11:00
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center; vertical-align: middle;">
-        ㊡
-        </td>
-        <td class="massage" rowspan="6" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
-        按摩小站<br><small>（全天）</small>
-        </td>
-        <td class="meditation" style="background-color: #eeeefc; text-align: center; vertical-align: middle;">
-        療癒睡眠按摩油<br><small>（~ 11:30）</small>
-        </td>
-        <td class="massage" rowspan="5" style="background-color: #f7faef; text-align: center; vertical-align: middle;">
-        按摩小站<br><small>（全天）</small>
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: center;vertical-align:middle;">
-        11:30 - 12:30
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;vertical-align:middle;">
-        ㊡
-        </td>
-        <td class="yoga" style="background-color: #ffebeb; text-align: center;">
-        紅酒瑜珈<br><small>(11:30 - 12:30)</small>
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: center;">
-        12:00 - 13:00
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
-        ㊡
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
-        ㊡
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: center;">
-        13:00 - 14:00
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
-        ㊡
-        </td>
-        <td class="yoga" style="background-color: #ffebeb; text-align: center;">
-        紅酒瑜珈
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: center;vertical-align:middle;">
-        14:00 - 15:30
-        </td>
-        <td class="meditation" style="background-color: #eeeefc; text-align: center;vertical-align:middle;">
-        和諧粉彩療癒畫<br><small>（~ 15:30）</small>
-        </td>
-        <td class="meditation" style="background-color: #eeeefc; text-align: center;vertical-align:middle;">
-        療癒睡眠按摩油<br><small>（~ 15:30）</small>
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: center;">
-        15:00 - 16:00
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
-        ㊡
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
-        ㊡
-        </td>
-        <td class="child" style="color: #0004ff; font-weight: bold; text-align: center;">
-        活動結束
-        </td>
-    </tr>
-    </tbody>
-</table>
-</div>
 
 ## 其他相關資訊
 
