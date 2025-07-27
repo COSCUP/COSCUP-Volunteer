@@ -1,22 +1,22 @@
 ---
-title: Eve Gathering
+title: Pre-Party
 summary: Regardless of whether you participate in the next day's event, we very much welcome you to come and have a drink with us and talk about open source. Looking forward to meeting you!
 description: Regardless of whether you participate in the next day's event, we very much welcome you to come and have a drink with us and talk about open source. Looking forward to meeting you!
 comments: true
 icon: fontawesome/solid/beer-mug-empty
 ---
 
-# :beers: Eve Gathering
+# :beers: Pre-Party
 
 <figure markdown="span">
     <a href="https://volunteer.coscup.org/s3/img/Two-pints-beer-main.jpg">
         <img src="https://volunteer.coscup.org/s3/img/Two-pints-beer-main.jpg"
-            alt="COSCUP 前夜派對 Eve Gathering" title="COSCUP 前夜派對 Eve Gathering"
+            alt="COSCUP 前夜派對 Pre-Party" title="COSCUP 前夜派對 Pre-Party"
             style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
     </a>
 </figure>
 
-The Eve Gathering is a party that allows everyone to warm up in preparation for COSCUP!
+The Pre-Party is a party that allows everyone to warm up in preparation for COSCUP!
 
 The time and location of this year's Welcome party:
 
@@ -40,7 +40,7 @@ The time and location of this year's Welcome party:
 <figure markdown="span">
     <a href="https://volunteer.coscup.org/img/2024/eve_gathering_after.jpg">
         <img src="https://volunteer.coscup.org/img/2024/eve_gathering_after.jpg"
-            alt="COSCUP 前夜派對續攤 After Eve Gathering" title="COSCUP 前夜派對續攤 After Eve Gathering"
+            alt="COSCUP 前夜派對續攤 After Pre-Party" title="COSCUP 前夜派對續攤 After Pre-Party"
             style="border-radius: 8px;border:1px solid hsl(0, 0%, 50%);">
     </a>
 </figure>
