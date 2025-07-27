@@ -14,7 +14,7 @@ We use the [docker compose](https://docs.docker.com/compose/) (not **docker-comp
 
 Build the base image for local development.
 
-    docker build -t coscupweb-base:25.05.11 -f ./Dockerfile-base-dev ./
+    docker build -t coscupweb-base:25.07.27 -f ./Dockerfile-base-dev ./
 
 !!! note
 

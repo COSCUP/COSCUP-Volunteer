@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build the base image
-        run: docker build -t coscupweb-base:25.05.11 -f ./Dockerfile-base-dev ./
+        run: docker build -t coscupweb-base:25.07.27 -f ./Dockerfile-base-dev ./
       - name: List images
         run: docker images
       - name: Rename sample setting file
