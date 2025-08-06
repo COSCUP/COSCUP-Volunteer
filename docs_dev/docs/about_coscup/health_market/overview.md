@@ -49,8 +49,6 @@ Do you have shoulder and neck pain? If you have accumulated fatigue from daily l
 
 Childcare services are available in Mandarin only.
 
-[:hatched_chick: Childcare services](https://docs.google.com/forms/d/1ShAqLmkaDqEUPSAFZO-TC5QosZALA7DSwetylcoL-Vw/edit){ .md-button .md-button--primary }
-
 !!! info "2025 Childcare services"
 
     Childcare services, located `TR 413-2` classroom.

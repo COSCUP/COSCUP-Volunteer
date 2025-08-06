@@ -44,8 +44,6 @@ icon: material/head-heart
 
 COSCUP x RubyConf TW 2025 將透過台北市社會局聘請專業托育人員，於活動期間提供 12 歲以下兒童臨時托育服務。
 
-[:hatched_chick: 托育報名](https://docs.google.com/forms/d/1ShAqLmkaDqEUPSAFZO-TC5QosZALA7DSwetylcoL-Vw/edit){ .md-button .md-button--primary }
-
 !!! info "2025 托育服務"
 
     托育服務時間如下，地點在 `TR-413-2` 教室。須預約參與，現場依情況開放候補。
