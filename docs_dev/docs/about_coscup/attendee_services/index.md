@@ -35,7 +35,7 @@ The confirmed activities for 2024 are as follows. You can read the detailed acti
 
 <div class="grid cards" markdown>
 
--   :beers: [【Eve Gathering】](../eve_gathering/overview.md)
+-   :beers: [【Pre-Party】](../eve_gathering/overview.md)
 
     ---
 
@@ -47,7 +47,7 @@ The confirmed activities for 2024 are as follows. You can read the detailed acti
 
 Drink tickets for the "Eve Gathering" requires reservations. Please complete your purchase through the following order page.
 
-[:ticket: "Eve Gathering" order page :fontawesome-solid-share:](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=47){ .md-button .md-button--primary }
+[:ticket: "Pre-Party" order page :fontawesome-solid-share:](https://ocf.neticrm.tw/civicrm/event/info?reset=1&id=47){ .md-button .md-button--primary }
 
 !!! note "Other Services at COSCUP"
 
